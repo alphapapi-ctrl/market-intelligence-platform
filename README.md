@@ -1,0 +1,40 @@
+# Market Intelligence Platform
+
+A local market intelligence dashboard for tracking relative strength, breadth and macro conditions across AU/US equities and commodities.
+
+## Requirements
+- Python 3.10+
+- See `requirements.txt` for all dependencies
+
+## Installation
+
+1. Clone the repo
+2. Create and activate a virtual environment:
+
+python -m venv .venv
+.venv\Scripts\activate        # Windows
+source .venv/bin/activate     # Mac
+
+3. Install dependencies:
+pip install -r requirements.txt
+
+4. Set up FRED API key:
+   - Copy `macro/config_template.py` to `macro/config.py`
+   - Add your FRED API key (free at fred.stlouisfed.org)
+
+## Launch
+streamlit run dashboard.py
+
+## Full Documentation
+See `Market_Intelligence_Platform_Guide_v1.2.docx` for complete installation, usage and technical reference.
+
+## Pages
+- **Macro** — VIX regime, live market readings, macro cycle positioning
+- **AU/US Market** — breadth, benchmark RS, sector peer screener
+- **Commodities** — gold, silver, copper, uranium, lithium, platinum, palladium
+- **Uranium / AU Gold Miners** — dedicated universe screens
+- **RRG Charts** — relative rotation graphs
+- **Drawdown Analysis** — period-based performance analysis
+- **Actionable & Exports** — filtered lists with TradingView import
+- **EA Comparator** — MetaTrader .set file comparison
+- **MT5 Analysis** — trade history analysis from MT5 HTML reports
