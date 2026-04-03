@@ -1,0 +1,5 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+237,0,POD.AX,Podium Minerals,platinum,explorer,small,0.048,100.0,-0.0336,-0.0768,-0.2404,STRONG_UP,-32.39,50.0,50.0,-58.1,35.71,101.87,0.8238,LOW,-,0.0582,0.0673,0.0619,0,17.5272,LAGGARD,16.8143
+252,0,PLG,Platinum Group Metals,platinum,producer,small,1.7,66.67,0.0186,-0.172,-0.1803,STRONG_UP,-20.56,31.78,50.44,-53.74,47.2,95.9,0.5093,LOW,-,2.184,2.4836,2.1393,0,15.6429,LAGGARD,15.1282
+263,0,ZIM.AX,Zimplats Holdings,platinum,producer,mid,17.0,33.33,0.077,0.0768,0.1803,FLAT,-7.36,26.87,-2.86,-37.4,47.62,63.46,0.5483,LOW,EARLY,18.951,20.786,18.4767,0,20.1598,WEAK,14.402
+328,0,IPT.AX,Impact Minerals,platinum,explorer,small,0.058,0.0,-0.0186,0.2048,0.4972,STRONG_DOWN,-27.5,-17.14,-56.13,-50.0,25.0,71.02,0.0874,LOW,-,0.0623,0.0637,0.0667,0,-6.0345,WEAK,6.7271

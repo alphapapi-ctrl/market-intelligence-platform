@@ -1,0 +1,392 @@
+ticker,name,commodity,benchmark,type,market_cap,cap_band
+MOON.V,Blue Moon Metals,copper,copx,explorer,579646208,mid
+5713.T,Sumitomo Metal Mining Co Ltd,copper,copx,producer,2498822144000,large
+FDY.TO,Faraday Copper,copper,copx,explorer,1057639104,mid
+GLEN.L,Glencore,copper,copx,producer,61845610496,large
+KRY.V,Koryx Copper,copper,copx,producer,347069920,small
+2362.HK,JInchuan Group Interntional,copper,copx,explorer,8404532224,large
+GLAD.V,Gladiator Metals,copper,copx,producer,118733680,small
+NDA.DE,Aurubis AG,copper,copx,producer,6658002432,large
+OM.TO,Osisko Metals,copper,copx,producer,784990912,mid
+BHP,BHP Group ADR,copper,copx,producer,175331901440,large
+3939.HK,Wanguo Gold Group,copper,copx,producer,55139344384,large
+ALS.TO,Altius Minerals,copper,copx,producer,2501670912,mid
+ANTO.L,Antofagasta,copper,copx,producer,33331814400,large
+BOL.ST,Boliden,copper,copx,producer,162308931584,large
+FCX,Freeport McMoRan,copper,copx,producer,81173151744,large
+LUN.TO,Lundin Mining,copper,copx,producer,27169869824,large
+2899.HK,Zijin Mining Group H,copper,copx,producer,944999104512,large
+PUCOBRE.SN,Sociedad Punta Del Cobre,copper,copx,producer,1931113267200,large
+KGL.AX,KGL Resources,copper,copx,producer,154177904,small
+1515.T,Nittetsu Mining,copper,copx,producer,210553569280,large
+SAG.V,Sterling Metals,copper,copx,producer,58927016,small
+SCCO,Southern Copper,copper,copx,producer,132071350272,large
+0358.HK,Jiangxi Copper H,copper,copx,producer,180131381248,large
+DVP.AX,Develop Global,copper,copx,producer,1438736640,mid
+LA.V,Los Andes Copper,copper,copx,producer,372212992,small
+SLS.TO,Solaris Resources,copper,copx,producer,1840873216,mid
+WA1.AX,WA1 Resources,copper,copx,producer,1041221696,mid
+NGEX.TO,NGEX Minerals,copper,copx,producer,5128686080,large
+SFR.AX,Sandfire Resources,copper,copx,producer,7646976512,large
+CNL.TO,Collective Mining,copper,copx,producer,1799162624,mid
+A1M.AX,Aic Mines,copper,copx,producer,378869408,small
+ARG.TO,Amerigo Resources,copper,copx,producer,781333504,mid
+FOM.TO,Foran Mining,copper,copx,producer,2969649920,mid
+MMA.V,Midnight Sun Mining,copper,copx,producer,243663472,small
+CNB.AX,Carnaby Resources,copper,copx,producer,121492744,small
+HCH.AX,Hot Chili,copper,copx,producer,272636896,small
+BIG.V,Hercules Metals,copper,copx,producer,170752144,small
+FM.TO,First Quantum Minerals,copper,copx,producer,25996761088,large
+1208.HK,MMG Ltd.,copper,copx,producer,94938955776,large
+TGB,Taseko Mines,copper,copx,producer,2172760576,mid
+KGH.WA,KGHM Polska Miedz,copper,copx,producer,52800000000,large
+29M.AX,29Metals,copper,copx,producer,620289664,mid
+1258.HK,China Nonferrous Mining,copper,copx,producer,47331696640,large
+CAML.L,Central Asia Metals PLC,copper,copx,producer,271969152,small
+MARI.TO,Marimaca Copper,copper,copx,producer,1089812864,mid
+HBM.TO,Hudbay Minerals,copper,copx,producer,10330770432,large
+ATYM.L,Atalaya Mining Copper SA,copper,copx,producer,1077850880,mid
+0661.HK,China Daye Non-Ferrous Metals Mining,copper,copx,producer,2040096128,mid
+VISC.ST,Gruvaktiebolaget Viscaria Class B,copper,copx,producer,3335677440,mid
+ERO.TO,Ero Copper,copper,copx,producer,3544357120,mid
+GCU.TO,Gunnison Copper,copper,copx,producer,156373040,small
+ATX.V,ATEX Resources,copper,copx,producer,1092960000,mid
+LUCA.V,Luca Mining Ord Shs,copper,copx,producer,345173792,small
+KDK.V,Kodiak Copper Class B,copper,copx,producer,73430600,small
+AIS.AX,Aeris Resources,copper,copx,producer,502810880,mid
+FFM.TO,Firefly Metals,copper,copx,producer,1160866816,mid
+HGO.AX,Hillgrove Resources,copper,copx,producer,129735496,small
+CVV.AX,Caravel Minerals,copper,copx,producer,181597824,small
+2099.HK,China Gold International Resources,copper,copx,producer,61517885440,large
+PSC.AX,Prospect Resources,copper,copx,producer,256416784,small
+AR1.AX,Austral Resources Australia,copper,copx,producer,174127888,small
+FTZ.V,Fitzroy Minerals,copper,copx,producer,132843880,small
+CYM.AX,Cyprium Metals,copper,copx,producer,216779904,small
+REG.V,Regulus Resources,copper,copx,producer,502178688,mid
+CS.TO,Capstone Copper,copper,copx,producer,7544928256,large
+IE,Ivanhoe Electric,copper,copx,producer,1745817088,mid
+IVN.TO,Ivanhoe Mines Class A,copper,copx,producer,15970784256,large
+AHR.V,Amarc Resources,copper,copx,producer,198288080,small
+TNC.AX,True North Copper,copper,copx,producer,60953116,small
+ALDE.V,Aldebaran Resources,copper,copx,producer,383649312,small
+III.TO,Imperial Metals,copper,copx,producer,1336283776,mid
+KCP.V,King Copper Discovery,copper,copx,producer,220925440,small
+CY5.AX,Cygnus Metals,copper,copx,producer,164823296,small
+NDM.TO,Northern Dynasty Minerals,copper,copx,producer,961408512,mid
+TMQ,Trilogy Metals,copper,copx,producer,579753280,mid
+COPX,Global X Copper Miners ETF,copper,benchmark,ETF,,ETF
+1AE.AX,Aurora Energy Metals,uranium,URA,producer,10027570,small
+LOT.AX,Lotus Resources Ltd.,uranium,URA,producer,362014304,small
+EU,Encore Energy Corp,uranium,URA,producer,346472512,small
+I88.AX,Infini Resources,uranium,URA,producer,15149014,small
+ETM.AX,Energy Transition Minerals,uranium,URA,producer,195630944,small
+AEC.V,Anfield Energy Inc.,uranium,URA,producer,141115424,small
+wstrf,Western Uranium & Vanadium,uranium,URA,producer,31831272,small
+AEU.AX,Atomic Eagle,uranium,URA,producer,144690288,small
+LEU,Centrus Energy -A,uranium,URA,producer,3851108096,mid
+SMR,Nuscale Power Corp,uranium,URA,producer,3641634048,mid
+PR2.AX,Piche Resources,uranium,URA,producer,10419635,small
+OKLO,Oklo Inc.,uranium,URA,producer,9539340288,large
+EL8.AX,Elevate Uranium Ltd.,uranium,URA,producer,128141240,small
+AEE.AX,Aura Energy Ltd.,uranium,URA,producer,122332848,small
+DYL.AX,Deep Yellow Ltd.,uranium,URA,producer,1750283776,mid
+UEC,Uranium Energy Corp,uranium,URA,producer,6466011648,large
+UROY,Uranium Royalty Corp.,uranium,URA,royalties_financial_services,499488288,small
+UUUU,Energy Fuels Inc,uranium,URA,producer,4363404288,mid
+NNE,Nano Nuclear Energy,uranium,URA,producer,1125517824,mid
+FUU.V,F3 Uranium Corp,uranium,URA,producer,101093384,small
+LI.V,American Lithium Ord Shs,uranium,URA,producer,141893872,small
+PUR.V,Premier American Uranium Inc.,uranium,URA,producer,65029172,small
+SYH.V,Skyharbour Resources Ltd.,uranium,URA,producer,85390888,small
+JLL.AX,Jindalee Lithium,uranium,URA,producer,41502308,small
+COSA.V,Cosa Resources,uranium,URA,producer,59875556,small
+FSY.TO,Forsys Metals Corp,uranium,URA,producer,80759408,small
+PEN.AX,Peninsula Energy Ord Shs,uranium,URA,producer,247946336,small
+CXU.AX,Cauldron Energy,uranium,URA,producer,50924428,small
+SLX.AX,Silex Systems,uranium,URA,producer,1544226176,mid
+AGE.AX,Alligator Energy Ltd.,uranium,URA,producer,164170256,small
+BVR.AX,Bellavista Resources,uranium,URA,producer,64902312,small
+SASK.V,Atha Energy Corp.,uranium,URA,producer,263176928,small
+URG,Ur-Energy Inc,uranium,URA,producer,595992320,mid
+CVV.V,Canalaska Uranium Ltd.,uranium,URA,producer,145276128,small
+MGA.TO,Mega Uranium Ltd.,uranium,URA,producer,208904096,small
+ISO.TO,IsoEnergy Ltd.,uranium,URA,producer,843547456,mid
+URA,$Global X Uranium ETF,uranium,benchmark,ETF,,ETF
+ASN.AX,Anson Resources,uranium,URA,producer,85834736,small
+CCJ,Cameco Ord Shs,uranium,URA,producer,47089676288,large
+BOE.AX,Boss Energy Ltd.,uranium,URA,producer,666273792,mid
+PDN.AX,Paladin Energy,uranium,URA,producer,5158634496,large
+BMN.AX,Bannerman Energy Ltd.,uranium,URA,producer,772534400,mid
+DNN,Denison Mines Corp,uranium,URA,producer,3169403392,mid
+1164.HK,CGN Mining Co,uranium,URA,producer,29718669312,large
+NXE.TO,Nexgen Energy,uranium,URA,producer,10550670336,large
+YCA.L,Yellow Cake PLC,uranium,URA,producer,1449000448,mid
+LAM.TO,Laramide Resources,uranium,URA,producer,178701568,small
+TOE.AX,Toro Energy Ltd.,uranium,URA,producer,61945148,small
+BKY.MC,Berkeley Energia Ltd.,uranium,URA,producer,131241904,small
+HAR.AX,Haranga Resources,uranium,URA,producer,51125032,small
+PNN.AX,Power Minerals,uranium,URA,producer,37322032,small
+MYRUF,Myriad Uranium Corp.,uranium,URA,producer,35793740,small
+GLO.TO,Global Atomic Corp,uranium,URA,producer,387322944,small
+028260.KS,Samsung C&T,uranium,URA,producer,44800438960128,large
+ERA.AX,Energy Resources Of Australia,uranium,URA,producer,1216188672,mid
+8001.T,Itochu Corp,uranium,URA,producer,14515822395392,large
+7011.T,Mitsubishi Heavy Ind.,uranium,URA,producer,15385969557504,large
+EME.AX,Energy Metals,uranium,URA,producer,18661816,small
+034020.KS,Doosan Enerbility,uranium,URA,producer,65711724560384,large
+ARE.TO,Aecon Group,uranium,URA,producer,2720498176,mid
+052690.KS,Kepco En & Co,uranium,URA,producer,6410330439680,large
+000720.KS,Hyundai En & Co,uranium,URA,producer,17783335157760,large
+006360.KS,Gs En & Co,uranium,URA,producer,2325955739648,large
+047040.KS,Daewoo Eng & Co,uranium,URA,producer,6722090434560,large
+JAGU,Jaguar Uranium Corp,uranium,URA,producer,32511980,small
+NUCL,Eagle Nuclear Energy,uranium,URA,producer,218641488,small
+VZLA,Vizsla Silver Corp,silver,SIL,producer,1093931392,mid
+IPT.V,Impact Silver,silver,SIL,producer,79596320,small
+PLG,Platinum Group Metals,platinum,ETPMPT.AX,producer,209788576,small
+NVA,Nova Minerals,gold,GDX,explorer,234264784,small
+GSVR.V,Guanajuato Silver Co Ltd,silver,SIL,producer,390361376,small
+SCZ.V,Santacruz Silver Mining,silver,SIL,producer,978316928,mid
+MKR.AX,Manuka Resources Ord Shs,gold,GDX,producer,147881840,small
+HL,Hecla Mining Co,silver,SIL,producer,12019373056,large
+MKR.AX,Manuka Resources Ord Shs,silver,SIL,producer,147881840,small
+IE,Ivanhoe Electric Inc.,gold,GDX,producer,1745817088,mid
+CKG.V,Chesapeake Gold,gold,GDX,explorer,256029072,small
+TMQ,Trilogy Metals Inc.,gold,GDX,explorer,579753280,mid
+PNR.AX,Pantoro Gold,gold,GDX,producer,1288971520,mid
+BRMS.JK,Bumi Resources Minerals,gold,GDX,producer,103502344880128,large
+BRMS.JK,Bumi Resources Minerals,copper,copx,producer,103502344880128,large
+KTN.V,Kootenay Silver,silver,SIL,explorer,137535408,small
+AMMN.JK,Amman Mineral Internasional,gold,GDX,producer,360415536087040,large
+AMMN.JK,Amman Mineral Internasional,copper,copx,producer,360415536087040,large
+HMY,Harmony Gold Mining,gold,GDX,producer,8750997504,large
+SLVR.V,Silver Tiger Metals,silver,SIL,producer,401831168,small
+SBSW,Sibanye Gold ADR,gold,GDX,producer,8297057792,large
+SBSW,Sibanye Gold ADR,palladium,ETPMPD.AX,producer,8297057792,large
+VROY.V,Vizsla royalties_financial_services,gold,GDX,royalties_financial_services,165538560,small
+AMC.TO,Arizona Metals,gold,GDX,explorer,71607192,small
+AAG.V,Aftermath Silver,silver,SIL,explorer,243259008,small
+CYL.AX,Catalyst Metals,gold,GDX,producer,1633515776,mid
+NFG.V,New Found Gold Corp,gold,GDX,explorer,860000320,mid
+APM.TO,Andean Precious Metals,gold,GDX,producer,943489600,mid
+TUD.V,Tudor Gold,gold,GDX,explorer,383713248,small
+DV.V,Dolly Varden Silver,gold,GDX,explorer,356957952,small
+ITRG,Integra Resources,gold,GDX,producer,548048192,mid
+ITRG,Integra Resources,silver,SIL,producer,548048192,mid
+EXK,Endeavour Silver Corp,silver,SIL,producer,2652728576,mid
+CTGO,Contango ORE,gold,GDX,producer,288822080,small
+CS.TO,Capstone Copper,copper,COPX,producer,7544928256,large
+ASM,Avino Silver & Gold Mines,gold,GDX,producer,968984640,mid
+ASM,Avino Silver & Gold Mines,silver,SIL,producer,968984640,mid
+GLDG,Goldmining Inc,gold,GDX,explorer,243683520,small
+WRN,Western Copper and Gold Ord Shs,gold,GDX,producer,543745856,mid
+HYMC,Hycroft Mining Holding,gold,GDX,explorer,3024217344,mid
+GGD.TO,Gogold Resources Inc,gold,GDX,producer,1079220224,mid
+FF.TO,First Mining Gold,gold,GDX,explorer,635601216,mid
+ASL.AX,Andean Silver,silver,SIL,explorer,425098208,small
+WAM.V,Western Alaska Minerals,silver,SIL,producer,90095688,small
+WAF.AX,West African Resources,gold,GDX,producer,3598844416,mid
+FRES.L,Fresnillo Ord Shs,silver,SIL,producer,23580594176,large
+HSTR.V,Heliostar Metals Ord Shs,silver,SIL,producer,575661888,mid
+FRES.L,Fresnillo Ord Shs,gold,GDX,producer,23580594176,large
+HSTR.V,Heliostar Metals Ord Shs,gold,GDX,producer,575661888,mid
+USL.AX,Unico Silver,silver,SIL,producer,415747264,small
+CDE,Coeur Mining Inc,silver,SIL,producer,18952634368,large
+EMR.AX,Emerald Resources,gold,GDX,producer,3448571136,mid
+CMM.AX,Capricorn Metals,gold,GDX,producer,4909725696,mid
+1818.HK,Zhaojin Mining,gold,GDX,producer,106626031616,large
+DSV.TO,Discovery Silver Corp,silver,SIL,producer,6555687936,large
+GTWO.TO,G2 Golfields,gold,GDX,producer,1322158208,mid
+NGD,New Gold Inc,gold,GDX,producer,7213915648,large
+PSAB.JK,J Resources Asia,gold,GDX,producer,13362299666432,large
+NST.AX,Northern Star Resources,gold,GDX,producer,26897823744,large
+USAS,Americas Gold & Silver,gold,GDX,producer,1866141312,mid
+WGX.TO,Westgold Resources,gold,GDX,producer,4869391872,mid
+KGH.WA,KGHM Polska Miedz Ord Shs,silver,SIL,producer,52800000000,large
+KGH.WA,KGHM Polska Miedz Ord Shs,copper,COPX,producer,52800000000,large
+EGO,Eldorado Gold Corp,gold,GDX,producer,6591041536,large
+GMD.AX,Genesis Minerals,gold,GDX,producer,6979625472,large
+DC,Dakota Gold Corp,gold,GDX,explorer,584653824,mid
+CMCL,Caledonia Mining Corp Plc,gold,GDX,producer,430882784,small
+CUU.V,Copper Fox Metals,copper,COPX,producer,322437504,small
+DRD,Drdgold Ltd,gold,GDX,producer,2412177152,mid
+AYA.TO,Aya Gold & Silver,gold,GDX,producer,2599615488,mid
+AMI.AX,Aurelia Metals,gold,GDX,producer,406416448,small
+AMI.AX,Aurelia Metals,copper,COPX,producer,406416448,small
+GORO,Gold Resources Corp.,gold,GDX,producer,173188976,small
+WVM.V,West Vault Mining Ord Shs,gold,GDX,explorer,102651432,small
+FPC.V,Falco Resources,gold,GDX,explorer,121582528,small
+KGC,Kinross Gold Corp,gold,GDX,producer,33569585152,large
+GROY,Gold Royalty Corp,gold,GDX,royalties_financial_services,735308480,mid
+NEXA,Nexa Resources S.A.,copper,COPX,producer,1274059392,mid
+RMS.AX,Ramelius Resources,gold,GDX,producer,7033564160,large
+GAU,Galiano Gold,gold,GDX,producer,584693952,mid
+B,Barrick Mining,gold,GDX,producer,64094924800,large
+B,Barrick Mining,copper,COPX,producer,64094924800,large
+HBM,Hudbay Minerals Inc,copper,COPX,producer,7520864256,large
+HBM,Hudbay Minerals Inc,gold,GDX,producer,7520864256,large
+PRU.AX,Perseus Mining,gold,GDX,producer,6768270848,large
+SVM,Silvercorp Metals,silver,SIL,producer,2162055424,mid
+TXG.TO,Torex Gold Resources,gold,GDX,producer,5484467712,large
+GGP.L,Greatland Resources,gold,GDX,producer,3374700032,mid
+GGP.L,Greatland Resources,copper,COPX,producer,3374700032,mid
+ARTG.V,Artemis Gold Inc,gold,GDX,producer,7802615808,large
+VAU.AX,Vault Minerals,gold,GDX,producer,4185527040,mid
+SIL,Global X Silver Miners ETF,silver,benchmark,ETF,,ETF
+BRC.V,Blackrock Silver,silver,SIL,explorer,457847200,small
+BRC.V,Blackrock Silver,gold,GDX,explorer,457847200,small
+SVL.AX,Silver Mines Ord Shs,silver,SIL,explorer,365954848,small
+OBM.AX,ORA Banda Mining,gold,GDX,explorer,2192543744,mid
+GFI,Gold Fields Ltd,gold,GDX,producer,36391686144,large
+SA,Seabridge Gold Inc,gold,GDX,explorer,2764013056,mid
+LUG.TO,Lundin Gold Inc,gold,GDX,producer,23450525696,large
+PPTA.TO,Perpetua Resources,gold,GDX,explorer,4312679936,mid
+GENM.TO,Generation Mining Ltd,copper,COPX,explorer,181795248,small
+GENM.TO,Generation Mining Ltd,palladium,ETPMPD.AX,explorer,181795248,small
+TGB,Taseko Mines Ltd.,copper,COPX,producer,2172760576,mid
+MUX,McEwen Mining Inc,gold,GDX,producer,1126036096,mid
+MUX,McEwen Mining Inc,silver,SIL,producer,1126036096,mid
+PAAS,Pan American Silver,silver,SIL,producer,21035487232,large
+KNT.TO,K92 Mining Inc,gold,GDX,explorer,5455452160,large
+FISH.V,Sailfish Royalty Corp.,gold,GDX,royalties_financial_services,261553344,small
+SVRS.V,Silver Storm Mining,silver,SIL,producer,351877696,small
+AGMR.TO,Silver Mountain Resources,silver,SIL,explorer,218760688,small
+NEM,Newmont Corp,gold,GDX,producer,108056854528,large
+SFR.AX,Sandfire Resources Ord Shs,copper,COPX,producer,7646976512,large
+FSM,Fortuna Mining,gold,GDX,producer,2832032000,mid
+FSM,Fortuna Mining,silver,SIL,producer,2832032000,mid
+RGLD,Royal Gold Inc,gold,GDX,royalties_financial_services,19284119552,large
+ORLA,Orla Mining Ltd,gold,GDX,producer,4867354112,mid
+ASA,ASA Gold & Precious Metals,gold,GDX,royalties_financial_services,1075610496,mid
+AG,First Majestic Silver,silver,SIL,producer,9912059904,large
+BGL.AX,Bellevue Gold,gold,GDX,producer,2094371072,mid
+OR,Osisko Gold royalties_financial_services,gold,GDX,royalties_financial_services,6539398656,large
+AU,Anglo Gold Ashanti,gold,GDX,producer,43335315456,large
+KCN.AX,Kingsgate Consolidated Ord Shs,gold,GDX,producer,1234640896,mid
+KCN.AX,Kingsgate Consolidated Ord Shs,silver,SIL,producer,1234640896,mid
+EQX,Equinox Gold Corp,gold,GDX,producer,9929501696,large
+EVN.AX,Evolution Mining,gold,GDX,producer,26195013632,large
+MTA,Metalla Royalty & Str.,gold,GDX,royalties_financial_services,639599168,mid
+BTG,B2gold Corp,gold,GDX,producer,5534161408,large
+ARIS,Aris Mining Corp,gold,GDX,producer,3451638016,mid
+IAUX,I-80 Gold Corp,gold,GDX,producer,1149123072,mid
+CNL,Collective Mining,gold,GDX,explorer,1309790592,mid
+RRL.AX,Regis Resources,gold,GDX,producer,4846414336,mid
+MAH.AX,Machahon Holdings,gold,GDX,royalties_financial_services,1594689408,mid
+TFPM,Triple Flag Precious Metals,gold,GDX,royalties_financial_services,6626955776,large
+OGC.TO,Oceanagold Corp,gold,GDX,explorer,9513647104,large
+MKO.V,Mako Mining Corp,gold,GDX,producer,716084096,mid
+WDO.TO,Wesdome Gold Mines,gold,GDX,explorer,3408822016,mid
+IAG,Iamgold Corp,gold,GDX,producer,10098174976,large
+BVN,Buenaventura Mining,gold,GDX,producer,8165678080,large
+NEWP,New Pacific Metals,silver,SIL,explorer,677620544,mid
+WPM,Wheaton Precious Metals,gold,GDX,royalties_financial_services,54918639616,large
+WPM,Wheaton Precious Metals,silver,SIL,royalties_financial_services,54918639616,large
+WPM,Wheaton Precious Metals,platinum,ETPMPT.AX,royalties_financial_services,54918639616,large
+WPM,Wheaton Precious Metals,palladium,ETPMPD.AX,royalties_financial_services,54918639616,large
+RUP.TO,Rupert Resources,gold,GDX,explorer,1412729344,mid
+CGAU,Centerra Gold Inc,gold,GDX,producer,3279014656,mid
+ODV,Osisko Development,gold,GDX,producer,884569920,mid
+ALK.AX,Alkane Resources,gold,GDX,producer,2008321152,mid
+ABRA.TO,AbraSilver Resources,silver,SIL,explorer,1769866240,mid
+EDV.L,Endeavour Mining,gold,GDX,producer,9982009344,large
+ABRA.TO,AbraSilver Resources,gold,GDX,explorer,1769866240,mid
+ABRA.TO,AbraSilver Resources,copper,COPX,explorer,1769866240,mid
+AEM,Agnico Eagle Mines,gold,GDX,producer,92053118976,large
+PDI.AX,Predictive Discovery,gold,GDX,explorer,2016106368,mid
+GMIN.TO,G Mining Venture,gold,GDX,explorer,9261523968,large
+DPM.TO,Dundee Precious Metals,gold,GDX,explorer,9648671744,large
+BOL.ST,Boliden Ord Shs,gold,GDX,producer,162308931584,large
+BOL.ST,Boliden Ord Shs,silver,SIL,producer,162308931584,large
+BOL.ST,Boliden Ord Shs,copper,COPX,producer,162308931584,large
+FNV,Franco-Nevada Corp,gold,GDX,royalties_financial_services,44519419904,large
+SKE,Skeena Resources Ltd,gold,GDX,producer,3331277824,mid
+SKE,Skeena Resources Ltd,silver,SIL,producer,3331277824,mid
+PAF.L,Pan African Resources,gold,GDX,producer,2607125248,mid
+STK.AX,Strickland Metals,gold,GDX,explorer,526373728,mid
+010130.KS,Korea Zinc Ord Shs,copper,COPX,producer,28602670252032,large
+S32.AX,South32 Ord Shs,copper,COPX,producer,18418262016,large
+THM,International Tower Hill Mines,gold,GDX,explorer,548613632,mid
+600547.SS,Shandong Gold Ord. A,gold,GDX,producer,182368829440,large
+RSG.AX,Resolute Mining,gold,GDX,producer,2874826752,mid
+NG,Novagold Resources,gold,GDX,producer,3549394176,mid
+LGD.TO,Liberty Gold Corp,gold,GDX,producer,557317376,mid
+AGI,Alamos Gold Inc,gold,GDX,producer,17227302912,large
+TAU.V,Thesis Gold Inc A,gold,GDX,producer,723483136,mid
+SSRM,SSR Mining Inc,gold,GDX,producer,4969294336,mid
+AUGO,Aura Minerals,gold,GDX,producer,5548361728,large
+AMM.V,Almaden Minerals,gold,GDX,explorer,31593532,small
+MFRISCOA-1.MX,Minera Frisco Sab De Cv,gold,GDX,explorer,54411923456,large
+3939.HK,Wanguo Gold GP,gold,GDX,producer,55139344384,large
+MAU.TO,Montage Gold,gold,GDX,explorer,4641483264,mid
+600489.SS,Zhongjin Gold Ord. A,gold,GDX,producer,123897298944,large
+PZG,Paramount Gold Nevada Ord Shs,gold,GDX,producer,137453712,small
+600916.SS,China Gold Ord. A,gold,GDX,producer,15875999744,large
+OM.TO,Osisko Metals,copper,COPX,explorer,784990912,mid
+600988.SS,Chifeng Gold Ord. A,gold,GDX,producer,72975794176,large
+EMAS.JK,Merdeka Gold Resources,gold,GDX,producer,126321464180736,large
+TRX,TRX Gold,gold,GDX,producer,429792032,small
+DBG.V,Doubleview Gold,gold,GDX,explorer,425672384,small
+SSRM,SSR Mining Inc,silver,SIL,producer,4969294336,mid
+AUGO,Aura Minerals,copper,COPX,producer,5548361728,large
+SS1.AX,Sun Silver,silver,SIL,producer,270497536,small
+ZIM.AX,Zimplats Holdings,platinum,ETPMPT.AX,producer,1885811584,mid
+SPD.AX,Southern Palladium Limited,palladium,ETPMPD.AX,producer,182034336,small
+BML.ax,Boab Metals Ltd,silver,SIL,producer,253595872,small
+MMA.AX,Maronan Metals ltd,silver,SIL,producer,88006472,small
+ETPMPT.AX,Global X physical Platinum,platinum,benchmark,ETF,,ETF
+ETPMPD.AX,Global X physical Palladium,palladium,benchmark,ETF,,ETF
+RPH1.SG,Anglo American Platinum,platinum,ETPMPT.AX,producer,,small
+RPH1.SG,Anglo American Platinum,palladium,ETPMPD.AX,producer,,small
+IMPUY,Impala Platinum,palladium,ETPMPD.AX,producer,12020380672,large
+7JR.MU,Northam Platinum,palladium,ETPMPD.AX,producer,,small
+IVPAF,Ivanhoe Mines Ltd,palladium,ETPMPD.AX,producer,11594503168,large
+CHN.AX,Challice Mining,palladium,ETPMPD.AX,producer,560879680,mid
+IPT.AX,Impact Minerals,platinum,ETPMPT.AX,explorer,237319792,small
+POD.AX,Podium Minerals,platinum,ETPMPT.AX,explorer,50471324,small
+LIT,Global X Lithium and Battery Tech ETF,lithium,benchmark,ETF,,ETF
+RIO,RIO TINTO PLC-SPON ADR,lithium,LIT,producer,141065584640,large
+ALB,ALBEMARLE CORP,lithium,LIT,producer,20866027520,large
+SQM,QUIMICA Y MINERA CHIL-SP ADR,lithium,LIT,producer,21976975360,large
+002460.sz,GANFENG LITHIUM GROUP CO L-A,lithium,LIT,producer,147271811072,large
+300750.SZ,CONTEMPORARY AMPEREX TECHN-A,lithium,LIT,producer,1817560875008,large
+PLS.AX,PLS GROUP LTD,lithium,LIT,producer,15847317504,large
+1211.HK,BYD CO LTD-H,lithium,LIT,producer,976451796992,large
+300014.SZ,EVE ENERGY CO LTD-A,lithium,LIT,producer,145395892224,large
+TSLA,TESLA INC,lithium,LIT,producer,1437294002176,large
+002466.SZ,TIANQI LITHIUM CORP-A,lithium,LIT,producer,90840489984,large
+002709.SZ,GUANGZHOU TINCI MATERIALS -A,lithium,LIT,producer,87457341440,large
+ENS,ENERSYS,lithium,LIT,producer,6538084352,large
+300450.SZ,WUXI LEAD INTELLIGENT EQUI-A,lithium,LIT,producer,80814669824,large
+MIN.AX,MINERAL RESOURCES LTD,lithium,LIT,producer,11235367936,large
+247540.KQ,ECOPRO BM CO LTD,lithium,LIT,producer,19741355802624,large
+300207.SZ,SUNWODA ELECTRONIC CO LTD-A,lithium,LIT,producer,50675892224,large
+002738.SZ,SINOMINE RESOURCE GROUP CO-A,lithium,LIT,producer,46110547968,large
+002812.SZ,YUNNAN ENERGY NEW MATERIAL-A,lithium,LIT,producer,66005192704,large
+603659.ss,SHANGHAI PUTAILAI NEW ENERGY,lithium,LIT,producer,68984332288,large
+IGO.AX,IGO LTD,lithium,LIT,producer,5929406976,large
+LTR.AX,LIONTOWN LTD,lithium,LIT,producer,5499862016,large
+066970.KS,L&F CO LTD,lithium,LIT,producer,5417719562240,large
+002176.SZ,JIANGXI SPECIAL ELECTRIC -A,lithium,LIT,producer,15902954496,large
+LCID,LUCID GROUP INC,lithium,LIT,producer,3394808832,mid
+AMG.AS,AMG CRITICAL MATERIALS N.V.,lithium,LIT,producer,1067077568,mid
+LAC.TO,LITHIUM AMERICAS CORP,lithium,LIT,producer,1924427520,mid
+LAR.TO,LITHIUM ARGENTINA AG,lithium,LIT,producer,1576535040,mid
+ELV.AX,ELEVRA LITHIUM LTD,lithium,LIT,producer,1341086464,mid
+VUL.AX,VULCAN ENERGY RESOURCES LTD,lithium,LIT,producer,1572301952,mid
+SGML,SIGMA LITHIUM CORP,lithium,LIT,producer,1189580928,mid
+SLI.V,STANDARD LITHIUM LTD,lithium,LIT,producer,1215212800,mid
+ERA.PA,ERAMET,lithium,LIT,producer,1355256704,mid
+PMET.TO,PMET RESOURCES INC,lithium,LIT,producer,760215296,mid
+EUR.AX,EUROPEAN LITHIUM LTD,lithium,LIT,producer,417504512,small
+INR.AX,IONEER LTD,lithium,LIT,producer,353582912,small
+SGML,Sigma Lithium Corp,lithium,LIT,producer,1189580928,mid
+GEV,GE Vernova Inc,lithium,LIT,producer,246741516288,large
+5802.T,Sumitomo Electric Industries,lithium,LIT,producer,7927870521344,large
+ENR.DE,Siemens Energy AG,lithium,LIT,producer,129584644096,large
+2308.TW,Delta Electronics Inc,lithium,LIT,producer,4026192363520,large
+SEDG,Solar Edge Technologies inc.,lithium,LIT,producer,2877660928,mid
+0666.HK,REPT Bettero Energy Co,lithium,LIT,producer,38535053312,large
+ELVR,ELEVRA LITHIUM LTD,lithium,LIT,producer,901722944,mid
+CXO.AX,Core Lithium,lithium,LIT,producer,641619712,mid
+GDX,VanEck Gold Miners ETF,gold,benchmark,ETF,,ETF

@@ -1,0 +1,183 @@
+══════════════════════════════════════════════════════════════════════
+  DAILY MACRO SNAPSHOT — 20 Mar 2026
+══════════════════════════════════════════════════════════════════════
+
+  VIX: 24.06   VVIX: 118.09   VIX/VVIX: 0.2037
+  REGIME: CAUTIOUS
+  Elevated volatility — selective positioning
+
+──────────────────────────────────────────────────────────────────────
+  TODAY'S FOCUS INSTRUMENTS
+──────────────────────────────────────────────────────────────────────
+  ASX:
+    • XJO — ASX200
+    • XSO — Small Ords
+    • XEJ — Energy
+    • XIJ — IT
+    • XNJ — Industrials
+    • XTJ — Telecom
+  US:
+    • SPX — S&P500
+    • NDX — Nasdaq100
+    • IWM — Russell2000
+    • DJI — Dow Jones
+  Ratios:
+    • IWM/NDX — Small vs large cap
+    • XLF/NDX — Finance vs tech
+    • XDJ/XJO — ASX disc vs market
+    • XEJ/XJO — ASX energy vs market
+
+──────────────────────────────────────────────────────────────────────
+  ECONOMIC REGIME INDICATORS
+──────────────────────────────────────────────────────────────────────
+  Unemployment:  4.4%  → TICKING UP — late cycle signal
+  PMI Mfg:       50.3  ✓ EXPANSION — moderate growth
+  Non-Farm Pay:  158,466 (000s)
+  Consumer Sent:  56.4  ⚠ VERY LOW — recession level pessimism
+
+──────────────────────────────────────────────────────────────────────
+  CONSUMER CYCLE INDICATORS
+──────────────────────────────────────────────────────────────────────
+  XLY/XLP ratio:     1.3383  ▲ 2.30% 5d  ▼ 12.08% 63d  ⚠ RISK OFF — defensives outperforming 3 months
+  RSPD/RSPS ratio:   1.8195  ▲ 2.89% 5d  ▼ 5.99% 63d  ⚠ RISK OFF — equal weight confirms defensive rotation
+  Sector Groups Risk On/Off ratio: 1.3131  ▲ 2.08% 5d  ▲ 1.45% 10d  → NEUTRAL — no clear rotation
+
+──────────────────────────────────────────────────────────────────────
+  VALUATION & LEVERAGE
+──────────────────────────────────────────────────────────────────────
+  SPX/M2 ratio:      0.2944  ⚠ EXTREME — dot-com bubble levels
+  Margin/M2 ratio:   1.6352  ⚠ EXTREME — forced deleveraging risk
+  ✓ Margin stable/rising — ▲ 1.75% 1m  ▲ 1.67% 3m
+  ⚠ Margin AT or NEAR ALL TIME HIGH — peak deleveraging risk
+  Buffett Indicator: 232.59%  ⚠ EXTREME — significantly above historical average of 100%
+  Shiller CAPE:      37.5  ⚠ EXTREME — dot-com bubble territory  (manual — update monthly)
+
+══════════════════════════════════════════════════════════════════════
+  MACRO CYCLE POSITIONS
+══════════════════════════════════════════════════════════════════════
+
+  ──────────────────────────────────────────────────────────────────
+  18-21 YEAR LAND CYCLE
+  ──────────────────────────────────────────────────────────────────
+  Phase:    DOWNTURN
+  Context:  Credit contraction, real estate stress, recession risk
+  Years in: 19.7
+  ITB Housing ETF:  $90.64  ▼ 9.07% 63d  ▼ 17.82% 126d
+  → ITB down >10% over 6 months — housing stress building
+  Watch for next phase:
+    → Commercial real estate distress accelerating
+    → Credit tightening for property development
+    → Rising vacancy rates in office/retail
+    → Regional bank stress from CRE exposure
+
+  ──────────────────────────────────────────────────────────────────
+  40/80 YEAR RATE CYCLE (US10Y)
+  ──────────────────────────────────────────────────────────────────
+  Phase:    EARLY UP
+  Context:  Rates rising from historic lows, structural shift
+  Years in: 5.7
+  US10Y now: 4.26%
+  Key levels: Structural=4.0% | Mid=6.0% | Peak=8.0%
+  Watch for next phase:
+    → US10Y holding above 4% confirms structural up cycle
+    → Watch for break above 5% = acceleration signal
+    → AU10Y tracking US — RBA forced to follow
+    → Bond market pricing inflation re-acceleration
+
+  ──────────────────────────────────────────────────────────────────
+  COMMODITY VS EQUITY ALTERNATING CYCLE (GOLD/DOW)
+  ──────────────────────────────────────────────────────────────────
+  Phase:    MID
+  Context:  Industrial metals accelerate — copper/nickel lead
+  Years in: 5.7
+  Supercycle: METALS RUN → ENERGY MID CYCLE
+  Metals rotation:
+    → Tier 1: Copper (electrification backbone)
+    → Tier 1: Lithium (battery/storage)
+    → Tier 2: Uranium (nuclear baseload)
+    → Tier 2: Rare Earths (EV/defence)
+    → Tier 3: Manganese/Cobalt (supply chain)
+  Watch for next phase:
+    → SPGSCI/DJI ratio breaking higher = commodity cycle confirmed
+    → Gold/Dow ratio declining from highs = equity cycle returning
+    → Copper breakout above prior highs = Phase 2 acceleration
+    → Agriculture ETFs breaking out = late cycle signal
+
+  ──────────────────────────────────────────────────────────────────
+  US PRESIDENTIAL/ELECTION CYCLE
+  ──────────────────────────────────────────────────────────────────
+  Phase:    YEAR 2
+  Context:  Mid-term year, choppy and poor SPX returns historically
+  Years in: 2.2
+  Watch for next phase:
+    → Mid-term elections Nov 2026 — watch policy shift
+    → SPX historically underperforms in year 1-2
+    → Tariff/trade policy changes = volatility catalyst
+    → Fed independence risk = bond market vigilantes
+
+  ──────────────────────────────────────────────────────────────────
+  BUSINESS/ECONOMIC CYCLE
+  ──────────────────────────────────────────────────────────────────
+  Phase:    LATE CYCLE / EARLY CONTRACTION
+  Current signals:
+    • Yield curve recently un-inverted — historically 6-18 months to recession
+    • Fed cutting but inflation sticky — stagflation risk
+    • PMI manufacturing sub-50 in some months
+    • Consumer credit stress emerging
+  Watch for next phase:
+    → Unemployment rate rising above 4.5% = recession confirmed
+    → Yield curve re-inversion = double dip risk
+    → Credit spreads widening above 500bps = stress signal
+    → Fed pivoting to QE = late cycle confirmed
+
+  ──────────────────────────────────────────────────────────────────
+  FED QT/QE CYCLE
+  ──────────────────────────────────────────────────────────────────
+  Phase:    QT SLOWING — PRE PIVOT
+  Fed Funds: 3.64%
+  Balance sheet: $6.66T
+  Watch for next phase:
+    → Fed balance sheet stabilising = QT effectively over
+    → First repo market stress = forced QE pivot
+    → Fed funds rate below 3% = full easing cycle
+    → Watch SOFR spreads for liquidity stress signals
+
+══════════════════════════════════════════════════════════════════════
+  LIVE MARKET READINGS
+══════════════════════════════════════════════════════════════════════
+──────────────────────────────────────────────────────────────────────
+  RATES & BONDS
+──────────────────────────────────────────────────────────────────────
+  US10Y:        4.26%   US2Y: 3.76%   US3M: 3.73%
+  Yield Curve:  0.46% (10Y-2Y)   Fed Funds: 3.64%
+  AU10Y:        4.77%
+  ✓ Yield curve positive — un-inverted
+
+──────────────────────────────────────────────────────────────────────
+  FED & LIQUIDITY
+──────────────────────────────────────────────────────────────────────
+  Fed Balance Sheet: $6.66T   Fed Funds: 3.64%
+  HY Spread: 3.2%   IG Spread: 5.08%
+  US10Y 3M trend: RISING (+0.11% over 3 months)
+  US2Y  3M trend: RISING (+0.28% over 3 months)
+  ✓ HY spreads contained — credit conditions healthy
+
+──────────────────────────────────────────────────────────────────────
+  COMMODITIES
+──────────────────────────────────────────────────────────────────────
+  Gold:    $4708.3  ▼ 5.71% 5d
+  Silver:  $73.28  
+  Copper:  $5.52  ▼ 4.66% 5d
+  Oil:     $94.01  ▲ 0.58% 5d
+  Gold/SPX ratio:    0.6964
+  Gold/Copper ratio: 852.5
+
+──────────────────────────────────────────────────────────────────────
+  EQUITIES & RISK
+──────────────────────────────────────────────────────────────────────
+  SPX:  6606.49  ▼ 0.39% 5d
+  NDX:  24355.28  ▼ 0.10% 5d
+  IWM:  247.63
+  DXY:  99.44
+
+══════════════════════════════════════════════════════════════════════

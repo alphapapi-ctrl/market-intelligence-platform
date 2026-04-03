@@ -1,0 +1,49 @@
+═════════════════════════════════════════════════════════════════
+  MARKET BREADTH SUMMARY — 2026-03-17
+═════════════════════════════════════════════════════════════════
+  Metric                       Today       D5      D20      D63
+─────────────────────────────────────────────────────────────────
+  Total                         1735        0       +4      +23
+  Leaders                        335      -21      -37      -55
+  Contenders                     213      -27      -69     -105
+  Laggards                       464       +7       +4      +79
+  Weak                           723      +41     +106     +104
+  Above 200 SMA                  686      -93     -212     -260
+  High Volume                    199      -70      -98      -10
+  Acc Early                      188      +27      +45      +95
+  Acc Progress                    14       -5       +9       -4
+  Acc Shift                        6       -6       -1       -6
+  Large Total                    113        0        0        0
+  Large Leaders                   21       +3       +1       -1
+  Mid Total                      272        0        0       +1
+  Mid Leaders                     63       +1       -4      -17
+  Small Total                   1349        0       +4      +22
+  Small Leaders                  251      -25      -34      -37
+─────────────────────────────────────────────────────────────────
+  SECTOR BREADTH
+─────────────────────────────────────────────────────────────────
+  Sector                     Leaders Above200  HighVol
+─────────────────────────────────────────────────────────────────
+  Producer Manufacturing           7       13        3
+  Health Technology               19       27       16
+  Non-Energy Minerals            153      352       72
+  Technology Services             20       32       14
+  Process Industries               9       13        6
+  Electronic Technology            6       11        5
+  Energy Minerals                 23       56       19
+  Miscellaneous                   17       34        9
+  Consumer Services                9       15        3
+  Consumer Non-Durables            5        8        3
+  Communications                   3        3        2
+  Finance                         29       52       25
+  Retail Trade                     4        7        4
+  Industrial Services             10       25        4
+  Health Services                  2        2        2
+  Commercial Services              9       14        3
+  Consumer Durables                4        6        2
+  Utilities                        1        6        0
+  Transportation                   3        5        4
+  Distribution Services            2        5        3
+  Index                            0        0        0
+  Nan                              0        0        0
+═════════════════════════════════════════════════════════════════

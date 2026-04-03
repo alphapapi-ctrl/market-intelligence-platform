@@ -1,0 +1,2 @@
+rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+34,16,NST.AX,Northern Star Resources Limited,Gold,large,19.51,30.07,0.0834,-0.1399,-0.146,STRONG_UP,-17.11,9.0,38.8,-45.32,55.56,70.64,1.9414,HIGH,EARLY,22.666,25.9927,22.898,0,7.076,WEAK,23.3598

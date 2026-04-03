@@ -1,0 +1,4 @@
+rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+39,0,VAU.AX,Vault Minerals Limited,Gold,mid,4.02,45.1,-0.0266,-0.1019,-0.2019,STRONG_UP,-1.25,40.92,71.8,-41.81,50.0,58.06,1.6403,HIGH,EARLY,4.8842,5.3326,4.2953,0,35.2378,WEAK,23.8219
+45,0,CMM.AX,Capricorn Metals Ltd,Gold,mid,10.75,41.83,0.0258,-0.0285,-0.1955,STRONG_UP,-12.23,32.95,110.44,-41.12,55.56,60.53,1.7427,HIGH,EARLY,12.4953,13.5339,12.3384,0,30.2425,WEAK,22.4493
+58,0,CYL.AX,Catalyst Metals Limited,Gold,mid,6.26,36.6,0.0313,-0.0837,-0.1229,STRONG_UP,-18.81,24.45,870.54,-41.6,49.6,75.26,1.5334,HIGH,EARLY,6.999,7.785,7.0331,0,16.1159,WEAK,19.2819

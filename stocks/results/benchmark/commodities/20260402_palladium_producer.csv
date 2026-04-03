@@ -1,0 +1,14 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+49,-10,SBSW,"ticker
+SBSW    Sibanye Gold ADR
+SBSW    Sibanye Gold ADR
+Name: name, dtype: object",palladium,producer,large,12.41,2.1095,1.1007,1.0168,1.0368,FLAT,11.24,181.9,164.94,-45.72,57.2,80.56,0.6467,LOW,-,12.4177,14.9628,11.5121,1,129.1558,TREND+LEAD,42.6769
+92,26,SPD.AX,Southern Palladium Limited,palladium,producer,small,1.54,2.9549,1.068,0.9694,0.7393,STRONG_UP,48.08,294.87,,-51.85,44.44,106.75,0.2567,LOW,-,1.5277,1.9226,1.2865,1,122.7551,TREND+LEAD,35.5904
+93,0,7JR.MU,Northam Platinum,palladium,producer,small,17.7,3.8806,1.0548,1.5797,1.7559,STRONG_DOWN,105.66,418.56,656.24,-28.12,41.27,146.45,8.3554,HIGH,-,14.8598,13.7272,9.1808,1,117.9524,TREND+LEAD,35.5316
+112,-3,IMPUY,Impala Platinum,palladium,producer,large,14.5,1.7408,1.1179,0.979,1.0899,FLAT,12.5,132.63,235.72,-44.16,55.2,88.65,0.1963,LOW,-,14.5512,17.1858,12.8857,1,82.5836,TREND+LEAD,33.5369
+187,-2,RPH1.SG,"ticker
+RPH1.SG    Anglo American Platinum
+RPH1.SG    Anglo American Platinum
+Name: name, dtype: object",palladium,producer,small,12.1,1.8608,1.1597,1.0508,1.1743,FLAT,24.61,148.66,132.47,-35.19,52.78,86.79,0.0,LOW,-,11.8177,12.5335,9.3682,1,90.408,TREND+LEAD,25.4179
+193,32,CHN.AX,Challice Mining,palladium,producer,mid,1.58,1.105,1.1272,0.9919,0.8502,STRONG_UP,-36.29,47.66,42.34,-53.73,48.41,81.92,1.1462,MED,PROGRESS,1.531,1.8404,1.9061,0,28.1664,WEAK,24.427
+280,7,IVPAF,Ivanhoe Mines Ltd,palladium,producer,large,7.59,0.6221,0.9525,0.8592,0.7711,STRONG_UP,-27.3,-16.87,-36.7,-45.43,51.2,66.54,0.7197,LOW,EARLY,8.7621,10.8077,9.8035,0,-12.9789,WEAK,15.3187

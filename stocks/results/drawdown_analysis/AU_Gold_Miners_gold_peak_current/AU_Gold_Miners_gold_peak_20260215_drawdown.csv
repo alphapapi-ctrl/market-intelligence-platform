@@ -1,0 +1,154 @@
+rank,ticker,name,sector,cap_band,close,ret_period,bench_ret,rs_vs_bench,rs_5d,rs_21d,rs_trend,max_dd_period,bench_dd,dd_vs_bench,current_dd,peer_rs_score,vol_label,rel_vol,acc_watch,pass_trend,score,period_label,period_start,trading_days
+1,DTR.AX,Dateline Resources Limited,Gold,mid,0.555,81.97,-13.9,95.87,11.5,74.4,STRONG_DOWN,-19.28,-30.84,11.56,0.0,100.0,HIGH,1.8009,-,1,64.88,gold_peak,2026-02-15,28
+2,HMG.AX,Hamelin Gold Limited,Gold,small,0.12,57.89,-13.9,71.79,-11.82,2.35,STRONG_DOWN,-36.11,-30.84,-5.27,-33.33,98.68,LOW,0.0161,-,1,59.901,gold_peak,2026-02-15,28
+3,EM3.AX,EMC Gold Corporation,Gold,small,0.2,48.15,-13.9,62.05,24.91,47.35,STRONG_DOWN,-46.43,-30.84,-15.59,-28.57,98.03,LOW,0.7276,-,0,58.906,gold_peak,2026-02-15,28
+4,TOR.AX,Torque Metals Limited,Gold,small,0.42,61.54,-13.9,75.44,-4.13,64.72,STRONG_DOWN,-26.0,-30.84,4.84,-16.0,99.34,MED,1.2224,-,1,58.526,gold_peak,2026-02-15,28
+5,BEZ.AX,Besra Gold Inc,Gold,small,0.105,38.16,-13.9,52.06,-4.13,-7.65,FLAT,-33.33,-30.84,-2.49,-30.0,97.37,LOW,0.2171,-,1,50.782,gold_peak,2026-02-15,28
+6,R8R.AX,Regener8 Resources NL,Gold,small,0.165,37.5,-13.9,51.4,-1.0,72.35,FLAT,-21.05,-30.84,9.79,-13.16,96.71,LOW,0.0,-,1,46.636,gold_peak,2026-02-15,28
+7,DMG.AX,Dragon Mountain Gold,Gold,small,0.007,16.67,-13.9,30.57,-26.35,-19.32,STRONG_DOWN,-50.0,-30.84,-19.16,-50.0,93.42,LOW,0.4201,-,0,46.002,gold_peak,2026-02-15,28
+8,VKA.AX,Viking Mines Limited,Gold,small,0.014,12.0,-13.9,25.9,-16.63,9.85,STRONG_DOWN,-43.48,-30.84,-12.64,-39.13,92.11,LOW,0.5996,-,1,41.785,gold_peak,2026-02-15,28
+9,AAU.AX,Antilles Gold Limited,Gold,small,0.013,18.18,-13.9,32.08,-4.13,9.01,STRONG_DOWN,-29.41,-30.84,1.43,-23.53,94.08,MED,1.189,-,1,40.627,gold_peak,2026-02-15,28
+10,ERM.AX,Emmerson Resources Limited,Gold,small,0.365,19.67,-13.9,33.57,-5.48,22.35,STRONG_DOWN,-23.81,-30.84,7.03,-13.1,95.39,HIGH,1.6897,-,1,39.936,gold_peak,2026-02-15,28
+11,AWJ.AX,Auric Mining Limited,Gold,small,0.34,15.25,-13.9,29.15,-5.57,45.98,FLAT,-29.11,-30.84,1.73,-13.92,92.76,LOW,0.8943,-,1,38.969,gold_peak,2026-02-15,28
+12,VTM.AX,Victory Metals Limited,Gold,small,1.475,18.95,-13.9,32.85,1.61,39.41,FLAT,-16.29,-30.84,14.55,-4.53,94.74,MED,1.0194,-,1,37.197,gold_peak,2026-02-15,28
+13,TOK.AX,Tolu Minerals Limited,Gold,small,1.6,21.67,-13.9,35.57,14.39,48.83,FLAT,-10.28,-30.84,20.56,0.0,96.05,LOW,0.4946,-,1,36.875,gold_peak,2026-02-15,28
+14,AS1.AX,Asara Resources Limited,Gold,small,0.125,8.7,-13.9,22.6,-4.13,8.55,STRONG_DOWN,-32.26,-30.84,-1.42,-19.35,90.79,LOW,0.2022,-,1,36.703,gold_peak,2026-02-15,28
+15,ODY.AX,Odyssey Gold Limited,Gold,small,0.032,3.23,-13.9,17.13,6.22,13.77,STRONG_DOWN,-40.91,-30.84,-10.07,-27.27,88.82,HIGH,2.6494,-,1,36.519,gold_peak,2026-02-15,28
+16,HRN.AX,Horizon Gold Limited,Gold,small,1.32,10.92,-13.9,24.82,-5.25,24.44,STRONG_DOWN,-21.68,-30.84,9.16,-14.56,91.45,LOW,0.3784,-,1,34.615,gold_peak,2026-02-15,28
+17,GMN.AX,Gold Mountain Limited,Gold,small,0.1,-4.76,-13.9,9.14,-8.89,-20.51,FLAT,-50.0,-30.84,-19.16,-44.44,81.58,LOW,0.6482,-,1,33.878,gold_peak,2026-02-15,28
+18,AVW.AX,Avira Resources Limited,Gold,small,0.01,0.0,-13.9,13.9,-13.22,-10.99,STRONG_DOWN,-37.5,-30.84,-6.66,-37.5,84.21,LOW,0.3657,-,0,32.821,gold_peak,2026-02-15,28
+19,TMX.AX,Terrain Minerals Limited,Gold,small,0.005,0.0,-13.9,13.9,20.87,22.35,FLAT,-33.33,-30.84,-2.49,-16.67,84.21,LOW,0.6839,-,1,31.57,gold_peak,2026-02-15,28
+20,GUL.AX,Gullewa Limited,Gold,small,0.1,7.53,-13.9,21.43,-4.13,22.35,FLAT,-12.73,-30.84,18.11,-9.09,90.13,LOW,0.0836,-,1,30.178,gold_peak,2026-02-15,28
+21,LRM.AX,Lion Rock Minerals Ltd,Gold,small,0.024,4.35,-13.9,18.25,-4.13,26.69,FLAT,-17.39,-30.84,13.45,-4.0,89.47,LOW,0.2999,-,0,30.106,gold_peak,2026-02-15,28
+22,LAT.AX,Latitude 66 Limited,Gold,small,0.135,-6.9,-13.9,7.0,-7.7,-6.6,STRONG_DOWN,-41.46,-30.84,-10.62,-34.15,77.63,LOW,0.2781,-,1,29.275,gold_peak,2026-02-15,28
+23,RTG.AX,RTG Mining Inc.,Gold,small,0.038,0.0,-13.9,13.9,7.64,18.55,FLAT,-23.81,-30.84,7.03,-9.52,84.21,LOW,0.4385,-,1,28.714,gold_peak,2026-02-15,28
+24,A1G.AX,African Gold Limited,Gold,small,0.85,-3.41,-13.9,10.49,-4.71,7.35,STRONG_DOWN,-28.84,-30.84,2.0,-20.93,82.89,LOW,0.6069,-,1,28.463,gold_peak,2026-02-15,28
+25,DGR.AX,DGR Global Limited,Gold,small,0.03,0.0,-13.9,13.9,-7.35,13.26,STRONG_DOWN,-20.0,-30.84,10.84,-14.29,84.21,LOW,0.6152,-,1,27.571,gold_peak,2026-02-15,28
+26,FFM.AX,FireFly Metals Ltd,Gold,mid,1.685,-8.17,-13.9,5.73,3.54,3.36,FLAT,-34.4,-30.84,-3.56,-22.71,73.68,MED,1.151,-,1,25.464,gold_peak,2026-02-15,28
+27,MLS.AX,Metals Australia Limited,Gold,small,0.021,0.0,-13.9,13.9,-8.67,17.8,FLAT,-12.5,-30.84,18.34,-12.5,84.21,LOW,0.0,-,0,25.321,gold_peak,2026-02-15,28
+28,MOH.AX,Moho Resources Limited,Gold,small,0.0075,-6.25,-13.9,7.65,3.02,29.49,FLAT,-25.0,-30.84,5.84,-6.25,79.61,HIGH,1.9236,-,1,25.191,gold_peak,2026-02-15,28
+29,RSG.AX,Resolute Mining Limited,Gold,mid,1.345,-6.6,-13.9,7.3,-1.45,13.84,FLAT,-25.61,-30.84,5.23,-17.99,78.95,LOW,0.8736,-,1,25.036,gold_peak,2026-02-15,28
+30,CTO.AX,Citigold Corporation Limited,Gold,small,0.017,-5.56,-13.9,8.34,-9.68,11.82,FLAT,-21.05,-30.84,9.79,-10.53,80.92,LOW,0.0564,-,1,24.675,gold_peak,2026-02-15,28
+31,MM8.AX,Medallion Metals Limited,Gold,small,0.38,-8.43,-13.9,5.47,-4.13,9.7,FLAT,-30.53,-30.84,0.31,-20.0,73.03,LOW,0.3807,-,0,24.004,gold_peak,2026-02-15,28
+32,OLY.AX,Olympio Metals Limited,Gold,small,0.06,-7.69,-13.9,6.21,-7.35,10.58,FLAT,-25.35,-30.84,5.49,-15.49,76.32,LOW,0.0273,-,0,23.733,gold_peak,2026-02-15,28
+33,AA2.AX,Ariana Resources plc,Gold,small,0.34,-6.85,-13.9,7.05,-14.65,14.24,FLAT,-21.43,-30.84,9.41,-19.05,78.29,LOW,0.2274,-,0,23.484,gold_peak,2026-02-15,28
+34,NSM.AX,North Stawell Minerals Limited,Gold,small,0.028,-3.45,-13.9,10.45,-10.79,18.9,FLAT,-12.5,-30.84,18.34,-12.5,82.24,LOW,0.1863,-,0,23.35,gold_peak,2026-02-15,28
+35,AGC.AX,Australian Gold and Copper Ltd,Gold,small,0.205,-10.87,-13.9,3.03,6.69,9.58,FLAT,-36.73,-30.84,-5.89,-16.33,67.76,LOW,0.8916,-,1,23.307,gold_peak,2026-02-15,28
+36,DPM.AX,DPM Metals Inc.,Gold,large,47.32,-9.0,-13.9,4.9,-0.33,3.6,STRONG_DOWN,-30.84,-30.84,0.0,-22.43,71.05,HIGH,2.7506,-,0,23.275,gold_peak,2026-02-15,28
+37,TRE.AX,Toubani Resources Inc,Gold,small,0.42,-7.69,-13.9,6.21,-4.13,9.85,FLAT,-23.23,-30.84,7.61,-15.15,76.32,LOW,0.6129,-,1,23.097,gold_peak,2026-02-15,28
+38,TCG.AX,Turaco Gold Limited,Gold,mid,0.605,-10.37,-13.9,3.53,-6.54,5.79,FLAT,-31.45,-30.84,-0.61,-23.9,69.74,MED,1.0345,-,1,22.517,gold_peak,2026-02-15,28
+39,YRL.AX,Yandal Resources Limited,Gold,small,0.2,-6.98,-13.9,6.92,-4.13,15.37,FLAT,-19.15,-30.84,11.69,-14.89,76.97,LOW,0.1944,-,0,22.352,gold_peak,2026-02-15,28
+40,TAM.AX,Tanami Gold NL,Gold,small,0.093,-11.43,-13.9,2.47,-7.25,22.35,FLAT,-34.4,-30.84,-3.56,-25.6,65.13,LOW,0.6827,-,1,21.595,gold_peak,2026-02-15,28
+41,CLZ.AX,Classic Minerals Limited,Gold,small,0.001,0.0,-13.9,13.9,-4.13,22.35,FLAT,0.0,-30.84,30.84,0.0,84.21,LOW,,-,1,21.571,gold_peak,2026-02-15,28
+42,GCR.AX,Golden Cross Resources Ltd,Gold,small,0.002,0.0,-13.9,13.9,-4.13,22.35,FLAT,0.0,-30.84,30.84,0.0,84.21,LOW,,-,1,21.571,gold_peak,2026-02-15,28
+43,ATM.AX,Aneka Tambang (Persero) Tbk,Gold,large,0.995,-1.0,-13.9,12.9,-4.13,22.35,FLAT,-1.49,-30.84,29.35,-1.49,83.55,LOW,0.0,PROGRESS,0,21.42,gold_peak,2026-02-15,28
+44,AUC.AX,Ausgold Limited,Gold,small,0.89,-12.32,-13.9,1.58,-9.44,4.0,FLAT,-38.27,-30.84,-7.43,-26.75,61.84,LOW,0.6259,-,0,21.413,gold_peak,2026-02-15,28
+45,TBR.AX,Tribune Resources Ltd,Gold,small,5.69,-8.08,-13.9,5.82,4.46,11.95,FLAT,-19.01,-30.84,11.83,-12.06,74.34,LOW,0.4649,-,0,21.081,gold_peak,2026-02-15,28
+46,RXR.AX,Robex Resources Inc.,Gold,mid,5.98,-11.14,-13.9,2.76,-7.67,2.08,STRONG_DOWN,-29.77,-30.84,1.07,-24.87,66.45,LOW,0.4051,-,1,20.718,gold_peak,2026-02-15,28
+47,PRX.AX,Prodigy Gold NL,Gold,small,0.06,-7.69,-13.9,6.21,-4.13,14.65,FLAT,-15.15,-30.84,15.69,-9.09,76.32,LOW,0.1842,-,1,20.673,gold_peak,2026-02-15,28
+48,TSO.AX,Tesoro Gold Limited,Gold,small,0.955,-9.48,-13.9,4.42,-4.13,10.36,FLAT,-23.29,-30.84,7.55,-12.79,70.39,LOW,0.1681,-,1,20.62,gold_peak,2026-02-15,28
+49,DTM.AX,Dart Mining NL,Gold,small,0.032,-8.57,-13.9,5.33,-12.7,2.35,STRONG_DOWN,-20.0,-30.84,10.84,-20.0,72.37,LOW,0.1041,-,0,20.591,gold_peak,2026-02-15,28
+50,STK.AX,Strickland Metals Limited,Gold,mid,0.2,-11.11,-13.9,2.79,6.99,9.3,FLAT,-28.57,-30.84,2.27,-18.37,67.11,LOW,0.6726,-,1,20.568,gold_peak,2026-02-15,28
+51,KNB.AX,Koonenberry Gold Limited,Gold,small,0.025,-10.71,-13.9,3.19,0.04,8.55,FLAT,-26.67,-30.84,4.17,-16.67,68.42,LOW,0.4243,-,0,20.551,gold_peak,2026-02-15,28
+52,FXG.AX,Felix Gold Limited,Gold,small,0.28,-12.5,-13.9,1.4,20.32,7.19,STRONG_UP,-35.71,-30.84,-4.87,-20.0,61.18,LOW,0.7159,-,0,20.375,gold_peak,2026-02-15,28
+53,OZZ.AX,OZZ Resources Limited,Gold,small,0.0516,-6.09,-13.9,7.81,-4.12,16.26,FLAT,-6.1,-30.84,24.74,-6.09,80.26,LOW,,-,0,19.78,gold_peak,2026-02-15,28
+54,MHC.AX,Manhattan Gold Corporation Limited,Gold,small,0.022,-12.0,-13.9,1.9,-12.46,14.01,FLAT,-30.0,-30.84,0.84,-26.67,63.16,LOW,0.4753,-,0,19.456,gold_peak,2026-02-15,28
+55,GG1.AX,Green & Gold Minerals Limited,Gold,small,0.15,-11.76,-13.9,2.14,-4.13,8.06,FLAT,-28.21,-30.84,2.63,-23.08,63.82,HIGH,3.6085,-,0,19.213,gold_peak,2026-02-15,28
+56,MAN.AX,Mandrake Resources Limited,Gold,small,0.021,-8.7,-13.9,5.2,-12.82,13.65,FLAT,-16.0,-30.84,14.84,-16.0,71.71,MED,1.3198,-,0,19.141,gold_peak,2026-02-15,28
+57,GBM.AX,GBM Resources Limited,Gold,small,0.029,-12.12,-13.9,1.78,7.41,2.9,STRONG_UP,-29.73,-30.84,1.11,-21.62,62.5,LOW,0.6965,-,0,19.129,gold_peak,2026-02-15,28
+58,ORE.AX,Orezone Gold Corporation,Gold,mid,2.25,-12.79,-13.9,1.11,2.01,3.87,FLAT,-33.8,-30.84,-2.96,-21.6,59.21,HIGH,2.9685,-,0,19.095,gold_peak,2026-02-15,28
+59,PRU.AX,Perseus Mining Limited,Gold,large,5.02,-11.48,-13.9,2.42,1.34,6.03,FLAT,-26.76,-30.84,4.08,-19.38,64.47,MED,1.1339,-,1,19.085,gold_peak,2026-02-15,28
+60,NAG.AX,Nagambie Resources Limited,Gold,small,0.013,-13.33,-13.9,0.57,4.21,3.6,STRONG_UP,-35.29,-30.84,-4.45,-23.53,56.58,LOW,0.0668,-,0,18.537,gold_peak,2026-02-15,28
+61,KAL.AX,Kalgoorlie Gold Mining Limited,Gold,small,0.042,-12.5,-13.9,1.4,6.4,17.8,FLAT,-29.17,-30.84,1.67,-12.5,60.53,LOW,0.7725,-,0,18.218,gold_peak,2026-02-15,28
+62,PDI.AX,Predictive Discovery Limited,Gold,mid,0.765,-12.57,-13.9,1.33,-8.5,2.87,FLAT,-29.85,-30.84,0.99,-23.88,59.87,MED,1.1105,-,1,18.196,gold_peak,2026-02-15,28
+63,BCM.AX,Brazilian Critical Minerals Limited,Gold,small,0.03,-14.29,-13.9,-0.39,-4.13,3.43,FLAT,-37.5,-30.84,-6.66,-25.0,53.29,LOW,0.5321,-,1,17.829,gold_peak,2026-02-15,28
+64,TGM.AX,Theta Gold Mines Limited,Gold,small,0.21,-10.64,-13.9,3.26,-2.92,11.71,FLAT,-16.33,-30.84,14.51,-14.29,69.08,LOW,0.1758,-,1,17.675,gold_peak,2026-02-15,28
+65,TTM.AX,Titan Minerals Limited,Gold,small,0.835,-13.02,-13.9,0.88,-7.03,9.33,FLAT,-31.02,-30.84,-0.18,-22.69,57.24,LOW,0.3848,-,1,17.578,gold_peak,2026-02-15,28
+66,OBM.AX,Ora Banda Mining Ltd,Gold,mid,1.14,-12.98,-13.9,0.92,-15.06,14.65,FLAT,-30.0,-30.84,0.84,-24.0,57.89,MED,1.4952,-,1,17.483,gold_peak,2026-02-15,28
+67,E79.AX,E79 Gold Mines Limited,Gold,small,0.032,-15.79,-13.9,-1.89,-12.7,-1.46,FLAT,-40.48,-30.84,-9.64,-23.81,50.0,HIGH,1.8567,-,1,17.136,gold_peak,2026-02-15,28
+68,EVN.AX,Evolution Mining Limited,Gold,large,12.9,-14.1,-13.9,-0.2,1.53,2.79,FLAT,-34.17,-30.84,-3.33,-26.16,53.95,MED,1.3828,-,1,17.104,gold_peak,2026-02-15,28
+69,GG8.AX,Gorilla Gold Mines Ltd,Gold,small,0.34,-15.0,-13.9,-1.1,-5.57,-6.07,FLAT,-36.46,-30.84,-5.62,-29.17,51.97,LOW,0.7605,-,0,16.837,gold_peak,2026-02-15,28
+70,KCN.AX,Kingsgate Consolidated Limited,Gold,mid,4.62,-16.43,-13.9,-2.53,-22.79,-6.06,STRONG_DOWN,-40.36,-30.84,-9.52,-35.92,48.03,LOW,0.8325,-,1,16.253,gold_peak,2026-02-15,28
+71,NEM.AX,Newmont Corporation,Gold,large,149.23,-13.92,-13.9,-0.02,-2.09,7.77,FLAT,-29.58,-30.84,1.26,-20.29,54.61,HIGH,2.2233,-,1,15.997,gold_peak,2026-02-15,28
+72,KTA.AX,Krakatoa Resources Limited,Gold,small,0.0065,-13.33,-13.9,0.57,-4.13,15.2,FLAT,-25.0,-30.84,5.84,-18.75,56.58,LOW,0.3512,-,0,15.45,gold_peak,2026-02-15,28
+73,STN.AX,Saturn Metals Limited,Gold,small,0.445,-16.82,-13.9,-2.92,7.12,6.31,STRONG_UP,-40.0,-30.84,-9.16,-28.8,46.05,MED,1.0394,-,0,15.395,gold_peak,2026-02-15,28
+74,SX2.AX,Southern Cross Gold Consolidated Ltd,Gold,mid,8.89,-16.21,-13.9,-2.31,-4.01,2.22,FLAT,-34.88,-30.84,-4.04,-26.16,49.34,LOW,0.7984,-,1,15.09,gold_peak,2026-02-15,28
+75,A8G.AX,Australasian Metals Limited,Gold,small,0.079,-11.24,-13.9,2.66,-4.13,14.21,FLAT,-11.24,-30.84,19.6,-11.24,65.79,LOW,0.0,-,0,14.921,gold_peak,2026-02-15,28
+76,GGR.AX,Golden Globe Resources Limited,Gold,small,0.27,-12.9,-13.9,1.0,-12.6,12.35,FLAT,-19.35,-30.84,11.49,-12.9,58.55,LOW,0.5792,-,0,14.518,gold_peak,2026-02-15,28
+77,BM1.AX,Ballard Mining Limited,Gold,small,0.695,-17.26,-13.9,-3.36,3.63,6.59,FLAT,-39.67,-30.84,-8.83,-24.46,43.42,HIGH,2.377,-,0,14.331,gold_peak,2026-02-15,28
+78,GML.AX,Gateway Mining Limited,Gold,small,0.062,-15.07,-13.9,-1.17,-7.25,-0.15,FLAT,-28.4,-30.84,2.44,-23.46,51.32,LOW,0.9217,-,1,14.196,gold_peak,2026-02-15,28
+79,CYL.AX,Catalyst Metals Limited,Gold,mid,6.26,-17.09,-13.9,-3.19,-1.0,-4.95,FLAT,-35.51,-30.84,-4.67,-28.29,45.39,HIGH,1.5317,EARLY,0,13.742,gold_peak,2026-02-15,28
+80,G11.AX,G11 Resources Limited,Gold,small,0.27,-14.96,-13.9,-1.06,-14.13,6.72,FLAT,-25.0,-30.84,5.84,-25.0,52.63,LOW,0.7699,-,1,13.613,gold_peak,2026-02-15,28
+81,BCN.AX,Beacon Minerals Limited,Gold,small,3.15,-17.11,-13.9,-3.21,-5.38,0.9,FLAT,-35.63,-30.84,-4.79,-25.18,44.74,MED,1.1043,-,1,13.575,gold_peak,2026-02-15,28
+82,USL.AX,Unico Silver Limited,Gold,small,0.66,-18.52,-13.9,-4.62,-2.59,-3.5,STRONG_UP,-43.43,-30.84,-12.59,-33.33,38.16,LOW,0.9457,-,1,13.377,gold_peak,2026-02-15,28
+83,GGP.AX,Greatland Resources Limited,Gold,large,10.41,-17.58,-13.9,-3.68,-8.62,-0.08,FLAT,-36.89,-30.84,-6.05,-27.96,42.11,HIGH,1.9286,-,0,12.976,gold_peak,2026-02-15,28
+84,GMD.AX,Genesis Minerals Limited,Gold,large,6.11,-17.21,-13.9,-3.31,6.76,6.16,STRONG_UP,-34.19,-30.84,-3.35,-24.85,44.08,HIGH,1.651,-,1,12.905,gold_peak,2026-02-15,28
+85,PGO.AX,Pacgold Limited,Gold,small,0.115,-20.69,-13.9,-6.79,5.4,-13.76,FLAT,-51.11,-30.84,-20.27,-36.11,31.58,LOW,0.4849,-,1,12.839,gold_peak,2026-02-15,28
+86,HMX.AX,Hammer Metals Limited,Gold,small,0.033,-17.5,-13.9,-3.6,-7.07,-4.32,STRONG_DOWN,-35.42,-30.84,-4.58,-31.25,42.76,LOW,0.1532,-,0,12.762,gold_peak,2026-02-15,28
+87,GWR.AX,GWR Group Limited,Gold,small,0.14,-15.15,-13.9,-1.25,-0.42,9.85,FLAT,-23.53,-30.84,7.31,-17.65,50.66,LOW,0.1168,-,1,12.505,gold_peak,2026-02-15,28
+88,GBR.AX,Great Boulder Resources Limited,Gold,small,0.093,-19.13,-13.9,-5.23,-15.55,-8.76,STRONG_DOWN,-42.58,-30.84,-11.74,-40.0,36.84,LOW,0.5975,-,1,12.482,gold_peak,2026-02-15,28
+89,ALK.AX,Alkane Resources Limited,Gold,mid,1.47,-16.24,-13.9,-2.34,-2.4,6.11,FLAT,-25.77,-30.84,5.07,-17.65,48.68,LOW,0.6158,-,1,12.147,gold_peak,2026-02-15,28
+90,SRR.AX,Sarama Resources Limited,Gold,small,0.038,-13.64,-13.9,0.26,-6.69,10.72,FLAT,-15.56,-30.84,15.28,-15.56,55.26,LOW,0.0467,-,0,12.098,gold_peak,2026-02-15,28
+91,AQI.AX,Alicanto Minerals Limited,Gold,small,1.475,-20.49,-13.9,-6.59,-6.12,-14.08,FLAT,-47.03,-30.84,-16.19,-37.5,32.24,MED,1.3016,-,1,11.893,gold_peak,2026-02-15,28
+92,SNG.AX,Siren Gold Limited,Gold,small,0.08,-16.67,-13.9,-2.77,-17.17,7.45,FLAT,-26.0,-30.84,4.84,-20.0,46.71,LOW,0.2455,-,0,11.453,gold_peak,2026-02-15,28
+93,KAU.AX,Kaiser Reef Limited,Gold,small,0.27,-19.4,-13.9,-5.5,-7.7,-8.42,FLAT,-40.96,-30.84,-10.12,-34.94,34.87,LOW,0.9774,-,1,11.297,gold_peak,2026-02-15,28
+94,BGD.AX,Barton Gold Holdings Limited,Gold,small,0.885,-19.55,-13.9,-5.65,-6.87,-2.01,FLAT,-40.65,-30.84,-9.81,-28.05,34.21,MED,1.3516,-,0,10.946,gold_peak,2026-02-15,28
+95,RGL.AX,Riversgold Limited,Gold,small,0.012,-20.0,-13.9,-6.1,-4.13,-7.07,FLAT,-42.11,-30.84,-11.27,-36.84,32.89,LOW,0.6214,-,1,10.808,gold_peak,2026-02-15,28
+96,VTX.AX,Vertex Minerals Limited,Gold,small,0.155,-18.42,-13.9,-4.52,6.59,-0.15,STRONG_UP,-33.33,-30.84,-2.49,-26.19,39.47,MED,1.4852,-,0,10.78,gold_peak,2026-02-15,28
+97,AXN.AX,Alliance Nickel Limited,Gold,small,0.04,-16.67,-13.9,-2.77,-6.56,9.3,FLAT,-22.92,-30.84,7.92,-16.67,46.71,LOW,0.2314,-,0,10.529,gold_peak,2026-02-15,28
+98,CMM.AX,Capricorn Metals Ltd,Gold,mid,10.75,-19.68,-13.9,-5.78,-1.55,0.57,FLAT,-39.15,-30.84,-8.31,-30.49,33.55,MED,1.2959,EARLY,0,10.246,gold_peak,2026-02-15,28
+99,ALY.AX,Alchemy Resources Limited,Gold,small,0.009,-18.18,-13.9,-4.28,8.37,12.35,FLAT,-27.27,-30.84,3.57,-18.18,40.13,LOW,0.2636,-,1,9.256,gold_peak,2026-02-15,28
+100,RMS.AX,Ramelius Resources Limited,Gold,large,3.68,-19.23,-13.9,-5.33,-2.19,0.23,FLAT,-31.67,-30.84,-0.83,-24.03,36.18,MED,1.1701,-,1,8.971,gold_peak,2026-02-15,28
+101,KRM.AX,Kingsrose Mining,Gold,small,0.032,-17.95,-13.9,-4.05,-7.16,4.4,FLAT,-25.0,-30.84,5.84,-20.0,40.79,HIGH,1.9948,-,0,8.865,gold_peak,2026-02-15,28
+102,BHL.AX,Black Horse Mining Limited,Gold,small,0.295,-23.38,-13.9,-9.48,7.2,-7.42,STRONG_UP,-47.67,-30.84,-16.83,-31.4,24.34,LOW,0.7206,-,0,8.559,gold_peak,2026-02-15,28
+103,RRL.AX,Regis Resources Limited,Gold,mid,6.4,-21.28,-13.9,-7.38,-3.5,-8.46,FLAT,-39.58,-30.84,-8.74,-33.22,29.61,HIGH,1.6199,-,1,8.553,gold_peak,2026-02-15,28
+104,TM1.AX,Terra Metals Limited,Gold,small,0.27,-21.74,-13.9,-7.84,-9.39,-10.99,FLAT,-41.57,-30.84,-10.73,-39.33,27.63,HIGH,1.8159,-,1,8.372,gold_peak,2026-02-15,28
+105,CY5.AX,Cygnus Metals Limited,Gold,small,0.135,-22.86,-13.9,-8.96,3.87,-11.8,FLAT,-42.86,-30.84,-12.02,-35.71,25.66,LOW,0.3208,-,1,7.72,gold_peak,2026-02-15,28
+106,MDX.AX,Mindax Limited,Gold,small,0.031,-18.42,-13.9,-4.52,-4.13,1.83,FLAT,-23.08,-30.84,7.76,-20.51,39.47,LOW,0.0,-,0,7.705,gold_peak,2026-02-15,28
+107,ORP.AX,Orpheus Uranium Limited,Gold,small,0.055,-17.91,-13.9,-4.01,-9.3,5.68,FLAT,-20.29,-30.84,10.55,-20.29,41.45,LOW,0.7869,-,1,7.666,gold_peak,2026-02-15,28
+108,SNM.AX,Sentinel Metals Limited,Gold,small,0.555,-20.71,-13.9,-6.81,0.59,0.52,STRONG_UP,-33.12,-30.84,-2.28,-27.92,30.92,LOW,0.3145,-,0,7.236,gold_peak,2026-02-15,28
+109,WGX.AX,Westgold Resources Limited,Gold,large,5.62,-22.59,-13.9,-8.69,0.34,-5.69,STRONG_UP,-37.64,-30.84,-6.8,-30.19,26.97,HIGH,1.9058,-,1,6.655,gold_peak,2026-02-15,28
+110,BGL.AX,Bellevue Gold Limited,Gold,mid,1.405,-20.85,-13.9,-6.95,-8.55,-0.88,FLAT,-31.79,-30.84,-0.95,-23.64,30.26,LOW,0.9389,-,1,6.583,gold_peak,2026-02-15,28
+111,WWI.AX,West Wits Mining Limited,Gold,small,0.065,-21.69,-13.9,-7.79,-11.27,0.66,FLAT,-34.09,-30.84,-3.25,-26.14,28.95,LOW,0.8073,-,1,6.544,gold_peak,2026-02-15,28
+112,FG1.AX,Flynn Gold Limited,Gold,small,0.021,-19.23,-13.9,-5.33,-12.82,6.35,FLAT,-23.08,-30.84,7.76,-19.23,36.18,MED,1.2807,-,0,6.394,gold_peak,2026-02-15,28
+113,PVW.AX,PVW Resources Limited,Gold,small,0.015,-25.0,-13.9,-11.1,-10.38,-9.47,FLAT,-45.83,-30.84,-14.99,-37.5,20.39,LOW,0.5839,-,0,6.174,gold_peak,2026-02-15,28
+114,REZ.AX,Resources & Energy Group Limited,Gold,small,0.013,-18.75,-13.9,-4.85,-4.13,9.01,FLAT,-18.75,-30.84,12.09,-18.75,37.5,LOW,0.4068,-,0,5.683,gold_peak,2026-02-15,28
+115,OZM.AX,OzAurum Resources Limited,Gold,small,0.09,-21.74,-13.9,-7.84,-3.0,4.16,FLAT,-32.5,-30.84,-1.66,-25.0,27.63,LOW,0.1977,-,1,5.651,gold_peak,2026-02-15,28
+116,SBM.AX,St Barbara Limited,Gold,mid,0.57,-24.0,-13.9,-10.1,-1.42,-10.2,FLAT,-38.37,-30.84,-7.53,-33.72,23.68,HIGH,1.5283,-,1,5.323,gold_peak,2026-02-15,28
+117,PEC.AX,Perpetual Resources Limited,Gold,small,0.01,-23.08,-13.9,-9.18,-4.13,-0.73,FLAT,-35.71,-30.84,-4.87,-28.57,25.0,LOW,0.0317,-,0,5.289,gold_peak,2026-02-15,28
+118,POL.AX,Polymetals Resources Ltd,Gold,small,0.76,-24.38,-13.9,-10.48,5.23,-3.87,STRONG_UP,-37.26,-30.84,-6.42,-28.3,22.37,HIGH,1.8571,-,0,4.445,gold_peak,2026-02-15,28
+119,BTR.AX,Brightstar Resources Limited,Gold,small,0.36,-27.27,-13.9,-13.37,1.76,-11.6,STRONG_UP,-47.83,-30.84,-16.99,-37.39,15.13,HIGH,2.3044,-,0,4.288,gold_peak,2026-02-15,28
+120,NXM.AX,Nexus Minerals Limited,Gold,small,0.048,-25.0,-13.9,-11.1,-16.85,-13.65,STRONG_DOWN,-36.0,-30.84,-5.16,-36.0,19.74,LOW,0.0,-,0,3.03,gold_peak,2026-02-15,28
+121,HRZ.AX,Horizon Minerals Limited,Gold,small,0.93,-24.7,-13.9,-10.8,7.25,6.13,STRONG_UP,-34.01,-30.84,-3.17,-24.7,21.05,LOW,0.7382,-,0,2.946,gold_peak,2026-02-15,28
+122,WGR.AX,Western Gold Resources Limited,Gold,small,0.145,-25.64,-13.9,-11.74,-21.27,-5.15,FLAT,-38.1,-30.84,-7.26,-30.95,17.76,LOW,0.367,-,0,2.81,gold_peak,2026-02-15,28
+123,ICL.AX,Iceni Gold Limited,Gold,small,0.04,-24.53,-13.9,-10.63,-6.56,0.78,FLAT,-32.08,-30.84,-1.24,-24.53,21.71,LOW,0.5581,-,0,2.633,gold_peak,2026-02-15,28
+124,VAU.AX,Vault Minerals Limited,Gold,mid,4.02,-26.29,-13.9,-12.39,-6.79,-6.77,FLAT,-38.58,-30.84,-7.74,-31.61,17.11,HIGH,1.6387,EARLY,0,2.499,gold_peak,2026-02-15,28
+125,MBG.AX,MB Gold Limited,Gold,small,0.17,-22.73,-13.9,-8.83,-4.13,-0.38,FLAT,-24.44,-30.84,6.4,-24.44,26.32,LOW,0.1195,-,0,2.444,gold_peak,2026-02-15,28
+126,NMG.AX,New Murchison Gold Limited,Gold,small,0.043,-29.51,-13.9,-15.61,-4.13,-13.47,STRONG_UP,-47.14,-30.84,-16.3,-38.57,11.84,MED,1.1998,-,1,2.198,gold_peak,2026-02-15,28
+127,WSR.AX,Westar Resources Limited,Gold,small,0.006,-25.0,-13.9,-11.1,4.97,8.06,FLAT,-31.25,-30.84,-0.41,-25.0,19.74,LOW,0.0315,-,0,1.605,gold_peak,2026-02-15,28
+128,AUE.AX,Aurum Resources Limited,Gold,small,0.57,-25.49,-13.9,-11.59,-8.33,-0.63,FLAT,-32.68,-30.84,-1.84,-25.49,18.42,MED,1.1882,-,0,1.442,gold_peak,2026-02-15,28
+129,BC8.AX,Black Cat Syndicate Limited,Gold,mid,0.995,-28.67,-13.9,-14.77,-7.52,-8.56,STRONG_UP,-41.51,-30.84,-10.67,-37.42,13.82,MED,1.1562,EARLY,0,1.439,gold_peak,2026-02-15,28
+130,AAR.AX,Astral Resources NL,Gold,small,0.18,-29.41,-13.9,-15.51,-9.39,-9.73,STRONG_UP,-42.11,-30.84,-11.27,-36.84,13.16,MED,1.2971,-,0,1.125,gold_peak,2026-02-15,28
+131,SMI.AX,Santana Minerals Limited,Gold,mid,0.745,-24.37,-13.9,-10.47,-7.37,6.53,FLAT,-24.37,-30.84,6.47,-24.37,23.03,MED,1.405,EARLY,0,0.78,gold_peak,2026-02-15,28
+132,GPR.AX,Geopacific Resources Limited,Gold,small,0.039,-26.42,-13.9,-12.52,-22.88,0.35,FLAT,-33.33,-30.84,-2.49,-31.58,16.45,LOW,0.0,-,1,0.674,gold_peak,2026-02-15,28
+133,FAL.AX,Falcon Metals Limited,Gold,small,0.56,-30.86,-13.9,-16.96,7.87,0.12,STRONG_UP,-44.44,-30.84,-13.6,-30.86,10.53,LOW,0.4191,-,0,0.455,gold_peak,2026-02-15,28
+134,RR1.AX,Reach Resources Limited,Gold,small,0.0115,-28.13,-13.9,-14.23,0.42,-0.99,STRONG_UP,-35.29,-30.84,-4.45,-32.35,14.47,LOW,0.4397,-,1,-0.016,gold_peak,2026-02-15,28
+135,GA8.AX,GoldArc Resources Limited,Gold,small,0.051,-32.89,-13.9,-18.99,-4.13,2.03,FLAT,-44.74,-30.84,-13.9,-32.89,8.55,MED,1.0972,-,0,-0.861,gold_peak,2026-02-15,28
+136,MEK.AX,Meeka Metals Limited,Gold,small,0.16,-30.43,-13.9,-16.53,-4.13,-8.09,STRONG_UP,-38.78,-30.84,-7.94,-34.69,11.18,HIGH,1.5638,-,0,-0.876,gold_peak,2026-02-15,28
+137,BNR.AX,Bulletin Resources Limited,Gold,small,0.0415,-27.19,-13.9,-13.29,-15.83,-3.55,FLAT,-28.45,-30.84,2.39,-28.45,15.79,LOW,0.9201,-,0,-1.296,gold_peak,2026-02-15,28
+138,MAT.AX,Matsa Resources Limited,Gold,small,0.087,-33.08,-13.9,-19.18,-0.55,-5.15,STRONG_UP,-43.85,-30.84,-13.01,-33.08,7.89,LOW,0.2631,-,0,-1.402,gold_peak,2026-02-15,28
+139,NST.AX,Northern Star Resources Limited,Gold,large,18.8,-33.4,-13.9,-19.5,-4.97,-15.28,STRONG_UP,-45.32,-30.84,-14.48,-40.26,5.92,MED,1.3288,EARLY,0,-1.68,gold_peak,2026-02-15,28
+140,RC1.AX,Redcastle Resources Limited,Gold,small,0.13,-31.58,-13.9,-17.68,-11.27,-5.43,FLAT,-39.47,-30.84,-8.63,-31.58,9.21,LOW,0.1711,-,1,-1.72,gold_peak,2026-02-15,28
+141,PNR.AX,Pantoro Gold Limited,Gold,mid,3.27,-34.34,-13.9,-20.44,-9.34,-20.18,STRONG_UP,-47.54,-30.84,-16.7,-44.48,4.61,MED,1.2997,EARLY,0,-1.783,gold_peak,2026-02-15,28
+142,CDR.AX,Codrus Minerals Limited,Gold,small,0.024,-29.41,-13.9,-15.51,-4.13,-4.93,STRONG_UP,-31.43,-30.84,-0.59,-31.43,13.16,LOW,0.0,-,0,-2.079,gold_peak,2026-02-15,28
+143,AAJ.AX,Aruma Resources Limited,Gold,small,0.011,-35.29,-13.9,-21.39,-4.13,-4.32,STRONG_UP,-47.06,-30.84,-16.22,-35.29,3.95,LOW,0.526,-,0,-2.505,gold_peak,2026-02-15,28
+144,M2R.AX,Miramar Resources Limited,Gold,small,0.003,-33.33,-13.9,-19.43,-4.13,-2.65,FLAT,-40.0,-30.84,-9.16,-40.0,7.24,LOW,0.4749,-,0,-2.852,gold_peak,2026-02-15,28
+145,M2M.AX,Mt Malcolm Mines NL,Gold,small,0.01,-31.03,-13.9,-17.13,-13.22,-6.23,FLAT,-33.33,-30.84,-2.49,-33.33,9.87,LOW,0.1117,-,0,-3.144,gold_peak,2026-02-15,28
+146,ION.AX,Iondrive Limited,Gold,small,0.02,-39.39,-13.9,-25.49,-4.13,-15.15,STRONG_UP,-51.52,-30.84,-20.68,-39.39,1.97,HIGH,1.6175,-,0,-3.401,gold_peak,2026-02-15,28
+147,GHM.AX,Golden Horse Minerals Limited,Gold,small,0.47,-35.62,-13.9,-21.72,0.32,-10.51,STRONG_UP,-43.15,-30.84,-12.31,-35.62,3.29,MED,1.2088,-,0,-4.008,gold_peak,2026-02-15,28
+148,NVO.AX,Novo Resources Corp,Gold,small,0.076,-36.67,-13.9,-22.77,-12.56,-19.19,STRONG_UP,-44.44,-30.84,-13.6,-43.7,2.63,MED,1.417,-,0,-4.239,gold_peak,2026-02-15,28
+149,SVG.AX,Savannah Goldfields Limited,Gold,small,0.011,-33.33,-13.9,-19.43,-19.51,-4.32,FLAT,-35.29,-30.84,-4.45,-35.29,7.24,LOW,0.3523,-,0,-4.265,gold_peak,2026-02-15,28
+150,MDI.AX,Middle Island Resources Limited,Gold,small,0.027,-50.0,-13.9,-36.1,-22.31,-29.44,STRONG_UP,-60.66,-30.84,-29.82,-55.74,0.0,MED,1.4035,-,0,-5.494,gold_peak,2026-02-15,28
+151,HAW.AX,Hawthorn Resources Limited,Gold,small,0.086,-33.85,-13.9,-19.95,-5.27,-5.99,STRONG_UP,-33.85,-30.84,-3.01,-33.85,5.26,LOW,0.0782,-,1,-5.499,gold_peak,2026-02-15,28
+152,PGD.AX,Peregrine Gold Limited,Gold,small,0.13,-43.48,-13.9,-29.58,-17.46,-23.49,STRONG_UP,-50.0,-30.84,-19.16,-45.83,0.66,LOW,0.0468,-,0,-5.886,gold_peak,2026-02-15,28
+153,NPM.AX,New Peak Metals Limited,Gold,small,0.014,-41.67,-13.9,-27.77,-26.35,-14.02,FLAT,-41.67,-30.84,-10.83,-41.67,1.32,HIGH,6.0668,-,0,-7.463,gold_peak,2026-02-15,28

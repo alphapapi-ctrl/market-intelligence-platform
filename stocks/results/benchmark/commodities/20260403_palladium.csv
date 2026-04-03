@@ -1,0 +1,24 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+33,0,SBSW,"ticker
+SBSW    Sibanye Gold ADR
+SBSW    Sibanye Gold ADR
+Name: name, dtype: object",palladium,producer,large,12.5,2.257,1.078,1.0852,1.0291,FLAT,13.13,209.95,155.72,-45.72,57.6,80.43,0.6262,LOW,-,12.3503,14.875,11.5406,1,150.3531,TREND+LEAD,46.597
+61,-3,GENM.TO,"ticker
+GENM.TO    Generation Mining Ltd
+GENM.TO    Generation Mining Ltd
+Name: name, dtype: object",palladium,explorer,small,0.65,2.8687,1.1551,1.1007,0.8952,STRONG_UP,1.56,293.94,128.07,-41.76,44.8,81.06,0.6226,LOW,-,0.6195,0.693,0.5528,1,162.4535,TREND+LEAD,40.9198
+82,-3,IMPUY,Impala Platinum,palladium,producer,large,14.83,1.9268,1.1147,1.1089,1.0836,STRONG_UP,17.57,164.59,239.51,-44.16,55.6,88.54,0.1905,LOW,-,14.4957,17.1079,12.9187,1,103.3561,TREND+LEAD,38.2946
+94,-3,7JR.MU,Northam Platinum,palladium,producer,small,17.7,3.8634,1.0362,1.5944,1.7559,STRONG_DOWN,101.28,430.53,642.49,-26.46,41.27,146.0,2.0582,HIGH,-,15.0775,13.8292,9.2483,1,121.6986,TREND+LEAD,36.0432
+103,-3,SPD.AX,Southern Palladium Limited,palladium,producer,small,1.465,2.8074,1.0231,0.9344,0.7467,STRONG_UP,43.63,285.53,343.94,-51.85,44.44,106.75,0.4449,LOW,-,1.5067,1.9025,1.2908,1,118.8645,TREND+LEAD,34.8565
+155,-1,RPH1.SG,"ticker
+RPH1.SG    Anglo American Platinum
+RPH1.SG    Anglo American Platinum
+Name: name, dtype: object",palladium,producer,small,12.2,2.0189,1.1242,1.1471,1.1207,FLAT,32.19,177.24,136.28,-35.19,53.17,86.57,0.0,LOW,-,11.7884,12.5237,9.4021,1,108.8569,TREND+LEAD,28.845
+186,-2,WPM,"ticker
+WPM    Wheaton Precious Metals
+WPM    Wheaton Precious Metals
+WPM    Wheaton Precious Metals
+WPM    Wheaton Precious Metals
+Name: name, dtype: object",palladium,royalties_financial_services,large,135.56,1.2619,1.0836,1.1042,1.3327,STRONG_DOWN,23.62,73.29,168.89,-30.84,57.6,59.57,0.6874,LOW,-,132.559,141.3378,113.1713,1,70.871,TREND+LEAD,25.5414
+221,-3,CHN.AX,Challice Mining,palladium,producer,mid,1.44,0.9939,1.046,0.9064,0.7749,STRONG_UP,-40.74,36.49,32.72,-53.73,48.41,83.61,1.1337,MED,EARLY,1.5075,1.8166,1.9054,0,21.1293,WEAK,21.9749
+273,-1,IVPAF,Ivanhoe Mines Ltd,palladium,producer,large,7.5,0.6604,0.9307,0.9043,0.7423,STRONG_UP,-28.23,-9.31,-37.5,-46.08,51.2,66.59,0.2974,LOW,EARLY,8.638,10.7199,9.8015,0,-7.1589,WEAK,16.6275

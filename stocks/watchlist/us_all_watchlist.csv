@@ -1,0 +1,1559 @@
+ticker,name,sector,industry,market_cap,cap_band,benchmark
+SPY,SPDR S&P500 ETF,index,index,601908969472,large,benchmark
+MMM,3M,Industrials,Industrial Conglomerates,76092350464,large,SPY
+AOS,A. O. Smith,Industrials,Building Products,8898956288,mid,SPY
+ABT,Abbott Laboratories,Health Care,Health Care Equipment,178755452928,large,SPY
+ABBV,AbbVie,Health Care,Biotechnology,369388322816,large,SPY
+ACN,Accenture,Information Technology,IT Consulting & Other Services,123905556480,large,SPY
+ADBE,Adobe Inc.,Information Technology,Application Software,99023159296,large,SPY
+AMD,Advanced Micro Devices,Information Technology,Semiconductors,354614378496,large,SPY
+AES,AES Corporation,Utilities,Independent Power Producers & Energy Traders,10196924416,large,SPY
+AFL,Aflac,Financials,Life & Health Insurance,57904107520,large,SPY
+A,Agilent Technologies,Health Care,Life Sciences Tools & Services,32662323200,large,SPY
+APD,Air Products,Materials,Industrial Gases,65360666624,large,SPY
+ABNB,Airbnb,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",74909270016,large,SPY
+AKAM,Akamai Technologies,Information Technology,Internet Services & Infrastructure,17096797184,large,SPY
+ALB,Albemarle Corporation,Materials,Specialty Chemicals,20994476032,large,SPY
+ARE,Alexandria Real Estate Equities,Real Estate,Office REITs,7491774976,mid,SPY
+ALGN,Align Technology,Health Care,Health Care Supplies,12240550912,large,SPY
+ALLE,Allegion,Industrials,Building Products,12151682048,large,SPY
+LNT,Alliant Energy,Utilities,Electric Utilities,18732709888,large,SPY
+ALL,Allstate,Financials,Property & Casualty Insurance,53731704832,large,SPY
+GOOGL,Alphabet Inc. (Class A),Communication Services,Interactive Media & Services,3577929793536,large,SPY
+GOOG,Alphabet Inc. (Class C),Communication Services,Interactive Media & Services,3562082664448,large,SPY
+MO,Altria,Consumer Staples,Tobacco,110389452800,large,SPY
+AMZN,Amazon,Consumer Discretionary,Broadline Retail,2251864408064,large,SPY
+AMCR,Amcor,Materials,Paper & Plastic Packaging Products & Materials,18449483776,large,SPY
+AEE,Ameren,Utilities,Multi-Utilities,30871089152,large,SPY
+AEP,American Electric Power,Utilities,Electric Utilities,72119992320,large,SPY
+AXP,American Express,Financials,Consumer Finance,206107787264,large,SPY
+AIG,American International Group,Financials,Multi-line Insurance,40694824960,large,SPY
+AMT,American Tower,Real Estate,Telecom Tower REITs,81331109888,large,SPY
+AWK,American Water Works,Utilities,Water Utilities,26975993856,large,SPY
+AMP,Ameriprise Financial,Financials,Asset Management & Custody Banks,40315506688,large,SPY
+AME,Ametek,Industrials,Electrical Components & Equipment,50002690048,large,SPY
+AMGN,Amgen,Health Care,Biotechnology,187563196416,large,SPY
+APH,Amphenol,Information Technology,Electronic Components,157339516928,large,SPY
+ADI,Analog Devices,Information Technology,Semiconductors,155414904832,large,SPY
+AON,Aon plc,Financials,Insurance Brokers,69454184448,large,SPY
+APA,APA Corporation,Energy,Oil & Gas Exploration & Production,14850693120,large,SPY
+APO,Apollo Global Management,Financials,Asset Management & Custody Banks,62128435200,large,SPY
+AAPL,Apple Inc.,Information Technology,"Technology Hardware, Storage & Peripherals",3761492983808,large,SPY
+AMAT,Applied Materials,Information Technology,Semiconductor Materials & Equipment,276549238784,large,SPY
+APP,AppLovin,Information Technology,Application Software,130575671296,large,SPY
+APTV,Aptiv,Consumer Discretionary,Automotive Parts & Equipment,15317399552,large,SPY
+ACGL,Arch Capital Group,Financials,Property & Casualty Insurance,34465832960,large,SPY
+ADM,Archer Daniels Midland,Consumer Staples,Agricultural Products & Services,35578314752,large,SPY
+ARES,Ares Management,Financials,Asset Management & Custody Banks,33896073216,large,SPY
+ANET,Arista Networks,Information Technology,Communications Equipment,159526240256,large,SPY
+AJG,Arthur J. Gallagher & Co.,Financials,Insurance Brokers,55947530240,large,SPY
+AIZ,Assurant,Financials,Multi-line Insurance,10930703360,large,SPY
+T,AT&T,Communication Services,Integrated Telecommunication Services,198326353920,large,SPY
+ATO,Atmos Energy,Utilities,Gas Utilities,31262996480,large,SPY
+ADSK,Autodesk,Information Technology,Application Software,50472960000,large,SPY
+ADP,Automatic Data Processing,Industrials,Human Resource & Employment Services,82511585280,large,SPY
+AZO,AutoZone,Consumer Discretionary,Automotive Retail,56339542016,large,SPY
+AVB,AvalonBay Communities,Real Estate,Multi-Family Residential REITs,23507593216,large,SPY
+AVY,Avery Dennison,Materials,Paper & Plastic Packaging Products & Materials,13188963328,large,SPY
+AXON,Axon Enterprise,Industrials,Aerospace & Defense,33188962304,large,SPY
+BKR,Baker Hughes,Energy,Oil & Gas Equipment & Services,59882311680,large,SPY
+BALL,Ball Corporation,Materials,"Metal, Glass & Plastic Containers",15961198592,large,SPY
+BAC,Bank of America,Financials,Diversified Banks,354384576512,large,SPY
+BAX,Baxter International,Health Care,Health Care Equipment,8611092480,mid,SPY
+BDX,Becton Dickinson,Health Care,Health Care Equipment,55978213376,large,SPY
+BBY,Best Buy,Consumer Discretionary,Computer & Electronics Retail,13515014144,large,SPY
+TECH,Bio-Techne,Health Care,Life Sciences Tools & Services,8312364032,mid,SPY
+BIIB,Biogen,Health Care,Biotechnology,26026156032,large,SPY
+BLK,BlackRock,Financials,Asset Management & Custody Banks,150340222976,large,SPY
+BX,Blackstone Inc.,Financials,Asset Management & Custody Banks,138176724992,large,SPY
+XYZ,"Block, Inc.",Financials,Transaction & Payment Processing Services,36326215680,large,SPY
+BK,BNY Mellon,Financials,Asset Management & Custody Banks,85167243264,large,SPY
+BA,Boeing,Industrials,Aerospace & Defense,163628466176,large,SPY
+BKNG,Booking Holdings,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",135198621696,large,SPY
+BSX,Boston Scientific,Health Care,Health Care Equipment,93361520640,large,SPY
+BMY,Bristol Myers Squibb,Health Care,Pharmaceuticals,121687425024,large,SPY
+AVGO,Broadcom,Information Technology,Semiconductors,1491367493632,large,SPY
+BR,Broadridge Financial Solutions,Industrials,Data Processing & Outsourced Services,18788368384,large,SPY
+BRO,Brown & Brown,Financials,Insurance Brokers,22450700288,large,SPY
+BLDR,Builders FirstSource,Industrials,Building Products,8751073280,mid,SPY
+BG,Bunge Global,Consumer Staples,Agricultural Products & Services,25043945472,large,SPY
+BXP,"BXP, Inc.",Real Estate,Office REITs,9168010240,mid,SPY
+CHRW,C.H. Robinson,Industrials,Air Freight & Logistics,19909320704,large,SPY
+CDNS,Cadence Design Systems,Information Technology,Application Software,76952379392,large,SPY
+CPT,Camden Property Trust,Real Estate,Multi-Family Residential REITs,10552243200,large,SPY
+CPB,Campbell's Company (The),Consumer Staples,Packaged Foods & Meats,6562204672,mid,SPY
+COF,Capital One,Financials,Consumer Finance,113141792768,large,SPY
+CAH,Cardinal Health,Health Care,Health Care Distributors,50369392640,large,SPY
+CCL,Carnival,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",35514978304,large,SPY
+CARR,Carrier Global,Industrials,Building Products,46564864000,large,SPY
+CVNA,Carvana,Consumer Discretionary,Automotive Retail,69200101376,large,SPY
+CAT,Caterpillar Inc.,Industrials,Construction Machinery & Heavy Transportation Equipment,335644295168,large,SPY
+CBOE,Cboe Global Markets,Financials,Financial Exchanges & Data,30348400640,large,SPY
+CBRE,CBRE Group,Real Estate,Real Estate Services,40651202560,large,SPY
+CDW,CDW Corporation,Information Technology,Technology Distributors,15884929024,large,SPY
+COR,Cencora,Health Care,Health Care Distributors,63183564800,large,SPY
+CNC,Centene Corporation,Health Care,Managed Health Care,17266132992,large,SPY
+CNP,CenterPoint Energy,Utilities,Multi-Utilities,28593475584,large,SPY
+CF,CF Industries,Materials,Fertilizers & Agricultural Chemicals,19972335616,large,SPY
+CRL,Charles River Laboratories,Health Care,Life Sciences Tools & Services,8560222208,mid,SPY
+SCHW,Charles Schwab Corporation,Financials,Investment Banking & Brokerage,166623363072,large,SPY
+CHTR,Charter Communications,Communication Services,Cable & Satellite,27832348672,large,SPY
+CVX,Chevron Corporation,Energy,Integrated Oil & Gas,397811384320,large,SPY
+CMG,Chipotle Mexican Grill,Consumer Discretionary,Restaurants,43846737920,large,SPY
+CB,Chubb Limited,Financials,Property & Casualty Insurance,128410255360,large,SPY
+CHD,Church & Dwight,Consumer Staples,Household Products,21993850880,large,SPY
+CIEN,Ciena,Information Technology,Communications Equipment,63341678592,large,SPY
+CI,Cigna,Health Care,Health Care Services,72129314816,large,SPY
+CINF,Cincinnati Financial,Financials,Property & Casualty Insurance,24662253568,large,SPY
+CTAS,Cintas,Industrials,Diversified Support Services,69741568000,large,SPY
+CSCO,Cisco,Information Technology,Communications Equipment,312215470080,large,SPY
+C,Citigroup,Financials,Diversified Banks,201609019392,large,SPY
+CFG,Citizens Financial Group,Financials,Regional Banks,26194364416,large,SPY
+CLX,Clorox,Consumer Staples,Household Products,12337094656,large,SPY
+CME,CME Group,Financials,Financial Exchanges & Data,110696374272,large,SPY
+CMS,CMS Energy,Utilities,Multi-Utilities,24202377216,large,SPY
+KO,Coca-Cola Company (The),Consumer Staples,Soft Drinks & Non-alcoholic Beverages,330214637568,large,SPY
+CTSH,Cognizant,Information Technology,IT Consulting & Other Services,30184710144,large,SPY
+COIN,Coinbase,Financials,Financial Exchanges & Data,46235492352,large,SPY
+CL,Colgate-Palmolive,Consumer Staples,Household Products,68307980288,large,SPY
+CMCSA,Comcast,Communication Services,Cable & Satellite,101773975552,large,SPY
+FIX,Comfort Systems USA,Industrials,Construction & Engineering,49987055616,large,SPY
+CAG,Conagra Brands,Consumer Staples,Packaged Foods & Meats,7519968256,mid,SPY
+COP,ConocoPhillips,Energy,Oil & Gas Exploration & Production,159539724288,large,SPY
+ED,Consolidated Edison,Utilities,Multi-Utilities,41705168896,large,SPY
+STZ,Constellation Brands,Consumer Staples,Distillers & Vintners,26322993152,large,SPY
+CEG,Constellation Energy,Utilities,Electric Utilities,98841231360,large,SPY
+COO,Cooper Companies (The),Health Care,Health Care Supplies,13691176960,large,SPY
+CPRT,Copart,Industrials,Diversified Support Services,32331792384,large,SPY
+GLW,Corning Inc.,Information Technology,Electronic Components,127065473024,large,SPY
+CPAY,Corpay,Financials,Transaction & Payment Processing Services,20521496576,large,SPY
+CTVA,Corteva,Materials,Fertilizers & Agricultural Chemicals,57473904640,large,SPY
+CSGP,CoStar Group,Real Estate,Real Estate Services,16931720192,large,SPY
+COST,Costco,Consumer Staples,Consumer Staples Merchandise Retail,450509701120,large,SPY
+CTRA,Coterra,Energy,Oil & Gas Exploration & Production,26240464896,large,SPY
+CRH,CRH plc,Materials,Construction Materials,69941256192,large,SPY
+CRWD,CrowdStrike,Information Technology,Systems Software,101222457344,large,SPY
+CCI,Crown Castle,Real Estate,Telecom Tower REITs,36970049536,large,SPY
+CSX,CSX Corporation,Industrials,Rail Transportation,76668911616,large,SPY
+CMI,Cummins,Industrials,Construction Machinery & Heavy Transportation Equipment,75946786816,large,SPY
+CVS,CVS Health,Health Care,Health Care Services,93494788096,large,SPY
+DHR,Danaher Corporation,Health Care,Life Sciences Tools & Services,135255506944,large,SPY
+DRI,Darden Restaurants,Consumer Discretionary,Restaurants,22605289472,large,SPY
+DDOG,Datadog,Information Technology,Application Software,42589544448,large,SPY
+DVA,DaVita,Health Care,Health Care Services,9731877888,mid,SPY
+DECK,Deckers Brands,Consumer Discretionary,Footwear,14328173568,large,SPY
+DE,Deere & Company,Industrials,Agricultural & Farm Machinery,155503476736,large,SPY
+DELL,Dell Technologies,Information Technology,"Technology Hardware, Storage & Peripherals",115553181696,large,SPY
+DAL,Delta Air Lines,Industrials,Passenger Airlines,43603005440,large,SPY
+DVN,Devon Energy,Energy,Oil & Gas Exploration & Production,30696882176,large,SPY
+DXCM,Dexcom,Health Care,Health Care Equipment,24266811392,large,SPY
+FANG,Diamondback Energy,Energy,Oil & Gas Exploration & Production,54689472512,large,SPY
+DLR,Digital Realty,Real Estate,Data Center REITs,63555969024,large,SPY
+DG,Dollar General,Consumer Staples,Consumer Staples Merchandise Retail,26369898496,large,SPY
+DLTR,Dollar Tree,Consumer Staples,Consumer Staples Merchandise Retail,21563639808,large,SPY
+D,Dominion Energy,Utilities,Multi-Utilities,55172616192,large,SPY
+DPZ,Domino's,Consumer Discretionary,Restaurants,12470267904,large,SPY
+DASH,DoorDash,Consumer Discretionary,Specialized Consumer Services,67966005248,large,SPY
+DOV,Dover Corporation,Industrials,Industrial Machinery & Supplies & Components,27698907136,large,SPY
+DOW,Dow Inc.,Materials,Commodity Chemicals,29792243712,large,SPY
+DHI,D. R. Horton,Consumer Discretionary,Homebuilding,40663695360,large,SPY
+DTE,DTE Energy,Utilities,Multi-Utilities,30796480512,large,SPY
+DUK,Duke Energy,Utilities,Electric Utilities,102895812608,large,SPY
+DD,DuPont,Materials,Specialty Chemicals,19054997504,large,SPY
+ETN,Eaton Corporation,Industrials,Electrical Components & Equipment,140251234304,large,SPY
+EBAY,eBay Inc.,Consumer Discretionary,Broadline Retail,42551279616,large,SPY
+ECL,Ecolab,Materials,Specialty Chemicals,74638958592,large,SPY
+EIX,Edison International,Utilities,Electric Utilities,28275191808,large,SPY
+EW,Edwards Lifesciences,Health Care,Health Care Equipment,47073841152,large,SPY
+EA,Electronic Arts,Communication Services,Interactive Home Entertainment,50951655424,large,SPY
+ELV,Elevance Health,Health Care,Managed Health Care,66374721536,large,SPY
+EME,Emcor,Industrials,Construction & Engineering,33856421888,large,SPY
+EMR,Emerson Electric,Industrials,Electrical Components & Equipment,74055180288,large,SPY
+ETR,Entergy,Utilities,Electric Utilities,52601061376,large,SPY
+EOG,EOG Resources,Energy,Oil & Gas Exploration & Production,76525142016,large,SPY
+EPAM,EPAM Systems,Information Technology,IT Consulting & Other Services,7622929408,mid,SPY
+EQT,EQT Corporation,Energy,Oil & Gas Exploration & Production,37269155840,large,SPY
+EFX,Equifax,Industrials,Research & Consulting Services,22002544640,large,SPY
+EQIX,Equinix,Real Estate,Data Center REITs,98291277824,large,SPY
+EQR,Equity Residential,Real Estate,Multi-Family Residential REITs,23634190336,large,SPY
+ERIE,Erie Indemnity,Financials,Insurance Brokers,13046844416,large,SPY
+ESS,Essex Property Trust,Real Estate,Multi-Family Residential REITs,17101476864,large,SPY
+EL,Estée Lauder Companies (The),Consumer Staples,Personal Care Products,25002573824,large,SPY
+EG,Everest Group,Financials,Reinsurance,13211214848,large,SPY
+EVRG,Evergy,Utilities,Electric Utilities,19076737024,large,SPY
+ES,Eversource Energy,Utilities,Electric Utilities,26109976576,large,SPY
+EXC,Exelon,Utilities,Electric Utilities,50473230336,large,SPY
+EXE,Expand Energy,Energy,Oil & Gas Exploration & Production,24974974976,large,SPY
+EXPE,Expedia Group,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",27607107584,large,SPY
+EXPD,Expeditors International,Industrials,Air Freight & Logistics,19466170368,large,SPY
+EXR,Extra Space Storage,Real Estate,Self-Storage REITs,29662763008,large,SPY
+XOM,ExxonMobil,Energy,Integrated Oil & Gas,669557260288,large,SPY
+FFIV,"F5, Inc.",Information Technology,Communications Equipment,17233645568,large,SPY
+FDS,FactSet,Financials,Financial Exchanges & Data,8519770624,mid,SPY
+FICO,Fair Isaac,Information Technology,Application Software,25851432960,large,SPY
+FAST,Fastenal,Industrials,Trading Companies & Distributors,53167611904,large,SPY
+FRT,Federal Realty Investment Trust,Real Estate,Retail REITs,9281911808,mid,SPY
+FDX,FedEx,Industrials,Air Freight & Logistics,86287360000,large,SPY
+FIS,Fidelity National Information Services,Financials,Transaction & Payment Processing Services,23971311616,large,SPY
+FITB,Fifth Third Bancorp,Financials,Regional Banks,42661097472,large,SPY
+FSLR,First Solar,Information Technology,Semiconductors,20959983616,large,SPY
+FE,FirstEnergy,Utilities,Electric Utilities,29653735424,large,SPY
+FISV,Fiserv,Financials,Transaction & Payment Processing Services,30205763584,large,SPY
+F,Ford Motor Company,Consumer Discretionary,Automobile Manufacturers,46528557056,large,SPY
+FTNT,Fortinet,Information Technology,Systems Software,61373280256,large,SPY
+FTV,Fortive,Industrials,Industrial Machinery & Supplies & Components,17811660800,large,SPY
+FOXA,Fox Corporation (Class A),Communication Services,Broadcasting,24936716288,large,SPY
+FOX,Fox Corporation (Class B),Communication Services,Broadcasting,24682565632,large,SPY
+BEN,Franklin Resources,Financials,Asset Management & Custody Banks,12200542208,large,SPY
+FCX,Freeport-McMoRan,Materials,Copper,88215437312,large,SPY
+GRMN,Garmin,Consumer Discretionary,Consumer Electronics,45743067136,large,SPY
+IT,Gartner,Information Technology,IT Consulting & Other Services,11377377280,large,SPY
+GE,GE Aerospace,Industrials,Aerospace & Defense,296571469824,large,SPY
+GEHC,GE HealthCare,Health Care,Health Care Equipment,32100009984,large,SPY
+GEV,GE Vernova,Industrials,Heavy Electrical Equipment,243800424448,large,SPY
+GEN,Gen Digital,Information Technology,Systems Software,11649766400,large,SPY
+GNRC,Generac,Industrials,Electrical Components & Equipment,11389990912,large,SPY
+GD,General Dynamics,Industrials,Aerospace & Defense,94549581824,large,SPY
+GIS,General Mills,Consumer Staples,Packaged Foods & Meats,19970351104,large,SPY
+GM,General Motors,Consumer Discretionary,Automobile Manufacturers,67669762048,large,SPY
+GPC,Genuine Parts Company,Consumer Discretionary,Distributors,14394964992,large,SPY
+GILD,Gilead Sciences,Health Care,Biotechnology,173408583680,large,SPY
+GPN,Global Payments,Financials,Transaction & Payment Processing Services,17927680000,large,SPY
+GL,Globe Life,Financials,Life & Health Insurance,11213655040,large,SPY
+GDDY,GoDaddy,Information Technology,Internet Services & Infrastructure,11037014016,large,SPY
+GS,Goldman Sachs,Financials,Investment Banking & Brokerage,256109641728,large,SPY
+HAL,Halliburton,Energy,Oil & Gas Equipment & Services,32124887040,large,SPY
+HIG,Hartford (The),Financials,Property & Casualty Insurance,37983432704,large,SPY
+HAS,Hasbro,Consumer Discretionary,Leisure Products,12684228608,large,SPY
+HCA,HCA Healthcare,Health Care,Health Care Facilities,105513902080,large,SPY
+DOC,Healthpeak Properties,Real Estate,Health Care REITs,11485639680,large,SPY
+HSIC,Henry Schein,Health Care,Health Care Distributors,8704572416,mid,SPY
+HSY,Hershey Company (The),Consumer Staples,Packaged Foods & Meats,41792847872,large,SPY
+HPE,Hewlett Packard Enterprise,Information Technology,"Technology Hardware, Storage & Peripherals",32701976576,large,SPY
+HLT,Hilton Worldwide,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",70881107968,large,SPY
+HOLX,Hologic,Health Care,Health Care Equipment,16888477696,large,SPY
+HD,Home Depot (The),Consumer Discretionary,Home Improvement Retail,320347176960,large,SPY
+HON,Honeywell,Industrials,Industrial Conglomerates,145855791104,large,SPY
+HRL,Hormel Foods,Consumer Staples,Packaged Foods & Meats,12155779072,large,SPY
+HST,Host Hotels & Resorts,Real Estate,Hotel & Resort REITs,13334630400,large,SPY
+HWM,Howmet Aerospace,Industrials,Aerospace & Defense,93653696512,large,SPY
+HPQ,HP Inc.,Information Technology,"Technology Hardware, Storage & Peripherals",17909878784,large,SPY
+HUBB,Hubbell Incorporated,Industrials,Industrial Machinery & Supplies & Components,26275121152,large,SPY
+HUM,Humana,Health Care,Managed Health Care,21445580800,large,SPY
+HBAN,Huntington Bancshares,Financials,Regional Banks,32166119424,large,SPY
+HII,Huntington Ingalls Industries,Industrials,Aerospace & Defense,15617773568,large,SPY
+IBM,IBM,Information Technology,IT Consulting & Other Services,232875606016,large,SPY
+IEX,IDEX Corporation,Industrials,Industrial Machinery & Supplies & Components,14161030144,large,SPY
+IDXX,Idexx Laboratories,Health Care,Health Care Equipment,45349867520,large,SPY
+ITW,Illinois Tool Works,Industrials,Industrial Machinery & Supplies & Components,74416119808,large,SPY
+INCY,Incyte,Health Care,Biotechnology,19091460096,large,SPY
+IR,Ingersoll Rand,Industrials,Industrial Machinery & Supplies & Components,30783051776,large,SPY
+PODD,Insulet Corporation,Health Care,Health Care Equipment,14382575616,large,SPY
+INTC,Intel,Information Technology,Semiconductors,252958507008,large,SPY
+IBKR,Interactive Brokers,Financials,Investment Banking & Brokerage,115170893824,large,SPY
+ICE,Intercontinental Exchange,Financials,Financial Exchanges & Data,92927696896,large,SPY
+IFF,International Flavors & Fragrances,Materials,Specialty Chemicals,18504235008,large,SPY
+IP,International Paper,Materials,Paper & Plastic Packaging Products & Materials,18420826112,large,SPY
+INTU,Intuit,Information Technology,Application Software,117565235200,large,SPY
+ISRG,Intuitive Surgical,Health Care,Health Care Equipment,160561561600,large,SPY
+IVZ,Invesco,Financials,Asset Management & Custody Banks,10710285312,large,SPY
+INVH,Invitation Homes,Real Estate,Single-Family Residential REITs,15662675968,large,SPY
+IQV,IQVIA,Health Care,Life Sciences Tools & Services,29402220544,large,SPY
+IRM,Iron Mountain,Real Estate,Other Specialized REITs,30729562112,large,SPY
+JBHT,J.B. Hunt,Industrials,Cargo Ground Transportation,20463374336,large,SPY
+JBL,Jabil,Information Technology,Electronic Manufacturing Services,28687304704,large,SPY
+JKHY,Jack Henry & Associates,Financials,Transaction & Payment Processing Services,11397951488,large,SPY
+J,Jacobs Solutions,Industrials,Construction & Engineering,15117666304,large,SPY
+JNJ,Johnson & Johnson,Health Care,Pharmaceuticals,585701851136,large,SPY
+JCI,Johnson Controls,Industrials,Building Products,81386438656,large,SPY
+JPM,JPMorgan Chase,Financials,Diversified Banks,794545750016,large,SPY
+KVUE,Kenvue,Consumer Staples,Personal Care Products,32852785152,large,SPY
+KDP,Keurig Dr Pepper,Consumer Staples,Soft Drinks & Non-alcoholic Beverages,34387836928,large,SPY
+KEY,KeyCorp,Financials,Regional Banks,22305083392,large,SPY
+KEYS,Keysight Technologies,Information Technology,Electronic Equipment & Instruments,49952829440,large,SPY
+KMB,Kimberly-Clark,Consumer Staples,Household Products,31908022272,large,SPY
+KIM,Kimco Realty,Real Estate,Retail REITs,15304586240,large,SPY
+KMI,Kinder Morgan,Energy,Oil & Gas Storage & Transportation,73351872512,large,SPY
+KKR,KKR & Co.,Financials,Asset Management & Custody Banks,84489887744,large,SPY
+KLAC,KLA Corporation,Information Technology,Semiconductor Materials & Equipment,199301152768,large,SPY
+KHC,Kraft Heinz,Consumer Staples,Packaged Foods & Meats,26977544192,large,SPY
+KR,Kroger,Consumer Staples,Food Retail,44422897664,large,SPY
+LHX,L3Harris,Industrials,Aerospace & Defense,66590814208,large,SPY
+LH,Labcorp,Health Care,Health Care Services,22691387392,large,SPY
+LRCX,Lam Research,Information Technology,Semiconductor Materials & Equipment,274367184896,large,SPY
+LW,Lamb Weston,Consumer Staples,Packaged Foods & Meats,5468845056,mid,SPY
+LVS,Las Vegas Sands,Consumer Discretionary,Casinos & Gaming,36741148672,large,SPY
+LDOS,Leidos,Industrials,Diversified Support Services,20073687040,large,SPY
+LEN,Lennar,Consumer Discretionary,Homebuilding,21416757248,large,SPY
+LII,Lennox International,Industrials,Building Products,15945491456,large,SPY
+LLY,Lilly (Eli),Health Care,Pharmaceuticals,837361664000,large,SPY
+LIN,Linde plc,Materials,Industrial Gases,232901902336,large,SPY
+LYV,Live Nation Entertainment,Communication Services,Movies & Entertainment,36570398720,large,SPY
+LMT,Lockheed Martin,Industrials,Aerospace & Defense,143529492480,large,SPY
+L,Loews Corporation,Financials,Multi-line Insurance,22255169536,large,SPY
+LOW,Lowe's,Consumer Discretionary,Home Improvement Retail,129596620800,large,SPY
+LULU,Lululemon Athletica,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",18267686912,large,SPY
+LYB,LyondellBasell,Materials,Specialty Chemicals,25644730368,large,SPY
+MTB,M&T Bank,Financials,Regional Banks,31313893376,large,SPY
+MPC,Marathon Petroleum,Energy,Oil & Gas Refining & Marketing,71247536128,large,SPY
+MAR,Marriott International,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",87956324352,large,SPY
+MRSH,Marsh McLennan,Financials,Insurance Brokers,85543133184,large,SPY
+MLM,Martin Marietta Materials,Materials,Construction Materials,36017147904,large,SPY
+MAS,Masco,Industrials,Building Products,12037251072,large,SPY
+MA,Mastercard,Financials,Transaction & Payment Processing Services,440364466176,large,SPY
+MTCH,Match Group,Communication Services,Interactive Media & Services,7422046720,mid,SPY
+MKC,McCormick & Company,Consumer Staples,Packaged Foods & Meats,13113207808,large,SPY
+MCD,McDonald's,Consumer Discretionary,Restaurants,219176468480,large,SPY
+MCK,McKesson Corporation,Health Care,Health Care Distributors,109143719936,large,SPY
+MDT,Medtronic,Health Care,Health Care Equipment,111222947840,large,SPY
+MRK,Merck & Co.,Health Care,Pharmaceuticals,298838032384,large,SPY
+META,Meta Platforms,Communication Services,Interactive Media & Services,1453128548352,large,SPY
+MET,MetLife,Financials,Life & Health Insurance,46596816896,large,SPY
+MTD,Mettler Toledo,Health Care,Life Sciences Tools & Services,25608593408,large,SPY
+MGM,MGM Resorts,Consumer Discretionary,Casinos & Gaming,10032216064,large,SPY
+MCHP,Microchip Technology,Information Technology,Semiconductors,35498487808,large,SPY
+MU,Micron Technology,Information Technology,Semiconductors,413021306880,large,SPY
+MSFT,Microsoft,Information Technology,Systems Software,2775695753216,large,SPY
+MAA,Mid-America Apartment Communities,Real Estate,Multi-Family Residential REITs,14988545024,large,SPY
+MRNA,Moderna,Health Care,Biotechnology,19512074240,large,SPY
+MOH,Molina Healthcare,Health Care,Managed Health Care,7260453888,mid,SPY
+TAP,Molson Coors Beverage Company,Consumer Staples,Brewers,8292085248,mid,SPY
+MDLZ,Mondelez International,Consumer Staples,Packaged Foods & Meats,74247233536,large,SPY
+MPWR,Monolithic Power Systems,Information Technology,Semiconductors,54937993216,large,SPY
+MNST,Monster Beverage,Consumer Staples,Soft Drinks & Non-alcoholic Beverages,70797451264,large,SPY
+MCO,Moody's Corporation,Financials,Financial Exchanges & Data,78462328832,large,SPY
+MS,Morgan Stanley,Financials,Investment Banking & Brokerage,263283097600,large,SPY
+MOS,Mosaic Company (The),Materials,Fertilizers & Agricultural Chemicals,8309112320,mid,SPY
+MSI,Motorola Solutions,Information Technology,Communications Equipment,73110978560,large,SPY
+MSCI,MSCI Inc.,Financials,Financial Exchanges & Data,40027189248,large,SPY
+NDAQ,"Nasdaq, Inc.",Financials,Financial Exchanges & Data,49476755456,large,SPY
+NTAP,NetApp,Information Technology,"Technology Hardware, Storage & Peripherals",20469536768,large,SPY
+NFLX,Netflix,Communication Services,Movies & Entertainment,418504835072,large,SPY
+NEM,Newmont,Materials,Gold,124072050688,large,SPY
+NWSA,News Corp (Class A),Communication Services,Publishing,14087340032,large,SPY
+NWS,News Corp (Class B),Communication Services,Publishing,15473740800,large,SPY
+NEE,NextEra Energy,Utilities,Multi-Utilities,194080063488,large,SPY
+NKE,"Nike, Inc.",Consumer Discretionary,"Apparel, Accessories & Luxury Goods",65418137600,large,SPY
+NI,NiSource,Utilities,Multi-Utilities,22725541888,large,SPY
+NDSN,Nordson Corporation,Industrials,Industrial Machinery & Supplies & Components,14676665344,large,SPY
+NSC,Norfolk Southern,Industrials,Rail Transportation,64676745216,large,SPY
+NTRS,Northern Trust,Financials,Asset Management & Custody Banks,26901946368,large,SPY
+NOC,Northrop Grumman,Industrials,Aerospace & Defense,100260847616,large,SPY
+NCLH,Norwegian Cruise Line Holdings,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",8623478784,mid,SPY
+NRG,NRG Energy,Utilities,Independent Power Producers & Energy Traders,32427720704,large,SPY
+NUE,Nucor,Materials,Steel,39282012160,large,SPY
+NVDA,Nvidia,Information Technology,Semiconductors,4311464017920,large,SPY
+NVR,"NVR, Inc.",Consumer Discretionary,Homebuilding,18615214080,large,SPY
+NXPI,NXP Semiconductors,Information Technology,Semiconductors,49161396224,large,SPY
+ORLY,O’Reilly Automotive,Consumer Discretionary,Automotive Retail,76654485504,large,SPY
+OXY,Occidental Petroleum,Energy,Oil & Gas Exploration & Production,62447046656,large,SPY
+ODFL,Old Dominion,Industrials,Cargo Ground Transportation,41401491456,large,SPY
+OMC,Omnicom Group,Communication Services,Advertising,23216261120,large,SPY
+ON,ON Semiconductor,Information Technology,Semiconductors,25023911936,large,SPY
+OKE,Oneok,Energy,Oil & Gas Storage & Transportation,55609896960,large,SPY
+ORCL,Oracle Corporation,Information Technology,Application Software,420995629056,large,SPY
+OTIS,Otis Worldwide,Industrials,Industrial Machinery & Supplies & Components,30343276544,large,SPY
+PCAR,Paccar,Industrials,Construction Machinery & Heavy Transportation Equipment,62223831040,large,SPY
+PKG,Packaging Corporation of America,Materials,Paper & Plastic Packaging Products & Materials,18240571392,large,SPY
+PLTR,Palantir Technologies,Information Technology,Application Software,355068182528,large,SPY
+PANW,Palo Alto Networks,Information Technology,Systems Software,133179367424,large,SPY
+PSKY,Paramount Skydance Corporation,Communication Services,Movies & Entertainment,10583775232,large,SPY
+PH,Parker Hannifin,Industrials,Industrial Machinery & Supplies & Components,114612183040,large,SPY
+PAYX,Paychex,Industrials,Human Resource & Employment Services,32855273472,large,SPY
+PAYC,Paycom,Industrials,Human Resource & Employment Services,6784200192,mid,SPY
+PYPL,PayPal,Financials,Transaction & Payment Processing Services,42422460416,large,SPY
+PNR,Pentair,Industrials,Industrial Machinery & Supplies & Components,14008888320,large,SPY
+PEP,PepsiCo,Consumer Staples,Soft Drinks & Non-alcoholic Beverages,214623387648,large,SPY
+PFE,Pfizer,Health Care,Pharmaceuticals,161094254592,large,SPY
+PCG,PG&E Corporation,Utilities,Multi-Utilities,39057891328,large,SPY
+PM,Philip Morris International,Consumer Staples,Tobacco,246403645440,large,SPY
+PSX,Phillips 66,Energy,Oil & Gas Refining & Marketing,70615105536,large,SPY
+PNW,Pinnacle West Capital,Utilities,Multi-Utilities,12416983040,large,SPY
+PNC,PNC Financial Services,Financials,Diversified Banks,85593251840,large,SPY
+POOL,Pool Corporation,Consumer Discretionary,Distributors,7465352192,mid,SPY
+PPG,PPG Industries,Materials,Specialty Chemicals,23104972800,large,SPY
+PPL,PPL Corporation,Utilities,Electric Utilities,29030494208,large,SPY
+PFG,Principal Financial Group,Financials,Life & Health Insurance,19794415616,large,SPY
+PG,Procter & Gamble,Consumer Staples,Personal Care Products,334433288192,large,SPY
+PGR,Progressive Corporation,Financials,Property & Casualty Insurance,114398216192,large,SPY
+PLD,Prologis,Real Estate,Industrial REITs,124704497664,large,SPY
+PRU,Prudential Financial,Financials,Life & Health Insurance,33957840896,large,SPY
+PEG,Public Service Enterprise Group,Utilities,Electric Utilities,40840777728,large,SPY
+PTC,PTC Inc.,Information Technology,Application Software,16974794752,large,SPY
+PSA,Public Storage,Real Estate,Self-Storage REITs,49213276160,large,SPY
+PHM,PulteGroup,Consumer Discretionary,Homebuilding,22536284160,large,SPY
+PWR,Quanta Services,Industrials,Construction & Engineering,83881140224,large,SPY
+QCOM,Qualcomm,Information Technology,Semiconductors,135428120576,large,SPY
+DGX,Quest Diagnostics,Health Care,Health Care Services,22028212224,large,SPY
+Q,Qnity Electronics,Information Technology,Semiconductor Materials & Equipment,24431552512,large,SPY
+RL,Ralph Lauren Corporation,Consumer Discretionary,"Apparel, Accessories & Luxury Goods",21104162816,large,SPY
+RJF,Raymond James Financial,Financials,Investment Banking & Brokerage,28080220160,large,SPY
+RTX,RTX Corporation,Industrials,Aerospace & Defense,264093614080,large,SPY
+O,Realty Income,Real Estate,Retail REITs,58007752704,large,SPY
+REG,Regency Centers,Real Estate,Retail REITs,14389221376,large,SPY
+REGN,Regeneron Pharmaceuticals,Health Care,Biotechnology,80542629888,large,SPY
+RF,Regions Financial Corporation,Financials,Regional Banks,22857021440,large,SPY
+RSG,Republic Services,Industrials,Environmental & Facilities Services,68955930624,large,SPY
+RMD,ResMed,Health Care,Health Care Equipment,32709584896,large,SPY
+RVTY,Revvity,Health Care,Health Care Equipment,9943788544,mid,SPY
+HOOD,Robinhood Markets,Financials,Investment Banking & Brokerage,62031249408,large,SPY
+ROK,Rockwell Automation,Industrials,Electrical Components & Equipment,41040359424,large,SPY
+ROL,"Rollins, Inc.",Industrials,Environmental & Facilities Services,25993658368,large,SPY
+ROP,Roper Technologies,Information Technology,Electronic Equipment & Instruments,38521286656,large,SPY
+ROST,Ross Stores,Consumer Discretionary,Apparel Retail,71543275520,large,SPY
+RCL,Royal Caribbean Group,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",74611539968,large,SPY
+SPGI,S&P Global,Financials,Financial Exchanges & Data,130555248640,large,SPY
+CRM,Salesforce,Information Technology,Application Software,175387656192,large,SPY
+SNDK,Sandisk,Information Technology,"Technology Hardware, Storage & Peripherals",103555375104,large,SPY
+SBAC,SBA Communications,Real Estate,Telecom Tower REITs,21557641216,large,SPY
+SLB,Schlumberger,Energy,Oil & Gas Equipment & Services,74216030208,large,SPY
+STX,Seagate Technology,Information Technology,"Technology Hardware, Storage & Peripherals",96187531264,large,SPY
+SRE,Sempra,Utilities,Multi-Utilities,64810586112,large,SPY
+NOW,ServiceNow,Information Technology,Systems Software,107624587264,large,SPY
+SHW,Sherwin-Williams,Materials,Specialty Chemicals,78792376320,large,SPY
+SPG,Simon Property Group,Real Estate,Retail REITs,61308936192,large,SPY
+SWKS,Skyworks Solutions,Information Technology,Semiconductors,8299119616,mid,SPY
+SJM,J.M. Smucker Company (The),Consumer Staples,Packaged Foods & Meats,10186107904,large,SPY
+SW,Smurfit Westrock,Materials,Paper & Plastic Packaging Products & Materials,20597938176,large,SPY
+SNA,Snap-on,Industrials,Industrial Machinery & Supplies & Components,19031123968,large,SPY
+SOLV,Solventum,Health Care,Health Care Technology,11028950016,large,SPY
+SO,Southern Company,Utilities,Electric Utilities,109084672000,large,SPY
+LUV,Southwest Airlines,Industrials,Passenger Airlines,18473555968,large,SPY
+SWK,Stanley Black & Decker,Industrials,Industrial Machinery & Supplies & Components,10658861056,large,SPY
+SBUX,Starbucks,Consumer Discretionary,Restaurants,102958538752,large,SPY
+STT,State Street Corporation,Financials,Asset Management & Custody Banks,35975442432,large,SPY
+STLD,Steel Dynamics,Materials,Steel,26107807744,large,SPY
+STE,Steris,Health Care,Health Care Equipment,21465733120,large,SPY
+SYK,Stryker Corporation,Health Care,Health Care Equipment,126974607360,large,SPY
+SMCI,Supermicro,Information Technology,"Technology Hardware, Storage & Peripherals",13943189504,large,SPY
+SYF,Synchrony Financial,Financials,Consumer Finance,24642906112,large,SPY
+SNPS,Synopsys,Information Technology,Application Software,75848990720,large,SPY
+SYY,Sysco,Consumer Staples,Food Distributors,34080706560,large,SPY
+TMUS,T-Mobile US,Communication Services,Wireless Telecommunication Services,225267220480,large,SPY
+TROW,T. Rowe Price,Financials,Asset Management & Custody Banks,19663632384,large,SPY
+TTWO,Take-Two Interactive,Communication Services,Interactive Home Entertainment,37011017728,large,SPY
+TPR,"Tapestry, Inc.",Consumer Discretionary,"Apparel, Accessories & Luxury Goods",28896544768,large,SPY
+TRGP,Targa Resources,Energy,Oil & Gas Storage & Transportation,52532068352,large,SPY
+TGT,Target Corporation,Consumer Staples,Consumer Staples Merchandise Retail,54546452480,large,SPY
+TEL,TE Connectivity,Information Technology,Electronic Manufacturing Services,61369466880,large,SPY
+TDY,Teledyne Technologies,Information Technology,Electronic Equipment & Instruments,28861689856,large,SPY
+TER,Teradyne,Information Technology,Semiconductor Materials & Equipment,48471285760,large,SPY
+TSLA,"Tesla, Inc.",Consumer Discretionary,Automobile Manufacturers,1353089417216,large,SPY
+TXN,Texas Instruments,Information Technology,Semiconductors,177421991936,large,SPY
+TPL,Texas Pacific Land Corporation,Energy,Oil & Gas Exploration & Production,30626594816,large,SPY
+TXT,Textron,Industrials,Aerospace & Defense,15335003136,large,SPY
+TMO,Thermo Fisher Scientific,Health Care,Life Sciences Tools & Services,182569648128,large,SPY
+TJX,TJX Companies,Consumer Discretionary,Apparel Retail,179505889280,large,SPY
+TKO,TKO Group Holdings,Communication Services,Movies & Entertainment,16081219584,large,SPY
+TTD,Trade Desk (The),Communication Services,Advertising,10495293440,large,SPY
+TSCO,Tractor Supply,Consumer Discretionary,Other Specialty Retail,23064713216,large,SPY
+TT,Trane Technologies,Industrials,Building Products,94698078208,large,SPY
+TDG,TransDigm Group,Industrials,Aerospace & Defense,65904648192,large,SPY
+TRV,Travelers Companies (The),Financials,Property & Casualty Insurance,65578414080,large,SPY
+TRMB,Trimble Inc.,Information Technology,Electronic Equipment & Instruments,15493413888,large,SPY
+TFC,Truist Financial,Financials,Diversified Banks,60329259008,large,SPY
+TYL,Tyler Technologies,Information Technology,Application Software,14530334720,large,SPY
+TSN,Tyson Foods,Consumer Staples,Packaged Foods & Meats,22754863104,large,SPY
+USB,U.S. Bancorp,Financials,Diversified Banks,82268192768,large,SPY
+UBER,Uber,Industrials,Passenger Ground Transportation,147855048704,large,SPY
+UDR,"UDR, Inc.",Real Estate,Multi-Family Residential REITs,13041581056,large,SPY
+ULTA,Ulta Beauty,Consumer Discretionary,Other Specialty Retail,23839789056,large,SPY
+UNP,Union Pacific Corporation,Industrials,Rail Transportation,145279008768,large,SPY
+UAL,United Airlines Holdings,Industrials,Passenger Airlines,29851879424,large,SPY
+UPS,United Parcel Service,Industrials,Air Freight & Logistics,83420889088,large,SPY
+URI,United Rentals,Industrials,Trading Companies & Distributors,46120316928,large,SPY
+UNH,UnitedHealth Group,Health Care,Managed Health Care,251662204928,large,SPY
+UHS,Universal Health Services,Health Care,Health Care Facilities,10794009600,large,SPY
+VLO,Valero Energy,Energy,Oil & Gas Refining & Marketing,72989310976,large,SPY
+VTR,Ventas,Real Estate,Health Care REITs,39550353408,large,SPY
+VLTO,Veralto,Industrials,Environmental & Facilities Services,21812695040,large,SPY
+VRSN,Verisign,Information Technology,Internet Services & Infrastructure,24088094720,large,SPY
+VRSK,Verisk Analytics,Industrials,Research & Consulting Services,25795076096,large,SPY
+VZ,Verizon,Communication Services,Integrated Telecommunication Services,208353607680,large,SPY
+VRTX,Vertex Pharmaceuticals,Health Care,Biotechnology,111447334912,large,SPY
+VTRS,Viatris,Health Care,Pharmaceuticals,15479786496,large,SPY
+VICI,Vici Properties,Real Estate,Hotel & Resort REITs,29568235520,large,SPY
+V,Visa Inc.,Financials,Transaction & Payment Processing Services,579954278400,large,SPY
+VST,Vistra Corp.,Utilities,Electric Utilities,51181879296,large,SPY
+VMC,Vulcan Materials Company,Materials,Construction Materials,36546838528,large,SPY
+WRB,W. R. Berkley Corporation,Financials,Property & Casualty Insurance,25077596160,large,SPY
+GWW,W. W. Grainger,Industrials,Industrial Machinery & Supplies & Components,52936982528,large,SPY
+WAB,Wabtec,Industrials,Construction Machinery & Heavy Transportation Equipment,43407740928,large,SPY
+WMT,Walmart,Consumer Staples,Consumer Staples Merchandise Retail,1002848518144,large,SPY
+DIS,Walt Disney Company (The),Communication Services,Movies & Entertainment,171326914560,large,SPY
+WBD,Warner Bros. Discovery,Communication Services,Broadcasting,68484911104,large,SPY
+WM,Waste Management,Industrials,Environmental & Facilities Services,94953308160,large,SPY
+WAT,Waters Corporation,Health Care,Life Sciences Tools & Services,29846511616,large,SPY
+WEC,WEC Energy Group,Utilities,Electric Utilities,38295760896,large,SPY
+WFC,Wells Fargo,Financials,Diversified Banks,248702222336,large,SPY
+WELL,Welltower,Real Estate,Health Care REITs,141176274944,large,SPY
+WST,West Pharmaceutical Services,Health Care,Health Care Supplies,18366394368,large,SPY
+WDC,Western Digital,Information Technology,"Technology Hardware, Storage & Peripherals",100850032640,large,SPY
+WY,Weyerhaeuser,Real Estate,Timber REITs,17610635264,large,SPY
+WSM,"Williams-Sonoma, Inc.",Consumer Discretionary,Homefurnishing Retail,21443121152,large,SPY
+WMB,Williams Companies,Energy,Oil & Gas Storage & Transportation,88045699072,large,SPY
+WTW,Willis Towers Watson,Financials,Insurance Brokers,27289731072,large,SPY
+WDAY,"Workday, Inc.",Information Technology,Application Software,34784378880,large,SPY
+WYNN,Wynn Resorts,Consumer Discretionary,Casinos & Gaming,10640024576,large,SPY
+XEL,Xcel Energy,Utilities,Multi-Utilities,50371813376,large,SPY
+XYL,Xylem Inc.,Industrials,Industrial Machinery & Supplies & Components,29483327488,large,SPY
+YUM,Yum! Brands,Consumer Discretionary,Restaurants,43338829824,large,SPY
+ZBRA,Zebra Technologies,Information Technology,Electronic Equipment & Instruments,10275670016,large,SPY
+ZBH,Zimmer Biomet,Health Care,Health Care Equipment,18012721152,large,SPY
+ZTS,Zoetis,Health Care,Pharmaceuticals,51975360512,large,SPY
+ALNY,Alnylam Pharmaceuticals,Health Care,Biotechnology,42286891008,large,SPY
+ARM,Arm Holdings,Technology,Semiconductors,158354604032,large,SPY
+ASML,ASML Holding,Technology,Industrial Machinery,517221810176,large,SPY
+TEAM,Atlassian,Technology,Computer Software,18011082752,large,SPY
+CCEP,Coca-Cola Europacific Partners,Consumer Staples,Soft Drinks,41974009856,large,SPY
+FER,Ferrovial,Industrials,"Military, Government, Technical",48208359424,large,SPY
+INSM,Insmed Incorporated,Health Care,Biotechnology,35012096000,large,SPY
+MRVL,Marvell Technology,Technology,Semiconductors,93663223808,large,SPY
+MELI,Mercado Libre,Consumer Discretionary,Catalog/Specialty Distribution,86972030976,large,SPY
+MSTR,MicroStrategy,Technology,Computer Software,41412579328,large,SPY
+PDD,PDD Holdings,Technology,EDP Services,143199748096,large,SPY
+SHOP,Shopify,Technology,Computer Software,154326138880,large,SPY
+TRI,Thomson Reuters,Technology,Computer Software,40031125504,large,SPY
+ZS,Zscaler,Technology,EDP Services,22279159808,large,SPY
+BE,BLOOM ENERGY CLASS A CORP,Industrials,,38050758656,large,SPY
+FN,FABRINET,Information Technology,,19990505472,large,SPY
+NXT,NEXTPOWER INC CLASS A,Industrials,,17005499392,large,SPY
+KTOS,KRATOS DEFENSE AND SECURITY SOLUTI,Industrials,,12570661888,large,SPY
+CRDO,CREDO TECHNOLOGY GROUP HOLDING LTD,Information Technology,,18712444928,large,SPY
+SATS,ECHOSTAR CORP CLASS A,Communication,,37172543488,large,SPY
+STRL,STERLING INFRASTRUCTURE INC,Industrials,,12773616640,large,SPY
+CDE,COEUR MINING INC,Materials,,19760011264,large,SPY
+AEIS,ADVANCED ENERGY INDUSTRIES INC,Information Technology,,12636955648,large,SPY
+HL,HECLA MINING,Materials,,12857310208,large,SPY
+ENSG,ENSIGN GROUP INC,Health Care,,11426134016,large,SPY
+BBIO,BRIDGEBIO PHARMA INC,Health Care,,14181068800,large,SPY
+IONQ,IONQ INC,Information Technology,,10772843520,large,SPY
+GH,GUARDANT HEALTH INC,Health Care,,12307722240,large,SPY
+MOD,MODINE MANUFACTURING,Industrials,,11565005824,large,SPY
+RMBS,RAMBUS INC,Information Technology,,10062066688,large,SPY
+DY,DYCOM INDUSTRIES INC,Industrials,,10434078720,large,SPY
+TTMI,TTM TECHNOLOGIES INC,Information Technology,,10122634240,large,SPY
+SPXC,SPX TECHNOLOGIES INC,Industrials,,9840210944,mid,SPY
+GTLS,CHART INDUSTRIES INC,Industrials,,9912484864,mid,SPY
+IDCC,INTERDIGITAL INC,Information Technology,,8056242688,mid,SPY
+CTRE,CARETRUST REIT INC,Real Estate,,8554450432,mid,SPY
+AHR,AMERICAN HEALTHCARE REIT INC,Real Estate,,9042292736,mid,SPY
+MDGL,MADRIGAL PHARMACEUTICALS INC,Health Care,,12545639424,large,SPY
+AVAV,AEROVIRONMENT INC,Industrials,,9329551360,mid,SPY
+WTS,WATTS WATER TECHNOLOGIES INC CLASS,Industrials,,9632571392,mid,SPY
+UMBF,UMB FINANCIAL CORP,Financials,,8758753280,mid,SPY
+FCFS,FIRSTCASH HOLDINGS INC,Financials,,8808294400,mid,SPY
+ARWR,ARROWHEAD PHARMACEUTICALS INC,Health Care,,8546164736,mid,SPY
+PRIM,PRIMORIS SERVICES CORP,Industrials,,8016504832,mid,SPY
+FORM,FORMFACTOR INC,Information Technology,,8038015488,mid,SPY
+ONB,OLD NATIONAL BANCORP,Financials,,8650740736,mid,SPY
+SITM,SITIME CORP,Information Technology,,9127385088,mid,SPY
+FLR,FLUOR CORP,Industrials,,6909058560,mid,SPY
+CYTK,CYTOKINETICS INC,Health Care,,8218654720,mid,SPY
+VIAV,VIAVI SOLUTIONS INC,Information Technology,,8535952896,mid,SPY
+PRAX,PRAXIS PRECISION MEDICINES INC,Health Care,,8644341760,mid,SPY
+ESE,ESCO TECHNOLOGIES INC,Industrials,,7568813056,mid,SPY
+CMC,COMMERCIAL METALS,Materials,,6856778240,mid,SPY
+SM,SM ENERGY,Energy,,7298557952,mid,SPY
+HQY,HEALTHEQUITY INC,Health Care,,7233890304,mid,SPY
+JBTM,JBT MAREL CORP,Industrials,,6505572864,mid,SPY
+JXN,JACKSON FINANCIAL INC CLASS A,Financials,,7299000832,mid,SPY
+PCVX,VAXCYTE INC,Health Care,,8477141504,mid,SPY
+SLAB,SILICON LABORATORIES INC,Information Technology,,6894685184,mid,SPY
+ZWS,ZURN ELKAY WATER SOLUTIONS CORP,Industrials,,7542754816,mid,SPY
+TEX,TEREX CORP,Industrials,,6653724160,mid,SPY
+ORA,ORMAT TECH INC,Utilities,,6933499904,mid,SPY
+SANM,SANMINA CORP,Information Technology,,7110103040,mid,SPY
+CWAN,CLEARWATER ANALYTICS HOLDINGS INC,Information Technology,,7112855552,mid,SPY
+AXSM,AXSOME THERAPEUTICS INC,Health Care,,8619585536,mid,SPY
+EPRT,ESSENTIAL PROPERTIES REALTY TRUST,Real Estate,,6491878400,mid,SPY
+UEC,URANIUM ENERGY CORP,Energy,,6652295680,mid,SPY
+IBP,INSTALLED BUILDING PRODUCTS INC,Consumer Discretionary,,7248548352,mid,SPY
+FSS,FEDERAL SIGNAL CORP,Industrials,,6652467712,mid,SPY
+SMTC,SEMTECH CORP,Information Technology,,7682414080,mid,SPY
+TRNO,TERRENO REALTY REIT CORP,Real Estate,,6603838464,mid,SPY
+APLD,APPLIED DIGITAL CORP,Information Technology,,6866627584,mid,SPY
+AGX,ARGAN INC,Industrials,,8021158912,mid,SPY
+LUMN,LUMEN TECHNOLOGIES INC,Communication,,7169249280,mid,SPY
+KRYS,KRYSTAL BIOTECH INC,Health Care,,7628140032,mid,SPY
+EAT,BRINKER INTERNATIONAL INC,Consumer Discretionary,,6428752896,mid,SPY
+OKLO,OKLO INC CLASS A,Utilities,,8353865728,mid,SPY
+AROC,ARCHROCK INC,Energy,,6074088960,mid,SPY
+ENS,ENERSYS,Industrials,,6545835520,mid,SPY
+VSAT,VIASAT INC,Information Technology,,7292788224,mid,SPY
+POR,PORTLAND GENERAL ELECTRIC,Utilities,,6211069952,mid,SPY
+PL,PLANET LABS CLASS A,Industrials,,12419827712,large,SPY
+GATX,GATX CORP,Industrials,,6191769088,mid,SPY
+TXNM,TXNM ENERGY INC,Utilities,,6410021888,mid,SPY
+NE,NOBLE CORPORATION PLC,Energy,,7951345664,mid,SPY
+RIG,TRANSOCEAN LTD,Energy,,7267773440,mid,SPY
+GKOS,GLAUKOS CORP,Health Care,,6549547520,mid,SPY
+VAL,VALARIS LTD,Energy,,6787400192,mid,SPY
+VLY,VALLEY NATIONAL,Financials,,6925834240,mid,SPY
+RHP,RYMAN HOSPITALITY PROPERTIES REIT,Real Estate,,5853890560,mid,SPY
+DOCN,DIGITALOCEAN HOLDINGS INC,Information Technology,,9356012544,mid,SPY
+PTGX,PROTAGONIST THERAPEUTICS INC,Health Care,,6622068224,mid,SPY
+SWX,SOUTHWEST GAS HOLDINGS INC,Utilities,,6457819648,mid,SPY
+TMHC,TAYLOR MORRISON HOME CORP,Consumer Discretionary,,5589279232,mid,SPY
+AAOI,APPLIED OPTOELECTRONICS INC,Information Technology,,8071222784,mid,SPY
+BTSG,BRIGHTSPRING HEALTH SERVICES INC,Health Care,,8278835200,mid,SPY
+KRG,KITE REALTY GROUP TRUST REIT,Real Estate,,5463055360,mid,SPY
+QBTS,D WAVE QUANTUM INC,Information Technology,,5297163776,mid,SPY
+ROAD,CONSTRUCTION PARTNERS INC CLASS A,Industrials,,5984413184,mid,SPY
+GBCI,GLACIER BANCORP INC,Financials,,5919891456,mid,SPY
+MGY,MAGNOLIA OIL GAS CORP CLASS A,Energy,,5934209024,mid,SPY
+UBSI,UNITED BANKSHARES INC,Financials,,5837493760,mid,SPY
+ESNT,ESSENT GROUP LTD,Financials,,5593155072,mid,SPY
+CNX,CNX RESOURCES CORP,Energy,,5511071744,mid,SPY
+CWST,CASELLA WASTE SYSTEMS INC CLASS A,Industrials,,5537217536,mid,SPY
+LNTH,LANTHEUS HOLDINGS INC,Health Care,,4954307584,mid,SPY
+NJR,NEW JERSEY RESOURCES CORP,Utilities,,5643296256,mid,SPY
+SR,SPIRE INC,Utilities,,5475298816,mid,SPY
+GVA,GRANITE CONSTRUCTION INC,Industrials,,5306507264,mid,SPY
+BCPC,BALCHEM CORP,Materials,,5519266304,mid,SPY
+NPO,ENPRO INC,Industrials,,5358958592,mid,SPY
+PLXS,PLEXUS CORP,Information Technology,,5554173952,mid,SPY
+SSRM,SSR MINING INC,Materials,,6467032064,mid,SPY
+BKH,BLACK HILLS CORP,Utilities,,5386956288,mid,SPY
+HWC,HANCOCK WHITNEY CORP,Financials,,5250110976,mid,SPY
+UFPI,UFP INDUSTRIES INC,Industrials,,5133006848,mid,SPY
+PIPR,PIPER SANDLER COMPANIES,Financials,,5548481024,mid,SPY
+PTCT,PTC THERAPEUTICS INC,Health Care,,5609643008,mid,SPY
+CNR,CORE NATURAL RESOURCES INC,Energy,,5314617344,mid,SPY
+COMP,COMPASS INC CLASS A,Real Estate,,5247882240,mid,SPY
+MUR,MURPHY OIL CORP,Energy,,5888765440,mid,SPY
+OGS,ONE GAS INC,Utilities,,5573369856,mid,SPY
+SNEX,STONEX GROUP INC,Financials,,6638708224,mid,SPY
+ACA,ARCOSA INC,Industrials,,5282148864,mid,SPY
+LBRT,LIBERTY ENERGY INC CLASS A,Energy,,4553647616,mid,SPY
+RGTI,RIGETTI COMPUTING INC,Information Technology,,4713216512,mid,SPY
+BIPC,BROOKFIELD INFRASTRUCTURE CORP CLA,Utilities,,4917075456,mid,SPY
+VSEC,VSE CORP,Industrials,,5192772608,mid,SPY
+HOMB,HOME BANCSHARES INC,Financials,,5342550528,mid,SPY
+ABCB,AMERIS BANCORP,Financials,,5355907584,mid,SPY
+RIOT,RIOT PLATFORMS INC,Information Technology,,4875558400,mid,SPY
+JOBY,JOBY AVIATION INC CLASS A,Industrials,,8324340736,mid,SPY
+MATX,MATSON INC,Industrials,,5188046336,mid,SPY
+SBRA,SABRA HEALTH CARE REIT INC,Real Estate,,5007613952,mid,SPY
+NUVL,NUVALENT INC CLASS A,Health Care,,8288590336,mid,SPY
+BOOT,BOOT BARN HOLDINGS INC,Consumer Discretionary,,4120168192,mid,SPY
+AUB,ATLANTIC UNION BANKSHARES CORP,Financials,,5162891776,mid,SPY
+POWL,POWELL INDUSTRIES INC,Industrials,,6651663872,mid,SPY
+MAC,MACERICH REIT,Real Estate,,5261588480,mid,SPY
+COGT,COGENT BIOSCIENCES INC,Health Care,,5714893312,mid,SPY
+CIFR,CIPHER DIGITAL INC,Information Technology,,5193630720,mid,SPY
+PECO,PHILLIPS EDISON AND COMPANY INC,Real Estate,,5205051904,mid,SPY
+CORZ,CORE SCIENTIFIC INC,Information Technology,,5117848576,mid,SPY
+HIMS,HIMS HERS HEALTH INC CLASS A,Health Care,,4362747904,mid,SPY
+OPCH,OPTION CARE HEALTH INC,Health Care,,4360387072,mid,SPY
+HUT,HUT CORP,Information Technology,,5334787072,mid,SPY
+ATMU,ATMUS FILTRATION TECHNOLOGIES INC,Industrials,,4705965568,mid,SPY
+CRC,CALIFORNIA RESOURCES CORP,Energy,,6009262592,mid,SPY
+KNF,KNIFE RIVER CORP,Materials,,4188048896,mid,SPY
+KGS,KODIAK GAS SERVICES INC,Energy,,4976727552,mid,SPY
+GLNG,GOLAR LNG LTD,Energy,,5627403264,mid,SPY
+MIR,MIRION TECHNOLOGIES INC CLASS A,Information Technology,,4764251648,mid,SPY
+XENE,XENON PHARMACEUTICALS INC,Health Care,,5425033728,mid,SPY
+WULF,TERAWULF INC,Information Technology,,6310133760,mid,SPY
+SIGI,SELECTIVE INSURANCE GROUP INC,Financials,,4621504000,mid,SPY
+HCC,WARRIOR MET COAL INC,Materials,,5010138112,mid,SPY
+RYTM,RHYTHM PHARMACEUTICALS INC,Health Care,,5892316160,mid,SPY
+BDC,BELDEN INC,Information Technology,,4521488896,mid,SPY
+KYMR,KYMERA THERAPEUTICS INC,Health Care,,6972260352,mid,SPY
+BTU,PEABODY ENERGY CORP,Energy,,4088750336,mid,SPY
+RDN,RADIAN GROUP INC,Financials,,4585567232,mid,SPY
+FTDR,FRONTDOOR INC,Consumer Discretionary,,3854313472,mid,SPY
+ALKS,ALKERMES,Health Care,,5806083584,mid,SPY
+AX,AXOS FINANCIAL INC,Financials,,4838055424,mid,SPY
+VICR,VICOR CORP,Industrials,,7061876224,mid,SPY
+HASI,HA SUSTAINABLE INFRASTRUCTURE CAPI,Financials,,4756929536,mid,SPY
+BMI,BADGER METER INC,Information Technology,,4573631488,mid,SPY
+OSIS,OSI SYSTEMS INC,Information Technology,,4551937536,mid,SPY
+TGTX,TG THERAPEUTICS INC,Health Care,,5354347008,mid,SPY
+REZI,RESIDEO TECHNOLOGIES INC,Industrials,,5239199744,mid,SPY
+NOVT,NOVANTA INC,Information Technology,,4176428288,mid,SPY
+FOLD,AMICUS THERAPEUTICS INC,Health Care,,4534170112,mid,SPY
+AIR,AAR CORP,Industrials,,4365321216,mid,SPY
+BCO,BRINKS,Industrials,,4252962304,mid,SPY
+UUUU,ENERGY FUELS INC,Energy,,4288506624,mid,SPY
+MWA,MUELLER WATER PRODUCTS INC SERIES,Industrials,,4324054016,mid,SPY
+MTH,MERITAGE CORP,Consumer Discretionary,,4376480768,mid,SPY
+LAUR,LAUREATE EDUCATION INC,Consumer Discretionary,,4790476288,mid,SPY
+SKY,CHAMPION HOMES INC,Consumer Discretionary,,4129044224,mid,SPY
+RDNT,RADNET INC,Health Care,,4252368640,mid,SPY
+ITRI,ITRON INC,Information Technology,,3930723584,mid,SPY
+YOU,CLEAR SECURE INC CLASS A,Information Technology,,6916733440,mid,SPY
+NWE,NORTHWESTERN ENERGY GROUP INC,Utilities,,4156721408,mid,SPY
+TDS,TELEPHONE AND DATA SYSTEMS INC,Communication,,5103992832,mid,SPY
+TCBI,TEXAS CAPITAL BANCSHARES INC,Financials,,4243137024,mid,SPY
+CRSP,CRISPR THERAPEUTICS AG,Health Care,,4752232448,mid,SPY
+CSW,CSW INDUSTRIALS INC,Industrials,,4392108032,mid,SPY
+MYRG,MYR GROUP INC,Industrials,,4439488000,mid,SPY
+MRCY,MERCURY SYSTEMS INC,Industrials,,4454285824,mid,SPY
+ACIW,ACI WORLDWIDE INC,Information Technology,,4260627456,mid,SPY
+TERN,TERNS PHARMACEUTICALS INC,Health Care,,6084594176,mid,SPY
+ASB,ASSOCIATED BANCORP,Financials,,4312032768,mid,SPY
+EBC,EASTERN BANKSHARES INC,Financials,,4465253888,mid,SPY
+LGND,LIGAND PHARMACEUTICALS INC,Health Care,,3980051968,mid,SPY
+NHI,NATIONAL HEALTH INVESTORS REIT INC,Real Estate,,4029868032,mid,SPY
+ANF,ABERCROMBIE AND FITCH CLASS A,Consumer Discretionary,,4230359552,mid,SPY
+OUT,OUTFRONT MEDIA INC,Real Estate,,4772720128,mid,SPY
+MMSI,MERIT MEDICAL SYSTEMS INC,Health Care,,4023541504,mid,SPY
+IESC,IES INC,Industrials,,9615259648,mid,SPY
+SKT,TANGER INC,Real Estate,,3959440384,mid,SPY
+PBF,PBF ENERGY INC CLASS A,Energy,,5331223040,mid,SPY
+TPH,TRI POINTE HOMES INC,Consumer Discretionary,,3980087552,mid,SPY
+MMS,MAXIMUS INC,Industrials,,3402740224,mid,SPY
+CNO,CNO FINANCIAL GROUP INC,Financials,,3880470528,mid,SPY
+UNF,UNIFIRST CORP,Industrials,,4631837184,mid,SPY
+ACLX,ARCELLX INC,Health Care,,6711727616,mid,SPY
+URBN,URBAN OUTFITTERS INC,Consumer Discretionary,,5791814144,mid,SPY
+LMND,LEMONADE INC,Financials,,4695290368,mid,SPY
+LTH,LIFE TIME GROUP HOLDINGS INC,Consumer Discretionary,,6010742272,mid,SPY
+RUSHA,RUSH ENTERPRISES INC CLASS A,Industrials,,5058112512,mid,SPY
+VISN,VISTANCE NETWORKS INC,Information Technology,,4222919424,mid,SPY
+IRT,INDEPENDENCE REALTY INC TRUST,Real Estate,,3672651008,mid,SPY
+FFIN,FIRST FINANCIAL BANKSHARES INC,Financials,,4293993728,mid,SPY
+DAN,DANA INCORPORATED INC,Consumer Discretionary,,3659187456,mid,SPY
+GPI,GROUP AUTOMOTIVE INC,Consumer Discretionary,,4161157376,mid,SPY
+KTB,KONTOOR BRANDS INC,Consumer Discretionary,,3836515328,mid,SPY
+CVSA,COVISTA INC,Consumer Discretionary,,4283135744,mid,SPY
+TMDX,TRANSMEDICS GROUP INC,Health Care,,3454085376,mid,SPY
+ACHR,ARCHER AVIATION INC CLASS A,Industrials,,4064264448,mid,SPY
+INDV,INDIVIOR PHARMACEUTICALS INC,Health Care,,3810737664,mid,SPY
+FSLY,FASTLY INC CLASS A,Information Technology,,5085300224,mid,SPY
+CVCO,CAVCO INDUSTRIES INC,Consumer Discretionary,,3745169408,mid,SPY
+MIRM,MIRUM PHARMACEUTICALS INC,Health Care,,5682370048,mid,SPY
+IRTC,IRHYTHM HOLDINGS INC,Health Care,,3774597632,mid,SPY
+PTEN,PATTERSON UTI ENERGY INC,Energy,,4027292672,mid,SPY
+FLG,FLAGSTAR BANK NATIONAL ASSOCIATION,Financials,,5607586816,mid,SPY
+LRN,STRIDE INC,Consumer Discretionary,,3931487488,mid,SPY
+ABG,ASBURY AUTOMOTIVE GROUP INC,Consumer Discretionary,,3758034432,mid,SPY
+CALM,CAL MAINE FOODS INC,Consumer Staples,,3721780992,mid,SPY
+TDW,TIDEWATER INC,Energy,,4183013376,mid,SPY
+BNL,BROADSTONE NET LEASE INC,Real Estate,,3721847040,mid,SPY
+SFBS,SERVISFIRST BANCSHARES INC,Financials,,3995315200,mid,SPY
+PATK,PATRICK INDUSTRIES INC,Consumer Discretionary,,3806704384,mid,SPY
+IBOC,INTERNATIONAL BANCSHARES CORP,Financials,,4213783808,mid,SPY
+CDP,COPT DEFENSE PROPERTIES,Real Estate,,3624329472,mid,SPY
+AZZ,AZZ INC,Industrials,,3798614272,mid,SPY
+PSMT,PRICESMART INC,Consumer Staples,,4698878464,mid,SPY
+CBT,CABOT CORP,Materials,,3965186304,mid,SPY
+SXT,SENSIENT TECHNOLOGIES CORP,Materials,,3928763136,mid,SPY
+INDB,INDEPENDENT BANK CORP,Financials,,3761091072,mid,SPY
+CELC,CELCUITY INC,Health Care,,5444159488,mid,SPY
+SKYW,SKYWEST INC,Industrials,,3697614592,mid,SPY
+CGON,CG ONCOLOGY INC,Health Care,,5697687552,mid,SPY
+CVLT,COMMVAULT SYSTEMS INC,Information Technology,,3524462336,mid,SPY
+UCB,UNITED COMMUNITY BANKS INC,Financials,,3838386944,mid,SPY
+QLYS,QUALYS INC,Information Technology,,3168440064,mid,SPY
+FELE,FRANKLIN ELECTRIC INC,Industrials,,4119198208,mid,SPY
+CRNX,CRINETICS PHARMACEUTICALS INC,Health Care,,3898179328,mid,SPY
+LEU,CENTRUS ENERGY CORP CLASS A,Energy,,3602744832,mid,SPY
+STNE,STONECO LTD CLASS A,Financials,,3472220160,mid,SPY
+HP,HELMERICH & PAYNE INC,Energy,,3538999296,mid,SPY
+BGC,BGC GROUP INC CLASS A,Financials,,4733134848,mid,SPY
+BOX,BOX INC CLASS A,Information Technology,,3440332288,mid,SPY
+KAI,KADANT INC,Industrials,,3378734080,mid,SPY
+HRI,HERC HOLDINGS INC,Industrials,,3038028544,mid,SPY
+ADMA,ADMA BIOLOGICS INC,Health Care,,2188682752,mid,SPY
+LIVN,LIVANOVA PLC,Health Care,,3488667136,mid,SPY
+GHC,GRAHAM HOLDINGS COMPANY CLASS B,Consumer Discretionary,,4627601920,mid,SPY
+FULT,FULTON FINANCIAL CORP,Financials,,3695617024,mid,SPY
+WSFS,WSFS FINANCIAL CORP,Financials,,3625015808,mid,SPY
+CSTM,CONSTELLIUM SE CLASS A,Materials,,3806085120,mid,SPY
+SHAK,SHAKE SHACK INC CLASS A,Consumer Discretionary,,3813722112,mid,SPY
+ASO,ACADEMY SPORTS AND OUTDOORS INC,Consumer Discretionary,,3824172544,mid,SPY
+OTTR,OTTER TAIL CORP,Utilities,,3716662528,mid,SPY
+KBH,KB HOME,Consumer Discretionary,,3183209984,mid,SPY
+OII,OCEANEERING INTERNATIONAL INC,Energy,,3548006912,mid,SPY
+KLIC,KULICKE AND SOFFA INDUSTRIES INC,Information Technology,,3353474048,mid,SPY
+BKD,BROOKDALE SENIOR LIVING INC,Health Care,,3317607680,mid,SPY
+ENVA,ENOVA INTERNATIONAL INC,Financials,,3423412736,mid,SPY
+MARA,MARA HOLDINGS INC,Information Technology,,3311843584,mid,SPY
+VSCO,VICTORIA S SECRET,Consumer Discretionary,,3701482496,mid,SPY
+TGNA,TEGNA INC,Communication,,3243011584,mid,SPY
+SRRK,SCHOLAR ROCK HOLDING CORP,Health Care,,5745303552,mid,SPY
+EXPO,EXPONENT INC,Industrials,,3320493568,mid,SPY
+AVA,AVISTA CORP,Utilities,,3400266496,mid,SPY
+MHO,M I HOMES INC,Consumer Discretionary,,3180181760,mid,SPY
+ZETA,ZETA GLOBAL HOLDINGS CORP CLASS A,Information Technology,,3883019264,mid,SPY
+ALHC,ALIGNMENT HEALTHCARE INC,Health Care,,3832602368,mid,SPY
+KFY,KORN FERRY,Industrials,,3307071744,mid,SPY
+FBP,FIRST BANCORP,Financials,,3403724288,mid,SPY
+TPC,TUTOR PERINI CORP,Industrials,,4080779520,mid,SPY
+WHD,CACTUS INC CLASS A,Energy,,3292723456,mid,SPY
+MC,MOELIS CLASS A,Financials,,4163908096,mid,SPY
+LASR,NLIGHT INC,Information Technology,,3354174208,mid,SPY
+SIG,SIGNET JEWELERS LTD,Consumer Discretionary,,3452075008,mid,SPY
+STEP,STEPSTONE GROUP INC CLASS A,Financials,,5881093120,mid,SPY
+GPOR,GULFPORT ENERGY CORP,Energy,,3998581760,mid,SPY
+BKU,BANKUNITED INC,Financials,,3421992704,mid,SPY
+RNST,RENASANT CORP,Financials,,3486089472,mid,SPY
+NATL,NCR ATLEOS CORP,Financials,,3229610752,mid,SPY
+WK,WORKIVA INC CLASS A,Information Technology,,3410078464,mid,SPY
+WSBC,WESBANCO INC,Financials,,3335074560,mid,SPY
+STNG,SCORPIO TANKERS INC,Energy,,3956230144,mid,SPY
+PLMR,PALOMAR HOLDINGS INC,Financials,,3205438208,mid,SPY
+GNW,GENWORTH FINANCIAL INC,Financials,,3350803200,mid,SPY
+QTWO,Q2 HOLDINGS INC,Information Technology,,2979184896,mid,SPY
+CALX,CALIX NETWORKS INC,Information Technology,,3040259072,mid,SPY
+CATY,CATHAY GENERAL BANCORP,Financials,,3442652672,mid,SPY
+SPHR,SPHERE ENTERTAINMENT CLASS A,Communication,,4516579840,mid,SPY
+DIOD,DIODES INC,Information Technology,,3181106176,mid,SPY
+SXI,STANDEX INTERNATIONAL CORP,Industrials,,3122997760,mid,SPY
+PRM,PERIMETER SOLUTIONS INC,Materials,,3824171264,mid,SPY
+ICUI,ICU MEDICAL INC,Health Care,,3044557824,mid,SPY
+AVNT,AVIENT CORP,Materials,,3216263168,mid,SPY
+PJT,PJT PARTNERS INC CLASS A,Financials,,5563118592,mid,SPY
+BXMT,BLACKSTONE MORTGAGE TRUST REIT CLA,Financials,,3152037888,mid,SPY
+PBH,PRESTIGE CONSUMER HEALTHCARE INC,Health Care,,2523448832,mid,SPY
+VCTR,VICTORY CAPITAL HOLDINGS CLASS A I,Financials,,4030643712,mid,SPY
+CPK,CHESAPEAKE UTILITIES CORP,Utilities,,3105647616,mid,SPY
+AAP,ADVANCE AUTO PARTS INC,Consumer Discretionary,,3114983168,mid,SPY
+SYRE,SPYRE THERAPEUTICS INC,Health Care,,3736941056,mid,SPY
+WDFC,WD-40,Consumer Staples,,2789169152,mid,SPY
+GSAT,GLOBALSTAR VOTING INC,Communication,,9992529920,mid,SPY
+NMIH,NMI HOLDINGS INC,Financials,,2858910208,mid,SPY
+CRGY,CRESCENT ENERGY CLASS A,Energy,,4406979584,mid,SPY
+CBU,COMMUNITY FINANCIAL SYSTEM INC,Financials,,3133910528,mid,SPY
+CENX,CENTURY ALUMINUM,Materials,,6192806400,mid,SPY
+MTRN,MATERION CORP,Materials,,3101895424,mid,SPY
+ITGR,INTEGER HOLDINGS CORP,Health Care,,3043087104,mid,SPY
+FIBK,FIRST INTERSTATE BANCSYSTEM INC,Financials,,3385440768,mid,SPY
+SEI,SOLARIS OILFIELD INFRASTRUCTURE IN,Energy,,5197446656,mid,SPY
+LCII,LCI INDUSTRIES,Consumer Discretionary,,2979705088,mid,SPY
+LXP,LXP INDUSTRIAL TRUST,Real Estate,,2727222528,mid,SPY
+RUN,SUNRUN INC,Industrials,,3165647360,mid,SPY
+HAE,HAEMONETICS CORP,Health Care,,2660193792,mid,SPY
+CC,CHEMOURS,Materials,,3234897664,mid,SPY
+VRNS,VARONIS SYSTEMS INC,Information Technology,,2656226560,mid,SPY
+OPLN,OPENLANE INC,Industrials,,3148524032,mid,SPY
+RRR,RED ROCK RESORTS ORS CLASS A INC,Consumer Discretionary,,5659592704,mid,SPY
+FUL,HB FULLER,Materials,,3297026304,mid,SPY
+SYNA,SYNAPTICS INC,Information Technology,,2891113984,mid,SPY
+CARG,CARGURUS INC CLASS A,Communication,,3181455616,mid,SPY
+PARR,PAR PACIFIC HOLDINGS INC,Energy,,3210157824,mid,SPY
+AWR,AMERICAN STATES WATER,Utilities,,3032408832,mid,SPY
+INSW,INTERNATIONAL SEAWAYS INC,Energy,,3725848064,mid,SPY
+MZTI,MARZETTI,Consumer Staples,,3893116928,mid,SPY
+DORM,DORMAN PRODUCTS INC,Consumer Discretionary,,3083770880,mid,SPY
+SDRL,SEADRILL LTD,Energy,,2849568256,mid,SPY
+SOUN,SOUNDHOUND AI INC CLASS A,Information Technology,,2866680320,mid,SPY
+BOH,BANK OF HAWAII CORP,Financials,,2971071744,mid,SPY
+SLG,SL GREEN REALTY REIT CORP,Real Estate,,2737281280,mid,SPY
+CNK,CINEMARK HOLDINGS INC,Communication,,3434995456,mid,SPY
+PII,POLARIS INC,Consumer Discretionary,,3063563776,mid,SPY
+KMT,KENNAMETAL INC,Industrials,,2742394624,mid,SPY
+AEO,AMERICAN EAGLE OUTFITTERS INC,Consumer Discretionary,,2854582016,mid,SPY
+CLSK,CLEANSPARK INC,Information Technology,,2248068096,mid,SPY
+GTX,GARRETT MOTION INC,Consumer Discretionary,,3580422912,mid,SPY
+GFF,GRIFFON CORP,Industrials,,3326684416,mid,SPY
+BCC,BOISE CASCADE,Industrials,,2624681216,mid,SPY
+DBRG,DIGITALBRIDGE GROUP INC CLASS A,Financials,,3017827584,mid,SPY
+WAY,WAYSTAR HOLDING CORP,Health Care,,4550521344,mid,SPY
+DK,DELEK US HOLDINGS INC,Energy,,2692574976,mid,SPY
+APLE,APPLE HOSPITALITY REIT INC,Real Estate,,2727717632,mid,SPY
+HWKN,HAWKINS INC,Materials,,3167293952,mid,SPY
+OSCR,OSCAR HEALTH INC CLASS A,Financials,,3549156096,mid,SPY
+ACLS,AXCELIS TECHNOLOGIES INC,Information Technology,,2921052160,mid,SPY
+IDYA,IDEAYA BIOSCIENCES INC,Health Care,,2875031296,mid,SPY
+UE,URBAN EDGE PROPERTIES,Real Estate,,2849896448,mid,SPY
+PI,IMPINJ INC,Information Technology,,3036772864,mid,SPY
+TARS,TARSUS PHARMACEUTICALS INC,Health Care,,2984131328,mid,SPY
+AKR,ACADIA REALTY TRUST REIT,Real Estate,,2751985152,mid,SPY
+TWST,TWIST BIOSCIENCE CORP,Health Care,,3078460672,mid,SPY
+CON,CONCENTRA GROUP HOLDINGS PARENT IN,Health Care,,2687179776,mid,SPY
+COCO,THE VITA COCO COMPANY INC,Consumer Staples,,2753644032,mid,SPY
+SUPN,SUPERNUS PHARMACEUTICALS INC,Health Care,,2906724864,mid,SPY
+DNLI,DENALI THERAPEUTICS INC,Health Care,,3274914048,mid,SPY
+NOG,NORTHERN OIL AND GAS INC,Energy,,2956358144,mid,SPY
+MGEE,MGE ENERGY INC,Utilities,,2881600768,mid,SPY
+UCTT,ULTRA CLEAN HOLDINGS INC,Information Technology,,2873150976,mid,SPY
+JOE,ST JOE,Real Estate,,3762056448,mid,SPY
+CPRX,CATALYST PHARMACEUTICALS INC,Health Care,,3034706944,mid,SPY
+SFNC,SIMMONS FIRST NATIONAL CORP CLASS,Financials,,2827820288,mid,SPY
+FCPT,FOUR CORNERS PROPERTY INC TRUST,Real Estate,,2606444800,mid,SPY
+RELY,REMITLY GLOBAL INC,Financials,,3374683392,mid,SPY
+CAKE,CHEESECAKE FACTORY INC,Consumer Discretionary,,2753717504,mid,SPY
+VCYT,VERACYTE INC,Health Care,,2562534144,mid,SPY
+PLUG,PLUG POWER INC,Industrials,,3359431936,mid,SPY
+FFBC,FIRST FINANCIAL BANCORP,Financials,,2936777472,mid,SPY
+NG,NOVAGOLD RESOURCES INC,Materials,,3981091584,mid,SPY
+GOLF,ACUSHNET HOLDINGS CORP,Consumer Discretionary,,5507125248,mid,SPY
+POWI,POWER INTEGRATIONS INC,Information Technology,,2906744320,mid,SPY
+CWT,CALIFORNIA WATER SERVICE GROUP,Utilities,,2758481408,mid,SPY
+NIC,NICOLET BANKSHARES INC,Financials,,3181524224,mid,SPY
+APGE,APOGEE THERAPEUTICS INC,Health Care,,6291566080,mid,SPY
+MGRC,MCGRATH RENT,Industrials,,2646491392,mid,SPY
+IVT,INVENTRUST PROPERTIES CORP,Real Estate,,2387697664,mid,SPY
+CURB,CURBLINE PROPERTIES,Real Estate,,2764050176,mid,SPY
+SBCF,SEACOAST BANKING OF FLORIDA,Financials,,2984802560,mid,SPY
+HE,HAWAIIAN ELECTRIC INDUSTRIES INC,Utilities,,2641093376,mid,SPY
+ADEA,ADEIA INC,Information Technology,,2775342336,mid,SPY
+PFSI,PENNYMAC FINANCIAL SERVICES INC,Financials,,4700315648,mid,SPY
+ACAD,ACADIA PHARMACEUTICALS INC,Health Care,,3784980480,mid,SPY
+IBRX,IMMUNITYBIO INC,Health Care,,7538842112,mid,SPY
+PRVA,PRIVIA HEALTH GROUP INC,Health Care,,2623428352,mid,SPY
+HGV,HILTON GRAND VACATIONS INC,Consumer Discretionary,,3296857600,mid,SPY
+TENB,TENABLE HOLDINGS INC,Information Technology,,2098072192,mid,SPY
+ARQT,ARCUTIS BIOTHERAPEUTICS INC,Health Care,,2930908672,mid,SPY
+CVBF,CVB FINANCIAL CORP,Financials,,2669833984,mid,SPY
+PFS,PROVIDENT FINANCIAL SERVICES INC,Financials,,2783830784,mid,SPY
+TRN,TRINITY INDUSTRIES INC,Industrials,,2643551744,mid,SPY
+BEAM,BEAM THERAPEUTICS INC,Health Care,,2511774976,mid,SPY
+PHIN,PHINIA INC,Consumer Discretionary,,2637936640,mid,SPY
+PPTA,PERPETUA RESOURCES CORP,Materials,,3664035072,mid,SPY
+NGVT,INGEVITY CORP,Materials,,2508899840,mid,SPY
+MCY,MERCURY GENERAL CORP,Financials,,4885830656,mid,SPY
+WAFD,WAFD INC,Financials,,2431391232,mid,SPY
+CTRI,CENTURI HOLDINGS INC,Industrials,,3007354624,mid,SPY
+TOWN,TOWNEBANK,Financials,,3128178176,mid,SPY
+BBT,BEACON FINANCIAL CORP,Financials,,2538243072,mid,SPY
+DHT,DHT HOLDINGS INC,Energy,,3005036800,mid,SPY
+VRRM,VERRA MOBILITY CORP CLASS A,Industrials,,2316875776,mid,SPY
+WRBY,WARBY PARKER INC CLASS A,Consumer Discretionary,,2484465408,mid,SPY
+LQDA,LIQUIDIA CORP,Health Care,,3320151808,mid,SPY
+UNFI,UNITED NATURAL FOODS INC,Consumer Staples,,2732182528,mid,SPY
+ACMR,ACM RESEARCH CLASS A INC,Information Technology,,2664596736,mid,SPY
+SHOO,STEVEN MADDEN LTD,Consumer Discretionary,,2478272512,mid,SPY
+ERAS,ERASCA INC,Health Care,,5535340032,mid,SPY
+VC,VISTEON CORP,Consumer Discretionary,,2493387776,mid,SPY
+ABM,ABM INDUSTRIES INC,Industrials,,2268929024,mid,SPY
+ANDE,ANDERSONS INC,Consumer Staples,,2499864320,mid,SPY
+LMAT,LEMAITRE VASCULAR INC,Health Care,,2471224576,mid,SPY
+APAM,ARTISAN PARTNERS ASSET MANAGEMENT,Financials,,2579309568,mid,SPY
+AMR,ALPHA METALLURGICAL RESOURCE INC,Materials,,2691312896,mid,SPY
+TRMK,TRUSTMARK CORP,Financials,,2507353344,mid,SPY
+SPSC,SPS COMMERCE INC,Information Technology,,2114726144,mid,SPY
+FRME,FIRST MERCHANTS CORP,Financials,,2499576064,mid,SPY
+CSGS,CSG SYSTEMS INTERNATIONAL INC,Industrials,,2283066880,mid,SPY
+GEO,GEO GROUP INC,Industrials,,2474941440,mid,SPY
+MSGE,MADISON SQUARE GARDEN ENTERTAINMEN,Communication,,2852458752,mid,SPY
+HNI,HNI CORP,Industrials,,2337609984,mid,SPY
+DYN,DYNE THERAPEUTICS INC,Health Care,,3109111040,mid,SPY
+PRK,PARK NATIONAL CORP,Financials,,2974270208,mid,SPY
+PRDO,PERDOCEO EDUCATION CORP,Consumer Discretionary,,2414022400,mid,SPY
+TVTX,TRAVERE THERAPEUTICS INC,Health Care,,2807832832,mid,SPY
+VRDN,VIRIDIAN THERAPEUTICS ORS INC,Health Care,,1925571712,small,SPY
+CHEF,CHEFS WAREHOUSE INC,Consumer Staples,,2348383488,mid,SPY
+UPST,UPSTART HOLDINGS INC,Financials,,2508407552,mid,SPY
+AMBA,AMBARELLA INC,Information Technology,,2213090048,mid,SPY
+NTCT,NETSCOUT SYSTEMS INC,Information Technology,,2330550784,mid,SPY
+ALRM,ALARM.COM HOLDINGS INC,Information Technology,,2178245632,mid,SPY
+DNTH,DIANTHUS THERAPEUTICS INC,Health Care,,4553019392,mid,SPY
+NSIT,INSIGHT ENTERPRISES INC,Information Technology,,2078315520,mid,SPY
+EYE,NATIONAL VISION HOLDINGS INC,Consumer Discretionary,,1881866880,small,SPY
+NMRK,NEWMARK GROUP INC CLASS A,Real Estate,,3747023872,mid,SPY
+RXO,RXO INC,Industrials,,2460785408,mid,SPY
+BELFB,BEL FUSE INC CLASS B,Information Technology,,2590114304,mid,SPY
+DNOW,DNOW INC,Industrials,,2251061504,mid,SPY
+NWN,NORTHWEST NATURAL HOLDING COMPANY,Utilities,,2271879936,mid,SPY
+BANC,BANC OF CALIFORNIA INC,Financials,,2723417088,mid,SPY
+BCRX,BIOCRYST PHARMACEUTICALS INC,Health Care,,2262221824,mid,SPY
+CXW,CORECIVIC REIT INC,Industrials,,2145031296,mid,SPY
+DAVE,DAVE INC CLASS A,Financials,,2289932544,mid,SPY
+HURN,HURON CONSULTING GROUP INC,Industrials,,2160774400,mid,SPY
+BANF,BANCFIRST CORP,Financials,,3658763776,mid,SPY
+NTB,BANK OF NT BUTTERFIELD & SON LTD,Financials,,2203026944,mid,SPY
+FBNC,FIRST BANCORP,Financials,,2317334528,mid,SPY
+ATRO,ASTRONICS CORP,Industrials,,2492671488,mid,SPY
+VSH,VISHAY INTERTECHNOLOGY INC,Information Technology,,2523056896,mid,SPY
+CPRI,CAPRI HOLDINGS LTD,Consumer Discretionary,,2140146944,mid,SPY
+OSW,ONESPAWORLD HOLDINGS LTD,Consumer Discretionary,,2393841920,mid,SPY
+MTX,MINERALS TECHNOLOGIES INC,Materials,,2157607680,mid,SPY
+VERA,VERA THERAPEUTICS INC CLASS A,Health Care,,2915592448,mid,SPY
+HLIO,HELIOS TECHNOLOGIES INC,Industrials,,2228553728,mid,SPY
+FBK,FB FINANCIAL CORP,Financials,,2855431168,mid,SPY
+KN,KNOWLES CORP,Information Technology,,2212652544,mid,SPY
+TBBK,BANCORP INC,Financials,,2444016128,mid,SPY
+CUBI,CUSTOMERS BANCORP INC,Financials,,2408879360,mid,SPY
+NBTB,NBT BANCORP INC,Financials,,2252620288,mid,SPY
+AMPX,AMPRIUS TECHNOLOGIES INC,Industrials,,2192304128,mid,SPY
+BUSE,FIRST BUSEY CORP,Financials,,2208284928,mid,SPY
+CASH,PATHWARD FINANCIAL INC,Financials,,2010510592,mid,SPY
+HUBG,HUB GROUP INC CLASS A,Industrials,,2234514688,mid,SPY
+BL,BLACKLINE INC,Information Technology,,2161490176,mid,SPY
+KNTK,KINETIK HOLDINGS INC CLASS A,Energy,,3013803776,mid,SPY
+PLAB,PHOTRONICS INC,Information Technology,,2408776960,mid,SPY
+SNDX,SYNDAX PHARMACEUTICALS INC,Health Care,,2218244864,mid,SPY
+EWTX,EDGEWISE THERAPEUTICS INC,Health Care,,3575326720,mid,SPY
+MRX,MAREX GROUP PLC,Financials,,3149312000,mid,SPY
+NHC,NATIONAL HEALTHCARE CORP,Health Care,,2529348096,mid,SPY
+PLUS,EPLUS,Information Technology,,2041345536,mid,SPY
+CLMT,CALUMET INC,Energy,,3042385920,mid,SPY
+ARCB,ARCBEST CORP,Industrials,,2262582784,mid,SPY
+TNGX,TANGO THERAPEUTICS INC,Health Care,,3086359552,mid,SPY
+DRH,DIAMONDROCK HOSPITALITY,Real Estate,,1937313152,small,SPY
+ADPT,ADAPTIVE BIOTECHNOLOGIES CORP,Health Care,,2280467200,mid,SPY
+EXTR,EXTREME NETWORKS INC,Information Technology,,2062380032,mid,SPY
+LUNR,INTUITIVE MACHINES INC CLASS A,Industrials,,3823347712,mid,SPY
+BANR,BANNER CORP,Financials,,2100427904,mid,SPY
+VAC,MARRIOTT VACATIONS WORLDWIDE CORP,Consumer Discretionary,,2311934976,mid,SPY
+GRBK,GREEN BRICK PARTNERS INC,Consumer Discretionary,,2846979328,mid,SPY
+BHE,BENCHMARK ELECTRONICS INC,Information Technology,,2018357376,mid,SPY
+LION,LIONSGATE STUDIOS CORP,Communication,,2794503168,mid,SPY
+NEOG,NEOGEN CORP,Health Care,,2046919424,mid,SPY
+IMNM,IMMUNOME INC,Health Care,,2470829056,mid,SPY
+EFSC,ENTERPRISE FINANCIAL SERVICES CORP,Financials,,2025237120,mid,SPY
+GNL,GLOBAL NET LEASE INC,Real Estate,,2062972672,mid,SPY
+TXG,10X GENOMICS INC CLASS A,Health Care,,2852707840,mid,SPY
+EPAC,ENERPAC TOOL GROUP CORP CLASS A,Industrials,,1870392192,small,SPY
+BATRK,ATLANTA BRAVES HOLDINGS INC SERIES,Communication,,2805224448,mid,SPY
+LGN,LEGENCE CORP CLASS A,Industrials,,6636086272,mid,SPY
+DX,DYNEX CAPITAL REIT INC,Financials,,2599524608,mid,SPY
+EVTC,EVERTEC INC,Financials,,1796026368,small,SPY
+STRA,STRATEGIC EDUCATION INC,Consumer Discretionary,,1902079232,small,SPY
+HTO,H2O AMERICA,Utilities,,2475195392,mid,SPY
+AMRX,AMNEAL PHARMACEUTICALS INC CLASS A,Health Care,,3981107456,mid,SPY
+RSI,RUSH STREET INTERACTIVE INC CLASS,Consumer Discretionary,,5279554048,mid,SPY
+ARR,ARMOUR RESIDENTIAL REIT INC,Financials,,2104234240,mid,SPY
+TALO,TALOS ENERGY INC,Energy,,2660324096,mid,SPY
+ATKR,ATKORE INC,Industrials,,2075991040,mid,SPY
+CLDX,CELLDEX THERAPEUTICS INC,Health Care,,2067550592,mid,SPY
+KALU,KAISER ALUMINIUM CORP,Materials,,2133618432,mid,SPY
+ADUS,ADDUS HOMECARE CORP,Health Care,,1707568768,small,SPY
+VECO,VEECO INSTRUMENTS INC,Information Technology,,2075071232,mid,SPY
+GTY,GETTY REALTY REIT CORP,Real Estate,,1943439232,small,SPY
+ROG,ROGERS CORP,Information Technology,,1881648256,small,SPY
+DGII,DIGI INTERNATIONAL INC,Information Technology,,1879053568,small,SPY
+CALY,CALLAWAY GOLF COMPANY,Consumer Discretionary,,2553387520,mid,SPY
+DBD,DIEBOLD NIXDORF INC,Information Technology,,2773248512,mid,SPY
+STC,STEWART INFO SERVICES CORP,Financials,,1846940672,small,SPY
+RAMP,LIVERAMP HOLDINGS INC,Information Technology,,1728702592,small,SPY
+MGNI,MAGNITE INC,Communication,,1716492416,small,SPY
+GT,GOODYEAR TIRE & RUBBER,Consumer Discretionary,,1905339776,small,SPY
+WT,WISDOMTREE INC,Financials,,2046361344,mid,SPY
+LTC,LTC PROPERTIES REIT INC,Real Estate,,1863259904,small,SPY
+CNS,COHEN & STEERS INC,Financials,,3220342272,mid,SPY
+SEM,SELECT MEDICAL HOLDINGS CORP,Health Care,,2027699328,mid,SPY
+FCF,FIRST COMMONWEALTH FINANCIAL CORP,Financials,,1827445760,small,SPY
+PAGS,PAGSEGURO DIGITAL LTD CLASS A,Financials,,2890230016,mid,SPY
+XMTR,XOMETRY INC CLASS A,Industrials,,2194764288,mid,SPY
+AGYS,AGILYSYS INC,Information Technology,,1998215296,small,SPY
+NWBI,NORTHWEST BANCSHARES INC,Financials,,1889583360,small,SPY
+RCUS,ARCUS BIOSCIENCES INC,Health Care,,2878023680,mid,SPY
+RCAT,RED CAT HOLDINGS INC,Industrials,,1567535616,small,SPY
+ALG,ALAMO GROUP INC,Industrials,,2046767360,mid,SPY
+NN,NEXTNAV INC,Information Technology,,2244108032,mid,SPY
+SPB,SPECTRUM BRANDS HOLDINGS INC,Consumer Staples,,1716128256,small,SPY
+ZD,ZIFF DAVIS INC,Communication,,1634182528,small,SPY
+DCO,DUCOMMUN INC,Industrials,,1903941760,small,SPY
+MD,PEDIATRIX MEDICAL GROUP INC,Health Care,,1759467136,small,SPY
+GRAL,GRAIL INC,Health Care,,2255704064,mid,SPY
+BLBD,BLUE BIRD CORP,Industrials,,1853704960,small,SPY
+HMN,HORACE MANN EDUCATORS CORP,Financials,,1757997440,small,SPY
+BLKB,BLACKBAUD INC,Information Technology,,1819133824,small,SPY
+DXPE,DXP ENTERPRISES INC,Industrials,,2247469568,mid,SPY
+OFG,OFG BANCORP,Financials,,1788683776,small,SPY
+CWK,CUSHMAN AND WAKEFIELD LTD,Real Estate,,2893134592,mid,SPY
+SGHC,SUPER GROUP LTD,Consumer Discretionary,,5374927872,mid,SPY
+HCI,HCI GROUP INC,Financials,,1988938368,small,SPY
+AUPH,AURINIA PHARMACEUTICALS INC,Health Care,,2075676928,mid,SPY
+FUN,SIX FLAGS ENTERTAINMENT CORP,Consumer Discretionary,,1708360064,small,SPY
+SHO,SUNSTONE HOTEL INVESTORS REIT INC,Real Estate,,1707570688,small,SPY
+UTI,UNIVERSAL TECHNICAL INSTITUTE INC,Consumer Discretionary,,2010999424,mid,SPY
+DFTX,DEFINIUM THERAPEUTICS INC,Health Care,,2061757312,mid,SPY
+CECO,CECO ENVIRONMENTAL CORP,Industrials,,2217700096,mid,SPY
+BUR,BURFORD CAPITAL LTD,Financials,,906235392,small,SPY
+KWR,QUAKER HOUGHTON CORP,Materials,,2090090112,mid,SPY
+NTST,NETSTREIT CORP,Real Estate,,2119675520,mid,SPY
+DAWN,DAY ONE BIOPHARMACEUTICALS INC,Health Care,,2215735552,mid,SPY
+BFH,BREAD FINANCIAL HOLDINGS INC,Financials,,3329711872,mid,SPY
+STEL,STELLAR BANCORP INC,Financials,,1859278464,small,SPY
+BBAI,BIGBEAR.AI HOLDINGS INC,Information Technology,,1704282496,small,SPY
+IMVT,IMMUNOVANT INC,Health Care,,4986538496,mid,SPY
+GEF,GREIF INC CLASS A,Materials,,3820271872,mid,SPY
+IOSP,INNOSPEC INC,Materials,,1836667648,small,SPY
+WERN,WERNER ENTERPRISES INC,Industrials,,1823622016,small,SPY
+EOSE,EOS ENERGY ENTERPRISES INC CLASS A,Industrials,,1686988288,small,SPY
+IMAX,IMAX CORP,Communication,,2166739712,mid,SPY
+VCEL,VERICEL CORP,Health Care,,1738804736,small,SPY
+ADNT,ADIENT PLC,Consumer Discretionary,,1612316032,small,SPY
+FRSH,FRESHWORKS INC CLASS A,Information Technology,,2364004864,mid,SPY
+TNDM,TANDEM DIABETES CARE INC,Health Care,,1271545600,small,SPY
+SPNT,SIRIUSPOINT LTD,Financials,,2596014592,mid,SPY
+USAR,USA RARE EARTH INC CLASS A,Materials,,3470180864,mid,SPY
+IPAR,INTERPARFUMS INC,Consumer Staples,,2906024448,mid,SPY
+BRZE,BRAZE INC CLASS A,Information Technology,,2686465280,mid,SPY
+SYBT,STOCK YARDS BANCORP INC,Financials,,1983165312,small,SPY
+OI,O I GLASS INC,Materials,,1589703296,small,SPY
+PTON,PELOTON INTERACTIVE CLASS A INC,Consumer Discretionary,,1948739968,small,SPY
+HLMN,HILLMAN SOLUTIONS CORP,Industrials,,1586208640,small,SPY
+SONO,SONOS INC,Consumer Discretionary,,1641450624,small,SPY
+CRVL,CORVEL CORP,Health Care,,2790908928,mid,SPY
+CHCO,CITY HOLDING,Financials,,1750751616,small,SPY
+VVX,V2X INC,Industrials,,2181091584,mid,SPY
+TNK,TEEKAY TANKERS LTD CLASS A,Energy,,2667230464,mid,SPY
+ICHR,ICHOR HOLDINGS LTD,Information Technology,,1667085184,small,SPY
+AGIO,AGIOS PHARMACEUTICALS INC,Health Care,,2062444544,mid,SPY
+DHC,DIVERSIFIED HEALTHCARE TRUST,Real Estate,,1675477504,small,SPY
+OCUL,OCULAR THERAPEUTIX INC,Health Care,,1848203136,small,SPY
+ORKA,ORUKA THERAPEUTICS INC,Health Care,,2641121024,mid,SPY
+THR,THERMON GROUP HOLDINGS INC,Industrials,,1711679616,small,SPY
+OMCL,OMNICELL INC,Health Care,,1551636736,small,SPY
+HLF,HERBALIFE LTD,Consumer Staples,,1436363136,small,SPY
+AIN,ALBANY INTERNATIONAL CORP CLASS A,Industrials,,1497959296,small,SPY
+BKE,BUCKLE INC,Consumer Discretionary,,2564993024,mid,SPY
+GBX,GREENBRIER INC,Industrials,,1645007232,small,SPY
+AORT,ARTIVION INC,Health Care,,1636192640,small,SPY
+TPB,TURNING POINT BRANDS INC,Consumer Staples,,1395626624,small,SPY
+SKWD,SKYWARD SPECIALTY INSURANCE GROUP,Financials,,1956776832,small,SPY
+ECPG,ENCORE CAPITAL GROUP INC,Financials,,1586683520,small,SPY
+ATEN,A10 NETWORKS INC,Information Technology,,1720682368,small,SPY
+HTH,HILLTOP HOLDINGS INC,Financials,,2203534336,mid,SPY
+CRK,COMSTOCK RESOURCES INC,Energy,,5745184768,mid,SPY
+PACS,PACS GROUP INC,Health Care,,5051283968,mid,SPY
+TIC,TIC SOLUTIONS INC,Industrials,,1537407232,small,SPY
+ASGN,ASGN INC,Information Technology,,1667435008,small,SPY
+CENTA,CENTRAL GARDEN AND PET CLASS A,Consumer Staples,,1999600896,small,SPY
+SLNO,SOLENO THERAPEUTICS INC,Health Care,,2121008896,mid,SPY
+TILE,INTERFACE INC,Industrials,,1484873344,small,SPY
+LC,LENDINGCLUB CORP,Financials,,1651116544,small,SPY
+SMR,NUSCALE POWER CORP CLASS A,Industrials,,3233821696,mid,SPY
+AVPT,AVEPOINT INC CLASS A,Information Technology,,2146629632,mid,SPY
+WOR,WORTHINGTON ENTERPRISES INC,Industrials,,2584569600,mid,SPY
+NVAX,NOVAVAX INC,Health Care,,1254606848,small,SPY
+NRIX,NURIX THERAPEUTICS INC,Health Care,,1603824256,small,SPY
+BWIN,BALDWIN INSURANCE GROUP INC CLASS,Financials,,2161715968,mid,SPY
+WLY,JOHN WILEY AND SONS INC CLASS A,Communication,,2004162944,mid,SPY
+UFPT,UFP TECHNOLOGIES INC,Health Care,,1481107840,small,SPY
+IIPR,INNOVATIVE INDUSTRIAL PROPERTIES I,Real Estate,,1412701824,small,SPY
+UPWK,UPWORK INC,Industrials,,1429364352,small,SPY
+STBA,S AND T BANCORP INC,Financials,,1557779456,small,SPY
+PEB,PEBBLEBROOK HOTEL TRUST REIT,Real Estate,,1456234880,small,SPY
+YELP,YELP INC,Communication,,1546523520,small,SPY
+IRON,DISC MEDICINE INC,Health Care,,2487272960,mid,SPY
+ATEC,ALPHATEC HOLDNGS INC,Health Care,,1639192192,small,SPY
+XPRO,EXPRO GROUP HOLDINGS NV,Energy,,1895334272,small,SPY
+NSSC,NAPCO SECURITY TECHNOLOGIES INC,Information Technology,,1421936512,small,SPY
+CCS,CENTURY COMMUNITIES INC,Consumer Discretionary,,1655588992,small,SPY
+VRE,VERIS RESIDENTIAL INC,Real Estate,,1939686144,small,SPY
+INTA,INTAPP INC,Information Technology,,2030138240,mid,SPY
+WD,WALKER & DUNLOP INC,Financials,,1513643904,small,SPY
+NBHC,NATIONAL BANK HOLDINGS CORP CLASS,Financials,,1781639296,small,SPY
+QUBT,QUANTUM COMPUTING INC,Information Technology,,1542577792,small,SPY
+NNI,NELNET INC CLASS A,Financials,,4644013056,mid,SPY
+ARI,APOLLO COMMERCIAL REAL ESTATE FINA,Financials,,1483937152,small,SPY
+NVTS,NAVITAS SEMICONDUCTOR CORP,Information Technology,,2030976384,mid,SPY
+MQ,MARQETA INC CLASS A,Financials,,1747194112,small,SPY
+ALMS,ALUMIS INC,Health Care,,2972648704,mid,SPY
+BULL,WEBULL CORP CLASS A,Financials,,2523032576,mid,SPY
+TCBK,TRICO BANCSHARES,Financials,,1563485184,small,SPY
+FLYW,FLYWIRE CORP,Financials,,1438655232,small,SPY
+XHR,XENIA HOTELS RESORTS REIT INC,Real Estate,,1490355200,small,SPY
+ARLO,ARLO TECHNOLOGIES INC,Information Technology,,1499181440,small,SPY
+ATRC,ATRICURE INC,Health Care,,1447973760,small,SPY
+COHU,COHU INC,Information Technology,,1506990720,small,SPY
+RLAY,RELAY THERAPEUTICS INC,Health Care,,2241221632,mid,SPY
+BLX,BANCO LATINOAMERICANO DE COMERCIO,Financials,,1946395264,small,SPY
+STOK,STOKE THERAPEUTICS INC,Health Care,,1936596992,small,SPY
+PRCT,PROCEPT BIOROBOTICS CORP,Health Care,,1416521728,small,SPY
+GABC,GERMAN AMERICAN BANCORP INC,Financials,,1601846016,small,SPY
+NVRI,ENVIRI CORP,Industrials,,1620844928,small,SPY
+SILA,SILA RLTY TR INC TRUST,Real Estate,,1311549312,small,SPY
+WVE,WAVE LIFE SCIENCES LTD,Health Care,,1370496128,small,SPY
+PRGS,PROGRESS SOFTWARE CORP,Information Technology,,1084847616,small,SPY
+INVA,INNOVIVA INC,Health Care,,1715881600,small,SPY
+HCSG,HEALTHCARE SERVICES GROUP INC,Industrials,,1292858624,small,SPY
+AXGN,AXOGEN INC,Health Care,,1787356032,small,SPY
+WTTR,SELECT WATER SOLUTIONS INC CLASS A,Energy,,2095820544,mid,SPY
+INOD,INNODATA INC,Industrials,,1254214272,small,SPY
+MXL,MAXLINEAR INC,Information Technology,,1570963456,small,SPY
+FDP,FRESH DEL MONTE PRODUCE INC,Consumer Staples,,1970709504,small,SPY
+SLVM,SYLVAMO CORP,Materials,,1688189184,small,SPY
+SBH,SALLY BEAUTY HOLDINGS INC,Consumer Discretionary,,1305961728,small,SPY
+ECVT,ECOVYST INC,Materials,,1486813184,small,SPY
+LZB,LA-Z-BOY INC,Consumer Discretionary,,1303467520,small,SPY
+AAMI,ACADIAN ASSET MANAGEMENT INC,Financials,,1974743552,small,SPY
+LKFN,LAKELAND FINANCIAL CORP,Financials,,1514727168,small,SPY
+NTLA,INTELLIA THERAPEUTICS INC,Health Care,,1551093504,small,SPY
+CTS,CTS CORP,Information Technology,,1404394240,small,SPY
+WGS,GENEDX HOLDINGS CORP CLASS A,Health Care,,1938914560,small,SPY
+HOPE,HOPE BANCORP INC,Financials,,1491009408,small,SPY
+QCRH,QCR HOLDINGS INC,Financials,,1469172352,small,SPY
+PGNY,PROGYNY INC,Health Care,,1359577088,small,SPY
+WWW,WOLVERINE WORLD WIDE INC,Consumer Discretionary,,1307596928,small,SPY
+ANIP,ANI PHARMACEUTICALS INC,Health Care,,1666620672,small,SPY
+BRSL,BRIGHTSTAR LOTTERY PLC,Consumer Discretionary,,2349049088,mid,SPY
+PRLB,PROTO LABS INC,Industrials,,1373490944,small,SPY
+ENOV,ENOVIS CORP,Health Care,,1296029696,small,SPY
+SMPL,THE SIMPLY GOOD FOODS COMPANY,Consumer Staples,,1345188352,small,SPY
+AGM,FEDERAL AGRICULTURAL MORTGAGE NON,Financials,,1631804288,small,SPY
+ARDX,ARDELYX INC,Health Care,,1456769664,small,SPY
+LEG,LEGGETT & PLATT INC,Consumer Discretionary,,1316653824,small,SPY
+HG,HAMILTON INSURANCE GROUP LTD CLASS,Financials,,3016181504,mid,SPY
+AMSC,AMERICAN SUPERCONDUCTOR CORP,Industrials,,1527878144,small,SPY
+KW,KENNEDY WILSON HOLDINGS INC,Real Estate,,1505109248,small,SPY
+HLX,HELIX ENERGY SOLUTIONS GROUP INC,Energy,,1415515392,small,SPY
+PAYO,PAYONEER GLOBAL INC,Financials,,1753686400,small,SPY
+KSS,KOHLS CORP,Consumer Discretionary,,1438589056,small,SPY
+DCOM,DIME COMMUNITY BANCSHARES INC,Financials,,1502459520,small,SPY
+CBZ,CBIZ INC,Industrials,,1520572928,small,SPY
+SOC,SABLE OFFSHORE CORP CLASS A,Energy,,2263141376,mid,SPY
+USLM,UNITED STATES LIME AND MINERALS IN,Materials,,3889379840,mid,SPY
+BORR,BORR DRILLING LTD,Energy,,1793897344,small,SPY
+IE,IVANHOE ELECTRIC INC,Materials,,1918981888,small,SPY
+KOS,KOSMOS ENERGY LTD,Energy,,1731997696,small,SPY
+UNIT,UNITI GROUP INC,Communication,,2469626368,mid,SPY
+DEI,DOUGLAS EMMETT REIT INC,Real Estate,,1887548544,small,SPY
+FIGS,FIGS INC CLASS A,Consumer Discretionary,,2439088640,mid,SPY
+ABR,ARBOR REALTY TRUST REIT INC,Financials,,1589133056,small,SPY
+UVV,UNIVERSAL CORP,Consumer Staples,,1310726656,small,SPY
+LNN,LINDSAY CORP,Industrials,,1091185792,small,SPY
+NESR,NATIONAL ENERGY SERVICES REUNITED,Energy,,2282044160,mid,SPY
+RXRX,RECURSION PHARMACEUTICALS INC CLAS,Health Care,,1642709120,small,SPY
+TFIN,TRIUMPH FINANCIAL INC,Financials,,1426448256,small,SPY
+PRA,PROASSURANCE CORP,Financials,,1264775680,small,SPY
+SRCE,1ST SOURCE CORP,Financials,,1727044864,small,SPY
+WKC,WORLD KINECT CORP,Energy,,1302853376,small,SPY
+MLKN,MILLERKNOLL INC,Industrials,,988014912,small,SPY
+VTOL,BRISTOW GROUP INC,Energy,,1378982912,small,SPY
+CNOB,CONNECTONE BANCORP INC,Financials,,1358889600,small,SPY
+FIVN,FIVE9 INC,Information Technology,,1174022912,small,SPY
+ICFI,ICF INTERNATIONAL INC,Industrials,,1237051008,small,SPY
+CMPR,CIMPRESS PLC,Industrials,,1829412864,small,SPY
+CRI,CARTERS INC,Consumer Discretionary,,1308842880,small,SPY
+GRC,GORMAN-RUPP,Industrials,,1644552576,small,SPY
+WINA,WINMARK CORP,Consumer Discretionary,,1539829248,small,SPY
+AMLX,AMYLYX PHARMACEUTICALS INC,Health Care,,1652527232,small,SPY
+HRMY,HARMONY BIOSCIENCES HLDG INC,Health Care,,1604498688,small,SPY
+NVCR,NOVOCURE LTD,Health Care,,1200530944,small,SPY
+WABC,WESTAMERICA BANCORPORATION,Financials,,1262061312,small,SPY
+ACT,ENACT HOLDINGS INC,Financials,,5851598336,mid,SPY
+SFL,SFL LTD,Energy,,1451698432,small,SPY
+MCRI,MONARCH CASINO AND RESORT INC,Consumer Discretionary,,1729230080,small,SPY
+LPG,DORIAN LPG LTD,Energy,,1479800832,small,SPY
+IMKTA,INGLES MARKETS INC CLASS A,Consumer Staples,,1730767616,small,SPY
+ALKT,ALKAMI TECHNOLOGY INC,Information Technology,,1757813248,small,SPY
+ASTE,ASTEC INDUSTRIES INC,Industrials,,1261958528,small,SPY
+OBK,ORIGIN BANCORP INC,Financials,,1295119232,small,SPY
+DOLE,DOLE PLC,Consumer Staples,,1385597312,small,SPY
+JBLU,JETBLUE AIRWAYS CORP,Industrials,,1672940928,small,SPY
+DCH,DAUCH CORPORATION,Consumer Discretionary,,1444155904,small,SPY
+PUMP,PROPETRO HOLDING CORP,Energy,,1701015168,small,SPY
+CAPR,CAPRICOR THERAPEUTICS INC,Health Care,,1846666496,small,SPY
+LADR,LADDER CAPITAL CORP CLASS A,Financials,,1245203200,small,SPY
+ANAB,ANAPTYSBIO INC,Health Care,,1658199424,small,SPY
+ROCK,GIBRALTAR INDUSTRIES INC,Industrials,,1149085312,small,SPY
+TGLS,TECNOGLASS INC,Industrials,,2038810368,mid,SPY
+BFC,BANK FIRST CORP,Financials,,1534517888,small,SPY
+TNC,TENNANT,Industrials,,1257638400,small,SPY
+DFIN,DONNELLEY FINANCIAL SOLUTIONS INC,Financials,,1268207232,small,SPY
+REX,REX AMERICAN RESOURCES CORP,Energy,,1495701760,small,SPY
+UMH,UMH PROPERTIES INC,Real Estate,,1243515520,small,SPY
+DLX,DELUXE CORP,Industrials,,1264347904,small,SPY
+JJSF,J AND J SNACK FOODS CORP,Consumer Staples,,1506123008,small,SPY
+ZYME,ZYMEWORKS INC,Health Care,,1917011968,small,SPY
+QDEL,QUIDELORTHO CORP,Health Care,,1174410496,small,SPY
+IOVA,IOVANCE BIOTHERAPEUTICS INC,Health Care,,1413028352,small,SPY
+CNMD,CONMED CORP,Health Care,,1077375232,small,SPY
+LOB,LIVE OAK BANCSHARES INC,Financials,,1543272576,small,SPY
+NPKI,NPK INTERNATIONAL INC,Industrials,,1218892800,small,SPY
+PRG,PROG HOLDINGS INC,Financials,,1128844800,small,SPY
+LINC,LINCOLN EDUCATIONAL SERVICES CORP,Consumer Discretionary,,1330628096,small,SPY
+PZZA,PAPA JOHNS INTERNATIONAL INC,Consumer Discretionary,,1150859392,small,SPY
+USPH,US PHYSICAL THERAPY INC,Health Care,,1121151744,small,SPY
+OUST,OUSTER INC,Information Technology,,1224049792,small,SPY
+GLDD,GREAT LAKES DREDGE AND DOCK CORP,Industrials,,1135273600,small,SPY
+NBR,NABORS INDUSTRIES LTD,Energy,,1173708160,small,SPY
+EFC,ELLINGTON FINANCIAL INC,Financials,,1500774272,small,SPY
+ALGT,ALLEGIANT TRAVEL,Industrials,,1528495872,small,SPY
+TNET,TRINET GROUP INCINARY,Industrials,,1815547520,small,SPY
+MLYS,MINERALYS THERAPEUTICS INC,Health Care,,2222313984,mid,SPY
+PNTG,PENNANT GROUP INC,Health Care,,1028108160,small,SPY
+ORC,ORCHID ISLAND CAPITAL INC,Financials,,1378353408,small,SPY
+UAMY,UNITED STATES ANTIMONY CORP,Materials,,1245902080,small,SPY
+PEBO,PEOPLES BANCORP INC,Financials,,1201792512,small,SPY
+NAT,NORDIC AMERICAN TANKERS LTD,Energy,,1302266496,small,SPY
+FIHL,FIDELIS INSURANCE HOLDINGS LTD,Financials,,1655229952,small,SPY
+HROW,HARROW INC,Health Care,,1314580864,small,SPY
+RLJ,RLJ LODGING TRUST REIT,Real Estate,,1122266880,small,SPY
+COLL,COLLEGIUM PHARMACEUTICAL INC,Health Care,,1025946304,small,SPY
+MBIN,MERCHANTS BANCORP,Financials,,2044852352,mid,SPY
+CIM,CHIMERA INVESTMENT CORP,Financials,,1070888448,small,SPY
+TRS,TRIMAS CORP,Materials,,1450237568,small,SPY
+AI,C3 AI INC CLASS A,Information Technology,,1255316096,small,SPY
+GPRE,GREEN PLAINS INC,Energy,,1184466816,small,SPY
+SAFT,SAFETY INSURANCE GROUP INC,Financials,,1088755456,small,SPY
+SEZL,SEZZLE INC,Financials,,2177601792,mid,SPY
+TRIP,TRIPADVISOR INC,Communication,,1268455552,small,SPY
+AHCO,ADAPTHEALTH CORP,Health Care,,1635055232,small,SPY
+GSHD,GOOSEHEAD INSURANCE INC CLASS A,Financials,,1552827776,small,SPY
+LFST,LIFESTANCE HEALTH GROUP INC,Health Care,,2415362048,mid,SPY
+ELVN,ENLIVEN THERAPEUTICS INC,Health Care,,2322050048,mid,SPY
+ENR,ENERGIZER HOLDINGS INC,Consumer Staples,,1125929472,small,SPY
+PDFS,PDF SOLUTIONS INC,Information Technology,,1384606464,small,SPY
+PAHC,PHIBRO ANIMAL HEALTH CORP CLASS A,Health Care,,2250487552,mid,SPY
+WS,WORTHINGTON STEEL INC,Materials,,1509806592,small,SPY
+WLDN,WILLDAN GROUP INC,Industrials,,1188719360,small,SPY
+PWP,PERELLA WEINBERG PARTNERS CLASS A,Financials,,1619815040,small,SPY
+MFA,MFA FINANCIAL INC,Financials,,991298304,small,SPY
+SMA,SMARTSTOP SELF STORAGE REIT INC,Real Estate,,2463462144,mid,SPY
+AESI,ATLAS ENERGY SOLUTIONS INC,Energy,,1517135872,small,SPY
+HLIT,HARMONIC INC,Information Technology,,1032544320,small,SPY
+GENI,GENIUS SPORTS LTD,Consumer Discretionary,,1173060736,small,SPY
+GCT,GIGACLOUD TECHNOLOGY INC CLASS A,Consumer Discretionary,,1659400960,small,SPY
+PMT,PENNYMAC MORTGAGE INVESTMENT TRUST,Financials,,1040718656,small,SPY
+MAZE,MAZE THERAPEUTICS INC,Health Care,,1416423680,small,SPY
+NUVB,NUVATION BIO INC CLASS A,Health Care,,1532903936,small,SPY
+GPGI,GPGI INC CLASS A,Information Technology,,5031092224,mid,SPY
+NEO,NEOGENOMICS INC,Health Care,,1038497664,small,SPY
+ARRY,ARRAY TECHNOLOGIES INC,Industrials,,1121911680,small,SPY
+AEHR,AEHR TEST SYSTEMS,Information Technology,,1357403776,small,SPY
+CVI,CVR ENERGY INC,Energy,,3181793536,mid,SPY
+EYPT,EYEPOINT INC,Health Care,,1117988096,small,SPY
+AAT,AMERICAN ASSETS TRUST REIT INC,Real Estate,,1448278016,small,SPY
+TWO,TWO HARBORS INVESTMENT CORP,Financials,,1168080256,small,SPY
+CSR,CENTERSPACE,Real Estate,,1062466432,small,SPY
+PBI,PITNEY BOWES INC,Industrials,,1649024128,small,SPY
+OCFC,OCEANFIRST FINANCIAL CORP,Financials,,1047012736,small,SPY
+VYX,NCR VOYIX CORP,Information Technology,,854919872,small,SPY
+ASTH,ASTRANA HEALTH INC,Health Care,,1392870144,small,SPY
+SHLS,SHOALS TECHNOLOGIES GROUP INC CLAS,Industrials,,1144203904,small,SPY
+TMP,TOMPKINS FINANCIAL CORP,Financials,,1159890176,small,SPY
+APPN,APPIAN CORP CLASS A,Information Technology,,1809794944,small,SPY
+TYRA,TYRA BIOSCIENCES INC,Health Care,,2133676544,mid,SPY
+CRAI,CRA INTERNATIONAL INC,Industrials,,1084076800,small,SPY
+LILAK,LIBERTY LATIN AMERICA LTD CLASS C,Communication,,1704834048,small,SPY
+TSHA,TAYSHA GENE THERAPIES INC,Health Care,,1255369344,small,SPY
+PCRX,PACIRA BIOSCIENCES INC,Health Care,,976582976,small,SPY
+MBC,MASTERBRAND INC,Industrials,,1021574336,small,SPY
+SCL,STEPAN,Materials,,1133838336,small,SPY
+TTI,TETRA TECHNOLOGIES INC,Energy,,1171549056,small,SPY
+TE,T1 ENERGY INC,Industrials,,1133700096,small,SPY
+OSBC,OLD SECOND BANCORP INC,Financials,,1092807296,small,SPY
+TRVI,TREVI THERAPEUTICS INC,Health Care,,1533063424,small,SPY
+TDOC,TELADOC HEALTH INC,Health Care,,940149184,small,SPY
+CCB,COASTAL FINANCIAL CORP,Financials,,1181128064,small,SPY
+BY,BYLINE BANCORP INC,Financials,,1462091520,small,SPY
+GIII,G III APPAREL GROUP LTD,Consumer Discretionary,,1181300096,small,SPY
+FLNC,FLUENCE ENERGY INC CLASS A,Industrials,,2446339328,mid,SPY
+SGRY,SURGERY PARTNERS INC,Health Care,,1576333696,small,SPY
+TRUP,TRUPANION INC,Financials,,1113983744,small,SPY
+INVX,INNOVEX INTERNATIONAL INC,Energy,,1677067776,small,SPY
+XPEL,XPEL INC,Consumer Discretionary,,1219000704,small,SPY
+DEA,EASTERLY GOVERNMENT PROPERTIES INC,Real Estate,,1141323904,small,SPY
+NEXT,NEXTDECADE CORP,Energy,,2079700992,mid,SPY
+UVSP,UNIVEST FINANCIAL CORP,Financials,,997219520,small,SPY
+APEI,AMERICAN PUBLIC EDUCATION INC,Consumer Discretionary,,1059816192,small,SPY
+REAL,THE REALREAL INC,Consumer Discretionary,,1085123200,small,SPY
+RVLV,REVOLVE GROUP CLASS A INC,Consumer Discretionary,,1589314432,small,SPY
+CCOI,COGENT COMMUNICATIONS HOLDINGS INC,Communication,,951944896,small,SPY
+UPBD,UPBOUND GROUP INC,Consumer Discretionary,,1018801664,small,SPY
+PENG,PENGUIN SOLUTIONS INC,Information Technology,,1087469696,small,SPY
+MIAX,MIAMI INTERNATIONAL HOLDINGS INC,Financials,,3723142144,mid,SPY
+DEC,DIVERSIFIED ENERGY COMPANY,Energy,,1235961856,small,SPY
+STAA,STAAR SURGICAL,Health Care,,1000652608,small,SPY
+RYZ,RYERSON HOLDING CORP,Materials,,1141886592,small,SPY
+CTBI,COMMUNITY TRUST BANCORP INC,Financials,,1120991616,small,SPY
+PLOW,DOUGLAS DYNAMICS INC,Industrials,,967484544,small,SPY
+FLNG,FLEX LNG LTD,Energy,,1648194688,small,SPY
+VERX,VERTEX INC CLASS A,Information Technology,,1924281472,small,SPY
+CDRE,CADRE HOLDINGS INC,Industrials,,1389040512,small,SPY
+SAH,SONIC AUTOMOTIVE INC CLASS A,Consumer Discretionary,,2178066688,mid,SPY
+CDNA,CAREDX INC,Health Care,,941731584,small,SPY
+TDAY,USA TODAY INC,Communication,,1044472128,small,SPY
+FG,F&G ANNUITIES AND LIFE INC,Financials,,3532643328,mid,SPY
+FTRE,FORTREA HOLDINGS INC,Health Care,,883574976,small,SPY
+MSEX,MIDDLESEX WATER,Utilities,,996479936,small,SPY
+TROX,TRONOX HOLDINGS PLC,Materials,,1464329344,small,SPY
+WGO,WINNEBAGO INDUSTRIES INC,Consumer Discretionary,,858149312,small,SPY
+EPC,EDGEWELL PERSONAL CARE,Consumer Staples,,980114304,small,SPY
+ALNT,ALLIENT INC,Industrials,,1030275520,small,SPY
+AZTA,AZENTA INC,Health Care,,1042372352,small,SPY
+AMAL,AMALGAMATED FINANCIAL CORP,Financials,,1179491072,small,SPY
+WMK,WEIS MARKETS INC,Consumer Staples,,1739050240,small,SPY
+JBGS,JBG SMITH PROPERTIES,Real Estate,,879895488,small,SPY
+ALH,ALLIANCE LAUNDRY HOLDINGS INC,Industrials,,4332382720,mid,SPY
+UTL,UNITIL CORP,Utilities,,966751168,small,SPY
+SBSI,SOUTHSIDE BANCSHARES INC,Financials,,937815232,small,SPY
+GOLD,GOLD INC,Consumer Discretionary,,1161232128,small,SPY
+BTDR,BITDEER TECHNOLOGIES GROUP CLASS A,Information Technology,,2300833792,mid,SPY
+PRKS,UNITED PARKS AND RESORTS INC,Consumer Discretionary,,1835628160,small,SPY
+FMBH,FIRST MID BANCSHARES INC,Financials,,1109534336,small,SPY
+UVE,UNIVERSAL INSURANCE HOLDINGS INC,Financials,,934027776,small,SPY
+ADTN,ADTRAN HOLDINGS INC,Information Technology,,1039392960,small,SPY
+OLMA,OLEMA PHARMACEUTICALS INC,Health Care,,1312583808,small,SPY
+PDM,PIEDMONT REALTY TRUST INC CLASS A,Real Estate,,820124608,small,SPY
+BV,BRIGHTVIEW HOLDINGS INC,Industrials,,1103081984,small,SPY
+AMRC,AMERESCO INC CLASS A,Industrials,,1300321024,small,SPY
+VRTS,VIRTUS INVESTMENT PARTNERS INC,Financials,,859565696,small,SPY
+HFWA,HERITAGE FINANCIAL CORP,Financials,,1073521728,small,SPY
+THRM,GENTHERM INC,Consumer Discretionary,,847414656,small,SPY
+FIZZ,NATIONAL BEVERAGE CORP,Consumer Staples,,3160083456,mid,SPY
+VSTS,VESTIS CORP,Industrials,,1033160128,small,SPY
+BHVN,BIOHAVEN LTD,Health Care,,1474121728,small,SPY
+NNE,NANO NUCLEAR ENERGY INC,Industrials,,1113538560,small,SPY
+FA,FIRST ADVANTAGE CORP,Industrials,,1957603584,small,SPY
+COUR,COURSERA INC,Consumer Discretionary,,1000643328,small,SPY
+SAFE,SAFEHOLD INC,Real Estate,,969433408,small,SPY
+GHM,GRAHAM CORP,Industrials,,899663360,small,SPY
+LIF,LIFE360 INC,Information Technology,,3242429952,mid,SPY
+PVLA,PALVELLA THERAPEUTICS INC,Health Care,,1767164288,small,SPY
+GERN,GERON CORP,Health Care,,1063304064,small,SPY
+NSP,INSPERITY INC,Industrials,,1106951936,small,SPY
+XERS,XERIS BIOPHARMA HOLDINGS INC,Health Care,,1041484992,small,SPY
+SNCY,SUN COUNTRY AIRLINES HOLDINGS INC,Industrials,,896812672,small,SPY
+SKYT,SKYWATER TECHNOLOGY INC,Information Technology,,1379510784,small,SPY
+TRST,TRUSTCO BANK CORP,Financials,,802651072,small,SPY
+EE,EXCELERATE ENERGY INC CLASS A,Energy,,3735690752,mid,SPY
+VIR,VIR BIOTECHNOLOGY INC,Health Care,,1447891328,small,SPY
+MBX,MBX BIOSCIENCES INC,Health Care,,1567363072,small,SPY
+CFFN,CAPITOL FEDERAL FINANCIAL INC,Financials,,952927680,small,SPY
+ENVX,ENOVIX CORP,Industrials,,1099155712,small,SPY
+LXU,LSB INDUSTRIES INC,Materials,,1072692416,small,SPY
+XNCR,XENCOR INC,Health Care,,939468032,small,SPY
+EVLV,EVOLV TECHNOLOGIES HOLDINGS INC CL,Information Technology,,1081484928,small,SPY
+IRMD,IRADIMED CORP,Health Care,,1230066432,small,SPY
+BHRB,BURKE HERBERT FINANCIAL SERVICES C,Financials,,939627776,small,SPY
+LMB,LIMBACH HOLDINGS INC,Industrials,,939256576,small,SPY
+CRVS,CORVUS PHARMACEUTICALS INC,Health Care,,1233848448,small,SPY
+MBWM,MERCANTILE BANK CORP,Financials,,888866496,small,SPY
+LZ,LEGALZOOM COM INC,Industrials,,1033485568,small,SPY
+NBN,NORTHEAST BANK,Financials,,995786624,small,SPY
+EIG,EMPLOYERS HOLDINGS INC,Financials,,818633472,small,SPY
+BKSY,BLACKSKY TECHNOLOGY INC CLASS A,Industrials,,1139810304,small,SPY
+BLFS,BIOLIFE SOLUTIONS INC,Health Care,,942332992,small,SPY
+PKST,PEAKSTONE REALTY TRUST CLASS E,Real Estate,,777215808,small,SPY
+CMP,COMPASS MINERALS INTERNATIONAL INC,Materials,,951552128,small,SPY
+UFCS,UNITED FIRE GROUP INC,Financials,,959118784,small,SPY
+MNKD,MANNKIND CORP,Health Care,,770251136,small,SPY
+NX,QUANEX BUILDING PRODUCTS CORP,Industrials,,802084416,small,SPY
+SCSC,SCANSOURCE INC,Information Technology,,800681984,small,SPY
+LGIH,LGI HOMES INC,Consumer Discretionary,,882064576,small,SPY
+RWT,REDWOOD TRUST REIT INC,Financials,,707440256,small,SPY
+ACVA,ACV AUCTIONS INC CLASS A,Industrials,,758952128,small,SPY
+NBBK,NB BANCORP INC,Financials,,985519232,small,SPY
+CCNE,CNB FINANCIAL CORP,Financials,,868608384,small,SPY
+BFLY,BUTTERFLY NETWORK INC CLASS A,Health Care,,1046541120,small,SPY
+CLOV,CLOVER HEALTH INVESTMENTS CORP CLA,Health Care,,902427776,small,SPY
+IDT,IDT CORP CLASS B,Communication,,1215444864,small,SPY
+DAKT,DAKTRONICS INC,Information Technology,,958869568,small,SPY
+TR,TOOTSIE ROLL INDUSTRIES INC,Consumer Staples,,3191705344,mid,SPY
+HAFC,HANMI FINANCIAL CORP,Financials,,792916992,small,SPY
+PRSU,PURSUIT ATTRACTIONS AND HOSPITALIT,Consumer Discretionary,,1067693184,small,SPY
+CLB,CORE LABORATORIES INC,Energy,,752003520,small,SPY
+GRDN,GUARDIAN PHARMACY SERVICES INC CLA,Health Care,,2444300800,mid,SPY
+MYE,MYERS INDUSTRIES INC,Materials,,788932928,small,SPY
+WSR,WHITESTONE REIT,Real Estate,,862603264,small,SPY
+ESQ,ESQUIRE FINANCIAL HOLDINGS INC,Financials,,940980288,small,SPY
+RAPP,RAPPORT THERAPEUTICS INC,Health Care,,1604887168,small,SPY
+FBRT,FRANKLIN BSP REALTY TRUST INC,Financials,,689575808,small,SPY
+CMRE,COSTAMARE INC,Industrials,,2083773824,mid,SPY
+AMTB,AMERANT BANCORP INC CLASS A,Financials,,964289280,small,SPY
+HBNC,HORIZON BANCORP INC,Financials,,858546880,small,SPY
+MCB,METROPOLITAN BANK HOLDING CORP,Financials,,1037491392,small,SPY
+CAC,CAMDEN NATIONAL CORP,Financials,,816308544,small,SPY
+PAX,PATRIA INVESTMENTS LTD CLASS A,Financials,,2018871680,mid,SPY
+JBI,JANUS INTERNATIONAL GROUP INC,Industrials,,683182208,small,SPY
+RYAM,RAYONIER ADVANCED MATERIALS INC,Materials,,715719680,small,SPY
+BFST,BUSINESS FIRST BANCSHARES INC,Financials,,903329664,small,SPY
+ESRT,EMPIRE STATE REALTY REIT INC TRUST,Real Estate,,1530361728,small,SPY
+GLUE,MONTE ROSA THERAPEUTICS INC,Health Care,,1367467648,small,SPY
+GBTG,GLOBAL BUSINESS TRAVEL GROUP INC C,Consumer Discretionary,,2913438208,mid,SPY
+TALK,TALKSPACE INC,Health Care,,865453760,small,SPY
+MEG,MONTROSE ENVIRONMENTAL GRP INC,Industrials,,824309312,small,SPY
+HTBK,HERITAGE COMMERCE CORP,Financials,,784082496,small,SPY
+BRSP,BRIGHTSPIRE CAPITAL INC CLASS A,Financials,,726504384,small,SPY
+CSTL,CASTLE BIOSCIENCES INC,Health Care,,738522944,small,SPY
+OMER,OMEROS CORP,Health Care,,772814912,small,SPY
+BBUC,BROOKFIELD BUSINESS CORP CLASS A,Industrials,,2412787456,mid,SPY
+KOD,KODIAK SCIENCES INC,Health Care,,2480397568,mid,SPY
+THFF,FIRST FINANCIAL CORPORATION CORP,Financials,,760367808,small,SPY
+SHEN,SHENANDOAH TELECOMMUNICATIONS,Communication,,835054912,small,SPY
+SMP,STANDARD MOTOR PRODUCTS INC,Consumer Discretionary,,787288128,small,SPY
+CPF,CENTRAL PACIFIC FINANCIAL CORP,Financials,,860770368,small,SPY
+MATW,MATTHEWS INTERNATIONAL CORP CLASS,Consumer Discretionary,,789979904,small,SPY
+SVRA,SAVARA INC,Health Care,,1137895680,small,SPY
+ARVN,ARVINAS INC,Health Care,,696833664,small,SPY
+GNK,GENCO SHIPPING AND TRADING LTD,Industrials,,1047424704,small,SPY
+CBL,CBL ASSOCIATES PROPERTIES INC,Real Estate,,1251425920,small,SPY
+BJRI,BJS RESTAURANTS INC,Consumer Discretionary,,759707200,small,SPY
+KOP,KOPPERS HOLDINGS INC,Materials,,732351616,small,SPY
+ORIC,ORIC PHARMACEUTICALS INC,Health Care,,995745664,small,SPY
+BBSI,BARRETT BUSINESS SERVICES INC,Industrials,,757976384,small,SPY
+PCT,PURECYCLE TECHNOLOGIES INC,Materials,,979531008,small,SPY
+CGEM,CULLINAN THERAPEUTICS INC,Health Care,,873392064,small,SPY
+APOG,APOGEE ENTERPRISES INC,Industrials,,717389568,small,SPY
+PRAA,PRA GROUP INC,Financials,,693694592,small,SPY
+OIS,OIL STATES INTERNATIONAL INC,Energy,,674839872,small,SPY
+RDW,REDWIRE CORP,Industrials,,1867924480,small,SPY
+FMNB,FARMERS NATIONAL BANC CORP,Financials,,792559424,small,SPY
+AMPH,AMPHASTAR PHARMACEUTICALS INC,Health Care,,939722048,small,SPY
+STGW,STAGWELL INC CLASS A,Communication,,1591682176,small,SPY
+IBCP,INDEPENDENT BANK CORP,Financials,,691891072,small,SPY
+CMPX,COMPASS THERAPEUTICS,Health Care,,981479104,small,SPY
+MCW,MISTER CAR WASH INC,Consumer Discretionary,,2289499136,mid,SPY
+AMN,AMN HEALTHCARE INC,Health Care,,703543680,small,SPY
+NPK,NATIONAL PRESTO INDUSTRIES INC,Industrials,,1014830400,small,SPY
+HTB,HOMETRUST BANCSHARES INC,Financials,,750791168,small,SPY
+URGN,UROGEN PHARMA LTD,Health Care,,916200512,small,SPY
+FOXF,FOX FACTORY HOLDING CORP,Consumer Discretionary,,703209600,small,SPY
+SENEA,SENECA FOODS CORP CLASS A,Consumer Staples,,1107298432,small,SPY
+SCHL,SCHOLASTIC CORP,Communication,,997314368,small,SPY
+HRTG,HERITAGE INSURANCE HOLDINGS INC,Financials,,809570496,small,SPY
+NWPX,NWPX INFRASTRUCTURE INC,Industrials,,765697024,small,SPY
+EGBN,EAGLE BANCORP INC,Financials,,776288768,small,SPY
+KURA,KURA ONCOLOGY INC,Health Care,,760519232,small,SPY
+CXM,SPRINKLR INC CLASS A,Information Technology,,1508118016,small,SPY
+CNXN,PC CONNECTION INC,Information Technology,,1502883072,small,SPY
+FWRG,FIRST WATCH RESTAURANT GROUP INC,Consumer Discretionary,,657846464,small,SPY
+TRNS,TRANSCAT INC,Industrials,,711112704,small,SPY
+QNST,QUINSTREET INC,Communication,,689626688,small,SPY
+EQBK,EQUITY BANCSHARES INC CLASS A,Financials,,946075008,small,SPY
+EHAB,ENHABIT INC,Health Care,,710125440,small,SPY
+LIND,LINDBLAD EXPEDITIONS HOLDINGS INC,Consumer Discretionary,,1113198848,small,SPY
+SDGR,SCHRODINGER INC,Health Care,,854894720,small,SPY
+MRTN,MARTEN TRANSPORT LTD,Industrials,,1123482496,small,SPY
+ADAM,ADAMAS INC TRUST,Financials,,668605376,small,SPY
+MCHB,MECHANICS BANCORP CLASS A,Financials,,3305330688,mid,SPY
+AVBP,ARRIVENT BIOPHARMA INC,Health Care,,1100178432,small,SPY
+PLPC,PREFORMED LINE PRODUCTS,Industrials,,1482670080,small,SPY
+PFBC,PREFERRED BANK,Financials,,1110694272,small,SPY
+BKV,BKV CORP,Energy,,3022298880,mid,SPY
+RHLD,RESOLUTE HOLDINGS MANAGEMENT INC,Industrials,,1312507136,small,SPY
+LQDT,LIQUIDITY SERVICES INC,Industrials,,966392512,small,SPY
+AMPL,AMPLITUDE INC CLASS A,Information Technology,,914690560,small,SPY
+PHR,PHREESIA INC,Health Care,,507766176,small,SPY
+ABUS,ARBUTUS BIOPHARMA CORP,Health Care,,875741760,small,SPY
+MITK,MITEK SYSTEMS INC,Information Technology,,629896384,small,SPY
+JBIO,JADE BIOSCIENCES INC,Health Care,,763909312,small,SPY
+DRVN,DRIVEN BRANDS HOLDINGS INC,Consumer Discretionary,,2029365120,mid,SPY
+MMI,MARCUS & MILLICHAP INC,Real Estate,,1005566464,small,SPY
+PD,PAGERDUTY INC,Information Technology,,587371584,small,SPY
+RES,RPC INC,Energy,,1529310976,small,SPY
+ORRF,ORRSTOWN FINANCIAL SERVICES INC,Financials,,715534080,small,SPY
+PRCH,PORCH GROUP INC,Information Technology,,797184192,small,SPY
+FCBC,FIRST COMMUNITY BANKSHARES INC,Financials,,812517632,small,SPY
+INBX,INHIBRX BIOSCIENCES INC,Health Care,,927984960,small,SPY
+SLS,SELLAS LIFE SCIENCES GROUP INC,Health Care,,741676032,small,SPY
+IVR,INVESCO MORTGAGE CAPITAL REIT INC,Financials,,704266880,small,SPY
+TK,TEEKAY CORPORATION CORP LTD,Energy,,1104690560,small,SPY
+SWBI,SMITH WESSON BRANDS INC,Consumer Discretionary,,661177024,small,SPY
+STKL,SUNOPTA INC,Consumer Staples,,769787072,small,SPY
+CBRL,CRACKER BARREL OLD COUNTRY STORE I,Consumer Discretionary,,645721088,small,SPY
+SMBC,SOUTHERN MISSOURI BANCORP INC,Financials,,721371712,small,SPY
+DJCO,DAILY JOURNAL CORP,Information Technology,,713577344,small,SPY
+SEMR,SEMRUSH HOLDINGS INC CLASS A,Information Technology,,1809898752,small,SPY
+CCBG,CAPITAL CITY BANK INC,Financials,,758301376,small,SPY
+GDOT,GREEN DOT CORP CLASS A,Financials,,616244544,small,SPY
+AMSF,AMERISAFE INC,Financials,,623937472,small,SPY
+CTLP,CANTALOUPE INC,Financials,,794703680,small,SPY
+AVNS,AVANOS MEDICAL INC,Health Care,,648783168,small,SPY
+IART,INTEGRA LIFESCIENCES HOLDINGS CORP,Health Care,,742741568,small,SPY
+SD,SANDRIDGE ENERGY INC,Energy,,568948800,small,SPY
+TCMD,TACTILE SYSTEMS TECHNOLOGY INC,Health Care,,559660096,small,SPY
+NTGR,NETGEAR INC,Information Technology,,664056384,small,SPY
+FSBC,FIVE STAR BANCORP,Financials,,818920384,small,SPY
+ZGN,ERMENEGILDO ZEGNA NV,Consumer Discretionary,,2829936640,mid,SPY
+FET,FORUM ENERGY TECHNOLOGIES INC,Energy,,668164160,small,SPY
+MPB,MID PENN BANCORP INC,Financials,,817789056,small,SPY
+KALV,KALVISTA PHARMACEUTICALS INC,Health Care,,1019327488,small,SPY
+NAVI,NAVIENT CORP,Financials,,789244224,small,SPY
+JANX,JANUX THERAPEUTICS INC,Health Care,,902741760,small,SPY
+SERV,SERVE ROBOTICS INC,Consumer Discretionary,,639581952,small,SPY
+ODC,OIL DRI CORPORATION OF AMERICA,Consumer Staples,,978414080,small,SPY
+FISI,FINANCIAL INSTITUTIONS INC,Financials,,648606208,small,SPY
+ESPR,ESPERION THERAPEUTICS INC,Health Care,,670275328,small,SPY
+IIIN,INSTEEL INDUSTRIES INC,Industrials,,655791616,small,SPY

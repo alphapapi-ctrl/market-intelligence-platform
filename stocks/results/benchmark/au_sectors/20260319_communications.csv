@@ -1,0 +1,11 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+132,-1,TLS.AX,Telstra Group Limited,Communications,Wireless telecommunications,large,5.28,1.1691,1.03,1.1233,1.1035,UP,10.4,33.31,52.12,-7.45,49.21,13.28,0.7434,LOW,-,5.1614,4.9156,4.8009,1,123.447,TREND+LEAD,26.8153
+317,-1,FRX.AX,FlexiRoam Ltd,Communications,Wireless telecommunications,small,0.018,3.157,0.9988,0.8093,1.1822,UP,125.0,260.0,5.88,-48.0,16.27,107.9,0.1733,LOW,-,0.0208,0.0225,0.0127,1,39.2048,TREND+LEAD,18.1293
+603,2,CNU.AX,Chorus Limited,Communications,Major telecommunications,mid,7.82,1.0286,1.053,1.0515,0.9733,UP,-4.96,17.29,24.08,-12.34,51.19,20.02,1.4459,MED,SHIFT,7.7145,7.8068,7.8606,0,44.218,WEAK,13.6267
+625,2,ABB.AX,Aussie Broadband Ltd.,Communications,Specialty telecommunications,mid,4.85,1.101,1.005,0.9748,0.9819,UP,-11.39,25.55,40.16,-28.57,42.46,40.89,0.4513,LOW,-,4.954,4.8146,4.9059,0,26.5311,WEAK,13.4136
+634,2,SPK.AX,Spark New Zealand Limited,Communications,Major telecommunications,mid,1.8268,0.9677,1.0068,1.0888,0.931,DOWN,-9.57,10.35,-51.08,-21.6,45.63,16.69,1.6774,HIGH,EARLY,1.8275,1.8472,1.982,0,28.2887,WEAK,13.349
+1203,7,HFY.AX,Hubify Ltd.,Communications,Specialty telecommunications,small,0.016,1.4031,0.9988,1.6546,1.9704,DOWN,100.0,60.0,,-41.67,12.3,360.02,0.0348,LOW,-,0.0143,0.0108,0.0091,1,2.0499,TREND+LEAD,8.6463
+1210,7,TPG.AX,TPG Telecom Limited,Communications,Wireless telecommunications,large,4.0,0.8028,1.027,1.0903,1.0551,DOWN,-16.34,-8.46,-3.57,-35.15,51.98,19.54,0.5644,LOW,SHIFT,3.912,3.8506,4.5644,0,-22.4924,WEAK,8.5927
+1248,7,TUA.AX,Tuas Ltd.,Communications,Wireless telecommunications,mid,6.25,0.8741,1.0352,0.9913,0.8588,UP,-16.78,-0.32,86.57,-27.88,41.27,28.49,0.7047,LOW,PROGRESS,6.247,6.6986,6.641,0,-0.4621,WEAK,8.2647
+1573,10,MAQ.AX,Macquarie Technology Group Limited,Communications,Specialty telecommunications,mid,64.7,0.8226,0.9969,1.0376,0.9992,DOWN,-0.37,-6.19,-13.86,-21.33,51.59,42.37,1.0141,MED,PROGRESS,64.248,65.9638,65.5181,0,-7.5383,WEAK,4.8825
+1625,9,ITS.AX,Infotrust Ltd,Communications,Major telecommunications,small,0.45,0.7241,0.9988,1.0822,0.821,DOWN,,-17.43,-17.43,-31.67,37.5,81.53,0.1308,LOW,-,0.4477,0.4972,,0,-8.0175,WEAK,4.0822

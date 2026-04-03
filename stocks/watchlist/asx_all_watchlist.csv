@@ -1,0 +1,1763 @@
+ticker,name,sector,industry,benchmark,market_cap,cap_band
+VAS.AX,Vanguard Australian Shares ETF,index,index,benchmark,,small
+CBA.AX,Commonwealth Bank of Australia,Finance,Major banks,VAS.AX,288942981120.0,large
+BHP.AX,BHP Group Ltd,Non-energy minerals,Steel,VAS.AX,260156784640.0,large
+RIO.AX,Rio Tinto Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,262743474176.0,large
+NEM.AX,Newmont Corporation Registered Shs Chess Depositary Interests Repr 1 Sh,Non-energy minerals,Precious metals,VAS.AX,175961702400.0,large
+NAB.AX,National Australia Bank Limited,Finance,Major banks,VAS.AX,127722758144.0,large
+WBC.AX,Westpac Banking Corporation,Finance,Major banks,VAS.AX,136222711808.0,large
+ANZ.AX,ANZ Group Holdings Limited,Finance,Major banks,VAS.AX,109294837760.0,large
+WES.AX,Wesfarmers Limited,Retail trade,Home improvement chains,VAS.AX,83261628416.0,large
+MQG.AX,"Macquarie Group, Ltd.",Finance,Investment managers,VAS.AX,78358241280.0,large
+CSL.AX,CSL Limited,Health technology,Biotechnology,VAS.AX,67425357824.0,large
+FMG.AX,Fortescue Ltd,Non-energy minerals,Steel,VAS.AX,62349041664.0,large
+WDS.AX,Woodside Energy Group Ltd,Energy minerals,Oil & gas production,VAS.AX,66405429248.0,large
+TLS.AX,Telstra Group Limited,Communications,Wireless telecommunications,VAS.AX,60905656320.0,large
+GMG.AX,Goodman Group,Finance,Real estate investment trusts,VAS.AX,53328203776.0,large
+XYZ.AX,"Block, Inc. Shs Chess Depository Interests Repr 1 Sh",Commercial services,Miscellaneous commercial services,VAS.AX,52351811584.0,large
+RMD.AX,ResMed Inc. CHESS Depositary Interests on a ratio of 10 CDIs per ord.sh,Health technology,Medical specialties,VAS.AX,46923010048.0,large
+TCL.AX,Transurban Group Ltd.,Transportation,Other transportation,VAS.AX,43245748224.0,large
+WOW.AX,Woolworths Group Ltd,Retail trade,Food retail,VAS.AX,45211385856.0,large
+QBE.AX,QBE Insurance Group Limited,Finance,Property/Casualty insurance,VAS.AX,32363608064.0,large
+SIG.AX,Sigma Healthcare Ltd,Health technology,Pharmaceuticals: major,VAS.AX,30706249728.0,large
+BXB.AX,Brambles Limited,Transportation,Air freight/Couriers,VAS.AX,30853494784.0,large
+NST.AX,Northern Star Resources Ltd,Non-energy minerals,Precious metals,VAS.AX,31355918336.0,large
+ALL.AX,Aristocrat Leisure Limited,Consumer services,Casinos/Gaming,VAS.AX,27997036544.0,large
+COL.AX,Coles Group Ltd.,Retail trade,Food retail,VAS.AX,30381905920.0,large
+EVN.AX,Evolution Mining Limited,Non-energy minerals,Precious metals,VAS.AX,26438690816.0,large
+AMC.AX,Amcor PLC Shs Chess Depository Interests,Process industries,Containers/Packaging,VAS.AX,27043534848.0,large
+STO.AX,Santos Limited,Energy minerals,Oil & gas production,VAS.AX,26242004992.0,large
+AAI.AX,Alcoa Corporation shs Chess Depository Interests Repr 1 Sh,Non-energy minerals,Aluminum,VAS.AX,28852293632.0,large
+REA.AX,REA Group Ltd,Commercial services,Advertising/Marketing services,VAS.AX,20366696448.0,large
+LYC.AX,Lynas Rare Earths Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,19536222208.0,large
+ORG.AX,Origin Energy Limited,Energy minerals,Oil & gas production,VAS.AX,21689393152.0,large
+NWS.AX,News Corporation Shs B Chess Depository Interests repr 1 Sh,Consumer services,Publishing: newspapers,VAS.AX,22349123584.0,large
+NWSLV.AX,News Corporation Shs A Chess Depository Interests repr 1 Sh,Consumer services,Publishing: newspapers,VAS.AX,21592217600.0,large
+SCG.AX,Scentre Group,Finance,Real estate investment trusts,VAS.AX,17601431552.0,large
+FPH.AX,Fisher & Paykel Healthcare Corporation Limited,Health technology,Medical specialties,VAS.AX,17782319104.0,large
+S32.AX,South32 Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,19807473664.0,large
+IAG.AX,Insurance Australia Group Ltd,Finance,Property/Casualty insurance,VAS.AX,17219266560.0,large
+SUN.AX,Suncorp Group Limited,Finance,Multi-line insurance,VAS.AX,17110887424.0,large
+SGH.AX,SGH Limited,Distribution services,Wholesale distributors,VAS.AX,16552614912.0,large
+CPU.AX,Computershare Limited,Commercial services,Miscellaneous commercial services,VAS.AX,16385705984.0,large
+JHX.AX,James Hardie Industries PLC Chess Units of Foreign Securities,Non-energy minerals,Construction materials,VAS.AX,15908285440.0,large
+WTC.AX,Wisetech Global Ltd.,Technology services,Packaged software,VAS.AX,12731180032.0,large
+PLS.AX,PLS Group Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,16394887168.0,large
+SOL.AX,Washington H. Soul Pattinson and Company Limited,Finance,Financial conglomerates,VAS.AX,15705879552.0,large
+PME.AX,"Pro Medicus, Ltd.",Health services,Services to the health industry,VAS.AX,12415210496.0,large
+XRO.AX,Xero Limited,Technology services,Packaged software,VAS.AX,12859847680.0,large
+QAN.AX,Qantas Airways Limited,Transportation,Airlines,VAS.AX,12937853952.0,large
+APA.AX,APA Group,Utilities,Gas distributors,VAS.AX,13052188672.0,large
+TLC.AX,Lottery Corporation Limited,Consumer services,Movies/Entertainment,VAS.AX,12019168256.0,large
+MEZ.AX,Meridian Energy Limited,Utilities,Alternative power generation,VAS.AX,12080491520.0,large
+MPL.AX,Medibank Private Ltd.,Finance,Life/Health insurance,VAS.AX,12227774464.0,large
+AIA.AX,Auckland International Airport Limited,Transportation,Other transportation,VAS.AX,11340417024.0,large
+BSL.AX,Bluescope Steel Limited,Producer manufacturing,Metal fabrication,VAS.AX,11420679168.0,large
+COH.AX,Cochlear Limited,Health technology,Medical specialties,VAS.AX,11272116224.0,large
+DPM.AX,DPM Metals Inc. Chess Depository Interests Repr 1 Sh,Non-energy minerals,Precious metals,VAS.AX,11921646592.0,large
+NXG.AX,NexGen Energy Ltd. Shs Chess Depository Interests repr 1 shs,Non-energy minerals,Other metals/Minerals,VAS.AX,10801876992.0,large
+SGP.AX,Stockland,Finance,Real estate investment trusts,VAS.AX,10018373632.0,large
+VCX.AX,Vicinity Centres,Finance,Real estate investment trusts,VAS.AX,10947289088.0,large
+MIN.AX,Mineral Resources Limited,Non-energy minerals,Steel,VAS.AX,10411243520.0,large
+ALQ.AX,ALS Ltd.,Commercial services,Miscellaneous commercial services,VAS.AX,10633017344.0,large
+YAL.AX,Yancoal Australia Ltd.,Energy minerals,Coal,VAS.AX,10920034304.0,large
+SHL.AX,Sonic Healthcare Limited,Health services,Medical/Nursing services,VAS.AX,9874874368.0,mid
+ASX.AX,ASX Limited,Finance,Investment banks/Brokers,VAS.AX,10311778304.0,large
+RHC.AX,Ramsay Health Care Limited,Health services,Hospital/Nursing management,VAS.AX,8983896064.0,mid
+CHC.AX,Charter Hall Group,Finance,Real estate investment trusts,VAS.AX,8774096896.0,mid
+CAR.AX,CAR Group Limited,Technology services,Internet software/Services,VAS.AX,8530973696.0,mid
+ORI.AX,Orica Limited,Process industries,Industrial specialties,VAS.AX,9410845696.0,mid
+IFT.AX,Infratil Limited,Miscellaneous,Miscellaneous,VAS.AX,9506500608.0,mid
+REH.AX,Reece Limited,Distribution services,Wholesale distributors,VAS.AX,8088459264.0,mid
+GPT.AX,GPT Group,Finance,Real estate investment trusts,VAS.AX,8524319232.0,mid
+CSC.AX,Capstone Copper Corp. Shs Chess Depository Interests Repr 1 Sh,Non-energy minerals,Other metals/Minerals,VAS.AX,8400223744.0,mid
+LNW.AX,"Light & Wonder, Inc. Shs Chess Depository Interests Repr 1 Sh",Consumer services,Casinos/Gaming,VAS.AX,9693725696.0,mid
+QUB.AX,Qube Holdings Ltd.,Transportation,Other transportation,VAS.AX,8763539456.0,mid
+NXT.AX,Nextdc Limited,Technology services,Data processing services,VAS.AX,7225681408.0,mid
+TNE.AX,Technology One Limited,Technology services,Packaged software,VAS.AX,8809487360.0,mid
+AFI.AX,Australian Foundation Investment Co. Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,8219798016.0,mid
+JBH.AX,JB Hi-Fi Limited,Retail trade,Electronics/Appliance stores,VAS.AX,7877513728.0,mid
+CEN.AX,Contact Energy Limited,Utilities,Electric utilities,VAS.AX,7742673920.0,mid
+TPG.AX,TPG Telecom Limited,Communications,Wireless telecommunications,VAS.AX,8009159680.0,mid
+SFR.AX,Sandfire Resources Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,7637645824.0,mid
+GGP.AX,Greatland Resources Limited,Non-energy minerals,Precious metals,VAS.AX,8646848512.0,mid
+RMS.AX,Ramelius Resources Limited,Non-energy minerals,Precious metals,VAS.AX,7033564160.0,mid
+MCY.AX,Mercury NZ Ltd.,Utilities,Electric utilities,VAS.AX,7400374272.0,mid
+ALD.AX,Ampol Limited,Energy minerals,Oil refining/Marketing,VAS.AX,7928310784.0,mid
+WHC.AX,Whitehaven Coal Limited,Energy minerals,Coal,VAS.AX,7500938240.0,mid
+MGR.AX,Mirvac Group,Finance,Real estate investment trusts,VAS.AX,6727691776.0,mid
+AII.AX,Almonty Industries Inc. Shs Chess Depository Interests repr 1 shs,Non-energy minerals,Other metals/Minerals,VAS.AX,5895328768.0,mid
+PRU.AX,Perseus Mining Limited,Non-energy minerals,Precious metals,VAS.AX,7118818816.0,mid
+A2M.AX,a2 Milk Company Limited,Consumer non-durables,Food: meat/fish/dairy,VAS.AX,6811751936.0,mid
+GMD.AX,Genesis Minerals Limited,Non-energy minerals,Precious metals,VAS.AX,6705466368.0,mid
+ARG.AX,Argo Investments Limited,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,6457586176.0,mid
+AZJ.AX,Aurizon Holdings Ltd.,Transportation,Railroads,VAS.AX,6834227200.0,mid
+EDV.AX,Endeavour Group Ltd,Retail trade,Specialty stores,VAS.AX,5746322432.0,mid
+ALX.AX,Atlas Arteria,Transportation,Other transportation,VAS.AX,6152364032.0,mid
+HUB.AX,HUB24 Limited,Technology services,Packaged software,VAS.AX,6487930880.0,mid
+DXS.AX,Dexus,Finance,Real estate investment trusts,VAS.AX,6263925248.0,mid
+HVN.AX,Harvey Norman Holdings Ltd,Retail trade,Department stores,VAS.AX,5893611520.0,mid
+CDA.AX,Codan Limited,Consumer durables,Tools & hardware,VAS.AX,5823648256.0,mid
+AGL.AX,AGL Energy Limited,Utilities,Electric utilities,VAS.AX,6673652736.0,mid
+APE.AX,Eagers Automotive Limited,Retail trade,Specialty stores,VAS.AX,6689211904.0,mid
+BEN.AX,Bendigo & Adelaide Bank Ltd.,Finance,Regional banks,VAS.AX,5747930112.0,mid
+WGX.AX,Westgold Resources Ltd,Non-energy minerals,Precious metals,VAS.AX,5678437888.0,mid
+IGO.AX,IGO Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,6020279296.0,mid
+DNL.AX,Dyno Nobel Limited,Process industries,Chemicals: agricultural,VAS.AX,5638643200.0,mid
+CWY.AX,Cleanaway Waste Management Ltd.,Industrial services,Environmental services,VAS.AX,5174674944.0,mid
+RRL.AX,Regis Resources Limited,Non-energy minerals,Precious metals,VAS.AX,5088734720.0,mid
+SEK.AX,Seek Limited,Technology services,Internet software/Services,VAS.AX,4943927296.0,mid
+NWL.AX,Netwealth Group Ltd.,Finance,Investment managers,VAS.AX,5207233024.0,mid
+CGF.AX,Challenger Limited,Finance,Life/Health insurance,VAS.AX,5713124352.0,mid
+CMM.AX,Capricorn Metals Ltd,Non-energy minerals,Precious metals,VAS.AX,4997040128.0,mid
+LTR.AX,Liontown Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,5388593152.0,mid
+WOR.AX,Worley Limited,Industrial services,Engineering & construction,VAS.AX,5798262784.0,mid
+GQG.AX,"GQG Partners, Inc. Shs Chess Depository Interests Repr 1 Sh",Finance,Investment managers,VAS.AX,5327437824.0,mid
+PDN.AX,Paladin Energy Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,5113698816.0,mid
+DOW.AX,Downer EDI Limited,Industrial services,Engineering & construction,VAS.AX,5152624640.0,mid
+VAU.AX,Vault Minerals Limited,Non-energy minerals,Precious metals,VAS.AX,4289644544.0,mid
+360.AX,"Life360, Inc. Shs Chess Depository Interests Repr 3 Sh",Technology services,Packaged software,VAS.AX,4601695232.0,mid
+SDF.AX,Steadfast Group Limited,Finance,Insurance brokers/Services,VAS.AX,4659245056.0,mid
+BOQ.AX,Bank of Queensland Limited,Finance,Major banks,VAS.AX,4470917632.0,mid
+NHC.AX,New Hope Corporation Limited,Energy minerals,Coal,VAS.AX,4925291520.0,mid
+VNT.AX,Ventia Services Group Limited,Industrial services,Engineering & construction,VAS.AX,4300325888.0,mid
+ANN.AX,Ansell Limited,Producer manufacturing,Miscellaneous manufacturing,VAS.AX,4114300928.0,mid
+NIC.AX,Nickel Industries Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,3951162112.0,mid
+BRG.AX,Breville Group Limited,Consumer durables,Electronics/Appliances,VAS.AX,3893260288.0,mid
+NSR.AX,National Storage REIT,Finance,Real estate investment trusts,VAS.AX,3889245952.0,mid
+EBO.AX,EBOS Group Limited,Health technology,Medical specialties,VAS.AX,3966409216.0,mid
+DRO.AX,DroneShield Limited,Electronic technology,Aerospace & defense,VAS.AX,3627203840.0,mid
+BFL.AX,BSP Financial Group Ltd.,Finance,Major banks,VAS.AX,3712649984.0,mid
+EMR.AX,Emerald Resources NL,Non-energy minerals,Precious metals,VAS.AX,3739255296.0,mid
+TLX.AX,Telix Pharmaceuticals Limited,Health technology,Biotechnology,VAS.AX,4387162624.0,mid
+SGM.AX,Sims Ltd.,Non-energy minerals,Steel,VAS.AX,3555486976.0,mid
+SPK.AX,Spark New Zealand Limited,Communications,Major telecommunications,VAS.AX,3269889024.0,mid
+VEA.AX,Viva Energy Group Ltd.,Energy minerals,Oil refining/Marketing,VAS.AX,4221278720.0,mid
+TUA.AX,Tuas Ltd.,Communications,Wireless telecommunications,VAS.AX,3175213824.0,mid
+CNU.AX,Chorus Limited,Communications,Major telecommunications,VAS.AX,3400231680.0,mid
+MTS.AX,Metcash Limited,Distribution services,Food distributors,VAS.AX,3266186752.0,mid
+WAF.AX,West African Resources Ltd,Non-energy minerals,Precious metals,VAS.AX,3701668352.0,mid
+IFL.AX,Insignia Financial Ltd,Finance,Investment managers,VAS.AX,3185949184.0,mid
+TWE.AX,Treasury Wine Estates Limited,Consumer non-durables,Beverages: alcoholic,VAS.AX,3011740928.0,mid
+AMP.AX,AMP Limited,Finance,Investment managers,VAS.AX,3253285632.0,mid
+AUB.AX,AUB Group Limited,Finance,Insurance brokers/Services,VAS.AX,3124921344.0,mid
+L1G.AX,L1 Group Limited,Finance,Investment managers,VAS.AX,2579920896.0,mid
+FBU.AX,Fletcher Building Limited,Non-energy minerals,Construction materials,VAS.AX,2536757760.0,mid
+SUL.AX,Super Retail Group Limited,Retail trade,Specialty stores,VAS.AX,2877029632.0,mid
+NHF.AX,NIB Holdings Ltd,Finance,Multi-line insurance,VAS.AX,3122902528.0,mid
+PNI.AX,Pinnacle Investment Management Group Limited,Finance,Investment managers,VAS.AX,3153287168.0,mid
+RSG.AX,Resolute Mining Limited,Non-energy minerals,Precious metals,VAS.AX,2981697536.0,mid
+ILU.AX,Iluka Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,2910566400.0,mid
+MND.AX,Monadelphous Group Limited,Industrial services,Engineering & construction,VAS.AX,2807607552.0,mid
+BWP.AX,BWP Trust,Finance,Real estate investment trusts,VAS.AX,2630779648.0,mid
+BPT.AX,Beach Energy Limited,Energy minerals,Oil & gas production,VAS.AX,2977140480.0,mid
+PXA.AX,PEXA Group Limited,Finance,Real estate development,VAS.AX,2127068800.0,mid
+OBM.AX,Ora Banda Mining Ltd.,Non-energy minerals,Precious metals,VAS.AX,2158490624.0,mid
+MSB.AX,Mesoblast Limited,Health technology,Biotechnology,VAS.AX,2744537088.0,mid
+NWH.AX,NRW Holdings Limited,Industrial services,Engineering & construction,VAS.AX,2467337472.0,mid
+HDN.AX,HomeCo Daily Needs REIT,Finance,Real estate investment trusts,VAS.AX,2517605632.0,mid
+CIA.AX,Champion Iron Ltd.,Non-energy minerals,Steel,VAS.AX,2836895488.0,mid
+CLW.AX,Charter Hall Long WALE REIT,Finance,Real estate investment trusts,VAS.AX,2397585664.0,mid
+LSF.AX,L1 Long Short Fund Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,2509968896.0,mid
+SX2.AX,Southern Cross Gold Consolidated Ltd. Chees Depository Interest Repr 1 shs,Non-energy minerals,Precious metals,VAS.AX,2485213184.0,mid
+RGN.AX,Region Group,Finance,Real estate investment trusts,VAS.AX,2585750016.0,mid
+DBI.AX,Dalrymple Bay Infrastructure Ltd.,Distribution services,Wholesale distributors,VAS.AX,2488723456.0,mid
+SMR.AX,Stanmore Resources Ltd,Energy minerals,Coal,VAS.AX,2334604288.0,mid
+FLT.AX,Flight Centre Travel Group Limited,Consumer services,Other consumer services,VAS.AX,2240454400.0,mid
+LLC.AX,Lendlease Group,Industrial services,Engineering & construction,VAS.AX,2224669696.0,mid
+RWC.AX,Reliance Worldwide Corp. Ltd.,Producer manufacturing,Building products,VAS.AX,2196000256.0,mid
+ORA.AX,Orora Limited,Process industries,Containers/Packaging,VAS.AX,2291391232.0,mid
+GNE.AX,Genesis Energy Limited,Utilities,Electric utilities,VAS.AX,2021480832.0,mid
+LOV.AX,Lovisa Holdings Ltd.,Retail trade,Specialty stores,VAS.AX,2325508352.0,mid
+TAH.AX,Tabcorp Holdings Limited,Consumer services,Movies/Entertainment,VAS.AX,2132159232.0,mid
+MXT.AX,Metrics Master Income Trust,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,2345186304.0,mid
+BGL.AX,Bellevue Gold Limited,Non-energy minerals,Precious metals,VAS.AX,2280702976.0,mid
+CQR.AX,Charter Hall Retail REIT,Finance,Real estate investment trusts,VAS.AX,2138925056.0,mid
+PDI.AX,Predictive Discovery Limited,Non-energy minerals,Precious metals,VAS.AX,2201094144.0,mid
+4DX.AX,4DMedical Ltd.,Technology services,Information technology services,VAS.AX,3318719232.0,mid
+ALK.AX,Alkane Resources Ltd,Non-energy minerals,Precious metals,VAS.AX,2035645184.0,mid
+DRR.AX,Deterra Royalties Ltd,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,2133709824.0,mid
+EOS.AX,Electro Optic Systems Holdings Limited,Electronic technology,Aerospace & defense,VAS.AX,1736568832.0,small
+SNZ.AX,Summerset Group Holdings Limited,Health services,Hospital/Nursing management,VAS.AX,1834935808.0,small
+ZIP.AX,Zip Co Ltd.,Finance,Finance/Rental/Leasing,VAS.AX,2001326848.0,mid
+ASB.AX,Austal Limited,Producer manufacturing,Trucks/Construction/Farm machinery,VAS.AX,1907666944.0,small
+EVT.AX,EVT Limited,Consumer services,Movies/Entertainment,VAS.AX,2143670656.0,mid
+IMD.AX,Imdex Ltd,Distribution services,Wholesale distributors,VAS.AX,1898933248.0,small
+PMV.AX,Premier Investments Limited,Retail trade,Apparel/Footwear retail,VAS.AX,1984110720.0,small
+VGN.AX,Virgin Australia Holdings Limited,Transportation,Airlines,VAS.AX,1798578048.0,small
+FRW.AX,Freightways Group Limited,Transportation,Air freight/Couriers,VAS.AX,1809039616.0,small
+RYM.AX,Ryman Healthcare Ltd.,Health services,Medical/Nursing services,VAS.AX,1889256064.0,small
+GYG.AX,Guzman y Gomez Ltd.,Consumer services,Restaurants,VAS.AX,1556741504.0,small
+PPT.AX,Perpetual Limited,Finance,Investment managers,VAS.AX,1825367168.0,small
+REG.AX,Regis Healthcare Ltd.,Health services,Medical/Nursing services,VAS.AX,1844405120.0,small
+CIP.AX,Centuria Industrial REIT,Finance,Real estate investment trusts,VAS.AX,1791993728.0,small
+MFG.AX,Magellan Financial Group Ltd,Finance,Investment managers,VAS.AX,1770382080.0,small
+WLE.AX,WAM Leaders Limited,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,1886266624.0,small
+WAM.AX,WAM Capital Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,1913056896.0,small
+PRN.AX,Perenti Limited,Non-energy minerals,Precious metals,VAS.AX,1806615040.0,small
+ZIM.AX,Zimplats Holdings Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,1878276992.0,small
+ASK.AX,Abacus Storage King,Finance,Real estate investment trusts,VAS.AX,1754327424.0,small
+ARB.AX,ARB Corporation Limited,Producer manufacturing,Auto parts: OEM,VAS.AX,1675785600.0,small
+DMP.AX,Domino's Pizza Enterprises Limited,Consumer services,Restaurants,VAS.AX,1511798528.0,small
+EQR.AX,EQ Resources Limited,Non-energy minerals,Precious metals,VAS.AX,1593176448.0,small
+BGA.AX,Bega Cheese Limited,Consumer non-durables,Food: meat/fish/dairy,VAS.AX,1838371968.0,small
+MGH.AX,MAAS Group Holdings Ltd.,Distribution services,Wholesale distributors,VAS.AX,1452559744.0,small
+DYL.AX,Deep Yellow Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,1746201216.0,small
+INA.AX,Ingenia Communities Group,Finance,Real estate investment trusts,VAS.AX,1597726464.0,small
+MAQ.AX,Macquarie Technology Group Limited,Communications,Specialty telecommunications,VAS.AX,1563692288.0,small
+DTR.AX,Dateline Resources Limited,Non-energy minerals,Precious metals,VAS.AX,1476022272.0,small
+JDO.AX,Judo Capital Holdings Limited,Finance,Finance/Rental/Leasing,VAS.AX,1491308288.0,small
+RDX.AX,Redox Limited,Distribution services,Wholesale distributors,VAS.AX,1764273536.0,small
+GOZ.AX,Growthpoint Properties Australia,Finance,Real estate investment trusts,VAS.AX,1599121792.0,small
+DDR.AX,Dicker Data Limited,Retail trade,Electronics/Appliance stores,VAS.AX,1506258816.0,small
+CYL.AX,Catalyst Metals Limited,Non-energy minerals,Precious metals,VAS.AX,1596983424.0,small
+WPR.AX,Waypoint REIT Ltd.,Finance,Real estate investment trusts,VAS.AX,1554315136.0,small
+SLC.AX,Superloop Ltd.,Industrial services,Engineering & construction,VAS.AX,1605907328.0,small
+RXR.AX,Robex Resources Inc Shs Chess Depository Interest Repr 1 Shs,Non-energy minerals,Precious metals,VAS.AX,1906028416.0,small
+KCN.AX,Kingsgate Consolidated Limited,Non-energy minerals,Precious metals,VAS.AX,1167831296.0,small
+GDG.AX,Generation Development Group Limited,Finance,Investment managers,VAS.AX,1559497472.0,small
+SRG.AX,SRG Global Limited,Industrial services,Engineering & construction,VAS.AX,1591544192.0,small
+MAD.AX,Mader Group Ltd,Consumer services,Other consumer services,VAS.AX,1666351488.0,small
+NEU.AX,Neuren Pharmaceuticals Limited,Health technology,Pharmaceuticals: generic,VAS.AX,1523473536.0,small
+SLX.AX,Silex Systems Limited,Electronic technology,Semiconductors,VAS.AX,1438825216.0,small
+MI6.AX,Minerals 260 Limited,Non-energy minerals,Precious metals,VAS.AX,1527273856.0,small
+CBO.AX,Cobram Estate Olives Ltd.,Process industries,Agricultural commodities/Milling,VAS.AX,1647689600.0,small
+ELD.AX,Elders Limited,Process industries,Agricultural commodities/Milling,VAS.AX,1574273920.0,small
+LIN.AX,Lindian Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,1263458816.0,small
+ERA.AX,Energy Resources of Australia Ltd. Class A,Non-energy minerals,Other metals/Minerals,VAS.AX,1418886784.0,small
+GNP.AX,GenusPlus Group Ltd.,Industrial services,Engineering & construction,VAS.AX,1366888064.0,small
+ABB.AX,Aussie Broadband Ltd.,Communications,Specialty telecommunications,VAS.AX,1414158848.0,small
+BKI.AX,BKI Investment Co. Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,1368092544.0,small
+SRL.AX,Sunrise Energy Metals Limited,Producer manufacturing,Industrial machinery,VAS.AX,1275144448.0,small
+IPX.AX,Iperionx Ltd.,Non-energy minerals,Precious metals,VAS.AX,1286265600.0,small
+DVP.AX,Develop Global Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,1491534336.0,small
+PGF.AX,PM Capital Global Opportunities Fund Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,1358185856.0,small
+ORE.AX,Orezone Gold Corporation DR,Non-energy minerals,Precious metals,VAS.AX,1611734016.0,small
+KAR.AX,Karoon Energy Ltd,Energy minerals,Oil & gas production,VAS.AX,1515132416.0,small
+PYC.AX,PYC Therapeutics Limited,Health technology,Pharmaceuticals: major,VAS.AX,1096335360.0,small
+CNI.AX,Centuria Capital Group,Finance,Investment managers,VAS.AX,1298376192.0,small
+SNL.AX,Supply Network Limited,Distribution services,Wholesale distributors,VAS.AX,1375620992.0,small
+GNC.AX,Graincorp Limited Class A,Commercial services,Miscellaneous commercial services,VAS.AX,1476076544.0,small
+NCK.AX,Nick Scali Limited,Retail trade,Specialty stores,VAS.AX,1329147008.0,small
+MAH.AX,Macmahon Holdings Limited,Energy minerals,Coal,VAS.AX,1573139584.0,small
+BRE.AX,Brazilian Rare Earths Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,1136344832.0,small
+CU6.AX,Clarity Pharmaceuticals Ltd.,Health technology,Medical specialties,VAS.AX,1172612992.0,small
+MAF.AX,MA Financial Group Limited,Finance,Investment managers,VAS.AX,1374016128.0,small
+NEC.AX,Nine Entertainment Co. Holdings Limited,Consumer services,Broadcasting,VAS.AX,1530260480.0,small
+PNR.AX,Pantoro Gold Limited,Non-energy minerals,Precious metals,VAS.AX,1376066560.0,small
+AUI.AX,Australian United Investment Co. Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,1309273600.0,small
+MP1.AX,Megaport Ltd.,Technology services,Data processing services,VAS.AX,1269074560.0,small
+VUL.AX,Vulcan Energy Resources Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,1567522944.0,small
+ARF.AX,Arena REIT,Finance,Real estate investment trusts,VAS.AX,1357155968.0,small
+HLI.AX,Helia Group Limited,Finance,Specialty insurance,VAS.AX,1444861824.0,small
+IRE.AX,IRESS Limited,Technology services,Packaged software,VAS.AX,1270168448.0,small
+ARU.AX,Arafura Rare Earths Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,1404014592.0,small
+MC2.AX,Marimaca Copper Corp Chess Depositary Interests,Non-energy minerals,Other metals/Minerals,VAS.AX,1144617472.0,small
+FFM.AX,FireFly Metals Ltd,Non-energy minerals,Precious metals,VAS.AX,1303092224.0,small
+ELS.AX,Elsight Ltd.,Technology services,Packaged software,VAS.AX,1377870848.0,small
+ELV.AX,Elevra Lithium Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,1420671232.0,small
+UOS.AX,United Overseas Australia Ltd,Finance,Real estate development,VAS.AX,1219056000.0,small
+APZ.AX,Aspen Group Limited,Finance,Real estate investment trusts,VAS.AX,1047260992.0,small
+SSM.AX,Service Stream Limited,Commercial services,Miscellaneous commercial services,VAS.AX,1227534848.0,small
+GCI.AX,Gryphon Capital Income Trust,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,1284620160.0,small
+OCL.AX,Objective Corporation Limited,Technology services,Packaged software,VAS.AX,1104816384.0,small
+AIZ.AX,Air New Zealand Limited,Transportation,Airlines,VAS.AX,1164082432.0,small
+CKF.AX,Collins Foods Limited,Consumer services,Restaurants,VAS.AX,978165440.0,small
+IEL.AX,IDP Education Ltd.,Consumer services,Other consumer services,VAS.AX,1152311936.0,small
+BCI.AX,BCI Minerals Ltd,Non-energy minerals,Steel,VAS.AX,1219095552.0,small
+MLX.AX,Metals X Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,1152308992.0,small
+DUI.AX,Diversified United Investment Limited,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,1084799360.0,small
+PL8.AX,Plato Income Maximiser Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,1003172544.0,small
+DTL.AX,Data#3 Limited.,Technology services,Information technology services,VAS.AX,1018861440.0,small
+KLS.AX,Kelsian Group Limited,Consumer services,Hotels/Resorts/Cruise lines,VAS.AX,1029344704.0,small
+LFG.AX,Liberty Financial Group Ltd,Finance,Investment managers,VAS.AX,1092960000.0,small
+DGT.AX,Digico Infrastructure REIT,Finance,Real estate investment trusts,VAS.AX,963097216.0,small
+NGI.AX,Navigator Global Investments Ltd,Finance,Investment managers,VAS.AX,1006792064.0,small
+CMW.AX,Cromwell Property Group,Finance,Real estate investment trusts,VAS.AX,1021357952.0,small
+SIQ.AX,Smartgroup Corporation Ltd,Commercial services,Miscellaneous commercial services,VAS.AX,1159643776.0,small
+NAN.AX,Nanosonics Limited,Health technology,Medical specialties,VAS.AX,1122435584.0,small
+HSN.AX,Hansen Technologies Limited,Technology services,Information technology services,VAS.AX,980799424.0,small
+RIC.AX,Ridley Corporation Limited,Process industries,Agricultural commodities/Milling,VAS.AX,989612160.0,small
+CAT.AX,Catapult Sports Ltd.,Electronic technology,Electronic equipment/Instruments,VAS.AX,988867968.0,small
+TEA.AX,Tasmea Limited,Industrial services,Engineering & construction,VAS.AX,1194522752.0,small
+CHI.AX,Channel Infrastructure NZ Limited,Energy minerals,Oil refining/Marketing,VAS.AX,1038437440.0,small
+LFS.AX,Latitude Group Holdings Ltd.,Finance,Finance/Rental/Leasing,VAS.AX,940958272.0,small
+WA1.AX,WA1 Resources Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,1092723328.0,small
+MMS.AX,Mcmillan Shakespeare Limited,Finance,Finance/Rental/Leasing,VAS.AX,1041859648.0,small
+HMC.AX,HMC Capital Limited,Finance,Real estate development,VAS.AX,1039791680.0,small
+HGH.AX,Heartland Group Holdings Ltd.,Finance,Major banks,VAS.AX,1019957376.0,small
+WBT.AX,Weebit Nano Ltd.,Electronic technology,Semiconductors,VAS.AX,749670720.0,small
+CQE.AX,Charter Hall Social Infrastructure REIT,Finance,Real estate investment trusts,VAS.AX,961171648.0,small
+TBN.AX,Tamboran Resources Corporation Chess Depository Interests,Energy minerals,Integrated oil,VAS.AX,1409608576.0,small
+CIN.AX,Carlton Investments Ltd,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,923606144.0,small
+PPM.AX,Pepper Money Ltd,Finance,Finance/Rental/Leasing,VAS.AX,772655360.0,small
+ABG.AX,Abacus Group,Finance,Real estate investment trusts,VAS.AX,884721088.0,small
+C79.AX,Chrysos Corp. Ltd.,Finance,Finance/Rental/Leasing,VAS.AX,794453632.0,small
+PWH.AX,PWR Holdings Ltd.,Producer manufacturing,Auto parts: OEM,VAS.AX,881029312.0,small
+RPL.AX,Regal Partners Limited,Finance,Investment managers,VAS.AX,934061376.0,small
+VSL.AX,Vulcan Steel Ltd.,Distribution services,Wholesale distributors,VAS.AX,802984128.0,small
+SDR.AX,SiteMinder Limited,Technology services,Internet software/Services,VAS.AX,779615744.0,small
+GLS.AX,L1 Global Long Short Fund Limited Registered,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,924749120.0,small
+BVS.AX,Bravura Solutions Limited,Technology services,Packaged software,VAS.AX,883150976.0,small
+PPC.AX,Peet Limited,Finance,Real estate development,VAS.AX,868434880.0,small
+AOV.AX,Amotiv Limited,Consumer durables,Motor vehicles,VAS.AX,906164224.0,small
+BNZ.AX,Benz Mining Corp. Shs Chess Depository Interests Repr 1 sh,Non-energy minerals,Precious metals,VAS.AX,777887360.0,small
+WEB.AX,WEB Travel Group limited,Consumer services,Other consumer services,VAS.AX,939485696.0,small
+BGP.AX,Briscoe Group Limited,Retail trade,Specialty stores,VAS.AX,904332672.0,small
+AVR.AX,Anteris Technologies Global Corp.,Health technology,Medical specialties,VAS.AX,755428864.0,small
+IDX.AX,Integral Diagnostics Ltd,Health services,Medical/Nursing services,VAS.AX,839084992.0,small
+SGLLV.AX,Ricegrowers Ltd. Class B,Distribution services,Wholesale distributors,VAS.AX,921320128.0,small
+IPH.AX,IPH Ltd.,Commercial services,Miscellaneous commercial services,VAS.AX,861090752.0,small
+PMT.AX,PMET Resources Inc. Shs Chess Depository Interests Repr 0.1 Sh,Non-energy minerals,Other metals/Minerals,VAS.AX,835502400.0,small
+TPW.AX,Temple & Webster Group Ltd,Retail trade,Specialty stores,VAS.AX,825085184.0,small
+BC8.AX,Black Cat Syndicate Ltd.,Non-energy minerals,Precious metals,VAS.AX,746477312.0,small
+WGN.AX,Wagners Holding Co. Ltd.,Non-energy minerals,Construction materials,VAS.AX,814873216.0,small
+CVL.AX,Civmec Limited,Industrial services,Engineering & construction,VAS.AX,726215616.0,small
+RFF.AX,Rural Funds Group,Finance,Real estate investment trusts,VAS.AX,773600192.0,small
+FML.AX,Focus Minerals Ltd,Non-energy minerals,Precious metals,VAS.AX,699203136.0,small
+QAL.AX,Qualitas Limited,Finance,Investment managers,VAS.AX,738490048.0,small
+FCL.AX,FINEOS Corporation Holdings Plc Shs Chess Depositary Interests Repr 1 Sh,Technology services,Packaged software,VAS.AX,810387072.0,small
+SGR.AX,Star Entertainment Group Limited,Consumer services,Casinos/Gaming,VAS.AX,763163328.0,small
+AAC.AX,Australian Agricultural Company Limited,Consumer non-durables,Food: meat/fish/dairy,VAS.AX,795652096.0,small
+SXE.AX,Southern Cross Electrical Engineering Limited,Industrial services,Engineering & construction,VAS.AX,789942144.0,small
+AEL.AX,Amplitude Energy Limited,Energy minerals,Oil & gas production,VAS.AX,538286080.0,small
+DXI.AX,Dexus Industria REIT,Finance,Real estate investment trusts,VAS.AX,729720832.0,small
+A4N.AX,Alpha HPA Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,820321472.0,small
+BMN.AX,Bannerman Energy Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,778996800.0,small
+CCL.AX,Cuscal Limited,Commercial services,Miscellaneous commercial services,VAS.AX,783489664.0,small
+SMI.AX,Santana Minerals Ltd.,Non-energy minerals,Precious metals,VAS.AX,652610112.0,small
+SBM.AX,St. Barbara Ltd.,Non-energy minerals,Precious metals,VAS.AX,768220352.0,small
+DJW.AX,Djerriwarrh Investments Limited,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,738633856.0,small
+NUF.AX,Nufarm Limited,Process industries,Chemicals: agricultural,VAS.AX,779832448.0,small
+CCP.AX,Credit Corp Group Limited,Commercial services,Miscellaneous commercial services,VAS.AX,700409408.0,small
+MYS.AX,Mystate Limited,Finance,Regional banks,VAS.AX,758364480.0,small
+WIA.AX,WIA Gold Limited,Non-energy minerals,Precious metals,VAS.AX,635135936.0,small
+TVN.AX,Tivan Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,691693632.0,small
+SKC.AX,SkyCity Entertainment Group Limited,Consumer services,Casinos/Gaming,VAS.AX,640361600.0,small
+GTK.AX,Gentrack Group Ltd,Technology services,Packaged software,VAS.AX,604988928.0,small
+RXL.AX,Rox Resources Ltd,Non-energy minerals,Precious metals,VAS.AX,611278144.0,small
+CWP.AX,Cedar Woods Properties Limited,Finance,Real estate development,VAS.AX,594679488.0,small
+ING.AX,Inghams Group Ltd.,Process industries,Agricultural commodities/Milling,VAS.AX,750792832.0,small
+TCG.AX,Turaco Gold Ltd,Non-energy minerals,Precious metals,VAS.AX,658651136.0,small
+GNG.AX,GR Engineering Services Ltd,Industrial services,Engineering & construction,VAS.AX,658930816.0,small
+LIC.AX,Lifestyle Communities Ltd,Consumer durables,Homebuilding,VAS.AX,572178240.0,small
+SRV.AX,Servcorp Limited,Finance,Real estate development,VAS.AX,676744960.0,small
+KKC.AX,KKR Credit Income fund Units,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,,small
+UNI.AX,Universal Store Holdings Ltd.,Retail trade,Apparel/Footwear retail,VAS.AX,568501184.0,small
+PNV.AX,Polynovo Limited,Health technology,Biotechnology,VAS.AX,645938240.0,small
+EHL.AX,Emeco Holdings Limited,Finance,Finance/Rental/Leasing,VAS.AX,629825344.0,small
+29M.AX,29Metals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,621277184.0,small
+FGG.AX,Future Generation Global Limited,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,615504384.0,small
+LRV.AX,Larvotto Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,538929792.0,small
+BOE.AX,Boss Energy Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,653820096.0,small
+BMC.AX,Bmc Minerals Ltd CHESS Depositary Interests,Non-energy minerals,Other metals/Minerals,VAS.AX,648149888.0,small
+HM1.AX,Hearts and Minds Investments Ltd,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,648019520.0,small
+WHF.AX,Whitefield Industrials Limited,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,595789056.0,small
+DUR.AX,Duratec Limited,Industrial services,Engineering & construction,VAS.AX,706508288.0,small
+IMR.AX,"Imricor Medical Systems, Inc. Shs Chess Depository Interests Repr 1 Sh",Health technology,Medical specialties,VAS.AX,600170944.0,small
+SYL.AX,Symal Group Limited,Industrial services,Engineering & construction,VAS.AX,521333920.0,small
+COF.AX,Centuria Office REIT,Finance,Real estate investment trusts,VAS.AX,558510144.0,small
+PFP.AX,Propel Funeral Partners Ltd.,Consumer services,Other consumer services,VAS.AX,556033664.0,small
+AUC.AX,Ausgold Limited,Non-energy minerals,Precious metals,VAS.AX,495813024.0,small
+CXO.AX,Core Lithium Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,743695616.0,small
+MAUCA.AX,Magnetic Resources NL TEMP,Non-energy minerals,Precious metals,VAS.AX,664699200.0,small
+MAU.AX,Magnetic Resources NL,Non-energy minerals,Precious metals,VAS.AX,555454528.0,small
+GWA.AX,GWA Group Limited,Consumer durables,Home furnishings,VAS.AX,554278656.0,small
+CHN.AX,Chalice Mining Limited,Non-energy minerals,Precious metals,VAS.AX,560879680.0,small
+MOT.AX,Metrics Income Opportunities Trust Units,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,567056704.0,small
+SHV.AX,Select Harvests Limited,Process industries,Agricultural commodities/Milling,VAS.AX,555640832.0,small
+LYL.AX,Lycopodium Limited,Industrial services,Engineering & construction,VAS.AX,528942400.0,small
+FPR.AX,FleetPartners Group Limited,Finance,Finance/Rental/Leasing,VAS.AX,535597632.0,small
+SHA.AX,Shape Australia Corporation Limited,Industrial services,Engineering & construction,VAS.AX,562717632.0,small
+FGX.AX,Future Generation Australia Limited Stapled Security,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,542437312.0,small
+NXL.AX,Nuix Ltd.,Technology services,Packaged software,VAS.AX,401708640.0,small
+STK.AX,Strickland Metals Ltd,Non-energy minerals,Precious metals,VAS.AX,539533056.0,small
+AEF.AX,Australian Ethical Investment Ltd,Finance,Investment managers,VAS.AX,525894944.0,small
+RG1.AX,Regal Partners Global Investments Limited,Finance,Investment managers,VAS.AX,,small
+NMG.AX,New Murchison Gold Limited,Non-energy minerals,Precious metals,VAS.AX,521483616.0,small
+JMS.AX,Jupiter Mines Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,530779648.0,small
+TWR.AX,Tower Limited,Finance,Property/Casualty insurance,VAS.AX,536093984.0,small
+EQT.AX,EQT Holdings Ltd.,Finance,Investment managers,VAS.AX,536103456.0,small
+AX1.AX,Accent Group Ltd,Distribution services,Wholesale distributors,VAS.AX,429847744.0,small
+A1G.AX,African Gold Ltd,Non-energy minerals,Precious metals,VAS.AX,552257664.0,small
+SGQ.AX,St. George Mining Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,464694368.0,small
+CRN.AX,Coronado Global Resources Inc. Shs Chess Depository Interests Repr 10 Sh,Energy minerals,Coal,VAS.AX,610422592.0,small
+MEI.AX,Meteoric Resources NL,Non-energy minerals,Precious metals,VAS.AX,436655840.0,small
+AIS.AX,Aeris Resources Limited,Non-energy minerals,Precious metals,VAS.AX,454924128.0,small
+JIN.AX,Jumbo Interactive Limited,Consumer services,Casinos/Gaming,VAS.AX,492700320.0,small
+ASG.AX,Autosports Group Ltd,Retail trade,Specialty stores,VAS.AX,514503872.0,small
+FRS.AX,Forrestania Resources Limited,Non-energy minerals,Precious metals,VAS.AX,532268960.0,small
+AFG.AX,Australian Finance Group Ltd.,Finance,Finance/Rental/Leasing,VAS.AX,494603328.0,small
+SKS.AX,SKS Technologies Group Limited,Electronic technology,Electronic equipment/Instruments,VAS.AX,484347360.0,small
+CUV.AX,Clinuvel Pharmaceuticals Limited,Health technology,Pharmaceuticals: major,VAS.AX,452810688.0,small
+WQG.AX,WCM Global Growth Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,463853312.0,small
+AYA.AX,Artrya Limited,Technology services,Packaged software,VAS.AX,496065408.0,small
+OML.AX,oOh media Ltd,Commercial services,Advertising/Marketing services,VAS.AX,509148320.0,small
+MGX.AX,MGX Resources Limited,Non-energy minerals,Steel,VAS.AX,472171488.0,small
+MEK.AX,Meeka Metals Limited,Non-energy minerals,Precious metals,VAS.AX,500801024.0,small
+MYR.AX,Myer Holdings Limited,Retail trade,Department stores,VAS.AX,510570112.0,small
+SVM.AX,Sovereign Metals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,439918304.0,small
+USL.AX,Unico Silver Limited,Non-energy minerals,Precious metals,VAS.AX,374802464.0,small
+WC8.AX,Wildcat Resources Ltd.,Non-energy minerals,Precious metals,VAS.AX,529156384.0,small
+MTM.AX,Metallium Limited,Non-energy minerals,Precious metals,VAS.AX,456842432.0,small
+SPZ.AX,Smart Parking Limited,Consumer services,Other consumer services,VAS.AX,419885952.0,small
+OBL.AX,Omni Bridgeway Ltd,Commercial services,Miscellaneous commercial services,VAS.AX,456986560.0,small
+QOR.AX,Qoria Limited,Technology services,Packaged software,VAS.AX,405397632.0,small
+GLN.AX,Galan Lithium Limited,Process industries,Chemicals: agricultural,VAS.AX,489503616.0,small
+IPG.AX,IPD Group Ltd,Utilities,Electric utilities,VAS.AX,492865760.0,small
+PIC.AX,Perpetual Equity Investment Co. Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,449436480.0,small
+CDP.AX,Carindale Property Trust,Finance,Real estate investment trusts,VAS.AX,445126240.0,small
+OCA.AX,Oceania Healthcare Ltd.,Health services,Medical/Nursing services,VAS.AX,418478400.0,small
+KSC.AX,K & S Corporation Limited,Transportation,Trucking,VAS.AX,556815808.0,small
+AMI.AX,Aurelia Metals Limited,Non-energy minerals,Precious metals,VAS.AX,440284480.0,small
+HZN.AX,Horizon Oil Limited,Energy minerals,Integrated oil,VAS.AX,463862720.0,small
+EIQ.AX,EchoIQ Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,569375616.0,small
+ALI.AX,Argo Global Listed Infrastructure Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,427385312.0,small
+WMI.AX,WAM Microcap Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,428703840.0,small
+BLX.AX,Beacon Lighting Group Ltd,Producer manufacturing,Electrical products,VAS.AX,352040192.0,small
+A1M.AX,AIC Mines Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,430714720.0,small
+EOL.AX,Energy One Limited,Technology services,Packaged software,VAS.AX,398075264.0,small
+BFG.AX,Bell Financial Group Limited,Finance,Investment banks/Brokers,VAS.AX,410552224.0,small
+HLS.AX,Healius Limited,Health services,Medical/Nursing services,VAS.AX,377589152.0,small
+APX.AX,Appen Ltd.,Technology services,Information technology services,VAS.AX,372547648.0,small
+THL.AX,Tourism Holdings Limited,Finance,Finance/Rental/Leasing,VAS.AX,398156512.0,small
+TYR.AX,Tyro Payments Ltd.,Commercial services,Miscellaneous commercial services,VAS.AX,414201312.0,small
+MMI.AX,Metro Mining Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,417852608.0,small
+RAC.AX,Racura Oncology Ltd,Health technology,Pharmaceuticals: major,VAS.AX,478581344.0,small
+EUR.AX,European Lithium Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,386146688.0,small
+PE1.AX,Pengana Private Equity Trust,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,401704544.0,small
+LOT.AX,Lotus Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,371576928.0,small
+IGL.AX,IVE Group Ltd.,Commercial services,Commercial printing/Forms,VAS.AX,405918560.0,small
+ASL.AX,Andean Silver Limited,Non-energy minerals,Precious metals,VAS.AX,419757760.0,small
+LGI.AX,LGI LTD,Utilities,Alternative power generation,VAS.AX,362040960.0,small
+VYS.AX,Vysarn Ltd,Industrial services,Engineering & construction,VAS.AX,348113600.0,small
+ASM.AX,Australian Strategic Materials Ltd,Non-energy minerals,Precious metals,VAS.AX,396726816.0,small
+BCN.AX,Beacon Minerals Limited,Non-energy minerals,Precious metals,VAS.AX,378590080.0,small
+AZY.AX,Antipa Minerals Limited,Non-energy minerals,Precious metals,VAS.AX,381044000.0,small
+SVL.AX,Silver Mines Limited,Non-energy minerals,Precious metals,VAS.AX,355191488.0,small
+ACL.AX,Australian Clinical Labs Ltd,Health services,Medical/Nursing services,VAS.AX,384282400.0,small
+BAP.AX,Bapcor Ltd,Distribution services,Wholesale distributors,VAS.AX,420470688.0,small
+DXC.AX,Dexus Convenience Retail REIT,Finance,Real estate investment trusts,VAS.AX,360213632.0,small
+STX.AX,Strike Energy Limited,Energy minerals,Oil & gas production,VAS.AX,413930688.0,small
+CGS.AX,Cogstate Ltd,Commercial services,Miscellaneous commercial services,VAS.AX,364208000.0,small
+AAR.AX,Astral Resources NL,Non-energy minerals,Precious metals,VAS.AX,324188224.0,small
+INR.AX,ioneer Limited,Process industries,Chemicals: agricultural,VAS.AX,399702400.0,small
+CVW.AX,ClearView Wealth Limited,Finance,Investment managers,VAS.AX,395683776.0,small
+KGN.AX,Kogan.com Ltd.,Retail trade,Internet retail,VAS.AX,365057536.0,small
+RMC.AX,Resimac Group Limited,Finance,Finance/Rental/Leasing,VAS.AX,353998464.0,small
+SKT.AX,SKY Network Television Ltd,Consumer services,Cable/Satellite TV,VAS.AX,357100672.0,small
+CEL.AX,Challenger Gold Limited,Non-energy minerals,Precious metals,VAS.AX,341436992.0,small
+BTR.AX,Brightstar Resources Limited,Non-energy minerals,Precious metals,VAS.AX,406147904.0,small
+AGI.AX,Ainsworth Game Technology Limited,Consumer durables,Recreational products,VAS.AX,340161920.0,small
+VGL.AX,Vista Group International Ltd,Technology services,Packaged software,VAS.AX,349895040.0,small
+TGN.AX,Tungsten Mining NL,Non-energy minerals,Other metals/Minerals,VAS.AX,349085056.0,small
+MM8.AX,Medallion Metal Ltd,Non-energy minerals,Precious metals,VAS.AX,314398048.0,small
+TTT.AX,Titomic Ltd,Producer manufacturing,Industrial machinery,VAS.AX,361371776.0,small
+KSL.AX,Kina Securities Ltd.,Finance,Regional banks,VAS.AX,348629280.0,small
+TOK.AX,Tolu Minerals Limited,Non-energy minerals,Precious metals,VAS.AX,404213984.0,small
+BTL.AX,Beetaloo Energy Australia Limited,Energy minerals,Integrated oil,VAS.AX,436197792.0,small
+PPS.AX,Praemium Ltd,Technology services,Packaged software,VAS.AX,324169184.0,small
+HCW.AX,HealthCo Healthcare & Wellness REIT,Finance,Real estate investment trusts,VAS.AX,387874016.0,small
+HUM.AX,Humm Group Limited,Finance,Finance/Rental/Leasing,VAS.AX,323145248.0,small
+KP2.AX,Kore Potash PLC Shs Chess Deposit Interests Repr 1 Sh,Non-energy minerals,Other metals/Minerals,VAS.AX,300204416.0,small
+NVA.AX,Nova Minerals Limited,Non-energy minerals,Precious metals,VAS.AX,305566976.0,small
+GDI.AX,GDI Property Group,Finance,Real estate investment trusts,VAS.AX,318495232.0,small
+RHI.AX,Red Hill Minerals Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,308299296.0,small
+WWI.AX,West Wits Mining Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,282520224.0,small
+SST.AX,Steamships Trading Co. Ltd.,Transportation,Marine shipping,VAS.AX,310082368.0,small
+PBH.AX,PointsBet Holdings Ltd.,Consumer services,Movies/Entertainment,VAS.AX,302400704.0,small
+FID.AX,Fiducian Group Ltd,Finance,Investment managers,VAS.AX,267062096.0,small
+EBR.AX,"EBR Systems, Inc. Shs Chess Depository Interests Repr 1 Sh",Health technology,Medical specialties,VAS.AX,261252768.0,small
+AFP.AX,AFT Pharmaceuticals Ltd.,Health technology,Pharmaceuticals: major,VAS.AX,290321248.0,small
+CAY.AX,Canyon Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,268074944.0,small
+BOC.AX,Bougainville Copper Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,254674688.0,small
+PIA.AX,Pengana International Equities Ltd Registered,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,308038208.0,small
+AMA.AX,AMA Group Limited,Consumer durables,Automotive aftermarket,VAS.AX,231112160.0,small
+TBR.AX,Tribune Resources Limited,Non-energy minerals,Precious metals,VAS.AX,307987616.0,small
+FDR.AX,Finder Energy Holdings Limited,Energy minerals,Integrated oil,VAS.AX,287366272.0,small
+PAC.AX,Pacific Current Group Ltd,Finance,Investment managers,VAS.AX,295183680.0,small
+COG.AX,COG Financial Services Limited,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,247396736.0,small
+SVR.AX,Solvar Limited,Finance,Finance/Rental/Leasing,VAS.AX,300297152.0,small
+ATR.AX,Astron Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,261736784.0,small
+AMH.AX,AMCIL Limited,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,291384256.0,small
+MPW.AX,Metal Powder Works Limited,Producer manufacturing,Industrial machinery,VAS.AX,314581632.0,small
+BRN.AX,BrainChip Holdings Ltd.,Electronic technology,Semiconductors,VAS.AX,345322080.0,small
+PGC.AX,Paragon Care Limited,Distribution services,Medical distributors,VAS.AX,314508000.0,small
+CTM.AX,Centaurus Metals Limited,Non-energy minerals,Precious metals,VAS.AX,341864416.0,small
+OMA.AX,Omega Oil & Gas Limited,Energy minerals,Oil & gas production,VAS.AX,351091744.0,small
+HCH.AX,Hot Chili Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,259800800.0,small
+SXL.AX,Southern Cross Media Group Limited,Consumer services,Broadcasting,VAS.AX,260934640.0,small
+TM1.AX,Terra Metals Limited,Non-energy minerals,Precious metals,VAS.AX,296555936.0,small
+TTM.AX,Titan Minerals Ltd,Non-energy minerals,Precious metals,VAS.AX,234302592.0,small
+TOR.AX,Torque Metals Ltd.,Non-energy minerals,Precious metals,VAS.AX,257784080.0,small
+GVF.AX,Staude Capital Global Value Fund Ltd,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,270845984.0,small
+BML.AX,Boab Metals Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,230541696.0,small
+DUG.AX,DUG Technology Ltd,Technology services,Packaged software,VAS.AX,264889152.0,small
+PSC.AX,Prospect Resources Ltd.,Process industries,Chemicals: agricultural,VAS.AX,272697248.0,small
+ADH.AX,Adairs Ltd.,Retail trade,Specialty stores,VAS.AX,228764800.0,small
+GG8.AX,Gorilla Gold Mines Ltd,Non-energy minerals,Precious metals,VAS.AX,249102048.0,small
+SS1.AX,Sun Silver Ltd.,Non-energy minerals,Precious metals,VAS.AX,240135552.0,small
+ACF.AX,Acrow Limited,Industrial services,Engineering & construction,VAS.AX,271058272.0,small
+GRX.AX,GreenX Metals Limited,Energy minerals,Coal,VAS.AX,289535968.0,small
+SFC.AX,Schaffer Corporation Limited,Consumer non-durables,Consumer sundries,VAS.AX,251429936.0,small
+TTX.AX,Tetratherix Limited,Health technology,Medical specialties,VAS.AX,220322992.0,small
+NTU.AX,Northern Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,238712688.0,small
+3DA.AX,Amaero Ltd,Process industries,Chemicals: major diversified,VAS.AX,295300480.0,small
+BHM.AX,Broken Hill Mines Limited,Non-energy minerals,Precious metals,VAS.AX,221849872.0,small
+ACE.AX,Acusensus Ltd,Technology services,Information technology services,VAS.AX,253087344.0,small
+FEX.AX,Fenix Resources Limited,Non-energy minerals,Precious metals,VAS.AX,244788160.0,small
+REP.AX,RAM Essential Services Property Fund,Finance,Real estate investment trusts,VAS.AX,248027264.0,small
+XRF.AX,XRF Scientific Limited,Producer manufacturing,Industrial machinery,VAS.AX,238161728.0,small
+ERM.AX,Emmerson Resources Limited,Non-energy minerals,Precious metals,VAS.AX,251749040.0,small
+GDF.AX,GARDA Property Group Stapled Secs Cons of 1 Ut GARDA Div Prop Fund + 1 Sh of GARDA Hldgs Ltd,Finance,Real estate development,VAS.AX,239330336.0,small
+TGM.AX,Theta Gold Mines Ltd.,Non-energy minerals,Precious metals,VAS.AX,242920896.0,small
+VMM.AX,Viridis Mining and Minerals Limited,Non-energy minerals,Precious metals,VAS.AX,254904752.0,small
+HRN.AX,Horizon Gold Ltd.,Non-energy minerals,Precious metals,VAS.AX,238477424.0,small
+NVX.AX,NOVONIX Ltd,Electronic technology,Electronic equipment/Instruments,VAS.AX,219656208.0,small
+MVF.AX,Monash IVF Group Ltd,Health services,Medical/Nursing services,VAS.AX,257159008.0,small
+EML.AX,EML Payments Ltd.,Commercial services,Miscellaneous commercial services,VAS.AX,211744992.0,small
+HLO.AX,Helloworld Travel Ltd,Consumer services,Other consumer services,VAS.AX,240609840.0,small
+BBN.AX,Baby Bunting Group Ltd.,Retail trade,Apparel/Footwear retail,VAS.AX,189561008.0,small
+SM1.AX,Synlait Milk Ltd.,Consumer non-durables,Food: meat/fish/dairy,VAS.AX,223183296.0,small
+BBT.AX,BETR Entertainment Limited,Consumer services,Movies/Entertainment,VAS.AX,197802176.0,small
+CVC.AX,CVC Limited,Finance,Investment managers,VAS.AX,242603504.0,small
+RIV.AX,Rivco Australia Limited,Utilities,Water utilities,VAS.AX,,small
+LED.AX,LDR Capital Property Fund,Finance,Real estate investment trusts,VAS.AX,225886112.0,small
+KPG.AX,Kelly Partners Group Holdings Ltd.,Commercial services,Miscellaneous commercial services,VAS.AX,212339568.0,small
+PEN.AX,Peninsula Energy Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,245808864.0,small
+GRR.AX,Grange Resources Limited,Non-energy minerals,Steel,VAS.AX,219894368.0,small
+ORN.AX,Orion Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,230406784.0,small
+HRZ.AX,Horizon Minerals Ltd,Non-energy minerals,Precious metals,VAS.AX,228116144.0,small
+WJL.AX,Webjet Group Limited,Consumer services,Other consumer services,VAS.AX,204115776.0,small
+POL.AX,Polymetals Resources Ltd.,Non-energy minerals,Precious metals,VAS.AX,218321376.0,small
+CDM.AX,Cadence Capital Limited,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,242692160.0,small
+LAU.AX,Lindsay Australia Limited,Transportation,Trucking,VAS.AX,219043184.0,small
+WAX.AX,WAM Research Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,233469952.0,small
+WRK.AX,Wrkr Ltd,Technology services,Packaged software,VAS.AX,219481776.0,small
+AQI.AX,Alicanto Minerals Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,263885888.0,small
+EGH.AX,Eureka Group Holdings Limited,Finance,Real estate development,VAS.AX,229464720.0,small
+CCV.AX,Cash Converters International Limited,Retail trade,Specialty stores,VAS.AX,202210512.0,small
+PLA.AX,Pacific Lime and Cement Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,235970688.0,small
+LAM.AX,Laramide Resources Ltd. Shs Chess Depository Interests repr 1 sh,Non-energy minerals,Other metals/Minerals,VAS.AX,195720768.0,small
+AD8.AX,Audinate Group Ltd.,Electronic technology,Electronic production equipment,VAS.AX,215881104.0,small
+SYR.AX,Syrah Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,171181536.0,small
+PWR.AX,Peter Warren Automotive Holdings Ltd,Retail trade,Specialty stores,VAS.AX,229100576.0,small
+STN.AX,Saturn Metals Ltd.,Non-energy minerals,Precious metals,VAS.AX,257002672.0,small
+TGF.AX,Tribeca Global Natural Resources Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,188656192.0,small
+HAV.AX,Havilah Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,189348496.0,small
+BGD.AX,Barton Gold Holdings Limited,Non-energy minerals,Precious metals,VAS.AX,207740512.0,small
+AS1.AX,Asara Resources Limited,Non-energy minerals,Precious metals,VAS.AX,176679552.0,small
+MYG.AX,Mayfield Group Holdings Limited,Producer manufacturing,Electrical products,VAS.AX,255639744.0,small
+LDX.AX,Lumos Diagnostics Holdings Ltd.,Health technology,Medical specialties,VAS.AX,167518976.0,small
+FRI.AX,Finbar Group Limited,Finance,Real estate development,VAS.AX,216337904.0,small
+OCC.AX,Orthocell Ltd,Health technology,Medical specialties,VAS.AX,218402896.0,small
+AUE.AX,Aurum Resources Limited,Non-energy minerals,Precious metals,VAS.AX,241870688.0,small
+DXB.AX,Dimerix Limited,Health technology,Pharmaceuticals: major,VAS.AX,192126976.0,small
+CEH.AX,Coast Entertainment Holdings Ltd,Consumer services,Movies/Entertainment,VAS.AX,190395328.0,small
+WAR.AX,WAM Strategic Value Ltd,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,204442736.0,small
+MCM.AX,MC Mining Ltd,Energy minerals,Coal,VAS.AX,277459360.0,small
+ARX.AX,Aroa Biosurgery Ltd,Health technology,Medical specialties,VAS.AX,201136656.0,small
+BIS.AX,Bisalloy Steel Group Ltd,Non-energy minerals,Steel,VAS.AX,225792768.0,small
+ATA.AX,Atturra Limited,Commercial services,Miscellaneous commercial services,VAS.AX,168632272.0,small
+IMB.AX,Intelligent Monitoring Group Limited,Commercial services,Miscellaneous commercial services,VAS.AX,195613376.0,small
+SKO.AX,Serko Ltd.,Technology services,Packaged software,VAS.AX,176309216.0,small
+ETM.AX,Energy Transition Minerals Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,118697432.0,small
+A11.AX,Atlantic Lithium Limited.,Non-energy minerals,Steel,VAS.AX,217314320.0,small
+AVH.AX,AVITA Medical Inc Shs Chess Depository Interests repr 0.2 shs,Health technology,Medical specialties,VAS.AX,171179952.0,small
+OMH.AX,OM Holdings Ltd.,Miscellaneous,Miscellaneous,VAS.AX,187732976.0,small
+GEM.AX,G8 Education Limited,Consumer services,Other consumer services,VAS.AX,177458528.0,small
+ARR.AX,American Rare Earths Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,186422528.0,small
+SPL.AX,Starpharma Holdings Limited,Health technology,Pharmaceuticals: major,VAS.AX,209957840.0,small
+CYM.AX,Cyprium Metals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,210999120.0,small
+BET.AX,Betmakers Technology Group Ltd.,Technology services,Packaged software,VAS.AX,190447984.0,small
+WMA.AX,WAM Alternative Assets Ltd,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,200930400.0,small
+CAA.AX,Capral Limited,Non-energy minerals,Aluminum,VAS.AX,192990304.0,small
+CUP.AX,Count Limited,Commercial services,Miscellaneous commercial services,VAS.AX,181950048.0,small
+MYX.AX,Mayne Pharma Group Ltd.,Health technology,Pharmaceuticals: major,VAS.AX,189302768.0,small
+CVV.AX,Caravel Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,173216400.0,small
+VTM.AX,Victory Metals Limited,Non-energy minerals,Precious metals,VAS.AX,,small
+AGE.AX,Alligator Energy Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,173044336.0,small
+SPD.AX,Southern Palladium Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,183917440.0,small
+KAU.AX,Kaiser Reef Ltd,Non-energy minerals,Precious metals,VAS.AX,166463648.0,small
+EZL.AX,Euroz Hartleys Group Limited,Finance,Investment banks/Brokers,VAS.AX,191344944.0,small
+WTM.AX,Waratah Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,204772384.0,small
+LKE.AX,Lake Resources N.L.,Non-energy minerals,Other metals/Minerals,VAS.AX,179898208.0,small
+BKY.AX,Berkeley Energia Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,200831920.0,small
+SSG.AX,Shaver Shop Group Limited,Retail trade,Specialty stores,VAS.AX,177521936.0,small
+MKR.AX,Manuka Resources Ltd,Non-energy minerals,Precious metals,VAS.AX,132437240.0,small
+CVN.AX,Carnarvon Energy Limited,Energy minerals,Integrated oil,VAS.AX,187854112.0,small
+KOV.AX,Korvest Ltd.,Producer manufacturing,Metal fabrication,VAS.AX,170507584.0,small
+NZM.AX,NZME Limited,Consumer services,Publishing: newspapers,VAS.AX,174263072.0,small
+RCT.AX,Reef Casino Trust,Consumer services,Casinos/Gaming,VAS.AX,173805616.0,small
+AR1.AX,Austral Resources Australia Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,181480400.0,small
+AEU.AX,Atomic Eagle Ltd,Non-energy minerals,Steel,VAS.AX,189661584.0,small
+PRG.AX,PRL Global Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,174985312.0,small
+EGR.AX,EcoGraf Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,175389456.0,small
+SKY.AX,Sky Metals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,133431664.0,small
+CLX.AX,CTI Logistics Limited,Transportation,Air freight/Couriers,VAS.AX,144487040.0,small
+WAT.AX,Waterco Limited,Process industries,Chemicals: major diversified,VAS.AX,199770224.0,small
+RNU.AX,Renascor Resources Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,165505440.0,small
+GPR.AX,Geopacific Resources Limited,Non-energy minerals,Precious metals,VAS.AX,163495552.0,small
+MTO.AX,Motorcycle Holdings Ltd.,Retail trade,Specialty stores,VAS.AX,169146272.0,small
+IVR.AX,Investigator Silver Limited,Non-energy minerals,Precious metals,VAS.AX,165467952.0,small
+MHJ.AX,Michael Hill International Ltd.,Retail trade,Specialty stores,VAS.AX,144315968.0,small
+GML.AX,Gateway Mining Limited,Non-energy minerals,Precious metals,VAS.AX,139368896.0,small
+PEB.AX,Pacific Edge Limited,Health technology,Biotechnology,VAS.AX,148237232.0,small
+JYC.AX,Joyce Corporation Ltd,Retail trade,Specialty stores,VAS.AX,175641456.0,small
+BBL.AX,Brisbane Broncos Limited,Consumer services,Movies/Entertainment,VAS.AX,161276832.0,small
+EXR.AX,Elixir Energy Limited,Energy minerals,Oil & gas production,VAS.AX,194979760.0,small
+ONE.AX,Oneview Healthcare PLC Chess Depository Interests repr 1,Technology services,Packaged software,VAS.AX,152642208.0,small
+QGL.AX,Quantum Graphite Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,144566000.0,small
+TER.AX,TerraCom Limited,Energy minerals,Coal,VAS.AX,167672128.0,small
+VVA.AX,Viva Leisure Ltd.,Consumer services,Other consumer services,VAS.AX,154225072.0,small
+TSO.AX,Tesoro Gold Ltd,Non-energy minerals,Precious metals,VAS.AX,161998208.0,small
+KGL.AX,KGL Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,204285696.0,small
+EWC.AX,Energy World Corporation Ltd,Utilities,Electric utilities,VAS.AX,119408896.0,small
+FWDCD.AX,Fleetwood Limited,Consumer durables,Homebuilding,VAS.AX,,small
+FWD.AX,Fleetwood Limited,Consumer durables,Homebuilding,VAS.AX,155073328.0,small
+COI.AX,Comet Ridge Ltd,Energy minerals,Oil & gas production,VAS.AX,167501424.0,small
+MEU.AX,Marmota Limited,Non-energy minerals,Precious metals,VAS.AX,135598784.0,small
+RYD.AX,Ryder Capital Ltd.,Finance,Financial conglomerates,VAS.AX,160696832.0,small
+IKE.AX,ikeGPS Group Ltd,Electronic technology,Telecommunications equipment,VAS.AX,156866464.0,small
+RDY.AX,ReadyTech Holdings Ltd.,Technology services,Packaged software,VAS.AX,144570000.0,small
+APW.AX,AIMS Property Securities Fund,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,142905984.0,small
+SDI.AX,SDI Limited,Health technology,Medical specialties,VAS.AX,148581904.0,small
+SGI.AX,Stealth Group holdings Ltd.,Producer manufacturing,Miscellaneous manufacturing,VAS.AX,160026096.0,small
+CY5.AX,Cygnus Metals Limited,Non-energy minerals,Precious metals,VAS.AX,152614160.0,small
+EMV.AX,EMvision Medical Devices Ltd.,Health technology,Medical specialties,VAS.AX,148701776.0,small
+MM1.AX,Midas Minerals Limited,Non-energy minerals,Precious metals,VAS.AX,163852992.0,small
+ENR.AX,Encounter Resources Limited,Non-energy minerals,Precious metals,VAS.AX,139747696.0,small
+DLI.AX,Delta Lithium Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,154233056.0,small
+MLG.AX,MLG Oz Ltd,Industrial services,Engineering & construction,VAS.AX,120849440.0,small
+BTI.AX,Bailador Technology Investments Ltd,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,151196656.0,small
+PLT.AX,Plenti Group Ltd.,Finance,Finance/Rental/Leasing,VAS.AX,142126080.0,small
+FSA.AX,FSA Group Limited,Finance,Finance/Rental/Leasing,VAS.AX,144427648.0,small
+AHC.AX,Austco Healthcare Ltd,Electronic technology,Electronic equipment/Instruments,VAS.AX,125541688.0,small
+GBM.AX,GBM Resources Limited,Non-energy minerals,Precious metals,VAS.AX,142343584.0,small
+DEV.AX,DevEx Resources Ltd,Non-energy minerals,Precious metals,VAS.AX,124264080.0,small
+VLS.AX,Vita Life Sciences Limited,Health technology,Pharmaceuticals: other,VAS.AX,136691344.0,small
+GHM.AX,Golden Horse Minerals Limited Chess Depository,Non-energy minerals,Precious metals,VAS.AX,88369712.0,small
+AT4.AX,American Tungsten & Antimony Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,104821688.0,small
+TAM.AX,Tanami Gold NL,Non-energy minerals,Precious metals,VAS.AX,108108936.0,small
+ZEO.AX,Zeotech Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,123439240.0,small
+SEC.AX,Spheria Emerging Cos. Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,149846304.0,small
+FDV.AX,Frontier Digital Ventures Ltd.,Technology services,Internet software/Services,VAS.AX,143792480.0,small
+RND.AX,Rand Mining Limited,Non-energy minerals,Precious metals,VAS.AX,123420840.0,small
+BRL.AX,Bathurst Resources Ltd,Energy minerals,Coal,VAS.AX,147632576.0,small
+SOM.AX,Somnomed Limited,Health technology,Medical specialties,VAS.AX,129259112.0,small
+CXL.AX,Calix Ltd.,Producer manufacturing,Industrial machinery,VAS.AX,159627184.0,small
+OFX.AX,OFX Group Ltd.,Commercial services,Miscellaneous commercial services,VAS.AX,125123232.0,small
+ACW.AX,Actinogen Medical Limited,Health technology,Pharmaceuticals: other,VAS.AX,132886984.0,small
+GL1.AX,Global Lithium Resources Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,128851448.0,small
+TLG.AX,Talga Group Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,137950240.0,small
+ERD.AX,EROAD Limited,Technology services,Packaged software,VAS.AX,148864272.0,small
+BCK.AX,Brockman Mining Ltd.,Transportation,Other transportation,VAS.AX,139203488.0,small
+BRI.AX,Big River Industries Ltd.,Non-energy minerals,Forest products,VAS.AX,131395944.0,small
+ALC.AX,Alcidion Group Limited,Technology services,Packaged software,VAS.AX,134295280.0,small
+FXG.AX,Felix Gold Ltd.,Non-energy minerals,Precious metals,VAS.AX,123021512.0,small
+EL8.AX,Elevate Uranium Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,132800912.0,small
+BWN.AX,Bhagwan Marine Ltd.,Industrial services,Engineering & construction,VAS.AX,158860592.0,small
+ALR.AX,Altair Minerals limited,Non-energy minerals,Other metals/Minerals,VAS.AX,149316720.0,small
+RCE.AX,Recce Pharmaceuticals Ltd.,Health technology,Pharmaceuticals: major,VAS.AX,134470288.0,small
+DRE.AX,Dreadnought Resources Limited,Non-energy minerals,Precious metals,VAS.AX,103053592.0,small
+HGO.AX,Hillgrove Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,119493224.0,small
+LSX.AX,Lion Selection Group Ltd.,Finance,Investment managers,VAS.AX,131070080.0,small
+ELT.AX,Elementos Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,149778208.0,small
+CLV.AX,Clover Corporation Limited,Health technology,Pharmaceuticals: other,VAS.AX,174514304.0,small
+CNB.AX,Carnaby Resources Ltd.,Non-energy minerals,Precious metals,VAS.AX,117350952.0,small
+GBR.AX,Great Boulder Resources Ltd,Non-energy minerals,Precious metals,VAS.AX,100029112.0,small
+ARL.AX,Ardea Resources Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,116148144.0,small
+ILA.AX,Island Pharmaceuticals Ltd,Health technology,Pharmaceuticals: major,VAS.AX,110843136.0,small
+IOD.AX,IODM Ltd.,Technology services,Packaged software,VAS.AX,76159128.0,small
+WAA.AX,WAM Active Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,136819312.0,small
+QPM.AX,QPM Energy Limited,Producer manufacturing,Electrical products,VAS.AX,122695456.0,small
+AEE.AX,Aura Energy Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,127430056.0,small
+GOW.AX,Gowing Bros. Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,120728104.0,small
+SND.AX,Saunders International Limited,Industrial services,Engineering & construction,VAS.AX,123764216.0,small
+G50.AX,G50 Corp Limited,Non-energy minerals,Precious metals,VAS.AX,143545392.0,small
+FHE.AX,Frontier Energy Limited,Industrial services,Engineering & construction,VAS.AX,137830192.0,small
+KMD.AX,KMD Brands Limited,Consumer durables,Recreational products,VAS.AX,85994448.0,small
+NOL.AX,NobleOak Life Ltd,Finance,Life/Health insurance,VAS.AX,111532232.0,small
+FAL.AX,Falcon Metals Ltd,Non-energy minerals,Precious metals,VAS.AX,103650176.0,small
+URF.AX,US Masters Residential Property Fund,Finance,Real estate investment trusts,VAS.AX,123921232.0,small
+NYR.AX,"Nyrada, Inc. Shs Chess Depository Interests Repr 1 Shs",Health technology,Pharmaceuticals: major,VAS.AX,153093568.0,small
+SHJ.AX,Shine Justice Ltd.,Consumer services,Other consumer services,VAS.AX,118573280.0,small
+ANG.AX,Austin Engineering Limited,Producer manufacturing,Industrial machinery,VAS.AX,102704432.0,small
+DAI.AX,Decidr AI Industries Ltd,Consumer non-durables,Food: major diversified,VAS.AX,127132744.0,small
+FTI.AX,Fortifai Limited,Technology services,Packaged software,VAS.AX,160337264.0,small
+ART.AX,Airtasker Ltd,Technology services,Internet software/Services,VAS.AX,109676584.0,small
+PEX.AX,Peel Mining Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,125150288.0,small
+SNC.AX,Sandon Capital Investments Limited,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,118874696.0,small
+PAR.AX,Paradigm Biopharmaceuticals Ltd.,Health technology,Pharmaceuticals: generic,VAS.AX,115676112.0,small
+KAI.AX,Kairos Minerals Limited,Non-energy minerals,Precious metals,VAS.AX,8530737.0,small
+GLB.AX,Globe International Limited,Consumer non-durables,Apparel/Footwear,VAS.AX,105732736.0,small
+CRD.AX,Conrad Asia Energy Ltd. Shs Chess Depositary Interests Repr 1 Sh,Energy minerals,Oil & gas production,VAS.AX,112971608.0,small
+AKM.AX,Aspire Mining Limited,Energy minerals,Coal,VAS.AX,119294696.0,small
+SHO.AX,SportsHero Limited,Technology services,Packaged software,VAS.AX,81232664.0,small
+SBZ.AX,Schoolblazer Limited,Finance,Financial conglomerates,VAS.AX,104286392.0,small
+TWD.AX,Tamawood Limited,Consumer durables,Homebuilding,VAS.AX,112257472.0,small
+MXI.AX,MaxiPARTS Limited,Producer manufacturing,Trucks/Construction/Farm machinery,VAS.AX,108353616.0,small
+VFY.AX,Vitrafy Life Sciences Ltd.,Health technology,Medical specialties,VAS.AX,110459944.0,small
+PLY.AX,Playside Studios Ltd,Technology services,Packaged software,VAS.AX,108920304.0,small
+MPK.AX,Many Peaks Minerals Ltd,Non-energy minerals,Precious metals,VAS.AX,113170152.0,small
+BXN.AX,Bioxyne Limited,Commercial services,Miscellaneous commercial services,VAS.AX,145236912.0,small
+BKB.AX,Black Bear Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,102893656.0,small
+RML.AX,Resolution Minerals Ltd.,Non-energy minerals,Precious metals,VAS.AX,96480816.0,small
+5EA.AX,"5E Advanced Materials, Inc. Shs Chess Depository Interests Repr 0.1 Sh",Process industries,Chemicals: specialty,VAS.AX,89250544.0,small
+SLS.AX,Solstice Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,134326048.0,small
+HPG.AX,hipages Group Holdings Ltd.,Technology services,Packaged software,VAS.AX,97201784.0,small
+HAS.AX,Hastings Technology Metals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,103175240.0,small
+PNC.AX,Pioneer Credit Ltd,Finance,Finance/Rental/Leasing,VAS.AX,94825592.0,small
+CCR.AX,Credit Clear Limited,Technology services,Packaged software,VAS.AX,104361848.0,small
+BOT.AX,Botanix Pharmaceuticals Limited,Health technology,Pharmaceuticals: major,VAS.AX,88723896.0,small
+VNL.AX,Vinyl Group Ltd.,Electronic technology,Electronic equipment/Instruments,VAS.AX,111194960.0,small
+EMP.AX,Emperor Energy Ltd,Energy minerals,Oil & gas production,VAS.AX,117152232.0,small
+AGD.AX,Austral Gold Limited,Non-energy minerals,Precious metals,VAS.AX,90194000.0,small
+A1N.AX,ARN Media Limited,Consumer services,Broadcasting,VAS.AX,73566840.0,small
+CTT.AX,Cettire Ltd.,Retail trade,Apparel/Footwear retail,VAS.AX,87684792.0,small
+BUB.AX,Bubs Australia Ltd.,Distribution services,Food distributors,VAS.AX,98354304.0,small
+BB1.AX,Blinklab Limited,Technology services,Packaged software,VAS.AX,100726672.0,small
+VHM.AX,VHM Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,99409584.0,small
+TOP.AX,Thorney Opportunities Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,91474112.0,small
+ARA.AX,Ariadne Australia Limited,Finance,Real estate development,VAS.AX,93146360.0,small
+CAM.AX,Clime Capital Limited,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,101357792.0,small
+AA2.AX,Ariana Resources PLC Shs CHESS DEPOSITARY INTERESTS 1:10,Non-energy minerals,Precious metals,VAS.AX,98103232.0,small
+TKM.AX,Trek Metals Ltd Registered Chess Depositary Interests repr 1,Non-energy minerals,Other metals/Minerals,VAS.AX,117934928.0,small
+HZR.AX,Hazer Group Ltd.,Process industries,Chemicals: specialty,VAS.AX,92992584.0,small
+CUE.AX,Cue Energy Resources Limited,Energy minerals,Oil & gas production,VAS.AX,104966896.0,small
+PTN.AX,Patronus Resources Limited,Non-energy minerals,Precious metals,VAS.AX,97631936.0,small
+AQZ.AX,Alliance Aviation Services Limited,Transportation,Airlines,VAS.AX,88583472.0,small
+MSV.AX,Mitchell Services Limited,Industrial services,Contract drilling,VAS.AX,92203648.0,small
+YOJ.AX,Yojee Ltd.,Technology services,Packaged software,VAS.AX,88863376.0,small
+CBE.AX,Cobre Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,143796720.0,small
+WOT.AX,WOTSO,Finance,Real estate investment trusts,VAS.AX,106758192.0,small
+WR1.AX,Winsome Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,88170648.0,small
+SRZ.AX,Stellar Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,84109008.0,small
+MMA.AX,Maronan Metals Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,77948584.0,small
+AGY.AX,Argosy Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,95692096.0,small
+AAL.AX,Alfabs Australia Ltd.,Producer manufacturing,Trucks/Construction/Farm machinery,VAS.AX,81795584.0,small
+LRT.AX,Lowell Resources Funds Management Ltd Units,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,94334696.0,small
+MAT.AX,Matsa Resources Ltd,Non-energy minerals,Precious metals,VAS.AX,89344208.0,small
+EVO.AX,Embark Early Education Limited,Consumer services,Other consumer services,VAS.AX,83501128.0,small
+OIL.AX,Optiscan Imaging Limited,Health technology,Medical specialties,VAS.AX,104417664.0,small
+ATG.AX,Articore Group Limited,Retail trade,Internet retail,VAS.AX,96926776.0,small
+SHN.AX,Sunshine Metals Limited,Non-energy minerals,Precious metals,VAS.AX,74751392.0,small
+IMM.AX,Immutep Ltd,Health technology,Biotechnology,VAS.AX,64843740.0,small
+TOT.AX,360 Capital REIT,Finance,Real estate investment trusts,VAS.AX,84416280.0,small
+LM8.AX,Lunnon Metals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,75935240.0,small
+ALA.AX,Arovella Therapeutics Limited,Health technology,Pharmaceuticals: major,VAS.AX,83295664.0,small
+AHL.AX,Adrad Holdings Limited,Producer manufacturing,Auto parts: OEM,VAS.AX,89453496.0,small
+AON.AX,Apollo Minerals Limited,Non-energy minerals,Steel,VAS.AX,84033600.0,small
+NDO.AX,Nido Education Limited,Commercial services,Miscellaneous commercial services,VAS.AX,90809248.0,small
+FLG.AX,Flagship Minerals limited,Non-energy minerals,Other metals/Minerals,VAS.AX,77493752.0,small
+E25.AX,Element 25 Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,85050320.0,small
+NZK.AX,New Zealand King Salmon Investments Ltd.,Consumer non-durables,Food: meat/fish/dairy,VAS.AX,91534832.0,small
+BVR.AX,Bellavista Resources Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,66811204.0,small
+ATH.AX,Alterity Therapeutics Ltd.,Health technology,Pharmaceuticals: major,VAS.AX,97878744.0,small
+AV1.AX,Adveritas Limited,Technology services,Packaged software,VAS.AX,88913392.0,small
+FLC.AX,Fluence Corporation Limited,Industrial services,Environmental services,VAS.AX,89148704.0,small
+ITS.AX,Infotrust Ltd,Communications,Major telecommunications,VAS.AX,85579352.0,small
+CHW.AX,Chilwa Minerals Ltd,Non-energy minerals,Construction materials,VAS.AX,82748576.0,small
+VEE.AX,Veem Ltd.,Producer manufacturing,Industrial machinery,VAS.AX,84380888.0,small
+ACQ.AX,Acorn Capital Investment Fund Ltd Registered,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,82664088.0,small
+DRX.AX,Diatreme Resources Limited,Non-energy minerals,Construction materials,VAS.AX,80132512.0,small
+HMY.AX,Harmoney Corp Ltd,Finance,Finance/Rental/Leasing,VAS.AX,79083104.0,small
+AXE.AX,Archer Materials Limited,Electronic technology,Semiconductors,VAS.AX,73905632.0,small
+STM.AX,Sunstone Metals Ltd,Non-energy minerals,Precious metals,VAS.AX,63503956.0,small
+EDE.AX,Eden Innovations Ltd,Producer manufacturing,Trucks/Construction/Farm machinery,VAS.AX,63631012.0,small
+KKO.AX,Kinetiko Energy Ltd.,Energy minerals,Coal,VAS.AX,82953040.0,small
+ECH.AX,Echelon Resources Limited,Energy minerals,Integrated oil,VAS.AX,89580344.0,small
+AVL.AX,Australian Vanadium Limited,Producer manufacturing,Electrical products,VAS.AX,82638552.0,small
+B4P.AX,Beforepay Group Limited,Technology services,Packaged software,VAS.AX,70960552.0,small
+3PL.AX,3P Learning Ltd.,Technology services,Packaged software,VAS.AX,77778360.0,small
+BIO.AX,Biome Australia Ltd,Health technology,Pharmaceuticals: major,VAS.AX,77519328.0,small
+ASN.AX,Anson Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,72878552.0,small
+CYC.AX,Cyclopharm Limited,Health technology,Medical specialties,VAS.AX,102682240.0,small
+ADV.AX,Ardiden Limited,Non-energy minerals,Precious metals,VAS.AX,74142704.0,small
+YRL.AX,Yandal Resources Ltd.,Non-energy minerals,Precious metals,VAS.AX,78209328.0,small
+PVE.AX,Po Valley Energy Limited,Energy minerals,Oil & gas production,VAS.AX,75332504.0,small
+KSN.AX,Kingston Resources Ltd.,Non-energy minerals,Precious metals,VAS.AX,76615584.0,small
+EGL.AX,Environmental Group Limited,Industrial services,Engineering & construction,VAS.AX,78002048.0,small
+ARN.AX,Aldoro Resources Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,103647888.0,small
+LCY.AX,Legacy Iron Ore Ltd,Non-energy minerals,Precious metals,VAS.AX,58572256.0,small
+IVZ.AX,Invictus Energy Limited,Energy minerals,Integrated oil,VAS.AX,72156816.0,small
+ESK.AX,Etherstack Plc Shs Chess Depository Interests repr 1 sh,Technology services,Packaged software,VAS.AX,92020296.0,small
+LRM.AX,Lion Rock Minerals Limited,Non-energy minerals,Precious metals,VAS.AX,71278336.0,small
+LTP.AX,LTR Pharma Limited,Health technology,Biotechnology,VAS.AX,73619920.0,small
+RAD.AX,Radiopharm Theranostics Limited,Health services,Medical/Nursing services,VAS.AX,49663940.0,small
+CYP.AX,Cynata Therapeutics Limited,Health technology,Biotechnology,VAS.AX,70049032.0,small
+LRK.AX,Lark Distilling Co. Ltd.,Consumer non-durables,Beverages: alcoholic,VAS.AX,85909872.0,small
+NMR.AX,Native Mineral Resources Holdings Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,63725344.0,small
+EDU.AX,EDU Holdings Limited,Commercial services,Miscellaneous commercial services,VAS.AX,94334264.0,small
+EM3.AX,EMC Gold Corporation Chess Depository Interests,Non-energy minerals,Precious metals,VAS.AX,73104616.0,small
+AIQ.AX,Alternative Investment Trust Units,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,47607560.0,small
+FLN.AX,Freelancer Ltd.,Technology services,Internet software/Services,VAS.AX,69891808.0,small
+DBF.AX,Duxton Farms Limited,Process industries,Agricultural commodities/Milling,VAS.AX,73919416.0,small
+IFN.AX,Infragreen Group Limited,Industrial services,Environmental services,VAS.AX,76961936.0,small
+AL3.AX,AML3D Ltd,Producer manufacturing,Industrial machinery,VAS.AX,118793648.0,small
+OSM.AX,Osmond Resources Limited,Non-energy minerals,Precious metals,VAS.AX,75915360.0,small
+MTC.AX,MetalsTech Ltd,Non-energy minerals,Precious metals,VAS.AX,84596728.0,small
+LIS.AX,Li-S Energy Ltd,Producer manufacturing,Electrical products,VAS.AX,76824032.0,small
+IXR.AX,Ionic Rare Earths Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,66666508.0,small
+LKO.AX,Lakes Blue Energy NL,Energy minerals,Integrated oil,VAS.AX,49494968.0,small
+CAF.AX,Centrepoint Alliance Limited,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,74320432.0,small
+MDX.AX,Mindax Limited,Non-energy minerals,Precious metals,VAS.AX,70896552.0,small
+AQD.AX,AusQuest Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,66739848.0,small
+CUF.AX,CuFe Ltd,Non-energy minerals,Steel,VAS.AX,67855792.0,small
+RHY.AX,Rhythm Biosciences Limited,Health technology,Medical specialties,VAS.AX,62733304.0,small
+SHG.AX,Singular Health Group Ltd,Technology services,Information technology services,VAS.AX,71029192.0,small
+VR1.AX,Vection Technologies Ltd.,Technology services,Packaged software,VAS.AX,72095984.0,small
+TZN.AX,Terramin Australia Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,76405240.0,small
+NGY.AX,NuEnergy Gas Limited,Energy minerals,Oil & gas production,VAS.AX,67164960.0,small
+PHX.AX,PharmX Technologies Limited,Technology services,Information technology services,VAS.AX,69243032.0,small
+MME.AX,MoneyMe Ltd.,Technology services,Internet software/Services,VAS.AX,67457320.0,small
+PCL.AX,Pancontinental Energy NL,Energy minerals,Integrated oil,VAS.AX,116005120.0,small
+LKY.AX,Locksley Resources Limited,Non-energy minerals,Precious metals,VAS.AX,61646836.0,small
+GBE.AX,Globe Metals & Mining Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,135996832.0,small
+LBL.AX,Laserbond Limited,Process industries,Industrial specialties,VAS.AX,63828348.0,small
+NVU.AX,Nanoveu Ltd.,Electronic technology,Telecommunications equipment,VAS.AX,64827072.0,small
+KYP.AX,Kinatico Limited,Commercial services,Miscellaneous commercial services,VAS.AX,61262880.0,small
+TRJ.AX,Trajan Group Holdings Ltd,Commercial services,Miscellaneous commercial services,VAS.AX,62563144.0,small
+EXP.AX,Experience Co Ltd,Consumer services,Movies/Entertainment,VAS.AX,69429400.0,small
+CRI.AX,Critica Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,69349544.0,small
+M7T.AX,Mach7 Technologies Ltd.,Technology services,Packaged software,VAS.AX,74028056.0,small
+RTG.AX,RTG Mining Inc Chess Depository Interests repr 1 Sh,Non-energy minerals,Precious metals,VAS.AX,63086280.0,small
+BPG.AX,Black Pearl Group Limited,Technology services,Packaged software,VAS.AX,63616112.0,small
+CKA.AX,Cokal Limited,Energy minerals,Coal,VAS.AX,72289584.0,small
+SEG.AX,Sports Entertainment Group Limited,Consumer services,Broadcasting,VAS.AX,70218696.0,small
+RFG.AX,Retail Food Group Limited,Consumer services,Restaurants,VAS.AX,62212016.0,small
+PPE.AX,Peoplein Limited,Commercial services,Personnel services,VAS.AX,67858784.0,small
+PHO.AX,PhosCo Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,70822472.0,small
+CRS.AX,Caprice Resources Ltd.,Non-energy minerals,Precious metals,VAS.AX,66360048.0,small
+BOL.AX,Boom Logistics Ltd,Finance,Finance/Rental/Leasing,VAS.AX,68542152.0,small
+CD3.AX,CD Private Equity Fund III Units,Finance,Investment managers,VAS.AX,66266144.0,small
+ENX.AX,Enegex Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,76505144.0,small
+VBC.AX,Verbrec Ltd,Industrial services,Engineering & construction,VAS.AX,59700688.0,small
+MTH.AX,Mithril Silver and Gold Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,62827840.0,small
+FFI.AX,F.F.I. Holdings Ltd.,Consumer non-durables,Food: specialty/candy,VAS.AX,64943004.0,small
+EPM.AX,Eclipse Metals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,59252440.0,small
+NNL.AX,Nordic Resources Limited.,Non-energy minerals,Other metals/Minerals,VAS.AX,52646716.0,small
+VBX.AX,VBX Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,61913504.0,small
+SMN.AX,Structural Monitoring Systems Plc Chess Depository Interests,Electronic technology,Aerospace & defense,VAS.AX,59908612.0,small
+COV.AX,CLEO Diagnostics Ltd,Health technology,Medical specialties,VAS.AX,75958456.0,small
+EMH.AX,European Metals Holdings Ltd,Non-energy minerals,Steel,VAS.AX,55510312.0,small
+CZR.AX,CZR Resources Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,65845340.0,small
+MAM.AX,Microequities Asset Management Group Ltd.,Finance,Investment managers,VAS.AX,57568696.0,small
+CTP.AX,Central Petroleum Limited,Energy minerals,Oil & gas production,VAS.AX,67748760.0,small
+PTR.AX,PTR Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,39506476.0,small
+GHY.AX,Gold Hydrogen Ltd.,Utilities,Electric utilities,VAS.AX,71279448.0,small
+PCG.AX,Pengana Capital Group Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,83247800.0,small
+PTX.AX,Prescient Therapeutics Limited,Health technology,Biotechnology,VAS.AX,54678760.0,small
+BCM.AX,Brazillian Critical Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,52918292.0,small
+HIT.AX,Hitech Group Australia Limited,Commercial services,Personnel services,VAS.AX,52875000.0,small
+D3E.AX,D3 Energy Limited,Energy minerals,Integrated oil,VAS.AX,58928996.0,small
+ESR.AX,Estrella Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,66316108.0,small
+AWJ.AX,Auric Mining Ltd.,Non-energy minerals,Precious metals,VAS.AX,60805416.0,small
+ATC.AX,Altech Batteries Limited,Process industries,Chemicals: specialty,VAS.AX,48037892.0,small
+CMP.AX,Compumedics Limited,Health technology,Medical specialties,VAS.AX,54934484.0,small
+TNC.AX,True North Copper Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,54095888.0,small
+FGH.AX,Foresta Group Holdings Limited,Non-energy minerals,Forest products,VAS.AX,62877732.0,small
+SPG.AX,SPC Global Holdings Ltd,Consumer non-durables,Food: specialty/candy,VAS.AX,58044568.0,small
+FGR.AX,First Graphene Ltd,Producer manufacturing,Electrical products,VAS.AX,58115120.0,small
+RTR.AX,Rumble Resources Limited,Non-energy minerals,Precious metals,VAS.AX,55731412.0,small
+BSX.AX,Blackstone Minerals Ltd,Non-energy minerals,Precious metals,VAS.AX,51630164.0,small
+SKK.AX,Stakk Ltd,Technology services,Packaged software,VAS.AX,56173108.0,small
+CYG.AX,Coventry Group Limited,Distribution services,Wholesale distributors,VAS.AX,55626400.0,small
+ANO.AX,Advance ZincTek Limited,Process industries,Chemicals: specialty,VAS.AX,59513800.0,small
+MYE.AX,Mastermyne Group Limited,Industrial services,Engineering & construction,VAS.AX,57099924.0,small
+CTE.AX,Cryosite Limited,Commercial services,Miscellaneous commercial services,VAS.AX,53446472.0,small
+RNT.AX,Rent.com.au Ltd,Technology services,Internet software/Services,VAS.AX,68445800.0,small
+IMU.AX,Imugene Ltd,Health technology,Biotechnology,VAS.AX,52236368.0,small
+SFM.AX,Santa Fe Minerals Ltd.,Non-energy minerals,Precious metals,VAS.AX,45589260.0,small
+TRE.AX,Toubani Resources Limited Registered Shs,Non-energy minerals,Precious metals,VAS.AX,350627168.0,small
+IMA.AX,Image Resources NL,Non-energy minerals,Other metals/Minerals,VAS.AX,45382408.0,small
+WCE.AX,West Coast Silver Limited,Non-energy minerals,Precious metals,VAS.AX,59213424.0,small
+CCA.AX,Change Financial Ltd,Technology services,Packaged software,VAS.AX,53164880.0,small
+SHM.AX,Shriro Holdings Ltd.,Consumer durables,Home furnishings,VAS.AX,56303588.0,small
+RZI.AX,Raiz Invest Ltd.,Finance,Investment banks/Brokers,VAS.AX,59545356.0,small
+RKN.AX,Reckon Limited,Technology services,Packaged software,VAS.AX,54947996.0,small
+PFG.AX,Prime Financial Group Limited,Finance,Investment managers,VAS.AX,58982504.0,small
+ATX.AX,Amplia Therapeutics Ltd.,Health technology,Biotechnology,VAS.AX,123137184.0,small
+NH3.AX,NH3 Clean Energy Limited,Non-energy minerals,Precious metals,VAS.AX,56317544.0,small
+AOF.AX,Australian Unity Office Fund,Finance,Real estate investment trusts,VAS.AX,55890224.0,small
+NUZ.AX,Neurizon Therapeutics Limited,Health technology,Pharmaceuticals: major,VAS.AX,57358424.0,small
+ADN.AX,Andromeda Metals Limited,Non-energy minerals,Precious metals,VAS.AX,41612064.0,small
+TOE.AX,Toro Energy Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,69162064.0,small
+FND.AX,Findi Limited,Commercial services,Miscellaneous commercial services,VAS.AX,62338496.0,small
+PIQ.AX,Proteomics International Laboratories Ltd.,Health services,Medical/Nursing services,VAS.AX,37992320.0,small
+ATP.AX,Atlas Pearls Ltd,Consumer durables,Other consumer specialties,VAS.AX,46099472.0,small
+CC5.AX,Clever Culture Systems Limited,Health technology,Medical specialties,VAS.AX,54428072.0,small
+PGO.AX,Pacgold Limited,Non-energy minerals,Precious metals,VAS.AX,38529196.0,small
+RDM.AX,Red Metal Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,53696248.0,small
+FAR.AX,FAR Ltd,Energy minerals,Integrated oil,VAS.AX,55907840.0,small
+LEX.AX,Lefroy Exploration Ltd.,Non-energy minerals,Precious metals,VAS.AX,49684028.0,small
+HAR.AX,Haranga Resources Limited,Non-energy minerals,Steel,VAS.AX,48902200.0,small
+IRI.AX,Integrated Research Limited,Technology services,Packaged software,VAS.AX,54177544.0,small
+ROC.AX,RocketBoots Ltd.,Technology services,Packaged software,VAS.AX,69280608.0,small
+LMG.AX,Latrobe Magnesium Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,59428516.0,small
+COD.AX,Coda Minerals Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,50516372.0,small
+CLA.AX,Celsius Resources Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,48354940.0,small
+TCF.AX,360 Capital Mortgage REIT,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,51744976.0,small
+JAL.AX,Jameson Resources Limited,Energy minerals,Coal,VAS.AX,51024348.0,small
+ENP.AX,Entropy Neurodynamics Limited,Health technology,Pharmaceuticals: major,VAS.AX,48517236.0,small
+MCE.AX,Matrix Composites & Engineering Ltd,Industrial services,Oilfield services/Equipment,VAS.AX,80886960.0,small
+AUR.AX,Auris Minerals Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,33452274.0,small
+POD.AX,Podium Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,44533524.0,small
+DOC.AX,Doctor Care Anywhere Group PLC Shs Chess Depository Interests Repr 1 sh,Health services,Medical/Nursing services,VAS.AX,49514200.0,small
+UBN.AX,Urbanise.com Ltd.,Technology services,Packaged software,VAS.AX,49716504.0,small
+JLL.AX,Jindalee Lithium Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,43039428.0,small
+AGC.AX,Australian Gold & Copper Ltd.,Non-energy minerals,Precious metals,VAS.AX,48470460.0,small
+OR3.AX,Ore Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,45990356.0,small
+MCA.AX,Murray Cod Australia Limited,Process industries,Agricultural commodities/Milling,VAS.AX,55770880.0,small
+FRM.AX,Farm Pride Foods Limited,Process industries,Agricultural commodities/Milling,VAS.AX,53081992.0,small
+AFA.AX,ASF Group Limited,Finance,Financial conglomerates,VAS.AX,42789468.0,small
+ODY.AX,Odyssey Gold Limited,Non-energy minerals,Precious metals,VAS.AX,52274372.0,small
+FAU.AX,First AU Ltd.,Non-energy minerals,Precious metals,VAS.AX,44630412.0,small
+GT3.AX,Green360 Technologies Limited,Non-energy minerals,Construction materials,VAS.AX,42330676.0,small
+RCM.AX,Rapid Critical Metals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,42953644.0,small
+WWG.AX,Wiseway Group Ltd.,Transportation,Airlines,VAS.AX,46485244.0,small
+ABV.AX,Advanced Braking Technology Limited,Producer manufacturing,Auto parts: OEM,VAS.AX,47756552.0,small
+FEG.AX,Far East Gold Ltd,Non-energy minerals,Precious metals,VAS.AX,49548708.0,small
+DSK.AX,Dusk Group Ltd.,Retail trade,Specialty stores,VAS.AX,49814292.0,small
+HMD.AX,HeraMED Ltd,Technology services,Packaged software,VAS.AX,52465500.0,small
+PXX.AX,PolarX Ltd,Non-energy minerals,Precious metals,VAS.AX,49050344.0,small
+SNT.AX,Syntara Limited,Health technology,Pharmaceuticals: major,VAS.AX,50656748.0,small
+MAP.AX,Microba Life Sciences Limited,Health services,Medical/Nursing services,VAS.AX,41409488.0,small
+IBR.AX,Iron Bear Resources Ltd,Non-energy minerals,Precious metals,VAS.AX,51993904.0,small
+ZNC.AX,Zenith Minerals Limited,Non-energy minerals,Precious metals,VAS.AX,39000660.0,small
+AW1.AX,American West Metals Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,46338000.0,small
+EQU.AX,Equus Energy Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,90043240.0,small
+EZZ.AX,EZZ Life Science Holdings Ltd.,Distribution services,Medical distributors,VAS.AX,38104992.0,small
+AIM.AX,Ai-Media Technologies Limited,Technology services,Packaged software,VAS.AX,44168916.0,small
+BRK.AX,Brookside Energy Limited,Energy minerals,Integrated oil,VAS.AX,58300772.0,small
+LEL.AX,Lithium Energy Ltd.,Non-energy minerals,Precious metals,VAS.AX,38080532.0,small
+BEZ.AX,Besra Gold Inc Shs Chess Depository Interests Repr 1 Sh,Non-energy minerals,Precious metals,VAS.AX,45991100.0,small
+JGH.AX,Jade Gas Holdings Limited,Energy minerals,Integrated oil,VAS.AX,60692840.0,small
+BCA.AX,Black Canyon Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,46737528.0,small
+VTX.AX,Vertex Minerals Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,48718172.0,small
+WAG.AX,Australian Wealth Advisors Group Ltd.,Finance,Investment managers,VAS.AX,40900752.0,small
+MX1.AX,Micro-X Ltd.,Health technology,Medical specialties,VAS.AX,37029924.0,small
+IIQ.AX,Inoviq Ltd,Health services,Medical/Nursing services,VAS.AX,48567532.0,small
+SIX.AX,Sprintex Limited,Producer manufacturing,Auto parts: OEM,VAS.AX,49853544.0,small
+TR2.AX,Tali Resources Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,32900000.0,small
+CXU.AX,Cauldron Energy Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,87590016.0,small
+KRR.AX,King River Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,45371200.0,small
+AAU.AX,Antilles Gold Ltd,Non-energy minerals,Precious metals,VAS.AX,40684324.0,small
+KCC.AX,Kincora Copper Limited Shs Chess Depository Interests Repr 1 Sh,Non-energy minerals,Other metals/Minerals,VAS.AX,39443824.0,small
+VRX.AX,VRX Silica Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,45921500.0,small
+TEK.AX,Thorney Technologies Limited,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,40813004.0,small
+VMC.AX,Venus Metals Corporation Limited,Non-energy minerals,Precious metals,VAS.AX,44457844.0,small
+G11.AX,G11 Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,40232604.0,small
+PPL.AX,Pureprofile Ltd.,Commercial services,Miscellaneous commercial services,VAS.AX,45064352.0,small
+WTL.AX,WT Financial Group Ltd.,Finance,Investment managers,VAS.AX,47906012.0,small
+GTN.AX,GTN Ltd.,Commercial services,Miscellaneous commercial services,VAS.AX,44806460.0,small
+CAE.AX,Cannindah Resources Limited,Non-energy minerals,Precious metals,VAS.AX,47055984.0,small
+SNS.AX,SenSen Networks Ltd.,Technology services,Information technology services,VAS.AX,35687092.0,small
+MVP.AX,Medical Developments International Limited,Health technology,Pharmaceuticals: major,VAS.AX,46189912.0,small
+GWR.AX,GWR Group Limited,Non-energy minerals,Steel,VAS.AX,48822624.0,small
+KZR.AX,Kalamazoo Resources Ltd.,Non-energy minerals,Precious metals,VAS.AX,42406836.0,small
+NSC.AX,NAOS Small Cap Opportunities Company Ltd,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,42900420.0,small
+NGE.AX,NGE Capital Ltd,Finance,Financial conglomerates,VAS.AX,45623288.0,small
+AQN.AX,Aquirian Limited,Commercial services,Miscellaneous commercial services,VAS.AX,43981044.0,small
+CTO.AX,Citigold Corporation Limited,Non-energy minerals,Precious metals,VAS.AX,57000000.0,small
+SDV.AX,SciDev Ltd,Process industries,Chemicals: major diversified,VAS.AX,37067272.0,small
+TPC.AX,TPC Consolidated Limited,Utilities,Electric utilities,VAS.AX,46278860.0,small
+ARD.AX,Argent Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,42528288.0,small
+WZR.AX,Wisr Ltd.,Finance,Finance/Rental/Leasing,VAS.AX,33468490.0,small
+WGR.AX,Western Gold Resources Ltd.,Non-energy minerals,Precious metals,VAS.AX,51458540.0,small
+WCN.AX,White Cliff Minerals Limited,Non-energy minerals,Precious metals,VAS.AX,36024808.0,small
+VKA.AX,Viking Mines Limited,Non-energy minerals,Precious metals,VAS.AX,33934508.0,small
+LLM.AX,Loyal Metals Limited.,Non-energy minerals,Precious metals,VAS.AX,40194688.0,small
+DCC.AX,DigitalX Limited,Technology services,Packaged software,VAS.AX,38701284.0,small
+NMT.AX,Neometals Ltd,Non-energy minerals,Steel,VAS.AX,36983592.0,small
+IBC.AX,Ironbark Balanced Income Limited Registered,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,42454280.0,small
+CAV.AX,Carnavale Resources Limited,Non-energy minerals,Precious metals,VAS.AX,40806556.0,small
+SWP.AX,Swoop Holdings Limited,Electronic technology,Computer peripherals,VAS.AX,41993264.0,small
+EGG.AX,Enero Group Limited,Commercial services,Advertising/Marketing services,VAS.AX,43099180.0,small
+AVM.AX,Advance Metals Limited,Distribution services,Wholesale distributors,VAS.AX,40219988.0,small
+KAT.AX,Katana Capital Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,42747396.0,small
+ODE.AX,Odessa Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,37040184.0,small
+AGR.AX,Aguia Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,50072204.0,small
+VHL.AX,Vitasora Health Limited,Health technology,Medical specialties,VAS.AX,38792544.0,small
+ECT.AX,Environmental Clean Technologies Limited,Commercial services,Miscellaneous commercial services,VAS.AX,34119376.0,small
+RIM.AX,Rimfire Pacific Mining Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,38795432.0,small
+DES.AX,Desoto Resources Ltd.,Non-energy minerals,Precious metals,VAS.AX,42901764.0,small
+EPY.AX,EarlyPay Limited,Finance,Finance/Rental/Leasing,VAS.AX,40150380.0,small
+SIO.AX,Simonds Group Ltd.,Industrial services,Engineering & construction,VAS.AX,46787840.0,small
+FSI.AX,Flagship Investments Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,36588028.0,small
+BMT.AX,Beamtree Holdings Ltd,Technology services,Packaged software,VAS.AX,42869872.0,small
+88E.AX,88 Energy Limited,Energy minerals,Integrated oil,VAS.AX,30091112.0,small
+ORD.AX,Ordell Minerals Ltd,Non-energy minerals,Precious metals,VAS.AX,39373552.0,small
+COB.AX,Cobalt Blue Holdings Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,44959788.0,small
+GUM.AX,Gumtree Australia Markets Limited,Technology services,Internet software/Services,VAS.AX,40156064.0,small
+FRB.AX,Firebird Metals Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,36472284.0,small
+BMR.AX,Ballymore Resources Limited,Non-energy minerals,Precious metals,VAS.AX,35300436.0,small
+FPC.AX,Fat Prophets Global Contrarian Fund Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,40472392.0,small
+PL9.AX,Prairie Lithium Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,39062204.0,small
+TCO.AX,Transmetro Corp. Ltd.,Consumer services,Hotels/Resorts/Cruise lines,VAS.AX,42557236.0,small
+BMG.AX,BMG Resources Limited,Non-energy minerals,Precious metals,VAS.AX,34554900.0,small
+MRZ.AX,Mont Royal Resources Ltd.,Non-energy minerals,Precious metals,VAS.AX,28873964.0,small
+EYE.AX,Nova Eye Medical Ltd,Health technology,Medical specialties,VAS.AX,35605036.0,small
+AR3.AX,Australian Rare Earths Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,35769956.0,small
+M79.AX,Mammoth Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,26268908.0,small
+SKM.AX,Skylark Minerals Limited,Non-energy minerals,Precious metals,VAS.AX,31359114.0,small
+ABY.AX,Adore Beauty Group Ltd.,Retail trade,Specialty stores,VAS.AX,32885274.0,small
+NXM.AX,Nexus Minerals Ltd.,Non-energy minerals,Precious metals,VAS.AX,27772942.0,small
+RWL.AX,Rubicon Water Limited,Producer manufacturing,Industrial machinery,VAS.AX,32988928.0,small
+PNN.AX,Power Minerals Limited,Process industries,Chemicals: agricultural,VAS.AX,37322032.0,small
+CSX.AX,CleanSpace Holdings Ltd.,Health technology,Medical specialties,VAS.AX,38626308.0,small
+ZAG.AX,Zuleika Gold Limited,Non-energy minerals,Precious metals,VAS.AX,32440798.0,small
+STP.AX,Step One Clothing Limited,Retail trade,Internet retail,VAS.AX,38921460.0,small
+LSA.AX,Lachlan Star Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,46248480.0,small
+BDX.AX,BCAL Diagnostics Limited,Health services,Medical/Nursing services,VAS.AX,36499648.0,small
+MBH.AX,Maggie Beer Holdings Ltd.,Producer manufacturing,Industrial conglomerates,VAS.AX,35839116.0,small
+AVE.AX,Avecho Biotechnology Limited,Health technology,Pharmaceuticals: major,VAS.AX,33061172.0,small
+CPV.AX,ClearVue Technologies Ltd.,Electronic technology,Semiconductors,VAS.AX,33690892.0,small
+BKT.AX,Black Rock Mining Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,30068140.0,small
+EVZ.AX,EVZ Limited,Producer manufacturing,Industrial machinery,VAS.AX,35235880.0,small
+CCG.AX,Comms Group Ltd,Technology services,Packaged software,VAS.AX,36628368.0,small
+NXD.AX,NextEd Group Limited,Consumer services,Other consumer services,VAS.AX,40249752.0,small
+HMX.AX,Hammer Metals Limited,Non-energy minerals,Precious metals,VAS.AX,27675520.0,small
+EMD.AX,Emyria Ltd,Technology services,Packaged software,VAS.AX,37908156.0,small
+CNQ.AX,Clean TeQ Water Ltd,Industrial services,Environmental services,VAS.AX,33607412.0,small
+XRG.AX,xReality Group Limited,Consumer services,Movies/Entertainment,VAS.AX,39801536.0,small
+KPO.AX,Kalina Power Limited,Utilities,Alternative power generation,VAS.AX,38129268.0,small
+DUB.AX,Dubber Corporation Limited,Technology services,Packaged software,VAS.AX,37822016.0,small
+HHR.AX,Hartshead Resources NL,Energy minerals,Integrated oil,VAS.AX,36512868.0,small
+CG1.AX,Carbonxt Group Ltd.,Process industries,Chemicals: specialty,VAS.AX,37266412.0,small
+AI1.AX,Adisyn Limited,Technology services,Information technology services,VAS.AX,47545156.0,small
+CPN.AX,Caspin Resources Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,33907732.0,small
+TIP.AX,Teaminvest Private Group Ltd,Finance,Investment managers,VAS.AX,35331316.0,small
+MEC.AX,Morphic Ethical Equities Fund Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,34918416.0,small
+RTH.AX,RAS Technology Holdings Limited,Technology services,Data processing services,VAS.AX,34477848.0,small
+NVO.AX,Novo Resources Corp. Shs Chess Depository Interests repr 1 shs,Non-energy minerals,Other metals/Minerals,VAS.AX,38141724.0,small
+CST.AX,Castile Resources Ltd,Non-energy minerals,Precious metals,VAS.AX,34396648.0,small
+ATS.AX,Australis Oil & Gas Ltd.,Energy minerals,Oil & gas production,VAS.AX,31939932.0,small
+COS.AX,Cosol Limited,Technology services,Information technology services,VAS.AX,42767368.0,small
+S2R.AX,S2 Resources Ltd.,Non-energy minerals,Precious metals,VAS.AX,31363596.0,small
+PCK.AX,PainChek Ltd,Technology services,Packaged software,VAS.AX,33441170.0,small
+RGL.AX,Riversgold Ltd.,Non-energy minerals,Precious metals,VAS.AX,27562052.0,small
+FLX.AX,Felix Group Holdings Ltd.,Technology services,Internet software/Services,VAS.AX,31342576.0,small
+VML.AX,Vital Metals Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,31951754.0,small
+GFL.AX,Global Masters Fund Limited,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,32724900.0,small
+AEV.AX,Avenira Limited,Non-energy minerals,Precious metals,VAS.AX,31939830.0,small
+MAY.AX,Melbana Energy Limited,Energy minerals,Oil & gas production,VAS.AX,26473784.0,small
+GSN.AX,Great Southern Mining Limited,Non-energy minerals,Precious metals,VAS.AX,32147602.0,small
+JAN.AX,Janison Education Group Ltd.,Technology services,Packaged software,VAS.AX,27498266.0,small
+G1C.AX,Group One Capital Limited,Finance,Real estate development,VAS.AX,29625528.0,small
+HE8.AX,Helios Energy Ltd,Energy minerals,Integrated oil,VAS.AX,30138040.0,small
+BBC.AX,BNK Banking Corporation Limited,Finance,Regional banks,VAS.AX,29695008.0,small
+RMY.AX,RMA Global Ltd.,Technology services,Internet software/Services,VAS.AX,27237598.0,small
+GA8.AX,Goldarc Resources Limited,Non-energy minerals,Precious metals,VAS.AX,30916042.0,small
+MRD.AX,Mount Ridley Mines Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,39832052.0,small
+BLG.AX,BluGlass Ltd,Electronic technology,Semiconductors,VAS.AX,33110878.0,small
+RVT.AX,Richmond Vanadium Technology Pty Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,34148840.0,small
+VRS.AX,Veris Limited,Technology services,Data processing services,VAS.AX,29748446.0,small
+BNL.AX,Blue Star Helium Limited,Process industries,Chemicals: specialty,VAS.AX,35142156.0,small
+NCC.AX,NAOS Emerging Opportunities Co. Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,30626834.0,small
+LIB.AX,Liberty Metals Ltd,Non-energy minerals,Precious metals,VAS.AX,24603658.0,small
+MDI.AX,Middle Island Resources Limited,Non-energy minerals,Precious metals,VAS.AX,26819690.0,small
+CCX.AX,City Chic Collective Limited,Retail trade,Apparel/Footwear retail,VAS.AX,32738412.0,small
+ADO.AX,AnteoTech Ltd,Health technology,Medical specialties,VAS.AX,35677664.0,small
+DVL.AX,dorsaVi Ltd.,Electronic technology,Electronic equipment/Instruments,VAS.AX,32670772.0,small
+IPD.AX,Impedimed Limited,Health technology,Medical specialties,VAS.AX,31600588.0,small
+SEN.AX,Senetas Corporation Limited,Electronic technology,Computer peripherals,VAS.AX,30170848.0,small
+DGR.AX,DGR Global Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,35485664.0,small
+SVG.AX,Savannah Goldfields Limited,Non-energy minerals,Precious metals,VAS.AX,34265236.0,small
+JPR.AX,Jupiter Energy Limited,Energy minerals,Oil & gas production,VAS.AX,35883460.0,small
+M4M.AX,Macro Metals Limited,Non-energy minerals,Steel,VAS.AX,27453786.0,small
+AAM.AX,AuMega Metals Ltd,Non-energy minerals,Precious metals,VAS.AX,34629624.0,small
+DGH.AX,Desane Group Holdings Ltd,Finance,Real estate development,VAS.AX,31909792.0,small
+AR9.AX,archTIS Ltd.,Technology services,Information technology services,VAS.AX,35989032.0,small
+GCM.AX,"GCM Corp., Ltd.",Non-energy minerals,Precious metals,VAS.AX,37669144.0,small
+NOU.AX,Noumi Limited,Consumer non-durables,Food: meat/fish/dairy,VAS.AX,31867572.0,small
+HAW.AX,Hawthorn Resources Limited,Non-energy minerals,Precious metals,VAS.AX,30151406.0,small
+KM1.AX,Kali Metals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,29834590.0,small
+TMK.AX,TMK Energy Limited,Energy minerals,Oil & gas production,VAS.AX,38897956.0,small
+GAL.AX,Galileo Mining Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,30631864.0,small
+DME.AX,Dome Gold Mines Ltd.,Non-energy minerals,Precious metals,VAS.AX,27292704.0,small
+GR8.AX,Great Dirt Resources Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,24759730.0,small
+ASH.AX,Ashley Services Group Ltd.,Commercial services,Personnel services,VAS.AX,29715182.0,small
+BSA.AX,BSA Limited,Industrial services,Engineering & construction,VAS.AX,27108096.0,small
+QML.AX,QMines Ltd.,Non-energy minerals,Precious metals,VAS.AX,31085012.0,small
+PL3.AX,Patagonia Lithium Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,36236468.0,small
+DEM.AX,De.mem Ltd.,Industrial services,Engineering & construction,VAS.AX,30372482.0,small
+EMC.AX,Everest Metals Corporation Limited,Non-energy minerals,Precious metals,VAS.AX,31016306.0,small
+VRC.AX,Volt Resources Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,33492128.0,small
+AUZ.AX,Australian Mines Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,32823422.0,small
+LGP.AX,Little Green Pharma Ltd.,Process industries,Chemicals: major diversified,VAS.AX,29668024.0,small
+PWN.AX,Parkway Corporate Limited,Industrial services,Environmental services,VAS.AX,26304650.0,small
+OD6.AX,OD6 Metals Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,26059220.0,small
+AXN.AX,Alliance Nickel Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,28926520.0,small
+DYM.AX,Dynamic Metals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,29387084.0,small
+C1X.AX,Cosmos Exploration Limited,Non-energy minerals,Precious metals,VAS.AX,26525026.0,small
+KME.AX,Kip McGrath Education Centres Limited,Consumer services,Other consumer services,VAS.AX,30340994.0,small
+3DP.AX,Pointerra Ltd.,Technology services,Information technology services,VAS.AX,26197658.0,small
+PPK.AX,PPK Group Limited,Consumer services,Other consumer services,VAS.AX,29059998.0,small
+MNB.AX,Minbos Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,38142640.0,small
+LGM.AX,Legacy Minerals Holdings Limited,Non-energy minerals,Precious metals,VAS.AX,35020164.0,small
+AVG.AX,Australian Vintage Ltd,Consumer non-durables,Beverages: alcoholic,VAS.AX,26357032.0,small
+AT1.AX,Atomo Diagnostics Ltd.,Health technology,Medical specialties,VAS.AX,25925610.0,small
+IPT.AX,Impact Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,213587824.0,small
+SEQ.AX,Sequoia Financial Group Ltd.,Finance,Investment managers,VAS.AX,26353682.0,small
+NSB.AX,Neuroscientific Biopharmaceuticals Ltd.,Health technology,Biotechnology,VAS.AX,33257572.0,small
+ARI.AX,Arika Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,27907840.0,small
+A3D.AX,Aurora Labs Ltd.,Producer manufacturing,Industrial machinery,VAS.AX,28275462.0,small
+QFE.AX,QuickFee Ltd.,Commercial services,Miscellaneous commercial services,VAS.AX,29902964.0,small
+OZM.AX,OzAurum Resources Ltd.,Non-energy minerals,Precious metals,VAS.AX,25749170.0,small
+BPM.AX,BPM Minerals Ltd.,Non-energy minerals,Construction materials,VAS.AX,28571658.0,small
+RKT.AX,RocketDNA Ltd,Technology services,Data processing services,VAS.AX,25059466.0,small
+HYT.AX,HyTerra Ltd,Energy minerals,Integrated oil,VAS.AX,27517178.0,small
+AMS.AX,Atomos Ltd.,Consumer durables,Electronics/Appliances,VAS.AX,22242186.0,small
+AMN.AX,Agrimin Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,28869710.0,small
+HTM.AX,High-Tech Metals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,28425554.0,small
+ASV.AX,Asset Vision Co Ltd,Commercial services,Personnel services,VAS.AX,20280012.0,small
+NTD.AX,NTAW Holdings Limited.,Distribution services,Wholesale distributors,VAS.AX,28510296.0,small
+GEN.AX,Genmin Ltd.,Non-energy minerals,Steel,VAS.AX,24201004.0,small
+AHK.AX,ARK Mines Ltd,Non-energy minerals,Precious metals,VAS.AX,29658678.0,small
+FBR.AX,FBR Limited,Producer manufacturing,Industrial machinery,VAS.AX,27860802.0,small
+GTI.AX,Gratifii Ltd,Non-energy minerals,Steel,VAS.AX,23897864.0,small
+EMN.AX,"Euro Manganese, Inc. Shs Chess Depository Intersts Repr 1 Sh",Non-energy minerals,Other metals/Minerals,VAS.AX,27358192.0,small
+CCE.AX,Carnegie Clean Energy Ltd,Producer manufacturing,Electrical products,VAS.AX,24463648.0,small
+FRX.AX,FlexiRoam Ltd,Communications,Wireless telecommunications,VAS.AX,34884512.0,small
+JAV.AX,Javelin Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,26905248.0,small
+LAT.AX,Latitude 66 Limited,Non-energy minerals,Precious metals,VAS.AX,23082486.0,small
+NAC.AX,NAOS Ex-50 Opportunities Co. Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,28392736.0,small
+CVB.AX,Curvebeam AI Ltd.,Health technology,Biotechnology,VAS.AX,24364450.0,small
+CIW.AX,Clime Investment Management Ltd,Finance,Investment managers,VAS.AX,26787840.0,small
+ION.AX,Iondrive Limited,Non-energy minerals,Precious metals,VAS.AX,27219032.0,small
+RLF.AX,RLF AgTech Ltd,Process industries,Agricultural commodities/Milling,VAS.AX,29979282.0,small
+SNG.AX,Siren Gold Ltd,Non-energy minerals,Precious metals,VAS.AX,24000944.0,small
+PSL.AX,Paterson Resources Limited,Non-energy minerals,Precious metals,VAS.AX,26329314.0,small
+LDR.AX,Lode Resources Ltd,Non-energy minerals,Precious metals,VAS.AX,25167622.0,small
+RAP.AX,Raptor Metals Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,26162960.0,small
+GMN.AX,Gold Mountain Limited,Non-energy minerals,Precious metals,VAS.AX,21463766.0,small
+BWF.AX,Blackwall Limited,Finance,Real estate investment trusts,VAS.AX,34072604.0,small
+RMI.AX,Resource Minerals International Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,28119626.0,small
+S66.AX,Star Combo Pharma Ltd.,Health technology,Pharmaceuticals: other,VAS.AX,27016580.0,small
+EQX.AX,Equatorial Resources Limited,Non-energy minerals,Steel,VAS.AX,24974616.0,small
+BRX.AX,Belararox Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,19891456.0,small
+HOR.AX,Horseshoe Metals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,23968292.0,small
+RAU.AX,Resouro Strategic Metals Inc Shs Chess Depository Interests Repr 1 Sh,Non-energy minerals,Other metals/Minerals,VAS.AX,32169610.0,small
+P1E.AX,Pure One Corporation Limited,Energy minerals,Oil & gas production,VAS.AX,24933350.0,small
+MFD.AX,Mayfield Childcare Ltd.,Consumer services,Other consumer services,VAS.AX,25644366.0,small
+LML.AX,Lincoln Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,27357056.0,small
+NC1.AX,Nico Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,24622976.0,small
+OEC.AX,Orbital Corporation Ltd,Electronic technology,Aerospace & defense,VAS.AX,26859818.0,small
+VMT.AX,Vmoto Limited,Consumer durables,Motor vehicles,VAS.AX,30721346.0,small
+MCP.AX,Mcpherson's Limited,Consumer non-durables,Household/Personal care,VAS.AX,25910846.0,small
+VIT.AX,Vitura Health Limited,Health technology,Pharmaceuticals: other,VAS.AX,25184188.0,small
+1AI.AX,Algorae Pharmaceuticals Limited,Health technology,Pharmaceuticals: other,VAS.AX,27407016.0,small
+AUQ.AX,Alara Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,28108064.0,small
+AGN.AX,Argenica Therapeutics Ltd,Health technology,Biotechnology,VAS.AX,19910790.0,small
+KRM.AX,Kingsrose Mining Ltd,Non-energy minerals,Precious metals,VAS.AX,25619904.0,small
+BAS.AX,Bass Oil Ltd,Energy minerals,Oil & gas production,VAS.AX,24222392.0,small
+REE.AX,RareX Limited,Non-energy minerals,Precious metals,VAS.AX,20617608.0,small
+ABX.AX,ABx Group Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,25075648.0,small
+CRR.AX,Critical Resources Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,25352684.0,small
+ANX.AX,Anax Metals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,35846948.0,small
+GDM.AX,Great Divide Mining Ltd,Non-energy minerals,Precious metals,VAS.AX,24465236.0,small
+IR1.AX,Iris Metals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,28159552.0,small
+ZGL.AX,Zicom Group Limited,Producer manufacturing,Industrial machinery,VAS.AX,22635922.0,small
+NIM.AX,Nimy Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,21561068.0,small
+CBL.AX,Control Bionics Ltd.,Technology services,Packaged software,VAS.AX,24717712.0,small
+AMX.AX,Aerometrex Ltd.,Industrial services,Engineering & construction,VAS.AX,23272708.0,small
+TG1.AX,Techgen Metals Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,13095701.0,small
+TWL.AX,Trade Window Holdings Ltd.,Technology services,Packaged software,VAS.AX,32495600.0,small
+EVR.AX,EV Resources Limited,Non-energy minerals,Precious metals,VAS.AX,24320026.0,small
+TRI.AX,TrivarX Limited,Technology services,Packaged software,VAS.AX,20766482.0,small
+ERL.AX,Empire Resources Limited,Non-energy minerals,Precious metals,VAS.AX,27119840.0,small
+OEL.AX,Otto Energy Limited,Energy minerals,Oil & gas production,VAS.AX,23975048.0,small
+HCT.AX,Holista Colltech Limited,Health technology,Biotechnology,VAS.AX,23173566.0,small
+VSR.AX,Voltaic Strategic Resources Limited,Energy minerals,Integrated oil,VAS.AX,22702008.0,small
+CVR.AX,Cavalier Resources Limited,Non-energy minerals,Precious metals,VAS.AX,26294152.0,small
+AEG.AX,Aland Equity Group Limited,Finance,Investment managers,VAS.AX,23036348.0,small
+CC9.AX,Chariot Resources Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,17470672.0,small
+KNB.AX,Koonenberry Gold Limited,Non-energy minerals,Precious metals,VAS.AX,23631580.0,small
+NC6.AX,Nanollose Ltd,Health technology,Biotechnology,VAS.AX,25313206.0,small
+LEG.AX,Legend Mining Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,23315820.0,small
+ASP.AX,Aspermont Limited,Consumer services,Publishing: books/magazines,VAS.AX,22823400.0,small
+IAM.AX,Income Asset Management Group Limited,Finance,Investment banks/Brokers,VAS.AX,16755675.0,small
+BRU.AX,Buru Energy Ltd,Energy minerals,Integrated oil,VAS.AX,19049660.0,small
+CHL.AX,Camplify Holdings Ltd.,Technology services,Internet software/Services,VAS.AX,17678462.0,small
+VPR.AX,Volt Group Ltd.,Utilities,Electric utilities,VAS.AX,26182988.0,small
+CP8.AX,Canadian Phosphate Limited,Process industries,Chemicals: agricultural,VAS.AX,23232958.0,small
+HMG.AX,Hamelin Gold Limited,Non-energy minerals,Precious metals,VAS.AX,24787946.0,small
+RMX.AX,Red Mountain Mining Ltd,Non-energy minerals,Precious metals,VAS.AX,18048032.0,small
+WMG.AX,Western Mines Group Ltd,Non-energy minerals,Precious metals,VAS.AX,20474702.0,small
+TAS.AX,Tasman Resources Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,20022440.0,small
+FUN.AX,Fortuna Metals Limited,Non-energy minerals,Precious metals,VAS.AX,23523220.0,small
+4DS.AX,4DS Memory Ltd.,Electronic technology,Semiconductors,VAS.AX,22669886.0,small
+ARV.AX,Artemis Resources Limited,Non-energy minerals,Precious metals,VAS.AX,18854610.0,small
+IDA.AX,Indiana Resources Limited,Non-energy minerals,Precious metals,VAS.AX,19971206.0,small
+AHF.AX,Australian Dairy Nutritionals Limited,Consumer non-durables,Food: meat/fish/dairy,VAS.AX,20585646.0,small
+TAL.AX,Talius Group Limited,Technology services,Packaged software,VAS.AX,18064516.0,small
+HCL.AX,HighCom Limited,Electronic technology,Aerospace & defense,VAS.AX,25141910.0,small
+GAP.AX,Gale Pacific Limited,Process industries,Textiles,VAS.AX,23909560.0,small
+IOV.AX,Ion Video Ltd,Non-energy minerals,Precious metals,VAS.AX,18576398.0,small
+AZI.AX,Altamin Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,19017234.0,small
+AZ9.AX,Asian Battery Metals PLC Chess Depository Interests Repr 0.1 Sh,Energy minerals,Oil & gas production,VAS.AX,16413337.0,small
+SUH.AX,Southern Hemisphere Mining Limited,Non-energy minerals,Precious metals,VAS.AX,18406002.0,small
+WEC.AX,White Energy Company Limited,Energy minerals,Coal,VAS.AX,17658430.0,small
+AKN.AX,AuKing Mining Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,27368566.0,small
+ADX.AX,ADX Energy Ltd,Energy minerals,Integrated oil,VAS.AX,25041978.0,small
+ZNO.AX,Zoono Group Limited,Health technology,Pharmaceuticals: major,VAS.AX,25185130.0,small
+OLL.AX,OpenLearning Ltd.,Technology services,Internet software/Services,VAS.AX,20332168.0,small
+AJX.AX,Alexium International Group Limited,Process industries,Chemicals: specialty,VAS.AX,21894496.0,small
+PUR.AX,Pursuit Minerals Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,22532964.0,small
+IME.AX,ImExHS Ltd,Technology services,Packaged software,VAS.AX,21079766.0,small
+BTM.AX,Breakthrough Minerals Limited,Energy minerals,Coal,VAS.AX,23044564.0,small
+SRR.AX,Sarama Resources Ltd. Shs Chess Depository Interests Repr 1 Sh,Non-energy minerals,Precious metals,VAS.AX,17596680.0,small
+SMM.AX,Somerset Minerals Limited,Non-energy minerals,Precious metals,VAS.AX,20326138.0,small
+RRR.AX,Revolver Resources Holdings Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,21821546.0,small
+ORP.AX,Orpheus Uranium Limited,Non-energy minerals,Precious metals,VAS.AX,20775164.0,small
+WIN.AX,WIN Metals Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,23149188.0,small
+MPP.AX,Metro Performance Glass Ltd,Process industries,Industrial specialties,VAS.AX,1142432384.0,small
+MVL.AX,Marvel Gold Ltd,Non-energy minerals,Precious metals,VAS.AX,22755106.0,small
+SLD.AX,Saluda Medical Inc CHESS Depository Interest,Health technology,Medical specialties,VAS.AX,,small
+ALM.AX,Alma Metals Limited Chess Depository Interests repr 1 Shs,Non-energy minerals,Other metals/Minerals,VAS.AX,31287640.0,small
+PVL.AX,Powerhouse Ventures Ltd.,Finance,Investment managers,VAS.AX,18568522.0,small
+PVT.AX,Pivotal Metals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,17041992.0,small
+GUL.AX,Gullewa Limited,Non-energy minerals,Precious metals,VAS.AX,20058040.0,small
+DEL.AX,Delorean Corporation Ltd,Utilities,Electric utilities,VAS.AX,20926424.0,small
+PRX.AX,Prodigy Gold NL,Non-energy minerals,Precious metals,VAS.AX,18877230.0,small
+GC1.AX,Glennon Small Companies Ltd,Finance,Financial conglomerates,VAS.AX,19412564.0,small
+GT1.AX,Green Technology Metals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,18221962.0,small
+GW1.AX,Greenwing Resources Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,22641340.0,small
+XRA.AX,Xenora Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,18270112.0,small
+TAR.AX,Taruga Minerals Limited,Non-energy minerals,Precious metals,VAS.AX,15227062.0,small
+GRE.AX,Greentech Metals Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,21411230.0,small
+AKA.AX,Aureka Limited,Non-energy minerals,Precious metals,VAS.AX,18982326.0,small
+ACS.AX,Accent Resources NL,Non-energy minerals,Precious metals,VAS.AX,24476864.0,small
+HWK.AX,Hawk Resources Limited.,Non-energy minerals,Precious metals,VAS.AX,19928318.0,small
+NUC.AX,Nuchev Pty Ltd,Consumer non-durables,Food: meat/fish/dairy,VAS.AX,21170534.0,small
+BTC.AX,BTC Health Ltd Registered,Finance,Investment managers,VAS.AX,19659996.0,small
+W2V.AX,WAY 2 VAT LTD,Technology services,Packaged software,VAS.AX,17788690.0,small
+MBK.AX,Metal Bank Ltd,Non-energy minerals,Precious metals,VAS.AX,19349202.0,small
+FME.AX,Future Metals NL,Non-energy minerals,Precious metals,VAS.AX,16292815.0,small
+DTZ.AX,Dotz Nano Limited,Process industries,Chemicals: specialty,VAS.AX,23565370.0,small
+SCN.AX,Scorpion Minerals Limited,Non-energy minerals,Precious metals,VAS.AX,18422260.0,small
+TG6.AX,TG Metals Ltd.,Non-energy minerals,Precious metals,VAS.AX,18079548.0,small
+XF1.AX,Xref Ltd,Technology services,Packaged software,VAS.AX,15406283.0,small
+KAL.AX,Kalgoorlie Gold Mining Limited,Non-energy minerals,Precious metals,VAS.AX,19146548.0,small
+MAG.AX,Magmatic Resources Ltd.,Non-energy minerals,Precious metals,VAS.AX,16573624.0,small
+GRV.AX,Greenvale Energy Limited,Energy minerals,Oil & gas production,VAS.AX,21338482.0,small
+MRR.AX,MinRex Resources Limited,Non-energy minerals,Precious metals,VAS.AX,18985182.0,small
+SPN.AX,Sparc Technologies Ltd,Commercial services,Miscellaneous commercial services,VAS.AX,20680796.0,small
+AQX.AX,Alice Queen Limited,Non-energy minerals,Precious metals,VAS.AX,17322884.0,small
+TRM.AX,Truscott Mining Corporation Ltd,Non-energy minerals,Precious metals,VAS.AX,17095084.0,small
+NHE.AX,Noble Helium Ltd.,Process industries,Chemicals: specialty,VAS.AX,22781948.0,small
+PKP.AX,Peak Processing Limited,Health technology,Pharmaceuticals: other,VAS.AX,19730298.0,small
+MPX.AX,Mustera Property Group Ltd.,Finance,Real estate development,VAS.AX,19088566.0,small
+LM1.AX,Leeuwin Metals Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,18445006.0,small
+SFX.AX,Sheffield Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,17798730.0,small
+FZR.AX,Fitzroy River Corp. Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,17812452.0,small
+EME.AX,Energy Metals Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,18661816.0,small
+VMS.AX,Venari Minerals NL,Non-energy minerals,Precious metals,VAS.AX,16682903.0,small
+HIO.AX,Hawsons Iron Ltd,Non-energy minerals,Steel,VAS.AX,18826006.0,small
+KAM.AX,K2 Asset Management Holdings Ltd,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,17358134.0,small
+TSL.AX,Titanium Sands Ltd.,Non-energy minerals,Precious metals,VAS.AX,18757980.0,small
+ADG.AX,Adelong Gold Ltd,Non-energy minerals,Precious metals,VAS.AX,15999927.0,small
+ICE.AX,iCetana Ltd.,Technology services,Packaged software,VAS.AX,20741212.0,small
+RHT.AX,Resonance Health Ltd,Health services,Medical/Nursing services,VAS.AX,20039050.0,small
+NOX.AX,Noxopharm Ltd.,Health technology,Pharmaceuticals: major,VAS.AX,18434276.0,small
+CMD.AX,Cassius Mining Ltd,Non-energy minerals,Precious metals,VAS.AX,31713638.0,small
+STG.AX,Straker Ltd,Commercial services,Miscellaneous commercial services,VAS.AX,17371612.0,small
+SGA.AX,Sarytogan Graphite Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,22650482.0,small
+GSS.AX,Genetic Signatures Ltd.,Commercial services,Miscellaneous commercial services,VAS.AX,18171106.0,small
+EPX.AX,EPX Limited,Technology services,Packaged software,VAS.AX,16842384.0,small
+CXZ.AX,Connexion Mobility Ltd,Technology services,Packaged software,VAS.AX,17429436.0,small
+IDT.AX,IDT Australia Limited,Health technology,Pharmaceuticals: major,VAS.AX,18379300.0,small
+AAP.AX,Australian Agricultural Projects Ltd.,Consumer non-durables,Food: specialty/candy,VAS.AX,19167394.0,small
+SKN.AX,Skin Elements Ltd.,Consumer non-durables,Household/Personal care,VAS.AX,12100857.0,small
+SOR.AX,Strategic Elements Ltd,Finance,Investment managers,VAS.AX,19293962.0,small
+ACU.AX,Acumentis Group Limited,Finance,Real estate development,VAS.AX,17836402.0,small
+DKM.AX,Duketon Mining Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,17771190.0,small
+CR9.AX,Corella Resources Ltd,Non-energy minerals,Construction materials,VAS.AX,19154616.0,small
+KLR.AX,Kaili Resources Limited,Non-energy minerals,Precious metals,VAS.AX,16582541.0,small
+FIN.AX,Fin Resources Limited,Process industries,Chemicals: agricultural,VAS.AX,14789580.0,small
+MGA.AX,MetalsGrove Mining Limited,Non-energy minerals,Precious metals,VAS.AX,17417134.0,small
+RC1.AX,Redcastle Resources Limited,Technology services,Packaged software,VAS.AX,21008672.0,small
+AKO.AX,Akora Resources Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,13913980.0,small
+TIA.AX,Tian An Australia Limited,Finance,Real estate development,VAS.AX,22518296.0,small
+EAX.AX,Energy Action Limited,Commercial services,Miscellaneous commercial services,VAS.AX,17313860.0,small
+5GN.AX,5G Networks Limited,Technology services,Data processing services,VAS.AX,14045395.0,small
+CQT.AX,Conneqt Health Limited,Health technology,Medical specialties,VAS.AX,21433242.0,small
+SSH.AX,SSH Group Ltd.,Energy minerals,Oil & gas production,VAS.AX,16346750.0,small
+BTE.AX,Botala Energy Ltd.,Energy minerals,Oil & gas production,VAS.AX,17523650.0,small
+BM8.AX,Battery Age Minerals Limited,Non-energy minerals,Steel,VAS.AX,14392790.0,small
+NAE.AX,New Age Exploration Limited,Non-energy minerals,Precious metals,VAS.AX,10712799.0,small
+PGM.AX,Platina Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,14833398.0,small
+LPE.AX,Locality Planning Energy Holdings Limited,Utilities,Electric utilities,VAS.AX,16801448.0,small
+TMX.AX,Terrain Minerals Ltd,Non-energy minerals,Precious metals,VAS.AX,16679141.0,small
+IRD.AX,Iron Road Ltd,Non-energy minerals,Steel,VAS.AX,14147278.0,small
+BLU.AX,Blue Energy Limited,Energy minerals,Oil & gas production,VAS.AX,21083816.0,small
+LIT.AX,Livium Ltd.,Process industries,Chemicals: agricultural,VAS.AX,18576964.0,small
+GNM.AX,Great Northern Minerals Limited,Non-energy minerals,Precious metals,VAS.AX,14568411.0,small
+AJL.AX,AJ Lucas Group Limited,Energy minerals,Coal,VAS.AX,15820891.0,small
+CCM.AX,Cadoux Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,14094868.0,small
+EVG.AX,Evion Group NL,Process industries,Chemicals: agricultural,VAS.AX,16176988.0,small
+LU7.AX,Lithium Universe Limited,Technology services,Internet software/Services,VAS.AX,12928882.0,small
+MLS.AX,Metals Australia Ltd,Non-energy minerals,Precious metals,VAS.AX,16829550.0,small
+MGU.AX,Magnum Mining and Exploration Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,16065186.0,small
+PAB.AX,Patrys Limited,Health technology,Pharmaceuticals: major,VAS.AX,9199674.0,small
+BCC.AX,Beam Communications Holdings Limited,Electronic technology,Telecommunications equipment,VAS.AX,16852274.0,small
+ECP.AX,ECP Emerging Growth Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,15264485.0,small
+PR1.AX,Pure Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,21401588.0,small
+TLM.AX,Talisman Mining Limited,Non-energy minerals,Precious metals,VAS.AX,13747385.0,small
+PGD.AX,Peregrine Gold Ltd.,Non-energy minerals,Precious metals,VAS.AX,13833206.0,small
+SCP.AX,Scalare Partners Holdings Limited,Consumer non-durables,Food: specialty/candy,VAS.AX,14340461.0,small
+CAZ.AX,Cazaly Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,12958677.0,small
+AFL.AX,AF Legal Group Limited,Commercial services,Miscellaneous commercial services,VAS.AX,15301369.0,small
+NOV.AX,Novatti Group Ltd.,Technology services,Packaged software,VAS.AX,15478611.0,small
+MHC.AX,Manhattan Gold Corporation Limited,Non-energy minerals,Precious metals,VAS.AX,14500212.0,small
+YUG.AX,Yugo Metals Limited,Non-energy minerals,Precious metals,VAS.AX,15707642.0,small
+IS3.AX,I Synergy Group Ltd.,Commercial services,Advertising/Marketing services,VAS.AX,17406650.0,small
+MEM.AX,Memphasys Ltd,Health technology,Biotechnology,VAS.AX,12812552.0,small
+ICL.AX,Iceni Gold Ltd.,Non-energy minerals,Precious metals,VAS.AX,12655512.0,small
+HTG.AX,Harvest Technology Group Ltd.,Technology services,Packaged software,VAS.AX,14422527.0,small
+SRJ.AX,SRJ Technologies Group PLC Shs Chess Depository Interests repr 1 Shs,Industrial services,Engineering & construction,VAS.AX,12729435.0,small
+MXO.AX,Motio Limited,Commercial services,Advertising/Marketing services,VAS.AX,15197863.0,small
+LPM.AX,Lithium Plus Minerals Ltd.,Process industries,Chemicals: agricultural,VAS.AX,18597600.0,small
+FG1.AX,Flynn Gold Ltd,Non-energy minerals,Precious metals,VAS.AX,12173106.0,small
+FL1.AX,First Lithium Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,15214305.0,small
+RAG.AX,Ragnar Metals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,13677703.0,small
+AVA.AX,Ava Risk Group Ltd.,Technology services,Information technology services,VAS.AX,16010449.0,small
+CND.AX,Condor Energy Limited,Energy minerals,Integrated oil,VAS.AX,13618691.0,small
+XPD.AX,Xpedra Resources Limited,Non-energy minerals,Precious metals,VAS.AX,12097170.0,small
+LSR.AX,Lodestar Minerals Limited,Non-energy minerals,Precious metals,VAS.AX,22098340.0,small
+DWG.AX,DataWorks Group Limited,Technology services,Packaged software,VAS.AX,16488692.0,small
+T92.AX,Terra Critical Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,11424147.0,small
+VR8.AX,Vanadium Resources Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,10620185.0,small
+BNR.AX,Bulletin Resources Limited,Non-energy minerals,Precious metals,VAS.AX,14093439.0,small
+JNS.AX,Janus Electric Holdings Limited,Utilities,Alternative power generation,VAS.AX,20769358.0,small
+JAT.AX,Jatcorp ltd,Process industries,Chemicals: specialty,VAS.AX,15729903.0,small
+BUX.AX,Buxton Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,14496224.0,small
+ADD.AX,Adavale Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,14153930.0,small
+IND.AX,Industrial Minerals Limited,Non-energy minerals,Construction materials,VAS.AX,8835475.0,small
+APL.AX,Associate Global Partners Limited,Finance,Investment managers,VAS.AX,17262730.0,small
+NTI.AX,Neurotech International Ltd.,Health technology,Medical specialties,VAS.AX,15812900.0,small
+MEG.AX,Megado Minerals Ltd.,Non-energy minerals,Precious metals,VAS.AX,12913665.0,small
+BTN.AX,Butn Limited,Technology services,Packaged software,VAS.AX,15303102.0,small
+TON.AX,Triton Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,10978722.0,small
+MAN.AX,Mandrake Resources Ltd,Non-energy minerals,Precious metals,VAS.AX,13172458.0,small
+JCS.AX,JCurve Solutions Limited,Technology services,Information technology services,VAS.AX,14798424.0,small
+NWM.AX,Norwest Minerals Ltd.,Non-energy minerals,Precious metals,VAS.AX,14059617.0,small
+AHE.AX,Adheris Health Limited,Technology services,Packaged software,VAS.AX,12105807.0,small
+CLU.AX,Cluey Ltd,Technology services,Information technology services,VAS.AX,13760126.0,small
+AKG.AX,Academies Australasia Group Limited,Consumer services,Other consumer services,VAS.AX,13924518.0,small
+FRE.AX,Firebrick Pharma Limited,Health technology,Pharmaceuticals: major,VAS.AX,13381392.0,small
+NFM.AX,New Frontier Minerals Limited,Non-energy minerals,Precious metals,VAS.AX,13866372.0,small
+TMB.AX,Tambourah Metals Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,12587601.0,small
+RDN.AX,Raiden Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,13803567.0,small
+HFR.AX,Highfield Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,12800081.0,small
+FMR.AX,FMR Resources Limited,Technology services,Packaged software,VAS.AX,9820154.0,small
+ROG.AX,Red Sky Energy Limited,Energy minerals,Integrated oil,VAS.AX,10844455.0,small
+I88.AX,Infini Resources Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,14066941.0,small
+CMG.AX,Critical Minerals Group Ltd.,Producer manufacturing,Electrical products,VAS.AX,10085837.0,small
+USC.AX,Us1 Critical Minerals Limited,Non-energy minerals,Precious metals,VAS.AX,13493934.0,small
+REC.AX,Recharge Metals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,7966689.0,small
+AMU.AX,American Uranium Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,15532003.0,small
+CLG.AX,Close the Loop Ltd.,Industrial services,Environmental services,VAS.AX,13874897.0,small
+GRL.AX,Godolphin Resources Limited,Non-energy minerals,Precious metals,VAS.AX,15407113.0,small
+SPQ.AX,Superior Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,13203355.0,small
+TNY.AX,Tinybeans Group Ltd,Technology services,Packaged software,VAS.AX,14667218.0,small
+ADR.AX,Adherium Ltd.,Health technology,Medical specialties,VAS.AX,13434327.0,small
+GAS.AX,State Gas Ltd.,Energy minerals,Integrated oil,VAS.AX,11031325.0,small
+GED.AX,Golden Deeps Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,11286352.0,small
+OSL.AX,OncoSil Medical Ltd,Health technology,Medical specialties,VAS.AX,15962560.0,small
+EXT.AX,Excite Technology Services Limited,Technology services,Information technology services,VAS.AX,14574843.0,small
+AMO.AX,Ambertech Limited,Distribution services,Electronics distributors,VAS.AX,11925598.0,small
+CR1.AX,Constellation Resources Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,11255223.0,small
+BGT.AX,Bio-Gene Technology Ltd.,Process industries,Chemicals: agricultural,VAS.AX,10067017.0,small
+GTE.AX,Great Western Exploration Limited,Non-energy minerals,Precious metals,VAS.AX,13969642.0,small
+PKY.AX,Pathkey.AI Limited,Technology services,Internet software/Services,VAS.AX,13355711.0,small
+AUA.AX,Audeara Ltd.,Consumer durables,Electronics/Appliances,VAS.AX,11034238.0,small
+TGH.AX,Terragen Holdings Ltd,Health technology,Biotechnology,VAS.AX,16463979.0,small
+RCL.AX,ReadCloud Ltd.,Technology services,Packaged software,VAS.AX,11214242.0,small
+MGL.AX,Magontec Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,12531601.0,small
+BMM.AX,Bayan Mining And Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,11376752.0,small
+E79.AX,E79 Gold Mines Limited,Non-energy minerals,Precious metals,VAS.AX,8838892.0,small
+PR2.AX,Piche Resources Limited,Non-energy minerals,Precious metals,VAS.AX,8057850.0,small
+AU1.AX,Agency Group Australia Ltd,Finance,Real estate development,VAS.AX,12747702.0,small
+EM2.AX,Eagle Mountain Mining Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,13808836.0,small
+CML.AX,Connected Minerals Limited,Electronic technology,Computer communications,VAS.AX,14570804.0,small
+1MC.AX,Morella Corporation Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,11418512.0,small
+IVG.AX,Invert Graphite Limited,Non-energy minerals,Construction materials,VAS.AX,10062605.0,small
+FHS.AX,Freehill Mining Ltd.,Non-energy minerals,Precious metals,VAS.AX,6074780.0,small
+CF1.AX,Complii Fintech Solutions Ltd,Technology services,Packaged software,VAS.AX,9628300.0,small
+SOP.AX,Synertec Corporation Limited,Industrial services,Engineering & construction,VAS.AX,15580033.0,small
+BPP.AX,Babylon Pump & Power Ltd,Consumer services,Other consumer services,VAS.AX,11680277.0,small
+BOA.AX,Boa Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,11624889.0,small
+REZ.AX,Resources & Energy Group Limited,Non-energy minerals,Precious metals,VAS.AX,10987957.0,small
+SP8.AX,StreamPlay Studios Limited,Technology services,Packaged software,VAS.AX,11881896.0,small
+RWD.AX,Reward Minerals Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,12339882.0,small
+1CG.AX,One Click Group Limited,Technology services,Packaged software,VAS.AX,10458290.0,small
+KOB.AX,Koba Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,10855520.0,small
+SRK.AX,Strike Resources Limited,Non-energy minerals,Steel,VAS.AX,9647501.0,small
+TZL.AX,TZ Limited,Electronic technology,Computer communications,VAS.AX,13434228.0,small
+AUV.AX,Auravelle Metals Limited,Non-energy minerals,Precious metals,VAS.AX,10848180.0,small
+SPX.AX,Spenda Limited,Technology services,Packaged software,VAS.AX,11746518.0,small
+ERE.AX,European Resources Limited,Non-energy minerals,Precious metals,VAS.AX,9423214.0,small
+NAG.AX,Nagambie Resources Limited,Non-energy minerals,Precious metals,VAS.AX,11943864.0,small
+CYB.AX,AUCyber Limited,Technology services,Information technology services,VAS.AX,12107361.0,small
+MGT.AX,Magnetite Mines Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,7645017.0,small
+SQX.AX,SQX Resources Limited,Non-energy minerals,Precious metals,VAS.AX,10687500.0,small
+GIB.AX,Gibb River Diamonds Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,10510962.0,small
+RR1.AX,Reach Resources Limited,Non-energy minerals,Precious metals,VAS.AX,9002381.0,small
+STV.AX,Swift TV Limited,Technology services,Internet software/Services,VAS.AX,11253240.0,small
+NSM.AX,"North Stawell Minerals, Ltd.",Non-energy minerals,Precious metals,VAS.AX,10087024.0,small
+TRU.AX,TruScreen Group Ltd.,Health technology,Medical specialties,VAS.AX,10462555.0,small
+WOA.AX,Wide Open Agriculture Ltd.,Process industries,Agricultural commodities/Milling,VAS.AX,9162257.0,small
+CAN.AX,Cann Group Ltd.,Process industries,Agricultural commodities/Milling,VAS.AX,9580700.0,small
+HAL.AX,Halo Technologies Holdings Ltd,Technology services,Internet software/Services,VAS.AX,7303931.0,small
+NFL.AX,Norfolk Metals Ltd.,Non-energy minerals,Precious metals,VAS.AX,11088126.0,small
+AD1.AX,AdNeo Limited,Technology services,Internet software/Services,VAS.AX,11416139.0,small
+CZN.AX,Corazon Mining Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,10952614.0,small
+CMB.AX,Cambium Bio Ltd,Health technology,Biotechnology,VAS.AX,11206087.0,small
+PAT.AX,Patriot Resources limited,Process industries,Chemicals: agricultural,VAS.AX,10430854.0,small
+CTN.AX,Catalina Resources Limited,Non-energy minerals,Steel,VAS.AX,8683628.0,small
+NES.AX,Nelson Resources Ltd.,Non-energy minerals,Precious metals,VAS.AX,8214783.0,small
+1AE.AX,Aurora Energy Metals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,9311315.0,small
+TEE.AX,Top End Energy Limited,Utilities,Electric utilities,VAS.AX,10348657.0,small
+GLL.AX,Galilee Energy Limited,Energy minerals,Integrated oil,VAS.AX,10867729.0,small
+BPH.AX,BPH Energy Limited,Finance,Financial conglomerates,VAS.AX,9476943.0,small
+VRL.AX,Verity Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,10310221.0,small
+DTI.AX,DTI Group Ltd,Electronic technology,Electronic equipment/Instruments,VAS.AX,7164391.0,small
+H2G.AX,GreenHy2 Limited,Industrial services,Oilfield services/Equipment,VAS.AX,9175935.0,small
+ALY.AX,Alchemy Resources Limited,Non-energy minerals,Precious metals,VAS.AX,9504611.0,small
+THR.AX,Thor Energy Plc Shs CHESS Depository Interests,Non-energy minerals,Other metals/Minerals,VAS.AX,13189049.0,small
+QEM.AX,QEM Limited,Energy minerals,Integrated oil,VAS.AX,12115515.0,small
+ENV.AX,Enova Mining Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,9666280.0,small
+IGN.AX,Ignite Limited,Commercial services,Personnel services,VAS.AX,9924124.0,small
+T88.AX,Taiton Resources Limited,Energy minerals,Oil & gas production,VAS.AX,10022884.0,small
+ICR.AX,InteliCare Holdings Limited,Electronic technology,Computer peripherals,VAS.AX,15547253.0,small
+MIO.AX,Macarthur Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,8334304.0,small
+PEC.AX,Perpetual Resources Ltd.,Non-energy minerals,Construction materials,VAS.AX,10501760.0,small
+AXI.AX,Axtec Limited,Finance,Real estate development,VAS.AX,11541501.0,small
+VEN.AX,Vintage Energy Ltd.,Energy minerals,Oil & gas production,VAS.AX,6260741.0,small
+HPR.AX,High Peak Royalties Limited,Energy minerals,Oil & gas production,VAS.AX,13764942.0,small
+PLC.AX,Premier1 Lithium Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,9451541.0,small
+TXR.AX,TalonX Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,10251966.0,small
+MRQ.AX,MRG Metals Limited,Non-energy minerals,Precious metals,VAS.AX,8956203.0,small
+PV1.AX,Provaris Energy Ltd,Energy minerals,Integrated oil,VAS.AX,9373430.0,small
+CPO.AX,Culpeo Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,8727284.0,small
+FOS.AX,FOS Capital Ltd,Producer manufacturing,Electrical products,VAS.AX,8591810.0,small
+SVY.AX,Stavely Minerals Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,8902223.0,small
+PVW.AX,PVW Resources Limited,Non-energy minerals,Precious metals,VAS.AX,7415459.0,small
+ATV.AX,Activeport Group Limited,Technology services,Packaged software,VAS.AX,9095586.0,small
+1AD.AX,AdAlta Ltd.,Health technology,Biotechnology,VAS.AX,10198677.0,small
+SER.AX,Strategic Energy Resources Limited,Non-energy minerals,Precious metals,VAS.AX,226311648.0,small
+IMC.AX,Immuron Limited,Health technology,Pharmaceuticals: major,VAS.AX,9146301.0,small
+AEI.AX,Aeris Environmental Ltd,Consumer non-durables,Household/Personal care,VAS.AX,11096756.0,small
+TYX.AX,Tyranna Resources Limited,Non-energy minerals,Precious metals,VAS.AX,10098449.0,small
+SLM.AX,Solis Minerals Ltd,Non-energy minerals,Precious metals,VAS.AX,4985646.0,small
+ZMI.AX,Zinc of Ireland NL,Non-energy minerals,Other metals/Minerals,VAS.AX,10476192.0,small
+DUN.AX,Dundas Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,9187619.0,small
+ODA.AX,Orcoda Limited,Technology services,Packaged software,VAS.AX,9750739.0,small
+CDE.AX,Codeifai Limited,Technology services,Packaged software,VAS.AX,8738295.0,small
+EV1.AX,Evolution Energy Minerals Limited,Non-energy minerals,Precious metals,VAS.AX,8167280.0,small
+TRP.AX,Tissue Repair Ltd,Health technology,Pharmaceuticals: major,VAS.AX,9674375.0,small
+PKO.AX,Peako Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,7438709.0,small
+OLY.AX,Olympio Metals Limited,Non-energy minerals,Precious metals,VAS.AX,9510232.0,small
+UWC.AX,Underwood Capital Limited,Finance,Financial conglomerates,VAS.AX,8418402.0,small
+FNR.AX,Far Northern Resources Limited,Non-energy minerals,Precious metals,VAS.AX,12148393.0,small
+MHK.AX,Metal Hawk Ltd.,Non-energy minerals,Precious metals,VAS.AX,10488368.0,small
+AUK.AX,AuMake Ltd.,Retail trade,Internet retail,VAS.AX,11543577.0,small
+ECS.AX,Ecs Botanics Holdings Ltd,Process industries,Agricultural commodities/Milling,VAS.AX,7980247.0,small
+5GG.AX,Pentanet Ltd,Technology services,Internet software/Services,VAS.AX,9962948.0,small
+IG6.AX,International Graphite Limited,Producer manufacturing,Electrical products,VAS.AX,11712061.0,small
+HIQ.AX,HitIQ Limited,Consumer durables,Recreational products,VAS.AX,8226806.0,small
+EG1.AX,Evergold Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,9106775.0,small
+XST.AX,Xstate Resources Limited,Energy minerals,Integrated oil,VAS.AX,9430978.0,small
+GGE.AX,Grand Gulf Energy Limited,Energy minerals,Integrated oil,VAS.AX,9361275.0,small
+IBX.AX,Imagion Biosystems Ltd.,Health technology,Medical specialties,VAS.AX,10792985.0,small
+ITM.AX,ITech Minerals LTD,Non-energy minerals,Other metals/Minerals,VAS.AX,8122104.0,small
+HFY.AX,Hubify Ltd.,Communications,Specialty telecommunications,VAS.AX,8790508.0,small
+REM.AX,RemSense Technologies Limited,Technology services,Packaged software,VAS.AX,9091682.0,small
+WSI.AX,WestStar Industrial Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,8627271.0,small
+N1H.AX,N1 Holdings Ltd.,Finance,Finance/Rental/Leasing,VAS.AX,8805558.0,small
+BIM.AX,Bindi Metals Ltd.,Non-energy minerals,Precious metals,VAS.AX,8564764.0,small
+CCO.AX,Calmer Co International Limited,Health technology,Pharmaceuticals: major,VAS.AX,10561488.0,small
+UNT.AX,Unith Ltd,Technology services,Packaged software,VAS.AX,12180499.0,small
+CDT.AX,Castle Minerals Ltd,Non-energy minerals,Precious metals,VAS.AX,7282612.0,small
+LCL.AX,LCL Resources Limited,Non-energy minerals,Precious metals,VAS.AX,8394800.0,small
+EPN.AX,Epsilon Healthcare Limited,Health technology,Pharmaceuticals: major,VAS.AX,8560288.0,small
+AS2.AX,Askari Metals Limited,Non-energy minerals,Precious metals,VAS.AX,6933544.0,small
+MNC.AX,Merino & Co Limited,Process industries,Textiles,VAS.AX,6653391.0,small
+MML.AX,McLaren Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,8046723.0,small
+CHM.AX,Chimeric Therapeutics Limited,Health technology,Biotechnology,VAS.AX,8837408.0,small
+APC.AX,APC Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,7341258.0,small
+VAR.AX,Variscan Mines Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,7487588.0,small
+SNX.AX,"Sierra Nevada Gold, Inc.. Shs Chess Depository Interests Repr 1 Sh",Non-energy minerals,Precious metals,VAS.AX,18505240.0,small
+OVT.AX,Ovanti Ltd,Technology services,Packaged software,VAS.AX,477048.0,small
+LIO.AX,Lion Energy Limited,Energy minerals,Oil & gas production,VAS.AX,7234684.0,small
+SLA.AX,Solara Minerals Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,8885224.0,small
+FCT.AX,FirstWave Cloud Technology Ltd.,Technology services,Information technology services,VAS.AX,8507524.0,small
+EMT.AX,eMetals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,7649999.0,small
+EGY.AX,Energy Technologies Limited,Producer manufacturing,Electrical products,VAS.AX,11998862.0,small
+KTA.AX,Krakatoa Resources Ltd.,Non-energy minerals,Precious metals,VAS.AX,7879696.0,small
+QXR.AX,QX Resources Ltd,Process industries,Chemicals: agricultural,VAS.AX,8450654.0,small
+MCO.AX,Myeco Group Ltd,Industrial services,Environmental services,VAS.AX,6639710.0,small
+TOU.AX,Tlou Energy Ltd,Energy minerals,Coal,VAS.AX,9090091.0,small
+CBY.AX,Canterbury Resources Ltd.,Non-energy minerals,Precious metals,VAS.AX,7365551.0,small
+KFM.AX,Kingfisher Mining Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,8117655.0,small
+TIO.AX,Temas Resources Corp. Chess Depository Interest,Non-energy minerals,Precious metals,VAS.AX,5720306.0,small
+RNX.AX,Renegade Exploration Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,7244289.0,small
+KNI.AX,Kuniko Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,6951460.0,small
+HRE.AX,Heavy Rare Earths Limited,Non-energy minerals,Precious metals,VAS.AX,6657084.0,small
+AVD.AX,Avada Group Limited,Transportation,Other transportation,VAS.AX,8918177.0,small
+SRN.AX,Surefire Resources NL,Non-energy minerals,Other metals/Minerals,VAS.AX,6038414.0,small
+AAJ.AX,Aruma Resources Limited,Non-energy minerals,Precious metals,VAS.AX,8402002.0,small
+SMX.AX,Strata Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,6079305.0,small
+RPM.AX,RPM Automotive Group Ltd.,Distribution services,Wholesale distributors,VAS.AX,7627838.0,small
+IXC.AX,Invex Therapeutics Ltd.,Health technology,Biotechnology,VAS.AX,7515385.0,small
+GES.AX,Genesis Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,6262730.0,small
+ALV.AX,Alvo Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,5858248.0,small
+TEM.AX,Tempest Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,6611258.0,small
+AM5.AX,Antares Metals Limited,Non-energy minerals,Precious metals,VAS.AX,5992720.0,small
+PRO.AX,Prophecy International Holdings Ltd,Technology services,Packaged software,VAS.AX,8025293.0,small
+SIS.AX,Simble Solutions Ltd.,Technology services,Packaged software,VAS.AX,7669982.0,small
+OMG.AX,OMG Group Limited,Consumer non-durables,Food: major diversified,VAS.AX,7570359.0,small
+PFT.AX,Pure Foods Tasmania Ltd.,Consumer non-durables,Food: meat/fish/dairy,VAS.AX,7858272.0,small
+YAR.AX,Yari Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,6715711.0,small
+SPA.AX,SPACETALK Limited,Distribution services,Wholesale distributors,VAS.AX,6388433.0,small
+SOC.AX,Soco Corporation Ltd,Commercial services,Miscellaneous commercial services,VAS.AX,7525176.0,small
+TAT.AX,Tartana Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,7771797.0,small
+MMR.AX,MEC Resources Ltd,Energy minerals,Integrated oil,VAS.AX,7487960.0,small
+IVX.AX,Invion Ltd.,Health technology,Pharmaceuticals: major,VAS.AX,6787572.0,small
+TMS.AX,Tennant Minerals Limited,Non-energy minerals,Precious metals,VAS.AX,5329452.0,small
+EMU.AX,Emu NL,Non-energy minerals,Precious metals,VAS.AX,8210181.0,small
+RCR.AX,Rincon Resources Ltd.,Non-energy minerals,Precious metals,VAS.AX,7030123.0,small
+ALB.AX,Albion Resources Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,6113884.0,small
+AYM.AX,Australia United Mining Limited,Non-energy minerals,Precious metals,VAS.AX,7370310.0,small
+KNG.AX,Kingsland Minerals Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,6977728.0,small
+EMA.AX,Eminence Minerals Limited,Non-energy minerals,Steel,VAS.AX,7314561.0,small
+PGY.AX,Pilot Energy Limited,Energy minerals,Integrated oil,VAS.AX,6753192.0,small
+MOH.AX,Moho Resources Ltd.,Non-energy minerals,Precious metals,VAS.AX,9457705.0,small
+MTL.AX,Mantle Minerals Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,7233115.0,small
+DXN.AX,DXN Ltd.,Technology services,Data processing services,VAS.AX,5027276.0,small
+CHR.AX,Charger Metals NL,Non-energy minerals,Other metals/Minerals,VAS.AX,6562392.0,small
+CHRCB.AX,Charger Metals NL TEMP,Non-energy minerals,Other metals/Minerals,VAS.AX,5663434.0,small
+ZEU.AX,Zeus Resources Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,6459575.0,small
+CRB.AX,Carbine Resources Limited,Non-energy minerals,Precious metals,VAS.AX,7151195.0,small
+CR3.AX,Core Energy Minerals Ltd,Non-energy minerals,Precious metals,VAS.AX,5702821.0,small
+M24.AX,Mamba Exploration Ltd.,Non-energy minerals,Precious metals,VAS.AX,6444146.0,small
+NVQ.AX,Noviqtech Limited,Technology services,Information technology services,VAS.AX,6035891.0,small
+AX8.AX,Accelerate Resources Ltd.,Non-energy minerals,Precious metals,VAS.AX,6067132.0,small
+14D.AX,1414 Degrees Ltd.,Producer manufacturing,Building products,VAS.AX,8321240.0,small
+RON.AX,Ronin Resources Ltd,Energy minerals,Coal,VAS.AX,6460002.0,small
+MQR.AX,Marquee Resources Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,6541738.0,small
+VBS.AX,Vectus Biosystems Limited,Health technology,Pharmaceuticals: major,VAS.AX,8015000.0,small
+DTM.AX,Dart Mining NL,Non-energy minerals,Precious metals,VAS.AX,6291258.0,small
+NRX.AX,Noronex Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,5660942.0,small
+PET.AX,Phoslock Environmental Technologies Limited,Commercial services,Miscellaneous commercial services,VAS.AX,6868296.0,small
+XPN.AX,XPON Technologies Group Ltd.,Technology services,Packaged software,VAS.AX,8826414.0,small
+CGR.AX,CGN Resources Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,6500218.0,small
+BEO.AX,Beonic Limited,Technology services,Internet software/Services,VAS.AX,8475634.0,small
+AHN.AX,Athena Resources Limited,Non-energy minerals,Steel,VAS.AX,9063829.0,small
+BIT.AX,Biotron Limited,Health technology,Biotechnology,VAS.AX,6754665.0,small
+GSM.AX,Golden State Mining Ltd.,Non-energy minerals,Precious metals,VAS.AX,6995746.0,small
+INF.AX,Infinity Metals Limited,Process industries,Chemicals: agricultural,VAS.AX,6233031.0,small
+JNO.AX,Juno Minerals Ltd.,Non-energy minerals,Steel,VAS.AX,6067874.0,small
+AYT.AX,Austin Metals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,8768765.0,small
+WYX.AX,Western Yilgarn NL,Non-energy minerals,Steel,VAS.AX,5978378.0,small
+WHK.AX,WhiteHawk Ltd.,Technology services,Packaged software,VAS.AX,6437966.0,small
+SLZ.AX,Sultan Resources Ltd.,Non-energy minerals,Steel,VAS.AX,5851619.0,small
+C7A.AX,Clara Resources Australia Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,6431290.0,small
+ENT.AX,Enterprise Metals Limited,Non-energy minerals,Precious metals,VAS.AX,6419714.0,small
+T3D.AX,333D Limited,Producer manufacturing,Industrial machinery,VAS.AX,4634971.0,small
+M2R.AX,Miramar Resources Limited,Non-energy minerals,Precious metals,VAS.AX,3775801.0,small
+X2M.AX,X2M Connect Limited,Technology services,Information technology services,VAS.AX,6324790.0,small
+BSN.AX,Basin Energy Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,5739270.0,small
+AOK.AX,Australian Oil Company Limited,Energy minerals,Integrated oil,VAS.AX,5509569.0,small
+NPM.AX,NewPeak Metals Ltd.,Non-energy minerals,Precious metals,VAS.AX,5595437.0,small
+BUS.AX,Bubalus Resources Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,5591040.0,small
+ID8.AX,Identitii Ltd,Technology services,Packaged software,VAS.AX,6218317.0,small
+M2M.AX,Mt Malcolm Mines NL,Non-energy minerals,Precious metals,VAS.AX,6197042.0,small
+COY.AX,Coppermoly Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,7061259.0,small
+RAS.AX,Ragusa Minerals Ltd,Non-energy minerals,Precious metals,VAS.AX,5549566.0,small
+AER.AX,Aeeris Ltd,Commercial services,Miscellaneous commercial services,VAS.AX,5861165.0,small
+NX1.AX,Nexalis Therapeutics Limited,Distribution services,Medical distributors,VAS.AX,4301635.0,small
+OB1.AX,Orbminco Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,4971798.0,small
+NME.AX,Nex Metals Exploration Ltd,Non-energy minerals,Precious metals,VAS.AX,5699799.0,small
+NGS.AX,Nutritional Growth Solutions Ltd.,Health technology,Pharmaceuticals: other,VAS.AX,6661864.0,small
+EVE.AX,EVE Health Group Limited,Health technology,Pharmaceuticals: other,VAS.AX,8040262.0,small
+H3E.AX,H3 Energy Limited,Energy minerals,Oil & gas production,VAS.AX,7681614.0,small
+ARC.AX,ARC Funds Limited,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,5456561.0,small
+AN1.AX,Anagenics Limited,Consumer non-durables,Household/Personal care,VAS.AX,4927254.0,small
+CNJ.AX,Conico Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,5867883.0,small
+ADS.AX,Adslot Ltd,Technology services,Information technology services,VAS.AX,5860723.0,small
+PPY.AX,Papyrus Australia Ltd,Non-energy minerals,Forest products,VAS.AX,6780199.0,small
+OKJ.AX,Oakajee Corporation Ltd,Finance,Financial conglomerates,VAS.AX,5120978.0,small
+M3M.AX,M3 Mining Ltd.,Non-energy minerals,Precious metals,VAS.AX,4593718.0,small
+ENL.AX,Enlitic Inc Chess Depository intrests Repr 1 Shs,Technology services,Packaged software,VAS.AX,7498571.0,small
+AVW.AX,Avira Resources Ltd,Non-energy minerals,Precious metals,VAS.AX,4725000.0,small
+VFX.AX,Visionflex Group Limited,Technology services,Packaged software,VAS.AX,6149085.0,small
+ATT.AX,Altitude Minerals Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,4976450.0,small
+RLG.AX,RooLife Group Ltd.,Technology services,Packaged software,VAS.AX,5665487.0,small
+NOR.AX,Norwood Systems Ltd,Technology services,Packaged software,VAS.AX,6225204.0,small
+AIV.AX,ActivEX Limited,Non-energy minerals,Precious metals,VAS.AX,5625278.0,small
+TEG.AX,Triangle Energy (Global) Limited,Energy minerals,Oil & gas production,VAS.AX,7780307.0,small
+RFT.AX,Rectifier Technologies Ltd,Producer manufacturing,Electrical products,VAS.AX,4148342.0,small
+RKB.AX,Rokeby Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,5479683.0,small
+PER.AX,Percheron Therapeutics Limited,Health technology,Pharmaceuticals: major,VAS.AX,5582329.0,small
+XGL.AX,Xamble Group Limited Chess Depository Interests,Commercial services,Advertising/Marketing services,VAS.AX,5198218.0,small
+SP3.AX,Spectur Ltd.,Electronic technology,Telecommunications equipment,VAS.AX,7050467.0,small
+WNX.AX,Wellnex Life Ltd,Consumer non-durables,Food: meat/fish/dairy,VAS.AX,5106749.0,small
+RAN.AX,Range International Limited,Producer manufacturing,Miscellaneous manufacturing,VAS.AX,5355341.0,small
+HLX.AX,Helix Resources Limited,Non-energy minerals,Precious metals,VAS.AX,5346291.0,small
+CMO.AX,Cosmo Metals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,4132346.0,small
+PTL.AX,Prestal Holdings Limited,Consumer non-durables,Household/Personal care,VAS.AX,5625163.0,small
+BRY.AX,Barys Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,5280668.0,small
+AXP.AX,AXP Energy Limited,Energy minerals,Integrated oil,VAS.AX,4010808.0,small
+C29.AX,C29 Metals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,4528894.0,small
+G88.AX,Golden Mile Resources Ltd.,Non-energy minerals,Precious metals,VAS.AX,4476310.0,small
+DM1.AX,Desert Metals Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,4555276.0,small
+ABR.AX,Albright Metals Ltd,Non-energy minerals,Precious metals,VAS.AX,5199830.0,small
+FEL.AX,Forte Energy Limited,Energy minerals,Integrated oil,VAS.AX,6062027.0,small
+BUR.AX,Burley Minerals Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,6077521.0,small
+PRM.AX,Prominence Energy Limited,Energy minerals,Oil & gas production,VAS.AX,5090029.0,small
+ASQ.AX,Australian Silica Quartz Group Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,8173952.0,small
+SHP.AX,South Harz Potash Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,3598978.0,small
+8IH.AX,8I Holdings Ltd. Chess Depository Interests repr 1 shs,Miscellaneous,Miscellaneous,VAS.AX,5222413.0,small
+SBR.AX,Sabre Resources Ltd,Non-energy minerals,Precious metals,VAS.AX,4544619.0,small
+L1M.AX,Lightning Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,4991909.0,small
+CDR.AX,Codrus Minerals Ltd.,Non-energy minerals,Precious metals,VAS.AX,4961625.0,small
+ACR.AX,Acrux Limited,Health technology,Pharmaceuticals: major,VAS.AX,4516694.0,small
+DAF.AX,Discovery Alaska Limited,Non-energy minerals,Precious metals,VAS.AX,4650474.0,small
+LVE.AX,Love Group Ltd,Commercial services,Miscellaneous commercial services,VAS.AX,4661429.0,small
+DDT.AX,Datadot Technology Limited,Electronic technology,Computer communications,VAS.AX,4860232.0,small
+CUL.AX,Cullen Resources Limited,Non-energy minerals,Precious metals,VAS.AX,5547215.0,small
+SHE.AX,Stonehorse Energy Ltd,Energy minerals,Integrated oil,VAS.AX,5475682.0,small
+RBX.AX,Resource Base Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,4722564.0,small
+DBO.AX,Diablo Resources Limited,Non-energy minerals,Precious metals,VAS.AX,4245159.0,small
+RIE.AX,Riedel Resources Limited,Non-energy minerals,Precious metals,VAS.AX,5991561.0,small
+BP8.AX,BPH Global Limited,Health technology,Pharmaceuticals: other,VAS.AX,4706969.0,small
+WEL.AX,Winchester Energy Ltd,Industrial services,Contract drilling,VAS.AX,3136038.0,small
+A8G.AX,Australasian Metals Limited,Non-energy minerals,Precious metals,VAS.AX,3936501.0,small
+8CO.AX,8Common Ltd,Technology services,Information technology services,VAS.AX,4481898.0,small
+IMI.AX,Infinity Mining Limited,Non-energy minerals,Precious metals,VAS.AX,3919287.0,small
+CT1.AX,Constellation Technologies Limited,Technology services,Packaged software,VAS.AX,2949467.0,small
+ERG.AX,Eneco Refresh Limited,Consumer non-durables,Beverages: non-alcoholic,VAS.AX,3813016.0,small
+DMG.AX,Dragon Mountain Gold Limited,Non-energy minerals,Precious metals,VAS.AX,3157373.0,small
+TML.AX,Timah Resources Ltd,Utilities,Electric utilities,VAS.AX,4171708.0,small
+ZMM.AX,ZIMI Ltd,Electronic technology,Computer communications,VAS.AX,3780969.0,small
+PKD.AX,Parkd Ltd.,Industrial services,Engineering & construction,VAS.AX,3266399.0,small
+KNO.AX,Knosys Ltd.,Technology services,Packaged software,VAS.AX,4755052.0,small
+MOM.AX,Moab Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,4031404.0,small
+EFE.AX,Eastern Resources Limited,Non-energy minerals,Steel,VAS.AX,4278784.0,small
+RGT.AX,Argent Biopharma Ltd,Health technology,Pharmaceuticals: other,VAS.AX,3389308.0,small
+GLH.AX,Global Health Limited,Health services,Medical/Nursing services,VAS.AX,3939234.0,small
+OSX.AX,Osteopore Ltd.,Health technology,Medical specialties,VAS.AX,3375011.0,small
+ADC.AX,ACDC Metals Ltd,Non-energy minerals,Construction materials,VAS.AX,3896399.0,small
+OCT.AX,Octava Minerals Ltd.,Non-energy minerals,Precious metals,VAS.AX,4107344.0,small
+CPM.AX,Cooper Metals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,3761071.0,small
+OLI.AX,Oliver's Real Food Ltd.,Consumer services,Restaurants,VAS.AX,3785123.0,small
+EE1.AX,Earths Energy Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,3751622.0,small
+RDS.AX,Redstone Resources Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,3689945.0,small
+PNT.AX,Panther Metals Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,3675354.0,small
+HT8.AX,Harris Technology Group Limited,Distribution services,Electronics distributors,VAS.AX,3289651.0,small
+PXR.AX,PACIFIC RESOURCES LIMITED,Energy minerals,Coal,VAS.AX,3600384.0,small
+HYD.AX,Hydrix Limited,Technology services,Packaged software,VAS.AX,3000457.0,small
+LRD.AX,Lord Resources Limited,Non-energy minerals,Precious metals,VAS.AX,3363038.0,small
+ABE.AX,Australian Bond Exchange Holdings Ltd.,Finance,Investment banks/Brokers,VAS.AX,2799454.0,small
+IFG.AX,Infocus Group Holdings Limited,Technology services,Packaged software,VAS.AX,5374252.0,small
+PFM.AX,Platformo Ltd,Distribution services,Electronics distributors,VAS.AX,3037065.0,small
+AM7.AX,Arcadia Minerals Limited Chess Depository Interests Repr 1 Sh,Non-energy minerals,Other metals/Minerals,VAS.AX,5295337.0,small
+WSR.AX,Westar Resources Ltd.,Non-energy minerals,Precious metals,VAS.AX,3219201.0,small
+ANR.AX,Anatara Lifesciences Ltd,Health technology,Pharmaceuticals: major,VAS.AX,2843556.0,small
+BUY.AX,Bounty Oil & Gas NL,Energy minerals,Integrated oil,VAS.AX,3123202.0,small
+EXL.AX,Elixinol Wellness Ltd,Health technology,Pharmaceuticals: other,VAS.AX,2897914.0,small
+BLZ.AX,Blaze Minerals Limited,Non-energy minerals,Precious metals,VAS.AX,2875000.0,small
+SAN.AX,Sagalio Energy Limited,Energy minerals,Integrated oil,VAS.AX,2865242.0,small
+AOA.AX,Ausmon Resources Limited,Non-energy minerals,Precious metals,VAS.AX,2853027.0,small
+VTA.AX,Vita Resources NL,Non-energy minerals,Precious metals,VAS.AX,2928736.0,small
+RLC.AX,Reedy Lagoon Corporation Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,1553413.0,small
+RBR.AX,RBR Group Ltd,Commercial services,Personnel services,VAS.AX,2933051.0,small
+WRX.AX,Western Ridge Resources Limited,Distribution services,Wholesale distributors,VAS.AX,6000355.0,small
+TD1.AX,Tali Digital Ltd,Technology services,Packaged software,VAS.AX,2056009.0,small
+HPC.AX,Hydration Pharmaceuticals Company Limited,Retail trade,Food retail,VAS.AX,1723204.0,small
+OAK.AX,Oakridge Internatinal Ltd,Health technology,Medical specialties,VAS.AX,1700868.0,small
+KEY.AX,Key Petroleum Limited,Energy minerals,Integrated oil,VAS.AX,2126347.0,small
+CYQ.AX,Cycliq Group Ltd,Electronic technology,Telecommunications equipment,VAS.AX,1842067.0,small
+BEL.AX,Bentley Capital Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,1141918.0,small
+1TT.AX,Thrive Tribe Technologies Limited,Technology services,Packaged software,VAS.AX,1753076.0,small
+MSG.AX,MCS Services Limited,Commercial services,Miscellaneous commercial services,VAS.AX,990498.0,small
+BMH.AX,Baumart Holdings Ltd,Retail trade,Home improvement chains,VAS.AX,977850.0,small
+MEL.AX,Metgasco Ltd,Energy minerals,Oil & gas production,VAS.AX,734845.0,small
+R8R.AX,Regener8 Resources NL,Non-energy minerals,Precious metals,VAS.AX,5961648.0,small
+SNM.AX,Sentinel Metals Limited,Non-energy minerals,Precious metals,VAS.AX,58321356.0,small
+AXL.AX,Axel REE Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,11612997.0,small
+PBL.AX,Parabellum Resources Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,4734800.0,small
+PC2.AX,PC Gold Ltd.,Non-energy minerals,Precious metals,VAS.AX,278815456.0,small
+REV.AX,REVOLUTION PRIVATE CREDIT INCOME TRUST Units,,,VAS.AX,394036032.0,small
+DSM.AX,Desert Minerals Ltd.,Process industries,Chemicals: agricultural,VAS.AX,5850013.0,small
+BM1.AX,Ballard Mining Limited,Non-energy minerals,Precious metals,VAS.AX,300039840.0,small
+AEM.AX,Advanced Energy Minerals Ltd,Non-energy minerals,Aluminum,VAS.AX,306541664.0,small
+XX20.AX,First Sentier ex-20 Australian Share Fund Units - Class- W -,,,VAS.AX,,small
+GLF.AX,Gemlife Communities Group,Finance,Real estate development,VAS.AX,1631437440.0,small
+LNQ.AX,Linq Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,74258160.0,small
+WC1.AX,West Cobar Metals Ltd.,Non-energy minerals,Precious metals,VAS.AX,6727724.0,small
+MIDS.AX,Antipodes Global SMID Fund Units - Class P,,,VAS.AX,,small
+RB6.AX,Rubix Resources Limited,Non-energy minerals,Precious metals,VAS.AX,9217500.0,small
+CD1.AX,CD Private Equity Fund I Units,Finance,Investment managers,VAS.AX,13341181.0,small
+AIH.AX,Advanced Innergy Holdings Ltd.,Process industries,Industrial specialties,VAS.AX,354768608.0,small
+STH.AX,StepChange Holdings Ltd.,Technology services,Information technology services,VAS.AX,21610854.0,small
+CTQ.AX,Careteq Ltd.,Commercial services,Miscellaneous commercial services,VAS.AX,2073284.0,small
+SEA.AX,Sea Forest Limited,Process industries,Agricultural commodities/Milling,VAS.AX,131179856.0,small
+HCF.AX,H&G High Conviction Ltd.,Finance,Financial conglomerates,VAS.AX,582194.0,small
+FUL.AX,Fulcrum Lithium Ltd.,Process industries,Chemicals: agricultural,VAS.AX,11934901.0,small
+CD2.AX,CD Private Equity Fund II Units,Finance,Investment managers,VAS.AX,21516426.0,small
+NYM.AX,Narryer Metals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,3521096.0,small
+RG8.AX,Regal Asian Investments Limited,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,,small
+BHL.AX,Black Horse Mining Ltd.,Non-energy minerals,Precious metals,VAS.AX,19071460.0,small
+OMX.AX,Orange Minerals NL,Non-energy minerals,Precious metals,VAS.AX,10129726.0,small
+BAK.AX,Barkly Rare Earths Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,16656250.0,small
+SMS.AX,Star Minerals Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,11957021.0,small
+PMM.AX,Pioneer Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,12557104.0,small
+MHM.AX,Mount Hope Mining Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,7584000.0,small
+CDO.AX,Cadence Opportunities Fund Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,34341496.0,small
+LMS.AX,Litchfield Minerals Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,24083692.0,small
+GGR.AX,Golden Globe Resources Ltd.,Non-energy minerals,Precious metals,VAS.AX,39206780.0,small
+GG1.AX,Green & Gold Minerals Limited,Non-energy minerals,Precious metals,VAS.AX,8855134.0,small
+NXN.AX,Nexsen Limited,Health technology,Biotechnology,VAS.AX,39038256.0,small
+MBG.AX,MB Gold Limited,Non-energy minerals,Precious metals,VAS.AX,,small
+RRE.AX,Right Resources Limited,Non-energy minerals,Precious metals,VAS.AX,15643973.0,small
+OM1.AX,Omnia Metals Group Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,6054334.0,small
+ILT.AX,Iltani Resources Ltd.,Non-energy minerals,Precious metals,VAS.AX,31780292.0,small
+6KA.AX,"6K Additive, Inc. Shs Chess Depository Interest Repr 1 Sh",Non-energy minerals,Other metals/Minerals,VAS.AX,209805056.0,small
+DIVI.AX,Ausbil Active Dividend Income Fund Units - Wholesale Class -,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,,small
+EGA.AX,Eastern Gas Corp Ltd,Energy minerals,Integrated oil,VAS.AX,15300000.0,small
+BHD.AX,Benjamin Hornigold Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,4347943.0,small
+PIM.AX,Pinnacle Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,5311317.0,small
+GDR.AX,Golden Dragon Mining Ltd,Non-energy minerals,Precious metals,VAS.AX,7751272.0,small
+HVY.AX,Heavy Minerals Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,32246366.0,small
+KLI.AX,Killi Resources Limited,Non-energy minerals,Precious metals,VAS.AX,30085598.0,small
+UM1.AX,Unity Metals Limited,Non-energy minerals,Precious metals,VAS.AX,33118564.0,small
+DAL.AX,Dalaroo Metals Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,15849675.0,small
+AUG.AX,Augustus Minerals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,7635300.0,small
+ACM.AX,Australian Critical Minerals Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,8270409.0,small
+GHIF.AX,Ausbil Global Infrastructure Fund Units - Hedged,,,VAS.AX,,small
+PFE.AX,Pantera Minerals Limited,Non-energy minerals,Steel,VAS.AX,9855561.0,small
+TVL.AX,Touch Ventures Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,43211040.0,small
+OPH.AX,Ophir High Conviction Fund Units,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,589884736.0,small
+GSCF.AX,Ausbil Global SmallCap Fund Units,,,VAS.AX,,small
+TSK.AX,Tusker Minerals Ltd,Non-energy minerals,Other metals/Minerals,VAS.AX,7473009.0,small
+MEX.AX,Minerals Exploration Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,20155642.0,small
+EPI.AX,Epiminder Ltd.,Electronic technology,Electronic equipment/Instruments,VAS.AX,108089944.0,small
+BGE.AX,Bridge Saas Limited,Technology services,Packaged software,VAS.AX,2798029.0,small
+PLG.AX,Pearl Gull Iron Limited,Non-energy minerals,Steel,VAS.AX,6340795.0,small
+RNV.AX,Renerve Limited,Health technology,Biotechnology,VAS.AX,16368512.0,small
+WGB.AX,WAM Global Ltd.,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,785360320.0,small
+SLB.AX,Stelar Metals Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,3938507.0,small
+PCI.AX,Perpetual Credit Income Trust,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,,small
+RF1.AX,Regal Investment Fund Units,Miscellaneous,Investment trusts/Mutual funds,VAS.AX,,small
+10X.AX,Exultant Mining Ltd.,Non-energy minerals,Other metals/Minerals,VAS.AX,7480000.0,small
+TR8.AX,Tarrina Resources Limited,Consumer services,Restaurants,VAS.AX,6817324.0,small
+NGX.AX,NGX Limited,Non-energy minerals,Other metals/Minerals,VAS.AX,8426901.0,small
+MNE.AX,Macallum New Energy Limited,Energy minerals,Integrated oil,VAS.AX,22371734.0,small
+ML8.AX,Moonlight Resources Ltd,Non-energy minerals,Precious metals,VAS.AX,16478752.0,small
+KLV.AX,Klevo Rewards Limited,Technology services,Packaged software,VAS.AX,33791228.0,small
+EV8.AX,Everlast Minerals Ltd,Non-energy minerals,Construction materials,VAS.AX,57778604.0,small
+CMA.AX,Carma Limited,Miscellaneous,Miscellaneous,VAS.AX,130546384.0,small

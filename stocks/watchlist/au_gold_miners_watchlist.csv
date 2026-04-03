@@ -1,0 +1,155 @@
+ticker,name,sector,benchmark,type,market_cap,cap_band
+GDX,Van Eck Gold Miners AU GDX,Gold,benchmark,ETF,,small
+NST.AX,Northern Star Resources Limited,Gold,GDX,Miners & Producers,26897823744.0,large
+EVN.AX,Evolution Mining Limited,Gold,GDX,Miners & Producers,26195013632.0,large
+NEM.AX,Newmont Corporation,Gold,GDX,Miners & Producers,162343452672.0,large
+GGP.AX,Greatland Resources Limited,Gold,GDX,Miners & Producers,7004956672.0,large
+RMS.AX,Ramelius Resources Limited,Gold,GDX,Miners & Producers,7033564160.0,large
+PRU.AX,Perseus Mining Limited,Gold,GDX,Miners & Producers,6768270848.0,large
+GMD.AX,Genesis Minerals Limited,Gold,GDX,Miners & Producers,6979625472.0,large
+WGX.AX,Westgold Resources Limited,Gold,GDX,Miners & Producers,5309953024.0,large
+RRL.AX,Regis Resources Limited,Gold,GDX,Miners & Producers,4846414336.0,mid
+CMM.AX,Capricorn Metals Ltd,Gold,GDX,Miners & Producers,4909725696.0,mid
+VAU.AX,Vault Minerals Limited,Gold,GDX,Miners & Producers,4185527040.0,mid
+RSG.AX,Resolute Mining Limited,Gold,GDX,Miners & Producers,2874826752.0,mid
+OBM.AX,Ora Banda Mining Ltd,Gold,GDX,Miners & Producers,2192543744.0,mid
+BGL.AX,Bellevue Gold Limited,Gold,GDX,Miners & Producers,2094371072.0,mid
+PDI.AX,Predictive Discovery Limited,Gold,GDX,Miners & Producers,2016106368.0,mid
+ALK.AX,Alkane Resources Limited,Gold,GDX,Miners & Producers,2008321152.0,mid
+DTR.AX,Dateline Resources Limited,Gold,GDX,Miners & Producers,2022697216.0,mid
+CYL.AX,Catalyst Metals Limited,Gold,GDX,Miners & Producers,1633515776.0,mid
+KCN.AX,Kingsgate Consolidated Limited,Gold,GDX,Miners & Producers,1234640896.0,mid
+PNR.AX,Pantoro Gold Limited,Gold,GDX,Miners & Producers,1288971520.0,mid
+FFM.AX,FireFly Metals Ltd,Gold,GDX,Miners & Producers,1295404288.0,mid
+SX2.AX,Southern Cross Gold Consolidated Ltd,Gold,GDX,Miners & Producers,2425197312.0,mid
+DPM.AX,DPM Metals Inc.,Gold,GDX,Miners & Producers,10731069440.0,large
+BC8.AX,Black Cat Syndicate Limited,Gold,GDX,Miners & Producers,724629248.0,mid
+SMI.AX,Santana Minerals Limited,Gold,GDX,Miners & Producers,720288192.0,mid
+SBM.AX,St Barbara Limited,Gold,GDX,Miners & Producers,689583616.0,mid
+TCG.AX,Turaco Gold Limited,Gold,GDX,Miners & Producers,636925440.0,mid
+AUC.AX,Ausgold Limited,Gold,GDX,Miners & Producers,487595136.0,small
+RXR.AX,Robex Resources Inc.,Gold,GDX,Miners & Producers,1737507712.0,mid
+STK.AX,Strickland Metals Limited,Gold,GDX,Miners & Producers,526373728.0,mid
+NMG.AX,New Murchison Gold Limited,Gold,GDX,Miners & Producers,467162400.0,small
+A1G.AX,African Gold Limited,Gold,GDX,Miners & Producers,481455424.0,small
+MEK.AX,Meeka Metals Limited,Gold,GDX,Miners & Producers,471342112.0,small
+USL.AX,Unico Silver Limited,Gold,GDX,Miners & Producers,415747264.0,small
+BCN.AX,Beacon Minerals Limited,Gold,GDX,Miners & Producers,350752576.0,small
+AAR.AX,Astral Resources NL,Gold,GDX,Miners & Producers,324188224.0,small
+BTR.AX,Brightstar Resources Limited,Gold,GDX,Miners & Producers,395170944.0,small
+MM8.AX,Medallion Metals Limited,Gold,GDX,Miners & Producers,302186688.0,small
+TOK.AX,Tolu Minerals Limited,Gold,GDX,Miners & Producers,414578464.0,small
+TRE.AX,Toubani Resources Inc,Gold,GDX,Miners & Producers,316695488.0,small
+WWI.AX,West Wits Mining Limited,Gold,GDX,Miners & Producers,282520224.0,small
+TBR.AX,Tribune Resources Ltd,Gold,GDX,Miners & Producers,298543360.0,small
+TM1.AX,Terra Metals Limited,Gold,GDX,Miners & Producers,262371040.0,small
+TTM.AX,Titan Minerals Limited,Gold,GDX,Miners & Producers,240052336.0,small
+TOR.AX,Torque Metals Limited,Gold,GDX,Miners & Producers,251789088.0,small
+GG8.AX,Gorilla Gold Mines Ltd,Gold,GDX,Miners & Producers,249102048.0,small
+HRN.AX,Horizon Gold Limited,Gold,GDX,Miners & Producers,245929872.0,small
+TGM.AX,Theta Gold Mines Limited,Gold,GDX,Miners & Producers,242920896.0,small
+ERM.AX,Emmerson Resources Limited,Gold,GDX,Miners & Producers,239712832.0,small
+HRZ.AX,Horizon Minerals Limited,Gold,GDX,Miners & Producers,242454080.0,small
+POL.AX,Polymetals Resources Ltd,Gold,GDX,Miners & Producers,233696128.0,small
+AQI.AX,Alicanto Minerals Limited,Gold,GDX,Miners & Producers,238792448.0,small
+STN.AX,Saturn Metals Limited,Gold,GDX,Miners & Producers,243332320.0,small
+BGD.AX,Barton Gold Holdings Limited,Gold,GDX,Miners & Producers,211312400.0,small
+AS1.AX,Asara Resources Limited,Gold,GDX,Miners & Producers,200397232.0,small
+BM1.AX,Ballard Mining Limited,Gold,GDX,Miners & Producers,315951008.0,small
+AUE.AX,Aurum Resources Limited,Gold,GDX,Miners & Producers,203096320.0,small
+VTM.AX,Victory Metals Limited,Gold,GDX,Miners & Producers,,small
+KAU.AX,Kaiser Reef Limited,Gold,GDX,Miners & Producers,163437040.0,small
+GPR.AX,Geopacific Resources Limited,Gold,GDX,Miners & Producers,125026024.0,small
+GML.AX,Gateway Mining Limited,Gold,GDX,Miners & Producers,144014528.0,small
+TSO.AX,Tesoro Gold Limited,Gold,GDX,Miners & Producers,170948384.0,small
+CY5.AX,Cygnus Metals Limited,Gold,GDX,Miners & Producers,164823296.0,small
+GBM.AX,GBM Resources Limited,Gold,GDX,Miners & Producers,142343584.0,small
+TAM.AX,Tanami Gold NL,Gold,GDX,Miners & Producers,109284032.0,small
+FXG.AX,Felix Gold Limited,Gold,GDX,Miners & Producers,137784096.0,small
+GBR.AX,Great Boulder Resources Limited,Gold,GDX,Miners & Producers,102227552.0,small
+FAL.AX,Falcon Metals Limited,Gold,GDX,Miners & Producers,119678552.0,small
+GHM.AX,Golden Horse Minerals Limited,Gold,GDX,Miners & Producers,93334304.0,small
+ORE.AX,Orezone Gold Corporation,Gold,GDX,Miners & Producers,1490161920.0,mid
+EM3.AX,EMC Gold Corporation,Gold,GDX,Miners & Producers,81227352.0,small
+MAT.AX,Matsa Resources Limited,Gold,GDX,Miners & Producers,84488544.0,small
+YRL.AX,Yandal Resources Limited,Gold,GDX,Miners & Producers,76301784.0,small
+LRM.AX,Lion Rock Minerals Ltd,Gold,GDX,Miners & Producers,85534008.0,small
+MDX.AX,Mindax Limited,Gold,GDX,Miners & Producers,73259768.0,small
+RTG.AX,RTG Mining Inc.,Gold,GDX,Miners & Producers,72644808.0,small
+BCM.AX,Brazilian Critical Minerals Limited,Gold,GDX,Miners & Producers,58598600.0,small
+AWJ.AX,Auric Mining Limited,Gold,GDX,Miners & Producers,63611824.0,small
+PGO.AX,Pacgold Limited,Gold,GDX,Miners & Producers,49784916.0,small
+AGC.AX,Australian Gold and Copper Ltd,Gold,GDX,Miners & Producers,55202464.0,small
+ODY.AX,Odyssey Gold Limited,Gold,GDX,Miners & Producers,44814936.0,small
+VTX.AX,Vertex Minerals Limited,Gold,GDX,Miners & Producers,44419508.0,small
+AAU.AX,Antilles Gold Limited,Gold,GDX,Miners & Producers,40684324.0,small
+G11.AX,G11 Resources Limited,Gold,GDX,Miners & Producers,39145236.0,small
+GWR.AX,GWR Group Limited,Gold,GDX,Miners & Producers,45567784.0,small
+CTO.AX,Citigold Corporation Limited,Gold,GDX,Miners & Producers,51000004.0,small
+BEZ.AX,Besra Gold Inc,Gold,GDX,Miners & Producers,43900592.0,small
+WGR.AX,Western Gold Resources Limited,Gold,GDX,Miners & Producers,42637076.0,small
+VKA.AX,Viking Mines Limited,Gold,GDX,Miners & Producers,33934508.0,small
+NXM.AX,Nexus Minerals Limited,Gold,GDX,Miners & Producers,28980462.0,small
+HMX.AX,Hammer Metals Limited,Gold,GDX,Miners & Producers,29461038.0,small
+RGL.AX,Riversgold Limited,Gold,GDX,Miners & Producers,27562052.0,small
+GA8.AX,GoldArc Resources Limited,Gold,GDX,Miners & Producers,29198484.0,small
+MDI.AX,Middle Island Resources Limited,Gold,GDX,Miners & Producers,26819690.0,small
+GGR.AX,Golden Globe Resources Limited,Gold,GDX,Miners & Producers,37806536.0,small
+DGR.AX,DGR Global Limited,Gold,GDX,Miners & Producers,31310880.0,small
+SVG.AX,Savannah Goldfields Limited,Gold,GDX,Miners & Producers,23557348.0,small
+HAW.AX,Hawthorn Resources Limited,Gold,GDX,Miners & Producers,28811344.0,small
+AXN.AX,Alliance Nickel Limited,Gold,GDX,Miners & Producers,30448970.0,small
+SNM.AX,Sentinel Metals Limited,Gold,GDX,Miners & Producers,57800632.0,small
+OZM.AX,OzAurum Resources Limited,Gold,GDX,Miners & Producers,25749170.0,small
+ION.AX,Iondrive Limited,Gold,GDX,Miners & Producers,25922888.0,small
+SNG.AX,Siren Gold Limited,Gold,GDX,Miners & Producers,24000944.0,small
+GMN.AX,Gold Mountain Limited,Gold,GDX,Miners & Producers,20441684.0,small
+KRM.AX,Kingsrose Mining,Gold,GDX,Miners & Producers,24112850.0,small
+KNB.AX,Koonenberry Gold Limited,Gold,GDX,Miners & Producers,25686502.0,small
+HMG.AX,Hamelin Gold Limited,Gold,GDX,Miners & Producers,23796428.0,small
+LAT.AX,Latitude 66 Limited,Gold,GDX,Miners & Producers,24536502.0,small
+ORP.AX,Orpheus Uranium Limited,Gold,GDX,Miners & Producers,19366678.0,small
+GUL.AX,Gullewa Limited,Gold,GDX,Miners & Producers,21802218.0,small
+PRX.AX,Prodigy Gold NL,Gold,GDX,Miners & Producers,20225602.0,small
+KAL.AX,Kalgoorlie Gold Mining Limited,Gold,GDX,Miners & Producers,19146548.0,small
+RC1.AX,Redcastle Resources Limited,Gold,GDX,Miners & Producers,15606442.0,small
+TMX.AX,Terrain Minerals Limited,Gold,GDX,Miners & Producers,16679141.0,small
+MLS.AX,Metals Australia Limited,Gold,GDX,Miners & Producers,15366110.0,small
+PGD.AX,Peregrine Gold Limited,Gold,GDX,Miners & Producers,12845120.0,small
+MHC.AX,Manhattan Gold Corporation Limited,Gold,GDX,Miners & Producers,12362912.0,small
+AA2.AX,Ariana Resources plc,Gold,GDX,Miners & Producers,99567464.0,small
+ICL.AX,Iceni Gold Limited,Gold,GDX,Miners & Producers,13756055.0,small
+FG1.AX,Flynn Gold Limited,Gold,GDX,Miners & Producers,12781761.0,small
+BNR.AX,Bulletin Resources Limited,Gold,GDX,Miners & Producers,12184952.0,small
+SRR.AX,Sarama Resources Limited,Gold,GDX,Miners & Producers,17596680.0,small
+MAN.AX,Mandrake Resources Limited,Gold,GDX,Miners & Producers,13172458.0,small
+E79.AX,E79 Gold Mines Limited,Gold,GDX,Miners & Producers,11313782.0,small
+REZ.AX,Resources & Energy Group Limited,Gold,GDX,Miners & Producers,11903621.0,small
+NVO.AX,Novo Resources Corp,Gold,GDX,Miners & Producers,29369138.0,small
+NAG.AX,Nagambie Resources Limited,Gold,GDX,Miners & Producers,12464186.0,small
+RR1.AX,Reach Resources Limited,Gold,GDX,Miners & Producers,10055961.0,small
+NSM.AX,North Stawell Minerals Limited,Gold,GDX,Miners & Producers,10460618.0,small
+BHL.AX,Black Horse Mining Limited,Gold,GDX,Miners & Producers,19071460.0,small
+ALY.AX,Alchemy Resources Limited,Gold,GDX,Miners & Producers,10692686.0,small
+PEC.AX,Perpetual Resources Limited,Gold,GDX,Miners & Producers,9547055.0,small
+PVW.AX,PVW Resources Limited,Gold,GDX,Miners & Producers,7415459.0,small
+OLY.AX,Olympio Metals Limited,Gold,GDX,Miners & Producers,9203451.0,small
+MBG.AX,MB Gold Limited,Gold,GDX,Miners & Producers,,small
+KTA.AX,Krakatoa Resources Limited,Gold,GDX,Miners & Producers,7879696.0,small
+GG1.AX,Green & Gold Minerals Limited,Gold,GDX,Miners & Producers,9160484.0,small
+AAJ.AX,Aruma Resources Limited,Gold,GDX,Miners & Producers,8036697.0,small
+MOH.AX,Moho Resources Limited,Gold,GDX,Miners & Producers,7849277.0,small
+R8R.AX,Regener8 Resources NL,Gold,GDX,Miners & Producers,5379412.0,small
+DTM.AX,Dart Mining NL,Gold,GDX,Miners & Producers,6710676.0,small
+M2R.AX,Miramar Resources Limited,Gold,GDX,Miners & Producers,4530962.0,small
+NPM.AX,New Peak Metals Limited,Gold,GDX,Miners & Producers,4608006.0,small
+M2M.AX,Mt Malcolm Mines NL,Gold,GDX,Miners & Producers,5164201.0,small
+AVW.AX,Avira Resources Limited,Gold,GDX,Miners & Producers,5250000.0,small
+CLZ.AX,Classic Minerals Limited,Gold,GDX,Miners & Producers,5509605.0,small
+OZZ.AX,OZZ Resources Limited,Gold,GDX,Miners & Producers,5419546.0,small
+CDR.AX,Codrus Minerals Limited,Gold,GDX,Miners & Producers,4961625.0,small
+A8G.AX,Australasian Metals Limited,Gold,GDX,Miners & Producers,4573288.0,small
+DMG.AX,Dragon Mountain Gold,Gold,GDX,Miners & Producers,2762701.0,small
+WSR.AX,Westar Resources Limited,Gold,GDX,Miners & Producers,3219201.0,small
+GCR.AX,Golden Cross Resources Ltd,Gold,GDX,Miners & Producers,2194512.0,small
+ATM.AX,Aneka Tambang (Persero) Tbk,Gold,GDX,Miners & Producers,6799656448.0,large
