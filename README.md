@@ -26,7 +26,7 @@ pip install -r requirements.txt
 streamlit run dashboard.py
 
 ## Full Documentation
-See `Market_Intelligence_Platform_Guide_v1.2.docx` for complete installation, usage and technical reference.
+See in "docs" folder `Market_Intelligence_Platform_Guide_v1.2.docx` for complete installation, usage and technical reference.
 
 ## Pages
 - **Macro** — VIX regime, live market readings, macro cycle positioning
