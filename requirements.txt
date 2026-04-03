@@ -1,0 +1,9 @@
+pandas
+numpy
+yfinance
+fredapi
+requests
+streamlit
+plotly
+streamlit-option-menu
+kaleido
