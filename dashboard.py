@@ -1397,7 +1397,8 @@ elif page == "Commodities":
             st.markdown("**By Commodity**")
             comm_cols = [c for c in history.columns if c.startswith('comm_') and c.endswith('_total')
                          and c.count('_') == 2]
-            comm_keys = [c.replace('comm_','').replace('_total','') for c in comm_cols]
+            comm_keys = [c.replace('comm_','').replace('_total','') for c in comm_cols
+                         if c.count('_') == 2 and 'unknown' not in c.lower()]
 
             today     = history.iloc[-1]
             today_str = str(today['date'])

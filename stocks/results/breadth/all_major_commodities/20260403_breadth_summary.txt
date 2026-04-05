@@ -70,7 +70,6 @@
   Silver mid               12      3     10      0      0
   Silver small             14      2      6      0     -1
 
-
   Uranium large            14      9     13      0     +3
   Uranium mid              14      2      8      0     -1
   Uranium small            36      4     15     +1     -3
