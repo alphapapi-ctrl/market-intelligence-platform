@@ -56,6 +56,7 @@ page = option_menu(
         "Uranium",
         "AU Gold Miners",
         "RRG Charts",
+        "Breadth RRG",
         "Drawdown Analysis",
         "Actionable & Exports",
         "EA Comparator",
@@ -64,7 +65,7 @@ page = option_menu(
     ],
     icons       = [
         "globe","flag","flag","hammer","radioactive","star",
-        "broadcast","graph-down","file-earmark-arrow-down",
+        "broadcast","grid-3x3","graph-down","file-earmark-arrow-down",
         "sliders","bar-chart-line","play-circle"
     ],
     default_index = 0,
@@ -2069,6 +2070,362 @@ elif page == "RRG Charts":
         if st.button("🔄 Update US RRG Data", key='rrg_us'):
             run_script(os.path.join(STOCKS, 'rrg_us_data.py'), STOCKS)
             st.rerun()
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# BREADTH RRG PAGE
+# ═══════════════════════════════════════════════════════════════════════════════
+elif page == "Breadth RRG":
+    import plotly.graph_objects as go
+
+    st.title("📊 Breadth Rotation Graph")
+    st.markdown("""
+        <div class="info-card">
+            Plots sector breadth participation using an RRG-style chart. 
+            <b>X axis</b> — normalised % of stocks above SMA (breadth strength vs universe average).
+            <b>Y axis</b> — rate of change of that breadth score over 21 days (breadth momentum).
+            Reading top-right to bottom-left follows the same rotation cycle as a standard RRG.
+            Three charts per universe show early (Ab20), intermediate (Ab50) and established (Ab200) trend participation — 
+            sectors leading on Ab20 but lagging on Ab200 are early rotation candidates.
+        </div>
+    """, unsafe_allow_html=True)
+
+    def build_breadth_rrg(history, sector_keys, prefix, sma_col, title, tail_days, smooth_span):
+        """Build one breadth RRG chart for a given SMA level"""
+        if history is None or len(history) == 0:
+            st.warning("No breadth history found")
+            return
+
+        history = history.copy()
+        history['date'] = pd.to_datetime(history['date'])
+        history = history.sort_values('date')
+
+        # Calculate % above SMA per sector per day
+        breadth_data = {}
+        for sec_key in sector_keys:
+            total_col = f'{prefix}_{sec_key}_total'
+            above_col = f'{prefix}_{sec_key}_{sma_col}'
+            if total_col not in history.columns or above_col not in history.columns:
+                continue
+            series = history.set_index('date').apply(
+                lambda row: round(row[above_col] / row[total_col] * 100, 2)
+                if row[total_col] > 0 else 0, axis=1
+            )
+            if series.std() > 0:
+                breadth_data[sec_key] = series
+
+        if not breadth_data:
+            st.warning(f"No breadth data for {sma_col}")
+            return
+
+        df_breadth = pd.DataFrame(breadth_data)
+        df_breadth = df_breadth.tail(tail_days + 63)  # enough history for momentum calc
+
+        # Normalise to universe average each day (like RRG normalisation)
+        universe_avg = df_breadth.mean(axis=1)
+
+        # RS-Ratio equivalent: sector breadth relative to universe average, normalised to 100
+        rs_ratio_df = df_breadth.apply(lambda col: (col / universe_avg) * 100)
+
+        # Apply EWM smoothing
+        rs_ratio_smooth = rs_ratio_df.ewm(span=smooth_span, adjust=False).mean()
+
+        # RS-Momentum: rate of change of RS-Ratio over 21 days, normalised to 100
+        rs_mom_df = rs_ratio_smooth / rs_ratio_smooth.shift(21) * 100
+        rs_mom_smooth = rs_mom_df.ewm(span=smooth_span, adjust=False).mean()
+
+        # Trim to tail length
+        rs_ratio_tail = rs_ratio_smooth.tail(tail_days)
+        rs_mom_tail   = rs_mom_smooth.tail(tail_days)
+
+        # Colour palette
+        COLOURS = [
+            '#00b4d8','#f77f00','#2dc653','#e63946','#9b5de5',
+            '#f15bb5','#fee440','#06d6a0','#118ab2','#ffd166',
+            '#ef476f','#b7e4c7','#40916c','#fcbf49','#eae2b7',
+        ]
+
+        # Short labels
+        SECTOR_LABELS = {
+            'energy_minerals'             : 'Energy Min',
+            'finance'                     : 'Finance',
+            'technology_services'         : 'Tech Svcs',
+            'electronic_technology'       : 'Elec Tech',
+            'communications'              : 'Comms',
+            'utilities'                   : 'Utilities',
+            'non_energy_minerals'         : 'Non-E Min',
+            'process_industries'          : 'Process Ind',
+            'consumer_services'           : 'Cons Svcs',
+            'consumer_durables'           : 'Cons Dur',
+            'consumer_non_durables'       : 'Cons NonDur',
+            'retail_trade'                : 'Retail',
+            'health_technology'           : 'Health Tech',
+            'health_services'             : 'Health Svcs',
+            'industrial_services'         : 'Ind Svcs',
+            'commercial_services'         : 'Comm Svcs',
+            'distribution_services'       : 'Distrib',
+            'transportation'              : 'Transport',
+            'producer_manufacturing'      : 'Producer Mfg',
+            'energy'                      : 'Energy',
+            'information_technology'      : 'Info Tech',
+            'consumer_discretionary'      : 'Cons Disc',
+            'financials'                  : 'Financials',
+            'industrials'                 : 'Industrials',
+            'materials'                   : 'Materials',
+            'consumer_staples'            : 'Cons Staples',
+            'health_care'                 : 'Health Care',
+            'communication_services'      : 'Comm Svcs',
+            'real_estate'                 : 'Real Estate',
+            'gold'                        : 'Gold',
+            'silver'                      : 'Silver',
+            'copper'                      : 'Copper',
+            'uranium'                     : 'Uranium',
+            'lithium'                     : 'Lithium',
+            'platinum'                    : 'Platinum',
+            'palladium'                   : 'Palladium',
+        }
+
+        fig = go.Figure()
+        
+        # Centre lines
+        fig.add_hline(y=100, line_width=1, line_dash='dash',
+                      line_color='rgba(128,128,128,0.3)')
+        fig.add_vline(x=100, line_width=1, line_dash='dash',
+                      line_color='rgba(128,128,128,0.3)')
+
+        current_positions = {}
+
+        for i, sec_key in enumerate(breadth_data.keys()):
+            if sec_key not in rs_ratio_tail.columns:
+                continue
+
+            colour = COLOURS[i % len(COLOURS)]
+            label  = SECTOR_LABELS.get(sec_key, sec_key.replace('_',' ').title())
+
+            x_vals = rs_ratio_tail[sec_key].dropna().tolist()
+            y_vals = rs_mom_tail[sec_key].dropna().tolist()
+
+            if len(x_vals) < 2:
+                continue
+
+            # Align lengths
+            min_len = min(len(x_vals), len(y_vals))
+            x_vals  = x_vals[-min_len:]
+            y_vals  = y_vals[-min_len:]
+
+            current_positions[sec_key] = (x_vals[-1], y_vals[-1], label, colour)
+
+            # Tail with fading opacity
+            n = len(x_vals)
+            for j in range(1, n):
+                opacity = 0.15 + 0.75 * (j / n)
+                fig.add_trace(go.Scatter(
+                    x=[x_vals[j-1], x_vals[j]],
+                    y=[y_vals[j-1], y_vals[j]],
+                    mode='lines',
+                    line=dict(color=colour, width=2),
+                    opacity=opacity,
+                    showlegend=False,
+                    hoverinfo='skip',
+                ))
+
+            # Current dot + label
+            fig.add_trace(go.Scatter(
+                x=[x_vals[-1]], y=[y_vals[-1]],
+                mode='markers+text',
+                marker=dict(size=12, color=colour,
+                            line=dict(color='white', width=1.5)),
+                text=[label],
+                textposition='top right',  # change from top center
+                textfont=dict(size=11, color=colour),  # increase from 9
+                name=label,
+                showlegend=False,
+                hovertemplate=f"<b>{label}</b><br>Breadth RS: %{{x:.1f}}<br>Momentum: %{{y:.1f}}<extra></extra>",
+            ))
+
+        # Legend sorted by quadrant
+        def get_quadrant(x, y):
+            if x >= 100 and y >= 100: return ('1_LEADING',   '🟢')
+            if x >= 100 and y <  100: return ('2_WEAKENING', '🟡')
+            if x <  100 and y >= 100: return ('3_IMPROVING', '🔵')
+            return                           ('4_LAGGING',   '🔴')
+
+        sorted_sectors = sorted(
+            current_positions.items(),
+            key=lambda item: (get_quadrant(item[1][0], item[1][1])[0], -item[1][0])
+        )
+
+        legend_x = 1.02
+        y_pos    = 1.0
+        lh       = 0.045  # reduce from 0.055 to fit more entries
+        last_q   = None
+
+        for sec_key, (x, y, label, colour) in sorted_sectors:
+            quad, icon = get_quadrant(x, y)
+            qname      = quad.split('_')[1]
+            if quad != last_q:
+                fig.add_annotation(
+                    x=legend_x, y=y_pos, xref='paper', yref='paper',
+                    text=f"<b>{icon} {qname}</b>",
+                    showarrow=False,
+                    font=dict(size=13, color='rgba(200,200,200,0.9)'),
+                    xanchor='left',
+                )
+                y_pos  -= lh * 0.8
+                last_q  = quad
+            fig.add_annotation(
+                x=legend_x, y=y_pos, xref='paper', yref='paper',
+                text=f"<span style='color:{colour}'>●</span> {label}",
+                showarrow=False,
+                font=dict(size=10, color='rgba(200,200,200,0.9)'),
+                xanchor='left',
+            )
+            y_pos -= lh
+
+        # Calculate dynamic axis ranges
+        all_x = [pos[0] for pos in current_positions.values()]
+        all_y = [pos[1] for pos in current_positions.values()]
+        x_pad = max((max(all_x) - min(all_x)) * 0.15, 10)
+        y_pad = max((max(all_y) - min(all_y)) * 0.15, 10)
+        x_min = min(min(all_x) - x_pad, 60)
+        x_max = max(max(all_x) + x_pad, 140)
+        y_min = min(min(all_y) - y_pad, 60)
+        y_max = max(max(all_y) + y_pad, 140)
+
+        # Quadrant backgrounds
+        fig.add_shape(type='rect', x0=100, y0=100, x1=x_max, y1=y_max,
+                      fillcolor='rgba(0,180,0,0.06)', line_width=0, layer='below')
+        fig.add_shape(type='rect', x0=x_min, y0=100, x1=100, y1=y_max,
+                      fillcolor='rgba(100,100,255,0.06)', line_width=0, layer='below')
+        fig.add_shape(type='rect', x0=x_min, y0=y_min, x1=100, y1=100,
+                      fillcolor='rgba(255,50,50,0.06)', line_width=0, layer='below')
+        fig.add_shape(type='rect', x0=100, y0=y_min, x1=x_max, y1=100,
+                      fillcolor='rgba(255,180,0,0.06)', line_width=0, layer='below')
+
+        # Quadrant labels
+        for text, x, y in [
+            ('LEADING',   x_max * 0.97, y_max * 0.97),
+            ('WEAKENING', x_max * 0.97, y_min * 1.03),
+            ('LAGGING',   x_min * 1.03, y_min * 1.03),
+            ('IMPROVING', x_min * 1.03, y_max * 0.97),
+        ]:
+            fig.add_annotation(x=x, y=y, text=text, showarrow=False,
+                               font=dict(size=11, color='rgba(150,150,150,0.4)'),
+                               xanchor='center')
+
+        fig.update_layout(
+            title        = dict(text=title, font=dict(size=14)),
+            height       = 700,
+            plot_bgcolor = 'rgba(15,15,25,1)',
+            paper_bgcolor= 'rgba(15,15,25,1)',
+            font         = dict(color='white'),
+            xaxis        = dict(range=[x_min, x_max], gridcolor='rgba(255,255,255,0.05)',
+                                title='Breadth Strength (vs universe avg)', title_font=dict(size=10)),
+            yaxis        = dict(range=[y_min, y_max], gridcolor='rgba(255,255,255,0.05)',
+                                title='Breadth Momentum (21d ROC)', title_font=dict(size=10)),
+            showlegend   = False,
+            margin       = dict(r=40, l=60, t=50, b=50),
+        )
+
+        st.plotly_chart(fig, use_container_width=True)
+
+        # ── Streamlit legend below chart ──────────────────────────────────────
+        quad_groups = {'1_LEADING': [], '2_WEAKENING': [], '3_IMPROVING': [], '4_LAGGING': []}
+        quad_labels = {
+            '1_LEADING'  : ('🟢 LEADING',   '#2dc653'),
+            '2_WEAKENING': ('🟡 WEAKENING',  '#f77f00'),
+            '3_IMPROVING': ('🔵 IMPROVING',  '#00b4d8'),
+            '4_LAGGING'  : ('🔴 LAGGING',    '#e63946'),
+        }
+        for sec_key, (x, y, label, colour) in sorted_sectors:
+            quad = get_quadrant(x, y)[0]
+            quad_groups[quad].append((label, colour))
+
+        leg_cols = st.columns(4)
+        for i, (quad_key, items) in enumerate(quad_groups.items()):
+            qname, qcolour = quad_labels[quad_key]
+            with leg_cols[i]:
+                st.markdown(f"<div style='color:{qcolour};font-weight:bold;font-size:13px;margin-bottom:6px'>{qname}</div>",
+                            unsafe_allow_html=True)
+                for label, colour in items:
+                    st.markdown(f"<div style='font-size:12px;margin-bottom:3px'>"
+                                f"<span style='color:{colour}'>●</span> {label}</div>",
+                                unsafe_allow_html=True)
+
+    # ── Controls ──────────────────────────────────────────────────────────────
+    col1, col2 = st.columns(2)
+    with col1:
+        tail_days   = st.slider("Tail length (trading days)", 10, 63, 10, key='brrg_tail')
+    with col2:
+        smooth_span = st.slider("Smoothing (EWM span)", 1, 20, 20, key='brrg_smooth')
+
+    tab_au, tab_us, tab_comm = st.tabs(["🇦🇺 AU Sectors", "🇺🇸 US Sectors", "⛏ Commodities"])
+
+    # ── AU ─────────────────────────────────────────────────────────────────────
+    with tab_au:
+        au_hist_file = os.path.join(STOCKS, 'results', 'breadth', 'au_total_market',
+                                    'au_total_market_breadth_history.csv')
+        au_hist = load_csv(au_hist_file)
+        if au_hist is not None:
+            sec_cols = [c for c in au_hist.columns if c.startswith('sec_') and c.endswith('_total')
+                        and not c.startswith('sp_') and not c.startswith('rus_')]
+            sec_keys = [c.replace('sec_','').replace('_total','') for c in sec_cols
+                        if 'nan' not in c and 'index' not in c]
+
+            st.caption(f"Latest: {au_hist.iloc[-1]['date']} — {file_age(au_hist_file)}")
+
+            sma_choice = st.radio("SMA Level", ["Above 20", "Above 50", "Above 200"],
+                                   horizontal=True, key='brrg_au_sma')
+            sma_col_map = {"Above 20": "above20", "Above 50": "above50", "Above 200": "above200"}
+            sma_col = sma_col_map[sma_choice]
+
+            build_breadth_rrg(au_hist, sec_keys, 'sec', sma_col,
+                              f'AU Sector Breadth — {sma_choice} SMA', tail_days, smooth_span)
+        else:
+            st.warning("No AU breadth history found — run AU breadth script first")
+
+    # ── US ─────────────────────────────────────────────────────────────────────
+    with tab_us:
+        us_hist_file = os.path.join(STOCKS, 'results', 'breadth', 'us_total_market',
+                                    'us_total_market_breadth_history.csv')
+        us_hist = load_csv(us_hist_file)
+        if us_hist is not None:
+            sp_cols = [c for c in us_hist.columns if c.startswith('sp_sec_') and c.endswith('_total')]
+            sp_keys = [c.replace('sp_sec_','').replace('_total','') for c in sp_cols
+                       if 'nan' not in c and 'index' not in c]
+
+            st.caption(f"Latest: {us_hist.iloc[-1]['date']} — {file_age(us_hist_file)}")
+
+            sma_choice = st.radio("SMA Level", ["Above 20", "Above 50", "Above 200"],
+                                   horizontal=True, key='brrg_us_sma')
+            sma_col_map = {"Above 20": "above20", "Above 50": "above50", "Above 200": "above200"}
+            sma_col = sma_col_map[sma_choice]
+
+            build_breadth_rrg(us_hist, sp_keys, 'sp_sec', sma_col,
+                              f'US Sector Breadth — {sma_choice} SMA', tail_days, smooth_span)
+        else:
+            st.warning("No US breadth history found — run US breadth script first")
+
+    # ── Commodities ────────────────────────────────────────────────────────────
+    with tab_comm:
+        comm_hist_file = os.path.join(STOCKS, 'results', 'breadth', 'all_major_commodities',
+                                      'all_major_commodities_breadth_history.csv')
+        comm_hist = load_csv(comm_hist_file)
+        if comm_hist is not None:
+            comm_cols = [c for c in comm_hist.columns if c.startswith('comm_') and c.endswith('_total')
+                         and c.count('_') == 2]
+            comm_keys = [c.replace('comm_','').replace('_total','') for c in comm_cols]
+
+            st.caption(f"Latest: {comm_hist.iloc[-1]['date']} — {file_age(comm_hist_file)}")
+
+            sma_choice = st.radio("SMA Level", ["Above 20", "Above 50", "Above 200"],
+                                   horizontal=True, key='brrg_comm_sma')
+            sma_col_map = {"Above 20": "above20", "Above 50": "above50", "Above 200": "above200"}
+            sma_col = sma_col_map[sma_choice]
+
+            build_breadth_rrg(comm_hist, comm_keys, 'comm', sma_col,
+                              f'Commodity Breadth — {sma_choice} SMA', tail_days, smooth_span)
+        else:
+            st.warning("No commodities breadth history found — run commodities breadth script first")
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # DRAWDOWN ANALYSIS PAGE
