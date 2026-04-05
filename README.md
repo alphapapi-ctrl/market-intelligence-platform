@@ -2,6 +2,17 @@
 
 A local market intelligence dashboard for tracking relative strength, breadth and macro conditions across AU/US equities and commodities.
 
+Provides actionable reports for screeners and trading view watchlist to easily import them into tradingview.
+
+Drawdown Analysis Tool:
+Choose up to 3 priods of time to conduct a drawdown analysis and relative strength comparison on all of the existing watchlist.  AU/US stocks, major commodities, AU gold mining, Uranium.
+
+RRG Relative Rotation Graphs - relative strength vs relative momentum with adjustable tails up to 63 trading days.  Separate graphs for AU and US sectors.  Useful for monitoring rotation across all sectors and major metals.
+
+Additional tools:
+Metatrader 5 Expert Advisor set file comparison tool.
+Metatrader 5 trade export html report viewer + filters.
+
 ## Requirements
 - Python 3.10+
 - See `requirements.txt` for all dependencies
