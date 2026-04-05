@@ -205,25 +205,36 @@ def calculate_benchmark(prices, prices_24m, volumes, watchlist_df):
         })
 
     df = pd.DataFrame(results)
+    if df.empty or 'score_final' not in df.columns:
+        print(f"Warning: no results calculated for {STUDY_NAME} — price data may be unavailable")
+        return None
     df = df.sort_values('score_final', ascending=False, na_position='last').reset_index(drop=True)
     df.index += 1
     df.index.name = 'rank'
     return df
 
 def save_results(df, results_dir, study_name):
+    if df is None or len(df) == 0:
+        print(f"No results to save for {study_name}")
+        return None
+
     os.makedirs(results_dir, exist_ok=True)
     today = datetime.today().strftime('%Y%m%d')
 
     # Delta rank
     prev_file = f"{results_dir}{study_name}_latest.csv"
     if os.path.exists(prev_file):
-        prev_df    = pd.read_csv(prev_file, index_col='rank')
-        prev_ranks = prev_df['ticker'].reset_index().rename(columns={'rank': 'prev_rank'})
-        df         = df.reset_index()
-        df         = df.merge(prev_ranks, on='ticker', how='left')
-        df['delta_rank'] = df['prev_rank'] - df['rank']
-        df['delta_rank'] = df['delta_rank'].fillna(0).astype(int)
-        df         = df.set_index('rank')
+        try:
+            prev_df    = pd.read_csv(prev_file, index_col='rank')
+            prev_ranks = prev_df[['ticker']].reset_index().rename(columns={'rank': 'prev_rank'})
+            df         = df.reset_index()
+            df         = df.merge(prev_ranks, on='ticker', how='left')
+            df['delta_rank'] = df['prev_rank'] - df['rank']
+            df['delta_rank'] = df['delta_rank'].fillna(0).astype(int)
+            df         = df.set_index('rank')
+        except Exception as e:
+            print(f"Could not load previous results for delta rank: {e}")
+            df['delta_rank'] = 0
     else:
         df['delta_rank'] = 0
 
@@ -300,10 +311,12 @@ if __name__ == "__main__":
     prices    = fetch_prices(watchlist, START_DATE, END_DATE)
     prices_24m= fetch_prices(watchlist, START_24M, END_DATE)
     volumes   = fetch_volumes(watchlist, START_DATE, END_DATE)
-    bm_results= calculate_benchmark(prices, prices_24m, volumes, watchlist)
-    bm_results= save_results(bm_results, RESULTS_DIR, STUDY_NAME)
-    fmt_results = format_results(bm_results)
-    fmt_results.to_csv(f"{RESULTS_DIR}{STUDY_NAME}_latest_formatted.csv")
-    print(fmt_results.head(20))
-    elapsed = time.time() - start
-    print(f"\nCompleted in {int(elapsed//60)}m {int(elapsed%60)}s")
+    bm_results = calculate_benchmark(prices, prices_24m, volumes, watchlist)
+    if bm_results is not None:
+        bm_results  = save_results(bm_results, RESULTS_DIR, STUDY_NAME)
+        if bm_results is not None:
+            fmt_results = format_results(bm_results)
+            fmt_results.to_csv(f"{RESULTS_DIR}{STUDY_NAME}_latest_formatted.csv")
+            print(fmt_results.head(20))
+    else:
+        print(f"No results generated for {STUDY_NAME} — check price data and try again")
