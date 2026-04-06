@@ -1953,70 +1953,31 @@ elif page == "RRG Charts":
                     hoverinfo='skip',
                 ))
 
-            # Current position dot
+            # Current dot + label
             fig.add_trace(go.Scatter(
-                x=[x_vals[-1]],
-                y=[y_vals[-1]],
-                mode='markers+text' if show_labels else 'markers',
-                marker=dict(size=10, color=colour,
+                x=[x_vals[-1]], y=[y_vals[-1]],
+                mode='markers+text',
+                marker=dict(size=12, color=colour,
                             line=dict(color='white', width=1.5)),
-                text=[label] if show_labels else [],
-                textposition='top center',
-                textfont=dict(size=9, color=colour),
+                text=[label],
+                textposition='top right',
+                textfont=dict(size=11, color=colour),
                 name=label,
                 showlegend=False,
                 hovertemplate=f"<b>{label}</b><br>RS-Ratio: %{{x:.2f}}<br>RS-Momentum: %{{y:.2f}}<extra></extra>",
             ))
 
-        # ── Dynamic legend sorted by quadrant then strength ───────────────────
+        # ── Sort for legend and PNG export ────────────────────────────────────
         def get_quadrant(x, y):
-            if x >= 100 and y >= 100: return ('1_LEADING',    '🟢')
-            if x >= 100 and y <  100: return ('2_WEAKENING',  '🟡')
-            if x <  100 and y >= 100: return ('3_IMPROVING',  '🔵')
-            return                           ('4_LAGGING',    '🔴')
+            if x >= 100 and y >= 100: return ('1_LEADING',   '🟢')
+            if x >= 100 and y <  100: return ('2_WEAKENING', '🟡')
+            if x <  100 and y >= 100: return ('3_IMPROVING', '🔵')
+            return                           ('4_LAGGING',   '🔴')
 
-        # Sort by quadrant then by RS-Ratio descending within quadrant
         sorted_tickers = sorted(
             current_positions.items(),
             key=lambda item: (get_quadrant(item[1][0], item[1][1])[0], -item[1][0])
         )
-
-        # Build legend as annotations on right side
-        legend_x   = 1.02
-        legend_y   = 1.0
-        line_height= 0.048
-        last_quad  = None
-        y_pos      = legend_y
-
-        for ticker, (x, y, label, colour) in sorted_tickers:
-            quad, quad_icon = get_quadrant(x, y)
-            quad_name       = quad.split('_')[1]
-
-            # Section header when quadrant changes
-            if quad != last_quad:
-                fig.add_annotation(
-                    x=legend_x, y=y_pos,
-                    xref='paper', yref='paper',
-                    text=f"<b>{quad_icon} {quad_name}</b>",
-                    showarrow=False,
-                    font=dict(size=10, color='rgba(255,255,255,0.6)'),
-                    xanchor='left',
-                    align='left',
-                )
-                y_pos   -= line_height * 0.8
-                last_quad = quad
-
-            # Ticker entry
-            fig.add_annotation(
-                x=legend_x, y=y_pos,
-                xref='paper', yref='paper',
-                text=f"<span style='color:{colour}'>●</span> {label}  <span style='color:rgba(255,255,255,0.4)'>{x:.1f} / {y:.1f}</span>",
-                showarrow=False,
-                font=dict(size=9, color='white'),
-                xanchor='left',
-                align='left',
-            )
-            y_pos -= line_height
 
         fig.update_layout(
             title        = dict(text=title, font=dict(size=16, color='white')),
@@ -2026,26 +1987,71 @@ elif page == "RRG Charts":
             plot_bgcolor = 'rgba(15,15,25,1)',
             paper_bgcolor= 'rgba(15,15,25,1)',
             font         = dict(color='white'),
-            xaxis        = dict(
-                range      = [65, 135],
-                gridcolor  = 'rgba(255,255,255,0.05)',
-                tickfont   = dict(size=10),
-                title_font = dict(size=11),
-            ),
-            yaxis        = dict(
-                range      = [65, 135],
-                gridcolor  = 'rgba(255,255,255,0.05)',
-                tickfont   = dict(size=10),
-                title_font = dict(size=11),
-            ),
+            xaxis        = dict(range=[65,135], gridcolor='rgba(255,255,255,0.05)',
+                                tickfont=dict(size=10), title_font=dict(size=11)),
+            yaxis        = dict(range=[65,135], gridcolor='rgba(255,255,255,0.05)',
+                                tickfont=dict(size=10), title_font=dict(size=11)),
             showlegend   = False,
-            margin       = dict(r=220, l=60, t=60, b=60),
+            margin       = dict(r=40, l=60, t=60, b=60),
         )
 
         st.plotly_chart(fig, use_container_width=True)
 
-        # Download snapshot
-        img_bytes = fig.to_image(format='png', width=1600, height=800, scale=2)
+        # ── Streamlit legend below chart ──────────────────────────────────────
+        quad_groups = {'1_LEADING': [], '2_WEAKENING': [], '3_IMPROVING': [], '4_LAGGING': []}
+        quad_labels = {
+            '1_LEADING'  : ('🟢 LEADING',   '#2dc653'),
+            '2_WEAKENING': ('🟡 WEAKENING',  '#f77f00'),
+            '3_IMPROVING': ('🔵 IMPROVING',  '#00b4d8'),
+            '4_LAGGING'  : ('🔴 LAGGING',    '#e63946'),
+        }
+        for ticker, (x, y, label, colour) in sorted_tickers:
+            quad = get_quadrant(x, y)[0]
+            quad_groups[quad].append((label, colour))
+
+        leg_cols = st.columns(4)
+        for i, (quad_key, items) in enumerate(quad_groups.items()):
+            qname, qcolour = quad_labels[quad_key]
+            with leg_cols[i]:
+                st.markdown(f"<div style='color:{qcolour};font-weight:bold;font-size:13px;margin-bottom:6px'>{qname}</div>",
+                            unsafe_allow_html=True)
+                for label, colour in items:
+                    st.markdown(f"<div style='font-size:12px;margin-bottom:3px'>"
+                                f"<span style='color:{colour}'>●</span> {label}</div>",
+                                unsafe_allow_html=True)
+
+        # ── PNG export with embedded legend ───────────────────────────────────
+        fig_export = go.Figure(fig)
+        legend_x  = 1.02
+        y_pos     = 1.0
+        lh        = 0.048
+        last_quad = None
+
+        for ticker, (x, y, label, colour) in sorted_tickers:
+            quad, icon = get_quadrant(x, y)
+            qname      = quad.split('_')[1]
+            if quad != last_quad:
+                fig_export.add_annotation(
+                    x=legend_x, y=y_pos, xref='paper', yref='paper',
+                    text=f"<b>{icon} {qname}</b>",
+                    showarrow=False,
+                    font=dict(size=11, color='rgba(255,255,255,0.8)'),
+                    xanchor='left',
+                )
+                y_pos    -= lh * 0.8
+                last_quad = quad
+            fig_export.add_annotation(
+                x=legend_x, y=y_pos, xref='paper', yref='paper',
+                text=f"● {label}  {x:.1f}/{y:.1f}",
+                showarrow=False,
+                font=dict(size=9, color=colour),
+                xanchor='left',
+            )
+            y_pos -= lh
+
+        fig_export.update_layout(margin=dict(r=220, l=60, t=60, b=60))
+
+        img_bytes = fig_export.to_image(format='png', width=1800, height=900, scale=2)
         st.download_button(
             label     = f"⬇ Download PNG ({tail_days}d tail)",
             data      = img_bytes,
@@ -2243,44 +2249,17 @@ elif page == "Breadth RRG":
                 hovertemplate=f"<b>{label}</b><br>Breadth RS: %{{x:.1f}}<br>Momentum: %{{y:.1f}}<extra></extra>",
             ))
 
-        # Legend sorted by quadrant
+        # ── Sort for legend and PNG export ────────────────────────────────────
         def get_quadrant(x, y):
             if x >= 100 and y >= 100: return ('1_LEADING',   '🟢')
             if x >= 100 and y <  100: return ('2_WEAKENING', '🟡')
             if x <  100 and y >= 100: return ('3_IMPROVING', '🔵')
             return                           ('4_LAGGING',   '🔴')
 
-        sorted_sectors = sorted(
+        sorted_tickers = sorted(
             current_positions.items(),
             key=lambda item: (get_quadrant(item[1][0], item[1][1])[0], -item[1][0])
         )
-
-        legend_x = 1.02
-        y_pos    = 1.0
-        lh       = 0.045  # reduce from 0.055 to fit more entries
-        last_q   = None
-
-        for sec_key, (x, y, label, colour) in sorted_sectors:
-            quad, icon = get_quadrant(x, y)
-            qname      = quad.split('_')[1]
-            if quad != last_q:
-                fig.add_annotation(
-                    x=legend_x, y=y_pos, xref='paper', yref='paper',
-                    text=f"<b>{icon} {qname}</b>",
-                    showarrow=False,
-                    font=dict(size=13, color='rgba(200,200,200,0.9)'),
-                    xanchor='left',
-                )
-                y_pos  -= lh * 0.8
-                last_q  = quad
-            fig.add_annotation(
-                x=legend_x, y=y_pos, xref='paper', yref='paper',
-                text=f"<span style='color:{colour}'>●</span> {label}",
-                showarrow=False,
-                font=dict(size=10, color='rgba(200,200,200,0.9)'),
-                xanchor='left',
-            )
-            y_pos -= lh
 
         # Calculate dynamic axis ranges
         all_x = [pos[0] for pos in current_positions.values()]
@@ -2337,7 +2316,7 @@ elif page == "Breadth RRG":
             '3_IMPROVING': ('🔵 IMPROVING',  '#00b4d8'),
             '4_LAGGING'  : ('🔴 LAGGING',    '#e63946'),
         }
-        for sec_key, (x, y, label, colour) in sorted_sectors:
+        for sec_key, (x, y, label, colour) in sorted_tickers:
             quad = get_quadrant(x, y)[0]
             quad_groups[quad].append((label, colour))
 
