@@ -5,6 +5,7 @@ import subprocess
 from datetime import datetime, timedelta
 import glob
 from streamlit_option_menu import option_menu
+import json
 
 # ── Config ────────────────────────────────────────────────────────────────────
 BASE    = os.path.dirname(os.path.abspath(__file__))
@@ -45,36 +46,81 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
+# ── Page Settings  ────────────────────────────────────────────────────────────────────
+SETTINGS_FILE = os.path.join(BASE, 'dashboard_settings.json')
+
+DEFAULT_SETTINGS = {
+    'pages': {
+        'Macro'               : True,
+        'AU Market'           : True,
+        'US Market'           : True,
+        'Commodities'         : True,
+        'Uranium'             : True,
+        'AU Gold Miners'      : True,
+        'RRG Charts'          : True,
+        'Breadth RRG'         : True,
+        'Drawdown Analysis'   : True,
+        'Actionable & Exports': True,
+        'EA Comparator'       : True,
+        'MT5 Analysis'        : True,
+        'Run Scripts'         : True,
+        'Settings'            : True,
+    }
+}
+
+def load_settings():
+    if os.path.exists(SETTINGS_FILE):
+        try:
+            with open(SETTINGS_FILE, 'r') as f:
+                saved = json.load(f)
+                # Merge with defaults in case new pages were added
+                merged = DEFAULT_SETTINGS.copy()
+                merged['pages'].update(saved.get('pages', {}))
+                return merged
+        except:
+            pass
+    return DEFAULT_SETTINGS.copy()
+
+def save_settings(settings):
+    with open(SETTINGS_FILE, 'w') as f:
+        json.dump(settings, f, indent=2)
+
 # ── Horizontal top menu ───────────────────────────────────────────────────────
+settings    = load_settings()
+page_config = settings['pages']
+
+ALL_PAGES = [
+    ("Macro",                "globe"),
+    ("AU Market",            "flag"),
+    ("US Market",            "flag"),
+    ("Commodities",          "hammer"),
+    ("Uranium",              "radioactive"),
+    ("AU Gold Miners",       "star"),
+    ("RRG Charts",           "broadcast"),
+    ("Breadth RRG",          "grid-3x3"),
+    ("Drawdown Analysis",    "graph-down"),
+    ("Actionable & Exports", "file-earmark-arrow-down"),
+    ("EA Comparator",        "sliders"),
+    ("MT5 Analysis",         "bar-chart-line"),
+    ("Run Scripts",          "play-circle"),
+    ("Settings",             "gear"),
+]
+
+# Filter to enabled pages — Settings always shown
+active_pages = [(name, icon) for name, icon in ALL_PAGES
+                if page_config.get(name, True) or name == 'Settings']
+
 page = option_menu(
     menu_title  = None,
-    options     = [
-        "Macro",
-        "AU Market",
-        "US Market",
-        "Commodities",
-        "Uranium",
-        "AU Gold Miners",
-        "RRG Charts",
-        "Breadth RRG",
-        "Drawdown Analysis",
-        "Actionable & Exports",
-        "EA Comparator",
-        "MT5 Analysis",
-        "Run Scripts",
-    ],
-    icons       = [
-        "globe","flag","flag","hammer","radioactive","star",
-        "broadcast","grid-3x3","graph-down","file-earmark-arrow-down",
-        "sliders","bar-chart-line","play-circle"
-    ],
+    options     = [p[0] for p in active_pages],
+    icons       = [p[1] for p in active_pages],
     default_index = 0,
     orientation = "horizontal",
     styles      = {
-        "container"     : {"padding": "0!important", "background-color": "#2c3e50"},
-        "icon"          : {"color": "#b0bec5", "font-size": "13px"},
-        "nav-link"      : {"font-size": "12px", "text-align": "center", "margin": "0px",
-                           "color": "#ecf0f1", "--hover-color": "#34495e"},
+        "container"        : {"padding": "0!important", "background-color": "#2c3e50"},
+        "icon"             : {"color": "#b0bec5", "font-size": "13px"},
+        "nav-link"         : {"font-size": "12px", "text-align": "center", "margin": "0px",
+                              "color": "#ecf0f1", "--hover-color": "#34495e"},
         "nav-link-selected": {"background-color": "#1a3a5c", "color": "white"},
     }
 )
@@ -265,6 +311,20 @@ def build_breadth_table(history, metrics, label=''):
         })
     return pd.DataFrame(rows)
 
+def sector_breadth_caption():
+    st.markdown("""
+        <div style="display:flex;gap:16px;flex-wrap:wrap;font-size:11px;color:#888;
+                    margin-bottom:6px;padding:6px 4px">
+            <span><b style="color:#ccc">Total</b> — stocks in sector</span>
+            <span><b style="color:#ccc">Leaders</b> — LEADER/CONTENDER regime count</span>
+            <span><b style="color:#ccc">dL5/dL63</b> — change in leaders over 5/63 days</span>
+            <span><b style="color:#ccc">Ab20%</b> — % of sector above 20 SMA</span>
+            <span><b style="color:#ccc">Ab50%</b> — % of sector above 50 SMA</span>
+            <span><b style="color:#ccc">Ab200%</b> — % of sector above 200 SMA</span>
+            <span><b style="color:#ccc">HVol</b> — stocks with HIGH relative volume</span>
+        </div>
+    """, unsafe_allow_html=True)
+
 def build_sector_table(history, sector_keys, prefix='sec'):
     if history is None or len(history) == 0:
         return None
@@ -301,8 +361,8 @@ def build_sector_table(history, sector_keys, prefix='sec'):
             rows.append({
                 'Sector'  : sec_key.replace('_', ' ').replace('-', ' ').title(),
                 'HVol'    : high_vol,
-                'Leaders' : leaders,
                 'Total'   : total,
+                'Leaders' : leaders,
                 'dL5'     : delta(f'{prefix}_{sec_key}_leaders',  d5)  if d5  is not None else 'n/a',
                 'dL63'    : delta(f'{prefix}_{sec_key}_leaders',  d63) if d63 is not None else 'n/a',
                 'Ab20%'   : f"{pct(above20,  total)}%",
@@ -995,6 +1055,7 @@ elif page == "AU Market":
                          if 'nan' not in c and 'index' not in c]
             df_sector = build_sector_table(history, sec_keys, prefix='sec')
             if df_sector is not None:
+                sector_breadth_caption()
                 st.dataframe(
                     style_breadth(df_sector, delta_cols=['dL5','dL63']),
                     use_container_width=True, hide_index=True, height=600
@@ -1172,6 +1233,7 @@ elif page == "US Market":
             st.markdown("**Layer 1 Sector Breadth**")
             df_sec = build_sector_table(history, sec_keys, prefix='sec')
             if df_sec is not None:
+                sector_breadth_caption()
                 st.dataframe(style_breadth(df_sec, delta_cols=['dL5','dL63']),
                              use_container_width=True, hide_index=True, height=500)
 
@@ -1203,6 +1265,7 @@ elif page == "US Market":
                 st.markdown("**Layer 2 Sector Breadth**")
                 df_sp_sec = build_sector_table(history, sp_sec_keys, prefix='sp_sec')
                 if df_sp_sec is not None:
+                    sector_breadth_caption()
                     st.dataframe(style_breadth(df_sp_sec, delta_cols=['dL5','dL63']),
                                  use_container_width=True, hide_index=True, height=500)
 
@@ -1234,6 +1297,7 @@ elif page == "US Market":
                 st.markdown("**Layer 3 Sector Breadth**")
                 df_rus_sec = build_sector_table(history, rus_sec_keys, prefix='rus_sec')
                 if df_rus_sec is not None:
+                    sector_breadth_caption()
                     st.dataframe(style_breadth(df_rus_sec, delta_cols=['dL5','dL63']),
                                  use_container_width=True, hide_index=True, height=500)
         else:
@@ -1425,6 +1489,7 @@ elif page == "Commodities":
                     continue
             if comm_rows:
                 df_comm = pd.DataFrame(comm_rows)
+                sector_breadth_caption()
                 st.dataframe(style_breadth(df_comm, delta_cols=['dL5','dL63']),
                              use_container_width=True, hide_index=True)
 
@@ -3553,3 +3618,41 @@ elif page == "Run Scripts":
             run_script(os.path.join(BASE, 'utilities', 'fetch_market_caps_uranium.py'), os.path.join(BASE, 'utilities'))
         if st.button("Fetch Market Caps — AU Gold"):
             run_script(os.path.join(BASE, 'utilities', 'fetch_market_caps_au_gold.py'), os.path.join(BASE, 'utilities'))
+
+            # ═══════════════════════════════════════════════════════════════════════════════
+# SETTINGS PAGE
+# ═══════════════════════════════════════════════════════════════════════════════
+elif page == "Settings":
+    st.title("⚙ Dashboard Settings")
+    st.caption("Changes take effect after saving and reloading the page")
+
+    current = load_settings()
+
+    st.subheader("Pages")
+    st.markdown("Toggle pages on or off. Settings is always visible.")
+
+    updated_pages = {}
+    cols = st.columns(3)
+    for i, (name, icon) in enumerate(ALL_PAGES):
+        if name == 'Settings':
+            continue
+        with cols[i % 3]:
+            updated_pages[name] = st.toggle(
+                name,
+                value=current['pages'].get(name, True),
+                key=f"setting_{name}"
+            )
+
+    st.divider()
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("💾 Save & Reload", type="primary"):
+            current['pages'] = updated_pages
+            save_settings(current)
+            st.success("Settings saved")
+            st.rerun()
+    with col2:
+        if st.button("Reset to defaults", type="secondary"):
+            save_settings(DEFAULT_SETTINGS)
+            st.success("Reset to defaults")
+            st.rerun()
