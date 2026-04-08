@@ -888,27 +888,6 @@ if page == "Macro":
     # ══════════════════════════════════════════════════════════════════════════
     st.subheader("🔄 Macro Cycle Positioning")
 
-    CYCLE_CONFIG = {
-        '18-21 YEAR LAND CYCLE': {
-            'total_years' : 20,
-            'phases'      : ['UPTURN','MID','PEAK','DOWNTURN'],
-            'phase_years' : [5, 5, 5, 5],
-            'colour'      : '#9b5de5',
-        },
-        '40/80 YEAR RATE CYCLE': {
-            'total_years' : 40,
-            'phases'      : ['EARLY UP','MID UP','PEAK','EARLY DOWN','MID DOWN','TROUGH'],
-            'phase_years' : [8, 8, 6, 6, 6, 6],
-            'colour'      : '#00b4d8',
-        },
-        'COMMODITY VS EQUITY CYCLE': {
-            'total_years' : 18,
-            'phases'      : ['EARLY','MID','LATE','TRANSITION'],
-            'phase_years' : [4, 5, 5, 4],
-            'colour'      : '#f77f00',
-        },
-    }
-
     # Business and Fed cycles as status cards
     biz_col, fed_col, pres_col = st.columns(3)
 
@@ -965,55 +944,6 @@ if page == "Macro":
         """, unsafe_allow_html=True)
 
     st.markdown("<div style='margin-top:16px'></div>", unsafe_allow_html=True)
-
-    # Long cycle progress bars
-    LONG_CYCLES = [
-        {
-            'name'        : '18-21 Year Land Cycle',
-            'total_years' : 20,
-            'years_in'    : 19.7,
-            'phase'       : 'DOWNTURN',
-            'colour'      : '#9b5de5',
-            'phases'      : [('UPTURN',5),('MID',5),('PEAK',5),('DOWNTURN',5)],
-        },
-        {
-            'name'        : '40/80 Year Rate Cycle',
-            'total_years' : 40,
-            'years_in'    : 5.7,
-            'phase'       : 'EARLY UP',
-            'colour'      : '#00b4d8',
-            'phases'      : [('TROUGH',5),('EARLY UP',8),('MID UP',8),('PEAK',6),('EARLY DOWN',7),('MID DOWN',6)],
-        },
-        {
-            'name'        : 'Commodity vs Equity Cycle',
-            'total_years' : 18,
-            'years_in'    : 5.7,
-            'phase'       : 'MID',
-            'colour'      : '#f77f00',
-            'phases'      : [('EARLY',4),('MID',5),('LATE',5),('TRANSITION',4)],
-        },
-    ]
-
-    for cycle in LONG_CYCLES:
-        pct = min(cycle['years_in'] / cycle['total_years'] * 100, 100)
-        st.markdown(f"""
-            <div style="background:rgba(255,255,255,0.04);border-radius:8px;
-                        padding:14px 16px;margin-bottom:10px">
-                <div style="display:flex;justify-content:space-between;margin-bottom:6px">
-                    <span style="color:white;font-weight:bold;font-size:13px">{cycle['name']}</span>
-                    <span style="color:{cycle['colour']};font-size:13px;font-weight:bold">
-                        {cycle['phase']} &nbsp;|&nbsp; Year {cycle['years_in']} of {cycle['total_years']}
-                    </span>
-                </div>
-                <div style="background:rgba(255,255,255,0.08);border-radius:4px;height:10px;position:relative">
-                    <div style="background:{cycle['colour']};width:{pct:.1f}%;height:10px;
-                                border-radius:4px;opacity:0.85"></div>
-                </div>
-                <div style="display:flex;justify-content:space-between;margin-top:4px">
-                    {''.join(f'<span style="color:#666;font-size:9px">{p[0]}</span>' for p in cycle['phases'])}
-                </div>
-            </div>
-        """, unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # AU MARKET PAGE
