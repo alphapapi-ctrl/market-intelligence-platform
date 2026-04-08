@@ -63,6 +63,7 @@ DEFAULT_SETTINGS = {
         'Actionable & Exports': True,
         'EA Comparator'       : True,
         'MT5 Analysis'        : True,
+        'DeMark Signals'      : True,
         'Run Scripts'         : True,
         'Settings'            : True,
     }
@@ -102,6 +103,7 @@ ALL_PAGES = [
     ("Actionable & Exports", "file-earmark-arrow-down"),
     ("EA Comparator",        "sliders"),
     ("MT5 Analysis",         "bar-chart-line"),
+    ("DeMark Signals",       "graph-up"),
     ("Run Scripts",          "play-circle"),
     ("Settings",             "gear"),
 ]
@@ -331,6 +333,7 @@ def build_sector_table(history, sector_keys, prefix='sec'):
 
     today     = history.iloc[-1]
     today_str = str(today['date'])
+    d1        = get_past_row(history, today_str, 1)   # add 1-day lookback
     d5        = get_past_row(history, today_str, 7)
     d63       = get_past_row(history, today_str, 91)
 
@@ -347,27 +350,53 @@ def build_sector_table(history, sector_keys, prefix='sec'):
         except:
             return 'n/a'
 
+    def ab_cell(above, total, above_key, total_key):
+        """Return pct value with 1-day arrow and delta"""
+        try:
+            today_pct = pct(above, total)
+            if d1 is not None:
+                prev_pct  = pct(int(d1[above_key]), int(d1[total_key]))
+                diff      = round(today_pct - prev_pct, 1)
+                if diff > 0:
+                    arrow = '▲'
+                    sign  = '+'
+                elif diff < 0:
+                    arrow = '▼'
+                    sign  = ''
+                else:
+                    arrow = '→'
+                    sign  = ''
+                return f"{today_pct}% {arrow}{sign}{diff}%"
+            return f"{today_pct}%"
+        except:
+            return f"{pct(above, total)}%"
+
     rows = []
     for sec_key in sector_keys:
         try:
-            total_key = f'{prefix}_{sec_key}_total'
-            total     = int(today[total_key])
-            leaders   = int(today[f'{prefix}_{sec_key}_leaders'])
-            above20   = int(today.get(f'{prefix}_{sec_key}_above20',  0))
-            above50   = int(today.get(f'{prefix}_{sec_key}_above50',  0))
-            above200  = int(today[f'{prefix}_{sec_key}_above200'])
-            high_vol  = int(today.get(f'{prefix}_{sec_key}_high_vol', 0))
+            total_key  = f'{prefix}_{sec_key}_total'
+            above20_key= f'{prefix}_{sec_key}_above20'
+            above50_key= f'{prefix}_{sec_key}_above50'
+            above200_key=f'{prefix}_{sec_key}_above200'
+            hvol_key   = f'{prefix}_{sec_key}_high_vol'
+
+            total   = int(today[total_key])
+            leaders = int(today[f'{prefix}_{sec_key}_leaders'])
+            above20 = int(today.get(above20_key, 0))
+            above50 = int(today.get(above50_key, 0))
+            above200= int(today[above200_key])
+            high_vol= int(today.get(hvol_key, 0))
 
             rows.append({
                 'Sector'  : sec_key.replace('_', ' ').replace('-', ' ').title(),
-                'HVol'    : high_vol,
                 'Total'   : total,
                 'Leaders' : leaders,
-                'dL5'     : delta(f'{prefix}_{sec_key}_leaders',  d5)  if d5  is not None else 'n/a',
-                'dL63'    : delta(f'{prefix}_{sec_key}_leaders',  d63) if d63 is not None else 'n/a',
-                'Ab20%'   : f"{pct(above20,  total)}%",
-                'Ab50%'   : f"{pct(above50,  total)}%",
-                'Ab200%'  : f"{pct(above200, total)}%",
+                'dL5'     : delta(f'{prefix}_{sec_key}_leaders', d5)  if d5  is not None else 'n/a',
+                'dL63'    : delta(f'{prefix}_{sec_key}_leaders', d63) if d63 is not None else 'n/a',
+                'Ab20%'   : ab_cell(above20,  total, above20_key,  total_key),
+                'Ab50%'   : ab_cell(above50,  total, above50_key,  total_key),
+                'Ab200%'  : ab_cell(above200, total, above200_key, total_key),
+                'HVol'    : high_vol,
             })
         except:
             continue
@@ -384,11 +413,13 @@ def style_breadth(df, pct_cols=None, delta_cols=None):
             pass
         return ''
 
-    def colour_pct(val, vmin, vmax):
+    def colour_ab_pct(val):
         try:
-            v = float(val)
-            if v >= 60: return 'background-color: rgba(0,180,0,0.10)'
-            if v <= 30: return 'background-color: rgba(180,0,0,0.10)'
+            v = float(str(val).split('%')[0].split(' ')[0].replace('+','').replace('▲','').replace('▼','').strip())
+            if v >= 70: return 'background-color: rgba(0,180,0,0.15)'
+            if v >= 40: return 'background-color: rgba(255,180,0,0.15)'
+            if v >= 20: return 'background-color: rgba(180,0,0,0.15)'
+            return 'background-color: rgba(148,0,211,0.15)'
         except:
             pass
         return ''
@@ -398,6 +429,13 @@ def style_breadth(df, pct_cols=None, delta_cols=None):
         for col in delta_cols:
             if col in df.columns:
                 styler = styler.map(colour_delta, subset=[col])
+
+    # Colour Ab% columns
+    ab_cols = [c for c in df.columns if c.startswith('Ab') and '%' in c]
+    for col in ab_cols:
+        if col in df.columns:
+            styler = styler.map(colour_ab_pct, subset=[col])
+
     return styler
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -3618,8 +3656,156 @@ elif page == "Run Scripts":
             run_script(os.path.join(BASE, 'utilities', 'fetch_market_caps_uranium.py'), os.path.join(BASE, 'utilities'))
         if st.button("Fetch Market Caps — AU Gold"):
             run_script(os.path.join(BASE, 'utilities', 'fetch_market_caps_au_gold.py'), os.path.join(BASE, 'utilities'))
+        if st.button("📈 Run DeMark Scan"):
+            import sys
+            sys.path.insert(0, STOCKS)
+            from demark_scan import run_scan
+            with st.spinner("Running DeMark scan..."):
+                run_scan()
 
-            # ═══════════════════════════════════════════════════════════════════════════════
+# ═══════════════════════════════════════════════════════════════════════════════
+# DEMARK SIGNALS PAGE
+# ═══════════════════════════════════════════════════════════════════════════════
+elif page == "DeMark Signals":
+    st.title("📈 DeMark Signal Scanner")
+    st.markdown("""
+        <div class="info-card">
+            Scans the US market for TD Setup 9 and TD Countdown 13 signals on daily and weekly timeframes.
+            <b>DM9 Top</b> — sell setup exhaustion (9 consecutive closes above close 4 bars prior) — potential reversal down.
+            <b>DM9 Bottom</b> — buy setup exhaustion — potential reversal up.
+            <b>DM13</b> — countdown exhaustion, higher conviction signal than setup alone.
+            Signals are not directional certainties — they indicate exhaustion of the current move and increased probability of reversal.
+        </div>
+    """, unsafe_allow_html=True)
+
+    demark_dir = os.path.join(STOCKS, 'results', 'demark')
+
+    # ── Controls ──────────────────────────────────────────────────────────────
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        cap_min = st.slider("Min Market Cap ($B)", 0.0, 10.0, 0.0, 0.5,
+                             help="0 = no minimum filter")
+    with col2:
+        cap_max_enabled = st.toggle("Apply upper cap limit", value=False)
+    with col3:
+        if cap_max_enabled:
+            cap_max = st.slider("Max Market Cap ($B)", 0.5, 100.0, 5.0, 0.5)
+        else:
+            st.caption("No upper limit applied")
+            cap_max = None
+    with col4:
+        scan_date = st.date_input("Scan as of date", value=datetime.today(),
+                                   max_value=datetime.today())
+        run_btn = st.button("▶ Run DeMark Scan", type="primary")
+
+    if run_btn:
+        with st.spinner("Fetching prices and scanning signals — this may take 5-10 minutes..."):
+            import sys
+            sys.path.insert(0, STOCKS)
+            from demark_scan import run_scan
+            cap_min_val = int(cap_min * 1e9) if cap_min > 0 else 0
+            cap_max_val = int(cap_max * 1e9) if cap_max_enabled and cap_max else None
+            df_scan, report = run_scan(
+                market_cap_min = cap_min_val,
+                market_cap_max = cap_max_val,
+                end_date       = scan_date.strftime('%Y-%m-%d')
+            )
+        if df_scan is not None:
+            st.success(f"✓ Scan complete — {len(df_scan)} stocks analysed")
+            st.rerun()
+
+    # ── Date selector ─────────────────────────────────────────────────────────
+    report_files = sorted(glob.glob(os.path.join(demark_dir, '*_demark.csv')), reverse=True)
+
+    if not report_files:
+        st.info("No scan results found — run the scanner above")
+    else:
+        dates     = [os.path.basename(f)[:8] for f in report_files][:10]
+        sel_date  = st.selectbox("Select scan date", dates)
+        csv_file  = os.path.join(demark_dir, f"{sel_date}_demark.csv")
+        txt_file  = os.path.join(demark_dir, f"{sel_date}_demark_report.txt")
+
+        df = load_csv(csv_file)
+
+        if df is not None and len(df) > 0:
+            # Apply market cap filter to display
+            df['market_cap'] = pd.to_numeric(df['market_cap'], errors='coerce')
+            df_filtered = df.copy()
+            if cap_min > 0:
+                df_filtered = df_filtered[df_filtered['market_cap'] >= cap_min * 1e9]
+            if cap_max_enabled and cap_max:
+                df_filtered = df_filtered[df_filtered['market_cap'] <= cap_max * 1e9]
+            
+            cap_max_label = f"${cap_max:.1f}B" if cap_max_enabled and cap_max else "no limit"
+            st.caption(f"Showing {len(df_filtered)} stocks | Market cap ${cap_min:.1f}B — {cap_max_label}")
+
+            # ── Signal groups ──────────────────────────────────────────────────
+            SIGNAL_GROUPS = [
+                ('DM9 Top Daily',      'd_setup9_sell',  'DM9 Top Daily',      '#e63946'),
+                ('DM9 Bottom Daily',   'd_setup9_buy',   'DM9 Bottom Daily',   '#2dc653'),
+                ('DM9 Top Weekly',     'w_setup9_sell',  'DM9 Top Weekly',     '#e63946'),
+                ('DM9 Bottom Weekly',  'w_setup9_buy',   'DM9 Bottom Weekly',  '#2dc653'),
+                ('DM13 Top Daily',     'd_cd13_sell',    'DM13 Top Daily',     '#c1121f'),
+                ('DM13 Bottom Daily',  'd_cd13_buy',     'DM13 Bottom Daily',  '#00b050'),
+                ('DM13 Top Weekly',    'w_cd13_sell',    'DM13 Top Weekly',    '#c1121f'),
+                ('DM13 Bottom Weekly', 'w_cd13_buy',     'DM13 Bottom Weekly', '#00b050'),
+            ]
+
+            # Text report
+            with st.expander("📄 Text Report", expanded=False):
+                report_txt = load_txt(txt_file)
+                if report_txt:
+                    st.code(report_txt, language=None)
+
+            st.divider()
+
+            # Display each signal group
+            for group_name, col_flag, label, colour in SIGNAL_GROUPS:
+                if col_flag not in df_filtered.columns:
+                    continue
+                mask    = df_filtered[col_flag] == True
+                grp_df  = df_filtered[mask].copy()
+
+                if len(grp_df) == 0:
+                    continue
+
+                tickers_str = ','.join(sorted(grp_df['ticker'].tolist()))
+
+                st.markdown(f"""
+                    <div style="color:{colour};font-weight:bold;font-size:14px;
+                                margin-bottom:4px;font-family:monospace">
+                        {label}:
+                    </div>
+                    <div style="font-size:13px;color:#ccc;margin-bottom:8px;
+                                font-family:monospace;word-break:break-all">
+                        {tickers_str}
+                    </div>
+                """, unsafe_allow_html=True)
+
+                c1, c2 = st.columns([3, 1])
+                with c2:
+                    st.download_button(
+                        label     = "⬇ TV Import",
+                        data      = tickers_str,
+                        file_name = f"{sel_date}_{group_name.replace(' ','_').lower()}_tvimport.txt",
+                        mime      = 'text/plain',
+                        key       = f"tv_{group_name}"
+                    )
+                    st.caption(f"{len(grp_df)} tickers")
+
+                with c1:
+                    show_cols = ['ticker','name','sector','cap_band','market_cap_b']
+                    show_cols = [c for c in show_cols if c in grp_df.columns]
+                    st.dataframe(
+                        grp_df[show_cols].sort_values('ticker'),
+                        use_container_width=True,
+                        hide_index=True,
+                        height=min(len(grp_df) * 35 + 40, 300)
+                    )
+
+                st.divider()
+
+# ═══════════════════════════════════════════════════════════════════════════════
 # SETTINGS PAGE
 # ═══════════════════════════════════════════════════════════════════════════════
 elif page == "Settings":

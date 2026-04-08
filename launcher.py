@@ -45,6 +45,9 @@ SCRIPTS = {
     '16' : {'label': 'RRG AU Data',   'python': PYTHON, 'cwd': STOCKS, 'script': 'rrg_au_data.py'},
     '17' : {'label': 'RRG US Data',   'python': PYTHON, 'cwd': STOCKS, 'script': 'rrg_us_data.py'},
 
+    # ── DeMark Scans      ─────────────────────────────────────────────────────
+    '18' : {'label': 'DeMark Scan — US Market', 'python': PYTHON, 'cwd': STOCKS, 'script': 'demark_scan.py'},
+
     # ── Batch runs ────────────────────────────────────────────────────────────
     'A'  : {'label': 'ALL — Full daily run',            'batch': ['1','2','3','4','5','6','7','8','9','10','11','12','13','14']},
     'B'  : {'label': 'AU — AU market only',             'batch': ['1','2','3','4']},
@@ -149,6 +152,7 @@ def show_menu():
         ('AU GOLD',       ['13','14']),
         ('DRAWDOWN',      ['15']),
         ('UTILITIES',     ['U1','U2','U3','U4','U5']),
+        ('DEMARK',        ['18']),
     ]
 
     for section, keys in sections:

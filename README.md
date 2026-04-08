@@ -37,15 +37,21 @@ pip install -r requirements.txt
 streamlit run dashboard.py
 
 ## Full Documentation
-See in "docs" folder `Market_Intelligence_Platform_Guide_v1.2.docx` for complete installation, usage and technical reference.
+See `Market_Intelligence_Platform_Guide_v1.4.docx` in "docs" folder for complete installation, usage and technical reference.
 
-## Pages
+Upload to your own AI to allow it to understand how all scripts work and calculations to allow for modification/additions.
+
+## Dashboard Pages
 - **Macro** — VIX regime, live market readings, macro cycle positioning
 - **AU/US Market** — breadth, benchmark RS, sector peer screener
 - **Commodities** — gold, silver, copper, uranium, lithium, platinum, palladium
 - **Uranium / AU Gold Miners** — dedicated universe screens
-- **RRG Charts** — relative rotation graphs
-- **Drawdown Analysis** — period-based performance analysis
+- **RRG Charts** — relative rotation graphs with downloadable PNG
+- **Breadth RRG** — sector breadth participation rotation graph (Ab20/50/200)
+- **DeMark Signals** — TD Setup 9 and Countdown 13 scanner, daily and weekly, US market
+- **Drawdown Analysis** — period-based performance analysis vs benchmark and peers
 - **Actionable & Exports** — filtered lists with TradingView import
-- **EA Comparator** — MetaTrader .set file comparison
+- **EA Comparator** — MetaTrader .set file comparison and export
 - **MT5 Analysis** — trade history analysis from MT5 HTML reports
+- **Run Scripts** — trigger data collection scripts from the dashboard
+- **Settings** — toggle pages on/off
