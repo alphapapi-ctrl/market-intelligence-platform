@@ -1,0 +1,4 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+103,103,CHN.AX,Challice Mining,palladium,producer,mid,1.645,1.4353,1.1481,1.0363,0.8326,STRONG_UP,-32.58,98.19,31.6,-53.73,49.2,84.39,1.5772,HIGH,PROGRESS,1.481,1.7792,1.9052,0,57.2471,WEAK,33.4985
+152,127,NNE,Nano Nuclear Energy,uranium,producer,mid,22.49,0.3734,1.0566,0.9577,0.6953,STRONG_UP,-60.29,-9.09,333.33,-66.45,46.59,77.54,1.6437,HIGH,PROGRESS,21.5325,24.8364,33.5413,0,-5.4645,WEAK,22.2988
+168,95,IVN.TO,Ivanhoe Mines Class A,copper,producer,large,10.96,0.3735,0.9935,0.8154,0.6378,STRONG_UP,-27.56,-9.79,-38.5,-45.14,51.41,65.28,1.549,HIGH,EARLY,11.446,14.278,13.5231,0,-7.7133,WEAK,19.7871

@@ -1,0 +1,2 @@
+rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+28,1,SMI.AX,Santana Minerals Limited,Gold,mid,0.73,51.68,0.0089,-0.0986,-0.1741,STRONG_UP,-5.19,75.9,65.28,-43.16,48.0,62.46,1.5719,HIGH,EARLY,0.7605,0.885,0.7934,0,58.3313,LAGGARD,30.1746

@@ -130,6 +130,7 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-04-02,BOTZ,Robotics & AI,thematic,94.5181,89.8284,33.4
 2026-04-06,BOTZ,Robotics & AI,thematic,92.9597,89.7781,33.59
 2026-04-07,BOTZ,Robotics & AI,thematic,92.131,92.3701,33.39
+2026-04-08,BOTZ,Robotics & AI,thematic,93.6253,94.2291,35.12
 2025-09-29,COPX,Copper Miners,commodity,120.9986,111.5939,57.873
 2025-09-30,COPX,Copper Miners,commodity,119.1556,108.859,58.4397
 2025-10-01,COPX,Copper Miners,commodity,121.5448,109.2144,59.1432
@@ -261,6 +262,7 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-04-02,COPX,Copper Miners,commodity,109.2883,78.954,76.86
 2026-04-06,COPX,Copper Miners,commodity,104.18,83.3815,76.72
 2026-04-07,COPX,Copper Miners,commodity,102.8749,83.2506,76.74
+2026-04-08,COPX,Copper Miners,commodity,109.9456,88.137,82.03
 2025-09-29,GDX,Gold Miners,commodity,135.0376,123.1492,75.174
 2025-09-30,GDX,Gold Miners,commodity,134.7489,125.1951,75.8491
 2025-10-01,GDX,Gold Miners,commodity,135.9974,120.0333,76.5739
@@ -392,6 +394,7 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-04-02,GDX,Gold Miners,commodity,114.6213,88.4344,94.59
 2026-04-06,GDX,Gold Miners,commodity,110.4042,87.1879,93.82
 2026-04-07,GDX,Gold Miners,commodity,107.8724,84.7186,94.97
+2026-04-08,GDX,Gold Miners,commodity,109.6838,85.454,98.18
 2025-09-29,GDXJ,Junior Gold Miners,commodity,134.9123,126.1504,96.0277
 2025-09-30,GDXJ,Junior Gold Miners,commodity,134.7649,127.6022,96.7999
 2025-10-01,GDXJ,Junior Gold Miners,commodity,136.1561,121.467,97.6503
@@ -523,6 +526,7 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-04-02,GDXJ,Junior Gold Miners,commodity,112.1353,83.2136,122.19
 2026-04-06,GDXJ,Junior Gold Miners,commodity,107.5267,82.0034,121.22
 2026-04-07,GDXJ,Junior Gold Miners,commodity,105.5424,79.8636,122.91
+2026-04-08,GDXJ,Junior Gold Miners,commodity,107.7052,81.196,127.25
 2025-09-29,IBB,Biotech,thematic,103.6156,100.7669,142.1523
 2025-09-30,IBB,Biotech,thematic,103.5639,101.1755,144.1087
 2025-10-01,IBB,Biotech,thematic,106.6384,102.1334,148.2413
@@ -654,6 +658,7 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-04-02,IBB,Biotech,thematic,104.2254,102.6962,169.43
 2026-04-06,IBB,Biotech,thematic,105.0884,107.1016,168.83
 2026-04-07,IBB,Biotech,thematic,103.0585,104.194,168.5
+2026-04-08,IBB,Biotech,thematic,98.9929,98.0305,171.86
 2025-09-29,IGV,Software,thematic,99.4436,104.3354,115.98
 2025-09-30,IGV,Software,thematic,98.1702,103.0314,115.01
 2025-10-01,IGV,Software,thematic,96.4781,101.7259,115.07
@@ -785,6 +790,7 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-04-02,IGV,Software,thematic,81.3304,100.738,80.34
 2026-04-06,IGV,Software,thematic,80.8132,98.311,80.46
 2026-04-07,IGV,Software,thematic,80.2989,97.0935,80.5
+2026-04-08,IGV,Software,thematic,76.3642,94.548,79.75
 2025-09-29,ITB,Homebuilders ETF,housing,102.8863,91.1716,107.1663
 2025-09-30,ITB,Homebuilders ETF,housing,101.6935,88.0999,106.8673
 2025-10-01,ITB,Homebuilders ETF,housing,104.8126,91.5061,107.7442
@@ -916,6 +922,7 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-04-02,ITB,Homebuilders ETF,housing,96.3541,97.2604,90.25
 2026-04-06,ITB,Homebuilders ETF,housing,96.9724,101.5493,91.38
 2026-04-07,ITB,Homebuilders ETF,housing,94.1265,97.2127,88.85
+2026-04-08,ITB,Homebuilders ETF,housing,98.6424,102.5532,93.48
 2025-09-29,KRE,Regional Banks,sector,96.6475,92.0143,62.81
 2025-09-30,KRE,Regional Banks,sector,94.6311,88.4115,62.5433
 2025-10-01,KRE,Regional Banks,sector,93.4808,88.1353,62.2172
@@ -1047,6 +1054,7 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-04-02,KRE,Regional Banks,sector,105.7056,99.3722,66.0
 2026-04-06,KRE,Regional Banks,sector,104.8153,101.0301,66.64
 2026-04-07,KRE,Regional Banks,sector,104.5142,102.2803,66.75
+2026-04-08,KRE,Regional Banks,sector,105.2942,103.7651,68.69
 2025-09-29,LIT,Lithium,commodity,136.5166,116.2137,56.347
 2025-09-30,LIT,Lithium,commodity,135.4222,111.4791,56.696
 2025-10-01,LIT,Lithium,commodity,135.1151,112.4779,57.4141
@@ -1178,6 +1186,7 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-04-02,LIT,Lithium,commodity,116.2691,103.2217,74.17
 2026-04-06,LIT,Lithium,commodity,112.9015,102.6418,73.12
 2026-04-07,LIT,Lithium,commodity,110.9311,98.3576,73.74
+2026-04-08,LIT,Lithium,commodity,113.1131,98.4727,76.71
 2025-09-29,SIL,Silver Miners,commodity,136.5286,115.2562,70.2537
 2025-09-30,SIL,Silver Miners,commodity,136.5808,117.7874,70.8671
 2025-10-01,SIL,Silver Miners,commodity,136.6219,113.8353,71.1243
@@ -1309,6 +1318,7 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-04-02,SIL,Silver Miners,commodity,115.9493,82.9871,92.65
 2026-04-06,SIL,Silver Miners,commodity,111.2983,82.1589,91.96
 2026-04-07,SIL,Silver Miners,commodity,108.5393,79.648,92.84
+2026-04-08,SIL,Silver Miners,commodity,111.1917,81.0363,95.89
 2025-09-29,SILJ,Junior Silver Miners,commodity,143.7637,118.3392,22.6243
 2025-09-30,SILJ,Junior Silver Miners,commodity,142.6848,120.0204,22.6636
 2025-10-01,SILJ,Junior Silver Miners,commodity,144.4603,117.5693,22.8894
@@ -1440,6 +1450,7 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-04-02,SILJ,Junior Silver Miners,commodity,115.8441,81.7669,30.61
 2026-04-06,SILJ,Junior Silver Miners,commodity,110.436,81.2458,30.43
 2026-04-07,SILJ,Junior Silver Miners,commodity,105.5548,77.0313,30.6
+2026-04-08,SILJ,Junior Silver Miners,commodity,107.2691,77.8268,31.37
 2025-09-29,SMH,Semiconductors,thematic,108.5599,96.1616,321.6591
 2025-09-30,SMH,Semiconductors,thematic,107.7748,98.5962,325.3476
 2025-10-01,SMH,Semiconductors,thematic,109.7618,102.6888,332.6549
@@ -1571,6 +1582,7 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-04-02,SMH,Semiconductors,thematic,109.1781,98.8299,392.32
 2026-04-06,SMH,Semiconductors,thematic,109.1543,100.2057,395.98
 2026-04-07,SMH,Semiconductors,thematic,107.9735,100.778,399.9
+2026-04-08,SMH,Semiconductors,thematic,111.7434,102.1239,422.92
 2025-09-29,URA,Uranium,commodity,120.808,104.2029,46.4907
 2025-09-30,URA,Uranium,commodity,117.409,100.4251,45.4981
 2025-10-01,URA,Uranium,commodity,118.7936,103.149,46.0612
@@ -1702,6 +1714,7 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-04-02,URA,Uranium,commodity,110.2905,91.0296,48.9
 2026-04-06,URA,Uranium,commodity,104.0421,92.4013,48.61
 2026-04-07,URA,Uranium,commodity,101.6477,96.4187,47.95
+2026-04-08,URA,Uranium,commodity,104.9347,93.234,51.4
 2025-09-29,XLB,Materials,sector,92.3159,95.0292,44.1646
 2025-09-30,XLB,Materials,sector,91.4714,93.4919,44.3825
 2025-10-01,XLB,Materials,sector,90.9752,93.4113,43.917
@@ -1833,6 +1846,7 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-04-02,XLB,Materials,sector,114.0532,97.3601,50.41
 2026-04-06,XLB,Materials,sector,112.7177,98.0815,50.22
 2026-04-07,XLB,Materials,sector,110.8332,96.3918,50.08
+2026-04-08,XLB,Materials,sector,113.2801,98.6122,51.75
 2025-09-29,XLC,Comm Services,sector,102.456,102.5392,117.7916
 2025-09-30,XLC,Comm Services,sector,102.6739,102.2747,117.6127
 2025-10-01,XLC,Comm Services,sector,101.1301,99.3099,115.9633
@@ -1964,6 +1978,7 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-04-02,XLC,Comm Services,sector,99.5807,97.0793,111.7
 2026-04-06,XLC,Comm Services,sector,99.1053,95.9452,111.76
 2026-04-07,XLC,Comm Services,sector,100.0613,96.8804,111.82
+2026-04-08,XLC,Comm Services,sector,99.1954,97.7356,113.81
 2025-09-29,XLE,Energy,sector,98.9001,98.2441,44.4778
 2025-09-30,XLE,Energy,sector,96.2675,95.2475,44.0049
 2025-10-01,XLE,Energy,sector,96.5856,95.2982,44.0049
@@ -2095,6 +2110,7 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-04-02,XLE,Energy,sector,135.7153,108.8279,59.25
 2026-04-06,XLE,Energy,sector,133.3414,107.3936,59.68
 2026-04-07,XLE,Energy,sector,138.8553,110.5803,60.16
+2026-04-08,XLE,Energy,sector,131.708,105.6383,58.05
 2025-09-29,XLF,Financials,sector,95.7119,99.6768,53.6656
 2025-09-30,XLF,Financials,sector,95.3973,97.9873,53.4078
 2025-10-01,XLF,Financials,sector,93.9512,96.1429,52.932
@@ -2226,6 +2242,7 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-04-02,XLF,Financials,sector,94.1539,97.0617,49.53
 2026-04-06,XLF,Financials,sector,92.9707,96.7622,49.88
 2026-04-07,XLF,Financials,sector,93.0349,96.9351,49.88
+2026-04-08,XLF,Financials,sector,94.1436,99.2698,51.2
 2025-09-29,XLI,Industrials,sector,96.3639,98.7579,152.1002
 2025-09-30,XLI,Industrials,sector,97.0826,99.1343,153.2729
 2025-10-01,XLI,Industrials,sector,96.4235,98.87,152.8456
@@ -2357,6 +2374,7 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-04-02,XLI,Industrials,sector,107.9951,94.2019,163.77
 2026-04-06,XLI,Industrials,sector,107.4856,95.9264,164.61
 2026-04-07,XLI,Industrials,sector,106.4159,95.3187,164.28
+2026-04-08,XLI,Industrials,sector,109.376,97.7919,170.44
 2025-09-29,XLK,Technology,sector,103.7975,99.133,139.7789
 2025-09-30,XLK,Technology,sector,103.3524,99.9656,140.5418
 2025-10-01,XLK,Technology,sector,103.4672,101.2785,141.918
@@ -2488,6 +2506,7 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-04-02,XLK,Technology,sector,98.0242,102.0778,135.99
 2026-04-06,XLK,Technology,sector,98.5648,101.7116,136.78
 2026-04-07,XLK,Technology,sector,98.1999,102.4174,137.43
+2026-04-08,XLK,Technology,sector,98.4916,102.3407,141.69
 2025-09-29,XLP,Consumer Staples,sector,89.0328,100.772,77.0546
 2025-09-30,XLP,Consumer Staples,sector,89.1364,99.1437,77.3111
 2025-10-01,XLP,Consumer Staples,sector,89.4403,98.2479,77.1927
@@ -2619,6 +2638,7 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-04-02,XLP,Consumer Staples,sector,110.1175,99.5403,81.89
 2026-04-06,XLP,Consumer Staples,sector,111.8564,102.3324,82.66
 2026-04-07,XLP,Consumer Staples,sector,110.3959,98.692,81.26
+2026-04-08,XLP,Consumer Staples,sector,110.5269,99.2785,82.78
 2025-09-29,XLRE,Real Estate,sector,94.0985,102.1209,41.2293
 2025-09-30,XLRE,Real Estate,sector,94.3709,100.8299,41.3963
 2025-10-01,XLRE,Real Estate,sector,94.7463,101.276,41.3963
@@ -2750,6 +2770,7 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-04-02,XLRE,Real Estate,sector,107.769,100.68,41.61
 2026-04-06,XLRE,Real Estate,sector,108.2316,101.3699,41.76
 2026-04-07,XLRE,Real Estate,sector,108.0018,100.6307,41.72
+2026-04-08,XLRE,Real Estate,sector,108.2815,101.3448,42.44
 2025-09-29,XLU,Utilities,sector,99.2699,105.3777,42.9063
 2025-09-30,XLU,Utilities,sector,100.3867,106.0571,42.9803
 2025-10-01,XLU,Utilities,sector,101.0467,105.9965,43.3942
@@ -2880,6 +2901,8 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-04-01,XLU,Utilities,sector,112.8868,105.667,46.11
 2026-04-02,XLU,Utilities,sector,112.267,104.437,46.34
 2026-04-06,XLU,Utilities,sector,113.3302,104.9652,46.17
+2026-04-07,XLU,Utilities,sector,113.642,103.9398,46.27
+2026-04-08,XLU,Utilities,sector,114.4538,104.1653,46.78
 2025-09-29,XLV,Healthcare,sector,92.6792,99.026,134.7697
 2025-09-30,XLV,Healthcare,sector,95.929,100.6398,138.0125
 2025-10-01,XLV,Healthcare,sector,99.2312,102.8894,142.2767
@@ -3011,6 +3034,7 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-04-02,XLV,Healthcare,sector,98.4764,97.1746,146.81
 2026-04-06,XLV,Healthcare,sector,98.6077,98.854,146.28
 2026-04-07,XLV,Healthcare,sector,97.4304,96.3476,146.57
+2026-04-08,XLV,Healthcare,sector,95.7563,93.9839,149.67
 2025-09-29,XLY,Consumer Disc,sector,102.555,103.1854,119.901
 2025-09-30,XLY,Consumer Disc,sector,101.3433,102.0768,119.3433
 2025-10-01,XLY,Consumer Disc,sector,101.8767,102.5807,120.0903
@@ -3142,6 +3166,7 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-04-02,XLY,Consumer Disc,sector,95.1224,97.2227,108.15
 2026-04-06,XLY,Consumer Disc,sector,94.5322,96.649,109.04
 2026-04-07,XLY,Consumer Disc,sector,93.348,95.5129,107.77
+2026-04-08,XLY,Consumer Disc,sector,93.4352,96.6637,110.82
 2025-09-29,^HGX,Housing Index,housing,103.0764,94.4273,736.04
 2025-09-30,^HGX,Housing Index,housing,102.3431,91.7151,737.21
 2025-10-01,^HGX,Housing Index,housing,104.8139,94.5721,741.5
@@ -3272,4 +3297,5 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-04-01,^HGX,Housing Index,housing,98.6465,98.6808,631.38
 2026-04-02,^HGX,Housing Index,housing,97.2552,97.5989,630.34
 2026-04-06,^HGX,Housing Index,housing,97.5054,101.3673,636.05
-2026-04-07,^HGX,Housing Index,housing,95.5043,98.5957,623.1907
+2026-04-07,^HGX,Housing Index,housing,95.5042,98.5956,623.19
+2026-04-08,^HGX,Housing Index,housing,99.7349,103.5136,652.1375

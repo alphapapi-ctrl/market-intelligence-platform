@@ -122,13 +122,17 @@ def run_scan(market_cap_min=0, market_cap_max=None, end_date=None):
 
     # Filter by market cap
     wl['market_cap'] = pd.to_numeric(wl['market_cap'], errors='coerce')
+    
+    # Always apply minimum $1B filter to reduce universe and rate limiting
+    wl = wl[wl['market_cap'] >= 1_000_000_000].copy()
+    
     if market_cap_min > 0:
         wl = wl[wl['market_cap'] >= market_cap_min]
     if market_cap_max:
         wl = wl[wl['market_cap'] <= market_cap_max]
 
     tickers = wl['ticker'].tolist()
-    print(f"Scanning {len(tickers)} tickers...")
+    print(f"Scanning {len(tickers)} tickers (filtered to $1B+ market cap)...")
 
     try:
         raw_daily = yf.download(tickers, start=start_date, end=end_date,

@@ -290,8 +290,12 @@ def save_results(df, results_dir, study_name):
     os.makedirs(actionable_dir, exist_ok=True)
 
     actionable_df = df[
-        ((df['acc_watch'] != '-') & (df['cap_band'].isin(['large', 'mid']))) |
-        ((df['vol_label'] == 'HIGH') & (df['regime_label'].isin(['LEADER', 'CONTENDER'])))
+        ((df['acc_watch'] != '-') & 
+         (df['cap_band'].isin(['large', 'mid'])) & 
+         (df['vol_label'].isin(['HIGH', 'MED'])) &
+         (df['regime_label'].isin(['LEADER', 'CONTENDER']))) |
+        ((df['vol_label'] == 'HIGH') & 
+         (df['regime_label'] == 'LEADER'))
     ].copy()
 
     # Save actionable CSV

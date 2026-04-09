@@ -1,0 +1,30 @@
+══════════════════════════════════════════════════════════════════════
+  DEMARK SIGNAL REPORT — 09 Apr 2026
+  Universe: 1554 stocks scanned
+══════════════════════════════════════════════════════════════════════
+
+DM9 Top Daily:
+AEE,AEP,ATO,AVA,BKH,CMS,CNP,D,DNTH,DTE,EQBK,EQR,ETR,EVRG,FE,GTY,INVH,KYMR,LNT,NEE,NI,NWE,NWN,PNW,POR,PPL,PPTA,SO,SWX,TAP,TRNO,UNIT,WEC,WMK,XEL,ZBH
+
+DM9 Bottom Daily:
+PBH
+
+DM9 Top Weekly:
+BCRX,FSLY,ROST,XENE
+
+DM9 Bottom Weekly:
+ARE,BHVN,CPRT,CWST,FWRG,OPCH,ROL,RYTM,UFPT,UUUU,UVV
+
+DM13 Top Daily:
+AAOI,KRG,PRAA,SLS
+
+DM13 Bottom Daily:
+BL,CPB,DG,EPAM,INTA,QDEL,VRSN
+
+DM13 Top Weekly:
+AAPL,ARVN,ATMU,AVA,BKH,CPRX,DD,ES,FLYW,FOLD,GNW,GRAL,KOD,KRYS,LGIH,MATX,MRCY,NSSC,NWE,ORLY,RMBS,RMD,TEL,TXNM,UNH,VTRS,WVE,XMTR,ZGN
+
+DM13 Bottom Weekly:
+CRK,KVUE,STZ,TRI
+
+══════════════════════════════════════════════════════════════════════

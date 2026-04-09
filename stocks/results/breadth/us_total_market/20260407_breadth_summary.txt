@@ -6,42 +6,42 @@
 ────────────────────────────────────────────────────────────────────────────────
   Metric                       Today       D5      D20      D63
 ────────────────────────────────────────────────────────────────────────────────
-  Total                         1531       -8        0        0
-  Leaders                        349       +5      -11      -28
+  Total                         1537       -2       +6       +6
+  Leaders                        351       +7       -9      -26
   Contenders                     291       +6      -22      -57
-  Laggards                       372       +6      +27      -45
+  Laggards                       376      +10      +31      -41
   Weak                           519      -25       +6     +130
-  Above 20 SMA                  1002     +266     +542      +12
-  Above 50 SMA                   639     +152      +26     -457
-  Above 200 SMA                  883      +33      -39     -215
-  High Volume                     56     -140     -113     -122
-  Acc Early                      250     -103      -49     +127
+  Above 20 SMA                  1006     +270     +546      +16
+  Above 50 SMA                   645     +158      +32     -451
+  Above 200 SMA                  888      +38      -34     -210
+  High Volume                     55     -141     -114     -123
+  Acc Early                      255      -98      -44     +132
   Acc Progress                   151      +53      +80     +105
-  Acc Shift                       39      +19      +20      -61
-  Large Total                    503       -3       +1       +1
-  Large Leaders                   89       +3      -11      -24
-  Mid Total                      577      +14      +18      +18
-  Mid Leaders                    161      +11       -1       -2
-  Small Total                    451      -19      -19      -19
-  Small Leaders                   99       -9       +1       -2
+  Acc Shift                       38      +18      +19      -62
+  Large Total                    505       -1       +3       +3
+  Large Leaders                   91       +5       -9      -22
+  Mid Total                      583      +20      +24      +24
+  Mid Leaders                    162      +12        0       -1
+  Small Total                    449      -21      -21      -21
+  Small Leaders                   98      -10        0       -3
 
   LAYER 1 SECTOR BREAKDOWN
 ────────────────────────────────────────────────────────────────────────────────
   Sector                      Lead    dL5   dL63   Ab20 dA20_5   Ab50 dA50_5  Ab200 dA200_5   HVol
 ────────────────────────────────────────────────────────────────────────────────
-  Health Care                   61     +1     -3    159    +40     98     +6    150     +3     16
-  Financials                    63     +1     -4    238    +42    133    +75    181    +16     11
-  Information Technology        43     +3     -4    116    +48     75    +22     86     +9      3
-  Consumer Discretionary        27     +1    -10     75    +21     39     +9     51     +3      3
-  Real Estate                   22      0     +1     57    +39     35    +16     53     +5      4
-  Industrials                   51     -1     -8    142    +57     70    +16    127     +3     12
-  Consumer Staples              15     +1     +1     26     +5     19     +1     33     +2      2
-  Utilities                     11     -1     -2     43    +12     41     +6     45     +1      1
-  Energy                        23      0     +1     65     -6     73     -3     84     -4      2
-  Materials                     17      0     -1     44      0     24      0     42     -5      0
+  Health Care                   61     +1     -3    157    +38     98     +6    149     +2     15
+  Financials                    64     +2     -3    239    +43    134    +76    182    +17     11
+  Information Technology        45     +5     -2    120    +52     78    +25     89    +12      3
+  Consumer Discretionary        27     +1    -10     75    +21     39     +9     52     +4      3
+  Real Estate                   21     -1      0     56    +38     35    +16     52     +4      4
+  Industrials                   52      0     -7    142    +57     70    +16    128     +4     12
+  Consumer Staples              14      0      0     25     +4     18      0     30     -1      2
+  Utilities                     11     -1     -2     44    +13     42     +7     46     +2      1
+  Energy                        23      0     +1     65     -6     74     -2     85     -3      2
+  Materials                     17      0     -1     45     +1     24      0     43     -4      0
   Technology                     3      0     +1      2     -1      2      0      3      0      0
   Communication                  7      0      0     23     +6     21     +2     20     +1      1
-  Communication Services         6      0      0     11     +2      9     +2      8     -1      1
+  Communication Services         6      0      0     12     +3     10     +3      9      0      1
   Index                          0      0    n/a      1     +1      0      0      0      0      0
 
 ════════════════════════════════════════════════════════════════════════════════
@@ -49,17 +49,17 @@
 ────────────────────────────────────────────────────────────────────────────────
   Metric                       Today       D5      D20      D63
 ────────────────────────────────────────────────────────────────────────────────
-  Total                          506       -3       +1       +1
-  Leaders                         75       +2      -11      -21
-  Contenders                      91       +2      -23      -24
-  Laggards                       121       -4      +16      -12
-  Weak                           219       -3      +19      +58
-  Above 20 SMA                   274      +85     +130      -84
-  Above 50 SMA                   149      +26      -59     -191
+  Total                          509        0       +4       +4
+  Leaders                         77       +4       -9      -19
+  Contenders                      89        0      -25      -26
+  Laggards                       120       -5      +15      -13
+  Weak                           223       +1      +23      +62
+  Above 20 SMA                   276      +87     +132      -82
+  Above 50 SMA                   152      +29      -56     -188
   Above 200 SMA                  247       +6      -27      -79
-  High Volume                     10      -43      -19      -45
-  Acc Early                      163      -43       +3      +87
-  Large Leaders                   75       +2      -11      -21
+  High Volume                      9      -44      -20      -46
+  Acc Early                      167      -39       +7      +91
+  Large Leaders                   77       +4       -9      -19
   Mid Leaders                      0        0        0        0
   Small Leaders                    0        0        0        0
 
@@ -67,18 +67,18 @@
 ────────────────────────────────────────────────────────────────────────────────
   Sector                      Lead    dL5   dL63   Ab20 dA20_5   Ab50 dA50_5  Ab200 dA200_5   HVol
 ────────────────────────────────────────────────────────────────────────────────
-  Health Care                    1      0     -1     27     +9      9     -2     25      0      4
-  Information Technology        17     +2     +2     40    +16     27    +12     30     +4      1
+  Health Care                    1      0     -1     27     +9     10     -1     25      0      3
+  Information Technology        18     +3     +3     41    +17     27    +12     31     +5      1
   Consumer Discretionary         6     +1     -6     18     +3      6      0     13     -1      1
-  Financials                    13      0    -12     53    +16     15    +10     30     +1      0
-  Consumer Staples               5     +1     -2     10     +1      7     -1     16      0      0
-  Industrials                    9     -1     -7     36    +24     13     +3     46     +3      2
+  Financials                    14     +1    -11     53    +16     15    +10     30     +1      0
+  Consumer Staples               5     +1     -2     10     +1      7     -1     14     -2      0
+  Industrials                    9     -1     -7     37    +25     14     +4     47     +4      2
   Utilities                      7     -1     +2     24     +4     24      0     27      0      0
   Materials                      2      0      0     15     -1      7     +1     14      0      0
-  Real Estate                    5     +1     +2     20    +13     10     +3     14     +1      1
+  Real Estate                    5     +1     +2     19    +12     10     +3     13      0      1
   Energy                         1     -1      0     17     -2     20     -2     21     -1      0
   Technology                     3      0     +1      2     -1      2      0      3      0      0
-  Communication Services         6      0      0     11     +2      9     +2      8     -1      1
+  Communication Services         6      0      0     12     +3     10     +3      9      0      1
   Index                          0      0    n/a      1     +1      0      0      0      0      0
 
 ════════════════════════════════════════════════════════════════════════════════
@@ -86,33 +86,33 @@
 ────────────────────────────────────────────────────────────────────────────────
   Metric                       Today       D5      D20      D63
 ────────────────────────────────────────────────────────────────────────────────
-  Total                         1025       -5       -1       -1
+  Total                         1028       -2       +2       +2
   Leaders                        274       +3        0       -7
-  Contenders                     200       +4       +1      -33
-  Laggards                       251      +10      +11      -33
-  Weak                           300      -22      -13      +72
-  Above 20 SMA                   728     +181     +412      +96
-  Above 50 SMA                   490     +126      +85     -266
-  Above 200 SMA                  636      +27      -12     -136
+  Contenders                     202       +6       +3      -31
+  Laggards                       256      +15      +16      -28
+  Weak                           296      -26      -17      +68
+  Above 20 SMA                   730     +183     +414      +98
+  Above 50 SMA                   493     +129      +88     -263
+  Above 200 SMA                  641      +32       -7     -131
   High Volume                     46      -97      -94      -77
-  Acc Early                       87      -60      -52      +40
+  Acc Early                       88      -59      -51      +41
   Large Leaders                   14       +1        0       -3
-  Mid Leaders                    161      +11       -1       -2
-  Small Leaders                   99       -9       +1       -2
+  Mid Leaders                    162      +12        0       -1
+  Small Leaders                   98      -10        0       -3
 
   LAYER 3 SECTOR BREAKDOWN
 ────────────────────────────────────────────────────────────────────────────────
   Sector                      Lead    dL5   dL63   Ab20 dA20_5   Ab50 dA50_5  Ab200 dA200_5   HVol
 ────────────────────────────────────────────────────────────────────────────────
   Communication                  7      0      0     23     +6     21     +2     20     +1      1
-  Consumer Discretionary        21      0     -4     57    +18     33     +9     38     +4      2
-  Consumer Staples              10      0     +3     16     +4     12     +2     17     +2      2
-  Energy                        22     +1     +1     48     -4     53     -1     63     -3      2
-  Financials                    50     +1     +8    185    +26    118    +65    151    +15     11
-  Health Care                   60     +1     -2    132    +31     89     +8    125     +3     12
-  Industrials                   42      0     -1    106    +33     57    +13     81      0     10
-  Information Technology        26     +1     -6     76    +32     48    +10     56     +5      2
-  Materials                     15      0     -1     29     +1     17     -1     28     -5      0
-  Real Estate                   17     -1     -1     37    +26     25    +13     39     +4      3
-  Utilities                      4      0     -4     19     +8     17     +6     18     +1      1
+  Consumer Discretionary        21      0     -4     57    +18     33     +9     39     +5      2
+  Consumer Staples               9     -1     +2     15     +3     11     +1     16     +1      2
+  Energy                        22     +1     +1     48     -4     54      0     64     -2      2
+  Financials                    50     +1     +8    186    +27    119    +66    152    +16     11
+  Health Care                   60     +1     -2    130    +29     88     +7    124     +2     12
+  Industrials                   43     +1      0    105    +32     56    +12     81      0     10
+  Information Technology        27     +2     -5     79    +35     51    +13     58     +7      2
+  Materials                     15      0     -1     30     +2     17     -1     29     -4      0
+  Real Estate                   16     -2     -2     37    +26     25    +13     39     +4      3
+  Utilities                      4      0     -4     20     +9     18     +7     19     +2      1
 ════════════════════════════════════════════════════════════════════════════════
