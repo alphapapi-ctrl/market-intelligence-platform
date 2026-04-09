@@ -52,6 +52,7 @@ SETTINGS_FILE = os.path.join(BASE, 'dashboard_settings.json')
 DEFAULT_SETTINGS = {
     'pages': {
         'Macro'               : True,
+        'Consumer Credit'     : True,
         'AU Market'           : True,
         'US Market'           : True,
         'Commodities'         : True,
@@ -66,6 +67,11 @@ DEFAULT_SETTINGS = {
         'DeMark Signals'      : True,
         'Run Scripts'         : True,
         'Settings'            : True,
+    },
+    'ai_features': {
+        'enabled'          : False,
+        'anthropic_api_key': '',
+        'model'            : 'claude-sonnet-4-6',
     }
 }
 
@@ -92,6 +98,7 @@ page_config = settings['pages']
 
 ALL_PAGES = [
     ("Macro",                "globe"),
+    ("Consumer Credit",      "credit-card"),
     ("AU Market",            "flag"),
     ("US Market",            "flag"),
     ("Commodities",          "hammer"),
@@ -871,7 +878,7 @@ if page == "Macro":
                         with grp_cols[i % n_cols]:
                             st.markdown(f"**{group}**")
                             grp_df = df_focus[df_focus['Group'] == group][['Instrument','Note']]
-                            st.dataframe(grp_df, use_container_width=True,
+                            st.dataframe(grp_df, width='stretch',
                                          hide_index=True,
                                          height=min(len(grp_df) * 35 + 40, 400))
             else:
@@ -946,6 +953,418 @@ if page == "Macro":
     st.markdown("<div style='margin-top:16px'></div>", unsafe_allow_html=True)
 
 # ═══════════════════════════════════════════════════════════════════════════════
+# CONSUMER CREDIT PAGE
+# ═══════════════════════════════════════════════════════════════════════════════
+elif page == "Consumer Credit":
+    import plotly.graph_objects as go
+    import numpy as np
+    import json
+    import sys
+    sys.path.insert(0, MACRO)
+
+    st.title("💳 Consumer Credit Health")
+    st.markdown("""
+        <div class="info-card">
+            Tracks the health of consumer, corporate and sovereign credit markets using
+            Federal Reserve (FRED) data. Most series are updated quarterly — signals here
+            are slow-moving but highly reliable leading indicators of economic stress.
+            <b>Rate of change</b> is more important than the level — accelerating
+            delinquencies signal deteriorating credit conditions before they appear in
+            employment or GDP data. Alerts feed into the Macro page change alerts.
+        </div>
+    """, unsafe_allow_html=True)
+
+    # ── Load latest snapshot ──────────────────────────────────────────────────
+    credit_dir   = os.path.join(MACRO, 'results', 'consumer_credit')
+    json_files   = sorted(glob.glob(os.path.join(credit_dir, '*_consumer_credit.json')),
+                          reverse=True)
+
+    if not json_files:
+        st.warning("No consumer credit data found — run the script first")
+        if st.button("▶ Run Consumer Credit Report", type="primary"):
+            run_script(os.path.join(MACRO, 'consumer_credit.py'), MACRO)
+            st.rerun()
+    else:
+        # Date selector
+        dates      = [os.path.basename(f)[:8] for f in json_files][:30]
+        sel_date   = st.selectbox("Report date", dates, index=0)
+        json_file  = os.path.join(credit_dir, f"{sel_date}_consumer_credit.json")
+
+        with open(json_file, 'r') as f:
+            snap = json.load(f)
+
+        credit_data = snap.get('credit_data', {})
+        pe_data     = snap.get('pe_data', {})
+        alerts      = snap.get('alerts', [])
+
+        report_date = datetime.strptime(sel_date, '%Y%m%d').strftime('%d %b %Y')
+        st.caption(f"Report date: {report_date}")
+
+        # ── Alerts banner ─────────────────────────────────────────────────────
+        if alerts:
+            st.markdown("**⚠ Active Alerts**")
+            for alert in alerts:
+                colour = '#e63946' if alert['type'] == 'ALERT' else '#f77f00'
+                st.markdown(f"""
+                    <div class="macro-card" style="border-left:3px solid {colour}">
+                        <span style="color:{colour};font-weight:bold">{alert['type']}</span>
+                        &nbsp; {alert['message']}
+                    </div>
+                """, unsafe_allow_html=True)
+            st.divider()
+
+        # ── Helper: indicator card ────────────────────────────────────────────
+        def credit_card(key, description, context, thresholds_text):
+            if key not in credit_data:
+                return
+            d       = credit_data[key]
+            val     = d['current']
+            roc     = d.get('roc', 0) or 0
+            roc_3m  = d.get('roc_3m', 0) or 0
+            level   = d.get('alert_level', 'OK')
+            arrow   = '▲' if roc > 0 else '▼' if roc < 0 else '→'
+            colours = {'ALERT': '#e63946', 'WARN': '#f77f00', 'OK': '#2dc653'}
+            colour  = colours.get(level, '#888')
+            icon    = '⚠' if level == 'ALERT' else '!' if level == 'WARN' else '✓'
+
+            st.markdown(f"""
+                <div class="macro-card" style="border-left:4px solid {colour}">
+                    <div style="display:flex;justify-content:space-between;align-items:center">
+                        <div>
+                            <div class="macro-label">{d['label']}</div>
+                            <div style="font-size:22px;font-weight:bold;color:{colour}">
+                                {val:.2f}{'%' if key != 'consumer_credit' else 'B'}
+                            </div>
+                            <div style="font-size:11px;color:#888">
+                                {arrow} {roc:+.3f} qoq &nbsp;|&nbsp; 3m: {roc_3m:+.3f}
+                            </div>
+                        </div>
+                        <div style="text-align:right">
+                            <div style="color:{colour};font-size:18px">{icon} {level}</div>
+                        </div>
+                    </div>
+                </div>
+            """, unsafe_allow_html=True)
+
+            with st.expander("ℹ What this means"):
+                st.markdown(f"""
+                    <div style="font-size:12px;color:#aaa;line-height:1.7">
+                        <b style="color:#ccc">What it measures:</b> {description}<br><br>
+                        <b style="color:#ccc">Current context:</b> {context}<br><br>
+                        <b style="color:#ccc">Thresholds:</b> {thresholds_text}
+                    </div>
+                """, unsafe_allow_html=True)
+
+        # ── Helper: history chart ─────────────────────────────────────────────
+        def credit_chart(key, title, recession_shade=True):
+            if key not in credit_data:
+                return
+            history = credit_data[key].get('history', {})
+            if not history:
+                return
+            dates_h = list(history.keys())
+            values  = list(history.values())
+            suffix  = 'B' if key == 'consumer_credit' else '%'
+
+            fig = go.Figure()
+            fig.add_trace(go.Scatter(
+                x=dates_h, y=values,
+                mode='lines+markers',
+                line=dict(color='#00b4d8', width=2),
+                marker=dict(size=5),
+                name=title,
+                hovertemplate=f"%{{x}}: %{{y:.2f}}{suffix}<extra></extra>"
+            ))
+
+            # Trend line
+            if len(values) >= 4:
+                x_num   = list(range(len(values)))
+                n       = len(x_num)
+                sum_x   = sum(x_num)
+                sum_y   = sum(values)
+                sum_xy  = sum(x * y for x, y in zip(x_num, values))
+                sum_x2  = sum(x * x for x in x_num)
+                slope   = (n * sum_xy - sum_x * sum_y) / (n * sum_x2 - sum_x ** 2)
+                intercept = (sum_y - slope * sum_x) / n
+                trend   = [slope * x + intercept for x in x_num]
+                t_colour= '#e63946' if slope > 0 else '#2dc653'
+                fig.add_trace(go.Scatter(
+                    x=dates_h, y=trend,
+                    mode='lines',
+                    line=dict(color=t_colour, width=1, dash='dash'),
+                    name='Trend', opacity=0.6
+                ))
+
+            fig.update_layout(
+                title       = title,
+                height      = 250,
+                plot_bgcolor= 'rgba(15,15,25,1)',
+                paper_bgcolor='rgba(15,15,25,1)',
+                font        = dict(color='white'),
+                xaxis       = dict(gridcolor='rgba(255,255,255,0.05)'),
+                yaxis       = dict(gridcolor='rgba(255,255,255,0.05)',
+                                   ticksuffix=suffix),
+                showlegend  = False,
+                margin      = dict(l=50,r=20,t=40,b=30),
+            )
+            st.plotly_chart(fig, width='stretch')
+
+        # ══════════════════════════════════════════════════════════════════════
+        # SECTION 1 — CONSUMER CREDIT
+        # ══════════════════════════════════════════════════════════════════════
+        st.subheader("💳 Consumer Credit")
+        st.markdown("""
+            <div class="info-card">
+                Consumer credit delinquency rates measure the percentage of loans
+                30+ days past due. Rising delinquencies signal financial stress among
+                households — typically 2-4 quarters ahead of broader economic weakness.
+                Credit card and auto loans are the canary in the coal mine as they
+                reflect lower income household stress first. Mortgage delinquencies
+                rising confirms the stress is spreading to middle income households.
+            </div>
+        """, unsafe_allow_html=True)
+
+        c1, c2 = st.columns(2)
+        with c1:
+            credit_card('cc_delinquency',
+                'Percentage of credit card balances 30+ days past due.',
+                'Rising above 3% signals consumer stress. Above 4% is crisis territory last seen in 2009-2010.',
+                'WARN >2.5% | ALERT >3.5%')
+            credit_chart('cc_delinquency', 'Credit Card Delinquency Rate')
+
+            credit_card('auto_delinquency',
+                'Percentage of auto loan balances 30+ days past due.',
+                'Auto loans are often the first to default — consumers prioritise housing and food. Rising auto defaults lead credit card defaults by 1-2 quarters.',
+                'WARN >1.5% | ALERT >2.5%')
+            credit_chart('auto_delinquency', 'Auto Loan Delinquency Rate')
+
+        with c2:
+            credit_card('cc_chargeoff',
+                'Percentage of credit card debt written off as uncollectable.',
+                'Charge-offs lag delinquencies by 1-2 quarters. Charge-off rate rising above delinquency rate signals banks are accelerating write-downs.',
+                'WARN >3.0% | ALERT >4.5%')
+            credit_chart('cc_chargeoff', 'Credit Card Charge-Off Rate')
+
+            credit_card('mortgage_delinquency',
+                'Percentage of mortgage balances 30+ days past due.',
+                'Mortgage delinquencies rising above 2% historically precede housing market stress by 2-3 quarters. Currently near historic lows.',
+                'WARN >1.5% | ALERT >2.5%')
+            credit_chart('mortgage_delinquency', 'Mortgage Delinquency Rate')
+
+        credit_card('consumer_credit',
+            'Total outstanding consumer credit in billions — credit cards, auto loans, student loans (excludes mortgages).',
+            'Decelerating growth signals consumers are tapped out. Contraction (negative QoQ) is recessionary.',
+            'Monitor rate of change — deceleration is the key signal')
+        credit_chart('consumer_credit', 'Total Consumer Credit Outstanding ($B)')
+
+        # Load AI settings and render assessment
+        ai_settings = load_settings()
+        if ai_settings.get('ai_features', {}).get('enabled', False):
+            import sys
+            sys.path.insert(0, MACRO)
+            from ai_assessment import render_ai_assessment
+            cc  = credit_data.get('cc_delinquency', {})
+            aut = credit_data.get('auto_delinquency', {})
+            mor = credit_data.get('mortgage_delinquency', {})
+            cho = credit_data.get('cc_chargeoff', {})
+            prompt = f"""You are a macro credit analyst. Analyse these US consumer credit readings 
+and provide a 4-5 sentence assessment. Focus on acceleration/deceleration trends, 
+what the combined picture suggests about consumer financial health, and what 
+to watch over the next 1-2 quarters. Be direct and quantitative.
+
+Credit card delinquency: {cc.get('current','n/a')}% (qoq change: {cc.get('roc','n/a')}, 3m: {cc.get('roc_3m','n/a')})
+Auto loan delinquency: {aut.get('current','n/a')}% (qoq: {aut.get('roc','n/a')})
+Mortgage delinquency: {mor.get('current','n/a')}% (qoq: {mor.get('roc','n/a')})
+Charge-off rate: {cho.get('current','n/a')}% (qoq: {cho.get('roc','n/a')})"""
+            render_ai_assessment(prompt, ai_settings, 'consumer_credit_assessment')
+
+        st.divider()
+
+        # ══════════════════════════════════════════════════════════════════════
+        # SECTION 2 — CORPORATE CREDIT
+        # ══════════════════════════════════════════════════════════════════════
+        st.subheader("🏢 Corporate Credit")
+        st.markdown("""
+            <div class="info-card">
+                Corporate credit spreads measure the premium investors demand over
+                risk-free rates to hold corporate debt. Widening spreads signal
+                deteriorating credit conditions and reduced risk appetite — often
+                leading equity market stress by 4-8 weeks. HY spreads above 600bps
+                historically coincide with recession. The leveraged loan market
+                (BKLN) reflects the health of PE-backed companies.
+            </div>
+        """, unsafe_allow_html=True)
+
+        c1, c2 = st.columns(2)
+        with c1:
+            credit_card('hy_spread',
+                'Option-adjusted spread of US high yield bonds over US Treasuries.',
+                'Below 300bps = risk on. 300-500bps = caution. Above 500bps = stress. Above 800bps = crisis.',
+                'WARN >4.0% | ALERT >6.0%')
+            credit_chart('hy_spread', 'High Yield Spread')
+
+        with c2:
+            credit_card('ig_spread',
+                'Option-adjusted spread of US investment grade bonds over US Treasuries.',
+                'IG spreads widen after HY — when IG starts widening it confirms stress is spreading beyond junk. Above 2% is historically recessionary.',
+                'WARN >1.5% | ALERT >2.5%')
+            credit_chart('ig_spread', 'Investment Grade Spread')
+
+        # BKLN from PE data
+        if 'BKLN' in pe_data:
+            bkln    = pe_data['BKLN']
+            colour  = '#2dc653' if bkln.get('ret_1m') and bkln['ret_1m'] > 0 else '#e63946'
+            ret_1m  = f"{bkln['ret_1m']:+.1f}%" if bkln.get('ret_1m')  is not None else 'n/a'
+            ret_3m  = f"{bkln['ret_3m']:+.1f}%" if bkln.get('ret_3m')  is not None else 'n/a'
+            ret_12m = f"{bkln['ret_12m']:+.1f}%" if bkln.get('ret_12m') is not None else 'n/a'
+            st.markdown(f"""
+                <div class="macro-card">
+                    <div class="macro-label">Leveraged Loan ETF (BKLN) — PE credit proxy</div>
+                    <div style="font-size:18px;font-weight:bold">${bkln['price']}</div>
+                    <div style="font-size:11px;color:#888">
+                        1m: <span style="color:{colour}">{ret_1m}</span>
+                        &nbsp;|&nbsp; 3m: {ret_3m}
+                        &nbsp;|&nbsp; 12m: {ret_12m}
+                    </div>
+                </div>
+            """, unsafe_allow_html=True)
+
+        if ai_settings.get('ai_features', {}).get('enabled', False):
+            hy  = credit_data.get('hy_spread', {})
+            ig  = credit_data.get('ig_spread', {})
+            bkln_d = pe_data.get('BKLN', {})
+            prompt = f"""Analyse these US corporate credit readings in 3-4 sentences.
+Focus on what the spread levels and trend suggest about corporate credit conditions
+and risk appetite. Note any divergences between HY, IG and leveraged loans.
+
+HY spread: {hy.get('current','n/a')}% (qoq: {hy.get('roc','n/a')})
+IG spread: {ig.get('current','n/a')}% (qoq: {ig.get('roc','n/a')})
+BKLN 1m return: {bkln_d.get('ret_1m','n/a')}%"""
+            render_ai_assessment(prompt, ai_settings, 'corporate_credit_assessment')
+
+        st.divider()
+
+        # ══════════════════════════════════════════════════════════════════════
+        # SECTION 3 — SOVEREIGN CREDIT
+        # ══════════════════════════════════════════════════════════════════════
+        st.subheader("🏛 Sovereign Credit")
+        st.markdown("""
+            <div class="info-card">
+                Sovereign credit health reflects the US government's fiscal position.
+                Rising debt/GDP and deficit spending are structural headwinds for
+                long-term bond yields and the dollar. The critical threshold is
+                when interest payments as a percentage of revenue become unsustainable —
+                historically above 20% triggers bond market vigilante activity.
+            </div>
+        """, unsafe_allow_html=True)
+
+        c1, c2 = st.columns(2)
+        with c1:
+            credit_card('debt_gdp',
+                'Total federal debt as a percentage of GDP.',
+                'US debt/GDP has risen from 35% in 2007 to 122%+ today. Above 130% historically associated with currency crises in smaller economies — the US reserve currency status provides buffer but is not unlimited.',
+                'WARN >110% | ALERT >130%')
+            credit_chart('debt_gdp', 'Federal Debt % GDP')
+
+        with c2:
+            credit_card('deficit_gdp',
+                'Annual federal budget deficit as a percentage of GDP. Negative = deficit.',
+                'Deficit above 5% of GDP during non-recession periods is historically unusual and inflationary. Running deficits this large during low unemployment is highly unusual.',
+                'Monitor trend — sustained deficits above 5% GDP are unsustainable')
+            credit_chart('deficit_gdp', 'Federal Deficit % GDP')
+
+        if ai_settings.get('ai_features', {}).get('enabled', False):
+            dbt = credit_data.get('debt_gdp', {})
+            dfc = credit_data.get('deficit_gdp', {})
+            prompt = f"""Analyse US sovereign credit health in 3-4 sentences.
+Focus on trajectory, sustainability and key risks over the next 12 months.
+Note what bond markets are likely pricing in given these readings.
+
+Federal debt/GDP: {dbt.get('current','n/a')}% (qoq change: {dbt.get('roc','n/a')})
+Federal deficit/GDP: {dfc.get('current','n/a')}% (qoq: {dfc.get('roc','n/a')})"""
+            render_ai_assessment(prompt, ai_settings, 'sovereign_credit_assessment')
+
+        st.divider()
+
+        # ══════════════════════════════════════════════════════════════════════
+        # SECTION 4 — PRIVATE EQUITY & BDC
+        # ══════════════════════════════════════════════════════════════════════
+        st.subheader("🏦 Private Equity & BDC")
+        st.markdown("""
+            <div class="info-card">
+                Private equity firms and Business Development Companies (BDCs) are
+                sensitive leading indicators of credit market health. BDCs lend
+                directly to middle-market companies — their stock performance and
+                dividend sustainability reflect the health of PE-backed credit.
+                PE firm stock prices reflect deal flow, exit activity and credit
+                availability. Deterioration here often leads public market stress
+                by 2-4 months.
+            </div>
+        """, unsafe_allow_html=True)
+
+        pe_rows = []
+        for ticker, d in pe_data.items():
+            if ticker == 'BKLN':
+                continue
+            pe_rows.append({
+                'Ticker'  : ticker,
+                'Name'    : d['name'],
+                'Price'   : f"${d['price']:.2f}" if d.get('price') is not None else 'n/a',
+                '1M %'    : f"{d['ret_1m']:+.1f}%" if d.get('ret_1m') is not None else 'n/a',
+                '3M %'    : f"{d['ret_3m']:+.1f}%" if d.get('ret_3m') is not None else 'n/a',
+                '12M %'   : f"{d['ret_12m']:+.1f}%" if d.get('ret_12m') is not None else 'n/a',
+            })
+
+        if pe_rows:
+            df_pe = pd.DataFrame(pe_rows)
+
+            def colour_ret(val):
+                try:
+                    v = float(str(val).replace('%','').replace('+',''))
+                    if v > 0: return 'color: #2dc653'
+                    if v < 0: return 'color: #e63946'
+                except: pass
+                return ''
+
+            st.dataframe(
+                df_pe.style.map(colour_ret, subset=['1M %','3M %','12M %']),
+                width='stretch', hide_index=True
+            )
+
+        if ai_settings.get('ai_features', {}).get('enabled', False):
+            pe_summary = ', '.join([
+                f"{t}: 1m {d['ret_1m']:+.1f}% 3m {d['ret_3m']:+.1f}%"
+                for t, d in pe_data.items() if d.get('ret_1m')
+            ])
+            prompt = f"""Analyse the private equity and BDC sector performance in 3 sentences.
+Focus on what the collective performance signals about credit availability,
+deal flow and middle-market corporate health.
+
+PE and BDC returns: {pe_summary}"""
+            render_ai_assessment(prompt, ai_settings, 'pe_assessment')
+
+        st.divider()
+
+        # ── Run script button ─────────────────────────────────────────────────
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("🔄 Refresh Data", type="primary"):
+                run_script(os.path.join(MACRO, 'consumer_credit.py'), MACRO)
+                st.rerun()
+        with col2:
+            rpt_file = os.path.join(credit_dir,
+                                    f"{sel_date}_consumer_credit_report.txt")
+            if os.path.exists(rpt_file):
+                with open(rpt_file, 'r', encoding='utf-8') as f:
+                    rpt_txt = f.read()
+                st.download_button(
+                    label     = "⬇ Download Report",
+                    data      = rpt_txt,
+                    file_name = f"{sel_date}_consumer_credit_report.txt",
+                    mime      = 'text/plain'
+                )
+
+# ═══════════════════════════════════════════════════════════════════════════════
 # AU MARKET PAGE
 # ═══════════════════════════════════════════════════════════════════════════════
 elif page == "AU Market":
@@ -991,7 +1410,7 @@ elif page == "AU Market":
             if df_overall is not None:
                 st.dataframe(
                     style_breadth(df_overall, delta_cols=['D5','D20','D63']),
-                    use_container_width=True, hide_index=True, height=460
+                    width='stretch', hide_index=True, height=460
                 )
 
             st.markdown("**By Cap Band**")
@@ -1013,7 +1432,7 @@ elif page == "AU Market":
             if df_cap is not None:
                 st.dataframe(
                     style_breadth(df_cap, delta_cols=['D5','D20','D63']),
-                    use_container_width=True, hide_index=True, height=370
+                    width='stretch', hide_index=True, height=370
                 )
 
             st.markdown("**Sector Breadth**")
@@ -1026,7 +1445,7 @@ elif page == "AU Market":
                 sector_breadth_caption()
                 st.dataframe(
                     style_breadth(df_sector, delta_cols=['dL5','dL63']),
-                    use_container_width=True, hide_index=True, height=600
+                    width='stretch', hide_index=True, height=600
                 )
         else:
             st.warning("No breadth history found")
@@ -1080,7 +1499,7 @@ elif page == "AU Market":
                 df = df[df['acc_watch'].isin(acc_filter)]
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                         use_container_width=True, height=600)
+                         width='stretch', height=600)
         else:
             st.warning("No benchmark results found")
         if st.button("🔄 Run AU Benchmark", key='au_bm'):
@@ -1132,7 +1551,7 @@ elif page == "AU Market":
                 df = df[df['acc_watch'].isin(acc_filter)]
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                         use_container_width=True, height=600)
+                         width='stretch', height=600)
         else:
             st.warning("No screener results found")
         if st.button("🔄 Run AU Screener", key='au_sc'):
@@ -1192,7 +1611,7 @@ elif page == "US Market":
             df_l1 = build_breadth_table(history, overall_metrics)
             if df_l1 is not None:
                 st.dataframe(style_breadth(df_l1, delta_cols=['D5','D20','D63']),
-                             use_container_width=True, hide_index=True, height=680)
+                             width='stretch', hide_index=True, height=680)
 
             sec_cols = [c for c in history.columns if c.startswith('sec_') and c.endswith('_total')
                         and not c.startswith('sp_sec_') and not c.startswith('rus_sec_')]
@@ -1203,7 +1622,7 @@ elif page == "US Market":
             if df_sec is not None:
                 sector_breadth_caption()
                 st.dataframe(style_breadth(df_sec, delta_cols=['dL5','dL63']),
-                             use_container_width=True, hide_index=True, height=500)
+                             width='stretch', hide_index=True, height=500)
 
             st.markdown("**Layer 2 — SP500/Nasdaq Quality**")
             l2_metrics = [
@@ -1224,7 +1643,7 @@ elif page == "US Market":
             df_l2 = build_breadth_table(history, l2_metrics)
             if df_l2 is not None:
                 st.dataframe(style_breadth(df_l2, delta_cols=['D5','D20','D63']),
-                             use_container_width=True, hide_index=True, height=520)
+                             width='stretch', hide_index=True, height=520)
 
             sp_sec_cols = [c for c in history.columns if c.startswith('sp_sec_') and c.endswith('_total')]
             sp_sec_keys = [c.replace('sp_sec_','').replace('_total','') for c in sp_sec_cols
@@ -1235,7 +1654,7 @@ elif page == "US Market":
                 if df_sp_sec is not None:
                     sector_breadth_caption()
                     st.dataframe(style_breadth(df_sp_sec, delta_cols=['dL5','dL63']),
-                                 use_container_width=True, hide_index=True, height=500)
+                                 width='stretch', hide_index=True, height=500)
 
             st.markdown("**Layer 3 — Russell Proxy**")
             l3_metrics = [
@@ -1256,7 +1675,7 @@ elif page == "US Market":
             df_l3 = build_breadth_table(history, l3_metrics)
             if df_l3 is not None:
                 st.dataframe(style_breadth(df_l3, delta_cols=['D5','D20','D63']),
-                             use_container_width=True, hide_index=True, height=520)
+                             width='stretch', hide_index=True, height=520)
 
             rus_sec_cols = [c for c in history.columns if c.startswith('rus_sec_') and c.endswith('_total')]
             rus_sec_keys = [c.replace('rus_sec_','').replace('_total','') for c in rus_sec_cols
@@ -1267,7 +1686,7 @@ elif page == "US Market":
                 if df_rus_sec is not None:
                     sector_breadth_caption()
                     st.dataframe(style_breadth(df_rus_sec, delta_cols=['dL5','dL63']),
-                                 use_container_width=True, hide_index=True, height=500)
+                                 width='stretch', hide_index=True, height=500)
         else:
             st.warning("No breadth history found")
 
@@ -1320,7 +1739,7 @@ elif page == "US Market":
                 df = df[df['acc_watch'].isin(acc_filter)]
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                         use_container_width=True, height=600)
+                         width='stretch', height=600)
         else:
             st.warning("No benchmark results found")
         if st.button("🔄 Run US Benchmark", key='us_bm'):
@@ -1371,7 +1790,7 @@ elif page == "US Market":
                 df = df[df['acc_watch'].isin(acc_filter)]
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                         use_container_width=True, height=600)
+                         width='stretch', height=600)
         else:
             st.warning("No screener results found")
         if st.button("🔄 Run US Screener", key='us_sc'):
@@ -1424,7 +1843,7 @@ elif page == "Commodities":
             df_overall = build_breadth_table(history, overall_metrics)
             if df_overall is not None:
                 st.dataframe(style_breadth(df_overall, delta_cols=['D5','D20','D63']),
-                             use_container_width=True, hide_index=True, height=520)
+                             width='stretch', hide_index=True, height=520)
 
             st.markdown("**By Commodity**")
             comm_cols = [c for c in history.columns if c.startswith('comm_') and c.endswith('_total')
@@ -1459,7 +1878,7 @@ elif page == "Commodities":
                 df_comm = pd.DataFrame(comm_rows)
                 sector_breadth_caption()
                 st.dataframe(style_breadth(df_comm, delta_cols=['dL5','dL63']),
-                             use_container_width=True, hide_index=True)
+                             width='stretch', hide_index=True)
 
             st.markdown("**Junior vs Senior Rotation**")
             jr_rows = []
@@ -1479,7 +1898,7 @@ elif page == "Commodities":
             if jr_rows:
                 df_jr = pd.DataFrame(jr_rows)
                 st.dataframe(style_breadth(df_jr, delta_cols=['dL5','dL63']),
-                             use_container_width=True, hide_index=True)
+                             width='stretch', hide_index=True)
 
             st.markdown("**By Type**")
             type_cols = [c for c in history.columns if c.startswith('type_') and c.endswith('_total')]
@@ -1500,7 +1919,7 @@ elif page == "Commodities":
             if type_rows:
                 df_type = pd.DataFrame(type_rows)
                 st.dataframe(style_breadth(df_type, delta_cols=['dL5','dL63']),
-                             use_container_width=True, hide_index=True)
+                             width='stretch', hide_index=True)
         else:
             st.warning("No breadth history found")
 
@@ -1559,7 +1978,7 @@ elif page == "Commodities":
                 df = df[df['acc_watch'].isin(acc_filter)]
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                         use_container_width=True, height=600)
+                         width='stretch', height=600)
         else:
             st.warning("No benchmark results found")
         if st.button("🔄 Run Commodities Benchmark", key='comm_bm'):
@@ -1617,7 +2036,7 @@ elif page == "Commodities":
                 df = df[df['acc_watch'].isin(acc_filter)]
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                         use_container_width=True, height=600)
+                         width='stretch', height=600)
         else:
             st.warning("No screener results found")
         if st.button("🔄 Run Commodities Screener", key='comm_sc'):
@@ -1671,7 +2090,7 @@ elif page == "Uranium":
                 df = df[df['acc_watch'].isin(acc_filter)]
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                         use_container_width=True, height=600)
+                         width='stretch', height=600)
         else:
             st.warning("No benchmark results found")
         if st.button("🔄 Run Uranium Benchmark", key='ura_bm'):
@@ -1717,7 +2136,7 @@ elif page == "Uranium":
                 df = df[df['acc_watch'].isin(acc_filter)]
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                         use_container_width=True, height=600)
+                         width='stretch', height=600)
         else:
             st.warning("No screener results found")
         if st.button("🔄 Run Uranium Screener", key='ura_sc'):
@@ -1770,7 +2189,7 @@ elif page == "AU Gold Miners":
                 df = df[df['acc_watch'].isin(acc_filter)]
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                         use_container_width=True, height=600)
+                         width='stretch', height=600)
         else:
             st.warning("No benchmark results found")
         if st.button("🔄 Run AU Gold Benchmark", key='gold_bm'):
@@ -1815,7 +2234,7 @@ elif page == "AU Gold Miners":
                 df = df[df['acc_watch'].isin(acc_filter)]
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                         use_container_width=True, height=600)
+                         width='stretch', height=600)
         else:
             st.warning("No screener results found")
         if st.button("🔄 Run AU Gold Screener", key='gold_sc'):
@@ -2028,7 +2447,7 @@ elif page == "RRG Charts":
             margin       = dict(r=40, l=60, t=60, b=60),
         )
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
 
         # ── Streamlit legend below chart ──────────────────────────────────────
         quad_groups = {'1_LEADING': [], '2_WEAKENING': [], '3_IMPROVING': [], '4_LAGGING': []}
@@ -2339,7 +2758,7 @@ elif page == "Breadth RRG":
             margin       = dict(r=40, l=60, t=50, b=50),
         )
 
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
 
         # ── Streamlit legend below chart ──────────────────────────────────────
         quad_groups = {'1_LEADING': [], '2_WEAKENING': [], '3_IMPROVING': [], '4_LAGGING': []}
@@ -2631,7 +3050,7 @@ elif page == "Drawdown Analysis":
                 st.markdown("**Top 20 — strongest vs benchmark**")
                 st.dataframe(
                     format_drawdown_df(df, cols_show).head(20).style.map(colour_rs, subset=['rs_vs_bench','dd_vs_bench']),
-                    use_container_width=True,
+                    width='stretch',
                     hide_index=False,
                     height=500
                 )
@@ -2640,7 +3059,7 @@ elif page == "Drawdown Analysis":
                 st.markdown("**Bottom 10 — weakest vs benchmark**")
                 st.dataframe(
                     format_drawdown_df(df, cols_show).tail(10).style.map(colour_rs, subset=['rs_vs_bench','dd_vs_bench']),
-                    use_container_width=True,
+                    width='stretch',
                     hide_index=False,
                     height=280
                 )
@@ -2686,7 +3105,7 @@ elif page == "Drawdown Analysis":
 
             st.dataframe(
                 merged.head(30).style.map(colour_trend, subset=['trend']),
-                use_container_width=True,
+                width='stretch',
                 hide_index=True,
                 height=600
             )
@@ -2759,13 +3178,13 @@ elif page == "Drawdown Analysis":
                             st.markdown("**Top 20**")
                             st.dataframe(
                                 format_drawdown_df(df, cols_show).head(20).style.map(colour_rs, subset=['rs_vs_bench','dd_vs_bench']),
-                                use_container_width=True, hide_index=False, height=500
+                                width='stretch', hide_index=False, height=500
                             )
                         with col2:
                             st.markdown("**Bottom 10**")
                             st.dataframe(
                                 format_drawdown_df(df, cols_show).tail(10).style.map(colour_rs, subset=['rs_vs_bench','dd_vs_bench']),
-                                use_container_width=True, hide_index=False, height=280
+                                width='stretch', hide_index=False, height=280
                             )
     else:
         st.info("No previous studies found")
@@ -2894,7 +3313,7 @@ elif page == "Actionable & Exports":
                         show_cols  = [c for c in base_cols + extra_cols if c in df.columns]
                         st.dataframe(
                             style_df(df[show_cols], 'regime_label', 'delta_rank'),
-                            use_container_width=True,
+                            width='stretch',
                             height=300
                         )
                 else:
@@ -3048,7 +3467,7 @@ elif page == "EA Comparator":
 
         st.dataframe(
             styled,
-            use_container_width=False,
+            width='content',
             hide_index=True,
             height=table_height,
             column_config=col_config
@@ -3073,7 +3492,7 @@ elif page == "EA Comparator":
 
             edited = st.data_editor(
                 edit_df,
-                use_container_width=True,
+                width='stretch',
                 hide_index=True,
                 height=400,
                 column_config={
@@ -3266,7 +3685,7 @@ elif page == "MT5 Analysis":
                 yaxis=dict(gridcolor='rgba(255,255,255,0.05)', tickprefix='$'),
                 margin=dict(l=60,r=20,t=40,b=40)
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
 
         # ── Day of week bar chart ─────────────────────────────────────────────
         def render_dow_chart(df_plot):
@@ -3300,12 +3719,12 @@ elif page == "MT5 Analysis":
                 legend=dict(bgcolor='rgba(0,0,0,0.3)'),
                 margin=dict(l=60,r=20,t=40,b=40)
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
 
             dow_table = dow.reset_index()
             dow_table.columns = ['Day','Trades','Net Profit','Win Rate %']
             dow_table['Net Profit'] = dow_table['Net Profit'].round(2)
-            st.dataframe(dow_table, use_container_width=True, hide_index=True)
+            st.dataframe(dow_table, width='stretch', hide_index=True)
 
         # ── Hour of day chart ─────────────────────────────────────────────────
         def render_hour_chart(df_plot):
@@ -3338,7 +3757,7 @@ elif page == "MT5 Analysis":
                 legend=dict(bgcolor='rgba(0,0,0,0.3)'),
                 margin=dict(l=60,r=20,t=40,b=40)
             )
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
 
         # ── Render based on mode ──────────────────────────────────────────────
         if mode == "Overall":
@@ -3388,7 +3807,7 @@ elif page == "MT5 Analysis":
 
                 st.dataframe(
                     sum_df.style.map(colour_profit, subset=['Net Profit','Expectancy','Max DD']),
-                    use_container_width=True, hide_index=True
+                    width='stretch', hide_index=True
                 )
 
                 # Detail per strategy
@@ -3433,7 +3852,7 @@ elif page == "MT5 Analysis":
 
             st.dataframe(
                 sum_df.style.map(colour_profit, subset=['Net Profit','Expectancy','Max DD']),
-                use_container_width=True, hide_index=True
+                width='stretch', hide_index=True
             )
 
             sel_sym_detail = st.selectbox("Select symbol for detail", symbols_in_df)
@@ -3470,7 +3889,7 @@ elif page == "MT5 Analysis":
 
             st.dataframe(
                 df[show_cols].style.map(colour_net, subset=['net_profit','profit']),
-                use_container_width=True, hide_index=True, height=400
+                width='stretch', hide_index=True, height=400
             )
 
             csv_data = df[show_cols].to_csv(index=False)
@@ -3494,6 +3913,10 @@ elif page == "Run Scripts":
         st.subheader("Macro")
         if st.button("Run Macro Report"):
             run_script(os.path.join(MACRO, 'macro_report.py'), MACRO)
+
+        st.subheader("Consumer Credit")
+        if st.button("Run Consumer Credit Report"):
+            run_script(os.path.join(MACRO, 'consumer_credit.py'), MACRO)
 
         st.subheader("AU Market")
         if st.button("Run AU Screener"):
@@ -3728,7 +4151,7 @@ elif page == "DeMark Signals":
                     show_cols = [c for c in show_cols if c in grp_df.columns]
                     st.dataframe(
                         grp_df[show_cols].sort_values('ticker'),
-                        use_container_width=True,
+                        width='stretch',
                         hide_index=True,
                         height=min(len(grp_df) * 35 + 40, 300)
                     )
@@ -3744,6 +4167,7 @@ elif page == "Settings":
 
     current = load_settings()
 
+    # ── Pages ─────────────────────────────────────────────────────────────────
     st.subheader("Pages")
     st.markdown("Toggle pages on or off. Settings is always visible.")
 
@@ -3759,11 +4183,45 @@ elif page == "Settings":
                 key=f"setting_{name}"
             )
 
+    # ── AI Features ───────────────────────────────────────────────────────────
+    st.divider()
+    st.subheader("AI Features")
+    st.caption("Requires an Anthropic API key — get one free at console.anthropic.com")
+
+    ai_enabled = st.toggle(
+        "Enable AI assessments",
+        value=current.get('ai_features', {}).get('enabled', False),
+        key='setting_ai_enabled'
+    )
+    if ai_enabled:
+        api_key = st.text_input(
+            "Anthropic API Key",
+            value=current.get('ai_features', {}).get('anthropic_api_key', ''),
+            type="password",
+            key='setting_api_key',
+            help="Stored locally in dashboard_settings.json — never pushed to GitHub"
+        )
+        model = st.selectbox(
+            "Model",
+            ['claude-sonnet-4-6', 'claude-haiku-4-5-20251001'],
+            index=0,
+            key='setting_model'
+        )
+    else:
+        api_key = current.get('ai_features', {}).get('anthropic_api_key', '')
+        model   = current.get('ai_features', {}).get('model', 'claude-sonnet-4-6')
+
+    # ── Save / Reset ──────────────────────────────────────────────────────────
     st.divider()
     col1, col2 = st.columns(2)
     with col1:
         if st.button("💾 Save & Reload", type="primary"):
-            current['pages'] = updated_pages
+            current['pages']       = updated_pages
+            current['ai_features'] = {
+                'enabled'          : ai_enabled,
+                'anthropic_api_key': api_key,
+                'model'            : model,
+            }
             save_settings(current)
             st.success("Settings saved")
             st.rerun()

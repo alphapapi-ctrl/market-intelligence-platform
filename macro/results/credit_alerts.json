@@ -1,0 +1,20 @@
+{
+  "date": "20260410",
+  "alerts": [
+    {
+      "type": "WARN",
+      "key": "cc_delinquency",
+      "message": "Credit Card Delinquency Rate %: 2.94 \u25bc -0.040 qoq"
+    },
+    {
+      "type": "WARN",
+      "key": "mortgage_delinquency",
+      "message": "Mortgage Delinquency Rate %: 1.78 \u25bc +0.000 qoq"
+    },
+    {
+      "type": "WARN",
+      "key": "debt_gdp",
+      "message": "Federal Debt % GDP: 122.5682 \u25b2 +1.539 qoq"
+    }
+  ]
+}

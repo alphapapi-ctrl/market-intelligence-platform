@@ -33,7 +33,7 @@ AMP,Ameriprise Financial,Financials,large,40315506688,40.32,-1,0,False,False,Fal
 AME,Ametek,Industrials,large,50002690048,50.0,-5,0,False,False,False,False,-1,-7,False,False,False,False
 AMGN,Amgen,Health Care,large,187563196416,187.56,4,0,False,False,False,False,6,-11,False,False,False,False
 APH,Amphenol,Information Technology,large,157339516928,157.34,-5,0,False,False,False,False,-1,0,False,False,False,False
-ADI,Analog Devices,Information Technology,large,155414904832,155.41,-5,0,False,False,False,False,-2,0,False,False,False,False
+ADI,Analog Devices,Information Technology,large,155414904832,155.41,0,0,False,False,False,False,-2,0,False,False,False,False
 AON,Aon plc,Financials,large,69454184448,69.45,-1,0,False,False,False,False,-1,0,False,False,False,False
 APA,APA Corporation,Energy,large,14850693120,14.85,1,0,False,False,False,False,-13,0,False,False,False,False
 APO,Apollo Global Management,Financials,large,62128435200,62.13,4,0,False,False,False,False,-1,4,False,False,False,False
@@ -53,7 +53,7 @@ ADSK,Autodesk,Information Technology,large,50472960000,50.47,-1,0,False,False,Fa
 ADP,Automatic Data Processing,Industrials,large,82511585280,82.51,1,0,False,False,False,False,12,4,False,False,False,False
 AZO,AutoZone,Consumer Discretionary,large,56339542016,56.34,-5,0,False,False,False,False,6,0,False,False,False,False
 AVB,AvalonBay Communities,Real Estate,large,23507593216,23.51,-6,0,False,False,False,False,-1,0,False,False,False,False
-AVY,Avery Dennison,Materials,large,13188963328,13.19,-1,-1,False,False,False,False,-1,-6,False,False,False,False
+AVY,Avery Dennison,Materials,large,13188963328,13.19,0,0,False,False,False,False,-1,-6,False,False,False,False
 AXON,Axon Enterprise,Industrials,large,33188962304,33.19,11,3,False,False,False,False,3,0,False,False,False,False
 BKR,Baker Hughes,Energy,large,59882311680,59.88,-3,0,False,False,False,False,-2,0,False,False,False,False
 BALL,Ball Corporation,Materials,large,15961198592,15.96,-5,0,False,False,False,False,6,-8,False,False,False,False
@@ -74,10 +74,10 @@ BMY,Bristol Myers Squibb,Health Care,large,121687425024,121.69,2,10,False,False,
 AVGO,Broadcom,Information Technology,large,1491367493632,1491.37,-5,0,False,False,False,False,-1,0,False,False,False,False
 BR,Broadridge Financial Solutions,Industrials,large,18788368384,18.79,-1,10,False,False,False,False,4,0,False,False,False,False
 BRO,Brown & Brown,Financials,large,22450700288,22.45,-4,0,False,False,False,False,15,0,False,False,False,False
-BLDR,Builders FirstSource,Industrials,mid,8751073280,8.75,0,0,False,False,False,False,10,0,False,False,False,False
+BLDR,Builders FirstSource,Industrials,mid,8751073280,8.75,-1,0,False,False,False,False,10,0,False,False,False,False
 BG,Bunge Global,Consumer Staples,large,25043945472,25.04,2,0,False,False,False,False,-3,0,False,False,False,False
 BXP,"BXP, Inc.",Real Estate,mid,9168010240,9.17,-1,0,False,False,False,False,-1,0,False,False,False,False
-CHRW,C.H. Robinson,Industrials,large,19909320704,19.91,-5,0,False,False,False,False,-1,-8,False,False,False,False
+CHRW,C.H. Robinson,Industrials,large,19909320704,19.91,0,0,False,False,False,False,-1,-8,False,False,False,False
 CDNS,Cadence Design Systems,Information Technology,large,76952379392,76.95,-4,0,False,False,False,False,-1,0,False,False,False,False
 CPT,Camden Property Trust,Real Estate,large,10552243200,10.55,-6,0,False,False,False,False,-1,0,False,False,False,False
 CPB,Campbell's Company (The),Consumer Staples,mid,6562204672,6.56,2,13,False,False,True,False,7,0,False,False,False,False
@@ -89,7 +89,7 @@ CVNA,Carvana,Consumer Discretionary,large,69200101376,69.2,-6,0,False,False,Fals
 CAT,Caterpillar Inc.,Industrials,large,335644295168,335.64,-5,0,False,False,False,False,-2,0,False,False,False,False
 CBOE,Cboe Global Markets,Financials,large,30348400640,30.35,-6,0,False,False,False,False,-1,-3,False,False,False,False
 CBRE,CBRE Group,Real Estate,large,40651202560,40.65,-4,0,False,False,False,False,-1,0,False,False,False,False
-CDW,CDW Corporation,Information Technology,large,15884929024,15.88,-5,0,False,False,False,False,-1,0,False,False,False,False
+CDW,CDW Corporation,Information Technology,large,15884929024,15.88,0,0,False,False,False,False,-1,0,False,False,False,False
 COR,Cencora,Health Care,large,63183564800,63.18,-4,0,False,False,False,False,6,-11,False,False,False,False
 CNC,Centene Corporation,Health Care,large,17266132992,17.27,-6,0,False,False,False,False,-1,-8,False,False,False,False
 CNP,CenterPoint Energy,Utilities,large,28593475584,28.59,-9,-1,False,True,False,False,1,-5,False,False,False,False
@@ -100,10 +100,10 @@ CHTR,Charter Communications,Communication Services,large,27832348672,27.83,-2,0,
 CVX,Chevron Corporation,Energy,large,397811384320,397.81,5,0,False,False,False,False,1,0,False,False,False,False
 CMG,Chipotle Mexican Grill,Consumer Discretionary,large,43846737920,43.85,-5,0,False,False,False,False,-1,0,False,False,False,False
 CB,Chubb Limited,Financials,large,128410255360,128.41,-6,0,False,False,False,False,-2,-7,False,False,False,False
-CHD,Church & Dwight,Consumer Staples,large,21993850880,21.99,-1,0,False,False,False,False,5,0,False,False,False,False
+CHD,Church & Dwight,Consumer Staples,large,21993850880,21.99,-1,0,False,False,False,False,0,0,False,False,False,False
 CIEN,Ciena,Information Technology,large,63341678592,63.34,-5,-7,False,False,False,False,-11,-3,False,False,False,False
 CI,Cigna,Health Care,large,72129314816,72.13,-4,0,False,False,False,False,-1,0,False,False,False,False
-CINF,Cincinnati Financial,Financials,large,24662253568,24.66,-6,0,False,False,False,False,-1,0,False,False,False,False
+CINF,Cincinnati Financial,Financials,large,24662253568,24.66,-6,0,False,False,False,False,0,0,False,False,False,False
 CTAS,Cintas,Industrials,large,69741568000,69.74,-5,0,False,False,False,False,4,0,False,False,False,False
 CSCO,Cisco,Information Technology,large,312215470080,312.22,-3,0,False,False,False,False,-3,-11,False,False,False,False
 C,Citigroup,Financials,large,201609019392,201.61,-5,0,False,False,False,False,-2,-8,False,False,False,False
@@ -120,7 +120,7 @@ FIX,Comfort Systems USA,Industrials,large,49987055616,49.99,-5,0,False,False,Fal
 CAG,Conagra Brands,Consumer Staples,mid,7519968256,7.52,-1,9,False,False,False,False,6,0,False,False,False,False
 COP,ConocoPhillips,Energy,large,159539724288,159.54,5,0,False,False,False,False,-22,0,False,False,False,False
 ED,Consolidated Edison,Utilities,large,41705168896,41.71,1,0,False,False,False,False,1,-4,False,False,False,False
-STZ,Constellation Brands,Consumer Staples,large,26322993152,26.32,1,0,False,False,False,False,-2,13,False,False,True,False
+STZ,Constellation Brands,Consumer Staples,large,26322993152,26.32,1,0,False,False,False,False,0,0,False,False,False,False
 CEG,Constellation Energy,Utilities,large,98841231360,98.84,-1,0,False,False,False,False,4,0,False,False,False,False
 COO,Cooper Companies (The),Health Care,large,13691176960,13.69,-1,0,False,False,False,False,-1,0,False,False,False,False
 CPRT,Copart,Industrials,large,32331792384,32.33,-1,0,False,False,False,False,9,0,True,False,False,False
@@ -176,7 +176,7 @@ EFX,Equifax,Industrials,large,22002544640,22.0,-7,0,False,False,False,False,-1,0
 EQIX,Equinix,Real Estate,large,98291277824,98.29,-6,0,False,False,False,False,-2,-7,False,False,False,False
 EQR,Equity Residential,Real Estate,large,23634190336,23.63,-9,-1,False,True,False,False,-1,0,False,False,False,False
 ERIE,Erie Indemnity,Financials,large,13046844416,13.05,-1,0,False,False,False,False,-1,0,False,False,False,False
-ESS,Essex Property Trust,Real Estate,large,17101476864,17.1,-6,0,False,False,False,False,-1,0,False,False,False,False
+ESS,Essex Property Trust,Real Estate,large,17101476864,17.1,-6,0,False,False,False,False,0,0,False,False,False,False
 EL,Estée Lauder Companies (The),Consumer Staples,large,25002573824,25.0,-1,0,False,False,False,False,10,0,False,False,False,False
 EG,Everest Group,Financials,large,13211214848,13.21,-4,0,False,False,False,False,-1,0,False,False,False,False
 EVRG,Evergy,Utilities,large,19076737024,19.08,-9,-1,False,True,False,False,-2,-2,False,False,False,False
@@ -193,14 +193,14 @@ FICO,Fair Isaac,Information Technology,large,25851432960,25.85,-7,0,False,False,
 FAST,Fastenal,Industrials,large,53167611904,53.17,-1,0,False,False,False,False,-1,0,False,False,False,False
 FRT,Federal Realty Investment Trust,Real Estate,mid,9281911808,9.28,-7,0,False,False,False,False,-2,-7,False,False,False,False
 FDX,FedEx,Industrials,large,86287360000,86.29,-5,0,False,False,False,False,-2,0,False,False,False,False
-FIS,Fidelity National Information Services,Financials,large,23971311616,23.97,0,0,False,False,False,False,3,0,False,False,False,False
+FIS,Fidelity National Information Services,Financials,large,23971311616,23.97,-1,0,False,False,False,False,3,0,False,False,False,False
 FITB,Fifth Third Bancorp,Financials,large,42661097472,42.66,-6,0,False,False,False,False,-2,-7,False,False,False,False
 FSLR,First Solar,Information Technology,large,20959983616,20.96,-1,0,False,False,False,False,-2,0,False,False,False,False
-FE,FirstEnergy,Utilities,large,29653735424,29.65,-9,-1,False,True,False,False,-2,-4,False,False,False,False
+FE,FirstEnergy,Utilities,large,29653735424,29.65,0,0,False,False,False,False,-2,-4,False,False,False,False
 FISV,Fiserv,Financials,large,30205763584,30.21,-1,0,False,False,False,False,5,0,False,False,False,False
 F,Ford Motor Company,Consumer Discretionary,large,46528557056,46.53,-1,0,False,False,False,False,-1,0,False,False,False,False
 FTNT,Fortinet,Information Technology,large,61373280256,61.37,-6,0,False,False,False,False,-1,0,False,False,False,False
-FTV,Fortive,Industrials,large,17811660800,17.81,-6,0,False,False,False,False,-1,-6,False,False,False,False
+FTV,Fortive,Industrials,large,17811660800,17.81,-6,0,False,False,False,False,0,0,False,False,False,False
 FOXA,Fox Corporation (Class A),Communication Services,large,24936716288,24.94,-3,0,False,False,False,False,-1,-8,False,False,False,False
 FOX,Fox Corporation (Class B),Communication Services,large,24682565632,24.68,-2,0,False,False,False,False,-1,0,False,False,False,False
 BEN,Franklin Resources,Financials,large,12200542208,12.2,-6,0,False,False,False,False,-1,-6,False,False,False,False
@@ -215,7 +215,7 @@ GNRC,Generac,Industrials,large,11389990912,11.39,-1,0,False,False,False,False,-1
 GD,General Dynamics,Industrials,large,94549581824,94.55,1,0,False,False,False,False,4,0,False,False,False,False
 GIS,General Mills,Consumer Staples,large,19970351104,19.97,2,11,False,False,False,False,7,0,False,False,False,False
 GM,General Motors,Consumer Discretionary,large,67669762048,67.67,-1,0,False,False,False,False,-1,-6,False,False,False,False
-GPC,Genuine Parts Company,Consumer Discretionary,large,14394964992,14.39,0,0,False,False,False,False,-1,0,False,False,False,False
+GPC,Genuine Parts Company,Consumer Discretionary,large,14394964992,14.39,-1,0,False,False,False,False,-1,0,False,False,False,False
 GILD,Gilead Sciences,Health Care,large,173408583680,173.41,-1,0,False,False,False,False,6,-2,False,False,False,False
 GPN,Global Payments,Financials,large,17927680000,17.93,8,0,False,False,False,False,4,0,False,False,False,False
 GL,Globe Life,Financials,large,11213655040,11.21,-6,0,False,False,False,False,-2,0,False,False,False,False
@@ -228,15 +228,16 @@ HCA,HCA Healthcare,Health Care,large,105513902080,105.51,-3,0,False,False,False,
 DOC,Healthpeak Properties,Real Estate,large,11485639680,11.49,-3,0,False,False,False,False,3,-11,False,False,False,False
 HSIC,Henry Schein,Health Care,mid,8704572416,8.7,-4,0,False,False,False,False,6,-7,False,False,False,False
 HSY,Hershey Company (The),Consumer Staples,large,41792847872,41.79,-1,-9,False,False,False,False,6,0,False,False,False,False
+HPE,Hewlett Packard Enterprise,Information Technology,large,32701976576,32.7,-4,0,False,False,False,False,-4,0,False,False,False,False
 HLT,Hilton Worldwide,Consumer Discretionary,large,70881107968,70.88,-1,0,False,False,False,False,-2,-6,False,False,False,False
 HOLX,Hologic,Health Care,large,16888477696,16.89,-2,0,False,False,False,False,-1,0,False,False,False,False
 HD,Home Depot (The),Consumer Discretionary,large,320347176960,320.35,-1,0,False,False,False,False,6,0,False,False,False,False
 HON,Honeywell,Industrials,large,145855791104,145.86,-1,0,False,False,False,False,6,-5,False,False,False,False
 HRL,Hormel Foods,Consumer Staples,large,12155779072,12.16,6,11,False,False,False,False,6,11,False,False,False,False
 HST,Host Hotels & Resorts,Real Estate,large,13334630400,13.33,-1,0,False,False,False,False,-2,-6,False,False,False,False
-HWM,Howmet Aerospace,Industrials,large,93653696512,93.65,-5,0,False,False,False,False,-1,0,False,False,False,False
+HWM,Howmet Aerospace,Industrials,large,93653696512,93.65,-5,0,False,False,False,False,0,0,False,False,False,False
 HPQ,HP Inc.,Information Technology,large,17909878784,17.91,3,0,False,False,False,False,1,5,False,False,False,False
-HUBB,Hubbell Incorporated,Industrials,large,26275121152,26.28,-5,0,False,False,False,False,-2,-7,False,False,False,False
+HUBB,Hubbell Incorporated,Industrials,large,26275121152,26.28,0,0,False,False,False,False,-2,-7,False,False,False,False
 HUM,Humana,Health Care,large,21445580800,21.45,-6,0,False,False,False,False,-1,0,False,False,False,False
 HBAN,Huntington Bancshares,Financials,large,32166119424,32.17,-6,0,False,False,False,False,-1,0,False,False,False,False
 HII,Huntington Ingalls Industries,Industrials,large,15617773568,15.62,-5,0,False,False,False,False,5,-3,False,False,False,False
@@ -260,16 +261,16 @@ IQV,IQVIA,Health Care,large,29402220544,29.4,-7,0,False,False,False,False,-1,-10
 IRM,Iron Mountain,Real Estate,large,30729562112,30.73,-6,0,False,False,False,False,-1,-2,False,False,False,False
 JBHT,J.B. Hunt,Industrials,large,20463374336,20.46,-6,0,False,False,False,False,-2,-8,False,False,False,False
 JBL,Jabil,Information Technology,large,28687304704,28.69,-5,0,False,False,False,False,-2,0,False,False,False,False
-JKHY,Jack Henry & Associates,Financials,large,11397951488,11.4,-4,9,False,False,False,False,3,-8,False,False,False,False
+JKHY,Jack Henry & Associates,Financials,large,11397951488,11.4,-4,9,False,False,False,False,0,0,False,False,False,False
 J,Jacobs Solutions,Industrials,large,15117666304,15.12,-1,0,False,False,False,False,-1,0,False,False,False,False
 JNJ,Johnson & Johnson,Health Care,large,585701851136,585.7,3,0,False,False,False,False,1,0,False,False,False,False
 JCI,Johnson Controls,Industrials,large,81386438656,81.39,-5,0,False,False,False,False,-2,0,False,False,False,False
-JPM,JPMorgan Chase,Financials,large,794545750016,794.55,-5,0,False,False,False,False,0,0,False,False,False,False
+JPM,JPMorgan Chase,Financials,large,794545750016,794.55,-5,0,False,False,False,False,-2,0,False,False,False,False
 KVUE,Kenvue,Consumer Staples,large,32852785152,32.85,2,0,False,False,False,False,5,13,False,False,True,False
 KDP,Keurig Dr Pepper,Consumer Staples,large,34387836928,34.39,-1,0,False,False,False,False,6,0,False,False,False,False
 KEY,KeyCorp,Financials,large,22305083392,22.31,-6,0,False,False,False,False,-2,0,False,False,False,False
 KEYS,Keysight Technologies,Information Technology,large,49952829440,49.95,-5,0,False,False,False,False,-2,-3,False,False,False,False
-KMB,Kimberly-Clark,Consumer Staples,large,31908022272,31.91,0,0,False,False,False,False,5,0,False,False,False,False
+KMB,Kimberly-Clark,Consumer Staples,large,31908022272,31.91,2,0,False,False,False,False,5,0,False,False,False,False
 KIM,Kimco Realty,Real Estate,large,15304586240,15.3,-6,0,False,False,False,False,4,-3,False,False,False,False
 KMI,Kinder Morgan,Energy,large,73351872512,73.35,-1,0,False,False,False,False,2,0,False,False,False,False
 KKR,KKR & Co.,Financials,large,84489887744,84.49,-1,0,False,False,False,False,-1,0,False,False,False,False
@@ -292,7 +293,7 @@ L,Loews Corporation,Financials,large,22255169536,22.26,-4,0,False,False,False,Fa
 LOW,Lowe's,Consumer Discretionary,large,129596620800,129.6,-1,0,False,False,False,False,-1,0,False,False,False,False
 LULU,Lululemon Athletica,Consumer Discretionary,large,18267686912,18.27,-5,0,False,False,False,False,-1,0,False,False,False,False
 LYB,LyondellBasell,Materials,large,25644730368,25.64,5,0,False,False,False,False,-15,0,False,False,False,False
-MTB,M&T Bank,Financials,large,31313893376,31.31,-6,0,False,False,False,False,-1,-9,False,False,False,False
+MTB,M&T Bank,Financials,large,31313893376,31.31,-6,0,False,False,False,False,0,0,False,False,False,False
 MPC,Marathon Petroleum,Energy,large,71247536128,71.25,1,11,False,False,False,False,-13,0,False,False,False,False
 MAR,Marriott International,Consumer Discretionary,large,87956324352,87.96,-6,0,False,False,False,False,-2,-9,False,False,False,False
 MRSH,Marsh McLennan,Financials,large,85543133184,85.54,-1,0,False,False,False,False,-1,0,False,False,False,False
@@ -312,8 +313,8 @@ MGM,MGM Resorts,Consumer Discretionary,large,10032216064,10.03,-4,0,False,False,
 MCHP,Microchip Technology,Information Technology,large,35498487808,35.5,-5,0,False,False,False,False,-2,0,False,False,False,False
 MU,Micron Technology,Information Technology,large,413021306880,413.02,-5,-5,False,False,False,False,4,-5,False,False,False,False
 MSFT,Microsoft,Information Technology,large,2775695753216,2775.7,-5,0,False,False,False,False,5,0,False,False,False,False
-MAA,Mid-America Apartment Communities,Real Estate,large,14988545024,14.99,-6,0,False,False,False,False,5,0,False,False,False,False
-MRNA,Moderna,Health Care,large,19512074240,19.51,0,0,False,False,False,False,3,-5,False,False,False,False
+MAA,Mid-America Apartment Communities,Real Estate,large,14988545024,14.99,0,0,False,False,False,False,5,0,False,False,False,False
+MRNA,Moderna,Health Care,large,19512074240,19.51,-1,0,False,False,False,False,3,-5,False,False,False,False
 MOH,Molina Healthcare,Health Care,mid,7260453888,7.26,-4,0,False,False,False,False,4,-11,False,False,False,False
 TAP,Molson Coors Beverage Company,Consumer Staples,mid,8292085248,8.29,-9,0,False,True,False,False,-1,-4,False,False,False,False
 MDLZ,Mondelez International,Consumer Staples,large,74247233536,74.25,-1,0,False,False,False,False,-1,0,False,False,False,False
@@ -333,13 +334,13 @@ NWS,News Corp (Class B),Communication Services,large,15473740800,15.47,-1,0,Fals
 NEE,NextEra Energy,Utilities,large,194080063488,194.08,-9,-1,False,True,False,False,-2,0,False,False,False,False
 NKE,"Nike, Inc.",Consumer Discretionary,large,65418137600,65.42,10,2,False,False,False,False,6,0,False,False,False,False
 NI,NiSource,Utilities,large,22725541888,22.73,-9,-1,False,True,False,False,-2,-5,False,False,False,False
-NDSN,Nordson Corporation,Industrials,large,14676665344,14.68,-1,0,False,False,False,False,-1,-6,False,False,False,False
+NDSN,Nordson Corporation,Industrials,large,14676665344,14.68,0,0,False,False,False,False,-1,-6,False,False,False,False
 NSC,Norfolk Southern,Industrials,large,64676745216,64.68,-6,0,False,False,False,False,-1,0,False,False,False,False
 NTRS,Northern Trust,Financials,large,26901946368,26.9,-5,0,False,False,False,False,-2,-7,False,False,False,False
 NOC,Northrop Grumman,Industrials,large,100260847616,100.26,1,5,False,False,False,False,4,-7,False,False,False,False
 NCLH,Norwegian Cruise Line Holdings,Consumer Discretionary,mid,8623478784,8.62,-4,0,False,False,False,False,-1,0,False,False,False,False
 NRG,NRG Energy,Utilities,large,32427720704,32.43,-5,0,False,False,False,False,-1,0,False,False,False,False
-NUE,Nucor,Materials,large,39282012160,39.28,-11,-2,False,False,False,False,-2,-9,False,False,False,False
+NUE,Nucor,Materials,large,39282012160,39.28,0,0,False,False,False,False,-2,-9,False,False,False,False
 NVDA,Nvidia,Information Technology,large,4311464017920,4311.46,-5,0,False,False,False,False,-1,0,False,False,False,False
 NVR,"NVR, Inc.",Consumer Discretionary,large,18615214080,18.62,-1,0,False,False,False,False,-1,0,False,False,False,False
 NXPI,NXP Semiconductors,Information Technology,large,49161396224,49.16,-1,0,False,False,False,False,-1,0,False,False,False,False
@@ -373,20 +374,20 @@ PPG,PPG Industries,Materials,large,23104972800,23.1,-1,0,False,False,False,False
 PPL,PPL Corporation,Utilities,large,29030494208,29.03,-9,-1,False,True,False,False,-2,-4,False,False,False,False
 PFG,Principal Financial Group,Financials,large,19794415616,19.79,-11,-3,False,False,False,False,-1,-9,False,False,False,False
 PG,Procter & Gamble,Consumer Staples,large,334433288192,334.43,-1,0,False,False,False,False,6,0,False,False,False,False
-PGR,Progressive Corporation,Financials,large,114398216192,114.4,-1,0,False,False,False,False,3,0,False,False,False,False
+PGR,Progressive Corporation,Financials,large,114398216192,114.4,0,0,False,False,False,False,3,0,False,False,False,False
 PLD,Prologis,Real Estate,large,124704497664,124.7,-6,0,False,False,False,False,-2,0,False,False,False,False
 PRU,Prudential Financial,Financials,large,33957840896,33.96,2,0,False,False,False,False,-2,0,False,False,False,False
 PEG,Public Service Enterprise Group,Utilities,large,40840777728,40.84,-2,0,False,False,False,False,5,0,False,False,False,False
 PTC,PTC Inc.,Information Technology,large,16974794752,16.97,-4,7,False,False,False,False,5,-10,False,False,False,False
 PSA,Public Storage,Real Estate,large,49213276160,49.21,-6,0,False,False,False,False,5,-3,False,False,False,False
-PHM,PulteGroup,Consumer Discretionary,large,22536284160,22.54,0,0,False,False,False,False,-1,0,False,False,False,False
+PHM,PulteGroup,Consumer Discretionary,large,22536284160,22.54,-1,0,False,False,False,False,-1,0,False,False,False,False
 PWR,Quanta Services,Industrials,large,83881140224,83.88,-5,-12,False,False,False,False,-2,-3,False,False,False,False
 QCOM,Qualcomm,Information Technology,large,135428120576,135.43,-1,0,False,False,False,False,15,0,False,False,False,False
 DGX,Quest Diagnostics,Health Care,large,22028212224,22.03,-4,0,False,False,False,False,5,0,False,False,False,False
 Q,Qnity Electronics,Information Technology,large,24431552512,24.43,-5,0,False,False,False,False,0,0,False,False,False,False
 RL,Ralph Lauren Corporation,Consumer Discretionary,large,21104162816,21.1,-5,0,False,False,False,False,-2,0,False,False,False,False
 RJF,Raymond James Financial,Financials,large,28080220160,28.08,-1,0,False,False,False,False,-1,-2,False,False,False,False
-RTX,RTX Corporation,Industrials,large,264093614080,264.09,-5,0,False,False,False,False,4,-6,False,False,False,False
+RTX,RTX Corporation,Industrials,large,264093614080,264.09,0,0,False,False,False,False,4,-6,False,False,False,False
 O,Realty Income,Real Estate,large,58007752704,58.01,-7,0,False,False,False,False,5,-2,False,False,False,False
 REG,Regency Centers,Real Estate,large,14389221376,14.39,-7,0,False,False,False,False,-1,-4,False,False,False,False
 REGN,Regeneron Pharmaceuticals,Health Care,large,80542629888,80.54,2,0,False,False,False,False,-2,-9,False,False,False,False
@@ -395,8 +396,8 @@ RSG,Republic Services,Industrials,large,68955930624,68.96,1,0,False,False,False,
 RMD,ResMed,Health Care,large,32709584896,32.71,-5,0,False,False,False,False,7,-13,False,False,False,True
 RVTY,Revvity,Health Care,mid,9943788544,9.94,-5,0,False,False,False,False,-1,0,False,False,False,False
 HOOD,Robinhood Markets,Financials,large,62031249408,62.03,-4,0,False,False,False,False,16,0,False,False,False,False
-ROK,Rockwell Automation,Industrials,large,41040359424,41.04,-5,0,False,False,False,False,0,0,False,False,False,False
-ROL,"Rollins, Inc.",Industrials,large,25993658368,25.99,-5,0,False,False,False,False,9,0,True,False,False,False
+ROK,Rockwell Automation,Industrials,large,41040359424,41.04,-5,0,False,False,False,False,-1,-8,False,False,False,False
+ROL,"Rollins, Inc.",Industrials,large,25993658368,25.99,-5,0,False,False,False,False,0,0,False,False,False,False
 ROP,Roper Technologies,Information Technology,large,38521286656,38.52,-7,0,False,False,False,False,-1,0,False,False,False,False
 ROST,Ross Stores,Consumer Discretionary,large,71543275520,71.54,-1,0,False,False,False,False,-9,-1,False,True,False,False
 RCL,Royal Caribbean Group,Consumer Discretionary,large,74611539968,74.61,2,0,False,False,False,False,-1,0,False,False,False,False
@@ -412,11 +413,11 @@ SHW,Sherwin-Williams,Materials,large,78792376320,78.79,-1,0,False,False,False,Fa
 SPG,Simon Property Group,Real Estate,large,61308936192,61.31,-7,0,False,False,False,False,-1,0,False,False,False,False
 SWKS,Skyworks Solutions,Information Technology,mid,8299119616,8.3,-4,0,False,False,False,False,-2,0,False,False,False,False
 SJM,J.M. Smucker Company (The),Consumer Staples,large,10186107904,10.19,2,0,False,False,False,False,5,0,False,False,False,False
-SW,Smurfit Westrock,Materials,large,20597938176,20.6,-1,0,False,False,False,False,-1,-5,False,False,False,False
+SW,Smurfit Westrock,Materials,large,20597938176,20.6,-1,0,False,False,False,False,0,0,False,False,False,False
 SNA,Snap-on,Industrials,large,19031123968,19.03,-5,0,False,False,False,False,-1,-8,False,False,False,False
 SOLV,Solventum,Health Care,large,11028950016,11.03,-1,0,False,False,False,False,13,0,False,False,False,False
 SO,Southern Company,Utilities,large,109084672000,109.08,-9,-1,False,True,False,False,4,-5,False,False,False,False
-LUV,Southwest Airlines,Industrials,large,18473555968,18.47,-4,0,False,False,False,False,-1,-5,False,False,False,False
+LUV,Southwest Airlines,Industrials,large,18473555968,18.47,0,0,False,False,False,False,-1,-5,False,False,False,False
 SWK,Stanley Black & Decker,Industrials,large,10658861056,10.66,-1,0,False,False,False,False,-1,-6,False,False,False,False
 SBUX,Starbucks,Consumer Discretionary,large,102958538752,102.96,-4,0,False,False,False,False,4,-3,False,False,False,False
 STT,State Street Corporation,Financials,large,35975442432,35.98,-5,0,False,False,False,False,-2,0,False,False,False,False
@@ -479,7 +480,7 @@ GWW,W. W. Grainger,Industrials,large,52936982528,52.94,-6,0,False,False,False,Fa
 WAB,Wabtec,Industrials,large,43407740928,43.41,-6,0,False,False,False,False,-2,0,False,False,False,False
 WMT,Walmart,Consumer Staples,large,1002848518144,1002.85,-1,-2,False,False,False,False,-2,0,False,False,False,False
 DIS,Walt Disney Company (The),Communication Services,large,171326914560,171.33,-1,0,False,False,False,False,10,0,False,False,False,False
-WBD,Warner Bros. Discovery,Communication Services,large,68484911104,68.48,-1,0,False,False,False,False,-1,-8,False,False,False,False
+WBD,Warner Bros. Discovery,Communication Services,large,68484911104,68.48,-1,0,False,False,False,False,0,0,False,False,False,False
 WM,Waste Management,Industrials,large,94953308160,94.95,-7,0,False,False,False,False,3,-9,False,False,False,False
 WAT,Waters Corporation,Health Care,large,29846511616,29.85,-4,0,False,False,False,False,-2,0,False,False,False,False
 WEC,WEC Energy Group,Utilities,large,38295760896,38.3,-9,-1,False,True,False,False,1,-5,False,False,False,False
@@ -489,12 +490,12 @@ WST,West Pharmaceutical Services,Health Care,large,18366394368,18.37,-6,0,False,
 WDC,Western Digital,Information Technology,large,100850032640,100.85,-5,-8,False,False,False,False,-2,0,False,False,False,False
 WY,Weyerhaeuser,Real Estate,large,17610635264,17.61,-1,0,False,False,False,False,-2,-4,False,False,False,False
 WSM,"Williams-Sonoma, Inc.",Consumer Discretionary,large,21443121152,21.44,-1,0,False,False,False,False,-1,-4,False,False,False,False
-WMB,Williams Companies,Energy,large,88045699072,88.05,-3,0,False,False,False,False,4,0,False,False,False,False
+WMB,Williams Companies,Energy,large,88045699072,88.05,-3,0,False,False,False,False,0,0,False,False,False,False
 WTW,Willis Towers Watson,Financials,large,27289731072,27.29,-1,0,False,False,False,False,-1,0,False,False,False,False
 WDAY,"Workday, Inc.",Information Technology,large,34784378880,34.78,2,0,False,False,False,False,15,6,False,False,False,False
 WYNN,Wynn Resorts,Consumer Discretionary,large,10640024576,10.64,-1,0,False,False,False,False,-2,0,False,False,False,False
 XEL,Xcel Energy,Utilities,large,50371813376,50.37,-9,-1,False,True,False,False,4,-2,False,False,False,False
-XYL,Xylem Inc.,Industrials,large,29483327488,29.48,-5,0,False,False,False,False,0,0,False,False,False,False
+XYL,Xylem Inc.,Industrials,large,29483327488,29.48,-5,0,False,False,False,False,-1,0,False,False,False,False
 YUM,Yum! Brands,Consumer Discretionary,large,43338829824,43.34,-4,0,False,False,False,False,-1,0,False,False,False,False
 ZBRA,Zebra Technologies,Information Technology,large,10275670016,10.28,-6,0,False,False,False,False,-1,0,False,False,False,False
 ZBH,Zimmer Biomet,Health Care,large,18012721152,18.01,-9,-1,False,True,False,False,-1,0,False,False,False,False
@@ -506,25 +507,25 @@ TEAM,Atlassian,Technology,large,18011082752,18.01,2,0,False,False,False,False,15
 CCEP,Coca-Cola Europacific Partners,Consumer Staples,large,41974009856,41.97,-4,0,False,False,False,False,4,-11,False,False,False,False
 FER,Ferrovial,Industrials,large,48208359424,48.21,-6,0,False,False,False,False,-2,0,False,False,False,False
 INSM,Insmed Incorporated,Health Care,large,35012096000,35.01,2,10,False,False,False,False,-2,0,False,False,False,False
-MRVL,Marvell Technology,Technology,large,93663223808,93.66,-6,0,False,False,False,False,-7,0,False,False,False,False
+MRVL,Marvell Technology,Technology,large,93663223808,93.66,0,0,False,False,False,False,-7,0,False,False,False,False
 MELI,Mercado Libre,Consumer Discretionary,large,86972030976,86.97,-7,0,False,False,False,False,-1,0,False,False,False,False
 MSTR,MicroStrategy,Technology,large,41412579328,41.41,-1,0,False,False,False,False,3,0,False,False,False,False
 PDD,PDD Holdings,Technology,large,143199748096,143.2,-1,0,False,False,False,False,-1,0,False,False,False,False
 SHOP,Shopify,Technology,large,154326138880,154.33,-1,0,False,False,False,False,4,0,False,False,False,False
 TRI,Thomson Reuters,Technology,large,40031125504,40.03,3,7,False,False,False,False,3,13,False,False,True,False
 ZS,Zscaler,Technology,large,22279159808,22.28,-4,0,False,False,False,False,22,0,False,False,False,False
-BE,BLOOM ENERGY CLASS A CORP,Industrials,large,38050758656,38.05,0,0,False,False,False,False,1,0,False,False,False,False
-FN,FABRINET,Information Technology,large,19990505472,19.99,-4,0,False,False,False,False,-3,0,False,False,False,False
+BE,BLOOM ENERGY CLASS A CORP,Industrials,large,38050758656,38.05,-4,0,False,False,False,False,1,0,False,False,False,False
+FN,FABRINET,Information Technology,large,19990505472,19.99,0,0,False,False,False,False,-3,0,False,False,False,False
 NXT,NEXTPOWER INC CLASS A,Industrials,large,17005499392,17.01,4,0,False,False,False,False,1,0,False,False,False,False
 KTOS,KRATOS DEFENSE AND SECURITY SOLUTI,Industrials,large,12570661888,12.57,-3,0,False,False,False,False,10,0,False,False,False,False
-CRDO,CREDO TECHNOLOGY GROUP HOLDING LTD,Information Technology,large,18712444928,18.71,-4,0,False,False,False,False,12,0,False,False,False,False
+CRDO,CREDO TECHNOLOGY GROUP HOLDING LTD,Information Technology,large,18712444928,18.71,-4,0,False,False,False,False,0,0,False,False,False,False
 SATS,ECHOSTAR CORP CLASS A,Communication,large,37172543488,37.17,-5,0,False,False,False,False,-2,-5,False,False,False,False
 STRL,STERLING INFRASTRUCTURE INC,Industrials,large,12773616640,12.77,-1,0,False,False,False,False,-2,0,False,False,False,False
 CDE,COEUR MINING INC,Materials,large,19760011264,19.76,-6,0,False,False,False,False,5,-6,False,False,False,False
 AEIS,ADVANCED ENERGY INDUSTRIES INC,Information Technology,large,12636955648,12.64,-5,0,False,False,False,False,-2,-10,False,False,False,False
 HL,HECLA MINING,Materials,large,12857310208,12.86,-6,0,False,False,False,False,6,0,False,False,False,False
 ENSG,ENSIGN GROUP INC,Health Care,large,11426134016,11.43,-1,0,False,False,False,False,5,0,False,False,False,False
-BBIO,BRIDGEBIO PHARMA INC,Health Care,large,14181068800,14.18,0,0,False,False,False,False,-4,0,False,False,False,False
+BBIO,BRIDGEBIO PHARMA INC,Health Care,large,14181068800,14.18,2,0,False,False,False,False,-4,0,False,False,False,False
 IONQ,IONQ INC,Information Technology,large,10772843520,10.77,-1,9,False,False,False,False,5,0,False,False,False,False
 GH,GUARDANT HEALTH INC,Health Care,large,12307722240,12.31,-7,0,False,False,False,False,-2,-10,False,False,False,False
 MOD,MODINE MANUFACTURING,Industrials,large,11565005824,11.57,-1,0,False,False,False,False,-2,0,False,False,False,False
@@ -532,12 +533,12 @@ RMBS,RAMBUS INC,Information Technology,large,10062066688,10.06,-4,0,False,False,
 DY,DYCOM INDUSTRIES INC,Industrials,large,10434078720,10.43,-5,0,False,False,False,False,-1,0,False,False,False,False
 TTMI,TTM TECHNOLOGIES INC,Information Technology,large,10122634240,10.12,-5,0,False,False,False,False,-2,0,False,False,False,False
 SPXC,SPX TECHNOLOGIES INC,Industrials,mid,9840210944,9.84,-1,0,False,False,False,False,-1,0,False,False,False,False
-GTLS,CHART INDUSTRIES INC,Industrials,mid,9912484864,9.91,-4,0,False,False,False,False,-1,-8,False,False,False,False
+GTLS,CHART INDUSTRIES INC,Industrials,mid,9912484864,9.91,0,0,False,False,False,False,-1,-8,False,False,False,False
 IDCC,INTERDIGITAL INC,Information Technology,mid,8056242688,8.06,-5,0,False,False,False,False,6,-11,False,False,False,False
 CTRE,CARETRUST REIT INC,Real Estate,mid,8554450432,8.55,-5,0,False,False,False,False,4,-2,False,False,False,False
 AHR,AMERICAN HEALTHCARE REIT INC,Real Estate,mid,9042292736,9.04,-5,0,False,False,False,False,4,0,False,False,False,False
 MDGL,MADRIGAL PHARMACEUTICALS INC,Health Care,large,12545639424,12.55,2,0,False,False,False,False,-4,0,False,False,False,False
-AVAV,AEROVIRONMENT INC,Industrials,mid,9329551360,9.33,-3,1,False,False,False,False,10,0,False,False,False,False
+AVAV,AEROVIRONMENT INC,Industrials,mid,9329551360,9.33,-3,1,False,False,False,False,0,0,False,False,False,False
 WTS,WATTS WATER TECHNOLOGIES INC CLASS,Industrials,mid,9632571392,9.63,-1,0,False,False,False,False,-1,-5,False,False,False,False
 UMBF,UMB FINANCIAL CORP,Financials,mid,8758753280,8.76,-6,0,False,False,False,False,-2,-6,False,False,False,False
 FCFS,FIRSTCASH HOLDINGS INC,Financials,mid,8808294400,8.81,-2,0,False,False,False,False,-2,-9,False,False,False,False
@@ -550,7 +551,7 @@ FLR,FLUOR CORP,Industrials,mid,6909058560,6.91,-5,0,False,False,False,False,-2,0
 CYTK,CYTOKINETICS INC,Health Care,mid,8218654720,8.22,2,0,False,False,False,False,-3,0,False,False,False,False
 VIAV,VIAVI SOLUTIONS INC,Information Technology,mid,8535952896,8.54,-5,0,False,False,False,False,-13,-5,False,False,False,False
 PRAX,PRAXIS PRECISION MEDICINES INC,Health Care,mid,8644341760,8.64,-1,0,False,False,False,False,-1,-6,False,False,False,False
-ESE,ESCO TECHNOLOGIES INC,Industrials,mid,7568813056,7.57,-5,0,False,False,False,False,0,0,False,False,False,False
+ESE,ESCO TECHNOLOGIES INC,Industrials,mid,7568813056,7.57,-5,0,False,False,False,False,-3,-4,False,False,False,False
 CMC,COMMERCIAL METALS,Materials,mid,6856778240,6.86,-1,0,False,False,False,False,-1,-6,False,False,False,False
 SM,SM ENERGY,Energy,mid,7298557952,7.3,1,0,False,False,False,False,-12,0,False,False,False,False
 HQY,HEALTHEQUITY INC,Health Care,mid,7233890304,7.23,2,0,False,False,False,False,-5,5,False,False,False,False
@@ -579,7 +580,7 @@ OKLO,OKLO INC CLASS A,Utilities,mid,8353865728,8.35,-1,0,False,False,False,False
 AROC,ARCHROCK INC,Energy,mid,6074088960,6.07,-3,0,False,False,False,False,-1,-3,False,False,False,False
 ENS,ENERSYS,Industrials,mid,6545835520,6.55,-5,-5,False,False,False,False,-3,0,False,False,False,False
 VSAT,VIASAT INC,Information Technology,mid,7292788224,7.29,-4,0,False,False,False,False,-3,-7,False,False,False,False
-POR,PORTLAND GENERAL ELECTRIC,Utilities,mid,6211069952,6.21,-9,-1,False,True,False,False,-2,-3,False,False,False,False
+POR,PORTLAND GENERAL ELECTRIC,Utilities,mid,6211069952,6.21,0,0,False,False,False,False,-2,-3,False,False,False,False
 PL,PLANET LABS CLASS A,Industrials,large,12419827712,12.42,-4,0,False,False,False,False,-6,0,False,False,False,False
 GATX,GATX CORP,Industrials,mid,6191769088,6.19,-6,0,False,False,False,False,-1,-7,False,False,False,False
 TXNM,TXNM ENERGY INC,Utilities,mid,6410021888,6.41,-7,0,False,False,False,False,-1,-13,False,False,False,True
@@ -597,9 +598,9 @@ AAOI,APPLIED OPTOELECTRONICS INC,Information Technology,mid,8071222784,8.07,-4,-
 BTSG,BRIGHTSPRING HEALTH SERVICES INC,Health Care,mid,8278835200,8.28,-4,0,False,False,False,False,-4,0,False,False,False,False
 KRG,KITE REALTY GROUP TRUST REIT,Real Estate,mid,5463055360,5.46,-6,-13,False,False,False,True,0,0,False,False,False,False
 QBTS,D WAVE QUANTUM INC,Information Technology,mid,5297163776,5.3,-1,0,False,False,False,False,11,0,False,False,False,False
-ROAD,CONSTRUCTION PARTNERS INC CLASS A,Industrials,mid,5984413184,5.98,0,0,False,False,False,False,-1,0,False,False,False,False
+ROAD,CONSTRUCTION PARTNERS INC CLASS A,Industrials,mid,5984413184,5.98,-1,0,False,False,False,False,-1,0,False,False,False,False
 GBCI,GLACIER BANCORP INC,Financials,mid,5919891456,5.92,-6,0,False,False,False,False,-2,-4,False,False,False,False
-MGY,MAGNOLIA OIL GAS CORP CLASS A,Energy,mid,5934209024,5.93,1,0,False,False,False,False,0,0,False,False,False,False
+MGY,MAGNOLIA OIL GAS CORP CLASS A,Energy,mid,5934209024,5.93,1,0,False,False,False,False,-13,0,False,False,False,False
 UBSI,UNITED BANKSHARES INC,Financials,mid,5837493760,5.84,-6,-6,False,False,False,False,-2,-9,False,False,False,False
 ESNT,ESSENT GROUP LTD,Financials,mid,5593155072,5.59,-4,0,False,False,False,False,-2,-4,False,False,False,False
 CNX,CNX RESOURCES CORP,Energy,mid,5511071744,5.51,-2,3,False,False,False,False,3,0,False,False,False,False
@@ -639,7 +640,7 @@ AUB,ATLANTIC UNION BANKSHARES CORP,Financials,mid,5162891776,5.16,-6,0,False,Fal
 POWL,POWELL INDUSTRIES INC,Industrials,mid,6651663872,6.65,-5,0,False,False,False,False,-3,-6,False,False,False,False
 MAC,MACERICH REIT,Real Estate,mid,5261588480,5.26,-6,0,False,False,False,False,-2,0,False,False,False,False
 COGT,COGENT BIOSCIENCES INC,Health Care,mid,5714893312,5.71,-1,0,False,False,False,False,-1,0,False,False,False,False
-CIFR,CIPHER DIGITAL INC,Information Technology,mid,5193630720,5.19,-3,0,False,False,False,False,-1,0,False,False,False,False
+CIFR,CIPHER DIGITAL INC,Information Technology,mid,5193630720,5.19,-3,0,False,False,False,False,0,0,False,False,False,False
 PECO,PHILLIPS EDISON AND COMPANY INC,Real Estate,mid,5205051904,5.21,-2,0,False,False,False,False,4,-11,False,False,False,False
 CORZ,CORE SCIENTIFIC INC,Information Technology,mid,5117848576,5.12,-4,0,False,False,False,False,-2,-11,False,False,False,False
 HIMS,HIMS HERS HEALTH INC CLASS A,Health Care,mid,4362747904,4.36,2,4,False,False,False,False,1,0,False,False,False,False
@@ -647,7 +648,7 @@ OPCH,OPTION CARE HEALTH INC,Health Care,mid,4360387072,4.36,-4,0,False,False,Fal
 HUT,HUT CORP,Information Technology,mid,5334787072,5.33,-4,0,False,False,False,False,-2,0,False,False,False,False
 ATMU,ATMUS FILTRATION TECHNOLOGIES INC,Industrials,mid,4705965568,4.71,-3,0,False,False,False,False,-1,-13,False,False,False,True
 CRC,CALIFORNIA RESOURCES CORP,Energy,mid,6009262592,6.01,-1,0,False,False,False,False,-13,0,False,False,False,False
-KNF,KNIFE RIVER CORP,Materials,mid,4188048896,4.19,-1,0,False,False,False,False,-1,0,False,False,False,False
+KNF,KNIFE RIVER CORP,Materials,mid,4188048896,4.19,-1,0,False,False,False,False,0,0,False,False,False,False
 KGS,KODIAK GAS SERVICES INC,Energy,mid,4976727552,4.98,-3,0,False,False,False,False,-13,-4,False,False,False,False
 GLNG,GOLAR LNG LTD,Energy,mid,5627403264,5.63,-4,0,False,False,False,False,-4,0,False,False,False,False
 MIR,MIRION TECHNOLOGIES INC CLASS A,Information Technology,mid,4764251648,4.76,-5,0,False,False,False,False,-1,0,False,False,False,False
@@ -663,10 +664,10 @@ RDN,RADIAN GROUP INC,Financials,mid,4585567232,4.59,-4,0,False,False,False,False
 FTDR,FRONTDOOR INC,Consumer Discretionary,mid,3854313472,3.85,-4,0,False,False,False,False,3,0,False,False,False,False
 ALKS,ALKERMES,Health Care,mid,5806083584,5.81,2,-3,False,False,False,False,-2,0,False,False,False,False
 AX,AXOS FINANCIAL INC,Financials,mid,4838055424,4.84,-5,0,False,False,False,False,-1,-4,False,False,False,False
-VICR,VICOR CORP,Industrials,mid,7061876224,7.06,0,0,False,False,False,False,-1,-6,False,False,False,False
-HASI,HA SUSTAINABLE INFRASTRUCTURE CAPI,Financials,mid,4756929536,4.76,-5,0,False,False,False,False,-2,0,False,False,False,False
+VICR,VICOR CORP,Industrials,mid,7061876224,7.06,-1,0,False,False,False,False,-1,-6,False,False,False,False
+HASI,HA SUSTAINABLE INFRASTRUCTURE CAPI,Financials,mid,4756929536,4.76,0,0,False,False,False,False,-2,0,False,False,False,False
 BMI,BADGER METER INC,Information Technology,mid,4573631488,4.57,-1,0,False,False,False,False,-2,0,False,False,False,False
-OSIS,OSI SYSTEMS INC,Information Technology,mid,4551937536,4.55,-3,0,False,False,False,False,-2,0,False,False,False,False
+OSIS,OSI SYSTEMS INC,Information Technology,mid,4551937536,4.55,-3,0,False,False,False,False,0,0,False,False,False,False
 TGTX,TG THERAPEUTICS INC,Health Care,mid,5354347008,5.35,-11,-2,False,False,False,False,-4,0,False,False,False,False
 REZI,RESIDEO TECHNOLOGIES INC,Industrials,mid,5239199744,5.24,-5,0,False,False,False,False,-2,0,False,False,False,False
 NOVT,NOVANTA INC,Information Technology,mid,4176428288,4.18,-1,0,False,False,False,False,-1,0,False,False,False,False
@@ -690,10 +691,11 @@ MYRG,MYR GROUP INC,Industrials,mid,4439488000,4.44,-5,0,False,False,False,False,
 MRCY,MERCURY SYSTEMS INC,Industrials,mid,4454285824,4.45,-4,0,False,False,False,False,-1,-13,False,False,False,True
 ACIW,ACI WORLDWIDE INC,Information Technology,mid,4260627456,4.26,-1,0,False,False,False,False,-1,0,False,False,False,False
 TERN,TERNS PHARMACEUTICALS INC,Health Care,mid,6084594176,6.08,6,0,False,False,False,False,-10,0,False,False,False,False
-ASB,ASSOCIATED BANCORP,Financials,mid,4312032768,4.31,-6,0,False,False,False,False,0,0,False,False,False,False
+ASB,ASSOCIATED BANCORP,Financials,mid,4312032768,4.31,-6,0,False,False,False,False,-2,0,False,False,False,False
 EBC,EASTERN BANKSHARES INC,Financials,mid,4465253888,4.47,-7,0,False,False,False,False,-2,0,False,False,False,False
+LGND,LIGAND PHARMACEUTICALS INC,Health Care,mid,3980051968,3.98,-4,0,False,False,False,False,-1,0,False,False,False,False
 NHI,NATIONAL HEALTH INVESTORS REIT INC,Real Estate,mid,4029868032,4.03,-4,0,False,False,False,False,-1,-3,False,False,False,False
-ANF,ABERCROMBIE AND FITCH CLASS A,Consumer Discretionary,mid,4230359552,4.23,-6,0,False,False,False,False,-2,0,False,False,False,False
+ANF,ABERCROMBIE AND FITCH CLASS A,Consumer Discretionary,mid,4230359552,4.23,0,0,False,False,False,False,-2,0,False,False,False,False
 OUT,OUTFRONT MEDIA INC,Real Estate,mid,4772720128,4.77,-4,-12,False,False,False,False,-1,-9,False,False,False,False
 MMSI,MERIT MEDICAL SYSTEMS INC,Health Care,mid,4023541504,4.02,-1,0,False,False,False,False,7,0,False,False,False,False
 IESC,IES INC,Industrials,mid,9615259648,9.62,-5,0,False,False,False,False,-2,0,False,False,False,False
@@ -702,7 +704,7 @@ PBF,PBF ENERGY INC CLASS A,Energy,mid,5331223040,5.33,6,0,False,False,False,Fals
 TPH,TRI POINTE HOMES INC,Consumer Discretionary,mid,3980087552,3.98,-1,0,False,False,False,False,-4,-5,False,False,False,False
 MMS,MAXIMUS INC,Industrials,mid,3402740224,3.4,-2,0,False,False,False,False,5,-4,False,False,False,False
 CNO,CNO FINANCIAL GROUP INC,Financials,mid,3880470528,3.88,-6,0,False,False,False,False,-1,0,False,False,False,False
-UNF,UNIFIRST CORP,Industrials,mid,4631837184,4.63,-5,0,False,False,False,False,0,0,False,False,False,False
+UNF,UNIFIRST CORP,Industrials,mid,4631837184,4.63,-5,0,False,False,False,False,2,-9,False,False,False,False
 ACLX,ARCELLX INC,Health Care,mid,6711727616,6.71,-1,0,False,False,False,False,-7,0,False,False,False,False
 URBN,URBAN OUTFITTERS INC,Consumer Discretionary,mid,5791814144,5.79,-6,0,False,False,False,False,-2,0,False,False,False,False
 LMND,LEMONADE INC,Financials,mid,4695290368,4.7,2,11,False,False,False,False,-4,0,False,False,False,False
@@ -721,19 +723,19 @@ INDV,INDIVIOR PHARMACEUTICALS INC,Health Care,mid,3810737664,3.81,-1,0,False,Fal
 FSLY,FASTLY INC CLASS A,Information Technology,mid,5085300224,5.09,-5,-9,False,False,False,False,-9,-1,False,True,False,False
 CVCO,CAVCO INDUSTRIES INC,Consumer Discretionary,mid,3745169408,3.75,-1,0,False,False,False,False,-1,-4,False,False,False,False
 MIRM,MIRUM PHARMACEUTICALS INC,Health Care,mid,5682370048,5.68,-7,0,False,False,False,False,-2,-4,False,False,False,False
-IRTC,IRHYTHM HOLDINGS INC,Health Care,mid,3774597632,3.77,-3,0,False,False,False,False,-1,0,False,False,False,False
+IRTC,IRHYTHM HOLDINGS INC,Health Care,mid,3774597632,3.77,0,0,False,False,False,False,-1,0,False,False,False,False
 PTEN,PATTERSON UTI ENERGY INC,Energy,mid,4027292672,4.03,1,0,False,False,False,False,-19,0,False,False,False,False
 FLG,FLAGSTAR BANK NATIONAL ASSOCIATION,Financials,mid,5607586816,5.61,-5,0,False,False,False,False,-3,0,False,False,False,False
 LRN,STRIDE INC,Consumer Discretionary,mid,3931487488,3.93,-5,0,False,False,False,False,-4,-6,False,False,False,False
 ABG,ASBURY AUTOMOTIVE GROUP INC,Consumer Discretionary,mid,3758034432,3.76,-1,0,False,False,False,False,-1,0,False,False,False,False
 CALM,CAL MAINE FOODS INC,Consumer Staples,mid,3721780992,3.72,2,0,False,False,False,False,4,12,False,False,False,False
 TDW,TIDEWATER INC,Energy,mid,4183013376,4.18,-11,-3,False,False,False,False,-3,-4,False,False,False,False
-BNL,BROADSTONE NET LEASE INC,Real Estate,mid,3721847040,3.72,-5,0,False,False,False,False,0,0,False,False,False,False
+BNL,BROADSTONE NET LEASE INC,Real Estate,mid,3721847040,3.72,-5,0,False,False,False,False,-1,-3,False,False,False,False
 SFBS,SERVISFIRST BANCSHARES INC,Financials,mid,3995315200,4.0,-5,0,False,False,False,False,-1,0,False,False,False,False
 PATK,PATRICK INDUSTRIES INC,Consumer Discretionary,mid,3806704384,3.81,-5,0,False,False,False,False,-1,-7,False,False,False,False
 IBOC,INTERNATIONAL BANCSHARES CORP,Financials,mid,4213783808,4.21,-5,0,False,False,False,False,-3,0,False,False,False,False
 CDP,COPT DEFENSE PROPERTIES,Real Estate,mid,3624329472,3.62,-4,0,False,False,False,False,-1,0,False,False,False,False
-AZZ,AZZ INC,Industrials,mid,3798614272,3.8,-5,0,False,False,False,False,0,0,False,False,False,False
+AZZ,AZZ INC,Industrials,mid,3798614272,3.8,-5,0,False,False,False,False,-2,-10,False,False,False,False
 PSMT,PRICESMART INC,Consumer Staples,mid,4698878464,4.7,-6,0,False,False,False,False,-2,0,False,False,False,False
 CBT,CABOT CORP,Materials,mid,3965186304,3.97,-1,0,False,False,False,False,-2,-8,False,False,False,False
 SXT,SENSIENT TECHNOLOGIES CORP,Materials,mid,3928763136,3.93,-5,0,False,False,False,False,-2,0,False,False,False,False
@@ -749,7 +751,7 @@ CRNX,CRINETICS PHARMACEUTICALS INC,Health Care,mid,3898179328,3.9,-5,0,False,Fal
 LEU,CENTRUS ENERGY CORP CLASS A,Energy,mid,3602744832,3.6,-1,0,False,False,False,False,4,0,False,False,False,False
 STNE,STONECO LTD CLASS A,Financials,mid,3472220160,3.47,2,0,False,False,False,False,-2,0,False,False,False,False
 HP,HELMERICH & PAYNE INC,Energy,mid,3538999296,3.54,-1,0,False,False,False,False,1,0,False,False,False,False
-BGC,BGC GROUP INC CLASS A,Financials,mid,4733134848,4.73,-7,0,False,False,False,False,-2,0,False,False,False,False
+BGC,BGC GROUP INC CLASS A,Financials,mid,4733134848,4.73,-7,0,False,False,False,False,0,0,False,False,False,False
 BOX,BOX INC CLASS A,Information Technology,mid,3440332288,3.44,1,0,False,False,False,False,3,0,False,False,False,False
 KAI,KADANT INC,Industrials,mid,3378734080,3.38,-3,0,False,False,False,False,-1,0,False,False,False,False
 HRI,HERC HOLDINGS INC,Industrials,mid,3038028544,3.04,-1,0,False,False,False,False,8,0,False,False,False,False
@@ -806,11 +808,11 @@ PJT,PJT PARTNERS INC CLASS A,Financials,mid,5563118592,5.56,-15,-5,False,False,F
 BXMT,BLACKSTONE MORTGAGE TRUST REIT CLA,Financials,mid,3152037888,3.15,-1,0,False,False,False,False,-1,-7,False,False,False,False
 PBH,PRESTIGE CONSUMER HEALTHCARE INC,Health Care,mid,2523448832,2.52,9,0,True,False,False,False,5,0,False,False,False,False
 VCTR,VICTORY CAPITAL HOLDINGS CLASS A I,Financials,mid,4030643712,4.03,-1,0,False,False,False,False,-1,-5,False,False,False,False
-CPK,CHESAPEAKE UTILITIES CORP,Utilities,mid,3105647616,3.11,-7,0,False,False,False,False,-1,0,False,False,False,False
+CPK,CHESAPEAKE UTILITIES CORP,Utilities,mid,3105647616,3.11,0,0,False,False,False,False,-1,0,False,False,False,False
 AAP,ADVANCE AUTO PARTS INC,Consumer Discretionary,mid,3114983168,3.11,-1,-2,False,False,False,False,-2,0,False,False,False,False
 SYRE,SPYRE THERAPEUTICS INC,Health Care,mid,3736941056,3.74,-10,-2,False,False,False,False,-3,-12,False,False,False,False
 WDFC,WD-40,Consumer Staples,mid,2789169152,2.79,-4,0,False,False,False,False,6,0,False,False,False,False
-GSAT,GLOBALSTAR VOTING INC,Communication,mid,9992529920,9.99,-5,0,False,False,False,False,-3,0,False,False,False,False
+GSAT,GLOBALSTAR VOTING INC,Communication,mid,9992529920,9.99,0,0,False,False,False,False,-3,0,False,False,False,False
 NMIH,NMI HOLDINGS INC,Financials,mid,2858910208,2.86,-4,0,False,False,False,False,-1,-5,False,False,False,False
 CRGY,CRESCENT ENERGY CLASS A,Energy,mid,4406979584,4.41,-2,0,False,False,False,False,-13,0,False,False,False,False
 CBU,COMMUNITY FINANCIAL SYSTEM INC,Financials,mid,3133910528,3.13,-7,0,False,False,False,False,-2,0,False,False,False,False
@@ -821,7 +823,7 @@ FIBK,FIRST INTERSTATE BANCSYSTEM INC,Financials,mid,3385440768,3.39,-1,0,False,F
 SEI,SOLARIS OILFIELD INFRASTRUCTURE IN,Energy,mid,5197446656,5.2,-1,0,False,False,False,False,-4,-11,False,False,False,False
 LCII,LCI INDUSTRIES,Consumer Discretionary,mid,2979705088,2.98,-1,0,False,False,False,False,-1,-10,False,False,False,False
 LXP,LXP INDUSTRIAL TRUST,Real Estate,mid,2727222528,2.73,-4,0,False,False,False,False,-1,0,False,False,False,False
-RUN,SUNRUN INC,Industrials,mid,3165647360,3.17,0,0,False,False,False,False,-2,0,False,False,False,False
+RUN,SUNRUN INC,Industrials,mid,3165647360,3.17,2,0,False,False,False,False,-2,0,False,False,False,False
 HAE,HAEMONETICS CORP,Health Care,mid,2660193792,2.66,-6,-11,False,False,False,False,4,0,False,False,False,False
 CC,CHEMOURS,Materials,mid,3234897664,3.23,1,0,False,False,False,False,-4,0,False,False,False,False
 VRNS,VARONIS SYSTEMS INC,Information Technology,mid,2656226560,2.66,-4,0,False,False,False,False,3,0,False,False,False,False
@@ -859,13 +861,13 @@ UE,URBAN EDGE PROPERTIES,Real Estate,mid,2849896448,2.85,-4,0,False,False,False,
 PI,IMPINJ INC,Information Technology,mid,3036772864,3.04,-1,0,False,False,False,False,-2,0,False,False,False,False
 TARS,TARSUS PHARMACEUTICALS INC,Health Care,mid,2984131328,2.98,-1,0,False,False,False,False,-1,0,False,False,False,False
 AKR,ACADIA REALTY TRUST REIT,Real Estate,mid,2751985152,2.75,-6,-8,False,False,False,False,-1,0,False,False,False,False
-TWST,TWIST BIOSCIENCE CORP,Health Care,mid,3078460672,3.08,0,0,False,False,False,False,-2,-5,False,False,False,False
+TWST,TWIST BIOSCIENCE CORP,Health Care,mid,3078460672,3.08,-5,0,False,False,False,False,-2,-5,False,False,False,False
 CON,CONCENTRA GROUP HOLDINGS PARENT IN,Health Care,mid,2687179776,2.69,-1,0,False,False,False,False,6,0,False,False,False,False
 COCO,THE VITA COCO COMPANY INC,Consumer Staples,mid,2753644032,2.75,-4,2,False,False,False,False,4,0,False,False,False,False
 SUPN,SUPERNUS PHARMACEUTICALS INC,Health Care,mid,2906724864,2.91,-1,0,False,False,False,False,-1,0,False,False,False,False
 DNLI,DENALI THERAPEUTICS INC,Health Care,mid,3274914048,3.27,1,0,False,False,False,False,1,0,False,False,False,False
 NOG,NORTHERN OIL AND GAS INC,Energy,mid,2956358144,2.96,-2,0,False,False,False,False,-1,0,False,False,False,False
-MGEE,MGE ENERGY INC,Utilities,mid,2881600768,2.88,-12,-4,False,False,False,False,-1,0,False,False,False,False
+MGEE,MGE ENERGY INC,Utilities,mid,2881600768,2.88,-12,-4,False,False,False,False,0,0,False,False,False,False
 UCTT,ULTRA CLEAN HOLDINGS INC,Information Technology,mid,2873150976,2.87,-5,0,False,False,False,False,-2,-8,False,False,False,False
 JOE,ST JOE,Real Estate,mid,3762056448,3.76,-7,0,False,False,False,False,4,-2,False,False,False,False
 CPRX,CATALYST PHARMACEUTICALS INC,Health Care,mid,3034706944,3.03,-11,-3,False,False,False,False,-3,-13,False,False,False,True
@@ -900,7 +902,7 @@ PFS,PROVIDENT FINANCIAL SERVICES INC,Financials,mid,2783830784,2.78,-6,0,False,F
 TRN,TRINITY INDUSTRIES INC,Industrials,mid,2643551744,2.64,-1,-2,False,False,False,False,-2,0,False,False,False,False
 BEAM,BEAM THERAPEUTICS INC,Health Care,mid,2511774976,2.51,-6,0,False,False,False,False,-1,-6,False,False,False,False
 PHIN,PHINIA INC,Consumer Discretionary,mid,2637936640,2.64,-1,0,False,False,False,False,-2,-7,False,False,False,False
-PPTA,PERPETUA RESOURCES CORP,Materials,mid,3664035072,3.66,-9,-1,False,True,False,False,-1,0,False,False,False,False
+PPTA,PERPETUA RESOURCES CORP,Materials,mid,3664035072,3.66,0,0,False,False,False,False,-1,0,False,False,False,False
 NGVT,INGEVITY CORP,Materials,mid,2508899840,2.51,-1,0,False,False,False,False,-2,-5,False,False,False,False
 MCY,MERCURY GENERAL CORP,Financials,mid,4885830656,4.89,-4,0,False,False,False,False,-1,-5,False,False,False,False
 WAFD,WAFD INC,Financials,mid,2431391232,2.43,-5,0,False,False,False,False,-2,0,False,False,False,False
@@ -918,7 +920,7 @@ ERAS,ERASCA INC,Health Care,mid,5535340032,5.54,-14,0,False,False,False,False,-2
 VC,VISTEON CORP,Consumer Discretionary,mid,2493387776,2.49,-6,0,False,False,False,False,-2,0,False,False,False,False
 ABM,ABM INDUSTRIES INC,Industrials,mid,2268929024,2.27,-5,0,False,False,False,False,-1,0,False,False,False,False
 ANDE,ANDERSONS INC,Consumer Staples,mid,2499864320,2.5,-5,0,False,False,False,False,-5,-7,False,False,False,False
-LMAT,LEMAITRE VASCULAR INC,Health Care,mid,2471224576,2.47,-4,0,False,False,False,False,0,0,False,False,False,False
+LMAT,LEMAITRE VASCULAR INC,Health Care,mid,2471224576,2.47,-4,0,False,False,False,False,-2,0,False,False,False,False
 APAM,ARTISAN PARTNERS ASSET MANAGEMENT,Financials,mid,2579309568,2.58,-1,0,False,False,False,False,-1,0,False,False,False,False
 AMR,ALPHA METALLURGICAL RESOURCE INC,Materials,mid,2691312896,2.69,-1,0,False,False,False,False,-5,0,False,False,False,False
 TRMK,TRUSTMARK CORP,Financials,mid,2507353344,2.51,-7,0,False,False,False,False,-2,0,False,False,False,False
@@ -947,9 +949,9 @@ BELFB,BEL FUSE INC CLASS B,Information Technology,mid,2590114304,2.59,-4,0,False
 DNOW,DNOW INC,Industrials,mid,2251061504,2.25,-3,0,False,False,False,False,-3,0,False,False,False,False
 NWN,NORTHWEST NATURAL HOLDING COMPANY,Utilities,mid,2271879936,2.27,-9,-1,False,True,False,False,-2,0,False,False,False,False
 BANC,BANC OF CALIFORNIA INC,Financials,mid,2723417088,2.72,-6,0,False,False,False,False,-2,-7,False,False,False,False
-BCRX,BIOCRYST PHARMACEUTICALS INC,Health Care,mid,2262221824,2.26,-3,0,False,False,False,False,-9,-1,False,True,False,False
+BCRX,BIOCRYST PHARMACEUTICALS INC,Health Care,mid,2262221824,2.26,-3,0,False,False,False,False,0,0,False,False,False,False
 CXW,CORECIVIC REIT INC,Industrials,mid,2145031296,2.15,-4,0,False,False,False,False,-4,0,False,False,False,False
-DAVE,DAVE INC CLASS A,Financials,mid,2289932544,2.29,-1,-8,False,False,False,False,3,0,False,False,False,False
+DAVE,DAVE INC CLASS A,Financials,mid,2289932544,2.29,0,0,False,False,False,False,3,0,False,False,False,False
 HURN,HURON CONSULTING GROUP INC,Industrials,mid,2160774400,2.16,-7,0,False,False,False,False,-1,0,False,False,False,False
 BANF,BANCFIRST CORP,Financials,mid,3658763776,3.66,-6,0,False,False,False,False,-2,0,False,False,False,False
 NTB,BANK OF NT BUTTERFIELD & SON LTD,Financials,mid,2203026944,2.2,-7,-10,False,False,False,False,-3,-10,False,False,False,False
@@ -959,8 +961,8 @@ VSH,VISHAY INTERTECHNOLOGY INC,Information Technology,mid,2523056896,2.52,-5,0,F
 CPRI,CAPRI HOLDINGS LTD,Consumer Discretionary,mid,2140146944,2.14,-5,0,False,False,False,False,-2,0,False,False,False,False
 OSW,ONESPAWORLD HOLDINGS LTD,Consumer Discretionary,mid,2393841920,2.39,-5,-5,False,False,False,False,-3,0,False,False,False,False
 MTX,MINERALS TECHNOLOGIES INC,Materials,mid,2157607680,2.16,-1,0,False,False,False,False,-2,-6,False,False,False,False
-VERA,VERA THERAPEUTICS INC CLASS A,Health Care,mid,2915592448,2.92,2,0,False,False,False,False,0,0,False,False,False,False
-HLIO,HELIOS TECHNOLOGIES INC,Industrials,mid,2228553728,2.23,-5,0,False,False,False,False,-2,-6,False,False,False,False
+VERA,VERA THERAPEUTICS INC CLASS A,Health Care,mid,2915592448,2.92,2,0,False,False,False,False,-2,0,False,False,False,False
+HLIO,HELIOS TECHNOLOGIES INC,Industrials,mid,2228553728,2.23,0,0,False,False,False,False,-2,-6,False,False,False,False
 FBK,FB FINANCIAL CORP,Financials,mid,2855431168,2.86,-6,0,False,False,False,False,-2,-12,False,False,False,False
 KN,KNOWLES CORP,Information Technology,mid,2212652544,2.21,-5,0,False,False,False,False,-2,0,False,False,False,False
 TBBK,BANCORP INC,Financials,mid,2444016128,2.44,-6,0,False,False,False,False,-2,0,False,False,False,False
@@ -974,7 +976,7 @@ BL,BLACKLINE INC,Information Technology,mid,2161490176,2.16,3,13,False,False,Tru
 KNTK,KINETIK HOLDINGS INC CLASS A,Energy,mid,3013803776,3.01,5,0,False,False,False,False,-14,0,False,False,False,False
 PLAB,PHOTRONICS INC,Information Technology,mid,2408776960,2.41,-1,-4,False,False,False,False,-3,0,False,False,False,False
 SNDX,SYNDAX PHARMACEUTICALS INC,Health Care,mid,2218244864,2.22,-4,0,False,False,False,False,-7,-8,False,False,False,False
-EWTX,EDGEWISE THERAPEUTICS INC,Health Care,mid,3575326720,3.58,1,0,False,False,False,False,-3,-12,False,False,False,False
+EWTX,EDGEWISE THERAPEUTICS INC,Health Care,mid,3575326720,3.58,0,0,False,False,False,False,-3,-12,False,False,False,False
 MRX,MAREX GROUP PLC,Financials,mid,3149312000,3.15,-11,-3,False,False,False,False,-2,-10,False,False,False,False
 NHC,NATIONAL HEALTHCARE CORP,Health Care,mid,2529348096,2.53,-4,0,False,False,False,False,-1,0,False,False,False,False
 PLUS,EPLUS,Information Technology,mid,2041345536,2.04,-4,0,False,False,False,False,-1,0,False,False,False,False
@@ -1028,7 +1030,7 @@ FCF,FIRST COMMONWEALTH FINANCIAL CORP,Financials,small,1827445760,1.83,-13,-5,Fa
 PAGS,PAGSEGURO DIGITAL LTD CLASS A,Financials,mid,2890230016,2.89,-5,0,False,False,False,False,-2,0,False,False,False,False
 XMTR,XOMETRY INC CLASS A,Industrials,mid,2194764288,2.19,-5,0,False,False,False,False,-1,-13,False,False,False,True
 AGYS,AGILYSYS INC,Information Technology,small,1998215296,2.0,3,0,False,False,False,False,20,10,False,False,False,False
-NWBI,NORTHWEST BANCSHARES INC,Financials,small,1889583360,1.89,-7,0,False,False,False,False,-2,0,False,False,False,False
+NWBI,NORTHWEST BANCSHARES INC,Financials,small,1889583360,1.89,0,0,False,False,False,False,-2,0,False,False,False,False
 RCUS,ARCUS BIOSCIENCES INC,Health Care,mid,2878023680,2.88,-7,0,False,False,False,False,-2,0,False,False,False,False
 RCAT,RED CAT HOLDINGS INC,Industrials,small,1567535616,1.57,-1,0,False,False,False,False,2,-4,False,False,False,False
 ALG,ALAMO GROUP INC,Industrials,mid,2046767360,2.05,-5,0,False,False,False,False,-2,-6,False,False,False,False
@@ -1040,10 +1042,10 @@ MD,PEDIATRIX MEDICAL GROUP INC,Health Care,small,1759467136,1.76,-4,0,False,Fals
 GRAL,GRAIL INC,Health Care,mid,2255704064,2.26,2,6,False,False,False,False,-2,-13,False,False,False,True
 BLBD,BLUE BIRD CORP,Industrials,small,1853704960,1.85,-5,0,False,False,False,False,-2,0,False,False,False,False
 HMN,HORACE MANN EDUCATORS CORP,Financials,small,1757997440,1.76,-4,0,False,False,False,False,-2,0,False,False,False,False
-BLKB,BLACKBAUD INC,Information Technology,small,1819133824,1.82,1,9,False,False,False,False,5,7,False,False,False,False
+BLKB,BLACKBAUD INC,Information Technology,small,1819133824,1.82,1,9,False,False,False,False,0,0,False,False,False,False
 DXPE,DXP ENTERPRISES INC,Industrials,mid,2247469568,2.25,-6,0,False,False,False,False,-2,-5,False,False,False,False
 OFG,OFG BANCORP,Financials,small,1788683776,1.79,-6,0,False,False,False,False,-3,0,False,False,False,False
-CWK,CUSHMAN AND WAKEFIELD LTD,Real Estate,mid,2893134592,2.89,-6,0,False,False,False,False,-1,0,False,False,False,False
+CWK,CUSHMAN AND WAKEFIELD LTD,Real Estate,mid,2893134592,2.89,0,0,False,False,False,False,-1,0,False,False,False,False
 SGHC,SUPER GROUP LTD,Consumer Discretionary,mid,5374927872,5.37,-1,-11,False,False,False,False,-2,0,False,False,False,False
 HCI,HCI GROUP INC,Financials,small,1988938368,1.99,-1,0,False,False,False,False,4,-11,False,False,False,False
 AUPH,AURINIA PHARMACEUTICALS INC,Health Care,mid,2075676928,2.08,-6,0,False,False,False,False,-3,0,False,False,False,False
@@ -1052,7 +1054,6 @@ SHO,SUNSTONE HOTEL INVESTORS REIT INC,Real Estate,small,1707570688,1.71,-1,0,Fal
 UTI,UNIVERSAL TECHNICAL INSTITUTE INC,Consumer Discretionary,mid,2010999424,2.01,1,0,False,False,False,False,1,0,False,False,False,False
 DFTX,DEFINIUM THERAPEUTICS INC,Health Care,mid,2061757312,2.06,-6,0,False,False,False,False,-7,-8,False,False,False,False
 CECO,CECO ENVIRONMENTAL CORP,Industrials,mid,2217700096,2.22,-1,0,False,False,False,False,-3,-9,False,False,False,False
-BUR,BURFORD CAPITAL LTD,Financials,small,906235392,0.91,-3,0,False,False,False,False,10,0,False,False,False,False
 KWR,QUAKER HOUGHTON CORP,Materials,mid,2090090112,2.09,-1,0,False,False,False,False,-1,-6,False,False,False,False
 NTST,NETSTREIT CORP,Real Estate,mid,2119675520,2.12,-7,0,False,False,False,False,4,-2,False,False,False,False
 DAWN,DAY ONE BIOPHARMACEUTICALS INC,Health Care,mid,2215735552,2.22,-8,0,False,False,False,False,-6,0,False,False,False,False
@@ -1065,14 +1066,14 @@ IOSP,INNOSPEC INC,Materials,small,1836667648,1.84,-1,0,False,False,False,False,-
 WERN,WERNER ENTERPRISES INC,Industrials,small,1823622016,1.82,-6,0,False,False,False,False,-1,-7,False,False,False,False
 EOSE,EOS ENERGY ENTERPRISES INC CLASS A,Industrials,small,1686988288,1.69,2,10,False,False,False,False,10,2,False,False,False,False
 IMAX,IMAX CORP,Communication,mid,2166739712,2.17,1,8,False,False,False,False,-1,-9,False,False,False,False
-VCEL,VERICEL CORP,Health Care,small,1738804736,1.74,0,0,False,False,False,False,-2,0,False,False,False,False
+VCEL,VERICEL CORP,Health Care,small,1738804736,1.74,-6,13,False,False,True,False,-2,0,False,False,False,False
 ADNT,ADIENT PLC,Consumer Discretionary,small,1612316032,1.61,2,0,False,False,False,False,-1,-4,False,False,False,False
 FRSH,FRESHWORKS INC CLASS A,Information Technology,mid,2364004864,2.36,1,0,False,False,False,False,2,0,False,False,False,False
 TNDM,TANDEM DIABETES CARE INC,Health Care,small,1271545600,1.27,-1,0,False,False,False,False,3,0,False,False,False,False
-SPNT,SIRIUSPOINT LTD,Financials,mid,2596014592,2.6,0,0,False,False,False,False,-2,0,False,False,False,False
+SPNT,SIRIUSPOINT LTD,Financials,mid,2596014592,2.6,-7,0,False,False,False,False,-2,0,False,False,False,False
 USAR,USA RARE EARTH INC CLASS A,Materials,mid,3470180864,3.47,-1,0,False,False,False,False,4,0,False,False,False,False
 IPAR,INTERPARFUMS INC,Consumer Staples,mid,2906024448,2.91,2,11,False,False,False,False,6,-4,False,False,False,False
-BRZE,BRAZE INC CLASS A,Information Technology,mid,2686465280,2.69,0,0,False,False,False,False,-6,0,False,False,False,False
+BRZE,BRAZE INC CLASS A,Information Technology,mid,2686465280,2.69,3,0,False,False,False,False,-6,0,False,False,False,False
 SYBT,STOCK YARDS BANCORP INC,Financials,small,1983165312,1.98,-7,0,False,False,False,False,-3,0,False,False,False,False
 OI,O I GLASS INC,Materials,small,1589703296,1.59,-1,0,False,False,False,False,-1,-7,False,False,False,False
 PTON,PELOTON INTERACTIVE CLASS A INC,Consumer Discretionary,small,1948739968,1.95,-6,11,False,False,False,False,-3,0,False,False,False,False
@@ -1085,6 +1086,7 @@ TNK,TEEKAY TANKERS LTD CLASS A,Energy,mid,2667230464,2.67,-6,4,False,False,False
 ICHR,ICHOR HOLDINGS LTD,Information Technology,small,1667085184,1.67,-5,0,False,False,False,False,-2,-9,False,False,False,False
 AGIO,AGIOS PHARMACEUTICALS INC,Health Care,mid,2062444544,2.06,1,0,False,False,False,False,-2,0,False,False,False,False
 DHC,DIVERSIFIED HEALTHCARE TRUST,Real Estate,small,1675477504,1.68,-4,0,False,False,False,False,3,-5,False,False,False,False
+OCUL,OCULAR THERAPEUTIX INC,Health Care,small,1848203136,1.85,-1,0,False,False,False,False,3,0,False,False,False,False
 ORKA,ORUKA THERAPEUTICS INC,Health Care,mid,2641121024,2.64,-10,-2,False,False,False,False,-5,0,False,False,False,False
 THR,THERMON GROUP HOLDINGS INC,Industrials,small,1711679616,1.71,-1,0,False,False,False,False,-3,-11,False,False,False,False
 OMCL,OMNICELL INC,Health Care,small,1551636736,1.55,-4,0,False,False,False,False,-1,-9,False,False,False,False
@@ -1105,7 +1107,7 @@ ASGN,ASGN INC,Information Technology,small,1667435008,1.67,2,6,False,False,False
 CENTA,CENTRAL GARDEN AND PET CLASS A,Consumer Staples,small,1999600896,2.0,-1,0,False,False,False,False,-1,0,False,False,False,False
 SLNO,SOLENO THERAPEUTICS INC,Health Care,mid,2121008896,2.12,-6,0,False,False,False,False,-1,0,False,False,False,False
 TILE,INTERFACE INC,Industrials,small,1484873344,1.48,-1,0,False,False,False,False,6,-6,False,False,False,False
-LC,LENDINGCLUB CORP,Financials,small,1651116544,1.65,-4,0,False,False,False,False,0,0,False,False,False,False
+LC,LENDINGCLUB CORP,Financials,small,1651116544,1.65,-4,0,False,False,False,False,-1,0,False,False,False,False
 SMR,NUSCALE POWER CORP CLASS A,Industrials,mid,3233821696,3.23,13,4,False,False,False,False,10,2,False,False,False,False
 AVPT,AVEPOINT INC CLASS A,Information Technology,mid,2146629632,2.15,-4,1,False,False,False,False,5,0,False,False,False,False
 WOR,WORTHINGTON ENTERPRISES INC,Industrials,mid,2584569600,2.58,-1,0,False,False,False,False,-2,0,False,False,False,False
@@ -1115,13 +1117,13 @@ BWIN,BALDWIN INSURANCE GROUP INC CLASS,Financials,mid,2161715968,2.16,-1,-5,Fals
 WLY,JOHN WILEY AND SONS INC CLASS A,Communication,mid,2004162944,2.0,-12,-2,False,False,False,False,-6,0,False,False,False,False
 UFPT,UFP TECHNOLOGIES INC,Health Care,small,1481107840,1.48,-1,0,False,False,False,False,9,0,True,False,False,False
 IIPR,INNOVATIVE INDUSTRIAL PROPERTIES I,Real Estate,small,1412701824,1.41,2,0,False,False,False,False,3,0,False,False,False,False
-UPWK,UPWORK INC,Industrials,small,1429364352,1.43,1,2,False,False,False,False,10,0,False,False,False,False
+UPWK,UPWORK INC,Industrials,small,1429364352,1.43,1,2,False,False,False,False,0,0,False,False,False,False
 STBA,S AND T BANCORP INC,Financials,small,1557779456,1.56,-7,0,False,False,False,False,-2,0,False,False,False,False
 PEB,PEBBLEBROOK HOTEL TRUST REIT,Real Estate,small,1456234880,1.46,-4,0,False,False,False,False,-2,0,False,False,False,False
 YELP,YELP INC,Communication,small,1546523520,1.55,-7,0,False,False,False,False,-6,0,False,False,False,False
 IRON,DISC MEDICINE INC,Health Care,mid,2487272960,2.49,-11,-3,False,False,False,False,-2,-10,False,False,False,False
 ATEC,ALPHATEC HOLDNGS INC,Health Care,small,1639192192,1.64,-2,0,False,False,False,False,13,0,False,False,False,False
-XPRO,EXPRO GROUP HOLDINGS NV,Energy,small,1895334272,1.9,-1,0,False,False,False,False,-3,0,False,False,False,False
+XPRO,EXPRO GROUP HOLDINGS NV,Energy,small,1895334272,1.9,-1,0,False,False,False,False,0,0,False,False,False,False
 NSSC,NAPCO SECURITY TECHNOLOGIES INC,Information Technology,small,1421936512,1.42,-5,0,False,False,False,False,-1,-13,False,False,False,True
 CCS,CENTURY COMMUNITIES INC,Consumer Discretionary,small,1655588992,1.66,-1,0,False,False,False,False,-1,0,False,False,False,False
 VRE,VERIS RESIDENTIAL INC,Real Estate,small,1939686144,1.94,-7,0,False,False,False,False,-15,-7,False,False,False,False
@@ -1141,7 +1143,7 @@ XHR,XENIA HOTELS RESORTS REIT INC,Real Estate,small,1490355200,1.49,-1,0,False,F
 ARLO,ARLO TECHNOLOGIES INC,Information Technology,small,1499181440,1.5,2,0,False,False,False,False,0,0,False,False,False,False
 ATRC,ATRICURE INC,Health Care,small,1447973760,1.45,1,0,False,False,False,False,15,7,False,False,False,False
 COHU,COHU INC,Information Technology,small,1506990720,1.51,-5,0,False,False,False,False,-2,0,False,False,False,False
-RLAY,RELAY THERAPEUTICS INC,Health Care,mid,2241221632,2.24,0,0,False,False,False,False,-2,0,False,False,False,False
+RLAY,RELAY THERAPEUTICS INC,Health Care,mid,2241221632,2.24,-6,0,False,False,False,False,-2,0,False,False,False,False
 BLX,BANCO LATINOAMERICANO DE COMERCIO,Financials,small,1946395264,1.95,-6,0,False,False,False,False,-2,0,False,False,False,False
 STOK,STOKE THERAPEUTICS INC,Health Care,small,1936596992,1.94,-3,0,False,False,False,False,-1,0,False,False,False,False
 PRCT,PROCEPT BIOROBOTICS CORP,Health Care,small,1416521728,1.42,4,0,False,False,False,False,1,5,False,False,False,False
@@ -1150,11 +1152,11 @@ NVRI,ENVIRI CORP,Industrials,small,1620844928,1.62,0,-7,False,False,False,False,
 SILA,SILA RLTY TR INC TRUST,Real Estate,small,1311549312,1.31,-6,0,False,False,False,False,6,-3,False,False,False,False
 WVE,WAVE LIFE SCIENCES LTD,Health Care,small,1370496128,1.37,-1,0,False,False,False,False,4,-13,False,False,False,True
 PRGS,PROGRESS SOFTWARE CORP,Information Technology,small,1084847616,1.08,-3,0,False,False,False,False,6,0,False,False,False,False
-INVA,INNOVIVA INC,Health Care,small,1715881600,1.72,-1,-2,False,False,False,False,0,0,False,False,False,False
+INVA,INNOVIVA INC,Health Care,small,1715881600,1.72,-1,-2,False,False,False,False,-2,0,False,False,False,False
 HCSG,HEALTHCARE SERVICES GROUP INC,Industrials,small,1292858624,1.29,-3,0,False,False,False,False,5,0,False,False,False,False
 AXGN,AXOGEN INC,Health Care,small,1787356032,1.79,-1,0,False,False,False,False,-2,-10,False,False,False,False
 WTTR,SELECT WATER SOLUTIONS INC CLASS A,Energy,mid,2095820544,2.1,-1,0,False,False,False,False,-14,0,False,False,False,False
-INOD,INNODATA INC,Industrials,small,1254214272,1.25,-4,0,False,False,False,False,10,0,False,False,False,False
+INOD,INNODATA INC,Industrials,small,1254214272,1.25,-4,0,False,False,False,False,0,0,False,False,False,False
 MXL,MAXLINEAR INC,Information Technology,small,1570963456,1.57,-5,0,False,False,False,False,-2,0,False,False,False,False
 FDP,FRESH DEL MONTE PRODUCE INC,Consumer Staples,small,1970709504,1.97,-3,0,False,False,False,False,-1,0,False,False,False,False
 SLVM,SYLVAMO CORP,Materials,small,1688189184,1.69,2,9,False,False,False,False,-1,0,False,False,False,False
@@ -1169,13 +1171,13 @@ WGS,GENEDX HOLDINGS CORP CLASS A,Health Care,small,1938914560,1.94,-5,6,False,Fa
 HOPE,HOPE BANCORP INC,Financials,small,1491009408,1.49,-5,0,False,False,False,False,-2,-7,False,False,False,False
 QCRH,QCR HOLDINGS INC,Financials,small,1469172352,1.47,-7,0,False,False,False,False,-2,0,False,False,False,False
 PGNY,PROGYNY INC,Health Care,small,1359577088,1.36,-2,0,False,False,False,False,13,5,False,False,False,False
-WWW,WOLVERINE WORLD WIDE INC,Consumer Discretionary,small,1307596928,1.31,-1,0,False,False,False,False,-1,0,False,False,False,False
+WWW,WOLVERINE WORLD WIDE INC,Consumer Discretionary,small,1307596928,1.31,0,0,False,False,False,False,-1,0,False,False,False,False
 ANIP,ANI PHARMACEUTICALS INC,Health Care,small,1666620672,1.67,-7,0,False,False,False,False,-2,0,False,False,False,False
 BRSL,BRIGHTSTAR LOTTERY PLC,Consumer Discretionary,mid,2349049088,2.35,2,0,False,False,False,False,14,6,False,False,False,False
 PRLB,PROTO LABS INC,Industrials,small,1373490944,1.37,-5,0,False,False,False,False,-2,0,False,False,False,False
 ENOV,ENOVIS CORP,Health Care,small,1296029696,1.3,-1,0,False,False,False,False,-1,0,False,False,False,False
 SMPL,THE SIMPLY GOOD FOODS COMPANY,Consumer Staples,small,1345188352,1.35,-2,0,False,False,False,False,11,0,False,False,False,False
-AGM,FEDERAL AGRICULTURAL MORTGAGE NON,Financials,small,1631804288,1.63,-7,0,False,False,False,False,-1,0,False,False,False,False
+AGM,FEDERAL AGRICULTURAL MORTGAGE NON,Financials,small,1631804288,1.63,0,0,False,False,False,False,-1,0,False,False,False,False
 ARDX,ARDELYX INC,Health Care,small,1456769664,1.46,2,0,False,False,False,False,-1,0,False,False,False,False
 LEG,LEGGETT & PLATT INC,Consumer Discretionary,small,1316653824,1.32,-1,0,False,False,False,False,6,-7,False,False,False,False
 HG,HAMILTON INSURANCE GROUP LTD CLASS,Financials,mid,3016181504,3.02,-6,0,False,False,False,False,-2,-9,False,False,False,False
@@ -1200,10 +1202,9 @@ LNN,LINDSAY CORP,Industrials,small,1091185792,1.09,8,0,False,False,False,False,6
 NESR,NATIONAL ENERGY SERVICES REUNITED,Energy,mid,2282044160,2.28,-5,0,False,False,False,False,-2,0,False,False,False,False
 RXRX,RECURSION PHARMACEUTICALS INC CLAS,Health Care,small,1642709120,1.64,-4,0,False,False,False,False,11,0,False,False,False,False
 TFIN,TRIUMPH FINANCIAL INC,Financials,small,1426448256,1.43,-6,0,False,False,False,False,-2,0,False,False,False,False
-PRA,PROASSURANCE CORP,Financials,small,1264775680,1.26,3,-10,False,False,False,False,1,0,False,False,False,False
+PRA,PROASSURANCE CORP,Financials,small,1264775680,1.26,3,-10,False,False,False,False,0,0,False,False,False,False
 SRCE,1ST SOURCE CORP,Financials,small,1727044864,1.73,-12,-4,False,False,False,False,-3,0,False,False,False,False
 WKC,WORLD KINECT CORP,Energy,small,1302853376,1.3,-4,0,False,False,False,False,-1,0,False,False,False,False
-MLKN,MILLERKNOLL INC,Industrials,small,988014912,0.99,-1,0,False,False,False,False,6,0,False,False,False,False
 VTOL,BRISTOW GROUP INC,Energy,small,1378982912,1.38,-6,0,False,False,False,False,-2,-4,False,False,False,False
 CNOB,CONNECTONE BANCORP INC,Financials,small,1358889600,1.36,-6,0,False,False,False,False,-2,0,False,False,False,False
 FIVN,FIVE9 INC,Information Technology,small,1174022912,1.17,2,0,False,False,False,False,5,0,False,False,False,False
@@ -1234,7 +1235,7 @@ ANAB,ANAPTYSBIO INC,Health Care,small,1658199424,1.66,-4,-10,False,False,False,F
 ROCK,GIBRALTAR INDUSTRIES INC,Industrials,small,1149085312,1.15,-1,0,False,False,False,False,7,0,False,False,False,False
 TGLS,TECNOGLASS INC,Industrials,mid,2038810368,2.04,2,0,False,False,False,False,1,0,False,False,False,False
 BFC,BANK FIRST CORP,Financials,small,1534517888,1.53,-7,0,False,False,False,False,-2,0,False,False,False,False
-TNC,TENNANT,Industrials,small,1257638400,1.26,-5,-5,False,False,False,False,0,0,False,False,False,False
+TNC,TENNANT,Industrials,small,1257638400,1.26,-5,-5,False,False,False,False,-3,0,False,False,False,False
 DFIN,DONNELLEY FINANCIAL SOLUTIONS INC,Financials,small,1268207232,1.27,-4,0,False,False,False,False,-1,0,False,False,False,False
 REX,REX AMERICAN RESOURCES CORP,Energy,small,1495701760,1.5,-2,0,False,False,False,False,-8,0,False,False,False,False
 UMH,UMH PROPERTIES INC,Real Estate,small,1243515520,1.24,-7,0,False,False,False,False,-1,-8,False,False,False,False
@@ -1258,7 +1259,7 @@ ALGT,ALLEGIANT TRAVEL,Industrials,small,1528495872,1.53,-1,0,False,False,False,F
 TNET,TRINET GROUP INCINARY,Industrials,small,1815547520,1.82,-4,0,False,False,False,False,-1,1,False,False,False,False
 MLYS,MINERALYS THERAPEUTICS INC,Health Care,mid,2222313984,2.22,-8,0,False,False,False,False,-2,0,False,False,False,False
 PNTG,PENNANT GROUP INC,Health Care,small,1028108160,1.03,-2,0,False,False,False,False,4,0,False,False,False,False
-ORC,ORCHID ISLAND CAPITAL INC,Financials,small,1378353408,1.38,0,0,False,False,False,False,-1,-4,False,False,False,False
+ORC,ORCHID ISLAND CAPITAL INC,Financials,small,1378353408,1.38,-6,0,False,False,False,False,-1,-4,False,False,False,False
 UAMY,UNITED STATES ANTIMONY CORP,Materials,small,1245902080,1.25,-1,-9,False,False,False,False,3,0,False,False,False,False
 PEBO,PEOPLES BANCORP INC,Financials,small,1201792512,1.2,-12,-4,False,False,False,False,-2,0,False,False,False,False
 NAT,NORDIC AMERICAN TANKERS LTD,Energy,small,1302266496,1.3,-6,0,False,False,False,False,-14,-4,False,False,False,False
@@ -1271,7 +1272,7 @@ CIM,CHIMERA INVESTMENT CORP,Financials,small,1070888448,1.07,-6,0,False,False,Fa
 TRS,TRIMAS CORP,Materials,small,1450237568,1.45,-2,0,False,False,False,False,-1,0,False,False,False,False
 AI,C3 AI INC CLASS A,Information Technology,small,1255316096,1.26,-6,0,False,False,False,False,16,0,False,False,False,False
 GPRE,GREEN PLAINS INC,Energy,small,1184466816,1.18,3,0,False,False,False,False,1,0,False,False,False,False
-SAFT,SAFETY INSURANCE GROUP INC,Financials,small,1088755456,1.09,-2,0,False,False,False,False,-1,-7,False,False,False,False
+SAFT,SAFETY INSURANCE GROUP INC,Financials,small,1088755456,1.09,0,0,False,False,False,False,-1,-7,False,False,False,False
 SEZL,SEZZLE INC,Financials,mid,2177601792,2.18,-4,0,False,False,False,False,-1,0,False,False,False,False
 TRIP,TRIPADVISOR INC,Communication,small,1268455552,1.27,-12,-3,False,False,False,False,-2,0,False,False,False,False
 AHCO,ADAPTHEALTH CORP,Health Care,small,1635055232,1.64,-6,0,False,False,False,False,-3,0,False,False,False,False
@@ -1284,7 +1285,6 @@ PAHC,PHIBRO ANIMAL HEALTH CORP CLASS A,Health Care,mid,2250487552,2.25,-4,0,Fals
 WS,WORTHINGTON STEEL INC,Materials,small,1509806592,1.51,-5,0,False,False,False,False,-1,-9,False,False,False,False
 WLDN,WILLDAN GROUP INC,Industrials,small,1188719360,1.19,-4,0,False,False,False,False,-1,0,False,False,False,False
 PWP,PERELLA WEINBERG PARTNERS CLASS A,Financials,small,1619815040,1.62,-1,0,False,False,False,False,-2,0,False,False,False,False
-MFA,MFA FINANCIAL INC,Financials,small,991298304,0.99,-6,0,False,False,False,False,-1,-10,False,False,False,False
 SMA,SMARTSTOP SELF STORAGE REIT INC,Real Estate,mid,2463462144,2.46,-1,0,False,False,False,False,6,0,False,False,False,False
 AESI,ATLAS ENERGY SOLUTIONS INC,Energy,small,1517135872,1.52,7,-6,False,False,False,False,1,0,False,False,False,False
 HLIT,HARMONIC INC,Information Technology,small,1032544320,1.03,-3,0,False,False,False,False,-1,0,False,False,False,False
@@ -1304,7 +1304,6 @@ TWO,TWO HARBORS INVESTMENT CORP,Financials,small,1168080256,1.17,0,6,False,False
 CSR,CENTERSPACE,Real Estate,small,1062466432,1.06,-4,0,False,False,False,False,12,0,False,False,False,False
 PBI,PITNEY BOWES INC,Industrials,small,1649024128,1.65,2,0,False,False,False,False,-3,0,False,False,False,False
 OCFC,OCEANFIRST FINANCIAL CORP,Financials,small,1047012736,1.05,-6,0,False,False,False,False,-2,0,False,False,False,False
-VYX,NCR VOYIX CORP,Information Technology,small,854919872,0.85,-1,0,False,False,False,False,10,0,False,False,False,False
 ASTH,ASTRANA HEALTH INC,Health Care,small,1392870144,1.39,-10,-2,False,False,False,False,-6,0,False,False,False,False
 SHLS,SHOALS TECHNOLOGIES GROUP INC CLAS,Industrials,small,1144203904,1.14,-1,0,False,False,False,False,-3,0,False,False,False,False
 TMP,TOMPKINS FINANCIAL CORP,Financials,small,1159890176,1.16,-12,-4,False,False,False,False,-2,-8,False,False,False,False
@@ -1313,29 +1312,25 @@ TYRA,TYRA BIOSCIENCES INC,Health Care,mid,2133676544,2.13,2,0,False,False,False,
 CRAI,CRA INTERNATIONAL INC,Industrials,small,1084076800,1.08,-6,0,False,False,False,False,-1,0,False,False,False,False
 LILAK,LIBERTY LATIN AMERICA LTD CLASS C,Communication,small,1704834048,1.7,3,0,False,False,False,False,-3,0,False,False,False,False
 TSHA,TAYSHA GENE THERAPIES INC,Health Care,small,1255369344,1.26,-4,0,False,False,False,False,-1,0,False,False,False,False
-PCRX,PACIRA BIOSCIENCES INC,Health Care,small,976582976,0.98,-1,0,False,False,False,False,1,0,False,False,False,False
 MBC,MASTERBRAND INC,Industrials,small,1021574336,1.02,-1,0,False,False,False,False,-1,-4,False,False,False,False
 SCL,STEPAN,Materials,small,1133838336,1.13,-1,0,False,False,False,False,-2,-8,False,False,False,False
 TTI,TETRA TECHNOLOGIES INC,Energy,small,1171549056,1.17,2,12,False,False,False,False,-2,0,False,False,False,False
 TE,T1 ENERGY INC,Industrials,small,1133700096,1.13,13,0,False,False,False,False,3,0,False,False,False,False
 OSBC,OLD SECOND BANCORP INC,Financials,small,1092807296,1.09,-7,0,False,False,False,False,-2,-8,False,False,False,False
 TRVI,TREVI THERAPEUTICS INC,Health Care,small,1533063424,1.53,-4,0,False,False,False,False,-1,-10,False,False,False,False
-TDOC,TELADOC HEALTH INC,Health Care,small,940149184,0.94,2,0,False,False,False,False,1,0,False,False,False,False
 CCB,COASTAL FINANCIAL CORP,Financials,small,1181128064,1.18,-5,0,False,False,False,False,-1,0,False,False,False,False
 BY,BYLINE BANCORP INC,Financials,small,1462091520,1.46,-7,0,False,False,False,False,-2,0,False,False,False,False
 GIII,G III APPAREL GROUP LTD,Consumer Discretionary,small,1181300096,1.18,-7,0,False,False,False,False,-1,0,False,False,False,False
 FLNC,FLUENCE ENERGY INC CLASS A,Industrials,mid,2446339328,2.45,-1,0,False,False,False,False,10,2,False,False,False,False
 SGRY,SURGERY PARTNERS INC,Health Care,small,1576333696,1.58,-5,0,False,False,False,False,-1,0,False,False,False,False
 TRUP,TRUPANION INC,Financials,small,1113983744,1.11,-1,0,False,False,False,False,-1,0,False,False,False,False
-INVX,INNOVEX INTERNATIONAL INC,Energy,small,1677067776,1.68,-3,0,False,False,False,False,0,0,False,False,False,False
+INVX,INNOVEX INTERNATIONAL INC,Energy,small,1677067776,1.68,-3,0,False,False,False,False,-1,-4,False,False,False,False
 XPEL,XPEL INC,Consumer Discretionary,small,1219000704,1.22,-1,11,False,False,False,False,-2,-10,False,False,False,False
 DEA,EASTERLY GOVERNMENT PROPERTIES INC,Real Estate,small,1141323904,1.14,-2,0,False,False,False,False,-1,0,False,False,False,False
 NEXT,NEXTDECADE CORP,Energy,mid,2079700992,2.08,-3,0,False,False,False,False,-8,10,False,False,False,False
-UVSP,UNIVEST FINANCIAL CORP,Financials,small,997219520,1.0,-7,0,False,False,False,False,-2,0,False,False,False,False
 APEI,AMERICAN PUBLIC EDUCATION INC,Consumer Discretionary,small,1059816192,1.06,-5,0,False,False,False,False,-20,-10,False,False,False,False
 REAL,THE REALREAL INC,Consumer Discretionary,small,1085123200,1.09,-5,0,False,False,False,False,-1,0,False,False,False,False
 RVLV,REVOLVE GROUP CLASS A INC,Consumer Discretionary,small,1589314432,1.59,-4,0,False,False,False,False,-1,0,False,False,False,False
-CCOI,COGENT COMMUNICATIONS HOLDINGS INC,Communication,small,951944896,0.95,-6,0,False,False,False,False,-1,0,False,False,False,False
 UPBD,UPBOUND GROUP INC,Consumer Discretionary,small,1018801664,1.02,-1,0,False,False,False,False,6,0,False,False,False,False
 PENG,PENGUIN SOLUTIONS INC,Information Technology,small,1087469696,1.09,-5,0,False,False,False,False,-2,0,False,False,False,False
 MIAX,MIAMI INTERNATIONAL HOLDINGS INC,Financials,mid,3723142144,3.72,-6,0,False,False,False,False,0,0,False,False,False,False
@@ -1343,213 +1338,85 @@ DEC,DIVERSIFIED ENERGY COMPANY,Energy,small,1235961856,1.24,5,0,False,False,Fals
 STAA,STAAR SURGICAL,Health Care,small,1000652608,1.0,-5,8,False,False,False,False,-2,0,False,False,False,False
 RYZ,RYERSON HOLDING CORP,Materials,small,1141886592,1.14,-11,-3,False,False,False,False,-1,-5,False,False,False,False
 CTBI,COMMUNITY TRUST BANCORP INC,Financials,small,1120991616,1.12,-12,-4,False,False,False,False,-3,0,False,False,False,False
-PLOW,DOUGLAS DYNAMICS INC,Industrials,small,967484544,0.97,-5,0,False,False,False,False,-1,-10,False,False,False,False
 FLNG,FLEX LNG LTD,Energy,small,1648194688,1.65,-4,0,False,False,False,False,-8,0,False,False,False,False
-VERX,VERTEX INC CLASS A,Information Technology,small,1924281472,1.92,1,8,False,False,False,False,3,0,False,False,False,False
+VERX,VERTEX INC CLASS A,Information Technology,small,1924281472,1.92,1,8,False,False,False,False,0,0,False,False,False,False
 CDRE,CADRE HOLDINGS INC,Industrials,small,1389040512,1.39,-5,0,False,False,False,False,-1,-12,False,False,False,False
 SAH,SONIC AUTOMOTIVE INC CLASS A,Consumer Discretionary,mid,2178066688,2.18,-1,0,False,False,False,False,-3,0,False,False,False,False
-CDNA,CAREDX INC,Health Care,small,941731584,0.94,-5,0,False,False,False,False,-2,-5,False,False,False,False
 TDAY,USA TODAY INC,Communication,small,1044472128,1.04,2,0,False,False,False,False,-8,0,False,False,False,False
 FG,F&G ANNUITIES AND LIFE INC,Financials,mid,3532643328,3.53,2,0,False,False,False,False,-3,0,False,False,False,False
-FTRE,FORTREA HOLDINGS INC,Health Care,small,883574976,0.88,-4,0,False,False,False,False,-1,0,False,False,False,False
-MSEX,MIDDLESEX WATER,Utilities,small,996479936,1.0,-11,-2,False,False,False,False,-1,0,False,False,False,False
 TROX,TRONOX HOLDINGS PLC,Materials,small,1464329344,1.46,2,0,False,False,False,False,-4,0,False,False,False,False
-WGO,WINNEBAGO INDUSTRIES INC,Consumer Discretionary,small,858149312,0.86,-2,0,False,False,False,False,7,-3,False,False,False,False
-EPC,EDGEWELL PERSONAL CARE,Consumer Staples,small,980114304,0.98,-1,0,False,False,False,False,-1,-4,False,False,False,False
 ALNT,ALLIENT INC,Industrials,small,1030275520,1.03,-3,0,False,False,False,False,-1,-6,False,False,False,False
 AZTA,AZENTA INC,Health Care,small,1042372352,1.04,-4,0,False,False,False,False,-1,0,False,False,False,False
 AMAL,AMALGAMATED FINANCIAL CORP,Financials,small,1179491072,1.18,-6,0,False,False,False,False,-2,-10,False,False,False,False
 WMK,WEIS MARKETS INC,Consumer Staples,small,1739050240,1.74,-9,-1,False,True,False,False,-3,0,False,False,False,False
-JBGS,JBG SMITH PROPERTIES,Real Estate,small,879895488,0.88,-1,0,False,False,False,False,-1,2,False,False,False,False
 ALH,ALLIANCE LAUNDRY HOLDINGS INC,Industrials,mid,4332382720,4.33,-7,0,False,False,False,False,0,0,False,False,False,False
-UTL,UNITIL CORP,Utilities,small,966751168,0.97,-5,0,False,False,False,False,-2,-3,False,False,False,False
-SBSI,SOUTHSIDE BANCSHARES INC,Financials,small,937815232,0.94,-6,0,False,False,False,False,-2,0,False,False,False,False
 GOLD,GOLD INC,Consumer Discretionary,small,1161232128,1.16,-5,0,False,False,False,False,6,-6,False,False,False,False
 BTDR,BITDEER TECHNOLOGIES GROUP CLASS A,Information Technology,mid,2300833792,2.3,-6,0,False,False,False,False,-4,-11,False,False,False,False
-PRKS,UNITED PARKS AND RESORTS INC,Consumer Discretionary,small,1835628160,1.84,-6,0,False,False,False,False,0,0,False,False,False,False
+PRKS,UNITED PARKS AND RESORTS INC,Consumer Discretionary,small,1835628160,1.84,-6,0,False,False,False,False,-1,0,False,False,False,False
 FMBH,FIRST MID BANCSHARES INC,Financials,small,1109534336,1.11,-7,0,False,False,False,False,-2,0,False,False,False,False
-UVE,UNIVERSAL INSURANCE HOLDINGS INC,Financials,small,934027776,0.93,-1,0,False,False,False,False,-1,0,False,False,False,False
 ADTN,ADTRAN HOLDINGS INC,Information Technology,small,1039392960,1.04,-3,-10,False,False,False,False,-4,-8,False,False,False,False
-OLMA,OLEMA PHARMACEUTICALS INC,Health Care,small,1312583808,1.31,-6,0,False,False,False,False,-1,0,False,False,False,False
-PDM,PIEDMONT REALTY TRUST INC CLASS A,Real Estate,small,820124608,0.82,-4,0,False,False,False,False,-1,0,False,False,False,False
+OLMA,OLEMA PHARMACEUTICALS INC,Health Care,small,1312583808,1.31,-6,0,False,False,False,False,0,0,False,False,False,False
 BV,BRIGHTVIEW HOLDINGS INC,Industrials,small,1103081984,1.1,-1,0,False,False,False,False,0,-8,False,False,False,False
 AMRC,AMERESCO INC CLASS A,Industrials,small,1300321024,1.3,-1,0,False,False,False,False,-1,7,False,False,False,False
-VRTS,VIRTUS INVESTMENT PARTNERS INC,Financials,small,859565696,0.86,-1,0,False,False,False,False,-1,0,False,False,False,False
 HFWA,HERITAGE FINANCIAL CORP,Financials,small,1073521728,1.07,-7,0,False,False,False,False,-2,0,False,False,False,False
-THRM,GENTHERM INC,Consumer Discretionary,small,847414656,0.85,-1,0,False,False,False,False,-1,0,False,False,False,False
 FIZZ,NATIONAL BEVERAGE CORP,Consumer Staples,mid,3160083456,3.16,-7,-12,False,False,False,False,5,0,False,False,False,False
 VSTS,VESTIS CORP,Industrials,small,1033160128,1.03,-2,0,False,False,False,False,-1,-12,False,False,False,False
 BHVN,BIOHAVEN LTD,Health Care,small,1474121728,1.47,1,0,False,False,False,False,9,0,True,False,False,False
 NNE,NANO NUCLEAR ENERGY INC,Industrials,small,1113538560,1.11,-1,0,False,False,False,False,10,0,False,False,False,False
 FA,FIRST ADVANTAGE CORP,Industrials,small,1957603584,1.96,-1,0,False,False,False,False,-1,0,False,False,False,False
 COUR,COURSERA INC,Consumer Discretionary,small,1000643328,1.0,1,10,False,False,False,False,4,0,False,False,False,False
-SAFE,SAFEHOLD INC,Real Estate,small,969433408,0.97,-4,0,False,False,False,False,-1,-2,False,False,False,False
-GHM,GRAHAM CORP,Industrials,small,899663360,0.9,-5,0,False,False,False,False,-1,-5,False,False,False,False
 LIF,LIFE360 INC,Information Technology,mid,3242429952,3.24,-6,0,False,False,False,False,-1,0,False,False,False,False
 PVLA,PALVELLA THERAPEUTICS INC,Health Care,small,1767164288,1.77,-1,-12,False,False,False,False,-1,0,False,False,False,False
 GERN,GERON CORP,Health Care,small,1063304064,1.06,-5,0,False,False,False,False,-2,0,False,False,False,False
 NSP,INSPERITY INC,Industrials,small,1106951936,1.11,1,0,False,False,False,False,-4,0,False,False,False,False
-XERS,XERIS BIOPHARMA HOLDINGS INC,Health Care,small,1041484992,1.04,1,8,False,False,False,False,-2,0,False,False,False,False
-SNCY,SUN COUNTRY AIRLINES HOLDINGS INC,Industrials,small,896812672,0.9,-4,0,False,False,False,False,-2,-8,False,False,False,False
+XERS,XERIS BIOPHARMA HOLDINGS INC,Health Care,small,1041484992,1.04,0,0,False,False,False,False,-2,0,False,False,False,False
 SKYT,SKYWATER TECHNOLOGY INC,Information Technology,small,1379510784,1.38,-4,0,False,False,False,False,-1,-4,False,False,False,False
-TRST,TRUSTCO BANK CORP,Financials,small,802651072,0.8,-6,0,False,False,False,False,-2,-8,False,False,False,False
 EE,EXCELERATE ENERGY INC CLASS A,Energy,mid,3735690752,3.74,-1,0,False,False,False,False,-1,-12,False,False,False,False
 VIR,VIR BIOTECHNOLOGY INC,Health Care,small,1447891328,1.45,-5,0,False,False,False,False,-1,0,False,False,False,False
 MBX,MBX BIOSCIENCES INC,Health Care,small,1567363072,1.57,1,0,False,False,False,False,-2,0,False,False,False,False
-CFFN,CAPITOL FEDERAL FINANCIAL INC,Financials,small,952927680,0.95,-5,0,False,False,False,False,-2,-9,False,False,False,False
 ENVX,ENOVIX CORP,Industrials,small,1099155712,1.1,-3,0,False,False,False,False,-2,0,False,False,False,False
 LXU,LSB INDUSTRIES INC,Materials,small,1072692416,1.07,6,0,False,False,False,False,1,0,False,False,False,False
-XNCR,XENCOR INC,Health Care,small,939468032,0.94,1,0,False,False,False,False,0,0,False,False,False,False
 EVLV,EVOLV TECHNOLOGIES HOLDINGS INC CL,Information Technology,small,1081484928,1.08,-6,0,False,False,False,False,-4,0,False,False,False,False
 IRMD,IRADIMED CORP,Health Care,small,1230066432,1.23,-1,0,False,False,False,False,4,0,False,False,False,False
-BHRB,BURKE HERBERT FINANCIAL SERVICES C,Financials,small,939627776,0.94,-7,0,False,False,False,False,-1,0,False,False,False,False
-LMB,LIMBACH HOLDINGS INC,Industrials,small,939256576,0.94,-3,0,False,False,False,False,-1,-7,False,False,False,False
 CRVS,CORVUS PHARMACEUTICALS INC,Health Care,small,1233848448,1.23,-1,0,False,False,False,False,8,0,False,False,False,False
-MBWM,MERCANTILE BANK CORP,Financials,small,888866496,0.89,-7,0,False,False,False,False,-2,-8,False,False,False,False
 LZ,LEGALZOOM COM INC,Industrials,small,1033485568,1.03,-4,9,False,False,False,False,13,0,False,False,False,False
-NBN,NORTHEAST BANK,Financials,small,995786624,1.0,-6,0,False,False,False,False,-2,-7,False,False,False,False
-EIG,EMPLOYERS HOLDINGS INC,Financials,small,818633472,0.82,-12,-4,False,False,False,False,-2,-5,False,False,False,False
 BKSY,BLACKSKY TECHNOLOGY INC CLASS A,Industrials,small,1139810304,1.14,-4,0,False,False,False,False,-6,-5,False,False,False,False
-BLFS,BIOLIFE SOLUTIONS INC,Health Care,small,942332992,0.94,-4,0,False,False,False,False,-1,0,False,False,False,False
-PKST,PEAKSTONE REALTY TRUST CLASS E,Real Estate,small,777215808,0.78,0,0,False,False,False,False,-2,0,False,False,False,False
-CMP,COMPASS MINERALS INTERNATIONAL INC,Materials,small,951552128,0.95,-1,0,False,False,False,False,-1,0,False,False,False,False
-UFCS,UNITED FIRE GROUP INC,Financials,small,959118784,0.96,-4,0,False,False,False,False,-1,0,False,False,False,False
-MNKD,MANNKIND CORP,Health Care,small,770251136,0.77,-7,0,False,False,False,False,7,0,False,False,False,False
-NX,QUANEX BUILDING PRODUCTS CORP,Industrials,small,802084416,0.8,-1,0,False,False,False,False,-2,-7,False,False,False,False
-SCSC,SCANSOURCE INC,Information Technology,small,800681984,0.8,-4,0,False,False,False,False,-2,0,False,False,False,False
-LGIH,LGI HOMES INC,Consumer Discretionary,small,882064576,0.88,-1,0,False,False,False,False,6,-13,False,False,False,True
-RWT,REDWOOD TRUST REIT INC,Financials,small,707440256,0.71,-7,0,False,False,False,False,-1,-5,False,False,False,False
-ACVA,ACV AUCTIONS INC CLASS A,Industrials,small,758952128,0.76,-4,2,False,False,False,False,11,0,False,False,False,False
-NBBK,NB BANCORP INC,Financials,small,985519232,0.99,-6,0,False,False,False,False,-2,-7,False,False,False,False
-CCNE,CNB FINANCIAL CORP,Financials,small,868608384,0.87,-14,-6,False,False,False,False,-3,-9,False,False,False,False
-BFLY,BUTTERFLY NETWORK INC CLASS A,Health Care,small,1046541120,1.05,-4,0,False,False,False,False,-6,-9,False,False,False,False
-CLOV,CLOVER HEALTH INVESTMENTS CORP CLA,Health Care,small,902427776,0.9,-3,0,False,False,False,False,11,0,False,False,False,False
+BFLY,BUTTERFLY NETWORK INC CLASS A,Health Care,small,1046541120,1.05,0,0,False,False,False,False,-6,-9,False,False,False,False
 IDT,IDT CORP CLASS B,Communication,small,1215444864,1.22,-1,0,False,False,False,False,-1,0,False,False,False,False
-DAKT,DAKTRONICS INC,Information Technology,small,958869568,0.96,-1,0,False,False,False,False,-1,-1,False,False,False,False
 TR,TOOTSIE ROLL INDUSTRIES INC,Consumer Staples,mid,3191705344,3.19,-10,-1,False,False,False,False,-12,-2,False,False,False,False
-HAFC,HANMI FINANCIAL CORP,Financials,small,792916992,0.79,-7,0,False,False,False,False,-2,-8,False,False,False,False
 PRSU,PURSUIT ATTRACTIONS AND HOSPITALIT,Consumer Discretionary,small,1067693184,1.07,-10,-2,False,False,False,False,-3,0,False,False,False,False
-CLB,CORE LABORATORIES INC,Energy,small,752003520,0.75,-2,0,False,False,False,False,-3,0,False,False,False,False
 GRDN,GUARDIAN PHARMACY SERVICES INC CLA,Health Care,mid,2444300800,2.44,-6,0,False,False,False,False,-4,0,False,False,False,False
-MYE,MYERS INDUSTRIES INC,Materials,small,788932928,0.79,-1,0,False,False,False,False,-1,-9,False,False,False,False
-WSR,WHITESTONE REIT,Real Estate,small,862603264,0.86,-6,-8,False,False,False,False,-18,-8,False,False,False,False
-ESQ,ESQUIRE FINANCIAL HOLDINGS INC,Financials,small,940980288,0.94,-6,0,False,False,False,False,-3,0,False,False,False,False
 RAPP,RAPPORT THERAPEUTICS INC,Health Care,small,1604887168,1.6,-6,0,False,False,False,False,-2,0,False,False,False,False
-FBRT,FRANKLIN BSP REALTY TRUST INC,Financials,small,689575808,0.69,-1,-11,False,False,False,False,4,0,False,False,False,False
-CMRE,COSTAMARE INC,Industrials,mid,2083773824,2.08,-5,0,False,False,False,False,-2,-11,False,False,False,False
-AMTB,AMERANT BANCORP INC CLASS A,Financials,small,964289280,0.96,-12,-4,False,False,False,False,-3,0,False,False,False,False
-HBNC,HORIZON BANCORP INC,Financials,small,858546880,0.86,-12,-4,False,False,False,False,-2,0,False,False,False,False
-MCB,METROPOLITAN BANK HOLDING CORP,Financials,small,1037491392,1.04,-6,0,False,False,False,False,0,0,False,False,False,False
-CAC,CAMDEN NATIONAL CORP,Financials,small,816308544,0.82,-7,0,False,False,False,False,-3,-9,False,False,False,False
+CMRE,COSTAMARE INC,Industrials,mid,2083773824,2.08,0,0,False,False,False,False,-2,-11,False,False,False,False
+MCB,METROPOLITAN BANK HOLDING CORP,Financials,small,1037491392,1.04,-6,0,False,False,False,False,-2,0,False,False,False,False
 PAX,PATRIA INVESTMENTS LTD CLASS A,Financials,mid,2018871680,2.02,2,0,False,False,False,False,-2,0,False,False,False,False
-JBI,JANUS INTERNATIONAL GROUP INC,Industrials,small,683182208,0.68,-1,0,False,False,False,False,-1,-3,False,False,False,False
-RYAM,RAYONIER ADVANCED MATERIALS INC,Materials,small,715719680,0.72,4,0,False,False,False,False,1,0,False,False,False,False
-BFST,BUSINESS FIRST BANCSHARES INC,Financials,small,903329664,0.9,-6,0,False,False,False,False,-2,-9,False,False,False,False
 ESRT,EMPIRE STATE REALTY REIT INC TRUST,Real Estate,small,1530361728,1.53,-1,0,False,False,False,False,0,0,False,False,False,False
 GLUE,MONTE ROSA THERAPEUTICS INC,Health Care,small,1367467648,1.37,1,0,False,False,False,False,-1,0,False,False,False,False
 GBTG,GLOBAL BUSINESS TRAVEL GROUP INC C,Consumer Discretionary,mid,2913438208,2.91,2,0,False,False,False,False,3,0,False,False,False,False
-TALK,TALKSPACE INC,Health Care,small,865453760,0.87,0,0,False,False,False,False,-8,0,False,False,False,False
-MEG,MONTROSE ENVIRONMENTAL GRP INC,Industrials,small,824309312,0.82,-4,10,False,False,False,False,4,0,False,False,False,False
-HTBK,HERITAGE COMMERCE CORP,Financials,small,784082496,0.78,-6,0,False,False,False,False,-2,-9,False,False,False,False
-BRSP,BRIGHTSPIRE CAPITAL INC CLASS A,Financials,small,726504384,0.73,-1,0,False,False,False,False,-2,-7,False,False,False,False
-CSTL,CASTLE BIOSCIENCES INC,Health Care,small,738522944,0.74,-5,0,False,False,False,False,10,0,False,False,False,False
-OMER,OMEROS CORP,Health Care,small,772814912,0.77,1,0,False,False,False,False,-1,-3,False,False,False,False
 BBUC,BROOKFIELD BUSINESS CORP CLASS A,Industrials,mid,2412787456,2.41,1,8,False,False,False,False,-2,0,False,False,False,False
 KOD,KODIAK SCIENCES INC,Health Care,mid,2480397568,2.48,1,-2,False,False,False,False,-3,-13,False,False,False,True
-THFF,FIRST FINANCIAL CORPORATION CORP,Financials,small,760367808,0.76,-7,0,False,False,False,False,-2,0,False,False,False,False
-SHEN,SHENANDOAH TELECOMMUNICATIONS,Communication,small,835054912,0.84,3,0,False,False,False,False,2,0,False,False,False,False
-SMP,STANDARD MOTOR PRODUCTS INC,Consumer Discretionary,small,787288128,0.79,-3,0,False,False,False,False,-1,-2,False,False,False,False
-CPF,CENTRAL PACIFIC FINANCIAL CORP,Financials,small,860770368,0.86,-6,0,False,False,False,False,-2,-7,False,False,False,False
-MATW,MATTHEWS INTERNATIONAL CORP CLASS,Consumer Discretionary,small,789979904,0.79,-12,-3,False,False,False,False,-1,-8,False,False,False,False
 SVRA,SAVARA INC,Health Care,small,1137895680,1.14,-10,-2,False,False,False,False,-2,-8,False,False,False,False
-ARVN,ARVINAS INC,Health Care,small,696833664,0.7,1,6,False,False,False,False,4,-13,False,False,False,True
 GNK,GENCO SHIPPING AND TRADING LTD,Industrials,small,1047424704,1.05,-5,-5,False,False,False,False,-2,-3,False,False,False,False
 CBL,CBL ASSOCIATES PROPERTIES INC,Real Estate,small,1251425920,1.25,-7,0,False,False,False,False,-3,-8,False,False,False,False
-BJRI,BJS RESTAURANTS INC,Consumer Discretionary,small,759707200,0.76,-4,0,False,False,False,False,-2,-9,False,False,False,False
-KOP,KOPPERS HOLDINGS INC,Materials,small,732351616,0.73,5,0,False,False,False,False,2,0,False,False,False,False
-ORIC,ORIC PHARMACEUTICALS INC,Health Care,small,995745664,1.0,-1,0,False,False,False,False,3,7,False,False,False,False
-BBSI,BARRETT BUSINESS SERVICES INC,Industrials,small,757976384,0.76,1,0,False,False,False,False,-3,0,False,False,False,False
-PCT,PURECYCLE TECHNOLOGIES INC,Materials,small,979531008,0.98,-4,0,False,False,False,False,10,0,False,False,False,False
-CGEM,CULLINAN THERAPEUTICS INC,Health Care,small,873392064,0.87,-6,0,False,False,False,False,0,0,False,False,False,False
-APOG,APOGEE ENTERPRISES INC,Industrials,small,717389568,0.72,-1,0,False,False,False,False,-1,0,False,False,False,False
-PRAA,PRA GROUP INC,Financials,small,693694592,0.69,-5,-13,False,False,False,True,-1,-7,False,False,False,False
-OIS,OIL STATES INTERNATIONAL INC,Energy,small,674839872,0.67,-1,0,False,False,False,False,4,0,False,False,False,False
 RDW,REDWIRE CORP,Industrials,small,1867924480,1.87,-5,0,False,False,False,False,-2,0,False,False,False,False
-FMNB,FARMERS NATIONAL BANC CORP,Financials,small,792559424,0.79,-14,-6,False,False,False,False,-2,0,False,False,False,False
-AMPH,AMPHASTAR PHARMACEUTICALS INC,Health Care,small,939722048,0.94,-6,0,False,False,False,False,-2,0,False,False,False,False
 STGW,STAGWELL INC CLASS A,Communication,small,1591682176,1.59,-1,-11,False,False,False,False,-6,0,False,False,False,False
-IBCP,INDEPENDENT BANK CORP,Financials,small,691891072,0.69,-6,0,False,False,False,False,-1,0,False,False,False,False
-CMPX,COMPASS THERAPEUTICS,Health Care,small,981479104,0.98,1,12,False,False,False,False,-1,0,False,False,False,False
 MCW,MISTER CAR WASH INC,Consumer Discretionary,mid,2289499136,2.29,-3,0,False,False,False,False,-1,0,False,False,False,False
-AMN,AMN HEALTHCARE INC,Health Care,small,703543680,0.7,-2,0,False,False,False,False,-1,0,False,False,False,False
-NPK,NATIONAL PRESTO INDUSTRIES INC,Industrials,small,1014830400,1.01,-6,0,False,False,False,False,-18,-7,False,False,False,False
-HTB,HOMETRUST BANCSHARES INC,Financials,small,750791168,0.75,-7,0,False,False,False,False,-2,-7,False,False,False,False
-URGN,UROGEN PHARMA LTD,Health Care,small,916200512,0.92,-5,0,False,False,False,False,-1,0,False,False,False,False
-FOXF,FOX FACTORY HOLDING CORP,Consumer Discretionary,small,703209600,0.7,7,-3,False,False,False,False,-3,0,False,False,False,False
+NPK,NATIONAL PRESTO INDUSTRIES INC,Industrials,small,1014830400,1.01,-6,0,False,False,False,False,0,0,False,False,False,False
 SENEA,SENECA FOODS CORP CLASS A,Consumer Staples,small,1107298432,1.11,-12,-2,False,False,False,False,-14,-6,False,False,False,False
-SCHL,SCHOLASTIC CORP,Communication,small,997314368,1.0,-1,-12,False,False,False,False,-4,0,False,False,False,False
-HRTG,HERITAGE INSURANCE HOLDINGS INC,Financials,small,809570496,0.81,-4,0,False,False,False,False,3,0,False,False,False,False
-NWPX,NWPX INFRASTRUCTURE INC,Industrials,small,765697024,0.77,-5,0,False,False,False,False,-2,-8,False,False,False,False
-EGBN,EAGLE BANCORP INC,Financials,small,776288768,0.78,-5,0,False,False,False,False,-2,0,False,False,False,False
-KURA,KURA ONCOLOGY INC,Health Care,small,760519232,0.76,-4,0,False,False,False,False,-1,0,False,False,False,False
 CXM,SPRINKLR INC CLASS A,Information Technology,small,1508118016,1.51,2,0,False,False,False,False,1,2,False,False,False,False
 CNXN,PC CONNECTION INC,Information Technology,small,1502883072,1.5,-6,0,False,False,False,False,-1,0,False,False,False,False
-FWRG,FIRST WATCH RESTAURANT GROUP INC,Consumer Discretionary,small,657846464,0.66,-5,0,False,False,False,False,9,0,True,False,False,False
-TRNS,TRANSCAT INC,Industrials,small,711112704,0.71,-6,0,False,False,False,False,-2,-6,False,False,False,False
-QNST,QUINSTREET INC,Communication,small,689626688,0.69,-2,0,False,False,False,False,2,0,False,False,False,False
-EQBK,EQUITY BANCSHARES INC CLASS A,Financials,small,946075008,0.95,-9,-1,False,True,False,False,-2,-8,False,False,False,False
-EHAB,ENHABIT INC,Health Care,small,710125440,0.71,-1,0,False,False,False,False,-14,-6,False,False,False,False
 LIND,LINDBLAD EXPEDITIONS HOLDINGS INC,Consumer Discretionary,small,1113198848,1.11,-1,0,False,False,False,False,-1,-6,False,False,False,False
-SDGR,SCHRODINGER INC,Health Care,small,854894720,0.85,1,5,False,False,False,False,3,0,False,False,False,False
 MRTN,MARTEN TRANSPORT LTD,Industrials,small,1123482496,1.12,-6,0,False,False,False,False,-2,-7,False,False,False,False
-ADAM,ADAMAS INC TRUST,Financials,small,668605376,0.67,-7,0,False,False,False,False,-1,0,False,False,False,False
 MCHB,MECHANICS BANCORP CLASS A,Financials,mid,3305330688,3.31,-6,0,False,False,False,False,-3,0,False,False,False,False
 AVBP,ARRIVENT BIOPHARMA INC,Health Care,small,1100178432,1.1,-6,0,False,False,False,False,-2,0,False,False,False,False
-PLPC,PREFORMED LINE PRODUCTS,Industrials,small,1482670080,1.48,-5,0,False,False,False,False,-4,0,False,False,False,False
+PLPC,PREFORMED LINE PRODUCTS,Industrials,small,1482670080,1.48,0,0,False,False,False,False,-4,0,False,False,False,False
 PFBC,PREFERRED BANK,Financials,small,1110694272,1.11,-11,-3,False,False,False,False,-3,0,False,False,False,False
 BKV,BKV CORP,Energy,mid,3022298880,3.02,-1,0,False,False,False,False,5,0,False,False,False,False
 RHLD,RESOLUTE HOLDINGS MANAGEMENT INC,Industrials,small,1312507136,1.31,3,0,False,False,False,False,-1,0,False,False,False,False
-LQDT,LIQUIDITY SERVICES INC,Industrials,small,966392512,0.97,-6,0,False,False,False,False,-1,0,False,False,False,False
-AMPL,AMPLITUDE INC CLASS A,Information Technology,small,914690560,0.91,2,8,False,False,False,False,4,4,False,False,False,False
-PHR,PHREESIA INC,Health Care,small,507766176,0.51,-2,8,False,False,False,False,13,4,False,False,False,False
-ABUS,ARBUTUS BIOPHARMA CORP,Health Care,small,875741760,0.88,2,0,False,False,False,False,-1,0,False,False,False,False
-MITK,MITEK SYSTEMS INC,Information Technology,small,629896384,0.63,-5,0,False,False,False,False,-1,-1,False,False,False,False
-JBIO,JADE BIOSCIENCES INC,Health Care,small,763909312,0.76,-6,0,False,False,False,False,-2,-11,False,False,False,False
 DRVN,DRIVEN BRANDS HOLDINGS INC,Consumer Discretionary,mid,2029365120,2.03,-1,-4,False,False,False,False,-3,9,False,False,False,False
 MMI,MARCUS & MILLICHAP INC,Real Estate,small,1005566464,1.01,-1,0,False,False,False,False,-1,0,False,False,False,False
-PD,PAGERDUTY INC,Information Technology,small,587371584,0.59,1,0,False,False,False,False,3,0,False,False,False,False
 RES,RPC INC,Energy,small,1529310976,1.53,5,0,False,False,False,False,-6,0,False,False,False,False
-ORRF,ORRSTOWN FINANCIAL SERVICES INC,Financials,small,715534080,0.72,-7,0,False,False,False,False,0,0,False,False,False,False
-PRCH,PORCH GROUP INC,Information Technology,small,797184192,0.8,1,0,False,False,False,False,5,0,False,False,False,False
-FCBC,FIRST COMMUNITY BANKSHARES INC,Financials,small,812517632,0.81,-12,-4,False,False,False,False,-3,0,False,False,False,False
-INBX,INHIBRX BIOSCIENCES INC,Health Care,small,927984960,0.93,-1,0,False,False,False,False,0,0,False,False,False,False
-SLS,SELLAS LIFE SCIENCES GROUP INC,Health Care,small,741676032,0.74,-3,-13,False,False,False,True,3,0,False,False,False,False
-IVR,INVESCO MORTGAGE CAPITAL REIT INC,Financials,small,704266880,0.7,-1,0,False,False,False,False,-2,-10,False,False,False,False
 TK,TEEKAY CORPORATION CORP LTD,Energy,small,1104690560,1.1,-6,4,False,False,False,False,-2,-4,False,False,False,False
-SWBI,SMITH WESSON BRANDS INC,Consumer Discretionary,small,661177024,0.66,-4,-4,False,False,False,False,-14,-6,False,False,False,False
-STKL,SUNOPTA INC,Consumer Staples,small,769787072,0.77,1,0,False,False,False,False,-2,0,False,False,False,False
-CBRL,CRACKER BARREL OLD COUNTRY STORE I,Consumer Discretionary,small,645721088,0.65,-7,8,False,False,False,False,-1,0,False,False,False,False
-SMBC,SOUTHERN MISSOURI BANCORP INC,Financials,small,721371712,0.72,-7,0,False,False,False,False,-3,-9,False,False,False,False
-DJCO,DAILY JOURNAL CORP,Information Technology,small,713577344,0.71,-5,0,False,False,False,False,-2,-3,False,False,False,False
 SEMR,SEMRUSH HOLDINGS INC CLASS A,Information Technology,small,1809898752,1.81,1,0,False,False,False,False,-6,-8,False,False,False,False
-CCBG,CAPITAL CITY BANK INC,Financials,small,758301376,0.76,-12,-4,False,False,False,False,-3,0,False,False,False,False
-GDOT,GREEN DOT CORP CLASS A,Financials,small,616244544,0.62,-1,0,False,False,False,False,-1,0,False,False,False,False
-AMSF,AMERISAFE INC,Financials,small,623937472,0.62,-2,0,False,False,False,False,-1,0,False,False,False,False
-CTLP,CANTALOUPE INC,Financials,small,794703680,0.79,2,0,False,False,False,False,-5,0,False,False,False,False
-AVNS,AVANOS MEDICAL INC,Health Care,small,648783168,0.65,2,-1,False,False,False,False,-2,0,False,False,False,False
-IART,INTEGRA LIFESCIENCES HOLDINGS CORP,Health Care,small,742741568,0.74,-1,0,False,False,False,False,-1,0,False,False,False,False
-SD,SANDRIDGE ENERGY INC,Energy,small,568948800,0.57,-1,0,False,False,False,False,4,0,False,False,False,False
-TCMD,TACTILE SYSTEMS TECHNOLOGY INC,Health Care,small,559660096,0.56,8,12,False,False,False,False,4,0,False,False,False,False
-NTGR,NETGEAR INC,Information Technology,small,664056384,0.66,-5,0,False,False,False,False,-3,0,False,False,False,False
-FSBC,FIVE STAR BANCORP,Financials,small,818920384,0.82,-7,0,False,False,False,False,-2,0,False,False,False,False
 ZGN,ERMENEGILDO ZEGNA NV,Consumer Discretionary,mid,2829936640,2.83,-1,0,False,False,False,False,-2,-13,False,False,False,True
-FET,FORUM ENERGY TECHNOLOGIES INC,Energy,small,668164160,0.67,-3,-6,False,False,False,False,-3,0,False,False,False,False
-MPB,MID PENN BANCORP INC,Financials,small,817789056,0.82,-6,0,False,False,False,False,-2,-8,False,False,False,False
 KALV,KALVISTA PHARMACEUTICALS INC,Health Care,small,1019327488,1.02,2,0,False,False,False,False,-7,0,False,False,False,False
-NAVI,NAVIENT CORP,Financials,small,789244224,0.79,-6,0,False,False,False,False,-1,0,False,False,False,False
-JANX,JANUX THERAPEUTICS INC,Health Care,small,902741760,0.9,-6,0,False,False,False,False,-2,0,False,False,False,False
-SERV,SERVE ROBOTICS INC,Consumer Discretionary,small,639581952,0.64,2,0,False,False,False,False,11,0,False,False,False,False
-ODC,OIL DRI CORPORATION OF AMERICA,Consumer Staples,small,978414080,0.98,-12,-4,False,False,False,False,-2,0,False,False,False,False
-FISI,FINANCIAL INSTITUTIONS INC,Financials,small,648606208,0.65,-6,-6,False,False,False,False,-2,-10,False,False,False,False
-ESPR,ESPERION THERAPEUTICS INC,Health Care,small,670275328,0.67,6,0,False,False,False,False,7,0,False,False,False,False
-IIIN,INSTEEL INDUSTRIES INC,Industrials,small,655791616,0.66,-5,0,False,False,False,False,-1,-6,False,False,False,False
