@@ -21,6 +21,14 @@ st.set_page_config(
     initial_sidebar_state = "collapsed"
 )
 
+STATUS_COLOURS = {
+    'FIRED'    : 'background-color: rgba(0,180,0,0.25); color: #2dc653; font-weight: bold',
+    'WATCHING' : 'background-color: rgba(255,180,0,0.20); color: #f77f00; font-weight: bold',
+    'STRONG'   : 'background-color: rgba(0,120,255,0.20); color: #4da6ff; font-weight: bold',
+    'OVERSOLD' : 'background-color: rgba(180,0,0,0.20); color: #e63946; font-weight: bold',
+    'INACTIVE' : '',
+}
+
 st.markdown("""
     <style>
     .info-card {
@@ -309,7 +317,7 @@ def build_breadth_table(history, metrics, label=''):
         if key in pct_keys:
             today_val = f"{pct(val, total)}%"
         else:
-            today_val = val
+            today_val = str(val)
 
         rows.append({
             'Metric' : display_name,
@@ -411,6 +419,9 @@ def build_sector_table(history, sector_keys, prefix='sec'):
     return pd.DataFrame(rows) if rows else None
 
 def style_breadth(df, pct_cols=None, delta_cols=None):
+    # Convert all columns to object type to prevent pyarrow type inference issues
+    df = df.copy().astype(object)
+
     def colour_delta(val):
         try:
             v = int(str(val).replace('+',''))
@@ -437,13 +448,358 @@ def style_breadth(df, pct_cols=None, delta_cols=None):
             if col in df.columns:
                 styler = styler.map(colour_delta, subset=[col])
 
-    # Colour Ab% columns
     ab_cols = [c for c in df.columns if c.startswith('Ab') and '%' in c]
     for col in ab_cols:
         if col in df.columns:
             styler = styler.map(colour_ab_pct, subset=[col])
 
     return styler
+
+# ── Zweig Breadth Thrust ──────────────────────────────────────────────────────
+def calc_zweig_thrust(advancing_series, declining_series, lookback=252):
+    """
+    Calculate Zweig Breadth Thrust from advancing and declining issue counts.
+    Returns dict with current status, EMA history, and historical signal dates.
+    
+    advancing_series: pd.Series of advancing issue counts indexed by date
+    declining_series: pd.Series of declining issue counts indexed by date
+    lookback: number of days of history to use
+    """
+    import pandas as pd
+    import numpy as np
+
+    if advancing_series is None or declining_series is None:
+        return None
+    if len(advancing_series) < 15 or len(declining_series) < 15:
+        return None
+
+    # Align and calculate ratio
+    df = pd.DataFrame({
+        'adv': advancing_series,
+        'dec': declining_series,
+    }).dropna()
+
+    if len(df) < 15:
+        return None
+
+    df = df.tail(lookback)
+    df['total'] = df['adv'] + df['dec']
+    df['ratio'] = df.apply(
+        lambda r: r['adv'] / r['total'] if r['total'] > 0 else 0.5, axis=1
+    )
+
+    # 10-day EMA
+    df['ema10'] = df['ratio'].ewm(span=10, adjust=False).mean()
+
+    # Find historical signal firings
+    # Signal: EMA goes from <=0.40 to >=0.615 within 10 trading days
+    signal_dates = []
+    ema_vals     = df['ema10'].values
+    dates        = df.index.tolist()
+    n            = len(ema_vals)
+
+    for i in range(10, n):
+        window      = ema_vals[max(0, i-10):i+1]
+        window_min  = min(window)
+        current_ema = ema_vals[i]
+        if window_min <= 0.40 and current_ema >= 0.615:
+            # Check not already captured (avoid duplicates within 10 days)
+            if not signal_dates or (dates[i] - signal_dates[-1]).days > 10:
+                signal_dates.append(dates[i])
+
+    # Current status
+    current_ema  = float(df['ema10'].iloc[-1])
+    window_10d   = df['ema10'].tail(10)
+    window_min   = float(window_10d.min())
+    window_max   = float(window_10d.max())
+
+    if current_ema >= 0.615 and window_min <= 0.40:
+        status = 'FIRED'
+    elif current_ema >= 0.615:
+        status = 'STRONG'
+    elif window_min <= 0.40 and current_ema > 0.40:
+        status = 'WATCHING'
+    elif current_ema <= 0.40:
+        status = 'OVERSOLD'
+    else:
+        status = 'INACTIVE'
+
+    return {
+        'current_ema'   : round(current_ema, 4),
+        'window_min'    : round(window_min, 4),
+        'window_max'    : round(window_max, 4),
+        'status'        : status,
+        'signal_dates'  : signal_dates,
+        'ema_series'    : df['ema10'],
+        'ratio_series'  : df['ratio'],
+        'df'            : df,
+    }
+
+
+def render_zweig_section(history_df, prefix, label, show_sector=True):
+    import plotly.graph_objects as go
+    import pandas as pd
+
+    # Always work on a clean copy with date as index
+    history_df = history_df.copy()
+
+    if 'date' not in history_df.columns:
+        history_df = history_df.reset_index()
+        if 'date' not in history_df.columns and 'index' in history_df.columns:
+            history_df = history_df.rename(columns={'index': 'date'})
+
+    if 'date' not in history_df.columns:
+        first_col = history_df.columns[0]
+        try:
+            history_df = history_df.rename(columns={first_col: 'date'})
+        except:
+            st.warning("Could not parse date column for Zweig calculation")
+            return
+
+    history_df['date'] = pd.to_datetime(history_df['date'])
+    history_df = history_df.set_index('date').sort_index()
+
+    st.markdown("### 📡 Zweig Breadth Thrust")
+    st.markdown("""
+        <div class="info-card">
+            The Zweig Breadth Thrust fires when the 10-day EMA of advancing issues /
+            (advancing + declining) moves from below 0.40 to above 0.615 within
+            10 trading days. Historically one of the most reliable bull market
+            confirmation signals — fires rarely (~15 times since 1945) but has
+            preceded significant gains every time.
+            <b>WATCHING</b> = setup building (EMA crossed below 0.40 recently).
+            <b>FIRED</b> = signal active. <b>STRONG</b> = above threshold but no
+            prior oversold setup.
+        </div>
+#    """, unsafe_allow_html=True)
+
+# ── Market-wide internal breadth ──────────────────────────────────────────
+    st.markdown("**Internal Breadth Version**")
+
+    if history_df is not None and 'leader' in history_df.columns:
+        adv_int = history_df['leader'].astype(float)
+
+        if 'weak' in history_df.columns:
+            dec_int = (history_df['laggard'] + history_df['weak']).astype(float)
+        else:
+            dec_int = history_df['laggard'].astype(float)
+
+        result = calc_zweig_thrust(adv_int, dec_int)
+
+        if result:
+            _render_zweig_card(result, f"{label} Internal", key_suffix=f"{prefix}_internal")
+            _render_zweig_chart(result, f"{label} Internal Breadth Thrust — EMA10")
+            _render_zweig_history(result)
+        else:
+            st.warning("Insufficient breadth history for Zweig calculation")
+    else:
+        st.warning("No breadth history available")
+
+
+
+    # ── Per sector table ──────────────────────────────────────────────────────
+    if show_sector and history_df is not None:
+        st.markdown("**Per Sector Zweig Status**")
+
+        # Find all sector keys
+        total_cols  = [c for c in history_df.columns if c.startswith(f'{prefix}_') and c.endswith('_total')]
+        sector_keys = [c.replace(f'{prefix}_','').replace('_total','') for c in total_cols
+                       if 'nan' not in c and 'index' not in c]
+
+        sector_rows = []
+        for sec_key in sector_keys:
+            leader_col = f'{prefix}_{sec_key}_leaders'
+            laggard_col= f'{prefix}_{sec_key}_laggard'
+            weak_col   = f'{prefix}_{sec_key}_weak'
+            total_col  = f'{prefix}_{sec_key}_total'
+
+            if leader_col not in history_df.columns:
+                continue
+
+            try:
+                adv_s = history_df[leader_col].astype(float)
+                # Use total - leaders as declining proxy if no laggard/weak columns
+                if laggard_col in history_df.columns and weak_col in history_df.columns:
+                    dec_s = (history_df[laggard_col] + history_df[weak_col]).astype(float)
+                elif total_col in history_df.columns:
+                    dec_s = (history_df[total_col].astype(float) - adv_s).clip(lower=0)
+                else:
+                    continue
+
+                res = calc_zweig_thrust(adv_s, dec_s, lookback=252)
+                if res is None:
+                    continue
+
+                last_signal = res['signal_dates'][-1].strftime('%Y-%m-%d') if res['signal_dates'] else 'Never'
+                sector_rows.append({
+                    'Sector'      : sec_key.replace('_',' ').title(),
+                    'EMA10'       : round(res['current_ema'], 4),
+                    '10d Low'     : round(res['window_min'], 4),
+                    '10d High'    : round(res['window_max'], 4),
+                    'Status'      : res['status'],
+                    'Last Signal' : last_signal,
+                    'Signals'     : len(res['signal_dates']),
+                })
+            except Exception as e:
+                continue
+
+        if sector_rows:
+            df_sec = pd.DataFrame(sector_rows).sort_values('EMA10', ascending=False)
+            
+            # Ensure all numeric columns are plain Python floats
+            for col in ['EMA10', '10d Low', '10d High']:
+                df_sec[col] = df_sec[col].astype(float)
+            df_sec['Signals'] = df_sec['Signals'].astype(int)
+
+            def style_status(val):
+                return STATUS_COLOURS.get(val, '')
+
+            def style_ema(val):
+                try:
+                    v = float(val)
+                    if v >= 0.615: return 'color: #2dc653'
+                    if v <= 0.40:  return 'color: #e63946'
+                    return 'color: #f77f00'
+                except:
+                    return ''
+
+            st.dataframe(
+                df_sec.style
+                    .map(style_status, subset=['Status'])
+                    .map(style_ema, subset=['EMA10', '10d Low', '10d High'])
+                    .format({'EMA10': '{:.4f}', '10d Low': '{:.4f}', '10d High': '{:.4f}'}),
+                width='stretch', hide_index=True,
+                height=min(len(df_sec) * 35 + 40, 600)
+            )
+
+
+def _render_zweig_card(result, label, key_suffix=''):
+    """Render status card for a Zweig result"""
+    STATUS_CONFIG = {
+        'FIRED'   : ('#2dc653', '🚀', 'Signal FIRED — high conviction bull signal'),
+        'WATCHING': ('#f77f00', '👀', 'Setup building — EMA crossed below 0.40, watch for thrust'),
+        'STRONG'  : ('#00b4d8', '💪', 'Above threshold but no prior oversold setup'),
+        'OVERSOLD': ('#e63946', '⚠',  'Market oversold — potential setup building'),
+        'INACTIVE': ('#888888', '—',  'No active setup'),
+    }
+    colour, icon, desc = STATUS_CONFIG.get(result['status'], ('#888', '—', ''))
+
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        st.markdown(f"""
+            <div class="macro-card" style="border-left:4px solid {colour}">
+                <div class="macro-label">{label} — Status</div>
+                <div style="color:{colour};font-size:20px;font-weight:bold">{icon} {result['status']}</div>
+                <div style="font-size:10px;color:#aaa">{desc}</div>
+            </div>
+        """, unsafe_allow_html=True)
+    with col2:
+        st.markdown(f"""
+            <div class="macro-card">
+                <div class="macro-label">Current EMA10</div>
+                <div style="font-size:20px;font-weight:bold;color:{colour}">{result['current_ema']:.4f}</div>
+                <div style="font-size:10px;color:#aaa">Threshold: 0.615</div>
+            </div>
+        """, unsafe_allow_html=True)
+    with col3:
+        st.markdown(f"""
+            <div class="macro-card">
+                <div class="macro-label">10-Day Range</div>
+                <div style="font-size:16px;font-weight:bold">
+                    {result['window_min']:.4f} → {result['window_max']:.4f}
+                </div>
+                <div style="font-size:10px;color:#aaa">Low → High (need ≤0.40 then ≥0.615)</div>
+            </div>
+        """, unsafe_allow_html=True)
+    with col4:
+        signals = result['signal_dates']
+        st.markdown(f"""
+            <div class="macro-card">
+                <div class="macro-label">Historical Signals</div>
+                <div style="font-size:20px;font-weight:bold">{len(signals)}</div>
+                <div style="font-size:10px;color:#aaa">in available history</div>
+            </div>
+        """, unsafe_allow_html=True)
+
+
+def _render_zweig_chart(result, title):
+    """Render EMA chart for Zweig result"""
+    import plotly.graph_objects as go
+
+    ema_s   = result['ema_series'].tail(126)
+    ratio_s = result['ratio_series'].tail(126)
+
+    fig = go.Figure()
+
+    # Raw ratio
+    fig.add_trace(go.Scatter(
+        x=ema_s.index.astype(str).tolist(),
+        y=ratio_s.values.tolist(),
+        mode='lines',
+        line=dict(color='rgba(100,150,255,0.3)', width=1),
+        name='Daily Ratio',
+    ))
+
+    # EMA line
+    fig.add_trace(go.Scatter(
+        x=ema_s.index.astype(str).tolist(),
+        y=ema_s.values.tolist(),
+        mode='lines',
+        line=dict(color='#00b4d8', width=2),
+        name='EMA10',
+    ))
+
+    # Signal threshold lines
+    fig.add_hline(y=0.615, line_dash='dash', line_color='#2dc653',
+                  annotation_text='0.615 — Thrust threshold',
+                  annotation_position='right')
+    fig.add_hline(y=0.40, line_dash='dash', line_color='#e63946',
+                  annotation_text='0.40 — Oversold threshold',
+                  annotation_position='right')
+
+    # Mark signal firing dates
+    for sig_date in result['signal_dates']:
+        if sig_date >= ema_s.index[0]:
+            fig.add_vline(
+                x=str(sig_date)[:10],
+                line_dash='dot',
+                line_color='#2dc653',
+                opacity=0.6,
+            )
+
+    fig.update_layout(
+        title       = title,
+        height      = 280,
+        plot_bgcolor= 'rgba(15,15,25,1)',
+        paper_bgcolor='rgba(15,15,25,1)',
+        font        = dict(color='white'),
+        xaxis       = dict(gridcolor='rgba(255,255,255,0.05)'),
+        yaxis       = dict(gridcolor='rgba(255,255,255,0.05)',
+                           range=[0, 1]),
+        showlegend  = True,
+        legend      = dict(font=dict(size=10)),
+        margin      = dict(l=50, r=120, t=40, b=30),
+    )
+    st.plotly_chart(fig, width='stretch')
+
+
+def _render_zweig_history(result):
+    """Render historical signal dates"""
+    signals = result['signal_dates']
+    if not signals:
+        st.caption("No historical signals found in available data")
+        return
+
+    with st.expander(f"📅 Historical signal dates ({len(signals)} total)"):
+        import pandas as pd
+        rows = []
+        for i, sig_date in enumerate(reversed(signals[-20:])):
+            rows.append({
+                '#'   : len(signals) - i,
+                'Date': sig_date.strftime('%Y-%m-%d'),
+                'Day' : sig_date.strftime('%A'),
+            })
+        st.dataframe(pd.DataFrame(rows), width='stretch', hide_index=True)
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # MACRO PAGE
@@ -1440,7 +1796,7 @@ PE and BDC returns: {pe_summary}"""
 elif page == "AU Market":
     st.title("AU Total Market")
 
-    tab1, tab2, tab3 = st.tabs(["Breadth", "Benchmark", "Screener"])
+    tab1, tab2, tab3, tab4 = st.tabs(["Breadth", "Zweig Thrust", "Benchmark", "Screener"])
 
     with tab1:
         st.subheader("AU Market Breadth")
@@ -1517,6 +1873,7 @@ elif page == "AU Market":
                     style_breadth(df_sector, delta_cols=['dL5','dL63']),
                     width='stretch', hide_index=True, height=600
                 )
+
         else:
             st.warning("No breadth history found")
 
@@ -1525,6 +1882,16 @@ elif page == "AU Market":
             st.rerun()
 
     with tab2:
+        st.subheader("Zweig Breadth Thrust")
+        history_file = os.path.join(STOCKS, 'results', 'breadth', 'au_total_market',
+                                    'au_total_market_breadth_history.csv')
+        zweig_history = load_csv(history_file)
+        if zweig_history is not None:
+            render_zweig_section(zweig_history, 'sec', 'AU Market', show_sector=True)
+        else:
+            st.warning("No breadth history found — run AU breadth script first")
+
+    with tab3:
         st.subheader("Benchmark vs VAS.AX")
         st.markdown("""
             <div class="info-card">
@@ -1576,7 +1943,7 @@ elif page == "AU Market":
             run_script(os.path.join(STOCKS, 'au_total_market_benchmark.py'), STOCKS)
             st.rerun()
 
-    with tab3:
+    with tab4:
         st.subheader("Sector Peer Screener")
         st.markdown("""
             <div class="info-card">
@@ -1634,7 +2001,7 @@ elif page == "AU Market":
 elif page == "US Market":
     st.title("US Total Market")
 
-    tab1, tab2, tab3 = st.tabs(["Breadth", "Benchmark", "Screener"])
+    tab1, tab2, tab3, tab4 = st.tabs(["Breadth", "Zweig Thrust", "Benchmark", "Screener"])
 
     with tab1:
         st.subheader("US Market Breadth")
@@ -1765,6 +2132,15 @@ elif page == "US Market":
             st.rerun()
 
     with tab2:
+        st.subheader("Zweig Breadth Thrust")
+        history_file = os.path.join(STOCKS, 'results', 'breadth', 'us_total_market', 'us_total_market_breadth_history.csv')
+        history = load_csv(history_file)
+        if history is not None:
+            render_zweig_section(history, 'sp_sec', 'US Market', show_sector=True)
+        else:
+            st.warning("No breadth history found — run US breadth script first")
+
+    with tab3:
         st.subheader("Benchmark vs SPY")
         st.markdown("""
             <div class="info-card">
@@ -1816,7 +2192,7 @@ elif page == "US Market":
             run_script(os.path.join(STOCKS, 'us_total_market_benchmark.py'), STOCKS)
             st.rerun()
 
-    with tab3:
+    with tab4:
         st.subheader("Sector Peer Screener")
         st.markdown("""
             <div class="info-card">
