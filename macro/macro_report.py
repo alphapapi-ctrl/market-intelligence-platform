@@ -182,6 +182,18 @@ def format_live_data(data):
         else:
             lines.append("  ✓ Yield curve positive — un-inverted")
 
+    # Yield curve velocity
+    yc_roc_5d  = data.get('yc_roc_5d')
+    yc_roc_21d = data.get('yc_roc_21d')
+    if yc_roc_5d is not None:
+        if yc_roc_5d > 0.1:
+            yc_vel = '✓ STEEPENING — risk appetite improving'
+        elif yc_roc_5d < -0.1:
+            yc_vel = '⚠ FLATTENING — risk appetite deteriorating'
+        else:
+            yc_vel = '→ STABLE'
+        lines.append(f"  Yield Curve Velocity:  {yc_roc_5d:+.3f}% 5d  {yc_roc_21d:+.3f}% 21d  {yc_vel}")
+
     lines.append("")
     lines.append("─"*70)
     lines.append("  FED & LIQUIDITY")
@@ -219,6 +231,23 @@ def format_live_data(data):
     lines.append(f"  Oil:     ${fmt(data.get('oil'))}  {fmt_chg(data.get('oil_chg_5d'))} 5d")
     lines.append(f"  Gold/SPX ratio:    {fmt(data.get('gold_spx_ratio'), decimals=4)}")
     lines.append(f"  Gold/Copper ratio: {fmt(data.get('gold_copper_ratio'), decimals=1)}")
+
+    # Copper/Gold ratio ROC
+    cu_gold = data.get('cu_gold_ratio')
+    cu_5d   = data.get('cu_gold_chg_5d')
+    cu_21d  = data.get('cu_gold_chg_21d')
+    cu_63d  = data.get('cu_gold_chg_63d')
+    if cu_gold is not None:
+        if cu_63d is not None:
+            if cu_63d > 5:
+                cu_status = '✓ RISING — industrial demand expanding, growth signal'
+            elif cu_63d < -5:
+                cu_status = '⚠ FALLING — industrial demand contracting, recession signal'
+            else:
+                cu_status = '→ FLAT — neutral growth signal'
+        else:
+            cu_status = ''
+        lines.append(f"  Cu/Gold ratio:     {fmt(cu_gold, decimals=6)}  {fmt_chg(cu_5d)} 5d  {fmt_chg(cu_63d)} 63d  {cu_status}")
 
     copper_chg = data.get('copper_chg_5d')
     if copper_chg is not None:
@@ -393,6 +422,13 @@ def build_report(data):
             risk_status = ''
         lines.append(f"  Sector Groups Risk On/Off ratio: {fmt(risk_ratio, decimals=4)}  {fmt_chg(chg_5d)} 5d  {fmt_chg(chg_10d)} 10d  {risk_status}")
 
+    # A/D Line divergence
+    ad_div = data.get('ad_divergence')
+    ad_trend = data.get('ad_trend')
+    if ad_div:
+        flag = '⚠' if 'BEARISH' in ad_div else '✓' if 'BULLISH' in ad_div else '→'
+        lines.append(f"  A/D Line:          {flag} {ad_div}")
+
     # Valuation & leverage
     lines.append("")
     lines.append("─"*70)
@@ -440,6 +476,17 @@ def build_report(data):
                 lines.append(f"  → Margin {fmt(from_peak)}% from peak — watch closely")
             else:
                 lines.append(f"  Margin {fmt(from_peak)}% from peak")
+
+    # Margin debt acceleration
+    margin_accel = data.get('margin_acceleration')
+    if margin_accel is not None:
+        if margin_accel > 0.5:
+            ma_status = '⚠ ACCELERATING — leverage building fast'
+        elif margin_accel < -0.5:
+            ma_status = '✓ DECELERATING — deleveraging in progress'
+        else:
+            ma_status = '→ STABLE'
+        lines.append(f"  Margin Debt Accel:     {margin_accel:+.3f}%  {ma_status}")
 
     buffett = data.get('buffett')
     if buffett is not None:

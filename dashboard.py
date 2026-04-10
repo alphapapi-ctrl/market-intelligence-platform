@@ -569,6 +569,32 @@ if page == "Macro":
         m = re.search(r'Fed Balance Sheet:\s*\$([\d.]+)T', text)
         if m: d['fed_bs'] = float(m.group(1))
 
+        # Copper/Gold ratio
+        m = re.search(r'Cu/Gold ratio:\s*([\d.]+)\s+[▲▼]\s*([\d.]+)%\s+5d\s+[▲▼]\s*([\d.]+)%\s+63d\s+(.*?)(?:\n|$)', text)
+        if m:
+            d['cu_gold_ratio']   = float(m.group(1))
+            d['cu_gold_chg_5d']  = float(m.group(2))
+            d['cu_gold_chg_63d'] = float(m.group(3))
+            d['cu_gold_status']  = m.group(4).strip()
+
+        # Yield curve velocity
+        m = re.search(r'Yield Curve Velocity:\s+([-\d.]+)%\s+5d\s+([-\d.]+)%\s+21d\s+(.*?)(?:\n|$)', text)
+        if m:
+            d['yc_roc_5d']    = float(m.group(1))
+            d['yc_roc_21d']   = float(m.group(2))
+            d['yc_vel_status']= m.group(3).strip()
+
+        # Margin debt acceleration
+        m = re.search(r'Margin Debt Accel:\s+([+\-\d.]+)%\s+(.*?)(?:\n|$)', text)
+        if m:
+            d['margin_acceleration'] = float(m.group(1))
+            d['margin_accel_status'] = m.group(2).strip()
+
+        # A/D line divergence
+        m = re.search(r'A/D Line:\s+(?:⚠|✓|→)\s+(.*?)(?:\n|$)', text)
+        if m:
+            d['ad_divergence'] = m.group(1).strip()
+
         return d
 
     macro = parse_macro_report(report_file)
@@ -749,6 +775,37 @@ if page == "Macro":
         if sent:  indicator_row("Consumer Sentiment", f"{sent}",
             macro.get('sent_label',''), good=sent > 70)
 
+        # Copper/Gold ratio
+        cu_gold = macro.get('cu_gold_ratio')
+        if cu_gold:
+            cu_5d  = macro.get('cu_gold_chg_5d')
+            cu_63d = macro.get('cu_gold_chg_63d')
+            if cu_63d is not None:
+                if cu_63d > 5:
+                    cu_st  = '✓ RISING — industrial demand expanding'
+                    colour = '#2dc653'
+                elif cu_63d < -5:
+                    cu_st  = '⚠ FALLING — industrial demand contracting'
+                    colour = '#e63946'
+                else:
+                    cu_st  = '→ FLAT — neutral growth signal'
+                    colour = '#f77f00'
+            else:
+                cu_st  = ''
+                colour = '#888'
+            st.markdown(f"""
+                <div class="macro-card">
+                    <div class="macro-label">Cu/Gold Ratio</div>
+                    <div class="macro-value">{cu_gold:.6f}</div>
+                    <div style="color:{colour};font-size:10px">
+                        5d: {f"{cu_5d:+.2f}%" if cu_5d is not None else 'n/a'}
+                        &nbsp;|&nbsp;
+                        63d: {f"{cu_63d:+.2f}%" if cu_63d is not None else 'n/a'}
+                    </div>
+                    <div class="macro-signal" style="color:{colour}">{cu_st}</div>
+                </div>
+            """, unsafe_allow_html=True)
+
     with col2:
         st.markdown("**Consumer Cycle**")
         xly = macro.get('xly_xlp', None)
@@ -789,11 +846,23 @@ if page == "Macro":
                 </div>
             """, unsafe_allow_html=True)
 
+            ad_div = macro.get('ad_divergence')
+        if ad_div:
+            good   = 'BULLISH' in ad_div
+            colour = '#2dc653' if good else '#e63946' if 'BEARISH' in ad_div else '#f77f00'
+            st.markdown(f"""
+                <div class="macro-card">
+                    <div class="macro-label">A/D Line Divergence</div>
+                    <div style="color:{colour};font-size:12px;font-weight:bold">{ad_div}</div>
+                </div>
+            """, unsafe_allow_html=True)
+
     with col3:
         st.markdown("**Valuation**")
         vals = [
             ("SPX/M2",        macro.get('spx_m2'),   0.25, "Extreme above 0.25"),
             ("Margin/M2",     macro.get('margin_m2'),1.4,  "Extreme above 1.4"),
+            ("Margin Accel %", macro.get('margin_acceleration'), 0.5, "Accelerating — leverage building"),
             ("Buffett Ind %", macro.get('buffett'),  150,  "Extreme above 150%"),
             ("Shiller CAPE",  macro.get('cape'),     30,   "Extreme above 30"),
         ]
@@ -818,6 +887,7 @@ if page == "Macro":
             ("US 2Y",             macro.get('us2y'),        "%"),
             ("AU 10Y",            macro.get('au10y'),       "%"),
             ("Yield Curve",       macro.get('yield_curve'), "%"),
+            ("Yield Curve 5d Vel", macro.get('yc_roc_5d'),  "%"),
             ("HY Spread",         macro.get('hy_spread'),   "%"),
             ("Fed Balance Sheet", macro.get('fed_bs'),      "T"),
         ]

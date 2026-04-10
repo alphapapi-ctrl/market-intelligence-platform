@@ -84,17 +84,19 @@ def load_snapshot():
 def get_change_alerts(data, prev):
     alerts = []
     checks = [
-        ('us10y',       'US10Y',       0.10, 0.25, 'pts'),
-        ('us02y',       'US2Y',        0.10, 0.25, 'pts'),
-        ('yield_curve', 'Yield Curve', 0.10, 0.25, 'pts'),
-        ('hy_spread',   'HY Spread',   0.20, 0.50, 'pts'),
-        ('ig_spread',   'IG Spread',   0.20, 0.50, 'pts'),
-        ('vix',         'VIX',         3.0,  5.0,  'pts'),
-        ('dxy',         'DXY',         0.5,  1.5,  'pts'),
-        ('gold',        'Gold',        1.0,  3.0,  '%'),
-        ('copper',      'Copper',      1.0,  3.0,  '%'),
-        ('oil',         'Oil',         1.0,  3.0,  '%'),
-        ('spx',         'SPX',         0.5,  2.0,  '%'),
+        ('us10y',         'US10Y',         0.10, 0.25, 'pts'),
+        ('us02y',         'US2Y',          0.10, 0.25, 'pts'),
+        ('yield_curve',   'Yield Curve',   0.10, 0.25, 'pts'),
+        ('hy_spread',     'HY Spread',     0.20, 0.50, 'pts'),
+        ('ig_spread',     'IG Spread',     0.20, 0.50, 'pts'),
+        ('vix',           'VIX',           3.0,  5.0,  'pts'),
+        ('dxy',           'DXY',           0.5,  1.5,  'pts'),
+        ('gold',          'Gold',          1.0,  3.0,  '%'),
+        ('copper',        'Copper',        1.0,  3.0,  '%'),
+        ('oil',           'Oil',           1.0,  3.0,  '%'),
+        ('spx',           'SPX',           0.5,  2.0,  '%'),
+        ('cu_gold_ratio', 'Cu/Gold Ratio', 3.0,  6.0,  '%'),
+        ('yc_roc_5d',     'Yield Curve V', 0.15, 0.30, 'pts'),
     ]
 
     for key, label, notable, alert, unit in checks:
@@ -206,30 +208,25 @@ def collect_macro_data():
     print("  Presidential cycle...")
     CYCLE_START = '2024-11-01'
     spx_cycle   = get_price('^GSPC')
-    
+
     if spx_cycle is not None:
-        # Need full cycle data — fetch separately with longer window
         spx_full = yf.download('^GSPC', start=CYCLE_START, auto_adjust=True, progress=False)['Close']
         if not spx_full.empty:
             spx_val_start = float(spx_full.iloc[0].iloc[0] if isinstance(spx_full.iloc[0], pd.Series) else spx_full.iloc[0])
             spx_val_now   = float(spx_full.iloc[-1].iloc[0] if isinstance(spx_full.iloc[-1], pd.Series) else spx_full.iloc[-1])
-            
-            # Return since cycle start
+
             data['pres_cycle_ret'] = round((spx_val_now / spx_val_start - 1) * 100, 2)
-            
-            # Max drawdown since cycle start
+
             rolling_max = spx_full.cummax()
             drawdowns   = (spx_full - rolling_max) / rolling_max
             if isinstance(drawdowns, pd.DataFrame):
                 drawdowns = drawdowns.iloc[:, 0]
             data['pres_cycle_dd']  = round(float(drawdowns.min() * 100), 2)
-            
-            # Current drawdown from cycle high
+
             cycle_high  = float(spx_full.max().iloc[0] if isinstance(spx_full.max(), pd.Series) else spx_full.max())
-            data['pres_cycle_high']     = round(cycle_high, 2)
-            data['pres_cycle_dd_now']   = round((spx_val_now / cycle_high - 1) * 100, 2)
-            
-            # Days into cycle
+            data['pres_cycle_high']   = round(cycle_high, 2)
+            data['pres_cycle_dd_now'] = round((spx_val_now / cycle_high - 1) * 100, 2)
+
             from datetime import date
             start_date = date(2024, 11, 1)
             data['pres_cycle_days'] = (date.today() - start_date).days
@@ -296,9 +293,9 @@ def collect_macro_data():
         aligned['risk_on']  = aligned['xlk'] + aligned['xlc'] + aligned['xly']
         aligned['risk_off'] = aligned['xlu'] + aligned['xlp'] + aligned['xlv']
         aligned['ratio']    = aligned['risk_on'] / aligned['risk_off']
-        data['risk_ratio']        = round(float(aligned['ratio'].iloc[-1]), 4)
-        data['risk_ratio_chg_5d'] = round(float((aligned['ratio'].iloc[-1] / aligned['ratio'].iloc[-5]  - 1) * 100), 2) if len(aligned) >= 5  else None
-        data['risk_ratio_chg_10d']= round(float((aligned['ratio'].iloc[-1] / aligned['ratio'].iloc[-10] - 1) * 100), 2) if len(aligned) >= 10 else None
+        data['risk_ratio']         = round(float(aligned['ratio'].iloc[-1]), 4)
+        data['risk_ratio_chg_5d']  = round(float((aligned['ratio'].iloc[-1] / aligned['ratio'].iloc[-5]  - 1) * 100), 2) if len(aligned) >= 5  else None
+        data['risk_ratio_chg_10d'] = round(float((aligned['ratio'].iloc[-1] / aligned['ratio'].iloc[-10] - 1) * 100), 2) if len(aligned) >= 10 else None
 
     # Cycle ratios
     print("  Cycle ratios...")
@@ -326,17 +323,17 @@ def collect_macro_data():
         data[f'{label}_chg_20d'] = round(float((aligned['ratio'].iloc[-1] / aligned['ratio'].iloc[-20] - 1) * 100), 2)
         data[f'{label}_chg_63d'] = round(float((aligned['ratio'].iloc[-1] / aligned['ratio'].iloc[-63] - 1) * 100), 2)
 
-    calc_ratio_trend(xly3,  xlp3,  'cyc_xly_xlp')   # discretionary vs staples
-    calc_ratio_trend(xlf,   xlu2,  'cyc_xlf_xlu')   # financials vs utilities
-    calc_ratio_trend(xlk,   spx2,  'cyc_xlk_spx')   # tech vs market
-    calc_ratio_trend(xli,   spx2,  'cyc_xli_spx')   # industrials vs market
-    calc_ratio_trend(xlb,   spx2,  'cyc_xlb_spx')   # materials vs market
-    calc_ratio_trend(xle,   spx2,  'cyc_xle_spx')   # energy vs market
-    calc_ratio_trend(xlp3,  spx2,  'cyc_xlp_spx')   # staples vs market
-    calc_ratio_trend(xlu2,  spx2,  'cyc_xlu_spx')   # utilities vs market
-    calc_ratio_trend(xlv2,  spx2,  'cyc_xlv_spx')   # healthcare vs market
-    calc_ratio_trend(iwm2,  spx2,  'cyc_iwm_spx')   # small cap vs market
-    calc_ratio_trend(xlf,   spx2,  'cyc_xlf_spx')   # financials vs market
+    calc_ratio_trend(xly3,  xlp3,  'cyc_xly_xlp')
+    calc_ratio_trend(xlf,   xlu2,  'cyc_xlf_xlu')
+    calc_ratio_trend(xlk,   spx2,  'cyc_xlk_spx')
+    calc_ratio_trend(xli,   spx2,  'cyc_xli_spx')
+    calc_ratio_trend(xlb,   spx2,  'cyc_xlb_spx')
+    calc_ratio_trend(xle,   spx2,  'cyc_xle_spx')
+    calc_ratio_trend(xlp3,  spx2,  'cyc_xlp_spx')
+    calc_ratio_trend(xlu2,  spx2,  'cyc_xlu_spx')
+    calc_ratio_trend(xlv2,  spx2,  'cyc_xlv_spx')
+    calc_ratio_trend(iwm2,  spx2,  'cyc_iwm_spx')
+    calc_ratio_trend(xlf,   spx2,  'cyc_xlf_spx')
 
     # Volatility
     print("  Volatility...")
@@ -401,6 +398,72 @@ def collect_macro_data():
         aligned = pd.concat([wilshire, gdp], axis=1, sort=True).dropna()
         aligned.columns = ['wilshire', 'gdp']
         data['buffett'] = round(float((aligned['wilshire'].iloc[-1] / 1000) / aligned['gdp'].iloc[-1]) * 100, 2)
+
+    # ── Copper/Gold ratio ROC ─────────────────────────────────────────────────
+    print("  Copper/Gold ratio ROC...")
+    if gold_prices is not None and copper_prices is not None and len(gold_prices) > 0 and len(copper_prices) > 0:
+        aligned_cg = pd.concat([copper_prices, gold_prices], axis=1).dropna()
+        aligned_cg.columns = ['copper', 'gold']
+        aligned_cg['cu_gold'] = aligned_cg['copper'] / aligned_cg['gold']
+        if len(aligned_cg) >= 6:
+            data['cu_gold_ratio']  = round(float(aligned_cg['cu_gold'].iloc[-1]), 6)
+            data['cu_gold_chg_5d'] = round(float((aligned_cg['cu_gold'].iloc[-1] / aligned_cg['cu_gold'].iloc[-6]  - 1) * 100), 2)
+        if len(aligned_cg) >= 22:
+            data['cu_gold_chg_21d'] = round(float((aligned_cg['cu_gold'].iloc[-1] / aligned_cg['cu_gold'].iloc[-22] - 1) * 100), 2)
+        if len(aligned_cg) >= 64:
+            data['cu_gold_chg_63d'] = round(float((aligned_cg['cu_gold'].iloc[-1] / aligned_cg['cu_gold'].iloc[-64] - 1) * 100), 2)
+
+    # ── Yield curve velocity ──────────────────────────────────────────────────
+    print("  Yield curve velocity...")
+    yc_series = get_fred('T10Y2Y')
+    if yc_series is not None:
+        yc_clean = yc_series.dropna()
+        if len(yc_clean) >= 6:
+            data['yc_roc_5d']  = round(float(yc_clean.iloc[-1] - yc_clean.iloc[-6]),  4)
+        if len(yc_clean) >= 22:
+            data['yc_roc_21d'] = round(float(yc_clean.iloc[-1] - yc_clean.iloc[-22]), 4)
+
+    # ── Margin debt acceleration ──────────────────────────────────────────────
+    margin_1m = data.get('margin_chg_1m')
+    margin_3m = data.get('margin_chg_3m')
+    if margin_1m is not None and margin_3m is not None:
+        data['margin_acceleration'] = round(margin_1m - (margin_3m / 3), 4)
+
+    # ── A/D line divergence from breadth history ──────────────────────────────
+    print("  A/D line divergence...")
+    breadth_file = os.path.join(
+        os.path.dirname(os.path.abspath(__file__)),
+        '..', 'stocks', 'results', 'breadth', 'us_total_market',
+        'us_total_market_breadth_history.csv'
+    )
+    breadth_file = os.path.normpath(breadth_file)
+    if os.path.exists(breadth_file):
+        try:
+            bh = pd.read_csv(breadth_file).tail(63)
+            if len(bh) >= 22 and 'leader' in bh.columns and 'laggard' in bh.columns and 'weak' in bh.columns:
+                bh['ad_daily'] = bh['leader'].astype(int) - bh['laggard'].astype(int) - bh['weak'].astype(int)
+                bh['ad_line']  = bh['ad_daily'].cumsum()
+                ad_now   = float(bh['ad_line'].iloc[-1])
+                ad_21d   = float(bh['ad_line'].iloc[-22])
+                ad_trend = 'RISING' if ad_now > ad_21d else 'FALLING'
+                data['ad_line_now'] = round(ad_now, 0)
+                data['ad_trend']    = ad_trend
+
+                if spx_prices is not None and len(spx_prices) >= 22:
+                    spx_now = spx_prices.iloc[-1]
+                    spx_21d = spx_prices.iloc[-22]
+                    if isinstance(spx_now, pd.Series): spx_now = spx_now.iloc[0]
+                    if isinstance(spx_21d, pd.Series): spx_21d = spx_21d.iloc[0]
+                    spx_trend = 'RISING' if float(spx_now) > float(spx_21d) else 'FALLING'
+
+                    if ad_trend == 'RISING' and spx_trend == 'FALLING':
+                        data['ad_divergence'] = 'BULLISH — breadth improving while price falls'
+                    elif ad_trend == 'FALLING' and spx_trend == 'RISING':
+                        data['ad_divergence'] = 'BEARISH — breadth deteriorating while price rises'
+                    else:
+                        data['ad_divergence'] = f'CONFIRMING — breadth and price both {spx_trend}'
+        except Exception as e:
+            print(f"  A/D line error: {e}")
 
     print("Done.")
     return data
