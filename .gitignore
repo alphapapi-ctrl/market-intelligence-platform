@@ -1,2 +1,3 @@
 macro/config.py
 dashboard_settings.json
+ea/mt5_batch_config.json

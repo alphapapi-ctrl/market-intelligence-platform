@@ -1,0 +1,30 @@
+══════════════════════════════════════════════════════════════════════
+  DEMARK SIGNAL REPORT — 11 Apr 2026
+  Universe: 1421 stocks scanned
+══════════════════════════════════════════════════════════════════════
+
+DM9 Top Daily:
+AFL,AGM,ALH,ANIP,ARR,BFC,BGC,BIPC,BY,CBL,CBU,CGON,CPK,DLR,EBC,EIX,ES,FIZZ,FMBH,FOLD,FRME,FRT,GABC,GIII,GNL,HFWA,IVT,JOE,MC,MELI,NBTB,NTB,NTST,NWBI,O,OGS,OSBC,PCG,PCVX,PFSI,PIPR,PMT,RCUS,REG,RHP,SBAC,SIGI,SPG,SPNT,STC,SYBT,TOWN,TRMK,TXNM,UMH,VMC
+
+DM9 Bottom Daily:
+BTU,EQT
+
+DM9 Top Weekly:
+BCRX,ROST,XENE
+
+DM9 Bottom Weekly:
+ADPT,ARE,ASGN,BHVN,CPRT,CWST,GPGI,OPCH,ROL,RYTM,UFPT,UUUU
+
+DM13 Top Daily:
+CELC,FCPT
+
+DM13 Bottom Daily:
+A,DE,DIS,FITB,GIS,HRL,HSIC,JBLU,LMND,MCD,MPC,PM,PRAX,PTON,TGLS,UEC,VTRS
+
+DM13 Top Weekly:
+AAPL,ATMU,AVA,BKH,CPRX,DD,ES,FLYW,FOLD,GNW,KOD,KRYS,MATX,MRCY,NSSC,NWE,ORLY,RMBS,RMD,TEL,TXNM,UNH,VTRS,WVE,XMTR,ZGN
+
+DM13 Bottom Weekly:
+CDNS,CRK,KVUE,RSG,STRA,TENB,TRI
+
+══════════════════════════════════════════════════════════════════════
