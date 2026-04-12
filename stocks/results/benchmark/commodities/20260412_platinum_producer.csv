@@ -1,0 +1,2 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+289,-4,PLG,Platinum Group Metals,platinum,producer,small,1.82,0.7048,0.9784,0.8522,0.8424,STRONG_UP,-35.92,35.82,42.19,-53.74,47.58,94.16,0.2844,LOW,-,1.771,2.194,2.1502,0,18.1007,WEAK,14.3885
