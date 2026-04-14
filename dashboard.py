@@ -59,7 +59,7 @@ SETTINGS_FILE = os.path.join(BASE, 'dashboard_settings.json')
 DEFAULT_SETTINGS = {
     'pages': {
         'Macro'               : True,
-        'Consumer Credit'     : True,
+        'Debt Markets'        : True,
         'AU Market'           : True,
         'US Market'           : True,
         'Commodities'         : True,
@@ -85,9 +85,9 @@ def load_settings():
         try:
             with open(SETTINGS_FILE, 'r') as f:
                 saved = json.load(f)
-                # Merge with defaults in case new pages were added
                 merged = DEFAULT_SETTINGS.copy()
                 merged['pages'].update(saved.get('pages', {}))
+                merged['ai_features'].update(saved.get('ai_features', {}))
                 return merged
         except:
             pass
@@ -103,7 +103,7 @@ page_config = settings['pages']
 
 ALL_PAGES = [
     ("Macro",                "globe"),
-    ("Consumer Credit",      "credit-card"),
+    ("Debt Markets",          "credit-card"),
     ("AU Market",            "flag"),
     ("US Market",            "flag"),
     ("Commodities",          "hammer"),
@@ -451,6 +451,70 @@ def style_breadth(df, pct_cols=None, delta_cols=None):
     return styler
 
 # ── Zweig Breadth Thrust ──────────────────────────────────────────────────────
+
+def build_benchmark_ai_prompt(df, market_label, group_col='sector'):
+    """Build AI prompt from benchmark DataFrame for rotation analysis."""
+    if df is None or len(df) == 0:
+        return None
+    try:
+        total    = len(df)
+        leaders  = len(df[df['regime_label'].isin(['TREND+LEAD','LEADER'])])
+        trend    = len(df[df['regime_label'].isin(['TREND_ONLY','CONTENDER'])])
+        weak     = len(df[df['regime_label'] == 'WEAK'])
+        strong_up = len(df[df.get('rs_trend', pd.Series()).isin(['STRONG_UP'])]) if 'rs_trend' in df.columns else 0
+
+        # Top 10 movers by score
+        score_col = 'score_final' if 'score_final' in df.columns else None
+        if score_col:
+            top10 = df.head(10)[['ticker','name', group_col, 'regime_label','rs_trend']].values.tolist() if group_col in df.columns else df.head(10)[['ticker','name','regime_label','rs_trend']].values.tolist()
+            top10_str = ', '.join([f"{r[0]} ({r[2] if len(r)>2 else ''}/{r[-1]})" for r in top10])
+        else:
+            top10_str = 'n/a'
+
+        # Delta rank movers — biggest climbers
+        if 'delta_rank' in df.columns:
+            df_copy = df.copy()
+            df_copy['delta_rank_num'] = pd.to_numeric(df_copy['delta_rank'].astype(str).str.replace('+',''), errors='coerce')
+            climbers = df_copy.nlargest(5, 'delta_rank_num')[['ticker', group_col if group_col in df_copy.columns else 'ticker', 'delta_rank']].values.tolist()
+            fallers  = df_copy.nsmallest(5, 'delta_rank_num')[['ticker', group_col if group_col in df_copy.columns else 'ticker', 'delta_rank']].values.tolist()
+            climbers_str = ', '.join([f"{r[0]} {r[2]}" for r in climbers])
+            fallers_str  = ', '.join([f"{r[0]} {r[2]}" for r in fallers])
+        else:
+            climbers_str = fallers_str = 'n/a'
+
+        # Sector/commodity rotation
+        if group_col in df.columns:
+            grp = df.groupby(group_col).agg(
+                total   = ('regime_label', 'count'),
+                leaders = ('regime_label', lambda x: x.isin(['TREND+LEAD','LEADER']).sum()),
+            ).reset_index()
+            grp['pct'] = (grp['leaders'] / grp['total'] * 100).round(1)
+            grp = grp.sort_values('pct', ascending=False)
+            top_grp = grp.head(3)[[group_col,'leaders','total','pct']].values.tolist()
+            bot_grp = grp.tail(3)[[group_col,'leaders','total','pct']].values.tolist()
+            top_grp_str = ', '.join([f"{r[0]} ({r[1]}/{r[2]}, {r[3]}%)" for r in top_grp])
+            bot_grp_str = ', '.join([f"{r[0]} ({r[1]}/{r[2]}, {r[3]}%)" for r in bot_grp])
+        else:
+            top_grp_str = bot_grp_str = 'n/a'
+
+        prompt = f"""You are a quantitative equity analyst specialising in relative strength rotation.
+Analyse this {market_label} benchmark ranking data and provide a 5-6 sentence assessment covering:
+(1) Overall market regime health, (2) Sector/group rotation — which are leading and lagging,
+(3) Notable individual movers — both climbers and fallers in rank,
+(4) Accumulation watch signals if any (stocks below SMAs with improving momentum),
+(5) Key risks or divergences worth monitoring.
+Be specific — name tickers and sectors. Avoid generic commentary.
+
+Universe: {total} stocks | Leaders/Trend+Lead: {leaders} ({round(leaders/total*100,1)}%) | Trend Only: {trend} | Weak: {weak} ({round(weak/total*100,1)}%) | Strong RS Up: {strong_up}
+Top 10 by score: {top10_str}
+Biggest rank climbers (5d): {climbers_str}
+Biggest rank fallers (5d): {fallers_str}
+Leading {group_col}s: {top_grp_str}
+Lagging {group_col}s: {bot_grp_str}"""
+        return prompt
+    except Exception as e:
+        return None
+
 def calc_zweig_thrust(advancing_series, declining_series, lookback=252):
     """
     Calculate Zweig Breadth Thrust from advancing and declining issue counts.
@@ -566,7 +630,7 @@ def render_zweig_section(history_df, prefix, label, show_sector=True):
             <b>FIRED</b> = signal active. <b>STRONG</b> = above threshold but no
             prior oversold setup.
         </div>
-#    """, unsafe_allow_html=True)
+    """, unsafe_allow_html=True)
 
 # ── Market-wide internal breadth ──────────────────────────────────────────
     st.markdown("**Internal Breadth Version**")
@@ -1376,14 +1440,14 @@ if page == "Macro":
 # ═══════════════════════════════════════════════════════════════════════════════
 # CONSUMER CREDIT PAGE
 # ═══════════════════════════════════════════════════════════════════════════════
-elif page == "Consumer Credit":
+elif page == "Debt Markets":
     import plotly.graph_objects as go
     import numpy as np
     import json
     import sys
     sys.path.insert(0, MACRO)
 
-    st.title("💳 Consumer Credit Health")
+    st.title("💳 Debt Markets")
     st.markdown("""
         <div class="info-card">
             Tracks the health of consumer, corporate and sovereign credit markets using
@@ -1402,7 +1466,7 @@ elif page == "Consumer Credit":
 
     if not json_files:
         st.warning("No consumer credit data found — run the script first")
-        if st.button("▶ Run Consumer Credit Report", type="primary"):
+        if st.button("▶ Run Debt Markets Report", type="primary"):
             run_script(os.path.join(MACRO, 'consumer_credit.py'), MACRO)
             st.rerun()
     else:
@@ -1533,7 +1597,7 @@ elif page == "Consumer Credit":
         # ══════════════════════════════════════════════════════════════════════
         # SECTION 1 — CONSUMER CREDIT
         # ══════════════════════════════════════════════════════════════════════
-        st.subheader("💳 Consumer Credit")
+        st.subheader("💳 Consumer Credit Markets")
         st.markdown("""
             <div class="info-card">
                 Consumer credit delinquency rates measure the percentage of loans
@@ -1582,7 +1646,10 @@ elif page == "Consumer Credit":
         ai_settings = load_settings()
         if ai_settings.get('ai_features', {}).get('enabled', False):
             import sys
-            sys.path.insert(0, MACRO)
+            import importlib
+            if MACRO not in sys.path:
+                sys.path.insert(0, MACRO)
+            importlib.invalidate_caches()
             from ai_assessment import render_ai_assessment
             cc  = credit_data.get('cc_delinquency', {})
             aut = credit_data.get('auto_delinquency', {})
@@ -1872,6 +1939,61 @@ elif page == "AU Market":
         else:
             st.warning("No breadth history found")
 
+        # ── AI Assessment ─────────────────────────────────────────────────
+        ai_settings = load_settings()
+        if history is not None and ai_settings.get('ai_features', {}).get('enabled', False):
+            import importlib
+            if MACRO not in __import__('sys').path:
+                __import__('sys').path.insert(0, MACRO)
+            importlib.invalidate_caches()
+            from ai_assessment import render_ai_assessment
+
+            today = history.iloc[-1]
+            total = int(today.get('total', 0))
+            leaders = int(today.get('leader', 0))
+            contenders = int(today.get('contender', 0))
+            laggards = int(today.get('laggard', 0))
+            weak = int(today.get('weak', 0))
+            ab20 = round(int(today.get('above_20', 0)) / total * 100, 1) if total > 0 else 0
+            ab50 = round(int(today.get('above_50', 0)) / total * 100, 1) if total > 0 else 0
+            ab200 = round(int(today.get('above_200', 0)) / total * 100, 1) if total > 0 else 0
+            large_l = int(today.get('large_leaders', 0))
+            mid_l   = int(today.get('mid_leaders', 0))
+            small_l = int(today.get('small_leaders', 0))
+
+            # Sector summary — top 3 and bottom 3 by leaders
+            sec_summary = ''
+            if df_sector is not None and len(df_sector) > 0:
+                top3 = df_sector.nlargest(3, 'Leaders')[['Sector','Leaders','Ab200%']].values.tolist()
+                bot3 = df_sector.nsmallest(3, 'Leaders')[['Sector','Leaders','Ab200%']].values.tolist()
+                sec_summary = (
+                    'Top sectors (leaders): ' +
+                    ', '.join([f"{r[0]} ({r[1]})" for r in top3]) +
+                    '. Bottom sectors: ' +
+                    ', '.join([f"{r[0]} ({r[1]})" for r in bot3])
+                )
+
+            # D5 deltas
+            d5_row = get_past_row(history, str(today['date']), 7)
+            d5_leaders = int(today.get('leader', 0)) - int(d5_row.get('leader', 0)) if d5_row is not None else 0
+            d5_ab200   = round(ab200 - (int(d5_row.get('above_200', 0)) / int(d5_row.get('total', total)) * 100), 1) if d5_row is not None else 0
+
+            prompt = f"""You are a market breadth analyst for the Australian stock market (ASX).
+Analyse these breadth readings and provide a concise 4-5 sentence assessment.
+Focus on: (1) overall market health and trend, (2) cap band divergences (large vs small),
+(3) key sector rotations, (4) what the breadth signals suggest about near-term direction.
+Be direct and specific — mention actual numbers.
+
+Date: {today['date']}
+Universe: {total} stocks
+Leaders: {leaders} ({round(leaders/total*100,1)}%) | Contenders: {contenders} | Laggards: {laggards} | Weak: {weak} ({round(weak/total*100,1)}%)
+Above 20 SMA: {ab20}% | Above 50 SMA: {ab50}% | Above 200 SMA: {ab200}%
+5-day change — Leaders: {d5_leaders:+d} | Above 200 SMA: {d5_ab200:+.1f}%
+Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
+{sec_summary}"""
+
+            render_ai_assessment(prompt, ai_settings, 'au_breadth_summary')
+
         if st.button("🔄 Run AU Breadth", key='au_breadth'):
             run_script(os.path.join(STOCKS, 'au_total_market_breadth.py'), STOCKS)
             st.rerun()
@@ -1901,6 +2023,17 @@ elif page == "AU Market":
         df = load_csv(bm_file, index_col='rank')
         if df is not None:
             st.caption(f"Last updated: {file_age(bm_file)} — {len(df)} stocks")
+            # ── AI Rotation Assessment ────────────────────────────────────────
+            ai_settings = load_settings()
+            if ai_settings.get('ai_features', {}).get('enabled', False):
+                import importlib
+                if MACRO not in __import__('sys').path:
+                    __import__('sys').path.insert(0, MACRO)
+                importlib.invalidate_caches()
+                from ai_assessment import render_ai_assessment
+                ai_prompt = build_benchmark_ai_prompt(df.reset_index(), 'AU Market', group_col='sector')
+                if ai_prompt:
+                    render_ai_assessment(ai_prompt, ai_settings, 'au_bm_rotation')
             cols = ['delta_rank','ticker','name','sector','cap_band','close',
                     'rs_ratio','rs_trend','ret_6m','ret_12m','max_dd',
                     'vol_label','acc_watch','regime_label','score_final']
@@ -2122,6 +2255,86 @@ elif page == "US Market":
         else:
             st.warning("No breadth history found")
 
+        # ── AI Assessment ─────────────────────────────────────────────────
+        ai_settings = load_settings()
+        if history is not None and ai_settings.get('ai_features', {}).get('enabled', False):
+            import importlib
+            if MACRO not in __import__('sys').path:
+                __import__('sys').path.insert(0, MACRO)
+            importlib.invalidate_caches()
+            from ai_assessment import render_ai_assessment
+
+            today = history.iloc[-1]
+            total   = int(today.get('total', 0))
+            leaders = int(today.get('leader', 0))
+            weak    = int(today.get('weak', 0))
+            ab20    = round(int(today.get('above_20', 0)) / total * 100, 1) if total > 0 else 0
+            ab50    = round(int(today.get('above_50', 0)) / total * 100, 1) if total > 0 else 0
+            ab200   = round(int(today.get('above_200', 0)) / total * 100, 1) if total > 0 else 0
+
+            # Layer 2 (SP500 quality)
+            sp_total   = int(today.get('sp_total', 0))
+            sp_leaders = int(today.get('sp_leader', 0))
+            sp_ab200   = round(int(today.get('sp_above_200', 0)) / sp_total * 100, 1) if sp_total > 0 else 0
+
+            # Layer 3 (Russell)
+            rus_total   = int(today.get('rus_total', 0))
+            rus_leaders = int(today.get('rus_leader', 0))
+            rus_ab200   = round(int(today.get('rus_above_200', 0)) / rus_total * 100, 1) if rus_total > 0 else 0
+
+            # Cap band
+            large_l = int(today.get('large_leaders', 0))
+            mid_l   = int(today.get('mid_leaders', 0))
+            small_l = int(today.get('small_leaders', 0))
+
+            # D5 deltas
+            d5_row = get_past_row(history, str(today['date']), 7)
+            d5_leaders = leaders - int(d5_row.get('leader', 0)) if d5_row is not None else 0
+            d5_ab200   = round(ab200 - (int(d5_row.get('above_200', 0)) / int(d5_row.get('total', total)) * 100), 1) if d5_row is not None else 0
+            d5_sp_ab200  = round(sp_ab200  - (int(d5_row.get('sp_above_200', 0))  / int(d5_row.get('sp_total', sp_total or 1)) * 100), 1) if d5_row is not None else 0
+            d5_rus_ab200 = round(rus_ab200 - (int(d5_row.get('rus_above_200', 0)) / int(d5_row.get('rus_total', rus_total or 1)) * 100), 1) if d5_row is not None else 0
+
+            # Zweig status
+            zweig_status = ''
+            try:
+                adv = history['leader'].astype(float)
+                dec = history['laggard'].astype(float)
+                zr  = calc_zweig_thrust(adv, dec)
+                if zr:
+                    zweig_status = f"Zweig EMA10: {zr['current_ema']:.4f} — Status: {zr['status']}"
+            except:
+                pass
+
+            # SP sector summary
+            sec_summary = ''
+            if df_sp_sec is not None and len(df_sp_sec) > 0:
+                top3 = df_sp_sec.nlargest(3, 'Leaders')[['Sector','Leaders','Ab200%']].values.tolist()
+                bot3 = df_sp_sec.nsmallest(3, 'Leaders')[['Sector','Leaders','Ab200%']].values.tolist()
+                sec_summary = (
+                    'SP500 top sectors: ' +
+                    ', '.join([f"{r[0]} ({r[1]})" for r in top3]) +
+                    '. Bottom: ' +
+                    ', '.join([f"{r[0]} ({r[1]})" for r in bot3])
+                )
+
+            prompt = f"""You are a market breadth analyst for the US stock market.
+Analyse these three-layer breadth readings and provide a 5-6 sentence assessment.
+Focus on: (1) overall market health trend, (2) divergence between large cap quality (Layer 2)
+and small cap risk appetite (Layer 3), (3) cap band leadership, (4) sector rotation signals,
+(5) what the Zweig Breadth Thrust status implies about near-term momentum.
+Be direct — reference specific numbers and note any concerning divergences.
+
+Date: {today['date']}
+Layer 1 (Full universe {total} stocks): Leaders {leaders} ({round(leaders/total*100,1)}%) | Weak {weak} ({round(weak/total*100,1)}%) | Ab200: {ab200}% ({d5_ab200:+.1f}% 5d)
+Layer 2 (SP500 quality {sp_total} stocks): Leaders {sp_leaders} ({round(sp_leaders/sp_total*100,1) if sp_total else 0}%) | Ab200: {sp_ab200}% ({d5_sp_ab200:+.1f}% 5d)
+Layer 3 (Russell proxy {rus_total} stocks): Leaders {rus_leaders} ({round(rus_leaders/rus_total*100,1) if rus_total else 0}%) | Ab200: {rus_ab200}% ({d5_rus_ab200:+.1f}% 5d)
+Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
+5-day overall change — Leaders: {d5_leaders:+d}
+{zweig_status}
+{sec_summary}"""
+
+            render_ai_assessment(prompt, ai_settings, 'us_breadth_summary')
+
         if st.button("🔄 Run US Breadth", key='us_breadth'):
             run_script(os.path.join(STOCKS, 'us_total_market_breadth.py'), STOCKS)
             st.rerun()
@@ -2149,13 +2362,24 @@ elif page == "US Market":
         df = load_csv(bm_file, index_col='rank')
         if df is not None:
             st.caption(f"Last updated: {file_age(bm_file)} — {len(df)} stocks")
+            # ── AI Rotation Assessment ────────────────────────────────────────
+            ai_settings = load_settings()
+            if ai_settings.get('ai_features', {}).get('enabled', False):
+                import importlib
+                if MACRO not in __import__('sys').path:
+                    __import__('sys').path.insert(0, MACRO)
+                importlib.invalidate_caches()
+                from ai_assessment import render_ai_assessment
+                ai_prompt = build_benchmark_ai_prompt(df.reset_index(), 'US Market', group_col='sector')
+                if ai_prompt:
+                    render_ai_assessment(ai_prompt, ai_settings, 'us_bm_rotation')
             cols = ['delta_rank','ticker','name','sector','cap_band','close',
                     'rs_ratio','rs_trend','ret_6m','ret_12m','max_dd',
                     'vol_label','acc_watch','regime_label','score_final']
             cols = [c for c in cols if c in df.columns]
 
             # Format numeric columns
-            
+
             col1, col2, col3 = st.columns(3)
             with col1:
                 regime_filter = st.multiselect("Filter regime",
@@ -2382,13 +2606,24 @@ elif page == "Commodities":
         df = load_csv(bm_file, index_col='rank')
         if df is not None:
             st.caption(f"Last updated: {file_age(bm_file)} — {len(df)} stocks")
+            # ── AI Rotation Assessment ────────────────────────────────────────
+            ai_settings = load_settings()
+            if ai_settings.get('ai_features', {}).get('enabled', False):
+                import importlib
+                if MACRO not in __import__('sys').path:
+                    __import__('sys').path.insert(0, MACRO)
+                importlib.invalidate_caches()
+                from ai_assessment import render_ai_assessment
+                ai_prompt = build_benchmark_ai_prompt(df.reset_index(), 'Commodities', group_col='commodity')
+                if ai_prompt:
+                    render_ai_assessment(ai_prompt, ai_settings, 'comm_bm_rotation')
             cols = ['delta_rank','ticker','name','commodity','type','cap_band','close',
                     'rs_ratio','rs_trend','ret_6m','ret_12m','max_dd',
                     'vol_label','acc_watch','regime_label','score_final']
             cols = [c for c in cols if c in df.columns]
 
             # Format numeric columns
-           
+
             col1, col2, col3, col4 = st.columns(4)
             with col1:
                 regime_filter = st.multiselect("Filter regime",
@@ -3775,8 +4010,8 @@ elif page == "Run Scripts":
         if st.button("Run Macro Report"):
             run_script(os.path.join(MACRO, 'macro_report.py'), MACRO)
 
-        st.subheader("Consumer Credit")
-        if st.button("Run Consumer Credit Report"):
+        st.subheader("Debt Markets")
+        if st.button("Run Debt Markets Report"):
             run_script(os.path.join(MACRO, 'consumer_credit.py'), MACRO)
 
         st.subheader("AU Market")
