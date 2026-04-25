@@ -3071,13 +3071,13 @@ elif page == "RRG Charts":
         # Controls
         col1, col2, col3, col4 = st.columns(4)
         with col1:
-            tail_from = st.slider(
-                "Tail length (trading days)",
-                min_value=1, max_value=252, value=5,
+            tail_range = st.slider(
+                "Tail range (trading days)",
+                min_value=1, max_value=252, value=(5, 63),
                 key=f"tail_{title}",
-                help="Number of trading days to show — tail always ends at the most recent date."
+                help="Left = recent end of tail  |  Right = oldest end. Tail always ends at most recent date."
             )
-            tail_to = 0
+            tail_to, tail_from = tail_range[0], tail_range[1]
         with col2:
             groups      = sorted(history['group'].unique().tolist())
             sel_groups  = st.multiselect("Filter groups", groups, default=groups, key=f"grp_{title}")
@@ -3091,8 +3091,9 @@ elif page == "RRG Charts":
 
         # Filter by date window and group/ticker
         cutoff_from = latest_date - pd.Timedelta(days=int(tail_from * 1.5))
-        df      = history[history['date'] >= cutoff_from].copy()
-        # Cap to tail_from rows per ticker — tail always ends at latest date
+        cutoff_to   = latest_date - pd.Timedelta(days=max(0, tail_to - 1))
+        df      = history[(history['date'] >= cutoff_from) & (history['date'] <= cutoff_to + pd.Timedelta(days=2))].copy()
+        # Cap to tail_from rows per ticker
         df      = df.groupby('ticker', group_keys=False).apply(lambda x: x.sort_values('date').tail(tail_from))
         df      = df[df['group'].isin(sel_groups)]
         if sel_tickers:
@@ -3184,13 +3185,13 @@ elif page == "RRG Charts":
         fig = go.Figure()
 
         # Quadrant backgrounds
-        fig.add_shape(type='rect', x0=100, y0=100, x1=175, y1=135,
+        fig.add_shape(type='rect', x0=100, y0=100, x1=175, y1=170,
                       fillcolor='rgba(0,180,0,0.06)', line_width=0, layer='below')
-        fig.add_shape(type='rect', x0=65,  y0=100, x1=100, y1=135,
+        fig.add_shape(type='rect', x0=50,  y0=100, x1=100, y1=170,
                       fillcolor='rgba(100,100,255,0.06)', line_width=0, layer='below')
-        fig.add_shape(type='rect', x0=65,  y0=65,  x1=100, y1=100,
+        fig.add_shape(type='rect', x0=50,  y0=50,  x1=100, y1=100,
                       fillcolor='rgba(255,50,50,0.06)', line_width=0, layer='below')
-        fig.add_shape(type='rect', x0=100, y0=65,  x1=175, y1=100,
+        fig.add_shape(type='rect', x0=100, y0=50,  x1=175, y1=100,
                       fillcolor='rgba(255,180,0,0.06)', line_width=0, layer='below')
 
         # Quadrant labels
@@ -3289,9 +3290,9 @@ elif page == "RRG Charts":
             plot_bgcolor = get_chart_theme()['plot_bgcolor'],
             paper_bgcolor= get_chart_theme()['paper_bgcolor'],
             font         = dict(color=get_chart_theme()['font_color']),
-            xaxis        = dict(range=[65,175], gridcolor=get_chart_theme()['gridcolor'],
+            xaxis        = dict(range=[50,175], gridcolor=get_chart_theme()['gridcolor'],
                                 tickfont=dict(size=10), title_font=dict(size=11)),
-            yaxis        = dict(range=[65,135], gridcolor=get_chart_theme()['gridcolor'],
+            yaxis        = dict(range=[50,170], gridcolor=get_chart_theme()['gridcolor'],
                                 tickfont=dict(size=10), title_font=dict(size=11)),
             showlegend   = False,
             margin       = dict(r=40, l=60, t=60, b=60),
@@ -3328,7 +3329,7 @@ elif page == "RRG Charts":
         # ── PNG export with embedded legend ───────────────────────────────────
         fig_export = go.Figure(fig)
         # Build two-column legend for PNG export
-        _png_quad_order = {'1_LEADING': 0, '3_IMPROVING': 1, '2_WEAKENING': 2, '4_LAGGING': 3}
+        _png_quad_order = {'4_LAGGING': 0, '2_WEAKENING': 1, '3_IMPROVING': 2, '1_LEADING': 3}
         sorted_tickers_png = sorted(
             sorted_tickers,
             key=lambda item: (_png_quad_order.get(get_quadrant(item[1][0], item[1][1])[0], 9), -item[1][0])
@@ -3336,7 +3337,7 @@ elif page == "RRG Charts":
 
         lh = 0.032; ann_color = '#111111' if _get_theme_mode()=='light' else '#ffffff'
         col1_x, col2_x = 1.02, 1.175; col1_items, col2_items = [], []
-        _left_quads = {'3_IMPROVING', '4_LAGGING'}; last_quad = None
+        _left_quads = {'4_LAGGING', '2_WEAKENING'}; last_quad = None
         for ticker, (x, y, label, colour) in sorted_tickers_png:
             quad, icon = get_quadrant(x, y); qname = quad.split('_')[1]
             cur_list = col1_items if quad in _left_quads else col2_items
@@ -3373,7 +3374,7 @@ elif page == "RRG Charts":
         st.download_button(
             label     = f"⬇ Download PNG ({tail_days}d tail)",
             data      = img_bytes,
-            file_name = f"rrg_{title.replace(' ','_').replace('/','_')}_{tail_from}d_{datetime.today().strftime('%Y%m%d')}.png",
+            file_name = f"rrg_{title.replace(' ','_').replace('/','_')}_{tail_to}to{tail_from}d_{datetime.today().strftime('%Y%m%d')}.png",
             mime      = 'image/png',
             key       = f"dl_rrg_{title}"
         )
@@ -3635,12 +3636,12 @@ elif page == "Breadth RRG":
             st.plotly_chart(fig, use_container_width=True)
 
         # ── Streamlit legend below chart ──────────────────────────────────────
-        quad_groups = {'1_LEADING': [], '3_IMPROVING': [], '2_WEAKENING': [], '4_LAGGING': []}
+        quad_groups = {'4_LAGGING': [], '2_WEAKENING': [], '3_IMPROVING': [], '1_LEADING': []}
         quad_labels = {
-            '1_LEADING'  : ('🟢 LEADING',   '#2dc653'),
-            '3_IMPROVING': ('🔵 IMPROVING',  '#00b4d8'),
-            '2_WEAKENING': ('🟡 WEAKENING',  '#f77f00'),
             '4_LAGGING'  : ('🔴 LAGGING',    '#e63946'),
+            '2_WEAKENING': ('🟡 WEAKENING',  '#f77f00'),
+            '3_IMPROVING': ('🔵 IMPROVING',  '#00b4d8'),
+            '1_LEADING'  : ('🟢 LEADING',   '#2dc653'),
         }
         for sec_key, (x, y, label, colour) in sorted_tickers:
             quad = get_quadrant(x, y)[0]
