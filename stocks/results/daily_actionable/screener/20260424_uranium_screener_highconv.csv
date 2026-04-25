@@ -1,0 +1,4 @@
+rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+3,-1,OKLO,OKLO INC,Uranium,large,76.46,95.65,0.1444,0.263,-0.0282,FLAT,-36.35,214.39,470.6,-73.83,50.8,96.47,3.1374,HIGH,SHIFT,56.1735,59.6432,85.9715,0,112.8961,LAGGARD,60.9288
+4,5,LEU,CENTRUS ENERGY CORP-CLASS A,Uranium,mid,219.58,97.83,0.0783,0.0158,-0.1594,STRONG_UP,-30.25,219.39,438.45,-61.35,52.4,92.36,1.8188,HIGH,SHIFT,190.7785,197.6734,252.0675,0,124.4693,LAGGARD,52.4227
+19,0,SMR,NUSCALE POWER CORP,Uranium,mid,12.72,4.35,0.0055,-0.0426,-0.2573,STRONG_UP,-63.36,-23.19,131.27,-82.86,47.6,99.69,2.4903,HIGH,SHIFT,10.842,11.9888,26.5223,0,-11.072,WEAK,25.9752

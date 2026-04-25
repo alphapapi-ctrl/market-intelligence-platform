@@ -1,0 +1,51 @@
+════════════════════════════════════════════════════════════════════════════════
+  MARKET BREADTH SUMMARY — 2026-04-23
+════════════════════════════════════════════════════════════════════════════════
+  Metric                       Today       D5      D20      D63
+────────────────────────────────────────────────────────────────────────────────
+  Total                         1750       +8       +2      +88
+  Leaders                        343        0      +14      -41
+  Contenders                     212       -2      +48     -110
+  Laggards                       439       -4      -40      -33
+  Weak                           756      +14      -20     +272
+  Above 20 SMA                   983      -90     +614      -26
+  Above 50 SMA                   709      +77     +402     -354
+  Above 200 SMA                  665      -12      +81     -383
+  High Volume                    245      +10      +31     -124
+  Acc Early                       35      +12     -141      -37
+  Acc Progress                    15      -14      -14       -1
+  Acc Shift                       38       +3      +21       +8
+  Large Total                     62       +1      -51      -49
+  Large Leaders                   11       -3      -13       -5
+  Mid Total                      116        0     -157     -146
+  Mid Leaders                     20        0      -43      -52
+  Small Total                   1572       +7     +211     +284
+  Small Leaders                  312       +3      +70      +16
+────────────────────────────────────────────────────────────────────────────────
+  SECTOR BREADTH
+────────────────────────────────────────────────────────────────────────────────
+  Sector                      Lead    dL5   dL63   Ab20 dA20_5   Ab50 dA50_5  Ab200 dA200_5   HVol
+────────────────────────────────────────────────────────────────────────────────
+  Producer Manufacturing         9     +1     -2     24     -3     20     +5     17     +1     10
+  Health Technology             18     -2     -7     57    -10     46     +1     31     +1     17
+  Non-Energy Minerals          148     -3    -12    421    -45    264    +16    311    -12     85
+  Technology Services           27     +3     -3     91     +5     71    +21     37     +2     29
+  Process Industries            11     +2     -1     30     +3     23     +5     20     +2     10
+  Electronic Technology          8      0     +1     18     -3     14     -1     13     +2      4
+  Energy Minerals               24     +2     +4     44     +3     52     +3     56     -5     21
+  Miscellaneous                 16      0     -2     45    -12     32     +3     33      0      9
+  Consumer Services              8     +2     -4     25     +1     15     +2     10     +2      6
+  Consumer Non-Durables          4     -2     -1     14     -1     11     +2     10      0      7
+  Communications                 3      0     +1      6      0      6      0      6      0      1
+  Finance                       26     -1     -8     93     -8     69    +12     46     -4     19
+  Retail Trade                   3      0     -5     14     -6      9     +3      6      0      5
+  Industrial Services           11      0     +3     27     +1     22     +2     24     -2      2
+  Commercial Services           11      0     -3     29     -2     24     +2     18     +2      4
+  Consumer Durables              4      0      0      7      0      6     +1      7      0      4
+  Utilities                      3      0      0      8     -7      9     -4      7      0      3
+  Transportation                 3      0      0      8     -3      3     +1      3      0      2
+  Distribution Services          4     -1      0     10     -1      5     +2      6      0      2
+  Health Services                2     -1     -2      7     -3      5     +1      3     -1      3
+  Index                          0      0      0      1      0      1      0      1      0      1
+  Nan                            0      0      0      0      0      0      0      0      0      0
+════════════════════════════════════════════════════════════════════════════════

@@ -9,7 +9,7 @@ RESULTS_DIR   = 'results/rrg/'
 OUTPUT_FILE   = 'results/rrg/us_rrg_history.csv'
 BENCHMARK     = 'SPY'
 LOOKBACK_DAYS = 400  # for SMA calculations
-BACKFILL_DAYS = 180  # 6 months
+BACKFILL_DAYS = 500  # 6 months
 
 TICKERS = {
     # US Sectors
@@ -42,6 +42,20 @@ TICKERS = {
     'SILJ' : ('Junior Silver Miners',    'commodity'),
     # Banks/Finance
     'KRE'  : ('Regional Banks',          'sector'),
+    # Energy/Resources Thematic
+    'OIH'  : ('Oil Services',            'thematic'),
+    'XOP'  : ('Oil & Gas E&P',           'thematic'),
+    'PBW'  : ('Clean Energy',            'thematic'),
+    'TAN'  : ('Solar',                   'thematic'),
+    'JETS' : ('Airlines',                'thematic'),
+    # Agriculture/Water
+    'MOO'  : ('Agribusiness',            'thematic'),
+    'PHO'  : ('Water',                   'thematic'),
+    # Tech/Internet
+    'FDN'  : ('Internet',                'thematic'),
+    # Commodities
+    'URNM' : ('Uranium Miners',          'commodity'),
+    'REMX' : ('Rare Earth Metals',       'commodity'),
 }
 
 def fetch_prices(tickers, benchmark, start, end):
@@ -137,32 +151,22 @@ if __name__ == "__main__":
     start = time.time()
 
     end_date   = datetime.today().strftime('%Y-%m-%d')
-    start_date = (datetime.today() - timedelta(days=LOOKBACK_DAYS)).strftime('%Y-%m-%d')
+    start_date = (datetime.today() - timedelta(days=BACKFILL_DAYS)).strftime('%Y-%m-%d')
+
+    if os.path.exists(OUTPUT_FILE):
+        history    = pd.read_csv(OUTPUT_FILE)
+        last_date  = history['date'].max()
+        start_from = last_date
+        print(f"Existing history found — processing from {start_from}")
+    else:
+        start_from = start_date
+        print(f"No existing history — backfilling {BACKFILL_DAYS} days from {start_from}")
 
     prices = fetch_prices(TICKERS, BENCHMARK, start_date, end_date)
 
-    # Check existing history for backfill
-    if os.path.exists(OUTPUT_FILE):
-        history       = pd.read_csv(OUTPUT_FILE)
-        existing_dates= set(history[history['ticker'] == list(TICKERS.keys())[0]]['date'].tolist())
-        last_date     = max(existing_dates) if existing_dates else '2000-01-01'
-        backfill_start= (datetime.today() - timedelta(days=BACKFILL_DAYS)).strftime('%Y-%m-%d')
-        start_from    = max(last_date, backfill_start)
-        print(f"Existing history found — processing from {start_from}")
-    else:
-        start_from    = (datetime.today() - timedelta(days=BACKFILL_DAYS)).strftime('%Y-%m-%d')
-        print(f"No existing history — backfilling from {start_from}")
-
-    # Filter prices to relevant date range
-    prices_filtered = prices[prices.index >= start_from]
-    # Need extra lookback for RS calculation
-    prices_full     = prices
-
     print(f"Calculating RRG data for {len(TICKERS)} tickers...")
-    new_df = calculate_rrg(prices_full, BENCHMARK, TICKERS)
-
-    # Filter to only new dates
-    new_df = new_df[new_df['date'] >= start_from]
+    new_df = calculate_rrg(prices, BENCHMARK, TICKERS)
+    new_df = new_df[new_df['date'] > start_from] if os.path.exists(OUTPUT_FILE) else new_df
     print(f"New rows: {len(new_df)}")
 
     history = save_history(new_df, OUTPUT_FILE)

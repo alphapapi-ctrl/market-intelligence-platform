@@ -1,0 +1,19 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+119,4,QUB.AX,Qube Holdings Ltd.,Transportation,Other transportation,mid,5.01,1.1461,1.0003,0.9777,1.0504,UP,19.15,35.5,59.32,-9.78,46.4,12.28,0.767,LOW,-,4.9405,4.93,4.5004,1,134.1216,TREND+LEAD,28.6779
+292,1,AZJ.AX,Aurizon Holdings Ltd.,Transportation,Railroads,mid,4.09,1.1857,0.9772,0.9878,1.1558,DOWN,26.64,40.17,16.08,-7.37,47.6,22.95,1.0177,MED,-,4.0375,3.9303,3.4288,1,83.3245,TREND+LEAD,20.0126
+630,5,QAN.AX,Qantas Airways Limited,Transportation,Airlines,large,9.08,0.9631,1.004,1.0048,0.8861,DOWN,-14.32,13.86,70.45,-29.51,52.0,40.01,0.7931,LOW,PROGRESS,8.7085,9.2047,10.0208,0,18.0091,WEAK,13.9331
+736,6,WWG.AX,Wiseway Group Ltd.,Transportation,Airlines,small,0.275,1.6359,0.9963,0.9406,0.9802,UP,25.5,93.4,120.58,-36.11,24.8,93.56,0.3056,LOW,-,0.2632,0.2956,0.2336,1,24.758,TREND+LEAD,12.8657
+871,12,BXB.AX,Brambles Limited,Transportation,Air freight/Couriers,large,22.39,0.9516,0.9775,0.9677,0.9598,UP,-8.5,12.5,51.72,-15.05,50.8,21.76,0.7277,LOW,EARLY,22.567,23.0761,23.3929,0,29.1765,WEAK,11.622
+1075,13,AVD.AX,Avada Group Limited,Transportation,Other transportation,small,0.105,0.2961,0.9963,1.0677,0.6296,DOWN,-38.24,-65.0,-83.85,-68.33,14.4,90.79,0.0,LOW,-,0.1005,0.1072,0.1512,0,-10.3095,WEAK,9.8893
+1142,14,CLX.AX,CTI Logistics Limited,Transportation,Air freight/Couriers,small,1.77,0.9567,0.9797,0.8571,0.7609,UP,-1.48,13.1,27.3,-24.92,40.4,30.25,1.2409,MED,-,1.8162,2.0315,1.929,0,17.4989,WEAK,9.4402
+1299,15,AQZ.AX,Alliance Aviation Services Limited,Transportation,Airlines,small,0.63,0.2116,1.0206,1.0228,0.5194,DOWN,-74.49,-74.98,-79.01,-80.48,38.4,89.84,0.603,LOW,-,0.5998,0.7053,1.6418,0,-32.049,WEAK,8.3432
+1378,15,BCK.AX,Brockman Mining Ltd.,Transportation,Other transportation,small,0.015,0.9063,0.9963,1.035,1.0601,STRONG_DOWN,-25.0,7.14,-42.31,-40.91,16.8,90.49,1.2185,MED,-,0.0147,0.0158,0.0176,0,1.3261,WEAK,7.6438
+1505,14,VGN.AX,Virgin Australia Holdings Limited,Transportation,Airlines,small,2.54,0.6652,1.0414,0.9156,0.7685,UP,-27.64,-21.36,-21.36,-39.52,41.06,57.7,1.9782,HIGH,-,2.4345,2.8068,3.17,0,-15.2016,WEAK,6.2577
+1510,14,TCL.AX,Transurban Group Ltd.,Transportation,Other transportation,large,13.56,0.8749,0.9912,0.916,0.9687,DOWN,-4.75,3.43,16.59,-9.8,53.2,16.16,1.2422,MED,EARLY,13.7745,13.998,13.988,0,11.2822,WEAK,6.2221
+1588,15,FRW.AX,Freightways Group Limited,Transportation,Air freight/Couriers,small,10.01,0.9117,0.9347,0.8791,0.8235,UP,-16.76,7.78,43.55,-19.21,12.4,32.32,1.1095,MED,-,10.616,11.5003,11.3279,0,2.9851,WEAK,5.0941
+1600,13,LAU.AX,Lindsay Australia Limited,Transportation,Trucking,small,0.63,0.8558,1.0043,1.0088,0.9225,DOWN,4.42,1.17,-30.4,-23.59,39.6,34.61,1.1543,MED,-,0.6022,0.6262,0.6412,0,1.3375,WEAK,4.8862
+1652,13,AIZ.AX,Air New Zealand Limited,Transportation,Airlines,small,0.365,0.5875,1.0101,0.9794,0.7223,UP,-30.48,-30.55,-27.65,-37.84,27.2,39.59,0.7667,LOW,-,0.365,0.4176,0.4939,0,-20.9888,WEAK,3.618
+1668,13,ALX.AX,Atlas Arteria,Transportation,Other transportation,mid,4.27,0.8049,0.9848,0.9262,0.9039,UP,-8.64,-4.84,-6.96,-16.16,43.2,19.25,0.4885,LOW,EARLY,4.3059,4.4086,4.646,0,-10.8723,WEAK,3.2275
+1670,13,SST.AX,Steamships Trading Co. Ltd.,Transportation,Marine shipping,small,10.1,0.6441,1.0063,0.966,0.9993,DOWN,-14.41,-23.85,-31.08,-32.67,7.6,14.32,0.0,LOW,-,10.015,10.2218,11.6897,0,-12.657,WEAK,3.1349
+1692,12,AIA.AX,Auckland International Airport Limited,Transportation,Other transportation,large,6.73,0.7875,0.9919,0.9409,0.936,UP,-4.73,-6.9,-4.82,-13.38,49.6,18.42,0.4481,LOW,PROGRESS,6.7155,7.0142,6.9521,0,-18.5679,WEAK,2.3462
+1698,12,KSC.AX,K & S Corporation Limited,Transportation,Trucking,small,3.21,0.8058,0.9994,0.9751,0.9488,UP,4.84,-4.74,24.27,-12.15,28.8,23.4,0.1838,LOW,-,3.2,3.272,3.2835,0,-5.8368,WEAK,1.8285

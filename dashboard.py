@@ -7,6 +7,75 @@ import glob
 from streamlit_option_menu import option_menu
 import json
 
+# ── Theme helpers ─────────────────────────────────────────────────────────────
+import re as _re
+
+def _get_theme_mode():
+    """Read .streamlit/config.toml and return 'light' or 'dark'.
+    Falls back to dashboard_settings.json theme key, then 'light' as default."""
+    cfg_file = os.path.join(BASE, '.streamlit', 'config.toml')
+    if os.path.isfile(cfg_file):
+        try:
+            text = open(cfg_file).read()
+            m = _re.search(r'base\s*=\s*"([^"]*)"', text)
+            if m:
+                return m.group(1).lower()
+        except:
+            pass
+    try:
+        s = json.load(open(SETTINGS_FILE))
+        return s.get('theme', 'light')
+    except:
+        pass
+    return 'light'
+
+def get_chart_theme():
+    """Return plotly colour dict matching current theme."""
+    mode = _get_theme_mode()
+    if mode == 'light':
+        return {
+            'plot_bgcolor' : 'rgba(245,245,248,1)',
+            'paper_bgcolor': 'rgba(245,245,248,1)',
+            'gridcolor'    : 'rgba(0,0,0,0.08)',
+            'font_color'   : '#1a1a1a',
+        }
+    return {
+        'plot_bgcolor' : 'rgba(15,15,25,1)',
+        'paper_bgcolor': 'rgba(15,15,25,1)',
+        'gridcolor'    : 'rgba(255,255,255,0.05)',
+        'font_color'   : 'white',
+    }
+
+def _write_streamlit_config(theme_dict):
+    """Write .streamlit/config.toml with given theme."""
+    cfg_dir = os.path.join(BASE, '.streamlit')
+    os.makedirs(cfg_dir, exist_ok=True)
+    lines = ['[theme]\n']
+    for k, v in theme_dict.items():
+        lines.append(f'{k} = "{v}"\n')
+    with open(os.path.join(cfg_dir, 'config.toml'), 'w') as f:
+        f.writelines(lines)
+
+THEMES = {
+    'Dark': {
+        'base'                    : 'dark',
+        'primaryColor'            : '#1a3a5c',
+        'backgroundColor'         : '#0e1117',
+        'secondaryBackgroundColor': '#1a1f2e',
+        'textColor'               : '#fafafa',
+        'font'                    : 'sans serif',
+    },
+    'Light': {
+        'base'                    : 'light',
+        'primaryColor'            : '#1a3a5c',
+        'backgroundColor'         : '#ffffff',
+        'secondaryBackgroundColor': '#f0f2f6',
+        'textColor'               : '#1a1a1a',
+        'font'                    : 'sans serif',
+    },
+}
+
+
 # ── Config ────────────────────────────────────────────────────────────────────
 BASE    = os.path.dirname(os.path.abspath(__file__))
 MACRO   = os.path.join(BASE, 'macro')
@@ -30,6 +99,8 @@ STATUS_COLOURS = {
 
 st.markdown("""
     <style>
+    thead tr th { color: #1a1a2e !important; font-weight: 600 !important; }
+    [data-testid="stDataFrame"] th { color: #1a1a2e !important; font-weight: 600 !important; }
     .info-card {
         background: rgba(128,128,128,0.08);
         border: 1px solid rgba(128,128,128,0.25);
@@ -57,6 +128,7 @@ st.markdown("""
 SETTINGS_FILE = os.path.join(BASE, 'dashboard_settings.json')
 
 DEFAULT_SETTINGS = {
+    'theme': 'light',
     'pages': {
         'Macro'               : True,
         'Debt Markets'        : True,
@@ -88,6 +160,8 @@ def load_settings():
                 merged = DEFAULT_SETTINGS.copy()
                 merged['pages'].update(saved.get('pages', {}))
                 merged['ai_features'].update(saved.get('ai_features', {}))
+                if 'theme' in saved:
+                    merged['theme'] = saved['theme']
                 return merged
         except:
             pass
@@ -475,8 +549,14 @@ def build_benchmark_ai_prompt(df, market_label, group_col='sector'):
         if 'delta_rank' in df.columns:
             df_copy = df.copy()
             df_copy['delta_rank_num'] = pd.to_numeric(df_copy['delta_rank'].astype(str).str.replace('+',''), errors='coerce')
-            climbers = df_copy.nlargest(5, 'delta_rank_num')[['ticker', group_col if group_col in df_copy.columns else 'ticker', 'delta_rank']].values.tolist()
-            fallers  = df_copy.nsmallest(5, 'delta_rank_num')[['ticker', group_col if group_col in df_copy.columns else 'ticker', 'delta_rank']].values.tolist()
+            if 'rs_ratio' in df_copy.columns:
+                df_copy['rs_ratio_num'] = pd.to_numeric(df_copy['rs_ratio'], errors='coerce')
+                climbers_pool = df_copy[df_copy['rs_ratio_num'] > 0.8]
+                fallers_pool  = df_copy[df_copy['rs_ratio_num'] < 1.2]
+            else:
+                climbers_pool = fallers_pool = df_copy
+            climbers = climbers_pool.nlargest(5, 'delta_rank_num')[['ticker', group_col if group_col in df_copy.columns else 'ticker', 'delta_rank']].values.tolist()
+            fallers  = fallers_pool.nsmallest(5, 'delta_rank_num')[['ticker', group_col if group_col in df_copy.columns else 'ticker', 'delta_rank']].values.tolist()
             climbers_str = ', '.join([f"{r[0]} {r[2]}" for r in climbers])
             fallers_str  = ', '.join([f"{r[0]} {r[2]}" for r in fallers])
         else:
@@ -829,11 +909,11 @@ def _render_zweig_chart(result, title):
     fig.update_layout(
         title       = title,
         height      = 280,
-        plot_bgcolor= 'rgba(15,15,25,1)',
-        paper_bgcolor='rgba(15,15,25,1)',
-        font        = dict(color='white'),
-        xaxis       = dict(gridcolor='rgba(255,255,255,0.05)'),
-        yaxis       = dict(gridcolor='rgba(255,255,255,0.05)',
+        plot_bgcolor= get_chart_theme()['plot_bgcolor'],
+        paper_bgcolor= get_chart_theme()['paper_bgcolor'],
+        font        = dict(color=get_chart_theme()['font_color']),
+        xaxis       = dict(gridcolor=get_chart_theme()['gridcolor']),
+        yaxis       = dict(gridcolor=get_chart_theme()['gridcolor'],
                            range=[0, 1]),
         showlegend  = True,
         legend      = dict(font=dict(size=10)),
@@ -1077,36 +1157,38 @@ if page == "Macro":
             ("Rates", ['US10Y','US2Y']),
         ]
 
-        for group_name, keys in groups:
-            st.markdown(f"**{group_name}**")
-            cols = st.columns(len(keys))
-            for i, key in enumerate(keys):
-                if key not in live:
-                    continue
-                d     = live[key]
-                price = d['price']
-                c1d   = d['chg_1d']
-                c5d   = d['chg_5d']
-                col   = metric_colour(c5d)
+        # 4-column table layout — one column per group
+        _lc1, _lc2, _lc3, _lc4 = st.columns(4)
+        _live_cols = [_lc1, _lc2, _lc3, _lc4]
 
-                # Format price
+        for gi, (group_name, keys) in enumerate(groups):
+            grp_rows = []
+            for key in keys:
+                if key not in live: continue
+                d = live[key]; price = d['price']; c1d = d['chg_1d']; c5d = d['chg_5d']
                 if price > 1000:   fmt = f"{price:,.2f}"
                 elif price > 10:   fmt = f"{price:.2f}"
                 elif price > 1:    fmt = f"{price:.4f}"
                 else:              fmt = f"{price:.5f}"
-
-                cols[i].markdown(f"""
-                    <div class="macro-card" style="text-align:center">
-                        <div class="macro-label">{d['label']}</div>
-                        <div class="macro-value">{fmt}</div>
-                        <div style="color:{metric_colour(c1d)};font-size:12px">
-                            {arrow(c1d)} {abs(c1d):.2f}% 1D</div>
-                        <div style="color:{metric_colour(c5d)};font-size:13px;font-weight:bold">
-                            {arrow(c5d)} {abs(c5d):.2f}% 5D</div>
-                    </div>
-                """, unsafe_allow_html=True)
-        spacer_html = "<div style='margin-top:16px'></div>"
-        st.markdown(spacer_html, unsafe_allow_html=True)
+                grp_rows.append({'Name': d['label'], 'Price': fmt, '1D %': c1d, '5D %': c5d})
+            if grp_rows:
+                import pandas as _pd7
+                df_grp = _pd7.DataFrame(grp_rows)
+                def _live_style(row):
+                    styles = ['', '']
+                    for col_idx, col_key in [(2, '1D %'), (3, '5D %')]:
+                        try:
+                            v = float(row.iloc[col_idx])
+                            styles.append('color:#2dc653' if v > 0 else 'color:#e63946' if v < 0 else '')
+                        except: styles.append('')
+                    return styles
+                with _live_cols[gi % 4]:
+                    st.markdown(f"**{group_name}**")
+                    st.dataframe(
+                        df_grp.style.apply(_live_style, axis=1)
+                            .format({'1D %': '{:+.2f}%', '5D %': '{:+.2f}%'}),
+                        use_container_width=True, hide_index=True
+                    )
 
     st.divider()
 
@@ -1161,8 +1243,7 @@ if page == "Macro":
 
     st.markdown("<div style='margin-top:12px'></div>", unsafe_allow_html=True)
 
-    # Four columns: Economic | Consumer Cycle | Valuation | Credit
-    col1, col2, col3, col4 = st.columns(4)
+    _ms1, col1, col2, col3, col4, _ms2 = st.columns([600, 2500, 2500, 2500, 2500, 600])
 
     with col1:
         st.markdown("**Economic Regime**")
@@ -1174,13 +1255,8 @@ if page == "Macro":
         def indicator_row(label, value, signal_text, good=True):
             colour = '#2dc653' if good else '#e63946'
             icon   = '✓' if good else '⚠'
-            st.markdown(f"""
-                <div class="macro-card">
-                    <div class="macro-label">{label}</div>
-                    <div class="macro-value">{value}</div>
-                    <div class="macro-signal" style="color:{colour}">{icon} {signal_text}</div>
-                </div>
-            """, unsafe_allow_html=True)
+            _ec_rows.append({'Indicator': label, 'Value': str(value), 'Signal': f"{icon} {signal_text}", '_colour': colour})
+        _ec_rows = []
 
         if unemp: indicator_row("Unemployment", f"{unemp}%",
             macro.get('unemp_label',''), good=unemp < 4.5)
@@ -1208,18 +1284,13 @@ if page == "Macro":
             else:
                 cu_st  = ''
                 colour = '#888'
-            st.markdown(f"""
-                <div class="macro-card">
-                    <div class="macro-label">Cu/Gold Ratio</div>
-                    <div class="macro-value">{cu_gold:.6f}</div>
-                    <div style="color:{colour};font-size:10px">
-                        5d: {f"{cu_5d:+.2f}%" if cu_5d is not None else 'n/a'}
-                        &nbsp;|&nbsp;
-                        63d: {f"{cu_63d:+.2f}%" if cu_63d is not None else 'n/a'}
-                    </div>
-                    <div class="macro-signal" style="color:{colour}">{cu_st}</div>
-                </div>
-            """, unsafe_allow_html=True)
+            _ec_rows.append({'Indicator':'Cu/Gold Ratio','Value':f"{cu_gold:.6f}  5d:{f'{cu_5d:+.2f}%' if cu_5d is not None else 'n/a'} 63d:{f'{cu_63d:+.2f}%' if cu_63d is not None else 'n/a'}", 'Signal':cu_st,'_colour':colour})
+        if _ec_rows:
+            import pandas as _pd3
+            _ec_df = _pd3.DataFrame(_ec_rows)[['Indicator','Value','Signal']]
+            def _ec_style(row):
+                return ['','',f"color:{_ec_rows[row.name]['_colour']}"]
+            st.dataframe(_ec_df.style.apply(_ec_style,axis=1),use_container_width=True,hide_index=True)
 
     with col2:
         st.markdown("**Consumer Cycle**")
@@ -1227,50 +1298,25 @@ if page == "Macro":
         rsp = macro.get('rspd_rsps', None)
         sec = macro.get('sector_ratio', None)
 
+        _cc_rows = []
         if xly:
-            lbl    = macro.get('xly_xlp_label','')
-            good   = 'RISK OFF' not in lbl
-            colour = '#2dc653' if good else '#e63946'
-            st.markdown(f"""
-                <div class="macro-card">
-                    <div class="macro-label">XLY/XLP Ratio</div>
-                    <div class="macro-value">{xly}</div>
-                    <div class="macro-signal" style="color:{colour}">{lbl[:50]}</div>
-                </div>
-            """, unsafe_allow_html=True)
+            lbl = macro.get('xly_xlp_label',''); good = 'RISK OFF' not in lbl; colour = '#2dc653' if good else '#e63946'
+            _cc_rows.append({'Indicator':'XLY/XLP Ratio','Value':str(xly),'Signal':lbl[:60],'_c':colour})
         if rsp:
-            lbl    = macro.get('rspd_rsps_label','')
-            good   = 'RISK OFF' not in lbl
-            colour = '#2dc653' if good else '#e63946'
-            st.markdown(f"""
-                <div class="macro-card">
-                    <div class="macro-label">RSPD/RSPS Ratio</div>
-                    <div class="macro-value">{rsp}</div>
-                    <div class="macro-signal" style="color:{colour}">{lbl[:50]}</div>
-                </div>
-            """, unsafe_allow_html=True)
+            lbl = macro.get('rspd_rsps_label',''); good = 'RISK OFF' not in lbl; colour = '#2dc653' if good else '#e63946'
+            _cc_rows.append({'Indicator':'RSPD/RSPS Ratio','Value':str(rsp),'Signal':lbl[:60],'_c':colour})
         if sec:
-            lbl    = macro.get('sector_ratio_label','')
-            good   = 'NEUTRAL' in lbl or 'RISK ON' in lbl
-            colour = '#2dc653' if good else '#f77f00'
-            st.markdown(f"""
-                <div class="macro-card">
-                    <div class="macro-label">Sector Risk On/Off</div>
-                    <div class="macro-value">{sec}</div>
-                    <div class="macro-signal" style="color:{colour}">{lbl[:50]}</div>
-                </div>
-            """, unsafe_allow_html=True)
-
+            lbl = macro.get('sector_ratio_label',''); good = 'NEUTRAL' in lbl or 'RISK ON' in lbl; colour = '#2dc653' if good else '#f77f00'
+            _cc_rows.append({'Indicator':'Sector Risk On/Off','Value':str(sec),'Signal':lbl[:60],'_c':colour})
             ad_div = macro.get('ad_divergence')
         if ad_div:
-            good   = 'BULLISH' in ad_div
-            colour = '#2dc653' if good else '#e63946' if 'BEARISH' in ad_div else '#f77f00'
-            st.markdown(f"""
-                <div class="macro-card">
-                    <div class="macro-label">A/D Line Divergence</div>
-                    <div style="color:{colour};font-size:12px;font-weight:bold">{ad_div}</div>
-                </div>
-            """, unsafe_allow_html=True)
+            good = 'BULLISH' in ad_div; colour = '#2dc653' if good else '#e63946' if 'BEARISH' in ad_div else '#f77f00'
+            _cc_rows.append({'Indicator':'A/D Divergence','Value':'','Signal':ad_div[:60],'_c':colour})
+        if _cc_rows:
+            import pandas as _pd4
+            _cc_df = _pd4.DataFrame(_cc_rows)[['Indicator','Value','Signal']]
+            def _cc_style(row): return ['','',f"color:{_cc_rows[row.name]['_c']}"]
+            st.dataframe(_cc_df.style.apply(_cc_style,axis=1),use_container_width=True,hide_index=True)
 
     with col3:
         st.markdown("**Valuation**")
@@ -1281,18 +1327,16 @@ if page == "Macro":
             ("Buffett Ind %", macro.get('buffett'),  150,  "Extreme above 150%"),
             ("Shiller CAPE",  macro.get('cape'),     30,   "Extreme above 30"),
         ]
+        _val_rows = []
         for lbl, val, threshold, warning in vals:
             if val is None: continue
-            extreme = val > threshold
-            colour  = '#e63946' if extreme else '#2dc653'
-            icon    = '⚠' if extreme else '✓'
-            st.markdown(f"""
-                <div class="macro-card">
-                    <div class="macro-label">{lbl}</div>
-                    <div class="macro-value">{val}</div>
-                    <div class="macro-signal" style="color:{colour}">{icon} {warning if extreme else 'Normal range'}</div>
-                </div>
-            """, unsafe_allow_html=True)
+            extreme = val > threshold; colour = '#e63946' if extreme else '#2dc653'; icon = '⚠' if extreme else '✓'
+            _val_rows.append({'Indicator':lbl,'Value':str(val),'Signal':f"{icon} {warning if extreme else 'Normal range'}", '_c':colour})
+        if _val_rows:
+            import pandas as _pd5
+            _val_df = _pd5.DataFrame(_val_rows)[['Indicator','Value','Signal']]
+            def _val_style(row): return ['','',f"color:{_val_rows[row.name]['_c']}"]
+            st.dataframe(_val_df.style.apply(_val_style,axis=1),use_container_width=True,hide_index=True)
 
     with col4:
         st.markdown("**Credit & Rates**")
@@ -1306,24 +1350,18 @@ if page == "Macro":
             ("HY Spread",         macro.get('hy_spread'),   "%"),
             ("Fed Balance Sheet", macro.get('fed_bs'),      "T"),
         ]
+        _cr_rows = []
         for lbl, val, suffix in credit_items:
             if val is None: continue
-            if lbl == "Yield Curve":
-                colour = '#2dc653' if val > 0 else '#e63946'
-                icon   = '✓ Uninverted' if val > 0 else '⚠ Inverted'
-            elif lbl == "HY Spread":
-                colour = '#2dc653' if val < 4 else '#f77f00' if val < 6 else '#e63946'
-                icon   = 'Contained' if val < 4 else 'Widening' if val < 6 else 'Stress'
-            else:
-                colour = '#888'
-                icon   = ''
-            st.markdown(f"""
-                <div class="macro-card">
-                    <div class="macro-label">{lbl}</div>
-                    <div class="macro-value">{val}{suffix}</div>
-                    <div class="macro-signal" style="color:{colour}">{icon}</div>
-                </div>
-            """, unsafe_allow_html=True)
+            if lbl == "Yield Curve": colour = '#2dc653' if val > 0 else '#e63946'; signal = '✓ Uninverted' if val > 0 else '⚠ Inverted'
+            elif lbl == "HY Spread": colour = '#2dc653' if val < 4 else '#f77f00' if val < 6 else '#e63946'; signal = 'Contained' if val < 4 else 'Widening' if val < 6 else 'Stress'
+            else: colour = '#888888'; signal = ''
+            _cr_rows.append({'Indicator':lbl,'Value':f"{val}{suffix}",'Signal':signal,'_c':colour})
+        if _cr_rows:
+            import pandas as _pd6
+            _cr_df = _pd6.DataFrame(_cr_rows)[['Indicator','Value','Signal']]
+            def _cr_style(row): return ['','',f"color:{_cr_rows[row.name]['_c']}"]
+            st.dataframe(_cr_df.style.apply(_cr_style,axis=1),use_container_width=True,hide_index=True)
 
     # Focus instruments expander
     focus_raw = macro.get('focus_raw', '')
@@ -1583,11 +1621,11 @@ elif page == "Debt Markets":
             fig.update_layout(
                 title       = title,
                 height      = 250,
-                plot_bgcolor= 'rgba(15,15,25,1)',
-                paper_bgcolor='rgba(15,15,25,1)',
-                font        = dict(color='white'),
-                xaxis       = dict(gridcolor='rgba(255,255,255,0.05)'),
-                yaxis       = dict(gridcolor='rgba(255,255,255,0.05)',
+                plot_bgcolor= get_chart_theme()['plot_bgcolor'],
+                paper_bgcolor= get_chart_theme()['paper_bgcolor'],
+                font        = dict(color=get_chart_theme()['font_color']),
+                xaxis       = dict(gridcolor=get_chart_theme()['gridcolor']),
+                yaxis       = dict(gridcolor=get_chart_theme()['gridcolor'],
                                    ticksuffix=suffix),
                 showlegend  = False,
                 margin      = dict(l=50,r=20,t=40,b=30),
@@ -1861,83 +1899,34 @@ elif page == "AU Market":
     tab1, tab2, tab3, tab4 = st.tabs(["Breadth", "Zweig Thrust", "Benchmark", "Screener"])
 
     with tab1:
-        st.subheader("AU Market Breadth")
-        st.markdown("""
-            <div class="info-card">
-                Tracks daily market internals across the full ASX universe. 
-                <b style="color:#ccc">Overall</b> shows aggregate counts and SMA participation as % of total universe with D5/D20/D63 deltas. 
-                <b style="color:#ccc">By Cap Band</b> shows leader and SMA breadth broken down by large/mid/small cap. 
-                <b style="color:#ccc">Sector Breadth</b> shows per-sector leader counts and SMA participation — useful for identifying sector rotation early.
-                <br><span style="color:#666;font-size:16px">💡 Download the breadth history CSV for AI analysis — upload to an AI assistant to identify trends, divergences and rotation signals across the full history.</span>
-            </div>
-        """, unsafe_allow_html=True)
+        _th1,_th2,_th3,_th4,_th5=st.columns([900,4000,1000,2000,900])
+        with _th2:
+            st.subheader("AU Market Breadth")
+        with _th4:
+            st.markdown('<br>',unsafe_allow_html=True)
+            if st.button("🔄 Run AU Breadth",key='au_breadth'):
+                run_script(os.path.join(STOCKS,'au_total_market_breadth.py'),STOCKS)
+                st.rerun()
+        _hc1, _hc2, _hc3 = st.columns([900, 10000, 900])
+        with _hc2:
+            st.markdown("""
+                <div class="info-card">
+                    Tracks daily market internals across the full ASX universe. 
+                    <b style="color:#ccc">Overall</b> shows aggregate counts and SMA participation as % of total universe with D5/D20/D63 deltas. 
+                    <b style="color:#ccc">By Cap Band</b> shows leader and SMA breadth broken down by large/mid/small cap. 
+                    <b style="color:#ccc">Sector Breadth</b> shows per-sector leader counts and SMA participation — useful for identifying sector rotation early.
+                    <br><span style="color:#666;font-size:16px">💡 Download the breadth history CSV for AI analysis — upload to an AI assistant to identify trends, divergences and rotation signals across the full history.</span>
+                </div>
+            """, unsafe_allow_html=True)
 
         history_file = os.path.join(STOCKS, 'results', 'breadth', 'au_total_market', 'au_total_market_breadth_history.csv')
         history = load_csv(history_file)
 
         if history is not None:
             today_str = str(history.iloc[-1]['date'])
-            st.caption(f"Latest: {today_str} — {file_age(history_file)}")
-
-            st.markdown("**Overall**")
-            overall_metrics = [
-                ('Total',         'total'),
-                ('Leaders',       'leader'),
-                ('Contenders',    'contender'),
-                ('Laggards',      'laggard'),
-                ('Weak',          'weak'),
-                ('Above 20 SMA',  'above_20'),
-                ('Above 50 SMA',  'above_50'),
-                ('Above 200 SMA', 'above_200'),
-                ('High Volume',   'high_vol'),
-                ('Acc Early',     'acc_early'),
-                ('Acc Progress',  'acc_progress'),
-                ('Acc Shift',     'acc_shift'),
-            ]
-            df_overall = build_breadth_table(history, overall_metrics)
-            if df_overall is not None:
-                st.dataframe(
-                    style_breadth(df_overall, delta_cols=['D5','D20','D63']),
-                    width='stretch', hide_index=True, height=460
-                )
-
-            st.markdown("**By Cap Band**")
-            cap_metrics = [
-                ('Large Leaders',  'large_leaders'),
-                ('Large Ab20',     'large_above20'),
-                ('Large Ab50',     'large_above50'),
-                ('Large Ab200',    'large_above200'),
-                ('Mid Leaders',    'mid_leaders'),
-                ('Mid Ab20',       'mid_above20'),
-                ('Mid Ab50',       'mid_above50'),
-                ('Mid Ab200',      'mid_above200'),
-                ('Small Leaders',  'small_leaders'),
-                ('Small Ab20',     'small_above20'),
-                ('Small Ab50',     'small_above50'),
-                ('Small Ab200',    'small_above200'),
-            ]
-            df_cap = build_breadth_table(history, cap_metrics)
-            if df_cap is not None:
-                st.dataframe(
-                    style_breadth(df_cap, delta_cols=['D5','D20','D63']),
-                    width='stretch', hide_index=True, height=370
-                )
-
-            st.markdown("**Sector Breadth**")
-            sec_cols  = [c for c in history.columns if c.startswith('sec_') and c.endswith('_total')
-                         and not c.startswith('sp_sec_') and not c.startswith('rus_sec_')]
-            sec_keys  = [c.replace('sec_','').replace('_total','') for c in sec_cols
-                         if 'nan' not in c and 'index' not in c]
-            df_sector = build_sector_table(history, sec_keys, prefix='sec')
-            if df_sector is not None:
-                sector_breadth_caption()
-                st.dataframe(
-                    style_breadth(df_sector, delta_cols=['dL5','dL63']),
-                    width='stretch', hide_index=True, height=600
-                )
-
-        else:
-            st.warning("No breadth history found")
+            _dc1, _dc2, _dc3 = st.columns([900, 10000, 900])
+            with _dc2:
+                st.caption(f"Latest: {today_str} — {file_age(history_file)}")
 
         # ── AI Assessment ─────────────────────────────────────────────────
         ai_settings = load_settings()
@@ -1963,6 +1952,7 @@ elif page == "AU Market":
 
             # Sector summary — top 3 and bottom 3 by leaders
             sec_summary = ''
+            df_sector = locals().get('df_sector', None)
             if df_sector is not None and len(df_sector) > 0:
                 top3 = df_sector.nlargest(3, 'Leaders')[['Sector','Leaders','Ab200%']].values.tolist()
                 bot3 = df_sector.nsmallest(3, 'Leaders')[['Sector','Leaders','Ab200%']].values.tolist()
@@ -1992,11 +1982,84 @@ Above 20 SMA: {ab20}% | Above 50 SMA: {ab50}% | Above 200 SMA: {ab200}%
 Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
 {sec_summary}"""
 
-            render_ai_assessment(prompt, ai_settings, 'au_breadth_summary')
+            _aic1, _aic2, _aic3 = st.columns([900, 10000, 900])
+            with _aic2:
+                render_ai_assessment(prompt, ai_settings, 'au_breadth_summary')
 
-        if st.button("🔄 Run AU Breadth", key='au_breadth'):
-            run_script(os.path.join(STOCKS, 'au_total_market_breadth.py'), STOCKS)
-            st.rerun()
+            _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
+            with _lbc2:
+                st.markdown("**Overall**")
+            overall_metrics = [
+                ('Total',         'total'),
+                ('Leaders',       'leader'),
+                ('Contenders',    'contender'),
+                ('Laggards',      'laggard'),
+                ('Weak',          'weak'),
+                ('Above 20 SMA',  'above_20'),
+                ('Above 50 SMA',  'above_50'),
+                ('Above 200 SMA', 'above_200'),
+                ('High Volume',   'high_vol'),
+                ('Acc Early',     'acc_early'),
+                ('Acc Progress',  'acc_progress'),
+                ('Acc Shift',     'acc_shift'),
+            ]
+            df_overall = build_breadth_table(history, overall_metrics)
+            if df_overall is not None:
+                _bc1, _bc2, _bc3 = st.columns([900, 10000, 900])
+                with _bc2:
+                    st.dataframe(
+                        style_breadth(df_overall, delta_cols=['D5','D20','D63']),
+                        width='stretch', hide_index=True, height=460
+                    )
+
+            _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
+            with _lbc2:
+                st.markdown("**By Cap Band**")
+            cap_metrics = [
+                ('Large Leaders',  'large_leaders'),
+                ('Large Ab20',     'large_above20'),
+                ('Large Ab50',     'large_above50'),
+                ('Large Ab200',    'large_above200'),
+                ('Mid Leaders',    'mid_leaders'),
+                ('Mid Ab20',       'mid_above20'),
+                ('Mid Ab50',       'mid_above50'),
+                ('Mid Ab200',      'mid_above200'),
+                ('Small Leaders',  'small_leaders'),
+                ('Small Ab20',     'small_above20'),
+                ('Small Ab50',     'small_above50'),
+                ('Small Ab200',    'small_above200'),
+            ]
+            df_cap = build_breadth_table(history, cap_metrics)
+            if df_cap is not None:
+                _bc1, _bc2, _bc3 = st.columns([900, 10000, 900])
+                with _bc2:
+                    st.dataframe(
+                        style_breadth(df_cap, delta_cols=['D5','D20','D63']),
+                        width='stretch', hide_index=True, height=370
+                    )
+
+            _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
+            with _lbc2:
+                st.markdown("**Sector Breadth**")
+            sec_cols  = [c for c in history.columns if c.startswith('sec_') and c.endswith('_total')
+                         and not c.startswith('sp_sec_') and not c.startswith('rus_sec_')]
+            sec_keys  = [c.replace('sec_','').replace('_total','') for c in sec_cols
+                         if 'nan' not in c and 'index' not in c]
+            df_sector = build_sector_table(history, sec_keys, prefix='sec')
+            if df_sector is not None:
+                _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
+            with _lbc2:
+                sector_breadth_caption()
+                _bc1, _bc2, _bc3 = st.columns([900, 10000, 900])
+                with _bc2:
+                    st.dataframe(
+                        style_breadth(df_sector, delta_cols=['dL5','dL63']),
+                        width='stretch', hide_index=True, height=600
+                    )
+
+        else:
+            st.warning("No breadth history found")
+
 
     with tab2:
         st.subheader("Zweig Breadth Thrust")
@@ -2132,128 +2195,35 @@ elif page == "US Market":
     tab1, tab2, tab3, tab4 = st.tabs(["Breadth", "Zweig Thrust", "Benchmark", "Screener"])
 
     with tab1:
-        st.subheader("US Market Breadth")
-        st.markdown("""
-            <div class="info-card">
-                Three-layer breadth analysis of the US market.
-                <b style="color:#ccc">Layer 1</b>: full universe of 1,500+ US stocks.
-                <b style="color:#ccc">Layer 2</b>: S&P 500/Nasdaq quality subset (~515 stocks) — higher quality names with sector data.
-                <b style="color:#ccc">Layer 3</b>: Russell 2000 proxy (~1,000 smaller stocks) — leading indicator for risk appetite.
-                Divergence between layers is a key signal — e.g. Layer 2 breadth holding while Layer 3 deteriorates signals large cap defensiveness.
-                <br><span style="color:#666;font-size:16px">💡 Download the breadth history CSV for AI analysis — upload to identify trend divergences, rotation signals and breadth thrust patterns across the full history.</span>
-            </div>
-        """, unsafe_allow_html=True)
+        _th1,_th2,_th3,_th4,_th5=st.columns([900,4000,1000,2000,900])
+        with _th2:
+            st.subheader("US Market Breadth")
+        with _th4:
+            st.markdown('<br>',unsafe_allow_html=True)
+            if st.button("🔄 Run US Breadth",key='us_breadth'):
+                run_script(os.path.join(STOCKS,'us_total_market_breadth.py'),STOCKS)
+                st.rerun()
+        _hc1, _hc2, _hc3 = st.columns([900, 10000, 900])
+        with _hc2:
+            st.markdown("""
+                <div class="info-card">
+                    Three-layer breadth analysis of the US market.
+                    <b style="color:#ccc">Layer 1</b>: full universe of 1,500+ US stocks.
+                    <b style="color:#ccc">Layer 2</b>: S&P 500/Nasdaq quality subset (~515 stocks) — higher quality names with sector data.
+                    <b style="color:#ccc">Layer 3</b>: Russell 2000 proxy (~1,000 smaller stocks) — leading indicator for risk appetite.
+                    Divergence between layers is a key signal — e.g. Layer 2 breadth holding while Layer 3 deteriorates signals large cap defensiveness.
+                    <br><span style="color:#666;font-size:16px">💡 Download the breadth history CSV for AI analysis — upload to identify trend divergences, rotation signals and breadth thrust patterns across the full history.</span>
+                </div>
+            """, unsafe_allow_html=True)
 
         history_file = os.path.join(STOCKS, 'results', 'breadth', 'us_total_market', 'us_total_market_breadth_history.csv')
         history = load_csv(history_file)
 
         if history is not None:
             today_str = str(history.iloc[-1]['date'])
-            st.caption(f"Latest: {today_str} — {file_age(history_file)}")
-
-            overall_metrics = [
-                ('Total',         'total'),
-                ('Leaders',       'leader'),
-                ('Contenders',    'contender'),
-                ('Laggards',      'laggard'),
-                ('Weak',          'weak'),
-                ('Above 20 SMA',  'above_20'),
-                ('Above 50 SMA',  'above_50'),
-                ('Above 200 SMA', 'above_200'),
-                ('High Volume',   'high_vol'),
-                ('Acc Early',     'acc_early'),
-                ('Acc Progress',  'acc_progress'),
-                ('Acc Shift',     'acc_shift'),
-                ('Large Total',   'large_total'),
-                ('Large Leaders', 'large_leaders'),
-                ('Mid Total',     'mid_total'),
-                ('Mid Leaders',   'mid_leaders'),
-                ('Small Total',   'small_total'),
-                ('Small Leaders', 'small_leaders'),
-            ]
-
-            st.markdown("**Layer 1 — Full Universe**")
-            df_l1 = build_breadth_table(history, overall_metrics)
-            if df_l1 is not None:
-                st.dataframe(style_breadth(df_l1, delta_cols=['D5','D20','D63']),
-                             width='stretch', hide_index=True, height=680)
-
-            sec_cols = [c for c in history.columns if c.startswith('sec_') and c.endswith('_total')
-                        and not c.startswith('sp_sec_') and not c.startswith('rus_sec_')]
-            sec_keys = [c.replace('sec_','').replace('_total','') for c in sec_cols
-                        if 'nan' not in c and 'index' not in c]
-            st.markdown("**Layer 1 Sector Breadth**")
-            df_sec = build_sector_table(history, sec_keys, prefix='sec')
-            if df_sec is not None:
-                sector_breadth_caption()
-                st.dataframe(style_breadth(df_sec, delta_cols=['dL5','dL63']),
-                             width='stretch', hide_index=True, height=500)
-
-            st.markdown("**Layer 2 — SP500/Nasdaq Quality**")
-            l2_metrics = [
-                ('Total',         'sp_total'),
-                ('Leaders',       'sp_leader'),
-                ('Contenders',    'sp_contender'),
-                ('Laggards',      'sp_laggard'),
-                ('Weak',          'sp_weak'),
-                ('Above 20 SMA',  'sp_above_20'),
-                ('Above 50 SMA',  'sp_above_50'),
-                ('Above 200 SMA', 'sp_above_200'),
-                ('High Volume',   'sp_high_vol'),
-                ('Acc Early',     'sp_acc_early'),
-                ('Large Leaders', 'sp_large_leaders'),
-                ('Mid Leaders',   'sp_mid_leaders'),
-                ('Small Leaders', 'sp_small_leaders'),
-            ]
-            df_l2 = build_breadth_table(history, l2_metrics)
-            if df_l2 is not None:
-                st.dataframe(style_breadth(df_l2, delta_cols=['D5','D20','D63']),
-                             width='stretch', hide_index=True, height=520)
-
-            sp_sec_cols = [c for c in history.columns if c.startswith('sp_sec_') and c.endswith('_total')]
-            sp_sec_keys = [c.replace('sp_sec_','').replace('_total','') for c in sp_sec_cols
-                           if 'nan' not in c and 'index' not in c]
-            if sp_sec_keys:
-                st.markdown("**Layer 2 Sector Breadth**")
-                df_sp_sec = build_sector_table(history, sp_sec_keys, prefix='sp_sec')
-                if df_sp_sec is not None:
-                    sector_breadth_caption()
-                    st.dataframe(style_breadth(df_sp_sec, delta_cols=['dL5','dL63']),
-                                 width='stretch', hide_index=True, height=500)
-
-            st.markdown("**Layer 3 — Russell Proxy**")
-            l3_metrics = [
-                ('Total',         'rus_total'),
-                ('Leaders',       'rus_leader'),
-                ('Contenders',    'rus_contender'),
-                ('Laggards',      'rus_laggard'),
-                ('Weak',          'rus_weak'),
-                ('Above 20 SMA',  'rus_above_20'),
-                ('Above 50 SMA',  'rus_above_50'),
-                ('Above 200 SMA', 'rus_above_200'),
-                ('High Volume',   'rus_high_vol'),
-                ('Acc Early',     'rus_acc_early'),
-                ('Large Leaders', 'rus_large_leaders'),
-                ('Mid Leaders',   'rus_mid_leaders'),
-                ('Small Leaders', 'rus_small_leaders'),
-            ]
-            df_l3 = build_breadth_table(history, l3_metrics)
-            if df_l3 is not None:
-                st.dataframe(style_breadth(df_l3, delta_cols=['D5','D20','D63']),
-                             width='stretch', hide_index=True, height=520)
-
-            rus_sec_cols = [c for c in history.columns if c.startswith('rus_sec_') and c.endswith('_total')]
-            rus_sec_keys = [c.replace('rus_sec_','').replace('_total','') for c in rus_sec_cols
-                            if 'nan' not in c and 'index' not in c]
-            if rus_sec_keys:
-                st.markdown("**Layer 3 Sector Breadth**")
-                df_rus_sec = build_sector_table(history, rus_sec_keys, prefix='rus_sec')
-                if df_rus_sec is not None:
-                    sector_breadth_caption()
-                    st.dataframe(style_breadth(df_rus_sec, delta_cols=['dL5','dL63']),
-                                 width='stretch', hide_index=True, height=500)
-        else:
-            st.warning("No breadth history found")
+            _dc1, _dc2, _dc3 = st.columns([900, 10000, 900])
+            with _dc2:
+                st.caption(f"Latest: {today_str} — {file_age(history_file)}")
 
         # ── AI Assessment ─────────────────────────────────────────────────
         ai_settings = load_settings()
@@ -2307,6 +2277,7 @@ elif page == "US Market":
 
             # SP sector summary
             sec_summary = ''
+            df_sp_sec = locals().get('df_sp_sec', None)
             if df_sp_sec is not None and len(df_sp_sec) > 0:
                 top3 = df_sp_sec.nlargest(3, 'Leaders')[['Sector','Leaders','Ab200%']].values.tolist()
                 bot3 = df_sp_sec.nsmallest(3, 'Leaders')[['Sector','Leaders','Ab200%']].values.tolist()
@@ -2333,11 +2304,144 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
 {zweig_status}
 {sec_summary}"""
 
-            render_ai_assessment(prompt, ai_settings, 'us_breadth_summary')
+            _aic1, _aic2, _aic3 = st.columns([900, 10000, 900])
+            with _aic2:
+                render_ai_assessment(prompt, ai_settings, 'us_breadth_summary')
 
-        if st.button("🔄 Run US Breadth", key='us_breadth'):
-            run_script(os.path.join(STOCKS, 'us_total_market_breadth.py'), STOCKS)
-            st.rerun()
+            overall_metrics = [
+                ('Total',         'total'),
+                ('Leaders',       'leader'),
+                ('Contenders',    'contender'),
+                ('Laggards',      'laggard'),
+                ('Weak',          'weak'),
+                ('Above 20 SMA',  'above_20'),
+                ('Above 50 SMA',  'above_50'),
+                ('Above 200 SMA', 'above_200'),
+                ('High Volume',   'high_vol'),
+                ('Acc Early',     'acc_early'),
+                ('Acc Progress',  'acc_progress'),
+                ('Acc Shift',     'acc_shift'),
+                ('Large Total',   'large_total'),
+                ('Large Leaders', 'large_leaders'),
+                ('Mid Total',     'mid_total'),
+                ('Mid Leaders',   'mid_leaders'),
+                ('Small Total',   'small_total'),
+                ('Small Leaders', 'small_leaders'),
+            ]
+
+            _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
+            with _lbc2:
+                st.markdown("**Layer 1 — Full Universe**")
+            df_l1 = build_breadth_table(history, overall_metrics)
+            if df_l1 is not None:
+                _bc1, _bc2, _bc3 = st.columns([900, 10000, 900])
+                with _bc2:
+                    st.dataframe(style_breadth(df_l1, delta_cols=['D5','D20','D63']),
+                                 width='stretch', hide_index=True, height=680)
+
+            sec_cols = [c for c in history.columns if c.startswith('sec_') and c.endswith('_total')
+                        and not c.startswith('sp_sec_') and not c.startswith('rus_sec_')]
+            sec_keys = [c.replace('sec_','').replace('_total','') for c in sec_cols
+                        if 'nan' not in c and 'index' not in c]
+            _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
+            with _lbc2:
+                st.markdown("**Layer 1 Sector Breadth**")
+            df_sec = build_sector_table(history, sec_keys, prefix='sec')
+            if df_sec is not None:
+                _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
+            with _lbc2:
+                sector_breadth_caption()
+                _bc1, _bc2, _bc3 = st.columns([900, 10000, 900])
+                with _bc2:
+                    st.dataframe(style_breadth(df_sec, delta_cols=['dL5','dL63']),
+                                 width='stretch', hide_index=True, height=500)
+
+            _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
+            with _lbc2:
+                st.markdown("**Layer 2 — SP500/Nasdaq Quality**")
+            l2_metrics = [
+                ('Total',         'sp_total'),
+                ('Leaders',       'sp_leader'),
+                ('Contenders',    'sp_contender'),
+                ('Laggards',      'sp_laggard'),
+                ('Weak',          'sp_weak'),
+                ('Above 20 SMA',  'sp_above_20'),
+                ('Above 50 SMA',  'sp_above_50'),
+                ('Above 200 SMA', 'sp_above_200'),
+                ('High Volume',   'sp_high_vol'),
+                ('Acc Early',     'sp_acc_early'),
+                ('Large Leaders', 'sp_large_leaders'),
+                ('Mid Leaders',   'sp_mid_leaders'),
+                ('Small Leaders', 'sp_small_leaders'),
+            ]
+            df_l2 = build_breadth_table(history, l2_metrics)
+            if df_l2 is not None:
+                _bc1, _bc2, _bc3 = st.columns([900, 10000, 900])
+                with _bc2:
+                    st.dataframe(style_breadth(df_l2, delta_cols=['D5','D20','D63']),
+                                 width='stretch', hide_index=True, height=520)
+
+            sp_sec_cols = [c for c in history.columns if c.startswith('sp_sec_') and c.endswith('_total')]
+            sp_sec_keys = [c.replace('sp_sec_','').replace('_total','') for c in sp_sec_cols
+                           if 'nan' not in c and 'index' not in c]
+            if sp_sec_keys:
+                _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
+            with _lbc2:
+                st.markdown("**Layer 2 Sector Breadth**")
+                df_sp_sec = build_sector_table(history, sp_sec_keys, prefix='sp_sec')
+                if df_sp_sec is not None:
+                    _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
+                    with _lbc2:
+                        sector_breadth_caption()
+                    _bc1, _bc2, _bc3 = st.columns([900, 10000, 900])
+                    with _bc2:
+                        st.dataframe(style_breadth(df_sp_sec, delta_cols=['dL5','dL63']),
+                                     width='stretch', hide_index=True, height=500)
+
+            _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
+            with _lbc2:
+                st.markdown("**Layer 3 — Russell Proxy**")
+            l3_metrics = [
+                ('Total',         'rus_total'),
+                ('Leaders',       'rus_leader'),
+                ('Contenders',    'rus_contender'),
+                ('Laggards',      'rus_laggard'),
+                ('Weak',          'rus_weak'),
+                ('Above 20 SMA',  'rus_above_20'),
+                ('Above 50 SMA',  'rus_above_50'),
+                ('Above 200 SMA', 'rus_above_200'),
+                ('High Volume',   'rus_high_vol'),
+                ('Acc Early',     'rus_acc_early'),
+                ('Large Leaders', 'rus_large_leaders'),
+                ('Mid Leaders',   'rus_mid_leaders'),
+                ('Small Leaders', 'rus_small_leaders'),
+            ]
+            df_l3 = build_breadth_table(history, l3_metrics)
+            if df_l3 is not None:
+                _bc1, _bc2, _bc3 = st.columns([900, 10000, 900])
+                with _bc2:
+                    st.dataframe(style_breadth(df_l3, delta_cols=['D5','D20','D63']),
+                                 width='stretch', hide_index=True, height=520)
+
+            rus_sec_cols = [c for c in history.columns if c.startswith('rus_sec_') and c.endswith('_total')]
+            rus_sec_keys = [c.replace('rus_sec_','').replace('_total','') for c in rus_sec_cols
+                            if 'nan' not in c and 'index' not in c]
+            if rus_sec_keys:
+                _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
+            with _lbc2:
+                st.markdown("**Layer 3 Sector Breadth**")
+                df_rus_sec = build_sector_table(history, rus_sec_keys, prefix='rus_sec')
+                if df_rus_sec is not None:
+                    _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
+                    with _lbc2:
+                        sector_breadth_caption()
+                    _bc1, _bc2, _bc3 = st.columns([900, 10000, 900])
+                    with _bc2:
+                        st.dataframe(style_breadth(df_rus_sec, delta_cols=['dL5','dL63']),
+                                     width='stretch', hide_index=True, height=500)
+        else:
+            st.warning("No breadth history found")
+
 
     with tab2:
         st.subheader("Zweig Breadth Thrust")
@@ -2471,25 +2575,38 @@ elif page == "Commodities":
     tab1, tab2, tab3 = st.tabs(["Breadth", "Benchmark", "Screener"])
 
     with tab1:
-        st.subheader("Commodities Breadth")
-        st.markdown("""
-            <div class="info-card">
-                Breadth analysis across 390 tickers covering gold, silver, copper, uranium, lithium, platinum and palladium.
-                <b style="color:#ccc">By Commodity</b> shows leader counts and SMA participation per metal — useful for identifying which commodity groups are leading.
-                <b style="color:#ccc">Junior vs Senior Rotation</b> shows large/mid/small cap breakdown within each commodity — junior miners leading seniors is a classic early cycle signal.
-                <b style="color:#ccc">By Type</b> shows producers vs explorers vs ETFs — explorer breadth expanding signals speculative risk appetite returning.
-                <br><span style="color:#666;font-size:16px">💡 Download the breadth history CSV for AI analysis — commodity breadth history is particularly useful for identifying cycle turning points.</span>
-            </div>
-        """, unsafe_allow_html=True)
+        _th1,_th2,_th3,_th4,_th5=st.columns([900,4000,1000,2000,900])
+        with _th2:
+            st.subheader("Commodities Breadth")
+        with _th4:
+            st.markdown('<br>',unsafe_allow_html=True)
+            if st.button("🔄 Run Commodities Breadth",key='comm_breadth'):
+                run_script(os.path.join(STOCKS,'all_major_commodities_breadth.py'),STOCKS)
+                st.rerun()
+        _hc1, _hc2, _hc3 = st.columns([900, 10000, 900])
+        with _hc2:
+            st.markdown("""
+                <div class="info-card">
+                    Breadth analysis across 390 tickers covering gold, silver, copper, uranium, lithium, platinum and palladium.
+                    <b style="color:#ccc">By Commodity</b> shows leader counts and SMA participation per metal — useful for identifying which commodity groups are leading.
+                    <b style="color:#ccc">Junior vs Senior Rotation</b> shows large/mid/small cap breakdown within each commodity — junior miners leading seniors is a classic early cycle signal.
+                    <b style="color:#ccc">By Type</b> shows producers vs explorers vs ETFs — explorer breadth expanding signals speculative risk appetite returning.
+                    <br><span style="color:#666;font-size:16px">💡 Download the breadth history CSV for AI analysis — commodity breadth history is particularly useful for identifying cycle turning points.</span>
+                </div>
+            """, unsafe_allow_html=True)
 
         history_file = os.path.join(STOCKS, 'results', 'breadth', 'all_major_commodities', 'all_major_commodities_breadth_history.csv')
         history = load_csv(history_file)
 
         if history is not None:
             today_str = str(history.iloc[-1]['date'])
-            st.caption(f"Latest: {today_str} — {file_age(history_file)}")
+            _dc1, _dc2, _dc3 = st.columns([900, 10000, 900])
+            with _dc2:
+                st.caption(f"Latest: {today_str} — {file_age(history_file)}")
 
-            st.markdown("**Overall**")
+            _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
+            with _lbc2:
+                st.markdown("**Overall**")
             overall_metrics = [
                 ('Total',         'total'),
                 ('Leaders',       'leader'),
@@ -2507,10 +2624,14 @@ elif page == "Commodities":
             ]
             df_overall = build_breadth_table(history, overall_metrics)
             if df_overall is not None:
-                st.dataframe(style_breadth(df_overall, delta_cols=['D5','D20','D63']),
-                             width='stretch', hide_index=True, height=520)
+                _bc1, _bc2, _bc3 = st.columns([900, 10000, 900])
+                with _bc2:
+                    st.dataframe(style_breadth(df_overall, delta_cols=['D5','D20','D63']),
+                                 width='stretch', hide_index=True, height=520)
 
-            st.markdown("**By Commodity**")
+            _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
+            with _lbc2:
+                st.markdown("**By Commodity**")
             comm_cols = [c for c in history.columns if c.startswith('comm_') and c.endswith('_total')
                          and c.count('_') == 2]
             comm_keys = [c.replace('comm_','').replace('_total','') for c in comm_cols
@@ -2541,11 +2662,17 @@ elif page == "Commodities":
                     continue
             if comm_rows:
                 df_comm = pd.DataFrame(comm_rows)
-                sector_breadth_caption()
-                st.dataframe(style_breadth(df_comm, delta_cols=['dL5','dL63']),
-                             width='stretch', hide_index=True)
+                _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
+                with _lbc2:
+                    sector_breadth_caption()
+                _bc1, _bc2, _bc3 = st.columns([900, 10000, 900])
+                with _bc2:
+                    st.dataframe(style_breadth(df_comm, delta_cols=['dL5','dL63']),
+                                 width='stretch', hide_index=True)
 
-            st.markdown("**Junior vs Senior Rotation**")
+            _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
+            with _lbc2:
+                st.markdown("**Junior vs Senior Rotation**")
             jr_rows = []
             for ck in comm_keys:
                 for band in ['large', 'mid', 'small']:
@@ -2562,10 +2689,14 @@ elif page == "Commodities":
                         continue
             if jr_rows:
                 df_jr = pd.DataFrame(jr_rows)
-                st.dataframe(style_breadth(df_jr, delta_cols=['dL5','dL63']),
-                             width='stretch', hide_index=True)
+                _bc1, _bc2, _bc3 = st.columns([900, 10000, 900])
+                with _bc2:
+                    st.dataframe(style_breadth(df_jr, delta_cols=['dL5','dL63']),
+                                 width='stretch', hide_index=True)
 
-            st.markdown("**By Type**")
+            _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
+            with _lbc2:
+                st.markdown("**By Type**")
             type_cols = [c for c in history.columns if c.startswith('type_') and c.endswith('_total')]
             type_keys = [c.replace('type_','').replace('_total','') for c in type_cols]
             type_rows = []
@@ -2583,14 +2714,13 @@ elif page == "Commodities":
                     continue
             if type_rows:
                 df_type = pd.DataFrame(type_rows)
-                st.dataframe(style_breadth(df_type, delta_cols=['dL5','dL63']),
-                             width='stretch', hide_index=True)
+                _bc1, _bc2, _bc3 = st.columns([900, 10000, 900])
+                with _bc2:
+                    st.dataframe(style_breadth(df_type, delta_cols=['dL5','dL63']),
+                                 width='stretch', hide_index=True)
         else:
             st.warning("No breadth history found")
 
-        if st.button("🔄 Run Commodities Breadth", key='comm_breadth'):
-            run_script(os.path.join(STOCKS, 'all_major_commodities_breadth.py'), STOCKS)
-            st.rerun()
 
     with tab2:
         st.subheader("Benchmark vs ETF")
@@ -2941,31 +3071,55 @@ elif page == "RRG Charts":
         # Controls
         col1, col2, col3, col4 = st.columns(4)
         with col1:
-            tail_days   = st.slider("Tail length (trading days)", 5, 63, 30, key=f"tail_{title}")
+            tail_from = st.slider(
+                "Tail length (trading days)",
+                min_value=1, max_value=252, value=5,
+                key=f"tail_{title}",
+                help="Number of trading days to show — tail always ends at the most recent date."
+            )
+            tail_to = 0
         with col2:
             groups      = sorted(history['group'].unique().tolist())
             sel_groups  = st.multiselect("Filter groups", groups, default=groups, key=f"grp_{title}")
         with col3:
             show_labels = st.toggle("Show labels", value=True, key=f"lbl_{title}")
-        with col4:
             smooth_span = st.slider("Smoothing (EWM span)", 1, 20, 20, key=f"span_{title}")
+        with col4:
+            all_tickers = sorted(history['ticker'].unique().tolist())
+            sel_tickers = st.multiselect("Filter tickers", all_tickers, default=[],
+                                          key=f"tick_{title}", placeholder="All tickers")
 
-        # Filter
-        cutoff  = latest_date - pd.Timedelta(days=tail_days * 1.5)
-        df      = history[history['date'] >= cutoff].copy()
+        # Filter by date window and group/ticker
+        cutoff_from = latest_date - pd.Timedelta(days=int(tail_from * 1.5))
+        df      = history[history['date'] >= cutoff_from].copy()
+        # Cap to tail_from rows per ticker — tail always ends at latest date
+        df      = df.groupby('ticker', group_keys=False).apply(lambda x: x.sort_values('date').tail(tail_from))
         df      = df[df['group'].isin(sel_groups)]
+        if sel_tickers:
+            df = df[df['ticker'].isin(sel_tickers)]
         tickers = df['ticker'].unique()
+        tail_days = tail_from
 
         # Colour palette — distinct per ticker
+        _rrg_light = _get_theme_mode() == 'light'
         COLOURS = [
-            '#00b4d8','#90e0ef','#48cae4',  # blues
-            '#f77f00','#fcbf49','#eae2b7',  # oranges
-            '#2dc653','#80b918','#aacc00',  # greens
-            '#e63946','#ff6b6b','#ffadad',  # reds
-            '#9b5de5','#c77dff','#e0aaff',  # purples
-            '#f15bb5','#fee440','#00bbf9',  # mixed
-            '#06d6a0','#118ab2','#ffd166',  # teal/blue/yellow
-            '#ef476f','#b7e4c7','#40916c',  # pink/greens
+            '#00b4d8','#90e0ef','#48cae4',
+            '#f77f00','#fcbf49','#eae2b7',
+            '#2dc653','#80b918','#aacc00',
+            '#e63946','#ff6b6b','#ffadad',
+            '#9b5de5','#c77dff','#e0aaff',
+            '#f15bb5','#fee440','#00bbf9',
+            '#06d6a0','#118ab2','#ffd166',
+            '#ef476f','#b7e4c7','#40916c',
+        ] if not _rrg_light else [
+            '#0077a8','#005f87','#0096c7',
+            '#c96a00','#a85500','#8b6914',
+            '#1a8a3a','#4a7c00','#2d6a00',
+            '#c0152a','#d93d3d','#a01020',
+            '#6a20c8','#8b00cc','#5c0fa8',
+            '#c4006a','#b8970a','#0088cc',
+            '#007a60','#005f8a','#a07800',
+            '#c42050','#1a6640','#004d30',
         ]
 
         # Assign colour per ticker
@@ -3015,43 +3169,55 @@ elif page == "RRG Charts":
             'COPX' : 'COPX - Copper',
             'SIL'  : 'SIL - Silver',
             'SILJ' : 'SILJ - Jr Silver',
+            'OIH'  : 'OIH - Oil Services',
+            'XOP'  : 'XOP - Oil E&P',
+            'PBW'  : 'PBW - Clean Energy',
+            'TAN'  : 'TAN - Solar',
+            'JETS' : 'JETS - Airlines',
+            'MOO'  : 'MOO - Agribusiness',
+            'PHO'  : 'PHO - Water',
+            'FDN'  : 'FDN - Internet',
+            'URNM' : 'URNM - Uranium Miners',
+            'REMX' : 'REMX - Rare Earth',
         }
 
         fig = go.Figure()
 
         # Quadrant backgrounds
-        fig.add_shape(type='rect', x0=100, y0=100, x1=135, y1=135,
+        fig.add_shape(type='rect', x0=100, y0=100, x1=175, y1=135,
                       fillcolor='rgba(0,180,0,0.06)', line_width=0, layer='below')
         fig.add_shape(type='rect', x0=65,  y0=100, x1=100, y1=135,
                       fillcolor='rgba(100,100,255,0.06)', line_width=0, layer='below')
         fig.add_shape(type='rect', x0=65,  y0=65,  x1=100, y1=100,
                       fillcolor='rgba(255,50,50,0.06)', line_width=0, layer='below')
-        fig.add_shape(type='rect', x0=100, y0=65,  x1=135, y1=100,
+        fig.add_shape(type='rect', x0=100, y0=65,  x1=175, y1=100,
                       fillcolor='rgba(255,180,0,0.06)', line_width=0, layer='below')
 
         # Quadrant labels
+        _qt_color = 'rgba(0,0,0,0.45)' if _get_theme_mode()=='light' else 'rgba(255,255,255,0.25)'
         for text, x, y in [
             ('LEADING',    132, 133),
             ('WEAKENING',  132, 67),
             ('LAGGING',    68,  67),
             ('IMPROVING',  68,  133),
         ]:
-            fig.add_annotation(x=x, y=y, text=text, showarrow=False,
-                               font=dict(size=12, color='rgba(255,255,255,0.25)'),
+            fig.add_annotation(x=x, y=y, text=f"<b>{text}</b>", showarrow=False,
+                               font=dict(size=13, color=_qt_color),
                                xanchor='center')
 
         # Centre lines
-        fig.add_hline(y=100, line_width=1, line_dash='dash',
-                      line_color='rgba(255,255,255,0.2)')
-        fig.add_vline(x=100, line_width=1, line_dash='dash',
-                      line_color='rgba(255,255,255,0.2)')
+        _cl_color = 'rgba(0,0,0,0.25)' if _get_theme_mode()=='light' else 'rgba(255,255,255,0.2)'
+        fig.add_hline(y=100, line_width=1, line_dash='dash', line_color=_cl_color)
+        fig.add_vline(x=100, line_width=1, line_dash='dash', line_color=_cl_color)
 
         # Track current positions for legend sorting
         current_positions = {}
 
         # Plot each ticker
         for ticker in tickers:
-            tdf    = df[df['ticker'] == ticker].sort_values('date').tail(tail_days)
+            tdf    = df[df['ticker'] == ticker].sort_values('date').tail(tail_from)
+            if len(tdf) == 0:
+                continue
             if len(tdf) < 2:
                 continue
 
@@ -3102,28 +3268,38 @@ elif page == "RRG Charts":
             if x <  100 and y >= 100: return ('3_IMPROVING', '🔵')
             return                           ('4_LAGGING',   '🔴')
 
+        _quad_order = {'1_LEADING': 0, '3_IMPROVING': 1, '2_WEAKENING': 2, '4_LAGGING': 3}
         sorted_tickers = sorted(
             current_positions.items(),
-            key=lambda item: (get_quadrant(item[1][0], item[1][1])[0], -item[1][0])
+            key=lambda item: (_quad_order.get(get_quadrant(item[1][0], item[1][1])[0], 9), -item[1][0])
         )
 
+        # Build title with date range info
+        _dates_in_view = sorted(df['date'].unique())
+        _date_from_str = pd.to_datetime(_dates_in_view[0]).strftime('%d %b %Y')  if _dates_in_view else ''
+        _date_to_str   = pd.to_datetime(_dates_in_view[-1]).strftime('%d %b %Y') if _dates_in_view else ''
+        _n_days        = len(_dates_in_view)
+        _chart_title   = f"{title}  ·  {_n_days} trading days  ({_date_from_str} → {_date_to_str})"
+
         fig.update_layout(
-            title        = dict(text=title, font=dict(size=16, color='white')),
+            title        = dict(text=_chart_title, font=dict(size=14, color=get_chart_theme()['font_color'])),
             xaxis_title  = 'RS-Ratio',
             yaxis_title  = 'RS-Momentum',
-            height       = 750,
-            plot_bgcolor = 'rgba(15,15,25,1)',
-            paper_bgcolor= 'rgba(15,15,25,1)',
-            font         = dict(color='white'),
-            xaxis        = dict(range=[65,135], gridcolor='rgba(255,255,255,0.05)',
+            height       = 1000,
+            plot_bgcolor = get_chart_theme()['plot_bgcolor'],
+            paper_bgcolor= get_chart_theme()['paper_bgcolor'],
+            font         = dict(color=get_chart_theme()['font_color']),
+            xaxis        = dict(range=[65,175], gridcolor=get_chart_theme()['gridcolor'],
                                 tickfont=dict(size=10), title_font=dict(size=11)),
-            yaxis        = dict(range=[65,135], gridcolor='rgba(255,255,255,0.05)',
+            yaxis        = dict(range=[65,135], gridcolor=get_chart_theme()['gridcolor'],
                                 tickfont=dict(size=10), title_font=dict(size=11)),
             showlegend   = False,
             margin       = dict(r=40, l=60, t=60, b=60),
         )
 
-        st.plotly_chart(fig, width='stretch')
+        _sp1, _mid, _sp2 = st.columns([800, 10000, 800])
+        with _mid:
+            st.plotly_chart(fig, use_container_width=True)
 
         # ── Streamlit legend below chart ──────────────────────────────────────
         quad_groups = {'1_LEADING': [], '2_WEAKENING': [], '3_IMPROVING': [], '4_LAGGING': []}
@@ -3137,10 +3313,11 @@ elif page == "RRG Charts":
             quad = get_quadrant(x, y)[0]
             quad_groups[quad].append((label, colour))
 
-        leg_cols = st.columns(4)
+        _ls1, _lc1, _lc2, _lc3, _lc4, _ls2 = st.columns([2900, 600, 600, 600, 600, 2900])
+        _leg_cols = [_lc1, _lc2, _lc3, _lc4]
         for i, (quad_key, items) in enumerate(quad_groups.items()):
             qname, qcolour = quad_labels[quad_key]
-            with leg_cols[i]:
+            with _leg_cols[i]:
                 st.markdown(f"<div style='color:{qcolour};font-weight:bold;font-size:13px;margin-bottom:6px'>{qname}</div>",
                             unsafe_allow_html=True)
                 for label, colour in items:
@@ -3150,40 +3327,53 @@ elif page == "RRG Charts":
 
         # ── PNG export with embedded legend ───────────────────────────────────
         fig_export = go.Figure(fig)
-        legend_x  = 1.02
-        y_pos     = 1.0
-        lh        = 0.048
-        last_quad = None
+        # Build two-column legend for PNG export
+        _png_quad_order = {'1_LEADING': 0, '3_IMPROVING': 1, '2_WEAKENING': 2, '4_LAGGING': 3}
+        sorted_tickers_png = sorted(
+            sorted_tickers,
+            key=lambda item: (_png_quad_order.get(get_quadrant(item[1][0], item[1][1])[0], 9), -item[1][0])
+        )
 
-        for ticker, (x, y, label, colour) in sorted_tickers:
-            quad, icon = get_quadrant(x, y)
-            qname      = quad.split('_')[1]
+        lh = 0.032; ann_color = '#111111' if _get_theme_mode()=='light' else '#ffffff'
+        col1_x, col2_x = 1.02, 1.175; col1_items, col2_items = [], []
+        _left_quads = {'3_IMPROVING', '4_LAGGING'}; last_quad = None
+        for ticker, (x, y, label, colour) in sorted_tickers_png:
+            quad, icon = get_quadrant(x, y); qname = quad.split('_')[1]
+            cur_list = col1_items if quad in _left_quads else col2_items
             if quad != last_quad:
-                fig_export.add_annotation(
-                    x=legend_x, y=y_pos, xref='paper', yref='paper',
-                    text=f"<b>{icon} {qname}</b>",
-                    showarrow=False,
-                    font=dict(size=11, color='rgba(255,255,255,0.8)'),
-                    xanchor='left',
-                )
-                y_pos    -= lh * 0.8
-                last_quad = quad
+                cur_list.append(('header', f"<b>{icon} {qname}</b>", ann_color)); last_quad = quad
+            cur_list.append(('ticker', f"● {label}  {x:.1f}/{y:.1f}", colour))
+
+        # Place col1
+        y_pos = 1.0
+        for kind, text, colour in col1_items:
             fig_export.add_annotation(
-                x=legend_x, y=y_pos, xref='paper', yref='paper',
-                text=f"● {label}  {x:.1f}/{y:.1f}",
-                showarrow=False,
-                font=dict(size=9, color=colour),
-                xanchor='left',
+                x=col1_x, y=y_pos, xref='paper', yref='paper',
+                text=text, showarrow=False, xanchor='left',
+                font=dict(size=11 if kind=='header' else 10, color=colour),
             )
-            y_pos -= lh
+            y_pos -= lh * 0.7 if kind == 'header' else lh
 
-        fig_export.update_layout(margin=dict(r=220, l=60, t=60, b=60))
+        # Place col2
+        y_pos = 1.0
+        for kind, text, colour in col2_items:
+            fig_export.add_annotation(
+                x=col2_x, y=y_pos, xref='paper', yref='paper',
+                text=text, showarrow=False, xanchor='left',
+                font=dict(size=11 if kind=='header' else 10, color=colour),
+            )
+            y_pos -= lh * 0.7 if kind == 'header' else lh
 
-        img_bytes = fig_export.to_image(format='png', width=1800, height=900, scale=2)
+        fig_export.update_layout(
+            margin=dict(r=600, l=60, t=80, b=60),
+            font=dict(color='#1a1a1a' if _get_theme_mode()=='light' else 'white'),
+        )
+
+        img_bytes = fig_export.to_image(format='png', width=2400, height=1000, scale=2)
         st.download_button(
             label     = f"⬇ Download PNG ({tail_days}d tail)",
             data      = img_bytes,
-            file_name = f"rrg_{title.replace(' ','_').replace('/','_')}_{tail_days}d_{datetime.today().strftime('%Y%m%d')}.png",
+            file_name = f"rrg_{title.replace(' ','_').replace('/','_')}_{tail_from}d_{datetime.today().strftime('%Y%m%d')}.png",
             mime      = 'image/png',
             key       = f"dl_rrg_{title}"
         )
@@ -3273,10 +3463,15 @@ elif page == "Breadth RRG":
         rs_mom_tail   = rs_mom_smooth.tail(tail_days)
 
         # Colour palette
+        _brrg_light = _get_theme_mode() == 'light'
         COLOURS = [
             '#00b4d8','#f77f00','#2dc653','#e63946','#9b5de5',
             '#f15bb5','#fee440','#06d6a0','#118ab2','#ffd166',
             '#ef476f','#b7e4c7','#40916c','#fcbf49','#eae2b7',
+        ] if not _brrg_light else [
+            '#0077a8','#c96a00','#1a8a3a','#c0152a','#6a20c8',
+            '#c4006a','#b8970a','#007a60','#005f8a','#a07800',
+            '#c42050','#1a6640','#004d30','#a85500','#8b6914',
         ]
 
         # Short labels
@@ -3384,9 +3579,10 @@ elif page == "Breadth RRG":
             if x <  100 and y >= 100: return ('3_IMPROVING', '🔵')
             return                           ('4_LAGGING',   '🔴')
 
+        _quad_order = {'1_LEADING': 0, '3_IMPROVING': 1, '2_WEAKENING': 2, '4_LAGGING': 3}
         sorted_tickers = sorted(
             current_positions.items(),
-            key=lambda item: (get_quadrant(item[1][0], item[1][1])[0], -item[1][0])
+            key=lambda item: (_quad_order.get(get_quadrant(item[1][0], item[1][1])[0], 9), -item[1][0])
         )
 
         # Calculate dynamic axis ranges
@@ -3422,36 +3618,39 @@ elif page == "Breadth RRG":
 
         fig.update_layout(
             title        = dict(text=title, font=dict(size=14)),
-            height       = 700,
-            plot_bgcolor = 'rgba(15,15,25,1)',
-            paper_bgcolor= 'rgba(15,15,25,1)',
-            font         = dict(color='white'),
-            xaxis        = dict(range=[x_min, x_max], gridcolor='rgba(255,255,255,0.05)',
+            height       = 1000,
+            plot_bgcolor = get_chart_theme()['plot_bgcolor'],
+            paper_bgcolor= get_chart_theme()['paper_bgcolor'],
+            font         = dict(color=get_chart_theme()['font_color']),
+            xaxis        = dict(range=[x_min, x_max], gridcolor=get_chart_theme()['gridcolor'],
                                 title='Breadth Strength (vs universe avg)', title_font=dict(size=10)),
-            yaxis        = dict(range=[y_min, y_max], gridcolor='rgba(255,255,255,0.05)',
+            yaxis        = dict(range=[y_min, y_max], gridcolor=get_chart_theme()['gridcolor'],
                                 title='Breadth Momentum (21d ROC)', title_font=dict(size=10)),
             showlegend   = False,
             margin       = dict(r=40, l=60, t=50, b=50),
         )
 
-        st.plotly_chart(fig, width='stretch')
+        _sp1, _mid, _sp2 = st.columns([800, 10000, 800])
+        with _mid:
+            st.plotly_chart(fig, use_container_width=True)
 
         # ── Streamlit legend below chart ──────────────────────────────────────
-        quad_groups = {'1_LEADING': [], '2_WEAKENING': [], '3_IMPROVING': [], '4_LAGGING': []}
+        quad_groups = {'1_LEADING': [], '3_IMPROVING': [], '2_WEAKENING': [], '4_LAGGING': []}
         quad_labels = {
             '1_LEADING'  : ('🟢 LEADING',   '#2dc653'),
-            '2_WEAKENING': ('🟡 WEAKENING',  '#f77f00'),
             '3_IMPROVING': ('🔵 IMPROVING',  '#00b4d8'),
+            '2_WEAKENING': ('🟡 WEAKENING',  '#f77f00'),
             '4_LAGGING'  : ('🔴 LAGGING',    '#e63946'),
         }
         for sec_key, (x, y, label, colour) in sorted_tickers:
             quad = get_quadrant(x, y)[0]
             quad_groups[quad].append((label, colour))
 
-        leg_cols = st.columns(4)
+        _ls1, _lc1, _lc2, _lc3, _lc4, _ls2 = st.columns([2900, 600, 600, 600, 600, 2900])
+        _leg_cols = [_lc1, _lc2, _lc3, _lc4]
         for i, (quad_key, items) in enumerate(quad_groups.items()):
             qname, qcolour = quad_labels[quad_key]
-            with leg_cols[i]:
+            with _leg_cols[i]:
                 st.markdown(f"<div style='color:{qcolour};font-weight:bold;font-size:13px;margin-bottom:6px'>{qname}</div>",
                             unsafe_allow_html=True)
                 for label, colour in items:
@@ -4326,3 +4525,64 @@ elif page == "Settings":
             save_settings(DEFAULT_SETTINGS)
             st.success("Reset to defaults")
             st.rerun()
+
+    # ── Display Settings ───────────────────────────────────────────────────────
+    st.divider()
+    st.subheader("Display")
+
+    # Theme
+    st.markdown("**Theme**")
+    st.caption("Sets chart backgrounds and colours. Restart may be required for full effect.")
+
+    cfg_file = os.path.join(BASE, '.streamlit', 'config.toml')
+    current_base = 'dark'
+    if os.path.isfile(cfg_file):
+        import re as _re2
+        txt = open(cfg_file).read()
+        m = _re2.search(r'base\s*=\s*"([^"]*)"', txt)
+        if m: current_base = m.group(1).lower()
+
+    theme_names  = list(THEMES.keys())
+    theme_idx    = 1 if current_base == 'light' else 0
+    selected_theme = st.radio("Theme", theme_names, horizontal=True,
+                               index=theme_idx, key='disp_theme')
+
+    if selected_theme == 'Custom':
+        pass  # reserved for future custom picker
+
+    tc1, tc2 = st.columns(2)
+    with tc1:
+        if st.button(f"Apply {selected_theme} Theme", type="primary", key='apply_theme'):
+            _write_streamlit_config(THEMES[selected_theme])
+            _s = load_settings()
+            _s['theme'] = selected_theme.lower()
+            save_settings(_s)
+            st.success(f"{selected_theme} theme applied — reload the page to see effect")
+            st.rerun()
+    with tc2:
+        st.caption("After applying, use the Streamlit menu (top right ☰) to also toggle the app theme if needed.")
+
+    # Font size
+    st.markdown("**Text Size**")
+    st.caption("Applies immediately — no reload needed.")
+    font_size = st.radio("Text size",
+                          ["Normal", "Large (+2px)", "Extra Large (+4px)"],
+                          horizontal=True, key="st_font_size")
+    _size_map = {"Normal": 0, "Large (+2px)": 2, "Extra Large (+4px)": 4}
+    _delta = _size_map.get(font_size, 0)
+    if _delta > 0:
+        st.markdown(f"""<style>
+        html, body, [class*="css"] {{ font-size: calc(1rem + {_delta}px) !important; }}
+        .stMarkdown p, .stMarkdown li, .stCaption, label {{
+            font-size: calc(1rem + {_delta}px) !important;
+        }}
+        h1 {{ font-size: calc(2rem   + {_delta}px) !important; }}
+        h2 {{ font-size: calc(1.5rem + {_delta}px) !important; }}
+        h3 {{ font-size: calc(1.25rem + {_delta}px) !important; }}
+        </style>""", unsafe_allow_html=True)
+
+    with st.expander("Current config.toml"):
+        if os.path.isfile(cfg_file):
+            st.code(open(cfg_file).read(), language="toml")
+        else:
+            st.caption("No config.toml yet — created on first Apply.")

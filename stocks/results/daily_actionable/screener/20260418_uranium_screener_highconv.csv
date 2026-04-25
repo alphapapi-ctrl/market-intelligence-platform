@@ -1,0 +1,4 @@
+rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+1,0,OKLO,OKLO INC,Uranium,large,66.81,95.56,0.1804,0.1211,-0.2368,STRONG_UP,-58.79,227.66,427.31,-73.83,51.0,89.72,2.4542,HIGH,SHIFT,53.216,59.6062,85.646,0,129.4103,LAGGARD,65.7205
+15,0,URC.TO,URANIUM ROYALTY CORP,Uranium,mid,4.98,57.78,-0.0834,-0.069,-0.1424,FLAT,-12.48,114.66,55.14,-38.43,50.6,71.93,2.2212,HIGH,PROGRESS,4.939,5.2592,5.0787,0,80.6555,LAGGARD,32.7584
+18,0,SMR,NUSCALE POWER CORP,Uranium,mid,12.65,6.67,0.2622,-0.0536,-0.3139,STRONG_UP,-73.45,-7.26,158.69,-82.86,48.19,94.29,2.399,HIGH,SHIFT,10.6175,12.3096,26.9829,0,-3.7095,WEAK,27.7226
