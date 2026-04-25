@@ -3073,7 +3073,7 @@ elif page == "RRG Charts":
         with col1:
             tail_range = st.slider(
                 "Tail range (trading days)",
-                min_value=1, max_value=252, value=(5, 63),
+                min_value=1, max_value=252, value=(1, 20),
                 key=f"tail_{title}",
                 help="Left = recent end of tail  |  Right = oldest end. Tail always ends at most recent date."
             )
@@ -3185,13 +3185,13 @@ elif page == "RRG Charts":
         fig = go.Figure()
 
         # Quadrant backgrounds
-        fig.add_shape(type='rect', x0=100, y0=100, x1=175, y1=170,
+        fig.add_shape(type='rect', x0=100, y0=100, x1=165, y1=155,
                       fillcolor='rgba(0,180,0,0.06)', line_width=0, layer='below')
-        fig.add_shape(type='rect', x0=50,  y0=100, x1=100, y1=170,
+        fig.add_shape(type='rect', x0=50,  y0=100, x1=100, y1=155,
                       fillcolor='rgba(100,100,255,0.06)', line_width=0, layer='below')
         fig.add_shape(type='rect', x0=50,  y0=50,  x1=100, y1=100,
                       fillcolor='rgba(255,50,50,0.06)', line_width=0, layer='below')
-        fig.add_shape(type='rect', x0=100, y0=50,  x1=175, y1=100,
+        fig.add_shape(type='rect', x0=100, y0=50,  x1=165, y1=100,
                       fillcolor='rgba(255,180,0,0.06)', line_width=0, layer='below')
 
         # Quadrant labels
@@ -3286,13 +3286,13 @@ elif page == "RRG Charts":
             title        = dict(text=_chart_title, font=dict(size=14, color=get_chart_theme()['font_color'])),
             xaxis_title  = 'RS-Ratio',
             yaxis_title  = 'RS-Momentum',
-            height       = 1000,
+            height       = 800,
             plot_bgcolor = get_chart_theme()['plot_bgcolor'],
             paper_bgcolor= get_chart_theme()['paper_bgcolor'],
             font         = dict(color=get_chart_theme()['font_color']),
-            xaxis        = dict(range=[50,175], gridcolor=get_chart_theme()['gridcolor'],
+            xaxis        = dict(range=[50,165], gridcolor=get_chart_theme()['gridcolor'],
                                 tickfont=dict(size=10), title_font=dict(size=11)),
-            yaxis        = dict(range=[50,170], gridcolor=get_chart_theme()['gridcolor'],
+            yaxis        = dict(range=[50,155], gridcolor=get_chart_theme()['gridcolor'],
                                 tickfont=dict(size=10), title_font=dict(size=11)),
             showlegend   = False,
             margin       = dict(r=40, l=60, t=60, b=60),
@@ -3303,12 +3303,12 @@ elif page == "RRG Charts":
             st.plotly_chart(fig, use_container_width=True)
 
         # ── Streamlit legend below chart ──────────────────────────────────────
-        quad_groups = {'1_LEADING': [], '2_WEAKENING': [], '3_IMPROVING': [], '4_LAGGING': []}
+        quad_groups = {'4_LAGGING': [], '2_WEAKENING': [], '3_IMPROVING': [], '1_LEADING': []}
         quad_labels = {
-            '1_LEADING'  : ('🟢 LEADING',   '#2dc653'),
+            '4_LAGGING'  : ('🔴 LAGGING',    '#e63946'),
             '2_WEAKENING': ('🟡 WEAKENING',  '#f77f00'),
             '3_IMPROVING': ('🔵 IMPROVING',  '#00b4d8'),
-            '4_LAGGING'  : ('🔴 LAGGING',    '#e63946'),
+            '1_LEADING'  : ('🟢 LEADING',   '#2dc653'),
         }
         for ticker, (x, y, label, colour) in sorted_tickers:
             quad = get_quadrant(x, y)[0]
