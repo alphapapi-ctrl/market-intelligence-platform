@@ -1,3 +1,16 @@
 macro/config.py
 dashboard_settings.json
 ea/mt5_batch_config.json
+
+# Settings with API keys
+dashboard_settings.json
+
+# Rank/score settings
+rank_settings.json
+drawdown_settings.json
+
+# Profile folders (optional — commit or ignore based on preference)
+rank_profiles/
+
+# Config with keys
+config.py

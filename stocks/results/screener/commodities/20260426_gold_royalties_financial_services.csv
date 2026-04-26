@@ -1,0 +1,10 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+74,15,MAH.AX,Machahon Holdings,gold,royalties_financial_services,mid,0.79,83.65,-0.0129,-0.0612,0.2924,FLAT,68.78,221.5,240.76,-22.01,44.84,61.24,0.5142,LOW,-,0.7995,0.7298,0.5501,1,162.184,LEADER,38.7425
+95,0,GROY,Gold Royalty Corp,gold,royalties_financial_services,mid,3.48,60.58,-0.0235,-0.0344,-0.1125,STRONG_UP,-3.33,130.46,61.86,-39.54,53.82,58.45,0.5786,LOW,EARLY,3.6075,3.887,3.7558,0,120.1292,LAGGARD,35.2435
+126,5,ASA,ASA Gold & Precious Metals,gold,royalties_financial_services,mid,66.59,55.77,0.0211,0.0467,0.0421,FLAT,44.04,119.99,287.27,-32.51,59.04,64.14,0.2956,LOW,-,65.5445,67.7894,53.1229,1,110.4498,CONTENDER,31.0759
+133,4,MTA,Metalla Royalty & Str.,gold,royalties_financial_services,mid,6.8,56.73,0.0178,-0.0906,-0.0582,FLAT,-2.86,121.5,113.84,-33.04,54.22,61.52,0.4598,LOW,-,6.7395,7.4576,6.6925,1,107.0813,CONTENDER,30.5919
+168,25,TFPM,Triple Flag Precious Metals,gold,royalties_financial_services,large,33.76,25.0,-0.003,-0.0611,0.0061,FLAT,17.14,64.69,109.94,-26.03,57.03,50.59,1.0686,MED,-,35.0455,35.9849,31.5787,1,72.9246,LAGGARD,26.326
+227,6,FISH.V,Sailfish Royalty Corp.,gold,royalties_financial_services,small,3.88,50.96,0.1479,0.0131,0.0565,FLAT,37.1,108.64,237.56,-26.84,44.98,65.23,0.5249,LOW,-,3.608,3.8032,3.2286,1,74.9144,CONTENDER,20.479
+242,-1,RGLD,Royal Gold Inc,gold,royalties_financial_services,large,252.36,11.54,0.0179,-0.0328,0.0008,FLAT,38.14,40.77,106.81,-29.27,54.62,50.66,0.9758,LOW,-,259.3356,263.8818,216.2476,1,43.9571,LAGGARD,19.2956
+246,24,VROY.V,Vizsla royalties_financial_services,gold,royalties_financial_services,small,3.2,35.58,0.1308,0.1942,-0.237,FLAT,-25.41,82.86,150.0,-52.48,50.2,91.85,0.1588,LOW,-,2.774,3.0438,3.6096,0,45.285,WEAK,18.5382
+266,1,FNV,Franco-Nevada Corp,gold,royalties_financial_services,large,242.33,12.5,0.0029,-0.0653,0.0666,FLAT,26.88,42.4,100.21,-20.62,56.22,48.14,0.6655,LOW,-,253.3085,253.9844,214.599,1,49.5178,LAGGARD,17.22

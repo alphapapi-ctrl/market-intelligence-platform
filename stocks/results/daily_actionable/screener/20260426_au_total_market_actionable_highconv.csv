@@ -1,0 +1,5 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+205,-1,COH.AX,Cochlear Limited,Health technology,Medical specialties,large,97.35,10.81,-0.4297,-0.4229,-0.4836,FLAT,-66.16,-63.0,-68.57,-69.66,48.02,92.21,3.001,HIGH,EARLY,160.167,174.9861,253.9201,0,-32.8106,WEAK,23.3709
+1290,12,EVT.AX,EVT Limited,Consumer services,Movies/Entertainment,mid,12.79,47.92,-0.0446,0.0001,0.2233,STRONG_DOWN,-3.05,-3.07,15.76,-29.36,51.98,25.87,1.9727,HIGH,EARLY,13.343,12.9181,13.6461,0,-6.1761,WEAK,8.2926
+1603,19,AMC.AX,Amcor PLC Shs Chess Depository Interests,Process industries,Containers/Packaging,large,54.91,28.57,-0.0516,-0.0792,-0.0298,FLAT,-10.19,-22.29,-11.01,-25.29,47.62,31.88,2.3345,HIGH,EARLY,57.3965,61.129,62.8932,0,-33.2957,WEAK,4.3068
+1674,19,CEN.AX,Contact Energy Limited,Utilities,Electric utilities,mid,7.66,27.78,-0.0651,-0.0361,0.0202,STRONG_DOWN,-7.24,-7.73,9.12,-13.96,45.63,47.89,3.0725,HIGH,EARLY,7.7455,7.759,7.9538,0,-7.3632,WEAK,2.416

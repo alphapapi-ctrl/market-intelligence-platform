@@ -2,6 +2,21 @@ import pandas as pd
 import numpy as np
 import os
 from datetime import datetime, timedelta
+
+import json as _json
+
+# ── Load rank settings ────────────────────────────────────────────────────────
+def _load_rs(key):
+    for _p in [
+        os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), 'rank_settings.json'),
+        os.path.join(os.path.dirname(os.path.abspath(__file__)), 'rank_settings.json'),
+    ]:
+        if os.path.exists(_p):
+            try: return _json.load(open(_p)).get(key, {})
+            except: pass
+    return {}
+
+_RS = _load_rs('au_benchmark')
 from config.benchmark.study_au_total_market import config
 from data_fetch.benchmark.data_fetch_au_total_market import load_watchlist, fetch_prices, fetch_volumes
 
