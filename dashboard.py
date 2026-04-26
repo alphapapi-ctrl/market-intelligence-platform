@@ -131,21 +131,19 @@ DEFAULT_SETTINGS = {
     'theme': 'light',
     'pages': {
         'Macro'               : True,
+        'Seasonality'         : True,
         'Debt Markets'        : True,
         'AU Market'           : True,
         'US Market'           : True,
         'Commodities'         : True,
-        'Uranium'             : True,
-        'AU Gold Miners'      : True,
         'RRG Charts'          : True,
-        'Breadth RRG'         : True,
         'Drawdown Analysis'   : True,
         'Actionable & Exports': True,
         'DeMark Signals'      : True,
         'Run Scripts'         : True,
         'AI Settings'         : True,
         'Rank Settings'       : True,
-        'Settings'            : True,
+        'General Settings'     : True,
     },
     'rank_settings': {
 
@@ -236,27 +234,25 @@ settings    = load_settings()
 page_config = settings['pages']
 
 ALL_PAGES = [
-    ("Macro",                "globe"),
-    ("Debt Markets",          "credit-card"),
-    ("AU Market",            "flag"),
-    ("US Market",            "flag"),
-    ("Commodities",          "hammer"),
-    ("Uranium",              "radioactive"),
-    ("AU Gold Miners",       "star"),
-    ("RRG Charts",           "broadcast"),
-    ("Breadth RRG",          "grid-3x3"),
-    ("Drawdown Analysis",    "graph-down"),
-    ("Actionable & Exports", "file-earmark-arrow-down"),
-    ("DeMark Signals",       "graph-up"),
-    ("Run Scripts",          "play-circle"),
-    ("AI Settings",          "robot"),
-    ("Rank Settings",        "sliders"),
-    ("Settings",             "gear"),
+    ("Macro",                    "globe"),
+    ("AU Market",                "flag"),
+    ("US Market",                "flag"),
+    ("Commodities",              "hammer"),
+    ("Debt Markets",             "credit-card"),
+    ("Seasonality",              "calendar3"),
+    ("DeMark Signals",           "graph-up"),
+    ("Relative Strength Charts", "broadcast"),
+    ("Actionable & Exports",     "file-earmark-arrow-down"),
+    ("Drawdown Analysis",        "graph-down"),
+    ("Run Scripts",              "play-circle"),
+    ("AI Settings",              "robot"),
+    ("Rank Settings",            "sliders"),
+    ("General Settings",         "gear"),
 ]
 
 # Filter to enabled pages — Settings always shown
 active_pages = [(name, icon) for name, icon in ALL_PAGES
-                if page_config.get(name, True) or name in ('Settings', 'AI Settings', 'Rank Settings')]
+                if page_config.get(name, True) or name in ('General Settings', 'AI Settings', 'Rank Settings')]
 
 page = option_menu(
     menu_title  = None,
@@ -1009,15 +1005,13 @@ if page == "Macro":
     import yfinance as yf
     import plotly.graph_objects as go
 
-    st.title("🌍 Macro Dashboard")
-    _mh1, _mh2, _mh3 = st.columns([8, 2, 2])
+    _mh1, _mh2, _mh3 = st.columns([900, 6000, 2000])
     with _mh2:
+        st.title("🌍 Macro Dashboard")
+    with _mh3:
+        st.markdown("<br>", unsafe_allow_html=True)
         if st.button("📊 Run Macro Report", key='top_macro_btn'):
             run_script(os.path.join(MACRO, 'macro_report.py'), MACRO)
-            st.rerun()
-    with _mh3:
-        if st.button("💳 Run Debt Data", key='top_debt_btn'):
-            run_script(os.path.join(MACRO, 'consumer_credit.py'), MACRO)
             st.rerun()
     st.markdown("""
         <style>
@@ -1626,6 +1620,1040 @@ Currently <b>{_hgx_curr:,.0f}</b>. Signal resets <b>{_reset_date}</b> (18 months
 # ═══════════════════════════════════════════════════════════════════════════════
 # CONSUMER CREDIT PAGE
 # ═══════════════════════════════════════════════════════════════════════════════
+elif page == "Seasonality":
+    import plotly.graph_objects as go
+    import plotly.express as px
+    st.title("📅 Seasonality")
+
+    _sea_tab1, _sea_tab2, _sea_tab3 = st.tabs(["📊 Sectors", "🔍 Stocks", "🇺🇸 Presidential Cycle"])
+
+    # ── Shared instruments ─────────────────────────────────────────────────────
+    _INSTRUMENTS = {
+        "AU Indices": {
+            "All Ordinaries (^AORD)"  : "^AORD",
+            "ASX 200 (^AXJO)"         : "^AXJO",
+        },
+        "AU Sectors": {
+            "AU Energy (^AXEJ)"       : "^AXEJ",
+            "AU Materials (^AXMJ)"    : "^AXMJ",
+            "AU Financials (^AXFJ)"   : "^AXFJ",
+            "AU Health (^AXHJ)"       : "^AXHJ",
+            "AU Industrials (^AXIJ)"  : "^AXIJ",
+            "AU Consumer Disc (^AXDJ)": "^AXDJ",
+            "AU Consumer Staples (^AXSJ)": "^AXSJ",
+            "AU Technology (^AXTJ)"   : "^AXTJ",
+            "AU Utilities (^AXUJ)"    : "^AXUJ",
+            "AU Real Estate (^AXPJ)"  : "^AXPJ",
+            "AU Telecom (^AXNJ)"      : "^AXNJ",
+        },
+        "US Indices": {
+            "S&P 500 (^GSPC)"         : "^GSPC",
+            "Nasdaq 100 (^NDX)"       : "^NDX",
+            "Russell 2000 (^RUT)"     : "^RUT",
+            "Dow Jones (^DJI)"        : "^DJI",
+        },
+        "US Sectors": {
+            "Technology (XLK)"        : "XLK",
+            "Financials (XLF)"        : "XLF",
+            "Healthcare (XLV)"        : "XLV",
+            "Energy (XLE)"            : "XLE",
+            "Industrials (XLI)"       : "XLI",
+            "Consumer Disc (XLY)"     : "XLY",
+            "Consumer Staples (XLP)"  : "XLP",
+            "Materials (XLB)"         : "XLB",
+            "Utilities (XLU)"         : "XLU",
+            "Real Estate (XLRE)"      : "XLRE",
+            "Communication (XLC)"     : "XLC",
+        },
+        "Commodities": {
+            "GSCI Index (^SPGSCI)"    : "^SPGSCI",
+            "Gold (GC=F)"             : "GC=F",
+            "Silver (SI=F)"           : "SI=F",
+            "Copper (HG=F)"           : "HG=F",
+            "Oil WTI (CL=F)"          : "CL=F",
+        },
+    }
+
+    # ── Tab 1: Seasonality Charts ───────────────────────────────────────────────
+    with _sea_tab1:
+        _sc1, _sc2, _sc3, _sc4 = st.columns([3, 2, 2, 2])
+        _groups    = list(_INSTRUMENTS.keys())
+        _grp_sel   = _sc1.selectbox("Asset class", _groups, key="sea_group")
+        _inst_map  = _INSTRUMENTS[_grp_sel]
+        _inst_sel  = _sc2.selectbox("Instrument", list(_inst_map.keys()), key="sea_inst")
+        _ticker    = _inst_map[_inst_sel]
+        _show_sea_avg = _sc4.toggle("Show average line", value=True, key="sea_show_avg")
+
+        @st.cache_data(ttl=3600)
+        def _fetch_sea(ticker):
+            import yfinance as _yf
+            df = _yf.download(ticker, start="1928-01-01", auto_adjust=True, progress=False)
+            if df.empty: return None
+            close = df["Close"].squeeze().dropna()
+            close.index = pd.to_datetime(close.index).tz_localize(None)
+            return close
+
+        _sea_data = _fetch_sea(_ticker)
+        if _sea_data is None or len(_sea_data) < 252:
+            st.warning("Insufficient data for this instrument.")
+        else:
+            _min_yr = int(_sea_data.index.year.min())
+            _max_yr = int(_sea_data.index.year.max())
+            _yr_range = _sc3.slider("Year range", _min_yr, _max_yr,
+                                     (_max_yr - 30, _max_yr), key="sea_yr")
+
+            # All years in range
+            _all_yrs_in_range = [y for y in range(_yr_range[0], _yr_range[1] + 1)
+                                  if not _sea_data[_sea_data.index.year == y].empty]
+
+            # Year filter multiselect — defaults to all
+            _yr_excl = st.multiselect(
+                "Exclude years", _all_yrs_in_range,
+                default=[], key="sea_yr_excl",
+                help="Select years to hide from the chart and tables"
+            )
+            _selected_yrs = [y for y in _all_yrs_in_range if y not in _yr_excl]
+
+            _sea_filt = _sea_data[
+                (_sea_data.index.year.isin(_selected_yrs))
+            ]
+
+            # Build per-year indexed series (Jan 1 = 100)
+            _yearly = {}
+            _monthly_rets = {}  # year -> {month -> pct}
+            for _yr in _selected_yrs:
+                _yd = _sea_filt[_sea_filt.index.year == _yr]
+                if len(_yd) < 20: continue
+                _base = float(_yd.iloc[0])
+                if _base == 0: continue
+                _indexed = (_yd / _base - 1) * 100
+                # Reindex to day-of-year for alignment
+                _doy = [d.timetuple().tm_yday for d in _indexed.index]
+                _yearly[_yr] = (_doy, _indexed.values.tolist())
+                # Monthly returns
+                _mrets = {}
+                for _mo in range(1, 13):
+                    _md = _yd[_yd.index.month == _mo]
+                    if len(_md) >= 2:
+                        _mrets[_mo] = round((_md.iloc[-1] / _md.iloc[0] - 1) * 100, 2)
+                    elif len(_md) == 1 and _mo > 1:
+                        _prev = _yd[_yd.index.month == _mo - 1]
+                        if len(_prev) > 0:
+                            _mrets[_mo] = round((_md.iloc[-1] / _prev.iloc[-1] - 1) * 100, 2)
+                _annual = round((_yd.iloc[-1] / _yd.iloc[0] - 1) * 100, 2)
+                _monthly_rets[_yr] = {**_mrets, 0: _annual}  # 0 = annual
+                
+            if not _yearly:
+                st.warning("No data in selected range.")
+            else:
+                # ── Spaghetti Chart ───────────────────────────────────────────
+                _theme  = get_chart_theme()
+                _avg_doy, _avg_vals = [], []
+                _all_doys = sorted(set(d for doys, _ in _yearly.values() for d in doys))
+                for _d in _all_doys:
+                    _pts = []
+                    for _yr, (_doys, _vals) in _yearly.items():
+                        if _d in _doys:
+                            _i = _doys.index(_d)
+                            _pts.append(_vals[_i])
+                    if _pts:
+                        _avg_doy.append(_d)
+                        _avg_vals.append(sum(_pts) / len(_pts))
+
+                _fig_sea = go.Figure()
+                _palette = px.colors.qualitative.Light24 + px.colors.qualitative.Pastel
+                for _i, (_yr, (_doys, _vals)) in enumerate(_yearly.items()):
+                    _fig_sea.add_trace(go.Scatter(
+                        x=_doys, y=_vals,
+                        mode='lines', name=str(_yr),
+                        line=dict(width=1, color=_palette[_i % len(_palette)]),
+                        opacity=0.45,
+                        hovertemplate=f"<b>{_yr}</b><br>Day %{{x}}: %{{y:.2f}}%<extra></extra>"
+                    ))
+                # Average line — dotted, theme-aware
+                if _show_sea_avg:
+                    _avg_col = '#111111' if _get_theme_mode() == 'light' else '#ffffff'
+                    _fig_sea.add_trace(go.Scatter(
+                        x=_avg_doy, y=_avg_vals,
+                        mode='lines', name='Average',
+                        line=dict(width=2.5, color=_avg_col, dash='dot'),
+                        hovertemplate="<b>Average</b><br>Day %{x}: %{y:.2f}%<extra></extra>"
+                    ))
+                _fig_sea.add_hline(y=0, line_dash="dash", line_color="rgba(128,128,128,0.4)", line_width=1)
+
+                # X-axis ticks at month starts (approx day of year)
+                _mo_days = [1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335]
+                _mo_names = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+                # Legend: sort by final value descending, cap at 40 entries
+                _legend_order = []
+                for _yr, (_doys, _vals) in _yearly.items():
+                    _legend_order.append((_yr, _vals[-1]))
+                _legend_order.sort(key=lambda x: x[1], reverse=True)
+                _top40 = {y for y, _ in _legend_order[:40]}
+
+                # Re-add traces with legend visibility controlled
+                _fig_sea2 = go.Figure()
+                for _tr in _fig_sea.data:
+                    try:
+                        _yr_int = int(_tr.name)
+                        _show = _yr_int in _top40
+                    except:
+                        _show = True  # Average line always shown
+                    _fig_sea2.add_trace(go.Scatter(
+                        x=list(_tr.x), y=list(_tr.y),
+                        mode=_tr.mode, name=_tr.name,
+                        line=dict(width=_tr.line.width, color=_tr.line.color,
+                                  dash=_tr.line.dash if _tr.line.dash else 'solid'),
+                        opacity=_tr.opacity if _tr.opacity is not None else 1.0,
+                        showlegend=_show,
+                        hovertemplate=_tr.hovertemplate,
+                    ))
+                _fig_sea2.update_layout(
+                    plot_bgcolor =_theme['plot_bgcolor'],
+                    paper_bgcolor=_theme['paper_bgcolor'],
+                    font=dict(color=_theme['font_color'], size=10),
+                    xaxis=dict(tickmode='array', tickvals=_mo_days, ticktext=_mo_names,
+                               gridcolor=_theme['gridcolor'], zeroline=False,
+                               domain=[0, 0.82]),
+                    yaxis=dict(title="Return from Jan 1 (%)",
+                               gridcolor=_theme['gridcolor'], zeroline=False),
+                    title=dict(text=f"{_inst_sel} — Seasonal Returns ({_yr_range[0]}–{_yr_range[1]})",
+                               font=dict(size=14)),
+                    showlegend=True,
+                    legend=dict(
+                        x=0.84, y=1, xanchor='left', yanchor='top',
+                        font=dict(size=9),
+                        bgcolor='rgba(0,0,0,0)',
+                        tracegroupgap=1,
+                        itemwidth=30,
+                    ),
+                    height=900,
+                    margin=dict(l=60, r=160, t=60, b=40),
+                )
+                st.plotly_chart(_fig_sea2, use_container_width=True)
+
+                # ── Monthly Returns Heatmap ────────────────────────────────────
+                st.markdown("#### Monthly Returns (%)")
+                _MO_NAMES = ["Jan","Feb","Mar","Apr","May","Jun",
+                             "Jul","Aug","Sep","Oct","Nov","Dec","Yearly"]
+                _rows = []
+                for _yr in sorted(_monthly_rets.keys(), reverse=True):
+                    _row = {"Year": _yr}
+                    for _mi, _mn in enumerate(_MO_NAMES[:12], 1):
+                        _row[_mn] = _monthly_rets[_yr].get(_mi, None)
+                    _row["Yearly"] = _monthly_rets[_yr].get(0, None)
+                    _rows.append(_row)
+
+                _df_heat = pd.DataFrame(_rows)
+
+                # Summary rows
+                _num_cols = _MO_NAMES
+                _summ_rows = []
+                for _lbl, _fn in [
+                    ("Average",   lambda c: round(c.mean(), 2)),
+                    ("% Positive",lambda c: round((c > 0).sum() / c.count() * 100, 2)),
+                    ("% Negative",lambda c: round(((c < 0).sum() / c.count() * 100) - 100, 2)),
+                    ("Median",    lambda c: round(c.median(), 2)),
+                    ("Best",      lambda c: round(c.max(), 2)),
+                    ("Worst",     lambda c: round(c.min(), 2)),
+                ]:
+                    _sr = {"Year": _lbl}
+                    for _cn in _num_cols:
+                        if _cn in _df_heat.columns:
+                            _col = pd.to_numeric(_df_heat[_cn], errors='coerce').dropna()
+                            _sr[_cn] = _fn(_col) if len(_col) > 0 else None
+                        else:
+                            _sr[_cn] = None
+                    _summ_rows.append(_sr)
+
+                # Style heatmap
+                def _heat_style(val, col):
+                    if col == "Year" or val is None: return ""
+                    try:
+                        v = float(val)
+                        if v > 0:
+                            intensity = min(int(abs(v) / 9 * 180), 200)
+                            return f"background-color: rgba(45,198,83,{intensity/255:.2f}); color: #0a3d1a"
+                        elif v < 0:
+                            intensity = min(int(abs(v) / 9 * 180), 200)
+                            return f"background-color: rgba(230,57,70,{intensity/255:.2f}); color: #3d0a0a"
+                    except: pass
+                    return ""
+
+                def _apply_heat(df):
+                    styles = df.copy().astype(str)
+                    for col in styles.columns:
+                        if col == "Year": continue
+                        styles[col] = [_heat_style(v, col) for v in df[col]]
+                    return styles
+
+                # Format display
+                _df_disp = _df_heat.copy()
+                for _cn in _num_cols:
+                    if _cn in _df_disp.columns:
+                        _df_disp[_cn] = _df_disp[_cn].apply(
+                            lambda x: f"{x:.2f}%" if pd.notna(x) else "")
+
+                _styled = _df_disp.style.apply(
+                    lambda col: [_heat_style(v, col.name) for v in _df_heat[col.name]
+                                 if col.name in _df_heat.columns] if col.name != "Year"
+                    else [""] * len(col), axis=0
+                )
+                st.dataframe(_df_disp.style.apply(
+                    lambda col: [_heat_style(v, col.name)
+                                 for v in (pd.to_numeric(_df_heat[col.name], errors="coerce")
+                                           if col.name != "Year" else _df_heat[col.name])]
+                    if col.name in _df_heat.columns else [""] * len(col), axis=0
+                ), use_container_width=True, hide_index=True)
+
+                # Summary table
+                st.markdown("#### Summary")
+                _df_summ = pd.DataFrame(_summ_rows)
+                for _cn in _num_cols:
+                    if _cn in _df_summ.columns:
+                        _df_summ[_cn] = _df_summ[_cn].apply(
+                            lambda x: f"{x:.2f}%" if pd.notna(x) and x is not None else "—")
+                def _summ_heat(v):
+                    try:
+                        n = float(str(v).replace("%","").replace("+",""))
+                        if n > 0:
+                            intensity = min(n / 9, 1.0)
+                            return f"background-color:rgba(45,198,83,{intensity*0.7:.2f});color:#0a3d1a"
+                        elif n < 0:
+                            intensity = min(abs(n) / 9, 1.0)
+                            return f"background-color:rgba(230,57,70,{intensity*0.7:.2f});color:#3d0a0a"
+                    except: pass
+                    return ""
+
+                _num_summ_cols = [c for c in _df_summ.columns if c != "Year"]
+                st.dataframe(
+                    _df_summ.style.applymap(_summ_heat, subset=_num_summ_cols),
+                    use_container_width=True, hide_index=True
+                )
+
+    # ── Tab 2: Presidential Cycle ───────────────────────────────────────────────
+
+    # ── Sector mappings for stock comparison ──────────────────────────────────
+    _SECTOR_MAP_US = {
+        "Technology"             : ("Technology (XLK)",        "XLK"),
+        "Financials"             : ("Financials (XLF)",        "XLF"),
+        "Finance"                : ("Financials (XLF)",        "XLF"),
+        "Health Care"            : ("Healthcare (XLV)",        "XLV"),
+        "Healthcare"             : ("Healthcare (XLV)",        "XLV"),
+        "Energy"                 : ("Energy (XLE)",            "XLE"),
+        "Industrials"            : ("Industrials (XLI)",       "XLI"),
+        "Consumer Discretionary" : ("Consumer Disc (XLY)",     "XLY"),
+        "Consumer Cyclical"      : ("Consumer Disc (XLY)",     "XLY"),
+        "Consumer Staples"       : ("Consumer Staples (XLP)",  "XLP"),
+        "Consumer Defensive"     : ("Consumer Staples (XLP)",  "XLP"),
+        "Materials"              : ("Materials (XLB)",         "XLB"),
+        "Basic Materials"        : ("Materials (XLB)",         "XLB"),
+        "Utilities"              : ("Utilities (XLU)",         "XLU"),
+        "Real Estate"            : ("Real Estate (XLRE)",      "XLRE"),
+        "Communication Services" : ("Communication (XLC)",     "XLC"),
+        "Communication"          : ("Communication (XLC)",     "XLC"),
+        "Information Technology" : ("Technology (XLK)",        "XLK"),
+    }
+    # AU sector map — covers both GICS parent sectors and common sub-sector labels
+    _SECTOR_MAP_AU = {
+        # Parent sectors
+        "Materials"              : ("AU Materials (^AXMJ)",    "^AXMJ"),
+        "Energy"                 : ("AU Energy (^AXEJ)",       "^AXEJ"),
+        "Financials"             : ("AU Financials (^AXFJ)",   "^AXFJ"),
+        "Finance"                : ("AU Financials (^AXFJ)",   "^AXFJ"),
+        "Health Care"            : ("AU Health (^AXHJ)",       "^AXHJ"),
+        "Healthcare"             : ("AU Health (^AXHJ)",       "^AXHJ"),
+        "Industrials"            : ("AU Industrials (^AXIJ)",  "^AXIJ"),
+        "Consumer Discretionary" : ("AU Cons Disc (^AXDJ)",    "^AXDJ"),
+        "Consumer Cyclical"      : ("AU Cons Disc (^AXDJ)",    "^AXDJ"),
+        "Consumer Staples"       : ("AU Cons Staples (^AXSJ)", "^AXSJ"),
+        "Consumer Defensive"     : ("AU Cons Staples (^AXSJ)", "^AXSJ"),
+        "Information Technology" : ("AU Technology (^AXTJ)",   "^AXTJ"),
+        "Technology"             : ("AU Technology (^AXTJ)",   "^AXTJ"),
+        "Technology services"    : ("AU Technology (^AXTJ)",   "^AXTJ"),
+        "Utilities"              : ("AU Utilities (^AXUJ)",    "^AXUJ"),
+        "Real Estate"            : ("AU Real Estate (^AXPJ)",  "^AXPJ"),
+        "Communication Services" : ("AU Telecom (^AXNJ)",      "^AXNJ"),
+        "Communication"          : ("AU Telecom (^AXNJ)",      "^AXNJ"),
+        # Common AU sub-sector / industry labels from watchlist CSVs
+        "Finance"                : ("AU Financials (^AXFJ)",   "^AXFJ"),
+        "Banks"                  : ("AU Financials (^AXFJ)",   "^AXFJ"),
+        "Insurance"              : ("AU Financials (^AXFJ)",   "^AXFJ"),
+        "Diversified financials" : ("AU Financials (^AXFJ)",   "^AXFJ"),
+        "Commercial banks"       : ("AU Financials (^AXFJ)",   "^AXFJ"),
+        "Non-energy minerals"    : ("AU Materials (^AXMJ)",    "^AXMJ"),
+        "Industrial minerals"    : ("AU Materials (^AXMJ)",    "^AXMJ"),
+        "Precious metals"        : ("AU Materials (^AXMJ)",    "^AXMJ"),
+        "Base metals"            : ("AU Materials (^AXMJ)",    "^AXMJ"),
+        "Steel"                  : ("AU Materials (^AXMJ)",    "^AXMJ"),
+        "Mining"                 : ("AU Materials (^AXMJ)",    "^AXMJ"),
+        "Gold mining"            : ("AU Materials (^AXMJ)",    "^AXMJ"),
+        "Energy minerals"        : ("AU Energy (^AXEJ)",       "^AXEJ"),
+        "Oil & gas"              : ("AU Energy (^AXEJ)",       "^AXEJ"),
+        "Coal"                   : ("AU Energy (^AXEJ)",       "^AXEJ"),
+        "Electronic technology"  : ("AU Technology (^AXTJ)",   "^AXTJ"),
+        "Packaged software"      : ("AU Technology (^AXTJ)",   "^AXTJ"),
+        "Semiconductors"         : ("AU Technology (^AXTJ)",   "^AXTJ"),
+        "Health technology"      : ("AU Health (^AXHJ)",       "^AXHJ"),
+        "Health services"        : ("AU Health (^AXHJ)",       "^AXHJ"),
+        "Pharmaceuticals"        : ("AU Health (^AXHJ)",       "^AXHJ"),
+        "Biotechnology"          : ("AU Health (^AXHJ)",       "^AXHJ"),
+        "Transportation"         : ("AU Industrials (^AXIJ)",  "^AXIJ"),
+        "Producer manufacturing" : ("AU Industrials (^AXIJ)",  "^AXIJ"),
+        "Retail trade"           : ("AU Cons Disc (^AXDJ)",    "^AXDJ"),
+        "Restaurants"            : ("AU Cons Disc (^AXDJ)",    "^AXDJ"),
+        "Hotels & entertainment" : ("AU Cons Disc (^AXDJ)",    "^AXDJ"),
+        "Food & beverage"        : ("AU Cons Staples (^AXSJ)", "^AXSJ"),
+        "Beverages"              : ("AU Cons Staples (^AXSJ)", "^AXSJ"),
+        "Telecommunications"     : ("AU Telecom (^AXNJ)",      "^AXNJ"),
+        "Real estate investment" : ("AU Real Estate (^AXPJ)",  "^AXPJ"),
+        "Property trusts"        : ("AU Real Estate (^AXPJ)",  "^AXPJ"),
+        "Electric utilities"     : ("AU Utilities (^AXUJ)",    "^AXUJ"),
+        "Gas utilities"          : ("AU Utilities (^AXUJ)",    "^AXUJ"),
+    }
+    # Normalise: lowercase lookup for fuzzy matching
+    def _resolve_sector(sector_val, industry_val, sector_map):
+        """Try sector first, then industry, then case-insensitive partial match."""
+        for val in [sector_val, industry_val]:
+            if not val: continue
+            if val in sector_map: return sector_map[val]
+            # Case-insensitive exact
+            _low = {k.lower(): v for k, v in sector_map.items()}
+            if str(val).lower() in _low: return _low[str(val).lower()]
+            # Partial match
+            for k, v in sector_map.items():
+                if k.lower() in str(val).lower() or str(val).lower() in k.lower():
+                    return v
+        return None
+
+    # Friendly watchlist names — maps filename stem to display name
+    _WL_FRIENDLY = {
+        'au_total_market'           : 'ASX Stocks',
+        'au_gold_miners'            : 'AU Gold Miners',
+        'us_total_market'           : 'US Stocks',
+        'all_major_commodities'     : 'Commodities',
+        'uranium'                   : 'Uranium',
+        'au_large_cap'              : 'ASX Large Cap',
+        'us_large_cap'              : 'US Large Cap',
+        'au_etfs'                   : 'AU ETFs',
+        'us_etfs'                   : 'US ETFs',
+    }
+    def _wl_display(fname):
+        stem = fname.replace('.csv','').lower()
+        for k, v in _WL_FRIENDLY.items():
+            if k in stem: return v
+        return fname.replace('.csv','').replace('_',' ').title()
+
+    with _sea_tab2:
+        import plotly.graph_objects as go
+        import plotly.express as px
+
+        # ── Watchlist + ticker picker ─────────────────────────────────────────
+        _st_c1, _st_c2, _st_c3 = st.columns([3, 3, 3])
+
+        _wl_files       = sorted(glob.glob(os.path.join(STOCKS, 'watchlist', '*.csv')))
+        _wl_basenames   = [os.path.basename(w) for w in _wl_files]
+        _wl_display_names = [_wl_display(b) for b in _wl_basenames]
+        _wl_disp_sel    = _st_c1.selectbox("Watchlist", _wl_display_names, key="stk_wl")
+        _wl_idx         = _wl_display_names.index(_wl_disp_sel) if _wl_disp_sel in _wl_display_names else 0
+        _wl_sel         = _wl_basenames[_wl_idx] if _wl_basenames else None
+        _wl_path        = os.path.join(STOCKS, 'watchlist', _wl_sel) if _wl_sel else None
+
+        _wl_tickers = []
+        if _wl_path and os.path.exists(_wl_path):
+            try:
+                _wl_df = pd.read_csv(_wl_path)
+                # Build display: "TICKER — Name" if name column exists
+                if 'name' in _wl_df.columns and 'ticker' in _wl_df.columns:
+                    _wl_tickers = [f"{r['ticker']} — {r['name']}" for _, r in _wl_df.iterrows()
+                                   if r.get('benchmark') != 'benchmark']
+                elif 'ticker' in _wl_df.columns:
+                    _wl_tickers = _wl_df['ticker'].tolist()
+            except: pass
+
+        _stk_sel  = _st_c2.selectbox("Stock", _wl_tickers, key="stk_pick") if _wl_tickers else None
+        _stk_ticker = _stk_sel.split(' — ')[0].strip() if _stk_sel else None
+
+        # Detect AU vs US
+        _is_au = _stk_ticker and _stk_ticker.endswith('.AX')
+
+        # ── Sector comparison ─────────────────────────────────────────────────
+        _cmp_mode = _st_c3.radio("Compare to", ["Auto sector", "Manual ticker", "None"],
+                                  horizontal=True, key="stk_cmp_mode")
+        _cmp_ticker = None
+        _cmp_label  = None
+
+        if _cmp_mode == "Manual ticker":
+            _mc1, _mc2 = st.columns([2, 4])
+            _cmp_manual = _mc1.text_input("Comparison ticker", placeholder="e.g. XLK or ^AXMJ",
+                                           key="stk_cmp_manual")
+            if _cmp_manual.strip():
+                _cmp_ticker = _cmp_manual.strip().upper()
+                _cmp_label  = _cmp_ticker
+
+        elif _cmp_mode == "Auto sector" and _stk_ticker:
+            # Try to get sector from watchlist
+            _stk_sector = None
+            if _wl_path and os.path.exists(_wl_path):
+                try:
+                    _wl_df2 = pd.read_csv(_wl_path)
+                    _t_clean = _stk_ticker
+                    _match = _wl_df2[_wl_df2['ticker'] == _t_clean]
+                    if not _match.empty and 'sector' in _wl_df2.columns:
+                        _stk_sector = _match.iloc[0]['sector']
+                except: pass
+
+            _sec_map = _SECTOR_MAP_AU if _is_au else _SECTOR_MAP_US
+            # Get industry too for fuzzy matching
+            _stk_industry = None
+            if _wl_path and os.path.exists(_wl_path):
+                try:
+                    _wl_df3 = pd.read_csv(_wl_path)
+                    _match3 = _wl_df3[_wl_df3['ticker'] == _stk_ticker]
+                    if not _match3.empty and 'industry' in _wl_df3.columns:
+                        _stk_industry = _match3.iloc[0]['industry']
+                except: pass
+            _resolved = _resolve_sector(_stk_sector, _stk_industry, _sec_map)
+            if _resolved:
+                _cmp_label, _cmp_ticker = _resolved
+                st.caption(f"Auto-matched: **{_stk_sector}** / {_stk_industry or '—'} → {_cmp_label}")
+            else:
+                # Manual fallback picker
+                _all_sec_labels = list(dict.fromkeys(_sec_map.values()))  # deduplicated
+                _sec_pick = st.selectbox("Sector (auto-detect failed — pick manually)",
+                                          [v[0] for v in _all_sec_labels], key="stk_sec_pick")
+                _cmp_ticker = next((v[1] for v in _all_sec_labels if v[0] == _sec_pick), None)
+                _cmp_label  = _sec_pick
+
+        if not _stk_ticker:
+            st.info("Select a watchlist and stock to view seasonality.")
+        else:
+            @st.cache_data(ttl=3600)
+            def _fetch_stk(ticker):
+                import yfinance as _yf
+                df = _yf.download(ticker, start="1990-01-01", auto_adjust=True, progress=False)
+                if df.empty: return None
+                c = df["Close"].squeeze().dropna()
+                c.index = pd.to_datetime(c.index).tz_localize(None)
+                return c
+
+            _stk_data = _fetch_stk(_stk_ticker)
+            _cmp_data = _fetch_stk(_cmp_ticker) if _cmp_ticker else None
+
+            if _stk_data is None or len(_stk_data) < 50:
+                st.warning(f"No data found for {_stk_ticker}")
+            else:
+                _s_min = int(_stk_data.index.year.min())
+                _s_max = int(_stk_data.index.year.max())
+
+                _ss1, _ss2, _ss3 = st.columns([3, 3, 2])
+                _s_range = _ss1.slider("Year range", _s_min, _s_max,
+                                        (_s_max - min(15, _s_max - _s_min), _s_max),
+                                        key="stk_yr")
+                _s_excl  = _ss2.multiselect("Exclude years",
+                                             list(range(_s_range[0], _s_range[1]+1)),
+                                             default=[], key="stk_excl")
+                _show_stk_avg = _ss3.toggle("Show average", value=True, key="stk_avg")
+
+                _s_yrs = [y for y in range(_s_range[0], _s_range[1]+1) if y not in _s_excl]
+
+                # ── Build per-year indexed series ─────────────────────────────
+                _stk_yearly = {}
+                _cmp_yearly = {}
+                _ann_rets_stk = {}
+                _ann_rets_cmp = {}
+
+                for _yr in _s_yrs:
+                    _yd = _stk_data[_stk_data.index.year == _yr]
+                    if len(_yd) < 20: continue
+                    _base = float(_yd.iloc[0])
+                    if _base == 0: continue
+                    _idx = (_yd / _base - 1) * 100
+                    _doys = [d.timetuple().tm_yday for d in _idx.index]
+                    _stk_yearly[_yr] = (_doys, _idx.values.tolist())
+                    _ann_rets_stk[_yr] = round(float(_idx.iloc[-1]), 2)
+
+                    if _cmp_data is not None:
+                        _cd = _cmp_data[_cmp_data.index.year == _yr]
+                        if len(_cd) >= 20:
+                            _cb = float(_cd.iloc[0])
+                            if _cb != 0:
+                                _ci = (_cd / _cb - 1) * 100
+                                _cdoys = [d.timetuple().tm_yday for d in _ci.index]
+                                _cmp_yearly[_yr] = (_cdoys, _ci.values.tolist())
+                                _ann_rets_cmp[_yr] = round(float(_ci.iloc[-1]), 2)
+
+                # ── Average series ────────────────────────────────────────────
+                def _build_avg(yearly):
+                    _all_d = sorted(set(d for doys,_ in yearly.values() for d in doys))
+                    _xs, _ys = [], []
+                    for _d in _all_d:
+                        _pts = [v for doys,vals in yearly.values()
+                                for di,d in enumerate(doys) if d == _d
+                                for v in [vals[di]]]
+                        if _pts: _xs.append(_d); _ys.append(sum(_pts)/len(_pts))
+                    return _xs, _ys
+
+                _stk_avg_x, _stk_avg_y = _build_avg(_stk_yearly) if _stk_yearly else ([], [])
+                _cmp_avg_x, _cmp_avg_y = _build_avg(_cmp_yearly) if _cmp_yearly else ([], [])
+
+                # ── Spaghetti chart ───────────────────────────────────────────
+                _theme   = get_chart_theme()
+                _fig_stk = go.Figure()
+                _palette = px.colors.qualitative.Light24
+
+                for _i, (_yr, (_doys, _vals)) in enumerate(_stk_yearly.items()):
+                    _fig_stk.add_trace(go.Scatter(
+                        x=_doys, y=_vals, mode='lines',
+                        name=str(_yr),
+                        line=dict(width=1, color=_palette[_i % len(_palette)]),
+                        opacity=0.4,
+                        hovertemplate=f"<b>{_stk_ticker} {_yr}</b><br>Day %{{x}}: %{{y:.2f}}%<extra></extra>"
+                    ))
+
+                if _cmp_yearly:
+                    for _yr, (_doys, _vals) in _cmp_yearly.items():
+                        _fig_stk.add_trace(go.Scatter(
+                            x=_doys, y=_vals, mode='lines',
+                            name=f"{_cmp_label} {_yr}",
+                            line=dict(width=1, color='rgba(255,180,0,0.3)'),
+                            opacity=0.25, showlegend=False,
+                            hovertemplate=f"<b>{_cmp_label} {_yr}</b><br>Day %{{x}}: %{{y:.2f}}%<extra></extra>"
+                        ))
+                    if _show_stk_avg and _cmp_avg_x:
+                        _fig_stk.add_trace(go.Scatter(
+                            x=_cmp_avg_x, y=_cmp_avg_y, mode='lines',
+                            name=f"{_cmp_label} Avg",
+                            line=dict(width=2.5, color='#f77f00', dash='dot'),
+                            hovertemplate=f"<b>{_cmp_label} Avg</b><br>Day %{{x}}: %{{y:.2f}}%<extra></extra>"
+                        ))
+
+                if _show_stk_avg and _stk_avg_x:
+                    _avg_col = '#111111' if _get_theme_mode() == 'light' else '#ffffff'
+                    _fig_stk.add_trace(go.Scatter(
+                        x=_stk_avg_x, y=_stk_avg_y, mode='lines',
+                        name=f"{_stk_ticker} Avg",
+                        line=dict(width=3, color=_avg_col, dash='dot'),
+                        hovertemplate=f"<b>{_stk_ticker} Avg</b><br>Day %{{x}}: %{{y:.2f}}%<extra></extra>"
+                    ))
+
+                _fig_stk.add_hline(y=0, line_dash="dash",
+                                    line_color="rgba(128,128,128,0.4)", line_width=1)
+                _mo_days  = [1,32,60,91,121,152,182,213,244,274,305,335]
+                _mo_names = ["Jan","Feb","Mar","Apr","May","Jun",
+                             "Jul","Aug","Sep","Oct","Nov","Dec"]
+                _fig_stk.update_layout(
+                    plot_bgcolor=_theme['plot_bgcolor'],
+                    paper_bgcolor=_theme['paper_bgcolor'],
+                    font=dict(color=_theme['font_color'], size=10),
+                    xaxis=dict(tickmode='array', tickvals=_mo_days, ticktext=_mo_names,
+                               gridcolor=_theme['gridcolor'], zeroline=False, domain=[0,0.82]),
+                    yaxis=dict(title="Return from Jan 1 (%)",
+                               gridcolor=_theme['gridcolor'], zeroline=False),
+                    title=dict(text=f"{_stk_ticker} Seasonal Returns ({_s_range[0]}–{_s_range[1]})"
+                               + (f" vs {_cmp_label}" if _cmp_label else ""),
+                               font=dict(size=14)),
+                    height=700,
+                    margin=dict(l=60, r=160, t=60, b=40),
+                    legend=dict(x=0.84, y=1, xanchor='left', yanchor='top',
+                                font=dict(size=9), bgcolor='rgba(0,0,0,0)'),
+                    showlegend=True,
+                )
+                st.plotly_chart(_fig_stk, use_container_width=True)
+
+                # ── Correlation stats ─────────────────────────────────────────
+                if _cmp_data is not None and _ann_rets_cmp:
+                    st.markdown(f"#### {_stk_ticker} vs {_cmp_label} — Annual Return Correlation")
+
+                    _common_yrs = sorted(set(_ann_rets_stk) & set(_ann_rets_cmp))
+                    if len(_common_yrs) >= 5:
+                        _xs_corr = [_ann_rets_cmp[y] for y in _common_yrs]
+                        _ys_corr = [_ann_rets_stk[y] for y in _common_yrs]
+                        _yr_labels = [str(y) for y in _common_yrs]
+
+                        # Pearson correlation
+                        import numpy as _np_corr
+                        _corr = float(_np_corr.corrcoef(_xs_corr, _ys_corr)[0,1])
+
+                        # Year-by-year rolling 3-yr correlation
+                        _roll_corr = {}
+                        for _i in range(2, len(_common_yrs)):
+                            _w = _common_yrs[max(0,_i-2):_i+1]
+                            _xw = [_ann_rets_cmp[y] for y in _w]
+                            _yw = [_ann_rets_stk[y] for y in _w]
+                            if len(_w) >= 3:
+                                _rc = float(_np_corr.corrcoef(_xw, _yw)[0,1])
+                                _roll_corr[_common_yrs[_i]] = _rc
+
+                        # Correlation quality buckets
+                        _strong = sum(1 for v in _roll_corr.values() if v >= 0.7)
+                        _mod    = sum(1 for v in _roll_corr.values() if 0.3 <= v < 0.7)
+                        _weak   = sum(1 for v in _roll_corr.values() if v < 0.3)
+                        _n_roll = len(_roll_corr)
+
+                        # Summary metrics
+                        _m1, _m2, _m3, _m4 = st.columns(4)
+                        _m1.metric("Overall Correlation", f"{_corr:.2f}")
+                        _m2.metric("Strong (≥0.7)", f"{_strong}/{_n_roll} yrs" if _n_roll else "—",
+                                   f"{_strong/_n_roll*100:.0f}%" if _n_roll else None)
+                        _m3.metric("Moderate (0.3–0.7)", f"{_mod}/{_n_roll} yrs" if _n_roll else "—",
+                                   f"{_mod/_n_roll*100:.0f}%" if _n_roll else None)
+                        _m4.metric("Weak (<0.3)", f"{_weak}/{_n_roll} yrs" if _n_roll else "—",
+                                   f"{_weak/_n_roll*100:.0f}%" if _n_roll else None)
+
+                        # Scatter plot — annual returns
+                        _fig_scatter = go.Figure()
+                        _sc_colors = ['#2dc653' if s*c > 0 else '#e63946'
+                                      for s,c in zip(_ys_corr, _xs_corr)]
+                        _fig_scatter.add_trace(go.Scatter(
+                            x=_xs_corr, y=_ys_corr,
+                            mode='markers+text',
+                            text=_yr_labels,
+                            textposition='top center',
+                            textfont=dict(size=9),
+                            marker=dict(size=10, color=_sc_colors, opacity=0.8,
+                                        line=dict(width=1, color='rgba(0,0,0,0.3)')),
+                            hovertemplate=(f"<b>%{{text}}</b><br>"
+                                           f"{_cmp_label}: %{{x:.1f}}%<br>"
+                                           f"{_stk_ticker}: %{{y:.1f}}%<extra></extra>"),
+                        ))
+                        # Trend line
+                        _z = _np_corr.polyfit(_xs_corr, _ys_corr, 1)
+                        _xr = [min(_xs_corr), max(_xs_corr)]
+                        _yr_fit = [_z[0]*x + _z[1] for x in _xr]
+                        _fig_scatter.add_trace(go.Scatter(
+                            x=_xr, y=_yr_fit, mode='lines',
+                            line=dict(dash='dash', color='rgba(128,128,128,0.6)', width=1.5),
+                            showlegend=False,
+                        ))
+                        _fig_scatter.add_vline(x=0, line_dash="dot",
+                                               line_color="rgba(128,128,128,0.4)")
+                        _fig_scatter.add_hline(y=0, line_dash="dot",
+                                               line_color="rgba(128,128,128,0.4)")
+                        _fig_scatter.update_layout(
+                            plot_bgcolor=_theme['plot_bgcolor'],
+                            paper_bgcolor=_theme['paper_bgcolor'],
+                            font=dict(color=_theme['font_color']),
+                            xaxis=dict(title=f"{_cmp_label} Annual Return (%)",
+                                       gridcolor=_theme['gridcolor'], zeroline=False),
+                            yaxis=dict(title=f"{_stk_ticker} Annual Return (%)",
+                                       gridcolor=_theme['gridcolor'], zeroline=False),
+                            title=dict(text=f"Annual Return Scatter — r={_corr:.2f}",
+                                       font=dict(size=13)),
+                            height=450,
+                            margin=dict(l=60, r=40, t=60, b=60),
+                            showlegend=False,
+                        )
+                        st.plotly_chart(_fig_scatter, use_container_width=True)
+
+                        # ── Monthly returns heatmap (same as Sectors tab) ────────────
+                        st.markdown("#### Monthly Returns (%)")
+                        _MO_NAMES = ["Jan","Feb","Mar","Apr","May","Jun",
+                                     "Jul","Aug","Sep","Oct","Nov","Dec","Yearly"]
+                        _stk_mo_rows = []
+                        for _yr in sorted(_ann_rets_stk.keys(), reverse=True):
+                            _yd2 = _stk_data[_stk_data.index.year == _yr]
+                            if len(_yd2) < 20: continue
+                            _row = {"Year": _yr}
+                            for _mi, _mn in enumerate(_MO_NAMES[:12], 1):
+                                _md = _yd2[_yd2.index.month == _mi]
+                                if len(_md) >= 2:
+                                    _row[_mn] = round((_md.iloc[-1]/_md.iloc[0]-1)*100, 2)
+                                else:
+                                    _row[_mn] = None
+                            _row["Yearly"] = _ann_rets_stk[_yr]
+                            _stk_mo_rows.append(_row)
+
+                        if _stk_mo_rows:
+                            _df_stk_heat = pd.DataFrame(_stk_mo_rows)
+                            def _stk_heat_style(val, col):
+                                if col == "Year" or val is None: return ""
+                                try:
+                                    v = float(val)
+                                    if v > 0:
+                                        intensity = min(int(abs(v)/9*180), 200)
+                                        return f"background-color:rgba(45,198,83,{intensity/255:.2f});color:#0a3d1a"
+                                    elif v < 0:
+                                        intensity = min(int(abs(v)/9*180), 200)
+                                        return f"background-color:rgba(230,57,70,{intensity/255:.2f});color:#3d0a0a"
+                                except: pass
+                                return ""
+                            _df_stk_disp = _df_stk_heat.copy()
+                            for _cn in _MO_NAMES:
+                                if _cn in _df_stk_disp.columns:
+                                    _df_stk_disp[_cn] = _df_stk_disp[_cn].apply(
+                                        lambda x: f"{x:.2f}%" if pd.notna(x) and x is not None else "")
+                            st.dataframe(
+                                _df_stk_disp.style.apply(
+                                    lambda col: [_stk_heat_style(v, col.name)
+                                                 for v in (pd.to_numeric(_df_stk_heat[col.name], errors="coerce")
+                                                           if col.name != "Year" else _df_stk_heat[col.name])]
+                                    if col.name in _df_stk_heat.columns else [""]*len(col), axis=0
+                                ), use_container_width=True, hide_index=True
+                            )
+
+                            # Summary rows
+                            _stk_summ = []
+                            for _lbl, _fn in [
+                                ("Average",    lambda c: round(c.mean(), 2)),
+                                ("% Positive", lambda c: round((c>0).sum()/c.count()*100, 2)),
+                                ("% Negative", lambda c: round(((c<0).sum()/c.count()*100)-100, 2)),
+                                ("Median",     lambda c: round(c.median(), 2)),
+                                ("Best",       lambda c: round(c.max(), 2)),
+                                ("Worst",      lambda c: round(c.min(), 2)),
+                            ]:
+                                _sr = {"Year": _lbl}
+                                for _cn in _MO_NAMES:
+                                    if _cn in _df_stk_heat.columns:
+                                        _col = pd.to_numeric(_df_stk_heat[_cn], errors='coerce').dropna()
+                                        _sr[_cn] = _fn(_col) if len(_col) > 0 else None
+                                    else:
+                                        _sr[_cn] = None
+                                _stk_summ.append(_sr)
+                            _df_stk_summ = pd.DataFrame(_stk_summ)
+                            def _stk_summ_heat(v):
+                                try:
+                                    n = float(str(v).replace("%","").replace("+",""))
+                                    if n > 0:
+                                        intensity = min(n/9, 1.0)
+                                        return f"background-color:rgba(45,198,83,{intensity*0.7:.2f});color:#0a3d1a"
+                                    elif n < 0:
+                                        intensity = min(abs(n)/9, 1.0)
+                                        return f"background-color:rgba(230,57,70,{intensity*0.7:.2f});color:#3d0a0a"
+                                except: pass
+                                return ""
+                            _stk_num_cols = [c for c in _df_stk_summ.columns if c != "Year"]
+                            for _cn in _stk_num_cols:
+                                _df_stk_summ[_cn] = _df_stk_summ[_cn].apply(
+                                    lambda x: f"{x:.2f}%" if pd.notna(x) and x is not None else "—")
+                            st.markdown("**Summary**")
+                            st.dataframe(
+                                _df_stk_summ.style.applymap(_stk_summ_heat, subset=_stk_num_cols),
+                                use_container_width=True, hide_index=True
+                            )
+
+                        # ── Combined annual returns + correlation table ────────────────
+                        st.markdown("#### Annual Returns & Rolling Correlation")
+                        _tbl_rows = []
+                        for _yr in sorted(_common_yrs, reverse=True):
+                            _sr = _ann_rets_stk.get(_yr)
+                            _cr = _ann_rets_cmp.get(_yr)
+                            _rc = _roll_corr.get(_yr)
+                            _tbl_rows.append({
+                                'Year'              : _yr,
+                                f'{_stk_ticker} %'  : f"{'+' if _sr and _sr>=0 else ''}{_sr:.2f}%" if _sr is not None else '—',
+                                f'{_cmp_label[:20]} %': f"{'+' if _cr and _cr>=0 else ''}{_cr:.2f}%" if _cr is not None else '—',
+                                '3yr Corr'          : f"{_rc:.2f}" if _rc is not None else '—',
+                            })
+                        _df_tbl = pd.DataFrame(_tbl_rows)
+
+                        def _tbl_heat(val, col):
+                            if val == '—': return ''
+                            try:
+                                n = float(str(val).replace('%','').replace('+',''))
+                                if '3yr Corr' in col:
+                                    # Correlation: green=strong positive, red=negative
+                                    if n >= 0.7:   return 'background-color:rgba(45,198,83,0.6);color:#0a3d1a;font-weight:bold'
+                                    elif n >= 0.3:  return 'background-color:rgba(247,127,0,0.5);color:#3d2000;font-weight:bold'
+                                    elif n >= 0:    return 'background-color:rgba(247,127,0,0.2);color:#3d2000'
+                                    else:           return 'background-color:rgba(230,57,70,0.5);color:#3d0a0a;font-weight:bold'
+                                else:
+                                    # Return: green/red scaled to 9%
+                                    if n > 0:
+                                        intensity = min(n / 9, 1.0)
+                                        return f'background-color:rgba(45,198,83,{intensity*0.7:.2f});color:#0a3d1a'
+                                    elif n < 0:
+                                        intensity = min(abs(n) / 9, 1.0)
+                                        return f'background-color:rgba(230,57,70,{intensity*0.7:.2f});color:#3d0a0a'
+                            except: pass
+                            return ''
+
+                        _heat_cols = [c for c in _df_tbl.columns if c != 'Year']
+                        st.dataframe(
+                            _df_tbl.style.apply(
+                                lambda col: [_tbl_heat(v, col.name) for v in col]
+                                if col.name in _heat_cols else ['']*len(col), axis=0
+                            ),
+                            use_container_width=True, hide_index=True
+                        )
+                    else:
+                        st.info("Need at least 5 years of overlapping data for correlation analysis.")
+
+
+    with _sea_tab3:
+        # Presidents from 1929 onwards (S&P data reliable from ~1928)
+        _PRESIDENTS = [
+            ("Hoover",     1929, 1933, "Republican"),
+            ("Roosevelt",  1933, 1945, "Democrat"),
+            ("Truman",     1945, 1953, "Democrat"),
+            ("Eisenhower", 1953, 1961, "Republican"),
+            ("Kennedy",    1961, 1963, "Democrat"),
+            ("Johnson",    1963, 1969, "Democrat"),
+            ("Nixon",      1969, 1974, "Republican"),
+            ("Ford",       1974, 1977, "Republican"),
+            ("Carter",     1977, 1981, "Democrat"),
+            ("Reagan",     1981, 1989, "Republican"),
+            ("Bush Sr",    1989, 1993, "Republican"),
+            ("Clinton",    1993, 2001, "Democrat"),
+            ("Bush Jr",    2001, 2009, "Republican"),
+            ("Obama",      2009, 2017, "Democrat"),
+            ("Trump",      2017, 2021, "Republican"),
+            ("Biden",      2021, 2025, "Democrat"),
+            ("Trump",      2025, 2029, "Republican"),
+        ]
+
+        _pc1, _pc2, _pc3 = st.columns([2, 2, 3])
+        _yr_sel   = _pc1.radio("Presidential year", [1, 2, 3, 4],
+                                horizontal=True, key="pres_yr",
+                                help="Year 1 = inauguration year, Year 4 = final year of term")
+        _party_sel = _pc2.multiselect("Party", ["Democrat", "Republican"],
+                                       default=["Democrat", "Republican"], key="pres_party")
+        _show_avg  = _pc3.toggle("Show average line", value=True, key="pres_avg")
+
+        @st.cache_data(ttl=3600)
+        def _fetch_spx():
+            import yfinance as _yf
+            df = _yf.download("^GSPC", start="1927-01-01", auto_adjust=True, progress=False)
+            if df.empty: return None
+            close = df["Close"].squeeze().dropna()
+            close.index = pd.to_datetime(close.index).tz_localize(None)
+            return close
+
+        _spx = _fetch_spx()
+
+        if _spx is None:
+            st.warning("Could not load S&P 500 data.")
+        else:
+            _D_COL = "#4C8BF5"   # Democrat blue
+            _R_COL = "#E8534A"   # Republican red
+            _fig_pc = go.Figure()
+            _avg_traces = {}  # party -> list of series
+
+            for _name, _start, _end, _party in _PRESIDENTS:
+                if _party not in _party_sel: continue
+                # Year within term
+                _term_yr = _start + (_yr_sel - 1)
+                if _term_yr >= _end: continue  # e.g. Kennedy only had 3 years
+
+                _yr_data = _spx[_spx.index.year == _term_yr]
+                if len(_yr_data) < 20: continue
+
+                _base = float(_yr_data.iloc[0])
+                if _base == 0: continue
+                _indexed = (_yr_data / _base - 1) * 100
+
+                # Day of year for x-axis
+                _doys = [d.timetuple().tm_yday for d in _indexed.index]
+                _col  = _D_COL if _party == "Democrat" else _R_COL
+                _annual_ret = round(float(_indexed.iloc[-1]), 2)
+                _label = f"{_name} ({_term_yr}) {'+' if _annual_ret >= 0 else ''}{_annual_ret:.1f}%"
+
+                _fig_pc.add_trace(go.Scatter(
+                    x=_doys, y=_indexed.values.tolist(),
+                    mode='lines', name=_label,
+                    line=dict(width=1.5, color=_col),
+                    opacity=0.5,
+                    hovertemplate=f"<b>{_label}</b><br>Day %{{x}}: %{{y:.2f}}%<extra></extra>"
+                ))
+
+                if _party not in _avg_traces:
+                    _avg_traces[_party] = {}
+                for _d, _v in zip(_doys, _indexed.values):
+                    _avg_traces[_party].setdefault(_d, []).append(float(_v))
+
+            # Average lines
+            if _show_avg:
+                for _party, _doy_vals in _avg_traces.items():
+                    _col = _D_COL if _party == "Democrat" else _R_COL
+                    _xs  = sorted(_doy_vals.keys())
+                    _ys  = [sum(_doy_vals[d]) / len(_doy_vals[d]) for d in _xs]
+                    _fig_pc.add_trace(go.Scatter(
+                        x=_xs, y=_ys,
+                        mode='lines',
+                        name=f"{_party} Avg",
+                        line=dict(width=3, color=_col, dash='dash'),
+                        hovertemplate=f"<b>{_party} Average</b><br>Day %{{x}}: %{{y:.2f}}%<extra></extra>"
+                    ))
+
+            _fig_pc.add_hline(y=0, line_dash="dash",
+                               line_color="rgba(128,128,128,0.4)", line_width=1)
+            _mo_days  = [1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335]
+            _mo_names = ["Jan","Feb","Mar","Apr","May","Jun",
+                         "Jul","Aug","Sep","Oct","Nov","Dec"]
+            _yr_label  = {1:"Inauguration Year (Yr 1)", 2:"Year 2",
+                          3:"Year 3 (Mid-term)", 4:"Final Year (Yr 4)"}
+            _theme = get_chart_theme()
+            _fig_pc.update_layout(
+                plot_bgcolor =_theme['plot_bgcolor'],
+                paper_bgcolor=_theme['paper_bgcolor'],
+                font=dict(color=_theme['font_color']),
+                xaxis=dict(tickmode='array', tickvals=_mo_days, ticktext=_mo_names,
+                           gridcolor=_theme['gridcolor'], zeroline=False),
+                yaxis=dict(title="Return from Jan 1 (%)",
+                           gridcolor=_theme['gridcolor'], zeroline=False),
+                title=dict(text=f"S&P 500 — Presidential {_yr_label[_yr_sel]}",
+                           font=dict(size=14)),
+                height=500,
+                margin=dict(l=60, r=200, t=60, b=40),
+                legend=dict(x=1.01, y=1, font=dict(size=10)),
+            )
+            st.plotly_chart(_fig_pc, use_container_width=True)
+
+            # ── Summary table ─────────────────────────────────────────────────
+            st.markdown("#### Presidential Year Returns")
+            _summ_pc = []
+            for _name, _start, _end, _party in _PRESIDENTS:
+                _row = {"President": _name, "Party": _party, "Term": f"{_start}–{_end}"}
+                for _y in [1, 2, 3, 4]:
+                    _ty = _start + (_y - 1)
+                    if _ty >= _end:
+                        _row[f"Yr {_y}"] = "—"
+                        continue
+                    _yd = _spx[_spx.index.year == _ty]
+                    if len(_yd) < 20:
+                        _row[f"Yr {_y}"] = "—"
+                        continue
+                    _ret = round((_yd.iloc[-1] / _yd.iloc[0] - 1) * 100, 2)
+                    _row[f"Yr {_y}"] = f"{'+' if _ret >= 0 else ''}{_ret:.2f}%"
+                _summ_pc.append(_row)
+
+            _df_pc = pd.DataFrame(_summ_pc)
+
+            def _pc_style(v):
+                if v in ("—", None): return ""
+                try:
+                    n = float(str(v).replace("%","").replace("+",""))
+                    if n > 0: return f"color: #2dc653; font-weight: bold"
+                    if n < 0: return f"color: #e63946; font-weight: bold"
+                except: pass
+                return ""
+
+            def _party_style(v):
+                if v == "Democrat":   return "color: #4C8BF5"
+                if v == "Republican": return "color: #E8534A"
+                return ""
+
+            def _pc_heat(v):
+                if v in ("—", None): return ""
+                try:
+                    n = float(str(v).replace("%","").replace("+",""))
+                    if n > 0:
+                        intensity = min(n / 9, 1.0)
+                        return f"background-color:rgba(45,198,83,{intensity*0.7:.2f});color:#0a3d1a;font-weight:bold"
+                    elif n < 0:
+                        intensity = min(abs(n) / 9, 1.0)
+                        return f"background-color:rgba(230,57,70,{intensity*0.7:.2f});color:#3d0a0a;font-weight:bold"
+                except: pass
+                return ""
+
+            st.dataframe(
+                _df_pc.style
+                    .applymap(_pc_heat,    subset=["Yr 1","Yr 2","Yr 3","Yr 4"])
+                    .applymap(_party_style, subset=["Party"]),
+                use_container_width=True, hide_index=True
+            )
+
+
 elif page == "Debt Markets":
     import plotly.graph_objects as go
     import numpy as np
@@ -1633,13 +2661,16 @@ elif page == "Debt Markets":
     import sys
     sys.path.insert(0, MACRO)
 
-    st.title("💳 Debt Markets")
-    _dh1, _dh2, _dh3 = st.columns([8, 2, 2])
+    _dh1, _dh2, _dh3, _dh4 = st.columns([900, 5000, 1500, 1500])
     with _dh2:
-        if st.button("🔄 Refresh Debt Data", key='top_debt_refresh'):
+        st.title("💳 Debt Markets")
+    with _dh3:
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("🔄 Run Debt Data", key='top_debt_refresh'):
             run_script(os.path.join(MACRO, 'consumer_credit.py'), MACRO)
             st.rerun()
-    with _dh3:
+    with _dh4:
+        st.markdown("<br>", unsafe_allow_html=True)
         _debt_file = os.path.join(MACRO, 'results', 'consumer_credit_report.txt')
         if os.path.exists(_debt_file):
             with open(_debt_file) as _f: _debt_txt = _f.read()
@@ -2036,31 +3067,30 @@ PE and BDC returns: {pe_summary}"""
 
         st.divider()
 
-        # ── Run script button ─────────────────────────────────────────────────
-        col1, col2 = st.columns(2)
-        with col1:
-            if st.button("🔄 Refresh Data", type="primary"):
-                run_script(os.path.join(MACRO, 'consumer_credit.py'), MACRO)
-                st.rerun()
-        with col2:
-            rpt_file = os.path.join(credit_dir,
-                                    f"{sel_date}_consumer_credit_report.txt")
-            if os.path.exists(rpt_file):
-                with open(rpt_file, 'r', encoding='utf-8') as f:
-                    rpt_txt = f.read()
-                st.download_button(
-                    label     = "⬇ Download Report",
-                    data      = rpt_txt,
-                    file_name = f"{sel_date}_consumer_credit_report.txt",
-                    mime      = 'text/plain'
-                )
+        # ── Date-specific report download ─────────────────────────────────────
+        rpt_file = os.path.join(credit_dir, f"{sel_date}_consumer_credit_report.txt")
+        if os.path.exists(rpt_file):
+            with open(rpt_file, 'r', encoding='utf-8') as f:
+                rpt_txt = f.read()
+            st.download_button(
+                label     = f"⬇ Download {sel_date} Report",
+                data      = rpt_txt,
+                file_name = f"{sel_date}_consumer_credit_report.txt",
+                mime      = 'text/plain'
+            )
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # AU MARKET PAGE
 # ═══════════════════════════════════════════════════════════════════════════════
 elif page == "AU Market":
-    st.title("AU Total Market")
-    _ph1, _ph2, _ph3, _ph4, _ph5 = st.columns([900, 4000, 1000, 2000, 900])
+    _ph1, _ph2, _ph3, _ph4, _ph5, _ph6 = st.columns([900, 3500, 1200, 1400, 1400, 900])
+    with _ph2:
+        st.title("AU Total Market")
+    with _ph3:
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("🌐 Run Breadth", key='top_run_br_au'):
+            run_script(os.path.join(STOCKS, 'au_total_market_breadth.py'), STOCKS)
+            st.rerun()
     with _ph4:
         st.markdown("<br>", unsafe_allow_html=True)
         if st.button("🔄 Run Benchmark", key='top_run_bm_au'):
@@ -2075,14 +3105,7 @@ elif page == "AU Market":
     tab1, tab2, tab3, tab4 = st.tabs(["Breadth", "Zweig Thrust", "Benchmark", "Screener"])
 
     with tab1:
-        _th1,_th2,_th3,_th4,_th5=st.columns([900,4000,1000,2000,900])
-        with _th2:
-            st.subheader("AU Market Breadth")
-        with _th4:
-            st.markdown('<br>',unsafe_allow_html=True)
-            if st.button("🔄 Run AU Breadth",key='au_breadth'):
-                run_script(os.path.join(STOCKS,'au_total_market_breadth.py'),STOCKS)
-                st.rerun()
+        st.subheader("AU Market Breadth")
         _hc1, _hc2, _hc3 = st.columns([900, 10000, 900])
         with _hc2:
             st.markdown("""
@@ -2365,8 +3388,14 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
 # US MARKET PAGE
 # ═══════════════════════════════════════════════════════════════════════════════
 elif page == "US Market":
-    st.title("US Total Market")
-    _ph1, _ph2, _ph3, _ph4, _ph5 = st.columns([900, 4000, 1000, 2000, 900])
+    _ph1, _ph2, _ph3, _ph4, _ph5, _ph6 = st.columns([900, 3500, 1200, 1400, 1400, 900])
+    with _ph2:
+        st.title("US Total Market")
+    with _ph3:
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("🌐 Run Breadth", key='top_run_br_us'):
+            run_script(os.path.join(STOCKS, 'us_total_market_breadth.py'), STOCKS)
+            st.rerun()
     with _ph4:
         st.markdown("<br>", unsafe_allow_html=True)
         if st.button("🔄 Run Benchmark", key='top_run_bm_us'):
@@ -2381,14 +3410,7 @@ elif page == "US Market":
     tab1, tab2, tab3, tab4 = st.tabs(["Breadth", "Zweig Thrust", "Benchmark", "Screener"])
 
     with tab1:
-        _th1,_th2,_th3,_th4,_th5=st.columns([900,4000,1000,2000,900])
-        with _th2:
-            st.subheader("US Market Breadth")
-        with _th4:
-            st.markdown('<br>',unsafe_allow_html=True)
-            if st.button("🔄 Run US Breadth",key='us_breadth'):
-                run_script(os.path.join(STOCKS,'us_total_market_breadth.py'),STOCKS)
-                st.rerun()
+        st.subheader("US Market Breadth")
         _hc1, _hc2, _hc3 = st.columns([900, 10000, 900])
         with _hc2:
             st.markdown("""
@@ -2754,8 +3776,14 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
 # COMMODITIES PAGE
 # ═══════════════════════════════════════════════════════════════════════════════
 elif page == "Commodities":
-    st.title("⛏ All Major Commodities")
-    _ph1, _ph2, _ph3, _ph4, _ph5 = st.columns([900, 4000, 1000, 2000, 900])
+    _ph1, _ph2, _ph3, _ph4, _ph5, _ph6 = st.columns([900, 3500, 1200, 1400, 1400, 900])
+    with _ph2:
+        st.title("⛏ All Major Commodities")
+    with _ph3:
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("🌐 Run Breadth", key='top_run_br_comm'):
+            run_script(os.path.join(STOCKS, 'all_major_commodities_breadth.py'), STOCKS)
+            st.rerun()
     with _ph4:
         st.markdown("<br>", unsafe_allow_html=True)
         if st.button("🔄 Run Benchmark", key='top_run_bm_comm'):
@@ -2767,17 +3795,13 @@ elif page == "Commodities":
             run_script(os.path.join(STOCKS, 'all_major_commodities_screener.py'), STOCKS)
             st.rerun()
 
-    tab1, tab2, tab3 = st.tabs(["Breadth", "Benchmark", "Screener"])
+    _main_tabs = st.tabs(["⛏ Commodities", "☢ Uranium", "🥇 AU Gold Miners"])
+
+    with _main_tabs[0]:
+        tab1, tab2, tab3 = st.tabs(["Breadth", "Benchmark", "Screener"])
 
     with tab1:
-        _th1,_th2,_th3,_th4,_th5=st.columns([900,4000,1000,2000,900])
-        with _th2:
-            st.subheader("Commodities Breadth")
-        with _th4:
-            st.markdown('<br>',unsafe_allow_html=True)
-            if st.button("🔄 Run Commodities Breadth",key='comm_breadth'):
-                run_script(os.path.join(STOCKS,'all_major_commodities_breadth.py'),STOCKS)
-                st.rerun()
+        st.subheader("Commodities Breadth")
         _hc1, _hc2, _hc3 = st.columns([900, 10000, 900])
         with _hc2:
             st.markdown("""
@@ -3048,233 +4072,240 @@ elif page == "Commodities":
 # ═══════════════════════════════════════════════════════════════════════════════
 # URANIUM PAGE
 # ═══════════════════════════════════════════════════════════════════════════════
-elif page == "Uranium":
-    st.title("☢ Uranium")
-    _ph1, _ph2, _ph3, _ph4, _ph5 = st.columns([900, 4000, 1000, 2000, 900])
-    with _ph4:
-        st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("🔄 Run Benchmark", key='top_run_bm_ura'):
-            run_script(os.path.join(STOCKS, 'uranium_benchmark.py'), STOCKS)
-            st.rerun()
-    with _ph5:
-        st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("🔍 Run Screener", key='top_run_sc_ura'):
-            run_script(os.path.join(STOCKS, 'uranium_screener.py'), STOCKS)
-            st.rerun()
+    with _main_tabs[1]:
+        _ph1, _ph2, _ph3, _ph4, _ph5 = st.columns([900, 4000, 1000, 2000, 900])
+        with _ph2:
+            st.title("☢ Uranium")
+        with _ph4:
+            st.markdown("<br>", unsafe_allow_html=True)
+            if st.button("🔄 Run Benchmark", key='top_run_bm_ura'):
+                run_script(os.path.join(STOCKS, 'uranium_benchmark.py'), STOCKS)
+                st.rerun()
+        with _ph5:
+            st.markdown("<br>", unsafe_allow_html=True)
+            if st.button("🔍 Run Screener", key='top_run_sc_ura'):
+                run_script(os.path.join(STOCKS, 'uranium_screener.py'), STOCKS)
+                st.rerun()
 
-    tab1, tab2 = st.tabs(["Benchmark", "Screener"])
+        tab1, tab2 = st.tabs(["Benchmark", "Screener"])
 
-    with tab1:
-        st.subheader("Benchmark vs URA")
-        st.markdown("""
-            <div class="info-card">
-                Ranks 47 uranium stocks versus <b style="color:#ccc">URA</b> (Global X Uranium ETF).
-                Universe includes uranium miners, explorers, nuclear construction and nuclear power companies.
-                RS Ratio &gt; 1.0 means outperforming the uranium ETF — identifies names capturing more upside than the sector average.
-            </div>
-        """, unsafe_allow_html=True)
+        with tab1:
+            st.subheader("Benchmark vs URA")
+            st.markdown("""
+                <div class="info-card">
+                    Ranks 47 uranium stocks versus <b style="color:#ccc">URA</b> (Global X Uranium ETF).
+                    Universe includes uranium miners, explorers, nuclear construction and nuclear power companies.
+                    RS Ratio &gt; 1.0 means outperforming the uranium ETF — identifies names capturing more upside than the sector average.
+                </div>
+            """, unsafe_allow_html=True)
 
-        bm_file = os.path.join(STOCKS, 'results', 'benchmark', 'uranium', 'uranium_latest_formatted.csv')
-        df = load_csv(bm_file, index_col='rank')
-        if df is not None:
-            st.caption(f"Last updated: {file_age(bm_file)} — {len(df)} stocks")
-            cols = ['delta_rank','ticker','name','sector','cap_band','close',
-                    'rs_ratio','rs_trend','ret_6m','ret_12m','max_dd',
-                    'vol_label','acc_watch','regime_label','score_final']
-            cols = [c for c in cols if c in df.columns]
+            bm_file = os.path.join(STOCKS, 'results', 'benchmark', 'uranium', 'uranium_latest_formatted.csv')
+            df = load_csv(bm_file, index_col='rank')
+            if df is not None:
+                st.caption(f"Last updated: {file_age(bm_file)} — {len(df)} stocks")
+                cols = ['delta_rank','ticker','name','sector','cap_band','close',
+                        'rs_ratio','rs_trend','ret_6m','ret_12m','max_dd',
+                        'vol_label','acc_watch','regime_label','score_final']
+                cols = [c for c in cols if c in df.columns]
 
-            # Format numeric columns
+                # Format numeric columns
             
-            col1, col2 = st.columns(2)
-            with col1:
-                regime_filter = st.multiselect("Filter regime",
-                    ['TREND+LEAD','TREND_ONLY','WEAK'],
-                    default=['TREND+LEAD','TREND_ONLY'],
-                    key='ura_bm_regime')
-            with col2:
-                acc_filter = st.multiselect("Filter acc_watch",
-                    ['EARLY','PROGRESS','SHIFT','-'],
-                    default=[],
-                    key='ura_bm_acc')
+                col1, col2 = st.columns(2)
+                with col1:
+                    regime_filter = st.multiselect("Filter regime",
+                        ['TREND+LEAD','TREND_ONLY','WEAK'],
+                        default=['TREND+LEAD','TREND_ONLY'],
+                        key='ura_bm_regime')
+                with col2:
+                    acc_filter = st.multiselect("Filter acc_watch",
+                        ['EARLY','PROGRESS','SHIFT','-'],
+                        default=[],
+                        key='ura_bm_acc')
 
-            if regime_filter:
-                df = df[df['regime_label'].isin(regime_filter)]
-            if acc_filter:
-                df = df[df['acc_watch'].isin(acc_filter)]
+                if regime_filter:
+                    df = df[df['regime_label'].isin(regime_filter)]
+                if acc_filter:
+                    df = df[df['acc_watch'].isin(acc_filter)]
 
-            st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                         width='stretch', height=600)
-        else:
-            st.warning("No benchmark results found")
-        if st.button("🔄 Run Uranium Benchmark", key='ura_bm'):
-            run_script(os.path.join(STOCKS, 'uranium_benchmark.py'), STOCKS)
-            st.rerun()
+                st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
+                             width='stretch', height=600)
+            else:
+                st.warning("No benchmark results found")
+            if st.button("🔄 Run Uranium Benchmark", key='ura_bm'):
+                run_script(os.path.join(STOCKS, 'uranium_benchmark.py'), STOCKS)
+                st.rerun()
 
-    with tab2:
-        st.subheader("Peer Screener")
-        st.markdown("""
-            <div class="info-card">
-                Ranks uranium stocks by relative strength versus <b style="color:#ccc">uranium peers</b>.
-                With only 47 stocks the peer group is tight — a Peer RS Score of 80+ puts a stock in the top 20% of the uranium universe.
-                Cross-reference with the Benchmark tab — leaders on both are the highest quality uranium names.
-            </div>
-        """, unsafe_allow_html=True)
+        with tab2:
+            st.subheader("Peer Screener")
+            st.markdown("""
+                <div class="info-card">
+                    Ranks uranium stocks by relative strength versus <b style="color:#ccc">uranium peers</b>.
+                    With only 47 stocks the peer group is tight — a Peer RS Score of 80+ puts a stock in the top 20% of the uranium universe.
+                    Cross-reference with the Benchmark tab — leaders on both are the highest quality uranium names.
+                </div>
+            """, unsafe_allow_html=True)
 
-        sc_file = os.path.join(STOCKS, 'results', 'screener', 'uranium', 'uranium_latest_formatted.csv')
-        df = load_csv(sc_file, index_col='rank')
-        if df is not None:
-            st.caption(f"Last updated: {file_age(sc_file)} — {len(df)} stocks")
-            cols = ['delta_rank','ticker','name','sector','cap_band','close',
-                    'peer_rs_score','rs_trend','ret_6m','ret_12m','max_dd',
-                    'vol_label','acc_watch','regime_label','score_final']
-            cols = [c for c in cols if c in df.columns]
+            sc_file = os.path.join(STOCKS, 'results', 'screener', 'uranium', 'uranium_latest_formatted.csv')
+            df = load_csv(sc_file, index_col='rank')
+            if df is not None:
+                st.caption(f"Last updated: {file_age(sc_file)} — {len(df)} stocks")
+                cols = ['delta_rank','ticker','name','sector','cap_band','close',
+                        'peer_rs_score','rs_trend','ret_6m','ret_12m','max_dd',
+                        'vol_label','acc_watch','regime_label','score_final']
+                cols = [c for c in cols if c in df.columns]
 
-            # Format numeric columns
+                # Format numeric columns
             
-            col1, col2 = st.columns(2)
-            with col1:
-                regime_filter = st.multiselect("Filter regime",
-                    ['LEADER','CONTENDER','LAGGARD','WEAK'],
-                    default=['LEADER','CONTENDER'],
-                    key='ura_sc_regime')
-            with col2:
-                acc_filter = st.multiselect("Filter acc_watch",
-                    ['EARLY','PROGRESS','SHIFT','-'],
-                    default=[],
-                    key='ura_sc_acc')
+                col1, col2 = st.columns(2)
+                with col1:
+                    regime_filter = st.multiselect("Filter regime",
+                        ['LEADER','CONTENDER','LAGGARD','WEAK'],
+                        default=['LEADER','CONTENDER'],
+                        key='ura_sc_regime')
+                with col2:
+                    acc_filter = st.multiselect("Filter acc_watch",
+                        ['EARLY','PROGRESS','SHIFT','-'],
+                        default=[],
+                        key='ura_sc_acc')
 
-            if regime_filter:
-                df = df[df['regime_label'].isin(regime_filter)]
-            if acc_filter:
-                df = df[df['acc_watch'].isin(acc_filter)]
+                if regime_filter:
+                    df = df[df['regime_label'].isin(regime_filter)]
+                if acc_filter:
+                    df = df[df['acc_watch'].isin(acc_filter)]
 
-            st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                         width='stretch', height=600)
-        else:
-            st.warning("No screener results found")
-        if st.button("🔄 Run Uranium Screener", key='ura_sc'):
-            run_script(os.path.join(STOCKS, 'uranium_screener.py'), STOCKS)
-            st.rerun()
+                st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
+                             width='stretch', height=600)
+            else:
+                st.warning("No screener results found")
+            if st.button("🔄 Run Uranium Screener", key='ura_sc'):
+                run_script(os.path.join(STOCKS, 'uranium_screener.py'), STOCKS)
+                st.rerun()
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# AU GOLD MINERS PAGE
-# ═══════════════════════════════════════════════════════════════════════════════
-elif page == "AU Gold Miners":
-    st.title("🥇 AU Gold Miners")
-    _ph1, _ph2, _ph3, _ph4, _ph5 = st.columns([900, 4000, 1000, 2000, 900])
-    with _ph4:
-        st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("🔄 Run Benchmark", key='top_run_bm_augm'):
-            run_script(os.path.join(STOCKS, 'au_gold_miners_benchmark.py'), STOCKS)
-            st.rerun()
-    with _ph5:
-        st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("🔍 Run Screener", key='top_run_sc_augm'):
-            run_script(os.path.join(STOCKS, 'au_gold_miners_screener.py'), STOCKS)
-            st.rerun()
+    # ═══════════════════════════════════════════════════════════════════════════════
+    # AU GOLD MINERS PAGE
+    # ═══════════════════════════════════════════════════════════════════════════════
 
-    tab1, tab2 = st.tabs(["Benchmark", "Screener"])
+    with _main_tabs[2]:
+        _ph1, _ph2, _ph3, _ph4, _ph5 = st.columns([900, 4000, 1000, 2000, 900])
+        with _ph2:
+            st.title("🥇 AU Gold Miners")
+        with _ph4:
+            st.markdown("<br>", unsafe_allow_html=True)
+            if st.button("🔄 Run Benchmark", key='top_run_bm_augm'):
+                run_script(os.path.join(STOCKS, 'au_gold_miners_benchmark.py'), STOCKS)
+                st.rerun()
+        with _ph5:
+            st.markdown("<br>", unsafe_allow_html=True)
+            if st.button("🔍 Run Screener", key='top_run_sc_augm'):
+                run_script(os.path.join(STOCKS, 'au_gold_miners_screener.py'), STOCKS)
+                st.rerun()
 
-    with tab1:
-        st.subheader("Benchmark vs GDX")
-        st.markdown("""
-            <div class="info-card">
-                Ranks 154 ASX gold mining stocks versus <b style="color:#ccc">GDX</b> (VanEck Gold Miners ETF).
-                GDX is a global benchmark — ASX stocks ranked highly here are outperforming not just local peers but the best gold miners globally.
-                Includes producers, developers, explorers and royalty companies.
-            </div>
-        """, unsafe_allow_html=True)
-        bm_file = os.path.join(STOCKS, 'results', 'benchmark', 'au_gold_miners', 'au_gold_miners_latest_formatted.csv')
-        df = load_csv(bm_file, index_col='rank')
-        if df is not None:
-            st.caption(f"Last updated: {file_age(bm_file)} — {len(df)} stocks")
-            cols = ['delta_rank','ticker','name','sector','cap_band','close',
-                    'rs_ratio','rs_trend','ret_6m','ret_12m','max_dd',
-                    'vol_label','acc_watch','regime_label','score_final']
-            cols = [c for c in cols if c in df.columns]
+        tab1, tab2 = st.tabs(["Benchmark", "Screener"])
 
-            # Format numeric columns
+        with tab1:
+            st.subheader("Benchmark vs GDX")
+            st.markdown("""
+                <div class="info-card">
+                    Ranks 154 ASX gold mining stocks versus <b style="color:#ccc">GDX</b> (VanEck Gold Miners ETF).
+                    GDX is a global benchmark — ASX stocks ranked highly here are outperforming not just local peers but the best gold miners globally.
+                    Includes producers, developers, explorers and royalty companies.
+                </div>
+            """, unsafe_allow_html=True)
+            bm_file = os.path.join(STOCKS, 'results', 'benchmark', 'au_gold_miners', 'au_gold_miners_latest_formatted.csv')
+            df = load_csv(bm_file, index_col='rank')
+            if df is not None:
+                st.caption(f"Last updated: {file_age(bm_file)} — {len(df)} stocks")
+                cols = ['delta_rank','ticker','name','sector','cap_band','close',
+                        'rs_ratio','rs_trend','ret_6m','ret_12m','max_dd',
+                        'vol_label','acc_watch','regime_label','score_final']
+                cols = [c for c in cols if c in df.columns]
+
+                # Format numeric columns
             
-            col1, col2 = st.columns(2)
-            with col1:
-                regime_filter = st.multiselect("Filter regime",
-                    ['TREND+LEAD','TREND_ONLY','WEAK'],
-                    default=['TREND+LEAD','TREND_ONLY'],
-                    key='gold_bm_regime')
-            with col2:
-                acc_filter = st.multiselect("Filter acc_watch",
-                    ['EARLY','PROGRESS','SHIFT','-'],
-                    default=[],
-                    key='gold_bm_acc')
+                col1, col2 = st.columns(2)
+                with col1:
+                    regime_filter = st.multiselect("Filter regime",
+                        ['TREND+LEAD','TREND_ONLY','WEAK'],
+                        default=['TREND+LEAD','TREND_ONLY'],
+                        key='gold_bm_regime')
+                with col2:
+                    acc_filter = st.multiselect("Filter acc_watch",
+                        ['EARLY','PROGRESS','SHIFT','-'],
+                        default=[],
+                        key='gold_bm_acc')
 
-            if regime_filter:
-                df = df[df['regime_label'].isin(regime_filter)]
-            if acc_filter:
-                df = df[df['acc_watch'].isin(acc_filter)]
+                if regime_filter:
+                    df = df[df['regime_label'].isin(regime_filter)]
+                if acc_filter:
+                    df = df[df['acc_watch'].isin(acc_filter)]
 
-            st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                         width='stretch', height=600)
-        else:
-            st.warning("No benchmark results found")
-        if st.button("🔄 Run AU Gold Benchmark", key='gold_bm'):
-            run_script(os.path.join(STOCKS, 'au_gold_miners_benchmark.py'), STOCKS)
-            st.rerun()
+                st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
+                             width='stretch', height=600)
+            else:
+                st.warning("No benchmark results found")
+            if st.button("🔄 Run AU Gold Benchmark", key='gold_bm'):
+                run_script(os.path.join(STOCKS, 'au_gold_miners_benchmark.py'), STOCKS)
+                st.rerun()
 
-    with tab2:
-        st.subheader("Peer Screener")
-        st.markdown("""
-            <div class="info-card">
-                Ranks ASX gold stocks by relative strength versus <b style="color:#ccc">ASX gold mining peers</b>.
-                With 154 stocks the peer group is broad enough to be meaningful — a Peer RS Score above 85 puts a stock in the top 15% of ASX gold miners.
-                Use alongside the Benchmark tab and the Commodities page gold filter for a complete picture of gold stock leadership.
-            </div>
-        """, unsafe_allow_html=True)
-        sc_file = os.path.join(STOCKS, 'results', 'screener', 'au_gold_miners', 'au_gold_miners_latest_formatted.csv')
-        df = load_csv(sc_file, index_col='rank')
-        if df is not None:
-            st.caption(f"Last updated: {file_age(sc_file)} — {len(df)} stocks")
-            cols = ['delta_rank','ticker','name','sector','cap_band','close',
-                    'peer_rs_score','rs_trend','ret_6m','ret_12m','max_dd',
-                    'vol_label','acc_watch','regime_label','score_final']
-            cols = [c for c in cols if c in df.columns]
+        with tab2:
+            st.subheader("Peer Screener")
+            st.markdown("""
+                <div class="info-card">
+                    Ranks ASX gold stocks by relative strength versus <b style="color:#ccc">ASX gold mining peers</b>.
+                    With 154 stocks the peer group is broad enough to be meaningful — a Peer RS Score above 85 puts a stock in the top 15% of ASX gold miners.
+                    Use alongside the Benchmark tab and the Commodities page gold filter for a complete picture of gold stock leadership.
+                </div>
+            """, unsafe_allow_html=True)
+            sc_file = os.path.join(STOCKS, 'results', 'screener', 'au_gold_miners', 'au_gold_miners_latest_formatted.csv')
+            df = load_csv(sc_file, index_col='rank')
+            if df is not None:
+                st.caption(f"Last updated: {file_age(sc_file)} — {len(df)} stocks")
+                cols = ['delta_rank','ticker','name','sector','cap_band','close',
+                        'peer_rs_score','rs_trend','ret_6m','ret_12m','max_dd',
+                        'vol_label','acc_watch','regime_label','score_final']
+                cols = [c for c in cols if c in df.columns]
 
-            # Format numeric columns
+                # Format numeric columns
             
-            col1, col2 = st.columns(2)
-            with col1:
-                regime_filter = st.multiselect("Filter regime",
-                    ['LEADER','CONTENDER','LAGGARD','WEAK'],
-                    default=['LEADER','CONTENDER'],
-                    key='gold_sc_regime')
-            with col2:
-                acc_filter = st.multiselect("Filter acc_watch",
-                    ['EARLY','PROGRESS','SHIFT','-'],
-                    default=[],
-                    key='gold_sc_acc')
+                col1, col2 = st.columns(2)
+                with col1:
+                    regime_filter = st.multiselect("Filter regime",
+                        ['LEADER','CONTENDER','LAGGARD','WEAK'],
+                        default=['LEADER','CONTENDER'],
+                        key='gold_sc_regime')
+                with col2:
+                    acc_filter = st.multiselect("Filter acc_watch",
+                        ['EARLY','PROGRESS','SHIFT','-'],
+                        default=[],
+                        key='gold_sc_acc')
 
-            if regime_filter:
-                df = df[df['regime_label'].isin(regime_filter)]
-            if acc_filter:
-                df = df[df['acc_watch'].isin(acc_filter)]
+                if regime_filter:
+                    df = df[df['regime_label'].isin(regime_filter)]
+                if acc_filter:
+                    df = df[df['acc_watch'].isin(acc_filter)]
 
-            st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                         width='stretch', height=600)
-        else:
-            st.warning("No screener results found")
-        if st.button("🔄 Run AU Gold Screener", key='gold_sc'):
-            run_script(os.path.join(STOCKS, 'au_gold_miners_screener.py'), STOCKS)
-            st.rerun()
+                st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
+                             width='stretch', height=600)
+            else:
+                st.warning("No screener results found")
+            if st.button("🔄 Run AU Gold Screener", key='gold_sc'):
+                run_script(os.path.join(STOCKS, 'au_gold_miners_screener.py'), STOCKS)
+                st.rerun()
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# RRG PAGE
-# ═══════════════════════════════════════════════════════════════════════════════
-elif page == "RRG Charts":
+    # ═══════════════════════════════════════════════════════════════════════════════
+    # RRG PAGE
+    # ═══════════════════════════════════════════════════════════════════════════════
+
+elif page == "Relative Strength Charts":
     import plotly.graph_objects as go
 
     st.title("📡 Relative Rotation Graph")
     st.caption("RS-Ratio vs RS-Momentum — tails show last 63 trading days")
 
-    tab1, tab2, tab3 = st.tabs(["🇦🇺 AU vs XJO", "🇺🇸 US vs SPY/RSP", "📈 Dow 30 vs DJI"])
+    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
+        "🇦🇺 AU vs XJO", "🇺🇸 US vs SPY/RSP", "📈 Dow 30 vs DJI",
+        "🇦🇺 AU Breadth RRG", "🇺🇸 US Breadth RRG", "⛏ Comm Breadth RRG"
+    ])
 
     def build_rrg(history_file, title):
         history = load_csv(history_file)
@@ -3665,276 +4696,7 @@ elif page == "RRG Charts":
 # ═══════════════════════════════════════════════════════════════════════════════
 # BREADTH RRG PAGE
 # ═══════════════════════════════════════════════════════════════════════════════
-elif page == "Breadth RRG":
-    import plotly.graph_objects as go
-
-    st.title("📊 Breadth Rotation Graph")
-    st.markdown("""
-        <div class="info-card">
-            Plots sector breadth participation using an RRG-style chart. 
-            <b>X axis</b> — normalised % of stocks above SMA (breadth strength vs universe average).
-            <b>Y axis</b> — rate of change of that breadth score over 21 days (breadth momentum).
-            Reading top-right to bottom-left follows the same rotation cycle as a standard RRG.
-            Three charts per universe show early (Ab20), intermediate (Ab50) and established (Ab200) trend participation — 
-            sectors leading on Ab20 but lagging on Ab200 are early rotation candidates.
-        </div>
-    """, unsafe_allow_html=True)
-
-    def build_breadth_rrg(history, sector_keys, prefix, sma_col, title, tail_days, smooth_span):
-        """Build one breadth RRG chart for a given SMA level"""
-        if history is None or len(history) == 0:
-            st.warning("No breadth history found")
-            return
-
-        history = history.copy()
-        history['date'] = pd.to_datetime(history['date'])
-        history = history.sort_values('date')
-
-        # Calculate % above SMA per sector per day
-        breadth_data = {}
-        for sec_key in sector_keys:
-            total_col = f'{prefix}_{sec_key}_total'
-            above_col = f'{prefix}_{sec_key}_{sma_col}'
-            if total_col not in history.columns or above_col not in history.columns:
-                continue
-            series = history.set_index('date').apply(
-                lambda row: round(row[above_col] / row[total_col] * 100, 2)
-                if row[total_col] > 0 else 0, axis=1
-            )
-            if series.std() > 0:
-                breadth_data[sec_key] = series
-
-        if not breadth_data:
-            st.warning(f"No breadth data for {sma_col}")
-            return
-
-        df_breadth = pd.DataFrame(breadth_data)
-        df_breadth = df_breadth.tail(tail_days + 63)  # enough history for momentum calc
-
-        # Normalise to universe average each day (like RRG normalisation)
-        universe_avg = df_breadth.mean(axis=1)
-
-        # RS-Ratio equivalent: sector breadth relative to universe average, normalised to 100
-        rs_ratio_df = df_breadth.apply(lambda col: (col / universe_avg) * 100)
-
-        # Apply EWM smoothing
-        rs_ratio_smooth = rs_ratio_df.ewm(span=smooth_span, adjust=False).mean()
-
-        # RS-Momentum: rate of change of RS-Ratio over 21 days, normalised to 100
-        rs_mom_df = rs_ratio_smooth / rs_ratio_smooth.shift(21) * 100
-        rs_mom_smooth = rs_mom_df.ewm(span=smooth_span, adjust=False).mean()
-
-        # Trim to tail length
-        rs_ratio_tail = rs_ratio_smooth.tail(tail_days)
-        rs_mom_tail   = rs_mom_smooth.tail(tail_days)
-
-        # Colour palette
-        _brrg_light = _get_theme_mode() == 'light'
-        COLOURS = [
-            '#00b4d8','#f77f00','#2dc653','#e63946','#9b5de5',
-            '#f15bb5','#fee440','#06d6a0','#118ab2','#ffd166',
-            '#ef476f','#b7e4c7','#40916c','#fcbf49','#eae2b7',
-        ] if not _brrg_light else [
-            '#0077a8','#c96a00','#1a8a3a','#c0152a','#6a20c8',
-            '#c4006a','#b8970a','#007a60','#005f8a','#a07800',
-            '#c42050','#1a6640','#004d30','#a85500','#8b6914',
-        ]
-
-        # Short labels
-        SECTOR_LABELS = {
-            'energy_minerals'             : 'Energy Min',
-            'finance'                     : 'Finance',
-            'technology_services'         : 'Tech Svcs',
-            'electronic_technology'       : 'Elec Tech',
-            'communications'              : 'Comms',
-            'utilities'                   : 'Utilities',
-            'non_energy_minerals'         : 'Non-E Min',
-            'process_industries'          : 'Process Ind',
-            'consumer_services'           : 'Cons Svcs',
-            'consumer_durables'           : 'Cons Dur',
-            'consumer_non_durables'       : 'Cons NonDur',
-            'retail_trade'                : 'Retail',
-            'health_technology'           : 'Health Tech',
-            'health_services'             : 'Health Svcs',
-            'industrial_services'         : 'Ind Svcs',
-            'commercial_services'         : 'Comm Svcs',
-            'distribution_services'       : 'Distrib',
-            'transportation'              : 'Transport',
-            'producer_manufacturing'      : 'Producer Mfg',
-            'energy'                      : 'Energy',
-            'information_technology'      : 'Info Tech',
-            'consumer_discretionary'      : 'Cons Disc',
-            'financials'                  : 'Financials',
-            'industrials'                 : 'Industrials',
-            'materials'                   : 'Materials',
-            'consumer_staples'            : 'Cons Staples',
-            'health_care'                 : 'Health Care',
-            'communication_services'      : 'Comm Svcs',
-            'real_estate'                 : 'Real Estate',
-            'gold'                        : 'Gold',
-            'silver'                      : 'Silver',
-            'copper'                      : 'Copper',
-            'uranium'                     : 'Uranium',
-            'lithium'                     : 'Lithium',
-            'platinum'                    : 'Platinum',
-            'palladium'                   : 'Palladium',
-        }
-
-        fig = go.Figure()
-        
-        # Centre lines
-        fig.add_hline(y=100, line_width=1, line_dash='dash',
-                      line_color='rgba(128,128,128,0.3)')
-        fig.add_vline(x=100, line_width=1, line_dash='dash',
-                      line_color='rgba(128,128,128,0.3)')
-
-        current_positions = {}
-
-        for i, sec_key in enumerate(breadth_data.keys()):
-            if sec_key not in rs_ratio_tail.columns:
-                continue
-
-            colour = COLOURS[i % len(COLOURS)]
-            label  = SECTOR_LABELS.get(sec_key, sec_key.replace('_',' ').title())
-
-            x_vals = rs_ratio_tail[sec_key].dropna().tolist()
-            y_vals = rs_mom_tail[sec_key].dropna().tolist()
-
-            if len(x_vals) < 2:
-                continue
-
-            # Align lengths
-            min_len = min(len(x_vals), len(y_vals))
-            x_vals  = x_vals[-min_len:]
-            y_vals  = y_vals[-min_len:]
-
-            current_positions[sec_key] = (x_vals[-1], y_vals[-1], label, colour)
-
-            # Tail with fading opacity
-            n = len(x_vals)
-            for j in range(1, n):
-                opacity = 0.15 + 0.75 * (j / n)
-                fig.add_trace(go.Scatter(
-                    x=[x_vals[j-1], x_vals[j]],
-                    y=[y_vals[j-1], y_vals[j]],
-                    mode='lines',
-                    line=dict(color=colour, width=2),
-                    opacity=opacity,
-                    showlegend=False,
-                    hoverinfo='skip',
-                ))
-
-            # Current dot + label
-            fig.add_trace(go.Scatter(
-                x=[x_vals[-1]], y=[y_vals[-1]],
-                mode='markers+text',
-                marker=dict(size=12, color=colour,
-                            line=dict(color='white', width=1.5)),
-                text=[label],
-                textposition='top right',  # change from top center
-                textfont=dict(size=11, color=colour),  # increase from 9
-                name=label,
-                showlegend=False,
-                hovertemplate=f"<b>{label}</b><br>Breadth RS: %{{x:.1f}}<br>Momentum: %{{y:.1f}}<extra></extra>",
-            ))
-
-        # ── Sort for legend and PNG export ────────────────────────────────────
-        def get_quadrant(x, y):
-            if x >= 100 and y >= 100: return ('1_LEADING',   '🟢')
-            if x >= 100 and y <  100: return ('2_WEAKENING', '🟡')
-            if x <  100 and y >= 100: return ('3_IMPROVING', '🔵')
-            return                           ('4_LAGGING',   '🔴')
-
-        _quad_order = {'1_LEADING': 0, '3_IMPROVING': 1, '2_WEAKENING': 2, '4_LAGGING': 3}
-        sorted_tickers = sorted(
-            current_positions.items(),
-            key=lambda item: (_quad_order.get(get_quadrant(item[1][0], item[1][1])[0], 9), -item[1][0])
-        )
-
-        # Calculate dynamic axis ranges
-        all_x = [pos[0] for pos in current_positions.values()]
-        all_y = [pos[1] for pos in current_positions.values()]
-        x_pad = max((max(all_x) - min(all_x)) * 0.15, 10)
-        y_pad = max((max(all_y) - min(all_y)) * 0.15, 10)
-        x_min = min(min(all_x) - x_pad, 60)
-        x_max = max(max(all_x) + x_pad, 140)
-        y_min = min(min(all_y) - y_pad, 60)
-        y_max = max(max(all_y) + y_pad, 140)
-
-        # Quadrant backgrounds
-        fig.add_shape(type='rect', x0=100, y0=100, x1=x_max, y1=y_max,
-                      fillcolor='rgba(0,180,0,0.06)', line_width=0, layer='below')
-        fig.add_shape(type='rect', x0=x_min, y0=100, x1=100, y1=y_max,
-                      fillcolor='rgba(100,100,255,0.06)', line_width=0, layer='below')
-        fig.add_shape(type='rect', x0=x_min, y0=y_min, x1=100, y1=100,
-                      fillcolor='rgba(255,50,50,0.06)', line_width=0, layer='below')
-        fig.add_shape(type='rect', x0=100, y0=y_min, x1=x_max, y1=100,
-                      fillcolor='rgba(255,180,0,0.06)', line_width=0, layer='below')
-
-        # Quadrant labels
-        for text, x, y in [
-            ('LEADING',   x_max * 0.97, y_max * 0.97),
-            ('WEAKENING', x_max * 0.97, y_min * 1.03),
-            ('LAGGING',   x_min * 1.03, y_min * 1.03),
-            ('IMPROVING', x_min * 1.03, y_max * 0.97),
-        ]:
-            fig.add_annotation(x=x, y=y, text=text, showarrow=False,
-                               font=dict(size=11, color='rgba(150,150,150,0.4)'),
-                               xanchor='center')
-
-        fig.update_layout(
-            title        = dict(text=title, font=dict(size=14)),
-            height       = 1000,
-            plot_bgcolor = get_chart_theme()['plot_bgcolor'],
-            paper_bgcolor= get_chart_theme()['paper_bgcolor'],
-            font         = dict(color=get_chart_theme()['font_color']),
-            xaxis        = dict(range=[x_min, x_max], gridcolor=get_chart_theme()['gridcolor'],
-                                title='Breadth Strength (vs universe avg)', title_font=dict(size=10)),
-            yaxis        = dict(range=[y_min, y_max], gridcolor=get_chart_theme()['gridcolor'],
-                                title='Breadth Momentum (21d ROC)', title_font=dict(size=10)),
-            showlegend   = False,
-            margin       = dict(r=40, l=60, t=50, b=50),
-        )
-
-        _sp1, _mid, _sp2 = st.columns([800, 10000, 800])
-        with _mid:
-            st.plotly_chart(fig, use_container_width=True)
-
-        # ── Streamlit legend below chart ──────────────────────────────────────
-        quad_groups = {'4_LAGGING': [], '2_WEAKENING': [], '3_IMPROVING': [], '1_LEADING': []}
-        quad_labels = {
-            '4_LAGGING'  : ('🔴 LAGGING',    '#e63946'),
-            '2_WEAKENING': ('🟡 WEAKENING',  '#f77f00'),
-            '3_IMPROVING': ('🔵 IMPROVING',  '#00b4d8'),
-            '1_LEADING'  : ('🟢 LEADING',   '#2dc653'),
-        }
-        for sec_key, (x, y, label, colour) in sorted_tickers:
-            quad = get_quadrant(x, y)[0]
-            quad_groups[quad].append((label, colour))
-
-        _ls1, _lc1, _lc2, _lc3, _lc4, _ls2 = st.columns([2900, 600, 600, 600, 600, 2900])
-        _leg_cols = [_lc1, _lc2, _lc3, _lc4]
-        for i, (quad_key, items) in enumerate(quad_groups.items()):
-            qname, qcolour = quad_labels[quad_key]
-            with _leg_cols[i]:
-                st.markdown(f"<div style='color:{qcolour};font-weight:bold;font-size:13px;margin-bottom:6px'>{qname}</div>",
-                            unsafe_allow_html=True)
-                for label, colour in items:
-                    st.markdown(f"<div style='font-size:12px;margin-bottom:3px'>"
-                                f"<span style='color:{colour}'>●</span> {label}</div>",
-                                unsafe_allow_html=True)
-
-    # ── Controls ──────────────────────────────────────────────────────────────
-    col1, col2 = st.columns(2)
-    with col1:
-        tail_days   = st.slider("Tail length (trading days)", 10, 63, 10, key='brrg_tail')
-    with col2:
-        smooth_span = st.slider("Smoothing (EWM span)", 1, 20, 20, key='brrg_smooth')
-
-    tab_au, tab_us, tab_comm = st.tabs(["🇦🇺 AU Sectors", "🇺🇸 US Sectors", "⛏ Commodities"])
-
-    # ── AU ─────────────────────────────────────────────────────────────────────
-    with tab_au:
+    with tab4:
         au_hist_file = os.path.join(STOCKS, 'results', 'breadth', 'au_total_market',
                                     'au_total_market_breadth_history.csv')
         au_hist = load_csv(au_hist_file)
@@ -3957,7 +4719,8 @@ elif page == "Breadth RRG":
             st.warning("No AU breadth history found — run AU breadth script first")
 
     # ── US ─────────────────────────────────────────────────────────────────────
-    with tab_us:
+
+    with tab5:
         us_hist_file = os.path.join(STOCKS, 'results', 'breadth', 'us_total_market',
                                     'us_total_market_breadth_history.csv')
         us_hist = load_csv(us_hist_file)
@@ -3979,7 +4742,8 @@ elif page == "Breadth RRG":
             st.warning("No US breadth history found — run US breadth script first")
 
     # ── Commodities ────────────────────────────────────────────────────────────
-    with tab_comm:
+
+    with tab6:
         comm_hist_file = os.path.join(STOCKS, 'results', 'breadth', 'all_major_commodities',
                                       'all_major_commodities_breadth_history.csv')
         comm_hist = load_csv(comm_hist_file)
@@ -4003,6 +4767,7 @@ elif page == "Breadth RRG":
 # ═══════════════════════════════════════════════════════════════════════════════
 # DRAWDOWN ANALYSIS PAGE
 # ═══════════════════════════════════════════════════════════════════════════════
+
 elif page == "Drawdown Analysis":
     import sys
     sys.path.insert(0, STOCKS)
@@ -5116,7 +5881,7 @@ elif page == "AI Settings":
                 st.success("Reset to default")
                 st.rerun()
 
-elif page == "Settings":
+elif page == "General Settings":
     st.title("⚙ Dashboard Settings")
     st.caption("Changes take effect after saving and reloading the page")
 
@@ -5246,3 +6011,83 @@ elif page == "Settings":
             st.code(open(cfg_file).read(), language="toml")
         else:
             st.caption("No config.toml yet — created on first Apply.")
+
+    # ── Network Access ────────────────────────────────────────────────────────
+    st.divider()
+    st.subheader("Network Access")
+    st.caption(
+        "Controls which network interfaces Streamlit listens on. "
+        "Restart Streamlit after changing. Uses .streamlit/config.toml."
+    )
+
+    _net_cfg_file = os.path.join(BASE, '.streamlit', 'config.toml')
+    _net_current  = '0.0.0.0'
+    if os.path.isfile(_net_cfg_file):
+        import re as _re_net
+        _nc_txt = open(_net_cfg_file).read()
+        _nm = _re_net.search(r'address\s*=\s*"([^"]*)"', _nc_txt)
+        if _nm: _net_current = _nm.group(1)
+
+    _net_options = {
+        'Localhost only (127.0.0.1)'          : '127.0.0.1',
+        'Local network only (LAN/Tailscale)'  : '0.0.0.0',
+        'Custom address'                       : 'custom',
+    }
+    _net_labels   = list(_net_options.keys())
+    _net_vals     = list(_net_options.values())
+    _net_idx      = _net_vals.index(_net_current) if _net_current in _net_vals else 2
+
+    _net_sel = st.radio("Listen on", _net_labels, index=_net_idx,
+                         key='net_mode',
+                         help="Localhost only = most secure, only your machine. "
+                              "Local network = accessible from other devices on LAN or via Tailscale. "
+                              "Custom = specify exact IP.")
+
+    _custom_addr = ''
+    if _net_sel == 'Custom address':
+        _custom_addr = st.text_input("IP address", value=_net_current
+                                      if _net_current not in ('127.0.0.1','0.0.0.0') else '',
+                                      placeholder="e.g. 192.168.1.100", key='net_custom_addr')
+
+    _net_addr = _net_options.get(_net_sel, _custom_addr or '0.0.0.0')
+    if _net_sel == 'Custom address':
+        _net_addr = _custom_addr or '0.0.0.0'
+
+    _port_current = 8501
+    if os.path.isfile(_net_cfg_file):
+        _pm = _re_net.search(r'port\s*=\s*(\d+)', open(_net_cfg_file).read())
+        if _pm: _port_current = int(_pm.group(1))
+
+    _port = st.number_input("Port", min_value=1024, max_value=65535,
+                             value=_port_current, step=1, key='net_port')
+
+    st.info(
+        f"Current: {_net_current}:{_port_current} — "
+        f"If seeing your public/NAT IP in the Streamlit banner, switch to Localhost only "
+        f"(http://localhost:{_port_current}) or Local network with Tailscale.",
+        icon="🌐"
+    )
+
+    if st.button("💾 Apply Network Settings", type="primary", key='net_apply'):
+        # Read existing config
+        import re as _re_net2
+        if os.path.isfile(_net_cfg_file):
+            _nc = open(_net_cfg_file).read()
+        else:
+            _nc = '[server]\n'
+
+        # Update or insert address
+        if 'address' in _nc:
+            _nc = _re_net2.sub(r'address\s*=\s*"[^"]*"', f'address = "{_net_addr}"', _nc)
+        else:
+            _nc = _nc.rstrip() + '\n' + f'address = "{_net_addr}"\n'
+
+        # Update or insert port
+        if _re_net2.search(r'port\s*=\s*\d+', _nc):
+            _nc = _re_net2.sub(r'port\s*=\s*\d+', f'port = {_port}', _nc)
+        else:
+            _nc = _nc.rstrip() + '\n' + f'port = {_port}\n'
+
+        os.makedirs(os.path.dirname(_net_cfg_file), exist_ok=True)
+        with open(_net_cfg_file, 'w') as _f: _f.write(_nc)
+        st.success(f"Network settings saved — restart Streamlit to apply (address={_net_addr}, port={_port})")
