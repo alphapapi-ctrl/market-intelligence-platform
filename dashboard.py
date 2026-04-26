@@ -1849,13 +1849,24 @@ elif page == "Seasonality":
                 # Summary rows
                 _num_cols = _MO_NAMES
                 _summ_rows = []
+                def _best_fmt(c, df):
+                    if c.empty: return None
+                    idx = c.idxmax()
+                    yr  = df.loc[idx, 'Year'] if idx in df.index else ''
+                    return f"{round(c.max(),2)}% ({yr})"
+                def _worst_fmt(c, df):
+                    if c.empty: return None
+                    idx = c.idxmin()
+                    yr  = df.loc[idx, 'Year'] if idx in df.index else ''
+                    return f"{round(c.min(),2)}% ({yr})"
+
                 for _lbl, _fn in [
                     ("Average",   lambda c: round(c.mean(), 2)),
                     ("% Positive",lambda c: round((c > 0).sum() / c.count() * 100, 2)),
-                    ("% Negative",lambda c: round(((c < 0).sum() / c.count() * 100) - 100, 2)),
+                    ("% Negative",lambda c: -round((c < 0).sum() / c.count() * 100, 2)),
                     ("Median",    lambda c: round(c.median(), 2)),
-                    ("Best",      lambda c: round(c.max(), 2)),
-                    ("Worst",     lambda c: round(c.min(), 2)),
+                    ("Best",      lambda c: _best_fmt(c, _df_heat)),
+                    ("Worst",     lambda c: _worst_fmt(c, _df_heat)),
                 ]:
                     _sr = {"Year": _lbl}
                     for _cn in _num_cols:
@@ -1912,7 +1923,8 @@ elif page == "Seasonality":
                 for _cn in _num_cols:
                     if _cn in _df_summ.columns:
                         _df_summ[_cn] = _df_summ[_cn].apply(
-                            lambda x: f"{x:.2f}%" if pd.notna(x) and x is not None else "—")
+                            lambda x: x if isinstance(x, str) else
+                            f"{x:.2f}%" if pd.notna(x) and x is not None else "—")
                 def _summ_heat(v):
                     try:
                         n = float(str(v).replace("%","").replace("+",""))
@@ -2394,13 +2406,24 @@ elif page == "Seasonality":
 
                             # Summary rows
                             _stk_summ = []
+                            def _stk_best_fmt(c):
+                                if c.empty: return None
+                                idx = c.idxmax()
+                                yr  = _df_stk_heat.loc[idx, 'Year'] if idx in _df_stk_heat.index else ''
+                                return f"{round(c.max(),2)}% ({yr})"
+                            def _stk_worst_fmt(c):
+                                if c.empty: return None
+                                idx = c.idxmin()
+                                yr  = _df_stk_heat.loc[idx, 'Year'] if idx in _df_stk_heat.index else ''
+                                return f"{round(c.min(),2)}% ({yr})"
+
                             for _lbl, _fn in [
                                 ("Average",    lambda c: round(c.mean(), 2)),
                                 ("% Positive", lambda c: round((c>0).sum()/c.count()*100, 2)),
-                                ("% Negative", lambda c: round(((c<0).sum()/c.count()*100)-100, 2)),
+                                ("% Negative", lambda c: -round((c<0).sum()/c.count()*100, 2)),
                                 ("Median",     lambda c: round(c.median(), 2)),
-                                ("Best",       lambda c: round(c.max(), 2)),
-                                ("Worst",      lambda c: round(c.min(), 2)),
+                                ("Best",       lambda c: _stk_best_fmt(c)),
+                                ("Worst",      lambda c: _stk_worst_fmt(c)),
                             ]:
                                 _sr = {"Year": _lbl}
                                 for _cn in _MO_NAMES:
@@ -2425,7 +2448,8 @@ elif page == "Seasonality":
                             _stk_num_cols = [c for c in _df_stk_summ.columns if c != "Year"]
                             for _cn in _stk_num_cols:
                                 _df_stk_summ[_cn] = _df_stk_summ[_cn].apply(
-                                    lambda x: f"{x:.2f}%" if pd.notna(x) and x is not None else "—")
+                                    lambda x: x if isinstance(x, str) else
+                                    f"{x:.2f}%" if pd.notna(x) and x is not None else "—")
                             st.markdown("**Summary**")
                             st.dataframe(
                                 _df_stk_summ.style.applymap(_stk_summ_heat, subset=_stk_num_cols),
