@@ -153,7 +153,12 @@ def calculate_rs(prices, prices_24m, volumes, benchmark_ticker, watchlist_df):
         else:
             cap_band = cap_bands.get(ticker, 'small')
 
-        dd_weights = {'large': 0.4, 'mid': 0.3, 'small': 0.2, 'ETF': 0.3}
+        dd_weights = {
+            'large': _RS.get('dd_weight_large', 0.4),
+            'mid'  : _RS.get('dd_weight_mid',   0.3),
+            'small': _RS.get('dd_weight_small',  0.2),
+            'ETF'  : _RS.get('dd_weight_etf',    0.3),
+        }
         dd_weight  = dd_weights.get(cap_band, 0.2)
 
         # Accumulation Watch
@@ -174,17 +179,27 @@ def calculate_rs(prices, prices_24m, volumes, benchmark_ticker, watchlist_df):
             acc_watch = '-'
 
         # Volume multiplier
-        vol_multiplier = {'HIGH': 1.1, 'MED': 1.0, 'LOW': 0.9}
+        vol_multiplier = {
+            'HIGH': _RS.get('vol_high', 1.1),
+            'MED' : _RS.get('vol_med',  1.0),
+            'LOW' : _RS.get('vol_low',  0.9),
+        }
 
-        # Score Final
-        trend_bonus    = 0.5 if pass_trend == 1 else 0
-        lead_bonus     = 0.5 if regime_label == 'TREND+LEAD' else 0
-        rs_trend_bonus = {'STRONG_UP': 1.0, 'UP': 0.5, 'FLAT': 0, 'DOWN': -0.5, 'STRONG_DOWN': -1.0}
+        # Score Final — weights loaded from rank_settings.json
+        trend_bonus    = _RS.get('trend_bonus', 0.5) if pass_trend == 1 else 0
+        lead_bonus     = _RS.get('lead_bonus',  0.5) if regime_label == 'TREND+LEAD' else 0
+        rs_trend_bonus = {
+            'STRONG_UP'  : _RS.get('rs_trend_strong_up',    1.0),
+            'UP'         : _RS.get('rs_trend_up',           0.5),
+            'FLAT'       : _RS.get('rs_trend_flat',         0.0),
+            'DOWN'       : _RS.get('rs_trend_down',        -0.5),
+            'STRONG_DOWN': _RS.get('rs_trend_strong_down', -1.0),
+        }
         base_score     = (
-            (ret_12m * 0.4) +
-            (persist_frac * 0.01) +
-            (max_dd * -dd_weight) +
-            (mqs * 0.2 if mqs is not None else 0) +
+            (ret_12m      * _RS.get('ret_12m_weight', 0.4)) +
+            (persist_frac * _RS.get('persist_weight',  0.01)) +
+            (max_dd       * -dd_weight) +
+            (mqs          * _RS.get('mqs_weight', 0.2) if mqs is not None else 0) +
             trend_bonus +
             lead_bonus +
             rs_trend_bonus[rs_trend])

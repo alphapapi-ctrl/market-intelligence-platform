@@ -1,0 +1,19 @@
+{
+  "ret_12m_weight": 0.4,
+  "persist_weight": 0.01,
+  "mqs_weight": 0.2,
+  "trend_bonus": 0.5,
+  "lead_bonus": 0.5,
+  "dd_weight_large": 0.4,
+  "dd_weight_mid": 0.3,
+  "dd_weight_small": 0.2,
+  "dd_weight_etf": 0.3,
+  "vol_high": 1.1,
+  "vol_med": 1.0,
+  "vol_low": 0.9,
+  "rs_trend_strong_up": 1.0,
+  "rs_trend_up": 0.5,
+  "rs_trend_flat": 0.0,
+  "rs_trend_down": -0.5,
+  "rs_trend_strong_down": -1.0
+}

@@ -143,15 +143,75 @@ DEFAULT_SETTINGS = {
         'Actionable & Exports': True,
         'DeMark Signals'      : True,
         'Run Scripts'         : True,
+        'AI Settings'         : True,
+        'Rank Settings'       : True,
         'Settings'            : True,
+    },
+    'rank_settings': {
+
+        'au_screener': {
+            'min_market_cap'   : 2000000000,
+            'min_vol_avg'      : 500000,
+            'regime_filter'    : ['LEADER', 'CONTENDER'],
+        },
+        'us_screener': {
+            'min_market_cap'   : 2000000000,
+            'min_vol_avg'      : 500000,
+            'regime_filter'    : ['LEADER', 'CONTENDER'],
+        },
+        'comm_screener': {
+            'min_market_cap'   : 0,
+            'min_vol_avg'      : 0,
+            'regime_filter'    : ['LEADER', 'CONTENDER'],
+        },
+        'au_benchmark': {
+            'ret_12m_weight': 0.4, 'persist_weight': 0.01, 'mqs_weight': 0.2,
+            'trend_bonus': 1.0, 'lead_bonus': 1.0,
+            'dd_weight_large': 0.4, 'dd_weight_mid': 0.3, 'dd_weight_small': 0.2, 'dd_weight_etf': 0.3,
+            'vol_high': 1.1, 'vol_med': 1.0, 'vol_low': 0.9,
+            'rs_trend_strong_up': 1.0, 'rs_trend_up': 0.5, 'rs_trend_flat': 0.0, 'rs_trend_down': -0.5, 'rs_trend_strong_down': -1.0,
+        },
+        'us_benchmark'  : {},
+        'comm_benchmark': {},
+    },
+    'ai_prompts': {
+        'au_breadth':    "You are a market breadth analyst for the Australian stock market (ASX).\nAnalyse these breadth readings and provide a concise 4-5 sentence assessment.\nFocus on: (1) overall market health and trend, (2) cap band divergences (large vs small),\n(3) key sector rotations, (4) what the breadth signals suggest about near-term direction.\nBe direct and specific — mention actual numbers.",
+        'us_breadth':    "You are a market breadth analyst for the US stock market.\nAnalyse these breadth readings and provide a concise 4-5 sentence assessment.\nFocus on: (1) overall market health across all 3 layers, (2) divergences between layers,\n(3) key sector rotations in Layer 2, (4) what the breadth signals suggest about near-term direction.\nBe direct and specific — mention actual numbers.",
+        'consumer_credit': "You are a macro credit analyst. Analyse these US consumer credit readings and provide a 3-4 sentence assessment focusing on: credit stress signals, delinquency trends, and what this means for consumer spending and equity markets.",
+        'corporate_credit': "Analyse these US corporate credit readings in 3-4 sentences. Focus on HY spreads, investment grade conditions, and systemic risk signals.",
+        'sovereign_credit': "Analyse US sovereign credit health in 3-4 sentences. Focus on yield curve shape, duration risk, and what rates signal about macro conditions.",
+        'au_benchmark':  "You are a quantitative analyst. Analyse this AU market relative strength data and provide a 4-5 sentence assessment covering: top momentum leaders, laggards to avoid, sector rotation signals, and any regime changes visible in the data.",
+        'us_benchmark':  "You are a quantitative analyst. Analyse this US market relative strength data and provide a 4-5 sentence assessment covering: top momentum leaders, laggards to avoid, sector rotation signals, and any regime changes visible in the data.",
+        'comm_benchmark': "You are a commodity market analyst. Analyse this commodity relative strength data and provide a 4-5 sentence assessment covering: leading commodities, lagging groups, rotation signals, and what this implies for risk appetite.",
     },
     'ai_features': {
         'enabled'          : False,
+        'provider'         : 'anthropic',
         'anthropic_api_key': '',
         'model'            : 'claude-sonnet-4-6',
     }
 }
 
+
+BM_DEFAULTS = {
+    'ret_12m_weight': 0.4, 'persist_weight': 0.01, 'mqs_weight': 0.2,
+    'trend_bonus': 1.0, 'lead_bonus': 1.0,
+    'dd_weight_large': 0.4, 'dd_weight_mid': 0.3, 'dd_weight_small': 0.2, 'dd_weight_etf': 0.3,
+    'vol_high': 1.1, 'vol_med': 1.0, 'vol_low': 0.9,
+    'rs_trend_strong_up': 1.0, 'rs_trend_up': 0.5, 'rs_trend_flat': 0.0,
+    'rs_trend_down': -0.5, 'rs_trend_strong_down': -1.0,
+}
+SC_DEFAULTS = {
+    'ret_12m_weight': 0.4, 'persist_weight': 0.01, 'mqs_weight': 0.2, 'peer_rs_weight': 0.02,
+    'dd_weight_large': 0.4, 'dd_weight_mid': 0.3, 'dd_weight_small': 0.2, 'dd_weight_etf': 0.3,
+    'vol_high': 1.1, 'vol_med': 1.0, 'vol_low': 0.9,
+    'rs_trend_strong_up': 1.0, 'rs_trend_up': 0.5, 'rs_trend_flat': 0.0,
+    'rs_trend_down': -0.5, 'rs_trend_strong_down': -1.0,
+    'regime_bonus_leader': 1.0, 'regime_bonus_contender': 0.5,
+    'regime_bonus_laggard': 0.0, 'regime_bonus_weak': -0.5,
+    'min_market_cap': 2000000000, 'min_vol_avg': 500000,
+    'regime_filter': ['LEADER', 'CONTENDER'],
+}
 def load_settings():
     if os.path.exists(SETTINGS_FILE):
         try:
@@ -189,12 +249,14 @@ ALL_PAGES = [
     ("Actionable & Exports", "file-earmark-arrow-down"),
     ("DeMark Signals",       "graph-up"),
     ("Run Scripts",          "play-circle"),
+    ("AI Settings",          "robot"),
+    ("Rank Settings",        "sliders"),
     ("Settings",             "gear"),
 ]
 
 # Filter to enabled pages — Settings always shown
 active_pages = [(name, icon) for name, icon in ALL_PAGES
-                if page_config.get(name, True) or name == 'Settings']
+                if page_config.get(name, True) or name in ('Settings', 'AI Settings', 'Rank Settings')]
 
 page = option_menu(
     menu_title  = None,
@@ -948,6 +1010,15 @@ if page == "Macro":
     import plotly.graph_objects as go
 
     st.title("🌍 Macro Dashboard")
+    _mh1, _mh2, _mh3 = st.columns([8, 2, 2])
+    with _mh2:
+        if st.button("📊 Run Macro Report", key='top_macro_btn'):
+            run_script(os.path.join(MACRO, 'macro_report.py'), MACRO)
+            st.rerun()
+    with _mh3:
+        if st.button("💳 Run Debt Data", key='top_debt_btn'):
+            run_script(os.path.join(MACRO, 'consumer_credit.py'), MACRO)
+            st.rerun()
     st.markdown("""
         <style>
         .macro-card {
@@ -1100,19 +1171,40 @@ if page == "Macro":
     st.subheader("📡 Live Market Readings")
 
     LIVE_TICKERS = {
-        'SPX'    : ('^GSPC',  'S&P 500',     'equity'),
-        'NDX'    : ('^NDX',   'Nasdaq 100',   'equity'),
-        'IWM'    : ('IWM',    'Russell 2000', 'equity'),
-        'XJO'    : ('^AXJO',  'ASX 200',      'equity'),
-        'VIX'    : ('^VIX',   'VIX',          'risk'),
-        'DXY'    : ('DX-Y.NYB','DXY',         'fx'),
-        'AUDUSD' : ('AUDUSD=X','AUDUSD',      'fx'),
-        'Gold'   : ('GC=F',   'Gold',         'commodity'),
-        'Silver' : ('SI=F',   'Silver',       'commodity'),
-        'Copper' : ('HG=F',   'Copper',       'commodity'),
-        'Oil'    : ('CL=F',   'Oil WTI',      'commodity'),
-        'US10Y'  : ('^TNX',   'US 10Y',       'rates'),
-        'US2Y'   : ('^IRX',   'US 2Y',        'rates'),
+        # Equities
+        'SPX'    : ('^GSPC',   'S&P 500',        'equity'),
+        'RSP'    : ('RSP',     'S&P EW (RSP)',    'equity'),
+        'NDX'    : ('^NDX',    'Nasdaq 100',      'equity'),
+        'IWM'    : ('IWM',     'Russell 2000',    'equity'),
+        'XJO'    : ('^AXJO',   'ASX 200',         'equity'),
+        # Global Indices
+        'NKY'    : ('^N225',   'Nikkei 225',      'global'),
+        'TSX'    : ('^GSPTSE', 'TSX (Canada)',     'global'),
+        'FTSE'   : ('^FTSE',   'FTSE 100',        'global'),
+        'DAX'    : ('^GDAXI',  'DAX',             'global'),
+        'HSI'    : ('^HSI',    'Hang Seng',       'global'),
+        'KOSPI'  : ('^KS11',   'South Korea (KOSPI)', 'global'),
+        # FX
+        'DXY'    : ('DX-Y.NYB','DXY',             'fx'),
+        'AUDUSD' : ('AUDUSD=X','AUD/USD',         'fx'),
+        'GBPUSD' : ('GBPUSD=X','GBP/USD',         'fx'),
+        'EURUSD' : ('EURUSD=X','EUR/USD',         'fx'),
+        'NZDUSD' : ('NZDUSD=X','NZD/USD',         'fx'),
+        'JPYUSD' : ('JPY=X',   'JPY/USD',         'fx'),
+        'CHFUSD' : ('CHF=X',   'CHF/USD',         'fx'),
+        # Commodities
+        'GSCI'   : ('^SPGSCI', 'GSCI Index',      'commodity'),
+        'Gold'   : ('GC=F',    'Gold',            'commodity'),
+        'Silver' : ('SI=F',    'Silver',          'commodity'),
+        'Platinum': ('PL=F',   'Platinum',        'commodity'),
+        'Palladium': ('PA=F',  'Palladium',       'commodity'),
+        'Copper' : ('HG=F',    'Copper',          'commodity'),
+        'Nickel' : ('^SPGSIK', 'Nickel (GSCI)',   'commodity'),
+        'NatGas' : ('NG=F',    'Nat Gas',         'commodity'),
+        'Oil'    : ('CL=F',    'Oil WTI',         'commodity'),
+        # Rates
+        'US10Y'  : ('^TNX',    'US 10Y',          'rates'),
+        'US2Y'   : ('^IRX',    'US 2Y',           'rates'),
     }
 
     @st.cache_data(ttl=300)
@@ -1151,15 +1243,16 @@ if page == "Macro":
 
         # Group display
         groups = [
-            ("Equities",    ['SPX','NDX','IWM','XJO']),
-            ("Risk & FX",   ['VIX','DXY','AUDUSD']),
-            ("Commodities", ['Gold','Silver','Copper','Oil']),
-            ("Rates", ['US10Y','US2Y']),
+            ("Equities & Global", ['SPX','RSP','NDX','IWM','XJO',
+                                   'NKY','TSX','FTSE','DAX','HSI','KOSPI']),
+            ("Commodities",       ['GSCI','Gold','Silver','Platinum','Palladium',
+                                   'Copper','Nickel','NatGas','Oil']),
+            ("FX",                ['DXY','AUDUSD','GBPUSD','EURUSD','NZDUSD','JPYUSD','CHFUSD']),
         ]
 
-        # 4-column table layout — one column per group
-        _lc1, _lc2, _lc3, _lc4 = st.columns(4)
-        _live_cols = [_lc1, _lc2, _lc3, _lc4]
+        # 3-column table layout — Equities & Global | Commodities | FX
+        _lc1, _lc2, _lc3 = st.columns(3)
+        _live_cols = [_lc1, _lc2, _lc3]
 
         for gi, (group_name, keys) in enumerate(groups):
             grp_rows = []
@@ -1225,6 +1318,61 @@ if page == "Macro":
             </div>
         </div>
     """, unsafe_allow_html=True)
+
+    # ── HGX Housing Lead Indicator ───────────────────────────────────────────────
+    try:
+        from datetime import timedelta as _td_hgx
+        import pandas as _pd_hgx
+        # Use Ticker object to avoid MultiIndex issues with newer yfinance
+        _hgx_tkr  = yf.Ticker('^HGX')
+        _hgx_hist = _hgx_tkr.history(period='5y')
+        if _hgx_hist.empty:
+            raise ValueError("No HGX data returned")
+        _hgx_data = _hgx_hist['Close'].dropna()
+        if len(_hgx_data) > 20:
+            _hgx_curr  = float(_hgx_data.iloc[-1])
+            # Find the most recent local peak, then check drawdown from that peak
+            # Use a rolling 252-day window to find recent peaks
+            _cutoff    = _hgx_data.index[-1] - _td_hgx(days=18*30)
+            _recent    = _hgx_data[_hgx_data.index >= _cutoff]
+            _peak_idx  = _recent.idxmax()
+            _peak_val  = float(_recent.max())
+            _curr_dd   = (_hgx_curr - _peak_val) / _peak_val * 100
+            _days_since = (_hgx_data.index[-1].tz_localize(None) - _peak_idx.tz_localize(None)).days
+
+            # Also check if any point in last 18 months crossed -20% from a preceding high
+            _cummax_full = _hgx_data.cummax()
+            _dd_full     = (_hgx_data - _cummax_full) / _cummax_full * 100
+            _recent_dd   = _dd_full[_dd_full.index >= _cutoff]
+            _worst_recent = float(_recent_dd.min()) if len(_recent_dd) else 0
+            _worst_idx   = _recent_dd.idxmin() if len(_recent_dd) else None
+
+            if _worst_recent <= -20 and _worst_idx is not None:
+                _trough_idx  = _worst_idx
+                _trough_dd   = _worst_recent
+                _trough_val  = float(_hgx_data.loc[_trough_idx])
+                _peak_slice  = _hgx_data.loc[:_trough_idx]
+                _peak_before = float(_peak_slice.max())
+                _peak_date   = _peak_slice.idxmax().strftime('%d %b %Y')
+                _trough_date = _trough_idx.strftime('%d %b %Y')
+                _trough_dt   = _pd_hgx.Timestamp(_trough_idx).tz_localize(None)
+                _reset_date  = (_trough_dt + _td_hgx(days=18*30)).strftime('%d %b %Y')
+                st.markdown(f"""
+<div style="background:rgba(255,180,0,0.10);border:1px solid rgba(255,180,0,0.5);
+border-left:4px solid #f77f00;border-radius:8px;padding:12px 16px;margin-bottom:12px">
+🏠 <b>HGX Housing Index — Caution Signal Active</b><br>
+<span style="font-size:12px">
+HGX fell <b style="color:#f77f00">{_trough_dd:.1f}%</b> from its high of
+<b>{_peak_before:,.0f}</b> ({_peak_date}) to a trough of <b>{_trough_val:,.0f}</b> on <b>{_trough_date}</b>.
+A ≥20% HGX drawdown has historically preceded broader economic weakness 6–18 months ahead.
+Currently <b>{_hgx_curr:,.0f}</b>. Signal resets <b>{_reset_date}</b> (18 months from trough).
+</span>
+</div>
+""", unsafe_allow_html=True)
+        else:
+            st.caption(f"HGX: insufficient data ({len(_hgx_data)} rows)")
+    except Exception as _e_hgx:
+        st.caption(f"HGX indicator error: {_e_hgx}")
 
     # Change alerts
     alerts = macro.get('alerts', [])
@@ -1486,6 +1634,17 @@ elif page == "Debt Markets":
     sys.path.insert(0, MACRO)
 
     st.title("💳 Debt Markets")
+    _dh1, _dh2, _dh3 = st.columns([8, 2, 2])
+    with _dh2:
+        if st.button("🔄 Refresh Debt Data", key='top_debt_refresh'):
+            run_script(os.path.join(MACRO, 'consumer_credit.py'), MACRO)
+            st.rerun()
+    with _dh3:
+        _debt_file = os.path.join(MACRO, 'results', 'consumer_credit_report.txt')
+        if os.path.exists(_debt_file):
+            with open(_debt_file) as _f: _debt_txt = _f.read()
+            st.download_button("⬇ Download Report", _debt_txt,
+                               file_name="debt_markets_report.txt", key='top_debt_dl')
     st.markdown("""
         <div class="info-card">
             Tracks the health of consumer, corporate and sovereign credit markets using
@@ -1693,7 +1852,9 @@ elif page == "Debt Markets":
             aut = credit_data.get('auto_delinquency', {})
             mor = credit_data.get('mortgage_delinquency', {})
             cho = credit_data.get('cc_chargeoff', {})
-            prompt = f"""You are a macro credit analyst. Analyse these US consumer credit readings 
+            _cc_prefix = load_settings().get('ai_prompts', {}).get('consumer_credit',
+                DEFAULT_SETTINGS['ai_prompts']['consumer_credit'])
+            prompt = f"""{_cc_prefix} 
 and provide a 4-5 sentence assessment. Focus on acceleration/deceleration trends, 
 what the combined picture suggests about consumer financial health, and what 
 to watch over the next 1-2 quarters. Be direct and quantitative.
@@ -1759,7 +1920,9 @@ Charge-off rate: {cho.get('current','n/a')}% (qoq: {cho.get('roc','n/a')})"""
             hy  = credit_data.get('hy_spread', {})
             ig  = credit_data.get('ig_spread', {})
             bkln_d = pe_data.get('BKLN', {})
-            prompt = f"""Analyse these US corporate credit readings in 3-4 sentences.
+            _corp_prefix = load_settings().get('ai_prompts', {}).get('corporate_credit',
+                DEFAULT_SETTINGS['ai_prompts']['corporate_credit'])
+            prompt = f"""{_corp_prefix}
 Focus on what the spread levels and trend suggest about corporate credit conditions
 and risk appetite. Note any divergences between HY, IG and leveraged loans.
 
@@ -1802,7 +1965,9 @@ BKLN 1m return: {bkln_d.get('ret_1m','n/a')}%"""
         if ai_settings.get('ai_features', {}).get('enabled', False):
             dbt = credit_data.get('debt_gdp', {})
             dfc = credit_data.get('deficit_gdp', {})
-            prompt = f"""Analyse US sovereign credit health in 3-4 sentences.
+            _sov_prefix = load_settings().get('ai_prompts', {}).get('sovereign_credit',
+                DEFAULT_SETTINGS['ai_prompts']['sovereign_credit'])
+            prompt = f"""{_sov_prefix}
 Focus on trajectory, sustainability and key risks over the next 12 months.
 Note what bond markets are likely pricing in given these readings.
 
@@ -1895,6 +2060,17 @@ PE and BDC returns: {pe_summary}"""
 # ═══════════════════════════════════════════════════════════════════════════════
 elif page == "AU Market":
     st.title("AU Total Market")
+    _ph1, _ph2, _ph3, _ph4, _ph5 = st.columns([900, 4000, 1000, 2000, 900])
+    with _ph4:
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("🔄 Run Benchmark", key='top_run_bm_au'):
+            run_script(os.path.join(STOCKS, 'au_total_market_benchmark.py'), STOCKS)
+            st.rerun()
+    with _ph5:
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("🔍 Run Screener", key='top_run_sc_au'):
+            run_script(os.path.join(STOCKS, 'au_total_market_screener.py'), STOCKS)
+            st.rerun()
 
     tab1, tab2, tab3, tab4 = st.tabs(["Breadth", "Zweig Thrust", "Benchmark", "Screener"])
 
@@ -1968,11 +2144,9 @@ elif page == "AU Market":
             d5_leaders = int(today.get('leader', 0)) - int(d5_row.get('leader', 0)) if d5_row is not None else 0
             d5_ab200   = round(ab200 - (int(d5_row.get('above_200', 0)) / int(d5_row.get('total', total)) * 100), 1) if d5_row is not None else 0
 
-            prompt = f"""You are a market breadth analyst for the Australian stock market (ASX).
-Analyse these breadth readings and provide a concise 4-5 sentence assessment.
-Focus on: (1) overall market health and trend, (2) cap band divergences (large vs small),
-(3) key sector rotations, (4) what the breadth signals suggest about near-term direction.
-Be direct and specific — mention actual numbers.
+            _au_br_prefix = load_settings().get('ai_prompts', {}).get('au_breadth',
+                DEFAULT_SETTINGS['ai_prompts']['au_breadth'])
+            prompt = f"""{_au_br_prefix}
 
 Date: {today['date']}
 Universe: {total} stocks
@@ -2094,8 +2268,9 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                     __import__('sys').path.insert(0, MACRO)
                 importlib.invalidate_caches()
                 from ai_assessment import render_ai_assessment
-                ai_prompt = build_benchmark_ai_prompt(df.reset_index(), 'AU Market', group_col='sector')
-                if ai_prompt:
+                _au_bm_pfx = load_settings().get('ai_prompts', {}).get('au_benchmark', DEFAULT_SETTINGS['ai_prompts']['au_benchmark'])
+                ai_prompt = _au_bm_pfx + '\n\n' + (build_benchmark_ai_prompt(df.reset_index(), 'AU Market', group_col='sector') or '')
+                if ai_prompt.strip():
                     render_ai_assessment(ai_prompt, ai_settings, 'au_bm_rotation')
             cols = ['delta_rank','ticker','name','sector','cap_band','close',
                     'rs_ratio','rs_trend','ret_6m','ret_12m','max_dd',
@@ -2191,6 +2366,17 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
 # ═══════════════════════════════════════════════════════════════════════════════
 elif page == "US Market":
     st.title("US Total Market")
+    _ph1, _ph2, _ph3, _ph4, _ph5 = st.columns([900, 4000, 1000, 2000, 900])
+    with _ph4:
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("🔄 Run Benchmark", key='top_run_bm_us'):
+            run_script(os.path.join(STOCKS, 'us_total_market_benchmark.py'), STOCKS)
+            st.rerun()
+    with _ph5:
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("🔍 Run Screener", key='top_run_sc_us'):
+            run_script(os.path.join(STOCKS, 'us_total_market_screener.py'), STOCKS)
+            st.rerun()
 
     tab1, tab2, tab3, tab4 = st.tabs(["Breadth", "Zweig Thrust", "Benchmark", "Screener"])
 
@@ -2288,12 +2474,9 @@ elif page == "US Market":
                     ', '.join([f"{r[0]} ({r[1]})" for r in bot3])
                 )
 
-            prompt = f"""You are a market breadth analyst for the US stock market.
-Analyse these three-layer breadth readings and provide a 5-6 sentence assessment.
-Focus on: (1) overall market health trend, (2) divergence between large cap quality (Layer 2)
-and small cap risk appetite (Layer 3), (3) cap band leadership, (4) sector rotation signals,
-(5) what the Zweig Breadth Thrust status implies about near-term momentum.
-Be direct — reference specific numbers and note any concerning divergences.
+            _us_br_prefix = load_settings().get('ai_prompts', {}).get('us_breadth',
+                DEFAULT_SETTINGS['ai_prompts']['us_breadth'])
+            prompt = f"""{_us_br_prefix}
 
 Date: {today['date']}
 Layer 1 (Full universe {total} stocks): Leaders {leaders} ({round(leaders/total*100,1)}%) | Weak {weak} ({round(weak/total*100,1)}%) | Ab200: {ab200}% ({d5_ab200:+.1f}% 5d)
@@ -2349,8 +2532,8 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
             df_sec = build_sector_table(history, sec_keys, prefix='sec')
             if df_sec is not None:
                 _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
-            with _lbc2:
-                sector_breadth_caption()
+                with _lbc2:
+                    sector_breadth_caption()
                 _bc1, _bc2, _bc3 = st.columns([900, 10000, 900])
                 with _bc2:
                     st.dataframe(style_breadth(df_sec, delta_cols=['dL5','dL63']),
@@ -2386,8 +2569,8 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                            if 'nan' not in c and 'index' not in c]
             if sp_sec_keys:
                 _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
-            with _lbc2:
-                st.markdown("**Layer 2 Sector Breadth**")
+                with _lbc2:
+                    st.markdown("**Layer 2 Sector Breadth**")
                 df_sp_sec = build_sector_table(history, sp_sec_keys, prefix='sp_sec')
                 if df_sp_sec is not None:
                     _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
@@ -2428,8 +2611,8 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                             if 'nan' not in c and 'index' not in c]
             if rus_sec_keys:
                 _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
-            with _lbc2:
-                st.markdown("**Layer 3 Sector Breadth**")
+                with _lbc2:
+                    st.markdown("**Layer 3 Sector Breadth**")
                 df_rus_sec = build_sector_table(history, rus_sec_keys, prefix='rus_sec')
                 if df_rus_sec is not None:
                     _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
@@ -2474,8 +2657,9 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                     __import__('sys').path.insert(0, MACRO)
                 importlib.invalidate_caches()
                 from ai_assessment import render_ai_assessment
-                ai_prompt = build_benchmark_ai_prompt(df.reset_index(), 'US Market', group_col='sector')
-                if ai_prompt:
+                _us_bm_pfx = load_settings().get('ai_prompts', {}).get('us_benchmark', DEFAULT_SETTINGS['ai_prompts']['us_benchmark'])
+                ai_prompt = _us_bm_pfx + '\n\n' + (build_benchmark_ai_prompt(df.reset_index(), 'US Market', group_col='sector') or '')
+                if ai_prompt.strip():
                     render_ai_assessment(ai_prompt, ai_settings, 'us_bm_rotation')
             cols = ['delta_rank','ticker','name','sector','cap_band','close',
                     'rs_ratio','rs_trend','ret_6m','ret_12m','max_dd',
@@ -2571,6 +2755,17 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
 # ═══════════════════════════════════════════════════════════════════════════════
 elif page == "Commodities":
     st.title("⛏ All Major Commodities")
+    _ph1, _ph2, _ph3, _ph4, _ph5 = st.columns([900, 4000, 1000, 2000, 900])
+    with _ph4:
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("🔄 Run Benchmark", key='top_run_bm_comm'):
+            run_script(os.path.join(STOCKS, 'all_major_commodities_benchmark.py'), STOCKS)
+            st.rerun()
+    with _ph5:
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("🔍 Run Screener", key='top_run_sc_comm'):
+            run_script(os.path.join(STOCKS, 'all_major_commodities_screener.py'), STOCKS)
+            st.rerun()
 
     tab1, tab2, tab3 = st.tabs(["Breadth", "Benchmark", "Screener"])
 
@@ -2744,8 +2939,9 @@ elif page == "Commodities":
                     __import__('sys').path.insert(0, MACRO)
                 importlib.invalidate_caches()
                 from ai_assessment import render_ai_assessment
-                ai_prompt = build_benchmark_ai_prompt(df.reset_index(), 'Commodities', group_col='commodity')
-                if ai_prompt:
+                _cm_bm_pfx = load_settings().get('ai_prompts', {}).get('comm_benchmark', DEFAULT_SETTINGS['ai_prompts']['comm_benchmark'])
+                ai_prompt = _cm_bm_pfx + '\n\n' + (build_benchmark_ai_prompt(df.reset_index(), 'Commodities', group_col='commodity') or '')
+                if ai_prompt.strip():
                     render_ai_assessment(ai_prompt, ai_settings, 'comm_bm_rotation')
             cols = ['delta_rank','ticker','name','commodity','type','cap_band','close',
                     'rs_ratio','rs_trend','ret_6m','ret_12m','max_dd',
@@ -2854,6 +3050,17 @@ elif page == "Commodities":
 # ═══════════════════════════════════════════════════════════════════════════════
 elif page == "Uranium":
     st.title("☢ Uranium")
+    _ph1, _ph2, _ph3, _ph4, _ph5 = st.columns([900, 4000, 1000, 2000, 900])
+    with _ph4:
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("🔄 Run Benchmark", key='top_run_bm_ura'):
+            run_script(os.path.join(STOCKS, 'uranium_benchmark.py'), STOCKS)
+            st.rerun()
+    with _ph5:
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("🔍 Run Screener", key='top_run_sc_ura'):
+            run_script(os.path.join(STOCKS, 'uranium_screener.py'), STOCKS)
+            st.rerun()
 
     tab1, tab2 = st.tabs(["Benchmark", "Screener"])
 
@@ -2954,6 +3161,17 @@ elif page == "Uranium":
 # ═══════════════════════════════════════════════════════════════════════════════
 elif page == "AU Gold Miners":
     st.title("🥇 AU Gold Miners")
+    _ph1, _ph2, _ph3, _ph4, _ph5 = st.columns([900, 4000, 1000, 2000, 900])
+    with _ph4:
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("🔄 Run Benchmark", key='top_run_bm_augm'):
+            run_script(os.path.join(STOCKS, 'au_gold_miners_benchmark.py'), STOCKS)
+            st.rerun()
+    with _ph5:
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("🔍 Run Screener", key='top_run_sc_augm'):
+            run_script(os.path.join(STOCKS, 'au_gold_miners_screener.py'), STOCKS)
+            st.rerun()
 
     tab1, tab2 = st.tabs(["Benchmark", "Screener"])
 
@@ -3056,7 +3274,7 @@ elif page == "RRG Charts":
     st.title("📡 Relative Rotation Graph")
     st.caption("RS-Ratio vs RS-Momentum — tails show last 63 trading days")
 
-    tab1, tab2 = st.tabs(["🇦🇺 AU vs XJO", "🇺🇸 US vs SPY"])
+    tab1, tab2, tab3 = st.tabs(["🇦🇺 AU vs XJO", "🇺🇸 US vs SPY/RSP", "📈 Dow 30 vs DJI"])
 
     def build_rrg(history_file, title):
         history = load_csv(history_file)
@@ -3180,6 +3398,37 @@ elif page == "RRG Charts":
             'FDN'  : 'FDN - Internet',
             'URNM' : 'URNM - Uranium Miners',
             'REMX' : 'REMX - Rare Earth',
+            # Dow 30
+            'AAPL' : 'AAPL - Apple',
+            'MSFT' : 'MSFT - Microsoft',
+            'AMZN' : 'AMZN - Amazon',
+            'NVDA' : 'NVDA - Nvidia',
+            'HD'   : 'HD - Home Depot',
+            'MCD'  : 'MCD - McDonald\'s',
+            'NKE'  : 'NKE - Nike',
+            'WMT'  : 'WMT - Walmart',
+            'V'    : 'V - Visa',
+            'GS'   : 'GS - Goldman Sachs',
+            'JPM'  : 'JPM - JPMorgan',
+            'AXP'  : 'AXP - Amex',
+            'TRV'  : 'TRV - Travelers',
+            'JNJ'  : 'JNJ - J&J',
+            'UNH'  : 'UNH - UnitedHealth',
+            'MRK'  : 'MRK - Merck',
+            'AMGN' : 'AMGN - Amgen',
+            'MMM'  : 'MMM - 3M',
+            'HON'  : 'HON - Honeywell',
+            'CAT'  : 'CAT - Caterpillar',
+            'BA'   : 'BA - Boeing',
+            'RTX'  : 'RTX - Raytheon',
+            'IBM'  : 'IBM - IBM',
+            'CRM'  : 'CRM - Salesforce',
+            'INTC' : 'INTC - Intel',
+            'CVX'  : 'CVX - Chevron',
+            'KO'   : 'KO - Coca-Cola',
+            'PG'   : 'PG - P&G',
+            'DIS'  : 'DIS - Disney',
+            'VZ'   : 'VZ - Verizon',
         }
 
         fig = go.Figure()
@@ -3389,12 +3638,28 @@ elif page == "RRG Charts":
             st.rerun()
 
     with tab2:
-        build_rrg(
-            os.path.join(STOCKS, 'results', 'rrg', 'us_rrg_history.csv'),
-            'US Sectors & ETFs vs SPY'
-        )
+        _spy_rsp = st.toggle("Use RSP (equal-weight) benchmark", value=False, key='rrg_us_rsp',
+                             help="SPY = cap-weighted S&P 500 | RSP = equal-weight S&P 500")
+        if _spy_rsp:
+            _us_hist_file = os.path.join(STOCKS, 'results', 'rrg', 'us_rrg_rsp_history.csv')
+            _us_title     = 'US Sectors & ETFs vs RSP (Equal Weight)'
+            _us_script    = 'rrg_us_rsp_data.py'
+        else:
+            _us_hist_file = os.path.join(STOCKS, 'results', 'rrg', 'us_rrg_history.csv')
+            _us_title     = 'US Sectors & ETFs vs SPY'
+            _us_script    = 'rrg_us_data.py'
+        build_rrg(_us_hist_file, _us_title)
         if st.button("🔄 Update US RRG Data", key='rrg_us'):
-            run_script(os.path.join(STOCKS, 'rrg_us_data.py'), STOCKS)
+            run_script(os.path.join(STOCKS, _us_script), STOCKS)
+            st.rerun()
+
+    with tab3:
+        build_rrg(
+            os.path.join(STOCKS, 'results', 'rrg', 'dow_rrg_history.csv'),
+            'Dow 30 vs DJI'
+        )
+        if st.button("🔄 Update Dow RRG Data", key='rrg_dow'):
+            run_script(os.path.join(STOCKS, 'rrg_dow_data.py'), STOCKS)
             st.rerun()
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -3783,6 +4048,46 @@ elif page == "Drawdown Analysis":
         </div>
     """, unsafe_allow_html=True)
 
+    # ── Score weight settings ────────────────────────────────────────────────
+    _dd_settings_file = os.path.join(BASE, 'drawdown_settings.json')
+
+    def _load_dd_settings():
+        if os.path.exists(_dd_settings_file):
+            try:
+                return json.load(open(_dd_settings_file))
+            except: pass
+        return {'rs_vs_bench': 0.4, 'peer_rs_score': 0.3, 'dd_vs_bench': 0.3}
+
+    def _save_dd_settings(s):
+        with open(_dd_settings_file, 'w') as f:
+            json.dump(s, f, indent=2)
+
+    _dd_s = _load_dd_settings()
+
+    with st.expander("⚙️ Score Weights", expanded=False):
+        st.caption("Weights are applied as-is — ensure they sum to a meaningful total. "
+                   "DD vs Benchmark weight is applied as negative (penalises higher drawdown).")
+        _wc1, _wc2, _wc3, _wc4 = st.columns([3, 3, 3, 2])
+        _w_rs   = _wc1.number_input("RS vs Benchmark", min_value=0.0, max_value=2.0,
+                                     value=float(_dd_s.get('rs_vs_bench', 0.4)),
+                                     step=0.05, format="%.2f", key='dd_w_rs',
+                                     help="Reward for outperforming the benchmark")
+        _w_peer = _wc2.number_input("Peer RS Score",   min_value=0.0, max_value=2.0,
+                                     value=float(_dd_s.get('peer_rs_score', 0.3)),
+                                     step=0.05, format="%.2f", key='dd_w_peer',
+                                     help="% of sector peers outperformed")
+        _w_dd   = _wc3.number_input("DD vs Benchmark", min_value=0.0, max_value=2.0,
+                                     value=float(_dd_s.get('dd_vs_bench', 0.3)),
+                                     step=0.05, format="%.2f", key='dd_w_dd',
+                                     help="Drawdown penalty vs benchmark (applied negative)")
+        _wc4.markdown("<br>", unsafe_allow_html=True)
+        if _wc4.button("💾 Save Weights", key='dd_save_weights'):
+            _save_dd_settings({'rs_vs_bench': _w_rs, 'peer_rs_score': _w_peer, 'dd_vs_bench': _w_dd})
+            st.success(f"Saved — RS:{_w_rs} | Peer:{_w_peer} | DD:{_w_dd}")
+        st.markdown(f"**Current formula:** `score = RS×{_w_rs} + Peer×{_w_peer} - DD×{_w_dd}`")
+
+    _dd_weights = {'rs_vs_bench': _w_rs, 'peer_rs_score': _w_peer, 'dd_vs_bench': _w_dd}
+
     col1, col2 = st.columns(2)
     with col1:
         watchlists     = sorted(glob.glob(os.path.join(STOCKS, 'watchlist', '*.csv')))
@@ -3884,7 +4189,8 @@ elif page == "Drawdown Analysis":
                 result = calculate_period(
                     prices, volumes, watchlist,
                     p['date'], p['label'],
-                    bench_override=bench_override
+                    bench_override=bench_override,
+                    weights=_dd_weights
                 )
                 if result is None:
                     st.warning(f"Insufficient data for period {p['label']} from {p['date']}")
@@ -4290,6 +4596,8 @@ elif page == "Run Scripts":
                 ('uranium_benchmark.py',          STOCKS),
                 ('uranium_screener.py',           STOCKS),
                 ('rrg_us_data.py',                STOCKS),
+                ('rrg_us_rsp_data.py',            STOCKS),
+                ('rrg_dow_data.py',               STOCKS),
             ]:
                 run_script(os.path.join(script[1], script[0]), script[1])
 
@@ -4457,6 +4765,357 @@ elif page == "DeMark Signals":
 # ═══════════════════════════════════════════════════════════════════════════════
 # SETTINGS PAGE
 # ═══════════════════════════════════════════════════════════════════════════════
+elif page == "Rank Settings":
+    st.title("🎛️ Rank Score Settings")
+    st.caption("Adjust scoring parameters for each benchmark and screener. "
+               "Save named profiles per tab. Load any saved profile. Reset to factory defaults at any time.")
+
+    _rs_base = os.path.join(BASE, 'rank_profiles')
+    os.makedirs(_rs_base, exist_ok=True)
+
+    # ── Profile helpers ───────────────────────────────────────────────────────
+    def _prof_dir(tab_key):
+        d = os.path.join(_rs_base, tab_key)
+        os.makedirs(d, exist_ok=True)
+        return d
+
+    def _list_profiles(tab_key):
+        return sorted(f[:-5] for f in os.listdir(_prof_dir(tab_key)) if f.endswith('.json'))
+
+    def _load_profile(tab_key, name):
+        p = os.path.join(_prof_dir(tab_key), f"{name}.json")
+        return json.load(open(p)) if os.path.exists(p) else {}
+
+    def _save_profile(tab_key, name, settings):
+        p = os.path.join(_prof_dir(tab_key), f"{name}.json")
+        json.dump(settings, open(p,'w'), indent=2)
+
+    def _active_settings(tab_key, defaults):
+        """Load active settings: check rank_settings.json first, else defaults."""
+        p = os.path.join(BASE, 'rank_settings.json')
+        if os.path.exists(p):
+            try:
+                return {**defaults, **json.load(open(p)).get(tab_key, {})}
+            except: pass
+        return defaults.copy()
+
+    def _save_active(tab_key, settings):
+        p = os.path.join(BASE, 'rank_settings.json')
+        try:    rs = json.load(open(p))
+        except: rs = {}
+        rs[tab_key] = settings
+        json.dump(rs, open(p,'w'), indent=2)
+        st.success(f"✓ Active settings saved to rank_settings.json")
+
+    # ── Weight guidance ───────────────────────────────────────────────────────
+    WEIGHT_GUIDE = """
+<div style="background:rgba(255,180,0,0.08);border:1px solid rgba(255,180,0,0.3);
+border-radius:6px;padding:8px 14px;font-size:11px;margin-bottom:12px;line-height:1.8">
+<b>Weight guidance:</b> &nbsp;
+<code>0.0</code> = disabled &nbsp;|&nbsp;
+<code>0.01–0.1</code> = minor influence &nbsp;|&nbsp;
+<code>0.2–0.3</code> = moderate &nbsp;|&nbsp;
+<code>0.4–0.5</code> = standard weight &nbsp;|&nbsp;
+<code>0.6–1.0</code> = high emphasis &nbsp;|&nbsp;
+<code>>1.0</code> = dominant factor<br>
+<b>Bonus values:</b> &nbsp;
+<code>0.5</code> = small boost &nbsp;|&nbsp;
+<code>1.0</code> = standard bonus &nbsp;|&nbsp;
+<code>-0.5</code> = mild penalty &nbsp;|&nbsp;
+<code>-1.0</code> = strong penalty<br>
+<b>Vol multiplier:</b> &nbsp;
+<code>1.0</code> = neutral &nbsp;|&nbsp;
+<code>1.1</code> = 10%% boost for high volume &nbsp;|&nbsp;
+<code>0.9</code> = 10%% penalty for low volume
+</div>"""
+
+    # ── Benchmark score widget ────────────────────────────────────────────────
+
+
+    def _profile_bar(tab_key, cur, k):
+        """Render profile load/save bar. Returns updated settings dict."""
+        profiles = _list_profiles(tab_key)
+        pb1, pb2, pb3, pb4 = st.columns([3, 2, 2, 1])
+        sel = pb1.selectbox("Load profile", ["— current —"] + profiles, key=f"prof_sel_{k}")
+        if sel != "— current —":
+            loaded = _load_profile(tab_key, sel)
+            if loaded:
+                cur = {**cur, **loaded}
+                st.session_state[f"prof_loaded_{k}"] = cur
+        pname = pb2.text_input("Save as", placeholder="profile name", key=f"prof_name_{k}")
+        if pb3.button("💾 Save profile", key=f"prof_save_{k}") and pname.strip():
+            _save_profile(tab_key, pname.strip(), cur)
+            st.success(f"Saved profile '{pname.strip()}'")
+        if pb4.button("↩ Defaults", key=f"prof_def_{k}"):
+            st.session_state[f"prof_loaded_{k}"] = None
+            # Increment reset counter — widgets use it as key suffix to force re-render
+            st.session_state[f"reset_ctr_{k}"] = st.session_state.get(f"reset_ctr_{k}", 0) + 1
+            st.rerun()
+        return cur
+
+    def _bm_score_widgets(tab_key, script, defaults):
+        cur = _active_settings(tab_key, defaults)
+        # Apply any loaded profile from session state
+        if st.session_state.get(f"prof_loaded_{tab_key}"):
+            cur = {**cur, **st.session_state[f"prof_loaded_{tab_key}"]}
+        st.markdown(unsafe_allow_html=True, body=WEIGHT_GUIDE)
+        cur = _profile_bar(tab_key, cur, tab_key)
+        _rk = st.session_state.get(f"reset_ctr_{tab_key}", 0)  # key suffix for reset
+        def _w_tag(v):
+            if v == 0: return "off"
+            elif v <= 0.1: return "minor"
+            elif v <= 0.3: return "moderate"
+            elif v <= 0.5: return "standard"
+            elif v <= 1.0: return "high"
+            else: return "dominant"
+        st.code(
+            f"score = (ret_12m × {cur['ret_12m_weight']} [{_w_tag(cur['ret_12m_weight'])}])"
+            f" + (persist × {cur['persist_weight']} [{_w_tag(cur['persist_weight'])}])"
+            f" + (dd × -{cur['dd_weight_large']}..{cur['dd_weight_small']} [penalty])"
+            f" + (mqs × {cur['mqs_weight']} [{_w_tag(cur['mqs_weight'])}])"
+            f" + trend_bonus({cur['trend_bonus']}) + lead_bonus({cur['lead_bonus']})"
+            f" + rs_trend_bonus  →  × vol_multiplier",
+            language="python")
+        st.markdown("#### Return & Quality")
+        c1,c2,c3 = st.columns(3)
+        v_ret  = c1.number_input("12m Return weight — standard 0.4", -2.0, 2.0, float(cur['ret_12m_weight']),  0.05, key=f"ret_{tab_key}_{_rk}", help="Primary momentum signal. 0.4 = standard. Higher = more return-chasing.")
+        v_per  = c2.number_input("Persistence weight — standard 0.01", 0.0, 0.5, float(cur['persist_weight']),  0.005, format="%.3f", key=f"per_{tab_key}_{_rk}", help="% up-days. Small influence — keep low (0.01). Increase to reward consistency.")
+        v_mqs  = c3.number_input("MQS weight — standard 0.2", -2.0, 2.0, float(cur['mqs_weight']),   0.05, key=f"mqs_{tab_key}_{_rk}", help="Momentum Quality Score. 0.2 = standard. Rewards clean rises with low volatility.")
+        st.markdown("#### Drawdown Penalty (applied negative)")
+        c1,c2,c3,c4 = st.columns(4)
+        v_ddl = c1.number_input("Large cap — std 0.4", 0.0, 2.0, float(cur['dd_weight_large']),  0.05, key=f"ddl_{tab_key}_{_rk}", help="Higher = larger stocks penalised more for big drawdowns")
+        v_ddm = c2.number_input("Mid cap — std 0.3",   0.0, 2.0, float(cur['dd_weight_mid']),    0.05, key=f"ddm_{tab_key}_{_rk}")
+        v_dds = c3.number_input("Small cap — std 0.2", 0.0, 2.0, float(cur['dd_weight_small']),  0.05, key=f"dds_{tab_key}_{_rk}")
+        v_dde = c4.number_input("ETF — std 0.3",       0.0, 2.0, float(cur['dd_weight_etf']),    0.05, key=f"dde_{tab_key}_{_rk}")
+        st.markdown("#### Trend & Leadership Bonus")
+        c1,c2 = st.columns(2)
+        v_tb = c1.number_input("Trend bonus (above 200 SMA) — std 1.0", 0.0, 3.0, float(cur['trend_bonus']), 0.05, key=f"tb_{tab_key}_{_rk}", help="Added when price > 200 SMA. 1.0 = standard single-point bonus.")
+        v_lb = c2.number_input("Lead bonus (RS ratio > 1.0) — std 1.0",  0.0, 3.0, float(cur['lead_bonus']),  0.05, key=f"lb_{tab_key}_{_rk}", help="Added when stock outperforms benchmark over 12m.")
+        st.markdown("#### RS Trend Bonus")
+        c1,c2,c3,c4,c5 = st.columns(5)
+        v_rsu  = c1.number_input("Strong Up — std 1.0",   -2.0, 2.0, float(cur['rs_trend_strong_up']),    0.05, key=f"rsu_{tab_key}_{_rk}")
+        v_ru   = c2.number_input("Up — std 0.5",          -2.0, 2.0, float(cur['rs_trend_up']),           0.05, key=f"ru_{tab_key}_{_rk}")
+        v_rf   = c3.number_input("Flat — std 0.0",        -2.0, 2.0, float(cur['rs_trend_flat']),         0.05, key=f"rf_{tab_key}_{_rk}")
+        v_rd   = c4.number_input("Down — std -0.5",       -2.0, 2.0, float(cur['rs_trend_down']),         0.05, key=f"rd_{tab_key}_{_rk}")
+        v_rsd  = c5.number_input("Strong Down — std -1.0",-2.0, 2.0, float(cur['rs_trend_strong_down']),  0.05, key=f"rsd_{tab_key}_{_rk}")
+        st.markdown("#### Volume Multiplier")
+        c1,c2,c3 = st.columns(3)
+        v_vh = c1.number_input("High vol — std 1.1 (+10%%)", 0.0, 3.0, float(cur['vol_high']), 0.05, key=f"vh_{tab_key}_{_rk}", help="Multiplies final score. 1.1 = 10%% boost for high volume days.")
+        v_vm = c2.number_input("Med vol — std 1.0 (neutral)", 0.0, 3.0, float(cur['vol_med']),  0.05, key=f"vm_{tab_key}_{_rk}")
+        v_vl = c3.number_input("Low vol — std 0.9 (-10%%)",  0.0, 3.0, float(cur['vol_low']),  0.05, key=f"vl_{tab_key}_{_rk}")
+        new_s = {
+            'ret_12m_weight': v_ret, 'persist_weight': v_per, 'mqs_weight': v_mqs,
+            'trend_bonus': v_tb, 'lead_bonus': v_lb,
+            'dd_weight_large': v_ddl, 'dd_weight_mid': v_ddm, 'dd_weight_small': v_dds, 'dd_weight_etf': v_dde,
+            'vol_high': v_vh, 'vol_med': v_vm, 'vol_low': v_vl,
+            'rs_trend_strong_up': v_rsu, 'rs_trend_up': v_ru, 'rs_trend_flat': v_rf,
+            'rs_trend_down': v_rd, 'rs_trend_strong_down': v_rsd,
+        }
+        b1,b2 = st.columns([2,1])
+        if b1.button("💾 Save as Active", type="primary", key=f"save_{tab_key}"):
+            _save_active(tab_key, new_s)
+        if b2.button("🔄 Save & Run", key=f"run_{tab_key}"):
+            _save_active(tab_key, new_s)
+            run_script(os.path.join(STOCKS, script), STOCKS)
+            st.success("Done")
+        return new_s
+
+    def _sc_score_widgets(tab_key, bm_script, sc_script, defaults):
+        cur = _active_settings(tab_key, defaults)
+        if st.session_state.get(f"prof_loaded_{tab_key}"):
+            cur = {**cur, **st.session_state[f"prof_loaded_{tab_key}"]}
+        st.markdown(unsafe_allow_html=True, body=WEIGHT_GUIDE)
+        cur = _profile_bar(tab_key, cur, tab_key)
+        _rk = st.session_state.get(f"reset_ctr_{tab_key}", 0)  # key suffix for reset
+        st.markdown("#### Score Weights")
+        def _w_tag(v):
+            if v == 0: return "off"
+            elif v <= 0.1: return "minor"
+            elif v <= 0.3: return "moderate"
+            elif v <= 0.5: return "standard"
+            elif v <= 1.0: return "high"
+            else: return "dominant"
+        st.code(
+            f"score = (ret_12m × {cur['ret_12m_weight']} [{_w_tag(cur['ret_12m_weight'])}])"
+            f" + (persist × {cur['persist_weight']} [{_w_tag(cur['persist_weight'])}])"
+            f" + (dd × -w_dd [penalty])"
+            f" + (mqs × {cur['mqs_weight']} [{_w_tag(cur['mqs_weight'])}])"
+            f" + (peer_rs × {cur['peer_rs_weight']} [{_w_tag(cur['peer_rs_weight'])}])"
+            f" + rs_trend_bonus + regime_bonus  →  × vol_multiplier",
+            language="python")
+        c1,c2,c3,c4 = st.columns(4)
+        v_ret  = c1.number_input("12m Return — std 0.4",    -2.0, 2.0, float(cur['ret_12m_weight']),  0.05, key=f"ret_{tab_key}_{_rk}", help="Primary return signal. 0.4 standard.")
+        v_per  = c2.number_input("Persistence — std 0.01",   0.0, 0.5, float(cur['persist_weight']),  0.005, format="%.3f", key=f"per_{tab_key}_{_rk}", help="Consistency of up-days. Keep small.")
+        v_mqs  = c3.number_input("MQS — std 0.2",           -2.0, 2.0, float(cur['mqs_weight']),      0.05, key=f"mqs_{tab_key}_{_rk}", help="Quality score. Rewards clean trends.")
+        v_prs  = c4.number_input("Peer RS — std 0.02",       0.0, 0.5, float(cur['peer_rs_weight']),  0.005, format="%.3f", key=f"prs_{tab_key}_{_rk}", help="% outperforming sector peers. Keep small — already 0-100 scale.")
+        st.markdown("#### Drawdown Penalty")
+        c1,c2,c3,c4 = st.columns(4)
+        v_ddl = c1.number_input("Large — std 0.4", 0.0, 2.0, float(cur['dd_weight_large']),  0.05, key=f"ddl_{tab_key}_{_rk}")
+        v_ddm = c2.number_input("Mid — std 0.3",   0.0, 2.0, float(cur['dd_weight_mid']),    0.05, key=f"ddm_{tab_key}_{_rk}")
+        v_dds = c3.number_input("Small — std 0.2", 0.0, 2.0, float(cur['dd_weight_small']),  0.05, key=f"dds_{tab_key}_{_rk}")
+        v_dde = c4.number_input("ETF — std 0.3",   0.0, 2.0, float(cur['dd_weight_etf']),    0.05, key=f"dde_{tab_key}_{_rk}")
+        st.markdown("#### RS Trend Bonus")
+        c1,c2,c3,c4,c5 = st.columns(5)
+        v_rsu = c1.number_input("Strong Up — std 1.0",   -2.0, 2.0, float(cur['rs_trend_strong_up']),   0.05, key=f"rsu_{tab_key}_{_rk}")
+        v_ru  = c2.number_input("Up — std 0.5",          -2.0, 2.0, float(cur['rs_trend_up']),          0.05, key=f"ru_{tab_key}_{_rk}")
+        v_rf  = c3.number_input("Flat — std 0.0",        -2.0, 2.0, float(cur['rs_trend_flat']),        0.05, key=f"rf_{tab_key}_{_rk}")
+        v_rd  = c4.number_input("Down — std -0.5",       -2.0, 2.0, float(cur['rs_trend_down']),        0.05, key=f"rd_{tab_key}_{_rk}")
+        v_rsd = c5.number_input("Strong Down — std -1.0",-2.0, 2.0, float(cur['rs_trend_strong_down']), 0.05, key=f"rsd_{tab_key}_{_rk}")
+        st.markdown("#### Regime Bonus")
+        c1,c2,c3,c4 = st.columns(4)
+        v_rl  = c1.number_input("Leader — std 1.0",    -2.0, 2.0, float(cur['regime_bonus_leader']),    0.05, key=f"rl_{tab_key}_{_rk}", help="Top peer RS + above trend. 1.0 = strong boost.")
+        v_rc  = c2.number_input("Contender — std 0.5", -2.0, 2.0, float(cur['regime_bonus_contender']), 0.05, key=f"rc_{tab_key}_{_rk}")
+        v_rlag= c3.number_input("Laggard — std 0.0",   -2.0, 2.0, float(cur['regime_bonus_laggard']),   0.05, key=f"rlag_{tab_key}_{_rk}")
+        v_rw  = c4.number_input("Weak — std -0.5",     -2.0, 2.0, float(cur['regime_bonus_weak']),      0.05, key=f"rw_{tab_key}_{_rk}", help="Below trend + low peer RS. -0.5 = penalty.")
+        st.markdown("#### Volume Multiplier")
+        c1,c2,c3 = st.columns(3)
+        v_vh = c1.number_input("High — std 1.1", 0.0, 3.0, float(cur['vol_high']), 0.05, key=f"vh_{tab_key}_{_rk}")
+        v_vm = c2.number_input("Med — std 1.0",  0.0, 3.0, float(cur['vol_med']),  0.05, key=f"vm_{tab_key}_{_rk}")
+        v_vl = c3.number_input("Low — std 0.9",  0.0, 3.0, float(cur['vol_low']),  0.05, key=f"vl_{tab_key}_{_rk}")
+        st.divider()
+        st.markdown("#### Filter Parameters")
+        fc1, fc2 = st.columns(2)
+        v_cap = fc1.number_input("Min market cap ($)", 0, 100_000_000_000,
+                                  int(cur.get('min_market_cap', 0)), 10_000_000, key=f"cap_{tab_key}_{_rk}")
+        v_vol = fc2.number_input("Min avg daily volume ($)", 0, 100_000_000,
+                                  int(cur.get('min_vol_avg', 0)), 10_000, key=f"vol_{tab_key}_{_rk}")
+        _valid_regimes = ['LEADER','CONTENDER','LAGGARD','WEAK']
+        _reg_default = [r for r in cur.get('regime_filter', ['LEADER','CONTENDER']) if r in _valid_regimes] or ['LEADER','CONTENDER']
+        v_reg = st.multiselect("Allowed regimes", _valid_regimes,
+                                default=_reg_default, key=f"reg_{tab_key}_{_rk}")
+        new_s = {
+            'ret_12m_weight': v_ret, 'persist_weight': v_per, 'mqs_weight': v_mqs, 'peer_rs_weight': v_prs,
+            'dd_weight_large': v_ddl, 'dd_weight_mid': v_ddm, 'dd_weight_small': v_dds, 'dd_weight_etf': v_dde,
+            'vol_high': v_vh, 'vol_med': v_vm, 'vol_low': v_vl,
+            'rs_trend_strong_up': v_rsu, 'rs_trend_up': v_ru, 'rs_trend_flat': v_rf,
+            'rs_trend_down': v_rd, 'rs_trend_strong_down': v_rsd,
+            'regime_bonus_leader': v_rl, 'regime_bonus_contender': v_rc,
+            'regime_bonus_laggard': v_rlag, 'regime_bonus_weak': v_rw,
+            'min_market_cap': v_cap, 'min_vol_avg': v_vol, 'regime_filter': v_reg,
+        }
+        b1,b2,b3 = st.columns([2,2,1])
+        if b1.button("💾 Save as Active", type="primary", key=f"save_{tab_key}"):
+            _save_active(tab_key, new_s)
+        if b2.button("🔄 Save & Run Screener", key=f"run_sc_{tab_key}"):
+            _save_active(tab_key, new_s)
+            run_script(os.path.join(STOCKS, sc_script), STOCKS)
+            st.success("Screener done")
+        if b3.button("📊 Run Benchmark", key=f"run_bm_{tab_key}"):
+            run_script(os.path.join(STOCKS, bm_script), STOCKS)
+            st.success("Benchmark done")
+        return new_s
+
+    # ── Tabs ──────────────────────────────────────────────────────────────────
+    _rs_tabs = st.tabs([
+        "🇦🇺 AU Benchmark", "🇺🇸 US Benchmark", "🪨 Comm Benchmark",
+        "🔍 AU Screener",   "🔍 US Screener",   "🔍 Comm Screener",
+    ])
+    with _rs_tabs[0]: _bm_score_widgets('au_benchmark',   'au_total_market_benchmark.py',       BM_DEFAULTS)
+    with _rs_tabs[1]: _bm_score_widgets('us_benchmark',   'us_total_market_benchmark.py',       BM_DEFAULTS)
+    with _rs_tabs[2]: _bm_score_widgets('comm_benchmark', 'all_major_commodities_benchmark.py', BM_DEFAULTS)
+    with _rs_tabs[3]: _sc_score_widgets('au_screener',   'au_total_market_benchmark.py',   'au_total_market_screener.py',       SC_DEFAULTS)
+    with _rs_tabs[4]: _sc_score_widgets('us_screener',   'us_total_market_benchmark.py',   'us_total_market_screener.py',       SC_DEFAULTS)
+    with _rs_tabs[5]: _sc_score_widgets('comm_screener', 'all_major_commodities_benchmark.py', 'all_major_commodities_screener.py', SC_DEFAULTS)
+
+elif page == "AI Settings":
+    st.title("🤖 AI Settings")
+
+    _ai_s    = load_settings()
+    _ai_feat = _ai_s.get('ai_features', {})
+    _ai_prmp = _ai_s.get('ai_prompts', DEFAULT_SETTINGS.get('ai_prompts', {}))
+
+    def _save_ai_settings(feat, prompts):
+        s = load_settings()
+        s['ai_features'] = feat
+        s['ai_prompts']  = prompts
+        save_settings(s)
+
+    # ── Tabs ──────────────────────────────────────────────────────────────────
+    _ai_tabs = st.tabs([
+        "⚙️ General",
+        "🇦🇺 AU Breadth",
+        "🇺🇸 US Breadth",
+        "💳 Debt Markets",
+        "📊 AU Benchmark",
+        "📊 US Benchmark",
+        "🪨 Commodities",
+    ])
+
+    # ── General tab ───────────────────────────────────────────────────────────
+    with _ai_tabs[0]:
+        _ai_enabled = st.toggle("Enable AI Assessments", value=_ai_feat.get('enabled', False))
+        st.markdown("#### Active Provider")
+        _provider = st.radio("Active provider", options=["anthropic", "openai"],
+                              index=0 if _ai_feat.get('provider', 'anthropic') == 'anthropic' else 1,
+                              horizontal=True,
+                              format_func=lambda x: "🟣 Claude (Anthropic)" if x == "anthropic" else "🟢 ChatGPT (OpenAI)",
+                              help="Select which API to use for all AI assessments",
+                              label_visibility="collapsed")
+
+        st.divider()
+        st.markdown("#### 🟣 Claude API")
+        _claude_key = st.text_input("Anthropic API Key", value=_ai_feat.get('anthropic_api_key', ''),
+                                     type="password", help="sk-ant-...")
+        _claude_models = ['claude-sonnet-4-6', 'claude-opus-4-6', 'claude-haiku-4-5-20251001']
+        _claude_model  = st.selectbox("Claude Model",
+                                       options=_claude_models,
+                                       index=_claude_models.index(_ai_feat.get('model', 'claude-sonnet-4-6'))
+                                       if _ai_feat.get('model', 'claude-sonnet-4-6') in _claude_models else 0)
+
+        st.divider()
+        st.markdown("#### 🟢 ChatGPT API")
+        _openai_key   = st.text_input("OpenAI API Key", value=_ai_feat.get('openai_api_key', ''),
+                                       type="password", help="sk-...")
+        _openai_model = st.selectbox("OpenAI Model",
+                                      options=['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo'],
+                                      index=['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo'].index(
+                                          _ai_feat.get('openai_model', 'gpt-4o')))
+
+        st.markdown("")
+        if st.button("💾 Save General Settings", type="primary", key='ai_save_general'):
+            _new_feat = {
+                'enabled'          : _ai_enabled,
+                'provider'         : _provider,
+                'anthropic_api_key': _claude_key,
+                'model'            : _claude_model,
+                'openai_api_key'   : _openai_key,
+                'openai_model'     : _openai_model,
+            }
+            _save_ai_settings(_new_feat, _ai_prmp)
+            st.success(f"Saved — using {'Claude' if _provider == 'anthropic' else 'ChatGPT'}")
+
+    # ── Prompt tabs ───────────────────────────────────────────────────────────
+    _prompt_defs = [
+        ('au_breadth',       'AU Breadth', '🇦🇺 AU Breadth', _ai_tabs[1]),
+        ('us_breadth',       'US Breadth', '🇺🇸 US Breadth', _ai_tabs[2]),
+        ('consumer_credit',  'Debt Markets — Consumer Credit', '💳 Consumer', _ai_tabs[3]),
+        ('au_benchmark',     'AU Benchmark', '📊 AU Benchmark', _ai_tabs[4]),
+        ('us_benchmark',     'US Benchmark', '📊 US Benchmark', _ai_tabs[5]),
+        ('comm_benchmark',   'Commodities Benchmark', '🪨 Commodities', _ai_tabs[6]),
+    ]
+
+    for _pk, _plabel, _ptab_label, _ptab in _prompt_defs:
+        with _ptab:
+            st.markdown(f"#### {_plabel} Prompt")
+            st.caption("Edit the system instruction sent to the AI. The live market data is appended automatically.")
+            _default_prompt = DEFAULT_SETTINGS.get('ai_prompts', {}).get(_pk, '')
+            _current_prompt = _ai_prmp.get(_pk, _default_prompt)
+            _new_prompt = st.text_area(
+                "Prompt", value=_current_prompt,
+                height=200, key=f"ai_prompt_{_pk}",
+                label_visibility="collapsed"
+            )
+            _pc1, _pc2 = st.columns([1, 4])
+            if _pc1.button("💾 Save", key=f"ai_save_{_pk}", type="primary"):
+                _ai_prmp[_pk] = _new_prompt
+                _save_ai_settings(_ai_feat, _ai_prmp)
+                st.success("Prompt saved")
+            if _pc2.button("↩ Reset to default", key=f"ai_reset_{_pk}"):
+                _ai_prmp[_pk] = _default_prompt
+                _save_ai_settings(_ai_feat, _ai_prmp)
+                st.success("Reset to default")
+                st.rerun()
+
 elif page == "Settings":
     st.title("⚙ Dashboard Settings")
     st.caption("Changes take effect after saving and reloading the page")
