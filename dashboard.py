@@ -2018,25 +2018,44 @@ elif page == "Seasonality":
                     plot_bgcolor =_theme['plot_bgcolor'],
                     paper_bgcolor=_theme['paper_bgcolor'],
                     font=dict(color=_theme['font_color'], size=10),
-                    xaxis=dict(tickmode='array', tickvals=_mo_days, ticktext=_mo_names,
-                               gridcolor=_theme['gridcolor'], zeroline=False,
-                               domain=[0, 0.82]),
-                    yaxis=dict(title="Return from Jan 1 (%)",
-                               gridcolor=_theme['gridcolor'], zeroline=False),
+                    xaxis=dict(
+                        tickmode='array',
+                        tickvals=[16,46,75,106,136,167,197,228,259,289,320,350],
+                        ticktext=_mo_names,
+                        gridcolor=_theme['gridcolor'],
+                        zeroline=False,
+                        range=[0, 366],
+                        domain=[0, 0.99],
+                        showline=False,
+                        ticklabelposition='outside',
+                    ),
+                    yaxis=dict(
+                        title="Return from Jan 1 (%)",
+                        gridcolor=_theme['gridcolor'],
+                        zeroline=False,
+                        domain=[0, 1],
+                    ),
                     title=dict(text=f"{_inst_sel} — Seasonal Returns ({_yr_range[0]}–{_yr_range[1]})",
                                font=dict(size=14)),
                     showlegend=True,
                     legend=dict(
-                        x=0.84, y=1, xanchor='left', yanchor='top',
+                        orientation='v',
+                        yanchor='top', y=1,
+                        xanchor='left', x=1.03,
                         font=dict(size=9),
                         bgcolor='rgba(0,0,0,0)',
-                        tracegroupgap=1,
+                        tracegroupgap=0,
                         itemwidth=30,
+                        borderwidth=0,
                     ),
                     height=900,
-                    margin=dict(l=60, r=160, t=60, b=40),
+                    margin=dict(l=10, r=120, t=60, b=40),
                 )
-                st.plotly_chart(_fig_sea2, use_container_width=True)
+                # Use columns to offset chart right — aligns Jan with Jan column in table below
+                # Year col in table is ~8% width; spacer nudges chart to match
+                _ch_spacer, _ch_plot = st.columns([0.03, 0.97])
+                with _ch_plot:
+                    st.plotly_chart(_fig_sea2, use_container_width=True)
 
                 # ── Monthly Returns Heatmap ────────────────────────────────────
                 st.markdown("#### Monthly Returns (%)")
@@ -2457,27 +2476,39 @@ elif page == "Seasonality":
 
                 _fig_stk.add_hline(y=0, line_dash="dash",
                                     line_color="rgba(128,128,128,0.4)", line_width=1)
-                _mo_days  = [1,32,60,91,121,152,182,213,244,274,305,335]
+                _mo_mids  = [16,46,75,106,136,167,197,228,259,289,320,350]
                 _mo_names = ["Jan","Feb","Mar","Apr","May","Jun",
                              "Jul","Aug","Sep","Oct","Nov","Dec"]
                 _fig_stk.update_layout(
                     plot_bgcolor=_theme['plot_bgcolor'],
                     paper_bgcolor=_theme['paper_bgcolor'],
                     font=dict(color=_theme['font_color'], size=10),
-                    xaxis=dict(tickmode='array', tickvals=_mo_days, ticktext=_mo_names,
-                               gridcolor=_theme['gridcolor'], zeroline=False, domain=[0,0.82]),
+                    xaxis=dict(tickmode='array', tickvals=_mo_mids, ticktext=_mo_names,
+                               gridcolor=_theme['gridcolor'], zeroline=False,
+                               range=[0,366], domain=[0, 0.99],
+                               showline=False, ticklabelposition='outside'),
                     yaxis=dict(title="Return from Jan 1 (%)",
                                gridcolor=_theme['gridcolor'], zeroline=False),
                     title=dict(text=f"{_stk_ticker} Seasonal Returns ({_s_range[0]}–{_s_range[1]})"
                                + (f" vs {_cmp_label}" if _cmp_label else ""),
                                font=dict(size=14)),
                     height=700,
-                    margin=dict(l=60, r=160, t=60, b=40),
-                    legend=dict(x=0.84, y=1, xanchor='left', yanchor='top',
-                                font=dict(size=9), bgcolor='rgba(0,0,0,0)'),
+                    margin=dict(l=10, r=120, t=60, b=40),
+                    legend=dict(
+                        orientation='v',
+                        yanchor='top', y=1,
+                        xanchor='left', x=1.02,
+                        font=dict(size=9),
+                        bgcolor='rgba(0,0,0,0)',
+                        tracegroupgap=0,
+                        itemwidth=30,
+                        borderwidth=0,
+                    ),
                     showlegend=True,
                 )
-                st.plotly_chart(_fig_stk, use_container_width=True)
+                _stk_spacer, _stk_plot = st.columns([0.03, 0.97])
+                with _stk_plot:
+                    st.plotly_chart(_fig_stk, use_container_width=True)
 
                 # ── Correlation stats ─────────────────────────────────────────
                 if _cmp_data is not None and _ann_rets_cmp:
@@ -2508,61 +2539,6 @@ elif page == "Seasonality":
                         _mod    = sum(1 for v in _roll_corr.values() if 0.3 <= v < 0.7)
                         _weak   = sum(1 for v in _roll_corr.values() if v < 0.3)
                         _n_roll = len(_roll_corr)
-
-                        # Summary metrics
-                        _m1, _m2, _m3, _m4 = st.columns(4)
-                        _m1.metric("Overall Correlation", f"{_corr:.2f}")
-                        _m2.metric("Strong (≥0.7)", f"{_strong}/{_n_roll} yrs" if _n_roll else "—",
-                                   f"{_strong/_n_roll*100:.0f}%" if _n_roll else None)
-                        _m3.metric("Moderate (0.3–0.7)", f"{_mod}/{_n_roll} yrs" if _n_roll else "—",
-                                   f"{_mod/_n_roll*100:.0f}%" if _n_roll else None)
-                        _m4.metric("Weak (<0.3)", f"{_weak}/{_n_roll} yrs" if _n_roll else "—",
-                                   f"{_weak/_n_roll*100:.0f}%" if _n_roll else None)
-
-                        # Scatter plot — annual returns
-                        _fig_scatter = go.Figure()
-                        _sc_colors = ['#2dc653' if s*c > 0 else '#e63946'
-                                      for s,c in zip(_ys_corr, _xs_corr)]
-                        _fig_scatter.add_trace(go.Scatter(
-                            x=_xs_corr, y=_ys_corr,
-                            mode='markers+text',
-                            text=_yr_labels,
-                            textposition='top center',
-                            textfont=dict(size=9),
-                            marker=dict(size=10, color=_sc_colors, opacity=0.8,
-                                        line=dict(width=1, color='rgba(0,0,0,0.3)')),
-                            hovertemplate=(f"<b>%{{text}}</b><br>"
-                                           f"{_cmp_label}: %{{x:.1f}}%<br>"
-                                           f"{_stk_ticker}: %{{y:.1f}}%<extra></extra>"),
-                        ))
-                        # Trend line
-                        _z = _np_corr.polyfit(_xs_corr, _ys_corr, 1)
-                        _xr = [min(_xs_corr), max(_xs_corr)]
-                        _yr_fit = [_z[0]*x + _z[1] for x in _xr]
-                        _fig_scatter.add_trace(go.Scatter(
-                            x=_xr, y=_yr_fit, mode='lines',
-                            line=dict(dash='dash', color='rgba(128,128,128,0.6)', width=1.5),
-                            showlegend=False,
-                        ))
-                        _fig_scatter.add_vline(x=0, line_dash="dot",
-                                               line_color="rgba(128,128,128,0.4)")
-                        _fig_scatter.add_hline(y=0, line_dash="dot",
-                                               line_color="rgba(128,128,128,0.4)")
-                        _fig_scatter.update_layout(
-                            plot_bgcolor=_theme['plot_bgcolor'],
-                            paper_bgcolor=_theme['paper_bgcolor'],
-                            font=dict(color=_theme['font_color']),
-                            xaxis=dict(title=f"{_cmp_label} Annual Return (%)",
-                                       gridcolor=_theme['gridcolor'], zeroline=False),
-                            yaxis=dict(title=f"{_stk_ticker} Annual Return (%)",
-                                       gridcolor=_theme['gridcolor'], zeroline=False),
-                            title=dict(text=f"Annual Return Scatter — r={_corr:.2f}",
-                                       font=dict(size=13)),
-                            height=450,
-                            margin=dict(l=60, r=40, t=60, b=60),
-                            showlegend=False,
-                        )
-                        st.plotly_chart(_fig_scatter, use_container_width=True)
 
                         # ── Monthly returns heatmap (same as Sectors tab) ────────────
                         st.markdown("#### Monthly Returns (%)")
@@ -2663,6 +2639,16 @@ elif page == "Seasonality":
                             )
 
                         # ── Combined annual returns + correlation table ────────────────
+                        # Summary metrics
+                        _m1, _m2, _m3, _m4 = st.columns(4)
+                        _m1.metric("Overall Correlation", f"{_corr:.2f}")
+                        _m2.metric("Strong (≥0.7)", f"{_strong}/{_n_roll} yrs" if _n_roll else "—",
+                                   f"{_strong/_n_roll*100:.0f}%" if _n_roll else None)
+                        _m3.metric("Moderate (0.3–0.7)", f"{_mod}/{_n_roll} yrs" if _n_roll else "—",
+                                   f"{_mod/_n_roll*100:.0f}%" if _n_roll else None)
+                        _m4.metric("Weak (<0.3)", f"{_weak}/{_n_roll} yrs" if _n_roll else "—",
+                                   f"{_weak/_n_roll*100:.0f}%" if _n_roll else None)
+
                         st.markdown("#### Annual Returns & Rolling Correlation")
                         _tbl_rows = []
                         for _yr in sorted(_common_yrs, reverse=True):
@@ -2706,6 +2692,52 @@ elif page == "Seasonality":
                             ),
                             use_container_width=True, hide_index=True
                         )
+
+                        # Scatter plot — annual returns
+                        _fig_scatter = go.Figure()
+                        _sc_colors = ['#2dc653' if s*c > 0 else '#e63946'
+                                      for s,c in zip(_ys_corr, _xs_corr)]
+                        _fig_scatter.add_trace(go.Scatter(
+                            x=_xs_corr, y=_ys_corr,
+                            mode='markers+text',
+                            text=_yr_labels,
+                            textposition='top center',
+                            textfont=dict(size=9),
+                            marker=dict(size=10, color=_sc_colors, opacity=0.8,
+                                        line=dict(width=1, color='rgba(0,0,0,0.3)')),
+                            hovertemplate=(f"<b>%{{text}}</b><br>"
+                                           f"{_cmp_label}: %{{x:.1f}}%<br>"
+                                           f"{_stk_ticker}: %{{y:.1f}}%<extra></extra>"),
+                        ))
+                        # Trend line
+                        _z = _np_corr.polyfit(_xs_corr, _ys_corr, 1)
+                        _xr = [min(_xs_corr), max(_xs_corr)]
+                        _yr_fit = [_z[0]*x + _z[1] for x in _xr]
+                        _fig_scatter.add_trace(go.Scatter(
+                            x=_xr, y=_yr_fit, mode='lines',
+                            line=dict(dash='dash', color='rgba(128,128,128,0.6)', width=1.5),
+                            showlegend=False,
+                        ))
+                        _fig_scatter.add_vline(x=0, line_dash="dot",
+                                               line_color="rgba(128,128,128,0.4)")
+                        _fig_scatter.add_hline(y=0, line_dash="dot",
+                                               line_color="rgba(128,128,128,0.4)")
+                        _fig_scatter.update_layout(
+                            plot_bgcolor=_theme['plot_bgcolor'],
+                            paper_bgcolor=_theme['paper_bgcolor'],
+                            font=dict(color=_theme['font_color']),
+                            xaxis=dict(title=f"{_cmp_label} Annual Return (%)",
+                                       gridcolor=_theme['gridcolor'], zeroline=False),
+                            yaxis=dict(title=f"{_stk_ticker} Annual Return (%)",
+                                       gridcolor=_theme['gridcolor'], zeroline=False),
+                            title=dict(text=f"Annual Return Scatter — r={_corr:.2f}",
+                                       font=dict(size=13)),
+                            height=450,
+                            margin=dict(l=60, r=40, t=60, b=60),
+                            showlegend=False,
+                        )
+                        st.plotly_chart(_fig_scatter, use_container_width=True)
+
                     else:
                         st.info("Need at least 5 years of overlapping data for correlation analysis.")
 
@@ -2733,9 +2765,9 @@ elif page == "Seasonality":
         ]
 
         _pc1, _pc2, _pc3 = st.columns([2, 2, 3])
-        _yr_sel   = _pc1.radio("Presidential year", [1, 2, 3, 4],
+        _yr_sel   = _pc1.radio("Presidential year", [1, 2, 3, 4, "All"],
                                 horizontal=True, key="pres_yr",
-                                help="Year 1 = inauguration year, Year 4 = final year of term")
+                                help="Year 1 = inauguration year, Year 4 = final year of term. All = overlay all 4 years.")
         _party_sel = _pc2.multiselect("Party", ["Democrat", "Republican"],
                                        default=["Democrat", "Republican"], key="pres_party")
         _show_avg  = _pc3.toggle("Show average line", value=True, key="pres_avg")
@@ -2759,37 +2791,39 @@ elif page == "Seasonality":
             _fig_pc = go.Figure()
             _avg_traces = {}  # party -> list of series
 
+            _yr_nums = [1,2,3,4] if _yr_sel == "All" else [_yr_sel]
+
             for _name, _start, _end, _party in _PRESIDENTS:
                 if _party not in _party_sel: continue
-                # Year within term
-                _term_yr = _start + (_yr_sel - 1)
-                if _term_yr >= _end: continue  # e.g. Kennedy only had 3 years
+                for _yn in _yr_nums:
+                    _term_yr = _start + (_yn - 1)
+                    if _term_yr >= _end: continue
 
-                _yr_data = _spx[_spx.index.year == _term_yr]
-                if len(_yr_data) < 20: continue
+                    _yr_data = _spx[_spx.index.year == _term_yr]
+                    if len(_yr_data) < 20: continue
 
-                _base = float(_yr_data.iloc[0])
-                if _base == 0: continue
-                _indexed = (_yr_data / _base - 1) * 100
+                    _base = float(_yr_data.iloc[0])
+                    if _base == 0: continue
+                    _indexed = (_yr_data / _base - 1) * 100
 
-                # Day of year for x-axis
-                _doys = [d.timetuple().tm_yday for d in _indexed.index]
-                _col  = _D_COL if _party == "Democrat" else _R_COL
-                _annual_ret = round(float(_indexed.iloc[-1]), 2)
-                _label = f"{_name} ({_term_yr}) {'+' if _annual_ret >= 0 else ''}{_annual_ret:.1f}%"
+                    _doys = [d.timetuple().tm_yday for d in _indexed.index]
+                    _col  = _D_COL if _party == "Democrat" else _R_COL
+                    _annual_ret = round(float(_indexed.iloc[-1]), 2)
+                    _yr_suffix = f" Yr{_yn}" if _yr_sel == "All" else ""
+                    _label = f"{_name}{_yr_suffix} ({_term_yr}) {'+' if _annual_ret >= 0 else ''}{_annual_ret:.1f}%"
 
-                _fig_pc.add_trace(go.Scatter(
-                    x=_doys, y=_indexed.values.tolist(),
-                    mode='lines', name=_label,
-                    line=dict(width=1.5, color=_col),
-                    opacity=0.5,
-                    hovertemplate=f"<b>{_label}</b><br>Day %{{x}}: %{{y:.2f}}%<extra></extra>"
-                ))
+                    _fig_pc.add_trace(go.Scatter(
+                        x=_doys, y=_indexed.values.tolist(),
+                        mode='lines', name=_label,
+                        line=dict(width=1.5, color=_col),
+                        opacity=0.5,
+                        hovertemplate=f"<b>{_label}</b><br>Day %{{x}}: %{{y:.2f}}%<extra></extra>"
+                    ))
 
-                if _party not in _avg_traces:
-                    _avg_traces[_party] = {}
-                for _d, _v in zip(_doys, _indexed.values):
-                    _avg_traces[_party].setdefault(_d, []).append(float(_v))
+                    if _party not in _avg_traces:
+                        _avg_traces[_party] = {}
+                    for _d, _v in zip(_doys, _indexed.values):
+                        _avg_traces[_party].setdefault(_d, []).append(float(_v))
 
             # Average lines
             if _show_avg:
@@ -2811,23 +2845,162 @@ elif page == "Seasonality":
             _mo_names = ["Jan","Feb","Mar","Apr","May","Jun",
                          "Jul","Aug","Sep","Oct","Nov","Dec"]
             _yr_label  = {1:"Inauguration Year (Yr 1)", 2:"Year 2",
-                          3:"Year 3 (Mid-term)", 4:"Final Year (Yr 4)"}
+                          3:"Year 3 (Mid-term)", 4:"Final Year (Yr 4)", "All":"All Years Overlay"}
             _theme = get_chart_theme()
             _fig_pc.update_layout(
                 plot_bgcolor =_theme['plot_bgcolor'],
                 paper_bgcolor=_theme['paper_bgcolor'],
                 font=dict(color=_theme['font_color']),
-                xaxis=dict(tickmode='array', tickvals=_mo_days, ticktext=_mo_names,
-                           gridcolor=_theme['gridcolor'], zeroline=False),
+                xaxis=dict(tickmode='array',
+                           tickvals=[16,46,75,106,136,167,197,228,259,289,320,350],
+                           ticktext=_mo_names,
+                           gridcolor=_theme['gridcolor'], zeroline=False,
+                           range=[0, 366], domain=[0, 0.99]),
                 yaxis=dict(title="Return from Jan 1 (%)",
                            gridcolor=_theme['gridcolor'], zeroline=False),
                 title=dict(text=f"S&P 500 — Presidential {_yr_label[_yr_sel]}",
                            font=dict(size=14)),
                 height=500,
-                margin=dict(l=60, r=200, t=60, b=40),
-                legend=dict(x=1.01, y=1, font=dict(size=10)),
+                margin=dict(l=10, r=60, t=60, b=40),
+                legend=dict(
+                    orientation='v',
+                    yanchor='top', y=1,
+                    xanchor='left', x=1,
+                    font=dict(size=9),
+                    bgcolor='rgba(0,0,0,0)',
+                    tracegroupgap=0,
+                    itemwidth=30,
+                    borderwidth=0,
+                ),
             )
-            st.plotly_chart(_fig_pc, use_container_width=True)
+            _pc_spacer, _pc_plot = st.columns([0.08, 0.885])
+            with _pc_plot:
+                st.plotly_chart(_fig_pc, use_container_width=True)
+
+
+            # ── Monthly Returns Heatmap ───────────────────────────────────────
+            st.markdown("#### Monthly Returns (%)")
+            _MO_NAMES_PC = ["Jan","Feb","Mar","Apr","May","Jun",
+                            "Jul","Aug","Sep","Oct","Nov","Dec","Yearly"]
+            _pc_mo_rows = []
+            _pc_yrs_to_show = []
+            for _pname, _pstart, _pend, _pparty in _PRESIDENTS:
+                if _pparty not in _party_sel: continue
+                _ynums = [1,2,3,4] if _yr_sel == "All" else [_yr_sel]
+                for _yn in _ynums:
+                    _ty = _pstart + (_yn - 1)
+                    if _ty >= _pend: continue
+                    _yd = _spx[_spx.index.year == _ty]
+                    if len(_yd) < 20: continue
+                    _pc_yrs_to_show.append((_pname, _pparty, _yn, _ty, _yd))
+
+            for _pname, _pparty, _yn, _ty, _yd in sorted(_pc_yrs_to_show, key=lambda x: x[3], reverse=True):
+                _p_badge = '<span style="color:#4C8BF5">D</span>' if _pparty=="Democrat" else '<span style="color:#E8534A">R</span>'
+                _row = {"President": f"{_pname} ({_ty}) {'D' if _pparty=='Democrat' else 'R'}"}
+                for _mi, _mn in enumerate(_MO_NAMES_PC[:12], 1):
+                    _md = _yd[_yd.index.month == _mi]
+                    if len(_md) >= 2:
+                        _row[_mn] = round((_md.iloc[-1]/_md.iloc[0]-1)*100, 2)
+                    else:
+                        _row[_mn] = None
+                _row["Yearly"] = round((_yd.iloc[-1]/_yd.iloc[0]-1)*100, 2)
+                _pc_mo_rows.append(_row)
+
+            if _pc_mo_rows:
+                _df_pc_heat = pd.DataFrame(_pc_mo_rows)
+
+                def _pc_heat_style(val, col):
+                    if col in ("President","Party") or val is None: return ""
+                    try:
+                        v = float(val)
+                        if v > 0:
+                            intensity = min(int(abs(v)/9*180), 200)
+                            return f"background-color:rgba(45,198,83,{intensity/255:.2f});color:#0a3d1a"
+                        elif v < 0:
+                            intensity = min(int(abs(v)/9*180), 200)
+                            return f"background-color:rgba(230,57,70,{intensity/255:.2f});color:#3d0a0a"
+                    except: pass
+                    return ""
+
+                def _party_col(v):
+                    if v == "Democrat": return "color:#4C8BF5"
+                    if v == "Republican": return "color:#E8534A"
+                    return ""
+
+                _df_pc_disp = _df_pc_heat.copy()
+                for _cn in _MO_NAMES_PC:
+                    if _cn in _df_pc_disp.columns:
+                        _df_pc_disp[_cn] = _df_pc_disp[_cn].apply(
+                            lambda x: f"{x:.2f}%" if pd.notna(x) and x is not None else "")
+
+                # Apply colour to R/D suffix in President column via styler
+                def _pres_col_style(v):
+                    if str(v).endswith(' D'): return 'color:#4C8BF5'
+                    if str(v).endswith(' R'): return 'color:#E8534A'
+                    return ''
+                _df_pc_disp2 = _df_pc_disp.drop(columns=['Party'], errors='ignore')
+                _df_pc_heat2 = _df_pc_heat.drop(columns=['Party'], errors='ignore')
+                _pc_col_cfg = {"President": st.column_config.TextColumn(width="medium")}
+                for _mn in _MO_NAMES_PC[:12]:
+                    _pc_col_cfg[_mn] = st.column_config.TextColumn(width="small")
+                _pc_col_cfg["Yearly"] = st.column_config.TextColumn(width="small")
+                st.dataframe(
+                    _df_pc_disp2.style
+                        .apply(lambda col: [_pc_heat_style(v, col.name) for v in
+                                            (pd.to_numeric(_df_pc_heat2[col.name], errors='coerce')
+                                             if col.name in _MO_NAMES_PC else _df_pc_heat2[col.name])]
+                               if col.name in _df_pc_heat2.columns else [""]*len(col), axis=0)
+                        .applymap(_pres_col_style, subset=["President"]),
+                    column_config=_pc_col_cfg,
+                    use_container_width=True, hide_index=True
+                )
+
+                # Summary rows
+                st.markdown("**Summary**")
+                _pc_summ = []
+                for _lbl, _fn in [
+                    ("Average",    lambda c: round(c.mean(), 2)),
+                    ("% Positive", lambda c: round((c>0).sum()/c.count()*100, 2)),
+                    ("% Negative", lambda c: -round((c<0).sum()/c.count()*100, 2)),
+                    ("Median",     lambda c: round(c.median(), 2)),
+                    ("Best",       lambda c: f"{round(c.max(),2)}% ({_df_pc_heat.loc[c.idxmax(),'President'] if c.idxmax() in _df_pc_heat.index else ''})"),
+                    ("Worst",      lambda c: f"{round(c.min(),2)}% ({_df_pc_heat.loc[c.idxmin(),'President'] if c.idxmin() in _df_pc_heat.index else ''})"),
+                ]:
+                    _sr = {"President": _lbl}
+                    for _cn in _MO_NAMES_PC:
+                        if _cn in _df_pc_heat.columns:
+                            _col = pd.to_numeric(_df_pc_heat[_cn], errors='coerce').dropna()
+                            _sr[_cn] = _fn(_col) if len(_col) > 0 else None
+                        else:
+                            _sr[_cn] = None
+                    _pc_summ.append(_sr)
+                _df_pc_summ = pd.DataFrame(_pc_summ)
+                def _pc_summ_heat(v):
+                    try:
+                        n = float(str(v).replace("%","").replace("+",""))
+                        if n > 0:
+                            intensity = min(n/9, 1.0)
+                            return f"background-color:rgba(45,198,83,{intensity*0.7:.2f});color:#0a3d1a"
+                        elif n < 0:
+                            intensity = min(abs(n)/9, 1.0)
+                            return f"background-color:rgba(230,57,70,{intensity*0.7:.2f});color:#3d0a0a"
+                    except: pass
+                    return ""
+                _pc_num_cols = [c for c in _df_pc_summ.columns if c not in ("President","Party")]
+                for _cn in _pc_num_cols:
+                    _df_pc_summ[_cn] = _df_pc_summ[_cn].apply(
+                        lambda x: x if isinstance(x, str) else
+                        f"{x:.2f}%" if pd.notna(x) and x is not None else "—")
+                _pc_summ_col_cfg = {"President": st.column_config.TextColumn(width="medium")}
+                for _mn in _MO_NAMES_PC[:12]:
+                    _pc_summ_col_cfg[_mn] = st.column_config.TextColumn(width="small")
+                _pc_summ_col_cfg["Yearly"] = st.column_config.TextColumn(width="small")
+                st.dataframe(
+                    _df_pc_summ.style
+                        .applymap(_pc_summ_heat, subset=_pc_num_cols),
+                    column_config=_pc_summ_col_cfg,
+                    use_container_width=True, hide_index=True
+                )
 
             # ── Summary table ─────────────────────────────────────────────────
             st.markdown("#### Presidential Year Returns")
