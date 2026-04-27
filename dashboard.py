@@ -143,6 +143,7 @@ DEFAULT_SETTINGS = {
         'Run Scripts'         : True,
         'AI Settings'         : True,
         'Rank Settings'       : True,
+        'Actionable Settings'  : True,
         'General Settings'     : True,
     },
     'rank_settings': {
@@ -247,12 +248,13 @@ ALL_PAGES = [
     ("Run Scripts",              "play-circle"),
     ("AI Settings",              "robot"),
     ("Rank Settings",            "sliders"),
+    ("Actionable Settings",       "funnel"),
     ("General Settings",         "gear"),
 ]
 
 # Filter to enabled pages — Settings always shown
 active_pages = [(name, icon) for name, icon in ALL_PAGES
-                if page_config.get(name, True) or name in ('General Settings', 'AI Settings', 'Rank Settings')]
+                if page_config.get(name, True) or name in ('General Settings', 'AI Settings', 'Rank Settings', 'Actionable Settings')]
 
 page = option_menu(
     menu_title  = None,
@@ -1368,6 +1370,89 @@ Currently <b>{_hgx_curr:,.0f}</b>. Signal resets <b>{_reset_date}</b> (18 months
     except Exception as _e_hgx:
         st.caption(f"HGX indicator error: {_e_hgx}")
 
+    # ── Business Cycle + Macro Quad Banner ───────────────────────────────────────
+    _pmi         = macro.get('pmi', 50)
+    _cu_gold_63d = macro.get('cu_gold_chg_63d')
+    _yc_vel      = macro.get('yc_roc_5d', 0)
+    _growth_up   = _pmi >= 50
+    if _cu_gold_63d is not None:
+        _inflation_up = _cu_gold_63d > 0
+    else:
+        _inflation_up = _yc_vel > 0
+
+    if _growth_up and _inflation_up:
+        _quad=2; _quad_label="QUAD 2 — Inflationary Boom"; _quad_sub="Growth ↑ / Inflation ↑"
+        _quad_favours="Commodities, Energy, Emerging Markets"; _quad_col="#c8860a"; _quad_bg="rgba(200,134,10,0.10)"
+    elif _growth_up and not _inflation_up:
+        _quad=4; _quad_label="QUAD 4 — Dis-inflationary Boom"; _quad_sub="Growth ↑ / Inflation ↓"
+        _quad_favours="Stocks, Property, Long Duration"; _quad_col="#2a8a6e"; _quad_bg="rgba(42,138,110,0.10)"
+    elif not _growth_up and _inflation_up:
+        _quad=1; _quad_label="QUAD 1 — Stagflation"; _quad_sub="Growth ↓ / Inflation ↑"
+        _quad_favours="Gold/Silver, Materials, Commodities, Cash"; _quad_col="#c45c0a"; _quad_bg="rgba(196,92,10,0.10)"
+    else:
+        _quad=3; _quad_label="QUAD 3 — Deflationary Bust"; _quad_sub="Growth ↓ / Inflation ↓"
+        _quad_favours="Gold, Cash, Treasuries"; _quad_col="#c0392b"; _quad_bg="rgba(192,57,43,0.10)"
+
+    # GDP from FRED
+    @st.cache_data(ttl=43200)
+    def _fetch_gdp_fred():
+        try:
+            import pandas_datareader.data as _web
+            from datetime import datetime as _dt, timedelta as _td
+            _df = _web.DataReader('A191RL1Q225SBEA','fred',_dt(2020,1,1),_dt.today()).dropna()
+            if _df.empty: return None,None,None
+            _last_date=_df.index[-1]; _last_val=float(_df.iloc[-1,0])
+            _qtr_month=((_last_date.month-1)//3+1)*3
+            _next_qtr_end=_dt(_last_date.year+(_last_date.month>9),((_qtr_month%12)+3 if _qtr_month<10 else 3),1)-_td(days=1)
+            _next_release=_next_qtr_end+_td(days=30)
+            return _last_val,_last_date.strftime('%d %b %Y'),_next_release.strftime('%d %b %Y')
+        except: return None,None,None
+    _gdp_val,_gdp_date,_gdp_next=_fetch_gdp_fred()
+    if _gdp_val is None: _gdp_val=macro.get('gdp_growth'); _gdp_date=None; _gdp_next=None
+    if _gdp_val is not None:
+        _gdp_dir='↑ Expanding' if _gdp_val>0 else '↓ Contracting'
+        _gdp_str=f"{_gdp_val:+.1f}% QoQ ann. ({_gdp_dir})"
+        if _gdp_date: _gdp_str+=f" — last: {_gdp_date}"
+        if _gdp_next: _gdp_str+=f" | next est. {_gdp_next}"
+        if _gdp_val<0 and _growth_up: _gdp_str+=" ⚠ diverges from PMI"
+    else: _gdp_str="Not yet available (quarterly)"
+
+    # CPI from FRED
+    @st.cache_data(ttl=43200)
+    def _fetch_cpi_fred():
+        try:
+            import pandas_datareader.data as _web
+            from datetime import datetime as _dt, timedelta as _td
+            _df=_web.DataReader('CPIAUCSL','fred',_dt(2022,1,1),_dt.today()).dropna()
+            if len(_df)<13: return None,None,None,None,None
+            _last=float(_df.iloc[-1,0]); _prev_mo=float(_df.iloc[-2,0]); _prev_yr=float(_df.iloc[-13,0])
+            _mom=round((_last/_prev_mo-1)*100,2); _yoy=round((_last/_prev_yr-1)*100,2)
+            _last_date=_df.index[-1].strftime('%b %Y')
+            _next_mo=(_df.index[-1].replace(day=1)+_td(days=45)).replace(day=15)
+            return _mom,_yoy,_last_date,_next_mo.strftime('%d %b %Y'),_last
+        except: return None,None,None,None,None
+    _cpi_mom,_cpi_yoy,_cpi_date,_cpi_next,_cpi_idx=_fetch_cpi_fred()
+    if _cpi_mom is not None:
+        _inflation_up=_cpi_mom>0
+        _cpi_str=f"CPI {_cpi_yoy:+.1f}% YoY | {_cpi_mom:+.2f}% MoM ({'↑ Rising' if _cpi_mom>0 else '↓ Falling'}) — {_cpi_date} | next ~{_cpi_next}"
+    else: _cpi_str="CPI: not available"
+
+    _pmi_str=f"PMI {_pmi:.1f} ({'↑ Expanding' if _growth_up else '↓ Contracting'})"
+    _cu_str=(f"Cu/Gold 63d {_cu_gold_63d:+.1f}% ({'↑ Rising' if _inflation_up else '↓ Falling'})"
+             if _cu_gold_63d is not None else f"YC Velocity {_yc_vel:+.2f}%")
+
+    st.markdown(f"""
+<div style="background:{_quad_bg};border:1px solid {_quad_col};border-left:5px solid {_quad_col};border-radius:8px;padding:12px 18px;margin-bottom:8px">
+<div style="font-size:14px;font-weight:700;color:{_quad_col};margin-bottom:4px">📐 {_quad_label} <span style="font-weight:400;font-size:12px">({_quad_sub})</span></div>
+<div style="display:flex;gap:24px;flex-wrap:wrap;font-size:12px">
+  <div><b>Favours:</b> {_quad_favours}</div>
+  <div><b>Growth — PMI:</b> {_pmi_str}</div>
+  <div><b>Growth — GDP:</b> {_gdp_str}</div>
+  <div><b>Inflation — CPI:</b> {_cpi_str}</div>
+  <div><b>Inflation — Cu/Gold:</b> {_cu_str}</div>
+</div></div>
+""", unsafe_allow_html=True)
+
     # Change alerts
     alerts = macro.get('alerts', [])
     if alerts:
@@ -1382,6 +1467,120 @@ Currently <b>{_hgx_curr:,.0f}</b>. Signal resets <b>{_reset_date}</b> (18 months
             """, unsafe_allow_html=True)
     else:
         st.caption("No change alerts since last run")
+
+    # ── Recession Warning Indicators ─────────────────────────────────────────────
+    @st.cache_data(ttl=43200)
+    def _fetch_recession_signals():
+        try:
+            import pandas_datareader.data as _web
+            from datetime import datetime as _dt, timedelta as _td
+            _start=_dt(2020,1,1); _today=_dt.today(); _sigs={}
+            try:
+                _u=_web.DataReader('UNRATE','fred',_start,_today).dropna()
+                if len(_u)>=13:
+                    _cur=float(_u.iloc[-1,0]); _min12=float(_u.iloc[-13:,0].min())
+                    _sigs['unemp']={'value':_cur,'trough':_min12,'date':_u.index[-1].strftime('%b %Y'),'triggered':_cur>_min12+0.3}
+            except: pass
+
+            try:
+                _hs=_web.DataReader('HOUST','fred',_start,_today).dropna()
+                if len(_hs)>=13:
+                    _cur=float(_hs.iloc[-1,0]); _pk=float(_hs.iloc[-13:,0].max())
+                    _chg=round((_cur/_pk-1)*100,1)
+                    _sigs['housing']={'value':round(_cur,0),'pct_from_peak':_chg,'date':_hs.index[-1].strftime('%b %Y'),'triggered':_chg<-15}
+            except: pass
+            return _sigs
+        except: return {}
+
+    _rec_sigs=_fetch_recession_signals()
+
+    # Yield curve ratio
+    _us10y=macro.get('us10y',0); _us2y=macro.get('us2y',0)
+    _yc_ratio=round(_us10y/_us2y,4) if _us2y and _us2y>0 else None
+    _yc_spread=macro.get('yield_curve',None)
+
+    def _yc_ratio_check():
+        if _yc_ratio is not None and _yc_ratio<1.25: return True
+        if _yc_spread is not None and _yc_spread<0: return True
+        return False
+    def _yc_ratio_val():
+        parts=[]
+        if _yc_ratio:
+            if _yc_ratio<1.0: _status=' 🔴 INVERTED'
+            elif _yc_ratio<1.25: _status=' 🟠 below 1.25 — caution'
+            else: _status=' 🔴 extreme — watch for acceleration'
+            parts.append(f"Ratio: {_yc_ratio:.4f}{_status}")
+        if _yc_spread is not None: parts.append(f"Spread: {_yc_spread:+.2f}%")
+        return ' | '.join(parts) if parts else 'n/a'
+
+    _unemp_val=macro.get('unemployment'); _unemp_sig=_rec_sigs.get('unemp',{})
+    def _unemp_check():
+        if _unemp_sig.get('triggered'): return True
+        lbl=macro.get('unemp_label','').upper()
+        return 'RISING' in lbl or 'TICKING UP' in lbl or 'INCREASING' in lbl
+    def _unemp_val_fn():
+        _uf=_unemp_sig.get('value'); _ut=_unemp_sig.get('trough')
+        if _uf and _ut and _ut<_uf: return f"{_uf}% (+{_uf-_ut:.1f}pp from trough {_ut}%)"
+        return f"{_unemp_val}% — {macro.get('unemp_label','')}" if _unemp_val else 'n/a'
+
+    def _housing_check():
+        if _rec_sigs.get('housing',{}).get('triggered'): return True
+        try: return _trough_dd<=-20 and _days_since<=18*30
+        except: return False
+    def _housing_val_fn():
+        parts=[]
+        if 'housing' in _rec_sigs:
+            _h=_rec_sigs['housing']; parts.append(f"Starts: {int(_h['value'])}K ({_h['pct_from_peak']:+.1f}% from peak)")
+        try:
+            if _trough_dd<=-20: parts.append(f"HGX: {_trough_dd:.1f}% drawdown (triggered)")
+        except: pass
+        return ' | '.join(parts) if parts else 'n/a'
+
+    _RECESSION_INDICATORS=[
+        {'key':'yield_curve','label':'📉 Yield Curve (US10Y/US02Y)','lead_time':'14–16 months',
+         'check':_yc_ratio_check,'value_fn':_yc_ratio_val,
+         'detail':'Ratio <1.25 = caution (orange), <1.0 = inverted (red). Above 1.25 = watch for acceleration.'},
+        {'key':'unemp','label':'👷 Rising Unemployment','lead_time':'5–7 months',
+         'check':_unemp_check,'value_fn':_unemp_val_fn,
+         'detail':'Rising >0.3pp from cycle trough signals labour market softening'},
+
+        {'key':'housing','label':'🏠 Housing Starts + HGX Decline','lead_time':'4–6 months',
+         'check':_housing_check,'value_fn':_housing_val_fn,
+         'detail':'Housing starts >15% below peak OR HGX ≥20% drawdown'},
+        {'key':'hy_spread','label':'💳 HY Credit Spreads Widening','lead_time':'3–6 months',
+         'check':lambda:macro.get('hy_spread',0)>4.0,
+         'value_fn':lambda:f"{macro.get('hy_spread',0):.2f}% (warn >4%, stress >6%)",
+         'detail':'HY spreads widening signals credit stress and risk-off'},
+        {'key':'margin','label':'📈 Margin Debt Over-leverage','lead_time':'6–12 months',
+         'check':lambda:macro.get('margin_m2',0)>1.4,
+         'value_fn':lambda:f"Margin/M2: {macro.get('margin_m2',0):.4f} (extreme >1.4) | Accel: {macro.get('margin_acceleration',0):+.3f}%",
+         'detail':'Margin/M2 ratio extreme — leveraged speculation at peak'},
+    ]
+
+    _active_triggers=[ind for ind in _RECESSION_INDICATORS if ind['check']()]
+    _n_active=len(_active_triggers)
+
+    if _n_active>=2:
+        _rec_col='#e63946' if _n_active>=4 else '#f77f00'
+        st.markdown(f"""<div style="background:rgba(230,57,70,0.08);border:1px solid {_rec_col};border-left:5px solid {_rec_col};border-radius:8px;padding:10px 16px;margin-bottom:8px">
+<b>{'🔴' if _n_active>=4 else '🟠'} Recession Warning: {_n_active}/{len(_RECESSION_INDICATORS)} indicators triggered</b>
+&nbsp;<span style="font-size:11px;color:#888">Score: {round(_n_active/len(_RECESSION_INDICATORS)*100)}%</span></div>""", unsafe_allow_html=True)
+
+    with st.expander(f"🔍 Recession Warning Indicators — {_n_active}/{len(_RECESSION_INDICATORS)} active", expanded=False):
+        for _ind in _RECESSION_INDICATORS:
+            _triggered=_ind['check']()
+            _val=_ind['value_fn']()
+            _partial=(_ind['key']=='yield_curve' and _yc_ratio is not None and 1.0<=_yc_ratio<1.25)
+            _dot='🔴' if (_triggered and not _partial) else '🟠' if _partial else '🟢'
+            _status='TRIGGERED' if (_triggered and not _partial) else 'CAUTION' if _partial else 'Clear'
+            _bdr='#e63946' if (_triggered and not _partial) else '#f77f00' if _partial else '#2dc653'
+            _bg='230,57,70' if (_triggered and not _partial) else '247,127,0' if _partial else '45,198,83'
+            _key_data=_rec_sigs.get(_ind['key'],{})
+            _date_str=_key_data.get('date','') if _key_data else ''
+            st.markdown(f"""<div style="border-left:3px solid {_bdr};padding:6px 12px;margin-bottom:6px;background:rgba({_bg},0.05);border-radius:0 6px 6px 0">
+<div style="font-size:13px;font-weight:600">{_dot} {_ind['label']} <span style="font-size:11px;font-weight:400;color:#888;margin-left:8px">Lead time: {_ind['lead_time']} | {_date_str}</span> <span style="font-size:11px;font-weight:700;color:{_bdr};margin-left:8px">{_status}</span></div>
+<div style="font-size:12px;color:#888;margin-top:2px">{_ind['detail']}</div>
+<div style="font-size:12px;margin-top:2px"><b>Current:</b> {_val}</div></div>""", unsafe_allow_html=True)
 
     st.markdown("<div style='margin-top:12px'></div>", unsafe_allow_html=True)
 
@@ -1427,6 +1626,13 @@ Currently <b>{_hgx_curr:,.0f}</b>. Signal resets <b>{_reset_date}</b> (18 months
                 cu_st  = ''
                 colour = '#888'
             _ec_rows.append({'Indicator':'Cu/Gold Ratio','Value':f"{cu_gold:.6f}  5d:{f'{cu_5d:+.2f}%' if cu_5d is not None else 'n/a'} 63d:{f'{cu_63d:+.2f}%' if cu_63d is not None else 'n/a'}", 'Signal':cu_st,'_colour':colour})
+        if _cpi_mom is not None:
+            _cpi_good = _cpi_yoy < 3.0
+            _ec_rows.append({'Indicator': f'CPI ({_cpi_date})',
+                             'Value': f"{_cpi_yoy:+.1f}% YoY | {_cpi_mom:+.2f}% MoM",
+                             'Signal': f"{'✓' if _cpi_good else '⚠'} {'Contained' if _cpi_good else 'Elevated'} — target 2%",
+                             '_colour': '#2dc653' if _cpi_good else '#e63946'})
+
         if _ec_rows:
             import pandas as _pd3
             _ec_df = _pd3.DataFrame(_ec_rows)[['Indicator','Value','Signal']]
@@ -5165,135 +5371,147 @@ elif page == "Drawdown Analysis":
 # ═══════════════════════════════════════════════════════════════════════════════
 elif page == "Actionable & Exports":
     st.title("📋 Actionable & TradingView Exports")
-    st.caption("Filtered actionable stocks with TradingView import files")
+    st.caption("Filtered actionable stocks grouped by market. Run scripts to generate files.")
 
-    actionable_dir = os.path.join(STOCKS, 'results', 'daily_actionable', 'screener')
+    _act_screener_dir  = os.path.join(STOCKS, 'results', 'daily_actionable', 'screener')
+    _act_benchmark_dir = os.path.join(STOCKS, 'results', 'daily_actionable', 'benchmark')
+    actionable_dir = _act_screener_dir  # default for screener lookups
 
-    # Find all dated CSV actionable files
-    csv_files = sorted(glob.glob(os.path.join(actionable_dir, '*.csv')), reverse=True)
-    tv_files  = sorted(glob.glob(os.path.join(actionable_dir, '*.txt')), reverse=True)
+    _all_csv = (sorted(glob.glob(os.path.join(_act_screener_dir,  '*.csv')), reverse=True) +
+                sorted(glob.glob(os.path.join(_act_benchmark_dir, '*.csv')), reverse=True))
+    _all_txt = (sorted(glob.glob(os.path.join(_act_screener_dir,  '*.txt')), reverse=True) +
+                sorted(glob.glob(os.path.join(_act_benchmark_dir, '*.txt')), reverse=True))
 
-    if not csv_files:
+    if not _all_csv:
         st.info("No actionable files found — run scripts first")
     else:
-        # Get available dates
         from collections import defaultdict
         by_date = defaultdict(dict)
+        for f in _all_csv + _all_txt:
+            n = os.path.basename(f); date = n[:8]
+            by_date[date][n[9:]] = f
 
-        for f in csv_files:
-            name  = os.path.basename(f)
-            date  = name[:8]
-            label = name[9:] \
-                .replace('_actionable_highconv.csv', '_highconv') \
-                .replace('_actionable.csv', '') \
-                .replace('_screener_highconv.csv', '_screener_highconv') \
-                .replace('_screener_actionable.csv', '_screener') \
-                .replace('_highconv.csv', '_highconv') \
-                .replace('.csv', '') \
-                .replace('_', ' ').title()
-            by_date[date][f'csv_{label}'] = f
+        dates    = sorted(by_date.keys(), reverse=True)
+        sel_date = st.selectbox("Select date", dates, key="act_date")
+        day_files = by_date[sel_date]
 
-        for f in tv_files:
-            name  = os.path.basename(f)
-            date  = name[:8]
-            label = name[9:] \
-                .replace('_actionable_highconv_tvimport.txt', '_highconv') \
-                .replace('_actionable_tvimport.txt', '') \
-                .replace('_screener_highconv_tvimport.txt', '_screener_highconv') \
-                .replace('_screener_tvimport.txt', '_screener') \
-                .replace('_tvimport.txt', '') \
-                .replace('_', ' ').title()
-            by_date[date][f'tv_{label}'] = f
+        # Load settings for display
+        _as_file = os.path.join(BASE, 'actionable_settings.json')
+        _act_cfg = {}
+        if os.path.exists(_as_file):
+            try: _act_cfg = json.load(open(_as_file))
+            except: pass
 
-        dates = sorted(by_date.keys(), reverse=True)
-        selected_date = st.selectbox("Select date", dates)
-        files = by_date[selected_date]
-        
-        st.divider()
-
-        STUDY_DESCRIPTIONS = {
-            'Au Total Market'              : 'AU Market — vs VAS.AX benchmark',
-            'Au Total Market Highconv'     : 'AU Market — HIGH vol + acc_watch signal (above 200 SMA)',
-            'Us Total Market'              : 'US Market — vs SPY benchmark (peer RS score)',
-            'Us Total Market Highconv'     : 'US Market — HIGH vol + acc_watch signal (above 200 SMA)',
-            'Us Benchmark'                 : 'US Market — vs SPY benchmark (RS ratio)',
-            'Us Benchmark Highconv'        : 'US Market Benchmark — HIGH vol + acc_watch (above 200 SMA)',
-            'All Major Commodities'        : 'Commodities — vs commodity ETF benchmark (RS ratio)',
-            'All Major Commodities Highconv': 'Commodities — HIGH vol + acc_watch signal (above 200 SMA)',
-            'Commodities Screener'         : 'Commodities — vs commodity peers (peer RS score)',
-            'Commodities Screener Highconv': 'Commodities — HIGH vol + acc_watch signal (above 200 SMA)',
-            'Uranium'                      : 'Uranium — vs URA benchmark (RS ratio)',
-            'Uranium Screener'             : 'Uranium — vs uranium peers (peer RS score)',
-            'Uranium Screener Highconv'    : 'Uranium — HIGH vol + acc_watch signal (above 200 SMA)',
-            'Au Gold Miners Screener'      : 'AU Gold — vs gold miner peers (peer RS score)',
-            'Au Gold Miners Screener Highconv': 'AU Gold — HIGH vol + acc_watch signal (above 200 SMA)',
+        _AS_DISPLAY_DEFAULTS = {
+            'au_market'  : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':[],'cap_bands':['large','mid','small']},
+            'us_market'  : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':[],'cap_bands':['large','mid','small']},
+            'commodities': {'min_score':0.0,'regimes':['LEADER','CONTENDER'],'vol':['HIGH','MED'],'acc_watch':[],'cap_bands':['large','mid','small','ETF']},
+            'uranium'    : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':[],'cap_bands':['large','mid','small']},
+            'au_gold'    : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':[],'cap_bands':['large','mid','small']},
         }
+        def _settings_caption(cfg_key):
+            _s = {**_AS_DISPLAY_DEFAULTS.get(cfg_key,{}), **_act_cfg.get(cfg_key,{})}
+            parts = []
+            if _s.get('regimes'):   parts.append(f"Regimes: **{', '.join(_s['regimes'])}**")
+            if _s.get('vol'):       parts.append(f"Vol: **{', '.join(_s['vol'])}**")
+            if _s.get('cap_bands'): parts.append(f"Cap: **{', '.join(_s['cap_bands'])}**")
+            _aw = _s.get('acc_watch')
+            if _aw and (isinstance(_aw,list) and len(_aw)>0 or isinstance(_aw,str) and _aw):
+                parts.append(f"Acc watch: **{', '.join(_aw) if isinstance(_aw,list) else _aw}**")
+            else:
+                parts.append("Acc watch: **any**")
+            parts.append(f"Min score: **{_s.get('min_score',0.0)}**")
+            return "Filters — " + " | ".join(parts)
 
-        # Group by study — match csv + tv pairs
-        studies = sorted(set(
-            k.replace('csv_','').replace('tv_','')
-            for k in files.keys()
-        ))
+        def _show_section(label, csv_stem, tv_stem, is_hc, cfg_key, subdir="screener"):
+            _dir     = _act_benchmark_dir if subdir == "benchmark" else _act_screener_dir
+            csv_path = os.path.join(_dir, f"{sel_date}_{csv_stem}")
+            tv_path  = os.path.join(_dir, f"{sel_date}_{tv_stem}")
+            has_csv  = os.path.exists(csv_path)
+            has_tv   = os.path.exists(tv_path)
+            hc_badge = " 🔥" if is_hc else ""
+            st.markdown(f"**{label}{hc_badge}**")
+            # Always show settings caption if config exists
+            _cap = _settings_caption(cfg_key)
+            if _cap:
+                st.caption(_cap)
+            elif not _act_cfg:
+                st.caption("⚙️ No filter settings saved — configure in Actionable Settings page")
+            if not has_csv and not has_tv:
+                st.caption(f"No file found: {sel_date}_{csv_stem}")
+                return
+            _c1, _c2 = st.columns([4, 1])
+            with _c2:
+                if has_tv:
+                    _tv = open(tv_path).read().strip()
+                    st.metric("Tickers", len(_tv.split(',')) if _tv else 0)
+                    st.download_button("⬇ TradingView", _tv, file_name=tv_stem,
+                                       mime='text/plain', key=f"tv_{cfg_key}_{label}_{sel_date}")
+                if has_csv:
+                    st.download_button("⬇ CSV", open(csv_path, encoding='utf-8').read(),
+                                       file_name=csv_stem, mime='text/csv',
+                                       key=f"csv_{cfg_key}_{label}_{sel_date}")
+            with _c1:
+                if has_csv:
+                    _df = load_csv(csv_path, index_col='rank')
+                    if _df is not None and len(_df) > 0:
+                        _bc = ['ticker','name','cap_band','close','vol_label','acc_watch','regime_label','score_final']
+                        _ec = ['sector','commodity','type','rs_ratio','peer_rs_score','ret_6m','ret_12m','max_dd','rs_trend','delta_rank']
+                        _sc = [c for c in _bc+_ec if c in _df.columns]
+                        _df_fmt = _df[_sc].copy()
+                        # Format columns
+                        for _col in ['ret_6m','ret_12m','ret_24m','max_dd','persist_frac']:
+                            if _col in _df_fmt.columns:
+                                _df_fmt[_col] = pd.to_numeric(_df_fmt[_col], errors='coerce').apply(
+                                    lambda x: f"{x:.0f}%" if pd.notna(x) else "")
+                        for _col in ['score_final','peer_rs_score','rs_ratio','mqs']:
+                            if _col in _df_fmt.columns:
+                                _df_fmt[_col] = pd.to_numeric(_df_fmt[_col], errors='coerce').apply(
+                                    lambda x: f"{x:.0f}" if pd.notna(x) else "")
+                        if 'close' in _df_fmt.columns:
+                            _df_fmt['close'] = pd.to_numeric(_df_fmt['close'], errors='coerce').apply(
+                                lambda x: f"{x:.3f}" if pd.notna(x) else "")
+                        st.dataframe(style_df(_df_fmt,'regime_label','delta_rank'),
+                                     width='stretch', height=min(len(_df)*35+40,350))
+                    else:
+                        st.caption("No results")
+            st.markdown("---")
+        # Group definitions — stems verified from actual directory listing
+        _GROUPS = [
+            ("🇦🇺 AU Market", "au_market", [
+                ("Benchmark",       "au_total_market_actionable.csv",                  "au_total_market_actionable_tvimport.txt",                  False, "benchmark"),
+                ("Screener",        "au_total_market_actionable.csv",                  "au_total_market_actionable_tvimport.txt",                  False, "screener"),
+                ("High Conviction", "au_total_market_actionable_highconv.csv",         "au_total_market_actionable_highconv_tvimport.txt",          True,  "screener"),
+            ]),
+            ("🇺🇸 US Market", "us_market", [
+                ("Benchmark",       "us_benchmark_actionable.csv",                     "us_benchmark_actionable_tvimport.txt",                     False, "screener"),
+                ("Screener",        "us_total_market_actionable.csv",                  "us_total_market_actionable_tvimport.txt",                  False, "screener"),
+                ("High Conviction", "us_total_market_actionable_highconv.csv",         "us_total_market_actionable_highconv_tvimport.txt",          True,  "screener"),
+            ]),
+            ("⛏ Commodities", "commodities", [
+                ("Benchmark",       "commodities_actionable.csv",                      "commodities_actionable_tvimport.txt",                      False, "screener"),
+                ("Screener",        "commodities_screener_actionable.csv",             "commodities_screener_actionable_tvimport.txt",             False, "screener"),
+                ("High Conviction", "all_major_commodities_actionable_highconv.csv",   "all_major_commodities_actionable_highconv_tvimport.txt",    True,  "screener"),
+            ]),
+            ("☢ Uranium", "uranium", [
+                ("Benchmark",       "uranium_actionable.csv",                          "uranium_actionable_tvimport.txt",                          False, "screener"),
+                ("Screener",        "uranium_screener_actionable.csv",                 "uranium_screener_actionable_tvimport.txt",                 False, "screener"),
+                ("High Conviction", "uranium_screener_highconv.csv",                   "uranium_screener_highconv_tvimport.txt",                    True,  "screener"),
+            ]),
+            ("🥇 AU Gold", "au_gold", [
+                ("Benchmark",       "au_gold_miners_actionable.csv",                   "au_gold_miners_actionable_tvimport.txt",                   False, "screener"),
+                ("Screener",        "au_gold_miners_actionable.csv",                   "au_gold_miners_actionable_tvimport.txt",                   False, "screener"),
+                ("High Conviction", "au_gold_miners_screener_highconv.csv",            "au_gold_miners_screener_highconv_tvimport.txt",             True,  "screener"),
+            ]),
+        ]
 
-        for study in studies:
-            csv_path = files.get(f'csv_{study}')
-            tv_path  = files.get(f'tv_{study}')
+        _grp_tabs = st.tabs([g[0] for g in _GROUPS])
+        for _gtab, (_glabel, _cfg_key, _studies) in zip(_grp_tabs, _GROUPS):
+            with _gtab:
+                for _slabel, _csv_stem, _tv_stem, _is_hc, _subdir in _studies:
+                    _show_section(_slabel, _csv_stem, _tv_stem, _is_hc, _cfg_key, _subdir)
 
-            # skip if neither exists
-            if not csv_path and not tv_path:
-                continue
 
-            desc = STUDY_DESCRIPTIONS.get(study, '')
-            st.subheader(study)
-            if desc:
-                st.caption(desc)
-            col1, col2 = st.columns([3, 1])
-
-            with col2:
-                if tv_path:
-                    content = load_txt(tv_path)
-                    tickers = content.strip() if content else ''
-                    count   = len(tickers.split(',')) if tickers else 0
-                    st.metric("Tickers", count)
-                    st.download_button(
-                        label     = "⬇ TradingView Import",
-                        data      = tickers,
-                        file_name = os.path.basename(tv_path),
-                        mime      = 'text/plain',
-                        key       = f"tv_{study}"
-                    )
-                if csv_path:
-                    csv_content = open(csv_path, encoding='utf-8').read()
-                    st.download_button(
-                        label     = "⬇ Download CSV",
-                        data      = csv_content,
-                        file_name = os.path.basename(csv_path),
-                        mime      = 'text/csv',
-                        key       = f"csv_{study}"
-                    )
-
-            with col1:
-                if csv_path:
-                    df = load_csv(csv_path, index_col='rank')
-                    if df is not None and len(df) > 0:
-                        base_cols  = ['ticker', 'name', 'cap_band', 'close',
-                                      'vol_label', 'acc_watch', 'regime_label', 'score_final']
-                        extra_cols = ['sector', 'commodity', 'type',
-                                      'rs_ratio', 'peer_rs_score', 'ret_6m', 'ret_12m',
-                                      'max_dd', 'rs_trend', 'delta_rank']
-                        show_cols  = [c for c in base_cols + extra_cols if c in df.columns]
-                        st.dataframe(
-                            style_df(df[show_cols], 'regime_label', 'delta_rank'),
-                            width='stretch',
-                            height=300
-                        )
-                else:
-                    st.info("No CSV available for this study — TradingView import only")
-
-            st.divider()
-
-# RUN SCRIPTS PAGE
-# ═══════════════════════════════════════════════════════════════════════════════
 elif page == "Run Scripts":
     st.title("🚀 Run Scripts")
     st.caption("Scripts run synchronously — page will wait until complete")
@@ -5904,6 +6122,46 @@ elif page == "AI Settings":
                 _save_ai_settings(_ai_feat, _ai_prmp)
                 st.success("Reset to default")
                 st.rerun()
+
+elif page == "Actionable Settings":
+    st.title("⚙️ Actionable Report Settings")
+    st.caption("Configure filters for actionable export files. Saved to actionable_settings.json.")
+    _as_file = os.path.join(BASE, 'actionable_settings.json')
+    _AS_DEFAULTS = {
+        'au_market'  : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
+        'us_market'  : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
+        'commodities': {'min_score':0.0,'regimes':['LEADER','CONTENDER'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small','ETF']},
+        'uranium'    : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
+        'au_gold'    : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
+    }
+    def _load_as():
+        if os.path.exists(_as_file):
+            try: return {k:{**_AS_DEFAULTS[k],**json.load(open(_as_file)).get(k,{})} for k in _AS_DEFAULTS}
+            except: pass
+        return {k:dict(v) for k,v in _AS_DEFAULTS.items()}
+    def _save_as(s):
+        with open(_as_file,'w') as _f: json.dump(s,_f,indent=2)
+        st.success("Saved to actionable_settings.json")
+    _as=_load_as()
+    _as_tabs=st.tabs(["🇦🇺 AU Market","🇺🇸 US Market","⛏ Commodities","☢ Uranium","🥇 AU Gold"])
+    for _k,_t in zip(['au_market','us_market','commodities','uranium','au_gold'],_as_tabs):
+        with _t:
+            _s=_as[_k]
+            st.markdown("#### Filter Parameters")
+            st.caption("Settings saved here are displayed under each table on the Actionable & Exports page.")
+            _c1,_c2=st.columns(2)
+            _ms =_c1.number_input("Min score_final",-5.0,10.0,float(_s['min_score']),0.1,key=f"as_ms_{_k}")
+            _acc_opts = ['EARLY','PROGRESS','SHIFT','-']
+            _acc_def  = _s['acc_watch'] if isinstance(_s['acc_watch'],list) else (['EARLY','PROGRESS','SHIFT'] if _s['acc_watch'] else [])
+            _acc=_c2.multiselect("Acc watch filter",_acc_opts,default=_acc_def,key=f"as_acc_{_k}",help="Leave empty = no filter. Select values to only show stocks with those acc_watch values.")
+            _reg=st.multiselect("Allowed regimes",['LEADER','CONTENDER','LAGGARD','WEAK','TREND+LEAD','TREND_ONLY'],default=_s['regimes'],key=f"as_reg_{_k}")
+            _vol=st.multiselect("Volume filter",['HIGH','MED','LOW'],default=_s['vol'],key=f"as_vol_{_k}")
+            _cap=st.multiselect("Cap bands",['large','mid','small','ETF'],default=_s['cap_bands'],key=f"as_cap_{_k}")
+            st.markdown("")
+            if st.button("💾 Save",type="primary",key=f"as_save_{_k}"):
+                _as[_k]={'min_score':_ms,'acc_watch':_acc,'regimes':_reg,'vol':_vol,'cap_bands':_cap}
+                _save_as(_as)
+
 
 elif page == "General Settings":
     st.title("⚙ Dashboard Settings")
