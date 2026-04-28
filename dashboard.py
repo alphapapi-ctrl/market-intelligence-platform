@@ -141,10 +141,8 @@ DEFAULT_SETTINGS = {
         'Actionable & Exports': True,
         'DeMark Signals'      : True,
         'Run Scripts'         : True,
-        'AI Settings'         : True,
         'Rank Settings'       : True,
-        'Actionable Settings'  : True,
-        'General Settings'     : True,
+        'Settings'            : True,
     },
     'rank_settings': {
 
@@ -246,15 +244,13 @@ ALL_PAGES = [
     ("Actionable & Exports",     "file-earmark-arrow-down"),
     ("Drawdown Analysis",        "graph-down"),
     ("Run Scripts",              "play-circle"),
-    ("AI Settings",              "robot"),
     ("Rank Settings",            "sliders"),
-    ("Actionable Settings",       "funnel"),
-    ("General Settings",         "gear"),
+    ("Settings",                 "gear"),
 ]
 
 # Filter to enabled pages — Settings always shown
 active_pages = [(name, icon) for name, icon in ALL_PAGES
-                if page_config.get(name, True) or name in ('General Settings', 'AI Settings', 'Rank Settings', 'Actionable Settings')]
+                if page_config.get(name, True) or name in ('Rank Settings', 'Settings')]
 
 page = option_menu(
     menu_title  = None,
@@ -5609,7 +5605,7 @@ elif page == "Actionable & Exports":
             if _cap:
                 st.caption(_cap)
             elif not _act_cfg:
-                st.caption("⚙️ No filter settings saved — configure in Actionable Settings page")
+                st.caption("⚙️ No filter settings saved — configure in Settings → Actionable Settings")
             if not has_csv and not has_tv:
                 st.caption(f"No file found: {sel_date}_{csv_stem}")
                 return
@@ -6197,352 +6193,350 @@ border-radius:6px;padding:8px 14px;font-size:11px;margin-bottom:12px;line-height
     with _rs_tabs[4]: _sc_score_widgets('us_screener',   'us_total_market_benchmark.py',   'us_total_market_screener.py',       SC_DEFAULTS)
     with _rs_tabs[5]: _sc_score_widgets('comm_screener', 'all_major_commodities_benchmark.py', 'all_major_commodities_screener.py', SC_DEFAULTS)
 
-elif page == "AI Settings":
-    st.title("🤖 AI Settings")
+elif page == "Settings":
+    st.title("⚙ Settings")
+    _settings_tabs = st.tabs(["⚙ General Settings", "⚙️ Actionable Settings", "🤖 AI Settings"])
 
-    _ai_s    = load_settings()
-    _ai_feat = _ai_s.get('ai_features', {})
-    _ai_prmp = _ai_s.get('ai_prompts', DEFAULT_SETTINGS.get('ai_prompts', {}))
+    # ── General Settings ──────────────────────────────────────────────────────
+    with _settings_tabs[0]:
+        st.subheader("⚙ Dashboard Settings")
+        st.caption("Changes take effect after saving and reloading the page")
 
-    def _save_ai_settings(feat, prompts):
-        s = load_settings()
-        s['ai_features'] = feat
-        s['ai_prompts']  = prompts
-        save_settings(s)
+        current = load_settings()
 
-    # ── Tabs ──────────────────────────────────────────────────────────────────
-    _ai_tabs = st.tabs([
-        "⚙️ General",
-        "🇦🇺 AU Breadth",
-        "🇺🇸 US Breadth",
-        "💳 Debt Markets",
-        "📊 AU Benchmark",
-        "📊 US Benchmark",
-        "🪨 Commodities",
-    ])
+        # ── Pages ─────────────────────────────────────────────────────────────
+        st.subheader("Pages")
+        st.markdown("Toggle pages on or off. Settings is always visible.")
 
-    # ── General tab ───────────────────────────────────────────────────────────
-    with _ai_tabs[0]:
-        _ai_enabled = st.toggle("Enable AI Assessments", value=_ai_feat.get('enabled', False))
-        st.markdown("#### Active Provider")
-        _provider = st.radio("Active provider", options=["anthropic", "openai"],
-                              index=0 if _ai_feat.get('provider', 'anthropic') == 'anthropic' else 1,
-                              horizontal=True,
-                              format_func=lambda x: "🟣 Claude (Anthropic)" if x == "anthropic" else "🟢 ChatGPT (OpenAI)",
-                              help="Select which API to use for all AI assessments",
-                              label_visibility="collapsed")
+        updated_pages = {}
+        cols = st.columns(3)
+        for i, (name, icon) in enumerate(ALL_PAGES):
+            if name == 'Settings':
+                continue
+            with cols[i % 3]:
+                updated_pages[name] = st.toggle(
+                    name,
+                    value=current['pages'].get(name, True),
+                    key=f"setting_{name}"
+                )
 
+        # ── AI Features ───────────────────────────────────────────────────────
         st.divider()
-        st.markdown("#### 🟣 Claude API")
-        _claude_key = st.text_input("Anthropic API Key", value=_ai_feat.get('anthropic_api_key', ''),
-                                     type="password", help="sk-ant-...")
-        _claude_models = ['claude-sonnet-4-6', 'claude-opus-4-6', 'claude-haiku-4-5-20251001']
-        _claude_model  = st.selectbox("Claude Model",
-                                       options=_claude_models,
-                                       index=_claude_models.index(_ai_feat.get('model', 'claude-sonnet-4-6'))
-                                       if _ai_feat.get('model', 'claude-sonnet-4-6') in _claude_models else 0)
+        st.subheader("AI Features")
+        st.caption("Requires an Anthropic API key — get one free at console.anthropic.com")
 
-        st.divider()
-        st.markdown("#### 🟢 ChatGPT API")
-        _openai_key   = st.text_input("OpenAI API Key", value=_ai_feat.get('openai_api_key', ''),
-                                       type="password", help="sk-...")
-        _openai_model = st.selectbox("OpenAI Model",
-                                      options=['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo'],
-                                      index=['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo'].index(
-                                          _ai_feat.get('openai_model', 'gpt-4o')))
-
-        st.markdown("")
-        if st.button("💾 Save General Settings", type="primary", key='ai_save_general'):
-            _new_feat = {
-                'enabled'          : _ai_enabled,
-                'provider'         : _provider,
-                'anthropic_api_key': _claude_key,
-                'model'            : _claude_model,
-                'openai_api_key'   : _openai_key,
-                'openai_model'     : _openai_model,
-            }
-            _save_ai_settings(_new_feat, _ai_prmp)
-            st.success(f"Saved — using {'Claude' if _provider == 'anthropic' else 'ChatGPT'}")
-
-    # ── Prompt tabs ───────────────────────────────────────────────────────────
-    _prompt_defs = [
-        ('au_breadth',       'AU Breadth', '🇦🇺 AU Breadth', _ai_tabs[1]),
-        ('us_breadth',       'US Breadth', '🇺🇸 US Breadth', _ai_tabs[2]),
-        ('consumer_credit',  'Debt Markets — Consumer Credit', '💳 Consumer', _ai_tabs[3]),
-        ('au_benchmark',     'AU Benchmark', '📊 AU Benchmark', _ai_tabs[4]),
-        ('us_benchmark',     'US Benchmark', '📊 US Benchmark', _ai_tabs[5]),
-        ('comm_benchmark',   'Commodities Benchmark', '🪨 Commodities', _ai_tabs[6]),
-    ]
-
-    for _pk, _plabel, _ptab_label, _ptab in _prompt_defs:
-        with _ptab:
-            st.markdown(f"#### {_plabel} Prompt")
-            st.caption("Edit the system instruction sent to the AI. The live market data is appended automatically.")
-            _default_prompt = DEFAULT_SETTINGS.get('ai_prompts', {}).get(_pk, '')
-            _current_prompt = _ai_prmp.get(_pk, _default_prompt)
-            _new_prompt = st.text_area(
-                "Prompt", value=_current_prompt,
-                height=200, key=f"ai_prompt_{_pk}",
-                label_visibility="collapsed"
+        ai_enabled = st.toggle(
+            "Enable AI assessments",
+            value=current.get('ai_features', {}).get('enabled', False),
+            key='setting_ai_enabled'
+        )
+        if ai_enabled:
+            api_key = st.text_input(
+                "Anthropic API Key",
+                value=current.get('ai_features', {}).get('anthropic_api_key', ''),
+                type="password",
+                key='setting_api_key',
+                help="Stored locally in dashboard_settings.json — never pushed to GitHub"
             )
-            _pc1, _pc2 = st.columns([1, 4])
-            if _pc1.button("💾 Save", key=f"ai_save_{_pk}", type="primary"):
-                _ai_prmp[_pk] = _new_prompt
-                _save_ai_settings(_ai_feat, _ai_prmp)
-                st.success("Prompt saved")
-            if _pc2.button("↩ Reset to default", key=f"ai_reset_{_pk}"):
-                _ai_prmp[_pk] = _default_prompt
-                _save_ai_settings(_ai_feat, _ai_prmp)
-                st.success("Reset to default")
+            model = st.selectbox(
+                "Model",
+                ['claude-sonnet-4-6', 'claude-haiku-4-5-20251001'],
+                index=0,
+                key='setting_model'
+            )
+        else:
+            api_key = current.get('ai_features', {}).get('anthropic_api_key', '')
+            model   = current.get('ai_features', {}).get('model', 'claude-sonnet-4-6')
+
+        # ── Save / Reset ──────────────────────────────────────────────────────
+        st.divider()
+        col1, col2 = st.columns(2)
+        with col1:
+            if st.button("💾 Save & Reload", type="primary"):
+                current['pages']       = updated_pages
+                current['ai_features'] = {
+                    'enabled'          : ai_enabled,
+                    'anthropic_api_key': api_key,
+                    'model'            : model,
+                }
+                save_settings(current)
+                st.success("Settings saved")
+                st.rerun()
+        with col2:
+            if st.button("Reset to defaults", type="secondary"):
+                save_settings(DEFAULT_SETTINGS)
+                st.success("Reset to defaults")
                 st.rerun()
 
-elif page == "Actionable Settings":
-    st.title("⚙️ Actionable Report Settings")
-    st.caption("Configure filters for actionable export files. Saved to actionable_settings.json.")
-    _as_file = os.path.join(BASE, 'actionable_settings.json')
-    _AS_DEFAULTS = {
-        'au_market'  : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
-        'us_market'  : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
-        'commodities': {'min_score':0.0,'regimes':['LEADER','CONTENDER'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small','ETF']},
-        'uranium'    : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
-        'au_gold'    : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
-    }
-    def _load_as():
-        if os.path.exists(_as_file):
-            try: return {k:{**_AS_DEFAULTS[k],**json.load(open(_as_file)).get(k,{})} for k in _AS_DEFAULTS}
-            except: pass
-        return {k:dict(v) for k,v in _AS_DEFAULTS.items()}
-    def _save_as(s):
-        with open(_as_file,'w') as _f: json.dump(s,_f,indent=2)
-        st.success("Saved to actionable_settings.json")
-    _as=_load_as()
-    _as_tabs=st.tabs(["🇦🇺 AU Market","🇺🇸 US Market","⛏ Commodities","☢ Uranium","🥇 AU Gold"])
-    for _k,_t in zip(['au_market','us_market','commodities','uranium','au_gold'],_as_tabs):
-        with _t:
-            _s=_as[_k]
-            st.markdown("#### Filter Parameters")
-            st.caption("Settings saved here are displayed under each table on the Actionable & Exports page.")
-            _c1,_c2=st.columns(2)
-            _ms =_c1.number_input("Min score_final",-5.0,10.0,float(_s['min_score']),0.1,key=f"as_ms_{_k}")
-            _acc_opts = ['EARLY','PROGRESS','SHIFT','-']
-            _acc_def  = _s['acc_watch'] if isinstance(_s['acc_watch'],list) else (['EARLY','PROGRESS','SHIFT'] if _s['acc_watch'] else [])
-            _acc=_c2.multiselect("Acc watch filter",_acc_opts,default=_acc_def,key=f"as_acc_{_k}",help="Leave empty = no filter. Select values to only show stocks with those acc_watch values.")
-            _reg=st.multiselect("Allowed regimes",['LEADER','CONTENDER','LAGGARD','WEAK','TREND+LEAD','TREND_ONLY'],default=_s['regimes'],key=f"as_reg_{_k}")
-            _vol=st.multiselect("Volume filter",['HIGH','MED','LOW'],default=_s['vol'],key=f"as_vol_{_k}")
-            _cap=st.multiselect("Cap bands",['large','mid','small','ETF'],default=_s['cap_bands'],key=f"as_cap_{_k}")
-            st.markdown("")
-            if st.button("💾 Save",type="primary",key=f"as_save_{_k}"):
-                _as[_k]={'min_score':_ms,'acc_watch':_acc,'regimes':_reg,'vol':_vol,'cap_bands':_cap}
-                _save_as(_as)
+        # ── Display Settings ──────────────────────────────────────────────────
+        st.divider()
+        st.subheader("Display")
 
+        st.markdown("**Theme**")
+        st.caption("Sets chart backgrounds and colours. Restart may be required for full effect.")
 
-elif page == "General Settings":
-    st.title("⚙ Dashboard Settings")
-    st.caption("Changes take effect after saving and reloading the page")
-
-    current = load_settings()
-
-    # ── Pages ─────────────────────────────────────────────────────────────────
-    st.subheader("Pages")
-    st.markdown("Toggle pages on or off. Settings is always visible.")
-
-    updated_pages = {}
-    cols = st.columns(3)
-    for i, (name, icon) in enumerate(ALL_PAGES):
-        if name == 'Settings':
-            continue
-        with cols[i % 3]:
-            updated_pages[name] = st.toggle(
-                name,
-                value=current['pages'].get(name, True),
-                key=f"setting_{name}"
-            )
-
-    # ── AI Features ───────────────────────────────────────────────────────────
-    st.divider()
-    st.subheader("AI Features")
-    st.caption("Requires an Anthropic API key — get one free at console.anthropic.com")
-
-    ai_enabled = st.toggle(
-        "Enable AI assessments",
-        value=current.get('ai_features', {}).get('enabled', False),
-        key='setting_ai_enabled'
-    )
-    if ai_enabled:
-        api_key = st.text_input(
-            "Anthropic API Key",
-            value=current.get('ai_features', {}).get('anthropic_api_key', ''),
-            type="password",
-            key='setting_api_key',
-            help="Stored locally in dashboard_settings.json — never pushed to GitHub"
-        )
-        model = st.selectbox(
-            "Model",
-            ['claude-sonnet-4-6', 'claude-haiku-4-5-20251001'],
-            index=0,
-            key='setting_model'
-        )
-    else:
-        api_key = current.get('ai_features', {}).get('anthropic_api_key', '')
-        model   = current.get('ai_features', {}).get('model', 'claude-sonnet-4-6')
-
-    # ── Save / Reset ──────────────────────────────────────────────────────────
-    st.divider()
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("💾 Save & Reload", type="primary"):
-            current['pages']       = updated_pages
-            current['ai_features'] = {
-                'enabled'          : ai_enabled,
-                'anthropic_api_key': api_key,
-                'model'            : model,
-            }
-            save_settings(current)
-            st.success("Settings saved")
-            st.rerun()
-    with col2:
-        if st.button("Reset to defaults", type="secondary"):
-            save_settings(DEFAULT_SETTINGS)
-            st.success("Reset to defaults")
-            st.rerun()
-
-    # ── Display Settings ───────────────────────────────────────────────────────
-    st.divider()
-    st.subheader("Display")
-
-    # Theme
-    st.markdown("**Theme**")
-    st.caption("Sets chart backgrounds and colours. Restart may be required for full effect.")
-
-    cfg_file = os.path.join(BASE, '.streamlit', 'config.toml')
-    current_base = 'dark'
-    if os.path.isfile(cfg_file):
-        import re as _re2
-        txt = open(cfg_file).read()
-        m = _re2.search(r'base\s*=\s*"([^"]*)"', txt)
-        if m: current_base = m.group(1).lower()
-
-    theme_names  = list(THEMES.keys())
-    theme_idx    = 1 if current_base == 'light' else 0
-    selected_theme = st.radio("Theme", theme_names, horizontal=True,
-                               index=theme_idx, key='disp_theme')
-
-    if selected_theme == 'Custom':
-        pass  # reserved for future custom picker
-
-    tc1, tc2 = st.columns(2)
-    with tc1:
-        if st.button(f"Apply {selected_theme} Theme", type="primary", key='apply_theme'):
-            _write_streamlit_config(THEMES[selected_theme])
-            _s = load_settings()
-            _s['theme'] = selected_theme.lower()
-            save_settings(_s)
-            st.success(f"{selected_theme} theme applied — reload the page to see effect")
-            st.rerun()
-    with tc2:
-        st.caption("After applying, use the Streamlit menu (top right ☰) to also toggle the app theme if needed.")
-
-    # Font size
-    st.markdown("**Text Size**")
-    st.caption("Applies immediately — no reload needed.")
-    font_size = st.radio("Text size",
-                          ["Normal", "Large (+2px)", "Extra Large (+4px)"],
-                          horizontal=True, key="st_font_size")
-    _size_map = {"Normal": 0, "Large (+2px)": 2, "Extra Large (+4px)": 4}
-    _delta = _size_map.get(font_size, 0)
-    if _delta > 0:
-        st.markdown(f"""<style>
-        html, body, [class*="css"] {{ font-size: calc(1rem + {_delta}px) !important; }}
-        .stMarkdown p, .stMarkdown li, .stCaption, label {{
-            font-size: calc(1rem + {_delta}px) !important;
-        }}
-        h1 {{ font-size: calc(2rem   + {_delta}px) !important; }}
-        h2 {{ font-size: calc(1.5rem + {_delta}px) !important; }}
-        h3 {{ font-size: calc(1.25rem + {_delta}px) !important; }}
-        </style>""", unsafe_allow_html=True)
-
-    with st.expander("Current config.toml"):
+        cfg_file = os.path.join(BASE, '.streamlit', 'config.toml')
+        current_base = 'dark'
         if os.path.isfile(cfg_file):
-            st.code(open(cfg_file).read(), language="toml")
-        else:
-            st.caption("No config.toml yet — created on first Apply.")
+            import re as _re2
+            txt = open(cfg_file).read()
+            m = _re2.search(r'base\s*=\s*"([^"]*)"', txt)
+            if m: current_base = m.group(1).lower()
 
-    # ── Network Access ────────────────────────────────────────────────────────
-    st.divider()
-    st.subheader("Network Access")
-    st.caption(
-        "Controls which network interfaces Streamlit listens on. "
-        "Restart Streamlit after changing. Uses .streamlit/config.toml."
-    )
+        theme_names  = list(THEMES.keys())
+        theme_idx    = 1 if current_base == 'light' else 0
+        selected_theme = st.radio("Theme", theme_names, horizontal=True,
+                                   index=theme_idx, key='disp_theme')
 
-    _net_cfg_file = os.path.join(BASE, '.streamlit', 'config.toml')
-    _net_current  = '0.0.0.0'
-    if os.path.isfile(_net_cfg_file):
-        import re as _re_net
-        _nc_txt = open(_net_cfg_file).read()
-        _nm = _re_net.search(r'address\s*=\s*"([^"]*)"', _nc_txt)
-        if _nm: _net_current = _nm.group(1)
+        if selected_theme == 'Custom':
+            pass  # reserved for future custom picker
 
-    _net_options = {
-        'Localhost only (127.0.0.1)'          : '127.0.0.1',
-        'Local network only (LAN/Tailscale)'  : '0.0.0.0',
-        'Custom address'                       : 'custom',
-    }
-    _net_labels   = list(_net_options.keys())
-    _net_vals     = list(_net_options.values())
-    _net_idx      = _net_vals.index(_net_current) if _net_current in _net_vals else 2
+        tc1, tc2 = st.columns(2)
+        with tc1:
+            if st.button(f"Apply {selected_theme} Theme", type="primary", key='apply_theme'):
+                _write_streamlit_config(THEMES[selected_theme])
+                _s = load_settings()
+                _s['theme'] = selected_theme.lower()
+                save_settings(_s)
+                st.success(f"{selected_theme} theme applied — reload the page to see effect")
+                st.rerun()
+        with tc2:
+            st.caption("After applying, use the Streamlit menu (top right ☰) to also toggle the app theme if needed.")
 
-    _net_sel = st.radio("Listen on", _net_labels, index=_net_idx,
-                         key='net_mode',
-                         help="Localhost only = most secure, only your machine. "
-                              "Local network = accessible from other devices on LAN or via Tailscale. "
-                              "Custom = specify exact IP.")
+        st.markdown("**Text Size**")
+        st.caption("Applies immediately — no reload needed.")
+        font_size = st.radio("Text size",
+                              ["Normal", "Large (+2px)", "Extra Large (+4px)"],
+                              horizontal=True, key="st_font_size")
+        _size_map = {"Normal": 0, "Large (+2px)": 2, "Extra Large (+4px)": 4}
+        _delta = _size_map.get(font_size, 0)
+        if _delta > 0:
+            st.markdown(f"""<style>
+            html, body, [class*="css"] {{ font-size: calc(1rem + {_delta}px) !important; }}
+            .stMarkdown p, .stMarkdown li, .stCaption, label {{
+                font-size: calc(1rem + {_delta}px) !important;
+            }}
+            h1 {{ font-size: calc(2rem   + {_delta}px) !important; }}
+            h2 {{ font-size: calc(1.5rem + {_delta}px) !important; }}
+            h3 {{ font-size: calc(1.25rem + {_delta}px) !important; }}
+            </style>""", unsafe_allow_html=True)
 
-    _custom_addr = ''
-    if _net_sel == 'Custom address':
-        _custom_addr = st.text_input("IP address", value=_net_current
-                                      if _net_current not in ('127.0.0.1','0.0.0.0') else '',
-                                      placeholder="e.g. 192.168.1.100", key='net_custom_addr')
+        with st.expander("Current config.toml"):
+            if os.path.isfile(cfg_file):
+                st.code(open(cfg_file).read(), language="toml")
+            else:
+                st.caption("No config.toml yet — created on first Apply.")
 
-    _net_addr = _net_options.get(_net_sel, _custom_addr or '0.0.0.0')
-    if _net_sel == 'Custom address':
-        _net_addr = _custom_addr or '0.0.0.0'
+        # ── Network Access ────────────────────────────────────────────────────
+        st.divider()
+        st.subheader("Network Access")
+        st.caption(
+            "Controls which network interfaces Streamlit listens on. "
+            "Restart Streamlit after changing. Uses .streamlit/config.toml."
+        )
 
-    _port_current = 8501
-    if os.path.isfile(_net_cfg_file):
-        _pm = _re_net.search(r'port\s*=\s*(\d+)', open(_net_cfg_file).read())
-        if _pm: _port_current = int(_pm.group(1))
-
-    _port = st.number_input("Port", min_value=1024, max_value=65535,
-                             value=_port_current, step=1, key='net_port')
-
-    st.info(
-        f"Current: {_net_current}:{_port_current} — "
-        f"If seeing your public/NAT IP in the Streamlit banner, switch to Localhost only "
-        f"(http://localhost:{_port_current}) or Local network with Tailscale.",
-        icon="🌐"
-    )
-
-    if st.button("💾 Apply Network Settings", type="primary", key='net_apply'):
-        # Read existing config
-        import re as _re_net2
+        _net_cfg_file = os.path.join(BASE, '.streamlit', 'config.toml')
+        _net_current  = '0.0.0.0'
         if os.path.isfile(_net_cfg_file):
-            _nc = open(_net_cfg_file).read()
-        else:
-            _nc = '[server]\n'
+            import re as _re_net
+            _nc_txt = open(_net_cfg_file).read()
+            _nm = _re_net.search(r'address\s*=\s*"([^"]*)"', _nc_txt)
+            if _nm: _net_current = _nm.group(1)
 
-        # Update or insert address
-        if 'address' in _nc:
-            _nc = _re_net2.sub(r'address\s*=\s*"[^"]*"', f'address = "{_net_addr}"', _nc)
-        else:
-            _nc = _nc.rstrip() + '\n' + f'address = "{_net_addr}"\n'
+        _net_options = {
+            'Localhost only (127.0.0.1)'          : '127.0.0.1',
+            'Local network only (LAN/Tailscale)'  : '0.0.0.0',
+            'Custom address'                       : 'custom',
+        }
+        _net_labels   = list(_net_options.keys())
+        _net_vals     = list(_net_options.values())
+        _net_idx      = _net_vals.index(_net_current) if _net_current in _net_vals else 2
 
-        # Update or insert port
-        if _re_net2.search(r'port\s*=\s*\d+', _nc):
-            _nc = _re_net2.sub(r'port\s*=\s*\d+', f'port = {_port}', _nc)
-        else:
-            _nc = _nc.rstrip() + '\n' + f'port = {_port}\n'
+        _net_sel = st.radio("Listen on", _net_labels, index=_net_idx,
+                             key='net_mode',
+                             help="Localhost only = most secure, only your machine. "
+                                  "Local network = accessible from other devices on LAN or via Tailscale. "
+                                  "Custom = specify exact IP.")
 
-        os.makedirs(os.path.dirname(_net_cfg_file), exist_ok=True)
-        with open(_net_cfg_file, 'w') as _f: _f.write(_nc)
-        st.success(f"Network settings saved — restart Streamlit to apply (address={_net_addr}, port={_port})")
+        _custom_addr = ''
+        if _net_sel == 'Custom address':
+            _custom_addr = st.text_input("IP address", value=_net_current
+                                          if _net_current not in ('127.0.0.1','0.0.0.0') else '',
+                                          placeholder="e.g. 192.168.1.100", key='net_custom_addr')
+
+        _net_addr = _net_options.get(_net_sel, _custom_addr or '0.0.0.0')
+        if _net_sel == 'Custom address':
+            _net_addr = _custom_addr or '0.0.0.0'
+
+        _port_current = 8501
+        if os.path.isfile(_net_cfg_file):
+            _pm = _re_net.search(r'port\s*=\s*(\d+)', open(_net_cfg_file).read())
+            if _pm: _port_current = int(_pm.group(1))
+
+        _port = st.number_input("Port", min_value=1024, max_value=65535,
+                                 value=_port_current, step=1, key='net_port')
+
+        st.info(
+            f"Current: {_net_current}:{_port_current} — "
+            f"If seeing your public/NAT IP in the Streamlit banner, switch to Localhost only "
+            f"(http://localhost:{_port_current}) or Local network with Tailscale.",
+            icon="🌐"
+        )
+
+        if st.button("💾 Apply Network Settings", type="primary", key='net_apply'):
+            import re as _re_net2
+            if os.path.isfile(_net_cfg_file):
+                _nc = open(_net_cfg_file).read()
+            else:
+                _nc = '[server]\n'
+
+            if 'address' in _nc:
+                _nc = _re_net2.sub(r'address\s*=\s*"[^"]*"', f'address = "{_net_addr}"', _nc)
+            else:
+                _nc = _nc.rstrip() + '\n' + f'address = "{_net_addr}"\n'
+
+            if _re_net2.search(r'port\s*=\s*\d+', _nc):
+                _nc = _re_net2.sub(r'port\s*=\s*\d+', f'port = {_port}', _nc)
+            else:
+                _nc = _nc.rstrip() + '\n' + f'port = {_port}\n'
+
+            os.makedirs(os.path.dirname(_net_cfg_file), exist_ok=True)
+            with open(_net_cfg_file, 'w') as _f: _f.write(_nc)
+            st.success(f"Network settings saved — restart Streamlit to apply (address={_net_addr}, port={_port})")
+
+    # ── Actionable Settings ───────────────────────────────────────────────────
+    with _settings_tabs[1]:
+        st.subheader("⚙️ Actionable Report Settings")
+        st.caption("Configure filters for actionable export files. Saved to actionable_settings.json.")
+        _as_file = os.path.join(BASE, 'actionable_settings.json')
+        _AS_DEFAULTS = {
+            'au_market'  : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
+            'us_market'  : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
+            'commodities': {'min_score':0.0,'regimes':['LEADER','CONTENDER'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small','ETF']},
+            'uranium'    : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
+            'au_gold'    : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
+        }
+        def _load_as():
+            if os.path.exists(_as_file):
+                try: return {k:{**_AS_DEFAULTS[k],**json.load(open(_as_file)).get(k,{})} for k in _AS_DEFAULTS}
+                except: pass
+            return {k:dict(v) for k,v in _AS_DEFAULTS.items()}
+        def _save_as(s):
+            with open(_as_file,'w') as _f: json.dump(s,_f,indent=2)
+            st.success("Saved to actionable_settings.json")
+        _as=_load_as()
+        _as_tabs=st.tabs(["🇦🇺 AU Market","🇺🇸 US Market","⛏ Commodities","☢ Uranium","🥇 AU Gold"])
+        for _k,_t in zip(['au_market','us_market','commodities','uranium','au_gold'],_as_tabs):
+            with _t:
+                _s=_as[_k]
+                st.markdown("#### Filter Parameters")
+                st.caption("Settings saved here are displayed under each table on the Actionable & Exports page.")
+                _c1,_c2=st.columns(2)
+                _ms =_c1.number_input("Min score_final",-5.0,10.0,float(_s['min_score']),0.1,key=f"as_ms_{_k}")
+                _acc_opts = ['EARLY','PROGRESS','SHIFT','-']
+                _acc_def  = _s['acc_watch'] if isinstance(_s['acc_watch'],list) else (['EARLY','PROGRESS','SHIFT'] if _s['acc_watch'] else [])
+                _acc=_c2.multiselect("Acc watch filter",_acc_opts,default=_acc_def,key=f"as_acc_{_k}",help="Leave empty = no filter. Select values to only show stocks with those acc_watch values.")
+                _reg=st.multiselect("Allowed regimes",['LEADER','CONTENDER','LAGGARD','WEAK','TREND+LEAD','TREND_ONLY'],default=_s['regimes'],key=f"as_reg_{_k}")
+                _vol=st.multiselect("Volume filter",['HIGH','MED','LOW'],default=_s['vol'],key=f"as_vol_{_k}")
+                _cap=st.multiselect("Cap bands",['large','mid','small','ETF'],default=_s['cap_bands'],key=f"as_cap_{_k}")
+                st.markdown("")
+                if st.button("💾 Save",type="primary",key=f"as_save_{_k}"):
+                    _as[_k]={'min_score':_ms,'acc_watch':_acc,'regimes':_reg,'vol':_vol,'cap_bands':_cap}
+                    _save_as(_as)
+
+    # ── AI Settings ───────────────────────────────────────────────────────────
+    with _settings_tabs[2]:
+        st.subheader("🤖 AI Settings")
+
+        _ai_s    = load_settings()
+        _ai_feat = _ai_s.get('ai_features', {})
+        _ai_prmp = _ai_s.get('ai_prompts', DEFAULT_SETTINGS.get('ai_prompts', {}))
+
+        def _save_ai_settings(feat, prompts):
+            s = load_settings()
+            s['ai_features'] = feat
+            s['ai_prompts']  = prompts
+            save_settings(s)
+
+        _ai_tabs = st.tabs([
+            "⚙️ General",
+            "🇦🇺 AU Breadth",
+            "🇺🇸 US Breadth",
+            "💳 Debt Markets",
+            "📊 AU Benchmark",
+            "📊 US Benchmark",
+            "🪨 Commodities",
+        ])
+
+        with _ai_tabs[0]:
+            _ai_enabled = st.toggle("Enable AI Assessments", value=_ai_feat.get('enabled', False))
+            st.markdown("#### Active Provider")
+            _provider = st.radio("Active provider", options=["anthropic", "openai"],
+                                  index=0 if _ai_feat.get('provider', 'anthropic') == 'anthropic' else 1,
+                                  horizontal=True,
+                                  format_func=lambda x: "🟣 Claude (Anthropic)" if x == "anthropic" else "🟢 ChatGPT (OpenAI)",
+                                  help="Select which API to use for all AI assessments",
+                                  label_visibility="collapsed")
+
+            st.divider()
+            st.markdown("#### 🟣 Claude API")
+            _claude_key = st.text_input("Anthropic API Key", value=_ai_feat.get('anthropic_api_key', ''),
+                                         type="password", help="sk-ant-...")
+            _claude_models = ['claude-sonnet-4-6', 'claude-opus-4-6', 'claude-haiku-4-5-20251001']
+            _claude_model  = st.selectbox("Claude Model",
+                                           options=_claude_models,
+                                           index=_claude_models.index(_ai_feat.get('model', 'claude-sonnet-4-6'))
+                                           if _ai_feat.get('model', 'claude-sonnet-4-6') in _claude_models else 0)
+
+            st.divider()
+            st.markdown("#### 🟢 ChatGPT API")
+            _openai_key   = st.text_input("OpenAI API Key", value=_ai_feat.get('openai_api_key', ''),
+                                           type="password", help="sk-...")
+            _openai_model = st.selectbox("OpenAI Model",
+                                          options=['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo'],
+                                          index=['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo'].index(
+                                              _ai_feat.get('openai_model', 'gpt-4o')))
+
+            st.markdown("")
+            if st.button("💾 Save General Settings", type="primary", key='ai_save_general'):
+                _new_feat = {
+                    'enabled'          : _ai_enabled,
+                    'provider'         : _provider,
+                    'anthropic_api_key': _claude_key,
+                    'model'            : _claude_model,
+                    'openai_api_key'   : _openai_key,
+                    'openai_model'     : _openai_model,
+                }
+                _save_ai_settings(_new_feat, _ai_prmp)
+                st.success(f"Saved — using {'Claude' if _provider == 'anthropic' else 'ChatGPT'}")
+
+        _prompt_defs = [
+            ('au_breadth',       'AU Breadth', '🇦🇺 AU Breadth', _ai_tabs[1]),
+            ('us_breadth',       'US Breadth', '🇺🇸 US Breadth', _ai_tabs[2]),
+            ('consumer_credit',  'Debt Markets — Consumer Credit', '💳 Consumer', _ai_tabs[3]),
+            ('au_benchmark',     'AU Benchmark', '📊 AU Benchmark', _ai_tabs[4]),
+            ('us_benchmark',     'US Benchmark', '📊 US Benchmark', _ai_tabs[5]),
+            ('comm_benchmark',   'Commodities Benchmark', '🪨 Commodities', _ai_tabs[6]),
+        ]
+
+        for _pk, _plabel, _ptab_label, _ptab in _prompt_defs:
+            with _ptab:
+                st.markdown(f"#### {_plabel} Prompt")
+                st.caption("Edit the system instruction sent to the AI. The live market data is appended automatically.")
+                _default_prompt = DEFAULT_SETTINGS.get('ai_prompts', {}).get(_pk, '')
+                _current_prompt = _ai_prmp.get(_pk, _default_prompt)
+                _new_prompt = st.text_area(
+                    "Prompt", value=_current_prompt,
+                    height=200, key=f"ai_prompt_{_pk}",
+                    label_visibility="collapsed"
+                )
+                _pc1, _pc2 = st.columns([1, 4])
+                if _pc1.button("💾 Save", key=f"ai_save_{_pk}", type="primary"):
+                    _ai_prmp[_pk] = _new_prompt
+                    _save_ai_settings(_ai_feat, _ai_prmp)
+                    st.success("Prompt saved")
+                if _pc2.button("↩ Reset to default", key=f"ai_reset_{_pk}"):
+                    _ai_prmp[_pk] = _default_prompt
+                    _save_ai_settings(_ai_feat, _ai_prmp)
+                    st.success("Reset to default")
+                    st.rerun()
