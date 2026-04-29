@@ -1,0 +1,185 @@
+{
+  "au_market": {
+    "min_score": 10.0,
+    "acc_watch": [],
+    "regimes": [
+      "LEADER",
+      "CONTENDER",
+      "TREND+LEAD"
+    ],
+    "vol": [
+      "HIGH",
+      "MED"
+    ],
+    "cap_bands": [
+      "large",
+      "mid"
+    ],
+    "sma_early": {
+      "logic": "AND",
+      "price": [
+        "Price < SMA20",
+        "Price < SMA50",
+        "Price < SMA200"
+      ],
+      "sma20": [
+        "SMA20 < SMA50",
+        "SMA20 < SMA200"
+      ],
+      "sma50": [
+        "SMA50 < SMA200"
+      ],
+      "sma200": []
+    },
+    "sma_progress": {
+      "logic": "AND",
+      "price": [
+        "Price > SMA20",
+        "Price < SMA50",
+        "Price < SMA200"
+      ],
+      "sma20": [
+        "SMA20 < SMA50",
+        "SMA20 < SMA200"
+      ],
+      "sma50": [
+        "SMA50 < SMA200"
+      ],
+      "sma200": []
+    },
+    "sma_shift": {
+      "logic": "AND",
+      "price": [
+        "Price > SMA20",
+        "Price > SMA50",
+        "Price < SMA200"
+      ],
+      "sma20": [
+        "SMA20 < SMA200"
+      ],
+      "sma50": [
+        "SMA50 < SMA200"
+      ],
+      "sma200": []
+    },
+    "sma_trending": {
+      "logic": "AND",
+      "price": [
+        "Price > SMA20",
+        "Price > SMA50",
+        "Price > SMA200"
+      ],
+      "sma20": [
+        "SMA20 > SMA50",
+        "SMA20 > SMA200"
+      ],
+      "sma50": [
+        "SMA50 > SMA200"
+      ],
+      "sma200": []
+    },
+    "sma_reaccum": {
+      "logic": "AND",
+      "price": [
+        "Price < SMA20",
+        "Price > SMA200",
+        "Price < SMA50"
+      ],
+      "sma20": [
+        "SMA20 > SMA50",
+        "SMA20 > SMA200"
+      ],
+      "sma50": [
+        "SMA50 > SMA200"
+      ],
+      "sma200": []
+    },
+    "sma_consolidate": {
+      "logic": "AND",
+      "price": [
+        "Price < SMA20",
+        "Price > SMA200"
+      ],
+      "sma20": [
+        "SMA20 < SMA50",
+        "SMA20 > SMA200"
+      ],
+      "sma50": [
+        "SMA50 > SMA200"
+      ],
+      "sma200": []
+    }
+  },
+  "us_market": {
+    "min_score": 0.0,
+    "regimes": [
+      "LEADER",
+      "CONTENDER",
+      "TREND+LEAD"
+    ],
+    "vol": [
+      "HIGH",
+      "MED"
+    ],
+    "acc_watch": false,
+    "cap_bands": [
+      "large",
+      "mid",
+      "small"
+    ]
+  },
+  "commodities": {
+    "min_score": 0.0,
+    "regimes": [
+      "LEADER",
+      "CONTENDER"
+    ],
+    "vol": [
+      "HIGH",
+      "MED"
+    ],
+    "acc_watch": false,
+    "cap_bands": [
+      "large",
+      "mid",
+      "small",
+      "ETF"
+    ]
+  },
+  "uranium": {
+    "min_score": 0.0,
+    "regimes": [
+      "LEADER",
+      "CONTENDER",
+      "TREND+LEAD"
+    ],
+    "vol": [
+      "HIGH",
+      "MED"
+    ],
+    "acc_watch": false,
+    "cap_bands": [
+      "large",
+      "mid",
+      "small"
+    ]
+  },
+  "au_gold": {
+    "min_score": 0.0,
+    "regimes": [
+      "LEADER",
+      "CONTENDER",
+      "TREND+LEAD"
+    ],
+    "vol": [
+      "HIGH",
+      "MED"
+    ],
+    "acc_watch": false,
+    "cap_bands": [
+      "large",
+      "mid",
+      "small"
+    ]
+  }
+}

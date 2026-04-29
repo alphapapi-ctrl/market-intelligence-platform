@@ -141,10 +141,7 @@ DEFAULT_SETTINGS = {
         'Actionable & Exports': True,
         'DeMark Signals'      : True,
         'Run Scripts'         : True,
-        'AI Settings'         : True,
-        'Rank Settings'       : True,
-        'Actionable Settings'  : True,
-        'General Settings'     : True,
+        'Settings'            : True,
     },
     'rank_settings': {
 
@@ -246,15 +243,12 @@ ALL_PAGES = [
     ("Actionable & Exports",     "file-earmark-arrow-down"),
     ("Drawdown Analysis",        "graph-down"),
     ("Run Scripts",              "play-circle"),
-    ("AI Settings",              "robot"),
-    ("Rank Settings",            "sliders"),
-    ("Actionable Settings",       "funnel"),
-    ("General Settings",         "gear"),
+    ("Settings",             "gear"),
 ]
 
 # Filter to enabled pages — Settings always shown
 active_pages = [(name, icon) for name, icon in ALL_PAGES
-                if page_config.get(name, True) or name in ('General Settings', 'AI Settings', 'Rank Settings', 'Actionable Settings')]
+                if page_config.get(name, True) or name == 'Settings']
 
 page = option_menu(
     menu_title  = None,
@@ -2041,7 +2035,7 @@ elif page == "Seasonality":
                     legend=dict(
                         orientation='v',
                         yanchor='top', y=1,
-                        xanchor='left', x=1.03,
+                        xanchor='left', x=1.02,
                         font=dict(size=9),
                         bgcolor='rgba(0,0,0,0)',
                         tracegroupgap=0,
@@ -2861,11 +2855,11 @@ elif page == "Seasonality":
                 title=dict(text=f"S&P 500 — Presidential {_yr_label[_yr_sel]}",
                            font=dict(size=14)),
                 height=500,
-                margin=dict(l=10, r=60, t=60, b=40),
+                margin=dict(l=10, r=120, t=60, b=40),
                 legend=dict(
                     orientation='v',
                     yanchor='top', y=1,
-                    xanchor='left', x=1,
+                    xanchor='left', x=1.02,
                     font=dict(size=9),
                     bgcolor='rgba(0,0,0,0)',
                     tracegroupgap=0,
@@ -2873,7 +2867,7 @@ elif page == "Seasonality":
                     borderwidth=0,
                 ),
             )
-            _pc_spacer, _pc_plot = st.columns([0.08, 0.885])
+            _pc_spacer, _pc_plot = st.columns([0.115, 0.885])
             with _pc_plot:
                 st.plotly_chart(_fig_pc, use_container_width=True)
 
@@ -3663,8 +3657,7 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
 
     with tab2:
         st.subheader("Zweig Breadth Thrust")
-        history_file = os.path.join(STOCKS, 'results', 'breadth', 'au_total_market',
-                                    'au_total_market_breadth_history.csv')
+        history_file = os.path.join(STOCKS, 'results', 'breadth', 'au_total_market', 'au_total_market_breadth_history.csv')
         zweig_history = load_csv(history_file)
         if zweig_history is not None:
             render_zweig_section(zweig_history, 'sec', 'AU Market', show_sector=True)
@@ -5099,9 +5092,132 @@ elif page == "Relative Strength Charts":
 # ═══════════════════════════════════════════════════════════════════════════════
 # BREADTH RRG PAGE
 # ═══════════════════════════════════════════════════════════════════════════════
+
+    def build_breadth_rrg(hist_df, sector_keys, prefix, sma_col, title, tail_days=20, smooth_span=3):
+        """
+        Build breadth RRG from history CSV.
+        Columns: sec_{key}_leaders, sec_{key}_total, sec_{key}_above20/50/200
+        RS-Ratio  = (leaders/total)*100 normalised vs universe mean
+        RS-Momentum = rate of change of RS-Ratio
+        """
+        import plotly.graph_objects as go
+        if hist_df is None or len(hist_df) < 5:
+            st.warning("Insufficient breadth history data.")
+            return
+        hist_df = hist_df.copy()
+        hist_df['date'] = pd.to_datetime(hist_df['date'])
+        hist_df = hist_df.sort_values('date').reset_index(drop=True)
+
+        # Use selected SMA col or leaders as signal
+        sma_suffix_map = {'above20': 'above20', 'above50': 'above50', 'above200': 'above200'}
+        sig_suffix = sma_suffix_map.get(sma_col, 'above50')
+
+        # Build RS series for each sector
+        rs_series = {}
+        for sk in sector_keys:
+            total_col = f'{prefix}_{sk}_total'
+            sig_col   = f'{prefix}_{sk}_{sig_suffix}'
+            if total_col not in hist_df.columns or sig_col not in hist_df.columns:
+                # Try leaders as fallback
+                sig_col = f'{prefix}_{sk}_leaders'
+                if sig_col not in hist_df.columns: continue
+            tot = pd.to_numeric(hist_df[total_col], errors='coerce')
+            sig = pd.to_numeric(hist_df[sig_col],   errors='coerce')
+            mask = tot > 0
+            pct = pd.Series(index=hist_df.index, dtype=float)
+            pct[mask] = (sig[mask] / tot[mask]) * 100
+            rs_series[sk] = pct.fillna(method='ffill')
+
+        if not rs_series:
+            st.warning("No matching sector columns found.")
+            return
+
+        rs_df = pd.DataFrame(rs_series, index=hist_df.index)
+        # Normalise: RS-Ratio = sector pct / universe mean pct * 100
+        univ_mean = rs_df.mean(axis=1).replace(0, float('nan'))
+        rs_norm = rs_df.divide(univ_mean, axis=0) * 100
+
+        # Smooth
+        rs_smooth = rs_norm.ewm(span=smooth_span, adjust=False).mean()
+
+        # RS-Momentum = 1-period change of smoothed RS
+        rs_mom = rs_smooth.diff(1)
+        rs_mom_smooth = rs_mom.ewm(span=smooth_span, adjust=False).mean()
+
+        # Normalise momentum around 100
+        mom_mean = rs_mom_smooth.mean()
+        mom_std  = rs_mom_smooth.std().replace(0, 1)
+        rs_mom_norm = (rs_mom_smooth - mom_mean) / mom_std * 10 + 100
+
+        # Get tail window
+        tail = min(tail_days, len(rs_smooth))
+        rs_tail   = rs_smooth.iloc[-tail:]
+        mom_tail  = rs_mom_norm.iloc[-tail:]
+
+        fig   = go.Figure()
+        theme = get_chart_theme()
+        COLOURS = ['#00b4d8','#f77f00','#2dc653','#e63946','#9b5de5',
+                   '#f15bb5','#fee440','#06d6a0','#118ab2','#ef476f',
+                   '#aacc00','#48cae4','#fcbf49','#c77dff','#ff6b6b',
+                   '#e63946','#80b918','#c77dff','#ff6b6b','#48cae4']
+
+        for i, sk in enumerate(sector_keys):
+            if sk not in rs_tail.columns: continue
+            x = rs_tail[sk].dropna()
+            y = mom_tail[sk].reindex(x.index).dropna()
+            x = x.reindex(y.index)
+            if len(x) < 2: continue
+            col   = COLOURS[i % len(COLOURS)]
+            label = sk.replace('_', ' ').title()
+            # Tail line
+            fig.add_trace(go.Scatter(
+                x=x.values, y=y.values, mode='lines',
+                line=dict(width=1.5, color=col), opacity=0.6,
+                showlegend=False, hoverinfo='skip'
+            ))
+            # Latest dot + label
+            fig.add_trace(go.Scatter(
+                x=[x.iloc[-1]], y=[y.iloc[-1]],
+                mode='markers+text', text=[label], textposition='top center',
+                textfont=dict(size=9, color=col),
+                marker=dict(size=9, color=col,
+                            line=dict(width=1, color='rgba(255,255,255,0.5)')),
+                name=label,
+                hovertemplate=f"<b>{label}</b><br>RS-Ratio: %{{x:.1f}}<br>RS-Mom: %{{y:.1f}}<extra></extra>"
+            ))
+
+        fig.add_hline(y=100, line_dash="dash", line_color="rgba(128,128,128,0.5)", line_width=1)
+        fig.add_vline(x=100, line_dash="dash", line_color="rgba(128,128,128,0.5)", line_width=1)
+
+        # Dynamic axis range
+        all_x = [t for tr in fig.data for t in (list(tr.x) if tr.x is not None else [])]
+        all_y = [t for tr in fig.data for t in (list(tr.y) if tr.y is not None else [])]
+        xr = [min(all_x or [95])-2, max(all_x or [105])+2]
+        yr = [min(all_y or [95])-2, max(all_y or [105])+2]
+
+        fig.update_layout(
+            plot_bgcolor=theme['plot_bgcolor'], paper_bgcolor=theme['paper_bgcolor'],
+            font=dict(color=theme['font_color']),
+            xaxis=dict(title="RS-Ratio (breadth vs universe)", gridcolor=theme['gridcolor'],
+                       zeroline=False, range=xr),
+            yaxis=dict(title="RS-Momentum", gridcolor=theme['gridcolor'],
+                       zeroline=False, range=yr),
+            title=dict(text=title, font=dict(size=14)),
+            height=650, showlegend=True,
+            legend=dict(x=1.01, y=1, font=dict(size=9)),
+            margin=dict(l=60, r=160, t=60, b=40),
+        )
+        xmid = (xr[0]+xr[1])/2
+        ymid = (yr[0]+yr[1])/2
+        for txt, x, y in [("Leading",xmid+0.5,ymid+0.5),("Weakening",xmid-0.5,ymid+0.5),
+                           ("Lagging",xmid-0.5,ymid-0.5),("Improving",xmid+0.5,ymid-0.5)]:
+            fig.add_annotation(x=x, y=y, text=txt, showarrow=False,
+                               font=dict(size=10, color="rgba(128,128,128,0.5)"),
+                               xanchor='center', yanchor='middle')
+        st.plotly_chart(fig, use_container_width=True)
+
     with tab4:
-        au_hist_file = os.path.join(STOCKS, 'results', 'breadth', 'au_total_market',
-                                    'au_total_market_breadth_history.csv')
+        au_hist_file = os.path.join(STOCKS, 'results', 'breadth', 'au_total_market', 'au_total_market_breadth_history.csv')
         au_hist = load_csv(au_hist_file)
         if au_hist is not None:
             sec_cols = [c for c in au_hist.columns if c.startswith('sec_') and c.endswith('_total')
@@ -5111,21 +5227,23 @@ elif page == "Relative Strength Charts":
 
             st.caption(f"Latest: {au_hist.iloc[-1]['date']} — {file_age(au_hist_file)}")
 
-            sma_choice = st.radio("SMA Level", ["Above 20", "Above 50", "Above 200"],
-                                   horizontal=True, key='brrg_au_sma')
-            sma_col_map = {"Above 20": "above20", "Above 50": "above50", "Above 200": "above200"}
-            sma_col = sma_col_map[sma_choice]
+            _bc1, _bc2, _bc3 = st.columns(3)
+            sma_choice    = _bc1.radio("SMA Level", ["Above 20", "Above 50", "Above 200"],
+                                        horizontal=True, key='brrg_au_sma')
+            _brrg_tail    = _bc2.slider("Tail days", 5, 63, 20, key='brrg_au_tail')
+            _brrg_smooth  = _bc3.slider("Smoothing", 1, 20, 5, key='brrg_au_smooth')
+            sma_col_map   = {"Above 20": "above20", "Above 50": "above50", "Above 200": "above200"}
+            sma_col       = sma_col_map[sma_choice]
 
             build_breadth_rrg(au_hist, sec_keys, 'sec', sma_col,
-                              f'AU Sector Breadth — {sma_choice} SMA', tail_days, smooth_span)
+                              f'AU Sector Breadth — {sma_choice} SMA', _brrg_tail, _brrg_smooth)
         else:
             st.warning("No AU breadth history found — run AU breadth script first")
 
     # ── US ─────────────────────────────────────────────────────────────────────
 
     with tab5:
-        us_hist_file = os.path.join(STOCKS, 'results', 'breadth', 'us_total_market',
-                                    'us_total_market_breadth_history.csv')
+        us_hist_file = os.path.join(STOCKS, 'results', 'breadth', 'us_total_market', 'us_total_market_breadth_history.csv')
         us_hist = load_csv(us_hist_file)
         if us_hist is not None:
             sp_cols = [c for c in us_hist.columns if c.startswith('sp_sec_') and c.endswith('_total')]
@@ -5139,16 +5257,18 @@ elif page == "Relative Strength Charts":
             sma_col_map = {"Above 20": "above20", "Above 50": "above50", "Above 200": "above200"}
             sma_col = sma_col_map[sma_choice]
 
+            _bc1b, _bc2b, _bc3b = st.columns(3)
+            _brrg_tail_us   = _bc2b.slider("Tail days", 5, 63, 20, key='brrg_us_tail')
+            _brrg_smooth_us = _bc3b.slider("Smoothing", 1, 20, 5, key='brrg_us_smooth')
             build_breadth_rrg(us_hist, sp_keys, 'sp_sec', sma_col,
-                              f'US Sector Breadth — {sma_choice} SMA', tail_days, smooth_span)
+                              f'US Sector Breadth — {sma_choice} SMA', _brrg_tail_us, _brrg_smooth_us)
         else:
             st.warning("No US breadth history found — run US breadth script first")
 
     # ── Commodities ────────────────────────────────────────────────────────────
 
     with tab6:
-        comm_hist_file = os.path.join(STOCKS, 'results', 'breadth', 'all_major_commodities',
-                                      'all_major_commodities_breadth_history.csv')
+        comm_hist_file = os.path.join(STOCKS, 'results', 'breadth', 'all_major_commodities', 'all_major_commodities_breadth_history.csv')
         comm_hist = load_csv(comm_hist_file)
         if comm_hist is not None:
             comm_cols = [c for c in comm_hist.columns if c.startswith('comm_') and c.endswith('_total')
@@ -5162,8 +5282,11 @@ elif page == "Relative Strength Charts":
             sma_col_map = {"Above 20": "above20", "Above 50": "above50", "Above 200": "above200"}
             sma_col = sma_col_map[sma_choice]
 
+            _bc1c, _bc2c, _bc3c = st.columns(3)
+            _brrg_tail_cm   = _bc2c.slider("Tail days", 5, 63, 20, key='brrg_cm_tail')
+            _brrg_smooth_cm = _bc3c.slider("Smoothing", 1, 20, 5, key='brrg_cm_smooth')
             build_breadth_rrg(comm_hist, comm_keys, 'comm', sma_col,
-                              f'Commodity Breadth — {sma_choice} SMA', tail_days, smooth_span)
+                              f'Commodity Breadth — {sma_choice} SMA', _brrg_tail_cm, _brrg_smooth_cm)
         else:
             st.warning("No commodities breadth history found — run commodities breadth script first")
 
@@ -5628,6 +5751,89 @@ elif page == "Actionable & Exports":
                 if has_csv:
                     _df = load_csv(csv_path, index_col='rank')
                     if _df is not None and len(_df) > 0:
+                        # Apply all filters from actionable settings
+                        _sma_cfg = _act_cfg.get(_cfg_key, {})
+                        _s_filt  = {**_AS_DISPLAY_DEFAULTS.get(_cfg_key,{}), **_act_cfg.get(_cfg_key,{})}
+
+                        # Regime filter
+                        _reg_filter = _s_filt.get('regimes', [])
+                        if _reg_filter and 'regime_label' in _df.columns:
+                            _df = _df[_df['regime_label'].isin(_reg_filter)]
+
+                        # Vol filter
+                        _vol_filter = _s_filt.get('vol', [])
+                        if _vol_filter and 'vol_label' in _df.columns:
+                            _df = _df[_df['vol_label'].isin(_vol_filter)]
+
+                        # Cap band filter
+                        _cap_filter = _s_filt.get('cap_bands', [])
+                        if _cap_filter and 'cap_band' in _df.columns:
+                            _df = _df[_df['cap_band'].isin(_cap_filter)]
+
+                        # Min score filter
+                        _min_score = _s_filt.get('min_score', 0.0)
+                        if _min_score and 'score_final' in _df.columns:
+                            _df = _df[pd.to_numeric(_df['score_final'], errors='coerce') >= _min_score]
+                        if all(c in _df.columns for c in ['close','sma20','sma50','sma200']):
+                            def _check_conds(p, s20, s50, s200, conds, logic='AND'):
+                                """Check condition strings with AND or OR logic."""
+                                _map = {
+                                    'Price > SMA20': p > s20,  'Price < SMA20': p < s20,
+                                    'Price > SMA50': p > s50,  'Price < SMA50': p < s50,
+                                    'Price > SMA200': p > s200,'Price < SMA200': p < s200,
+                                    'SMA20 > SMA50': s20 > s50,'SMA20 < SMA50': s20 < s50,
+                                    'SMA20 > SMA200': s20>s200,'SMA20 < SMA200': s20<s200,
+                                    'SMA50 > SMA20': s50 > s20,'SMA50 < SMA20': s50 < s20,
+                                    'SMA50 > SMA200': s50>s200,'SMA50 < SMA200': s50<s200,
+                                    'SMA200 > SMA20': s200>s20,'SMA200 < SMA20': s200<s20,
+                                    'SMA200 > SMA50': s200>s50,'SMA200 < SMA50': s200<s50,
+                                }
+                                _results = [_map.get(c, True) for c in conds]
+                                return all(_results) if logic == 'AND' else any(_results)
+
+                            def _derive_acc(row):
+                                _p,_s20,_s50,_s200 = row['close'],row['sma20'],row['sma50'],row['sma200']
+                                if any(pd.isna(x) for x in [_p,_s20,_s50,_s200]): return row['acc_watch']
+                                for _atype in ['TRENDING','REACCUM','CONSOLIDATE','SHIFT','PROGRESS','EARLY']:
+                                    _cfg = _sma_cfg.get(f'sma_{_atype.lower()}', {})
+                                    if not _cfg: continue
+                                    # Handle old list format vs new dict format
+                                    if isinstance(_cfg, list): continue
+                                    _all_conds = (_cfg.get('price',[])+_cfg.get('sma20',[])+
+                                                  _cfg.get('sma50',[])+_cfg.get('sma200',[]))
+                                    _logic = _cfg.get('logic','AND')
+                                    if _all_conds and _check_conds(_p,_s20,_s50,_s200,_all_conds,_logic):
+                                        return _atype
+                                return row['acc_watch']
+
+                            _df = _df.copy()
+                            _df['acc_watch'] = _df.apply(_derive_acc, axis=1)
+                            _acc_filter = _sma_cfg.get('acc_watch', [])
+                            if _acc_filter:
+                                _df = _df[_df['acc_watch'].isin(_acc_filter)]
+                        if _sma_cfg.get('sma_early') or _sma_cfg.get('sma_progress') or _sma_cfg.get('sma_shift'):
+                            _sma_logic = _sma_cfg.get('sma_logic', 'AND')
+                            def _sma_pass(row):
+                                _aw = row.get('acc_watch', '-')
+                                _sma_map = {
+                                    'EARLY'   : _sma_cfg.get('sma_early', []),
+                                    'PROGRESS': _sma_cfg.get('sma_progress', []),
+                                    'SHIFT'   : _sma_cfg.get('sma_shift', []),
+                                }
+                                _conditions = _sma_map.get(_aw, [])
+                                if not _conditions: return True
+                                _close = row.get('close', 0)
+                                _checks = []
+                                for _cond in _conditions:
+                                    if _cond == 'Above 20':  _checks.append(_close > row.get('sma20',  _close))
+                                    elif _cond == 'Below 20':  _checks.append(_close < row.get('sma20',  _close))
+                                    elif _cond == 'Above 50':  _checks.append(_close > row.get('sma50',  _close))
+                                    elif _cond == 'Below 50':  _checks.append(_close < row.get('sma50',  _close))
+                                    elif _cond == 'Above 200': _checks.append(_close > row.get('sma200', _close))
+                                    elif _cond == 'Below 200': _checks.append(_close < row.get('sma200', _close))
+                                return all(_checks) if _sma_logic == 'AND' else any(_checks)
+                            if all(c in _df.columns for c in ['close','sma20','sma50','sma200']):
+                                _df = _df[_df.apply(_sma_pass, axis=1)].copy()
                         _bc = ['ticker','name','cap_band','close','vol_label','acc_watch','regime_label','score_final']
                         _ec = ['sector','commodity','type','rs_ratio','peer_rs_score','ret_6m','ret_12m','max_dd','rs_trend','delta_rank']
                         _sc = [c for c in _bc+_ec if c in _df.columns]
@@ -5945,604 +6151,689 @@ elif page == "DeMark Signals":
 # ═══════════════════════════════════════════════════════════════════════════════
 # SETTINGS PAGE
 # ═══════════════════════════════════════════════════════════════════════════════
-elif page == "Rank Settings":
-    st.title("🎛️ Rank Score Settings")
-    st.caption("Adjust scoring parameters for each benchmark and screener. "
-               "Save named profiles per tab. Load any saved profile. Reset to factory defaults at any time.")
-
-    _rs_base = os.path.join(BASE, 'rank_profiles')
-    os.makedirs(_rs_base, exist_ok=True)
-
-    # ── Profile helpers ───────────────────────────────────────────────────────
-    def _prof_dir(tab_key):
-        d = os.path.join(_rs_base, tab_key)
-        os.makedirs(d, exist_ok=True)
-        return d
-
-    def _list_profiles(tab_key):
-        return sorted(f[:-5] for f in os.listdir(_prof_dir(tab_key)) if f.endswith('.json'))
-
-    def _load_profile(tab_key, name):
-        p = os.path.join(_prof_dir(tab_key), f"{name}.json")
-        return json.load(open(p)) if os.path.exists(p) else {}
-
-    def _save_profile(tab_key, name, settings):
-        p = os.path.join(_prof_dir(tab_key), f"{name}.json")
-        json.dump(settings, open(p,'w'), indent=2)
-
-    def _active_settings(tab_key, defaults):
-        """Load active settings: check rank_settings.json first, else defaults."""
-        p = os.path.join(BASE, 'rank_settings.json')
-        if os.path.exists(p):
-            try:
-                return {**defaults, **json.load(open(p)).get(tab_key, {})}
-            except: pass
-        return defaults.copy()
-
-    def _save_active(tab_key, settings):
-        p = os.path.join(BASE, 'rank_settings.json')
-        try:    rs = json.load(open(p))
-        except: rs = {}
-        rs[tab_key] = settings
-        json.dump(rs, open(p,'w'), indent=2)
-        st.success(f"✓ Active settings saved to rank_settings.json")
-
-    # ── Weight guidance ───────────────────────────────────────────────────────
-    WEIGHT_GUIDE = """
-<div style="background:rgba(255,180,0,0.08);border:1px solid rgba(255,180,0,0.3);
-border-radius:6px;padding:8px 14px;font-size:11px;margin-bottom:12px;line-height:1.8">
-<b>Weight guidance:</b> &nbsp;
-<code>0.0</code> = disabled &nbsp;|&nbsp;
-<code>0.01–0.1</code> = minor influence &nbsp;|&nbsp;
-<code>0.2–0.3</code> = moderate &nbsp;|&nbsp;
-<code>0.4–0.5</code> = standard weight &nbsp;|&nbsp;
-<code>0.6–1.0</code> = high emphasis &nbsp;|&nbsp;
-<code>>1.0</code> = dominant factor<br>
-<b>Bonus values:</b> &nbsp;
-<code>0.5</code> = small boost &nbsp;|&nbsp;
-<code>1.0</code> = standard bonus &nbsp;|&nbsp;
-<code>-0.5</code> = mild penalty &nbsp;|&nbsp;
-<code>-1.0</code> = strong penalty<br>
-<b>Vol multiplier:</b> &nbsp;
-<code>1.0</code> = neutral &nbsp;|&nbsp;
-<code>1.1</code> = 10%% boost for high volume &nbsp;|&nbsp;
-<code>0.9</code> = 10%% penalty for low volume
-</div>"""
-
-    # ── Benchmark score widget ────────────────────────────────────────────────
-
-
-    def _profile_bar(tab_key, cur, k):
-        """Render profile load/save bar. Returns updated settings dict."""
-        profiles = _list_profiles(tab_key)
-        pb1, pb2, pb3, pb4 = st.columns([3, 2, 2, 1])
-        sel = pb1.selectbox("Load profile", ["— current —"] + profiles, key=f"prof_sel_{k}")
-        if sel != "— current —":
-            loaded = _load_profile(tab_key, sel)
-            if loaded:
-                cur = {**cur, **loaded}
-                st.session_state[f"prof_loaded_{k}"] = cur
-        pname = pb2.text_input("Save as", placeholder="profile name", key=f"prof_name_{k}")
-        if pb3.button("💾 Save profile", key=f"prof_save_{k}") and pname.strip():
-            _save_profile(tab_key, pname.strip(), cur)
-            st.success(f"Saved profile '{pname.strip()}'")
-        if pb4.button("↩ Defaults", key=f"prof_def_{k}"):
-            st.session_state[f"prof_loaded_{k}"] = None
-            # Increment reset counter — widgets use it as key suffix to force re-render
-            st.session_state[f"reset_ctr_{k}"] = st.session_state.get(f"reset_ctr_{k}", 0) + 1
-            st.rerun()
-        return cur
-
-    def _bm_score_widgets(tab_key, script, defaults):
-        cur = _active_settings(tab_key, defaults)
-        # Apply any loaded profile from session state
-        if st.session_state.get(f"prof_loaded_{tab_key}"):
-            cur = {**cur, **st.session_state[f"prof_loaded_{tab_key}"]}
-        st.markdown(unsafe_allow_html=True, body=WEIGHT_GUIDE)
-        cur = _profile_bar(tab_key, cur, tab_key)
-        _rk = st.session_state.get(f"reset_ctr_{tab_key}", 0)  # key suffix for reset
-        def _w_tag(v):
-            if v == 0: return "off"
-            elif v <= 0.1: return "minor"
-            elif v <= 0.3: return "moderate"
-            elif v <= 0.5: return "standard"
-            elif v <= 1.0: return "high"
-            else: return "dominant"
-        st.code(
-            f"score = (ret_12m × {cur['ret_12m_weight']} [{_w_tag(cur['ret_12m_weight'])}])"
-            f" + (persist × {cur['persist_weight']} [{_w_tag(cur['persist_weight'])}])"
-            f" + (dd × -{cur['dd_weight_large']}..{cur['dd_weight_small']} [penalty])"
-            f" + (mqs × {cur['mqs_weight']} [{_w_tag(cur['mqs_weight'])}])"
-            f" + trend_bonus({cur['trend_bonus']}) + lead_bonus({cur['lead_bonus']})"
-            f" + rs_trend_bonus  →  × vol_multiplier",
-            language="python")
-        st.markdown("#### Return & Quality")
-        c1,c2,c3 = st.columns(3)
-        v_ret  = c1.number_input("12m Return weight — standard 0.4", -2.0, 2.0, float(cur['ret_12m_weight']),  0.05, key=f"ret_{tab_key}_{_rk}", help="Primary momentum signal. 0.4 = standard. Higher = more return-chasing.")
-        v_per  = c2.number_input("Persistence weight — standard 0.01", 0.0, 0.5, float(cur['persist_weight']),  0.005, format="%.3f", key=f"per_{tab_key}_{_rk}", help="% up-days. Small influence — keep low (0.01). Increase to reward consistency.")
-        v_mqs  = c3.number_input("MQS weight — standard 0.2", -2.0, 2.0, float(cur['mqs_weight']),   0.05, key=f"mqs_{tab_key}_{_rk}", help="Momentum Quality Score. 0.2 = standard. Rewards clean rises with low volatility.")
-        st.markdown("#### Drawdown Penalty (applied negative)")
-        c1,c2,c3,c4 = st.columns(4)
-        v_ddl = c1.number_input("Large cap — std 0.4", 0.0, 2.0, float(cur['dd_weight_large']),  0.05, key=f"ddl_{tab_key}_{_rk}", help="Higher = larger stocks penalised more for big drawdowns")
-        v_ddm = c2.number_input("Mid cap — std 0.3",   0.0, 2.0, float(cur['dd_weight_mid']),    0.05, key=f"ddm_{tab_key}_{_rk}")
-        v_dds = c3.number_input("Small cap — std 0.2", 0.0, 2.0, float(cur['dd_weight_small']),  0.05, key=f"dds_{tab_key}_{_rk}")
-        v_dde = c4.number_input("ETF — std 0.3",       0.0, 2.0, float(cur['dd_weight_etf']),    0.05, key=f"dde_{tab_key}_{_rk}")
-        st.markdown("#### Trend & Leadership Bonus")
-        c1,c2 = st.columns(2)
-        v_tb = c1.number_input("Trend bonus (above 200 SMA) — std 1.0", 0.0, 3.0, float(cur['trend_bonus']), 0.05, key=f"tb_{tab_key}_{_rk}", help="Added when price > 200 SMA. 1.0 = standard single-point bonus.")
-        v_lb = c2.number_input("Lead bonus (RS ratio > 1.0) — std 1.0",  0.0, 3.0, float(cur['lead_bonus']),  0.05, key=f"lb_{tab_key}_{_rk}", help="Added when stock outperforms benchmark over 12m.")
-        st.markdown("#### RS Trend Bonus")
-        c1,c2,c3,c4,c5 = st.columns(5)
-        v_rsu  = c1.number_input("Strong Up — std 1.0",   -2.0, 2.0, float(cur['rs_trend_strong_up']),    0.05, key=f"rsu_{tab_key}_{_rk}")
-        v_ru   = c2.number_input("Up — std 0.5",          -2.0, 2.0, float(cur['rs_trend_up']),           0.05, key=f"ru_{tab_key}_{_rk}")
-        v_rf   = c3.number_input("Flat — std 0.0",        -2.0, 2.0, float(cur['rs_trend_flat']),         0.05, key=f"rf_{tab_key}_{_rk}")
-        v_rd   = c4.number_input("Down — std -0.5",       -2.0, 2.0, float(cur['rs_trend_down']),         0.05, key=f"rd_{tab_key}_{_rk}")
-        v_rsd  = c5.number_input("Strong Down — std -1.0",-2.0, 2.0, float(cur['rs_trend_strong_down']),  0.05, key=f"rsd_{tab_key}_{_rk}")
-        st.markdown("#### Volume Multiplier")
-        c1,c2,c3 = st.columns(3)
-        v_vh = c1.number_input("High vol — std 1.1 (+10%%)", 0.0, 3.0, float(cur['vol_high']), 0.05, key=f"vh_{tab_key}_{_rk}", help="Multiplies final score. 1.1 = 10%% boost for high volume days.")
-        v_vm = c2.number_input("Med vol — std 1.0 (neutral)", 0.0, 3.0, float(cur['vol_med']),  0.05, key=f"vm_{tab_key}_{_rk}")
-        v_vl = c3.number_input("Low vol — std 0.9 (-10%%)",  0.0, 3.0, float(cur['vol_low']),  0.05, key=f"vl_{tab_key}_{_rk}")
-        new_s = {
-            'ret_12m_weight': v_ret, 'persist_weight': v_per, 'mqs_weight': v_mqs,
-            'trend_bonus': v_tb, 'lead_bonus': v_lb,
-            'dd_weight_large': v_ddl, 'dd_weight_mid': v_ddm, 'dd_weight_small': v_dds, 'dd_weight_etf': v_dde,
-            'vol_high': v_vh, 'vol_med': v_vm, 'vol_low': v_vl,
-            'rs_trend_strong_up': v_rsu, 'rs_trend_up': v_ru, 'rs_trend_flat': v_rf,
-            'rs_trend_down': v_rd, 'rs_trend_strong_down': v_rsd,
-        }
-        b1,b2 = st.columns([2,1])
-        if b1.button("💾 Save as Active", type="primary", key=f"save_{tab_key}"):
-            _save_active(tab_key, new_s)
-        if b2.button("🔄 Save & Run", key=f"run_{tab_key}"):
-            _save_active(tab_key, new_s)
-            run_script(os.path.join(STOCKS, script), STOCKS)
-            st.success("Done")
-        return new_s
-
-    def _sc_score_widgets(tab_key, bm_script, sc_script, defaults):
-        cur = _active_settings(tab_key, defaults)
-        if st.session_state.get(f"prof_loaded_{tab_key}"):
-            cur = {**cur, **st.session_state[f"prof_loaded_{tab_key}"]}
-        st.markdown(unsafe_allow_html=True, body=WEIGHT_GUIDE)
-        cur = _profile_bar(tab_key, cur, tab_key)
-        _rk = st.session_state.get(f"reset_ctr_{tab_key}", 0)  # key suffix for reset
-        st.markdown("#### Score Weights")
-        def _w_tag(v):
-            if v == 0: return "off"
-            elif v <= 0.1: return "minor"
-            elif v <= 0.3: return "moderate"
-            elif v <= 0.5: return "standard"
-            elif v <= 1.0: return "high"
-            else: return "dominant"
-        st.code(
-            f"score = (ret_12m × {cur['ret_12m_weight']} [{_w_tag(cur['ret_12m_weight'])}])"
-            f" + (persist × {cur['persist_weight']} [{_w_tag(cur['persist_weight'])}])"
-            f" + (dd × -w_dd [penalty])"
-            f" + (mqs × {cur['mqs_weight']} [{_w_tag(cur['mqs_weight'])}])"
-            f" + (peer_rs × {cur['peer_rs_weight']} [{_w_tag(cur['peer_rs_weight'])}])"
-            f" + rs_trend_bonus + regime_bonus  →  × vol_multiplier",
-            language="python")
-        c1,c2,c3,c4 = st.columns(4)
-        v_ret  = c1.number_input("12m Return — std 0.4",    -2.0, 2.0, float(cur['ret_12m_weight']),  0.05, key=f"ret_{tab_key}_{_rk}", help="Primary return signal. 0.4 standard.")
-        v_per  = c2.number_input("Persistence — std 0.01",   0.0, 0.5, float(cur['persist_weight']),  0.005, format="%.3f", key=f"per_{tab_key}_{_rk}", help="Consistency of up-days. Keep small.")
-        v_mqs  = c3.number_input("MQS — std 0.2",           -2.0, 2.0, float(cur['mqs_weight']),      0.05, key=f"mqs_{tab_key}_{_rk}", help="Quality score. Rewards clean trends.")
-        v_prs  = c4.number_input("Peer RS — std 0.02",       0.0, 0.5, float(cur['peer_rs_weight']),  0.005, format="%.3f", key=f"prs_{tab_key}_{_rk}", help="% outperforming sector peers. Keep small — already 0-100 scale.")
-        st.markdown("#### Drawdown Penalty")
-        c1,c2,c3,c4 = st.columns(4)
-        v_ddl = c1.number_input("Large — std 0.4", 0.0, 2.0, float(cur['dd_weight_large']),  0.05, key=f"ddl_{tab_key}_{_rk}")
-        v_ddm = c2.number_input("Mid — std 0.3",   0.0, 2.0, float(cur['dd_weight_mid']),    0.05, key=f"ddm_{tab_key}_{_rk}")
-        v_dds = c3.number_input("Small — std 0.2", 0.0, 2.0, float(cur['dd_weight_small']),  0.05, key=f"dds_{tab_key}_{_rk}")
-        v_dde = c4.number_input("ETF — std 0.3",   0.0, 2.0, float(cur['dd_weight_etf']),    0.05, key=f"dde_{tab_key}_{_rk}")
-        st.markdown("#### RS Trend Bonus")
-        c1,c2,c3,c4,c5 = st.columns(5)
-        v_rsu = c1.number_input("Strong Up — std 1.0",   -2.0, 2.0, float(cur['rs_trend_strong_up']),   0.05, key=f"rsu_{tab_key}_{_rk}")
-        v_ru  = c2.number_input("Up — std 0.5",          -2.0, 2.0, float(cur['rs_trend_up']),          0.05, key=f"ru_{tab_key}_{_rk}")
-        v_rf  = c3.number_input("Flat — std 0.0",        -2.0, 2.0, float(cur['rs_trend_flat']),        0.05, key=f"rf_{tab_key}_{_rk}")
-        v_rd  = c4.number_input("Down — std -0.5",       -2.0, 2.0, float(cur['rs_trend_down']),        0.05, key=f"rd_{tab_key}_{_rk}")
-        v_rsd = c5.number_input("Strong Down — std -1.0",-2.0, 2.0, float(cur['rs_trend_strong_down']), 0.05, key=f"rsd_{tab_key}_{_rk}")
-        st.markdown("#### Regime Bonus")
-        c1,c2,c3,c4 = st.columns(4)
-        v_rl  = c1.number_input("Leader — std 1.0",    -2.0, 2.0, float(cur['regime_bonus_leader']),    0.05, key=f"rl_{tab_key}_{_rk}", help="Top peer RS + above trend. 1.0 = strong boost.")
-        v_rc  = c2.number_input("Contender — std 0.5", -2.0, 2.0, float(cur['regime_bonus_contender']), 0.05, key=f"rc_{tab_key}_{_rk}")
-        v_rlag= c3.number_input("Laggard — std 0.0",   -2.0, 2.0, float(cur['regime_bonus_laggard']),   0.05, key=f"rlag_{tab_key}_{_rk}")
-        v_rw  = c4.number_input("Weak — std -0.5",     -2.0, 2.0, float(cur['regime_bonus_weak']),      0.05, key=f"rw_{tab_key}_{_rk}", help="Below trend + low peer RS. -0.5 = penalty.")
-        st.markdown("#### Volume Multiplier")
-        c1,c2,c3 = st.columns(3)
-        v_vh = c1.number_input("High — std 1.1", 0.0, 3.0, float(cur['vol_high']), 0.05, key=f"vh_{tab_key}_{_rk}")
-        v_vm = c2.number_input("Med — std 1.0",  0.0, 3.0, float(cur['vol_med']),  0.05, key=f"vm_{tab_key}_{_rk}")
-        v_vl = c3.number_input("Low — std 0.9",  0.0, 3.0, float(cur['vol_low']),  0.05, key=f"vl_{tab_key}_{_rk}")
-        st.divider()
-        st.markdown("#### Filter Parameters")
-        fc1, fc2 = st.columns(2)
-        v_cap = fc1.number_input("Min market cap ($)", 0, 100_000_000_000,
-                                  int(cur.get('min_market_cap', 0)), 10_000_000, key=f"cap_{tab_key}_{_rk}")
-        v_vol = fc2.number_input("Min avg daily volume ($)", 0, 100_000_000,
-                                  int(cur.get('min_vol_avg', 0)), 10_000, key=f"vol_{tab_key}_{_rk}")
-        _valid_regimes = ['LEADER','CONTENDER','LAGGARD','WEAK']
-        _reg_default = [r for r in cur.get('regime_filter', ['LEADER','CONTENDER']) if r in _valid_regimes] or ['LEADER','CONTENDER']
-        v_reg = st.multiselect("Allowed regimes", _valid_regimes,
-                                default=_reg_default, key=f"reg_{tab_key}_{_rk}")
-        new_s = {
-            'ret_12m_weight': v_ret, 'persist_weight': v_per, 'mqs_weight': v_mqs, 'peer_rs_weight': v_prs,
-            'dd_weight_large': v_ddl, 'dd_weight_mid': v_ddm, 'dd_weight_small': v_dds, 'dd_weight_etf': v_dde,
-            'vol_high': v_vh, 'vol_med': v_vm, 'vol_low': v_vl,
-            'rs_trend_strong_up': v_rsu, 'rs_trend_up': v_ru, 'rs_trend_flat': v_rf,
-            'rs_trend_down': v_rd, 'rs_trend_strong_down': v_rsd,
-            'regime_bonus_leader': v_rl, 'regime_bonus_contender': v_rc,
-            'regime_bonus_laggard': v_rlag, 'regime_bonus_weak': v_rw,
-            'min_market_cap': v_cap, 'min_vol_avg': v_vol, 'regime_filter': v_reg,
-        }
-        b1,b2,b3 = st.columns([2,2,1])
-        if b1.button("💾 Save as Active", type="primary", key=f"save_{tab_key}"):
-            _save_active(tab_key, new_s)
-        if b2.button("🔄 Save & Run Screener", key=f"run_sc_{tab_key}"):
-            _save_active(tab_key, new_s)
-            run_script(os.path.join(STOCKS, sc_script), STOCKS)
-            st.success("Screener done")
-        if b3.button("📊 Run Benchmark", key=f"run_bm_{tab_key}"):
-            run_script(os.path.join(STOCKS, bm_script), STOCKS)
-            st.success("Benchmark done")
-        return new_s
-
-    # ── Tabs ──────────────────────────────────────────────────────────────────
-    _rs_tabs = st.tabs([
-        "🇦🇺 AU Benchmark", "🇺🇸 US Benchmark", "🪨 Comm Benchmark",
-        "🔍 AU Screener",   "🔍 US Screener",   "🔍 Comm Screener",
-    ])
-    with _rs_tabs[0]: _bm_score_widgets('au_benchmark',   'au_total_market_benchmark.py',       BM_DEFAULTS)
-    with _rs_tabs[1]: _bm_score_widgets('us_benchmark',   'us_total_market_benchmark.py',       BM_DEFAULTS)
-    with _rs_tabs[2]: _bm_score_widgets('comm_benchmark', 'all_major_commodities_benchmark.py', BM_DEFAULTS)
-    with _rs_tabs[3]: _sc_score_widgets('au_screener',   'au_total_market_benchmark.py',   'au_total_market_screener.py',       SC_DEFAULTS)
-    with _rs_tabs[4]: _sc_score_widgets('us_screener',   'us_total_market_benchmark.py',   'us_total_market_screener.py',       SC_DEFAULTS)
-    with _rs_tabs[5]: _sc_score_widgets('comm_screener', 'all_major_commodities_benchmark.py', 'all_major_commodities_screener.py', SC_DEFAULTS)
-
-elif page == "AI Settings":
-    st.title("🤖 AI Settings")
-
-    _ai_s    = load_settings()
-    _ai_feat = _ai_s.get('ai_features', {})
-    _ai_prmp = _ai_s.get('ai_prompts', DEFAULT_SETTINGS.get('ai_prompts', {}))
-
-    def _save_ai_settings(feat, prompts):
-        s = load_settings()
-        s['ai_features'] = feat
-        s['ai_prompts']  = prompts
-        save_settings(s)
-
-    # ── Tabs ──────────────────────────────────────────────────────────────────
-    _ai_tabs = st.tabs([
-        "⚙️ General",
-        "🇦🇺 AU Breadth",
-        "🇺🇸 US Breadth",
-        "💳 Debt Markets",
-        "📊 AU Benchmark",
-        "📊 US Benchmark",
-        "🪨 Commodities",
+elif page == "Settings":
+    st.title("⚙️ Settings")
+    _stab_ai, _stab_rank, _stab_act, _stab_gen = st.tabs([
+        "🤖 AI",
+        "🎛️ Rank",
+        "📋 Actionable",
+        "🔧 General",
     ])
 
-    # ── General tab ───────────────────────────────────────────────────────────
-    with _ai_tabs[0]:
-        _ai_enabled = st.toggle("Enable AI Assessments", value=_ai_feat.get('enabled', False))
-        st.markdown("#### Active Provider")
-        _provider = st.radio("Active provider", options=["anthropic", "openai"],
-                              index=0 if _ai_feat.get('provider', 'anthropic') == 'anthropic' else 1,
-                              horizontal=True,
-                              format_func=lambda x: "🟣 Claude (Anthropic)" if x == "anthropic" else "🟢 ChatGPT (OpenAI)",
-                              help="Select which API to use for all AI assessments",
-                              label_visibility="collapsed")
+    with _stab_ai:
+            st.title("🤖 AI Settings")
 
-        st.divider()
-        st.markdown("#### 🟣 Claude API")
-        _claude_key = st.text_input("Anthropic API Key", value=_ai_feat.get('anthropic_api_key', ''),
-                                     type="password", help="sk-ant-...")
-        _claude_models = ['claude-sonnet-4-6', 'claude-opus-4-6', 'claude-haiku-4-5-20251001']
-        _claude_model  = st.selectbox("Claude Model",
-                                       options=_claude_models,
-                                       index=_claude_models.index(_ai_feat.get('model', 'claude-sonnet-4-6'))
-                                       if _ai_feat.get('model', 'claude-sonnet-4-6') in _claude_models else 0)
+            _ai_s    = load_settings()
+            _ai_feat = _ai_s.get('ai_features', {})
+            _ai_prmp = _ai_s.get('ai_prompts', DEFAULT_SETTINGS.get('ai_prompts', {}))
 
-        st.divider()
-        st.markdown("#### 🟢 ChatGPT API")
-        _openai_key   = st.text_input("OpenAI API Key", value=_ai_feat.get('openai_api_key', ''),
-                                       type="password", help="sk-...")
-        _openai_model = st.selectbox("OpenAI Model",
-                                      options=['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo'],
-                                      index=['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo'].index(
-                                          _ai_feat.get('openai_model', 'gpt-4o')))
+            def _save_ai_settings(feat, prompts):
+                s = load_settings()
+                s['ai_features'] = feat
+                s['ai_prompts']  = prompts
+                save_settings(s)
 
-        st.markdown("")
-        if st.button("💾 Save General Settings", type="primary", key='ai_save_general'):
-            _new_feat = {
-                'enabled'          : _ai_enabled,
-                'provider'         : _provider,
-                'anthropic_api_key': _claude_key,
-                'model'            : _claude_model,
-                'openai_api_key'   : _openai_key,
-                'openai_model'     : _openai_model,
+            # ── Tabs ──────────────────────────────────────────────────────────────────
+            _ai_tabs = st.tabs([
+                "⚙️ General",
+                "🇦🇺 AU Breadth",
+                "🇺🇸 US Breadth",
+                "💳 Debt Markets",
+                "📊 AU Benchmark",
+                "📊 US Benchmark",
+                "🪨 Commodities",
+            ])
+
+            # ── General tab ───────────────────────────────────────────────────────────
+            with _ai_tabs[0]:
+                _ai_enabled = st.toggle("Enable AI Assessments", value=_ai_feat.get('enabled', False))
+                st.markdown("#### Active Provider")
+                _provider = st.radio("Active provider", options=["anthropic", "openai"],
+                                      index=0 if _ai_feat.get('provider', 'anthropic') == 'anthropic' else 1,
+                                      horizontal=True,
+                                      format_func=lambda x: "🟣 Claude (Anthropic)" if x == "anthropic" else "🟢 ChatGPT (OpenAI)",
+                                      help="Select which API to use for all AI assessments",
+                                      label_visibility="collapsed")
+
+                st.divider()
+                st.markdown("#### 🟣 Claude API")
+                _claude_key = st.text_input("Anthropic API Key", value=_ai_feat.get('anthropic_api_key', ''),
+                                             type="password", help="sk-ant-...")
+                _claude_models = ['claude-sonnet-4-6', 'claude-opus-4-6', 'claude-haiku-4-5-20251001']
+                _claude_model  = st.selectbox("Claude Model",
+                                               options=_claude_models,
+                                               index=_claude_models.index(_ai_feat.get('model', 'claude-sonnet-4-6'))
+                                               if _ai_feat.get('model', 'claude-sonnet-4-6') in _claude_models else 0)
+
+                st.divider()
+                st.markdown("#### 🟢 ChatGPT API")
+                _openai_key   = st.text_input("OpenAI API Key", value=_ai_feat.get('openai_api_key', ''),
+                                               type="password", help="sk-...")
+                _openai_model = st.selectbox("OpenAI Model",
+                                              options=['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo'],
+                                              index=['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo'].index(
+                                                  _ai_feat.get('openai_model', 'gpt-4o')))
+
+                st.markdown("")
+                if st.button("💾 Save General Settings", type="primary", key='ai_save_general'):
+                    _new_feat = {
+                        'enabled'          : _ai_enabled,
+                        'provider'         : _provider,
+                        'anthropic_api_key': _claude_key,
+                        'model'            : _claude_model,
+                        'openai_api_key'   : _openai_key,
+                        'openai_model'     : _openai_model,
+                    }
+                    _save_ai_settings(_new_feat, _ai_prmp)
+                    st.success(f"Saved — using {'Claude' if _provider == 'anthropic' else 'ChatGPT'}")
+
+            # ── Prompt tabs ───────────────────────────────────────────────────────────
+            _prompt_defs = [
+                ('au_breadth',       'AU Breadth', '🇦🇺 AU Breadth', _ai_tabs[1]),
+                ('us_breadth',       'US Breadth', '🇺🇸 US Breadth', _ai_tabs[2]),
+                ('consumer_credit',  'Debt Markets — Consumer Credit', '💳 Consumer', _ai_tabs[3]),
+                ('au_benchmark',     'AU Benchmark', '📊 AU Benchmark', _ai_tabs[4]),
+                ('us_benchmark',     'US Benchmark', '📊 US Benchmark', _ai_tabs[5]),
+                ('comm_benchmark',   'Commodities Benchmark', '🪨 Commodities', _ai_tabs[6]),
+            ]
+
+            for _pk, _plabel, _ptab_label, _ptab in _prompt_defs:
+                with _ptab:
+                    st.markdown(f"#### {_plabel} Prompt")
+                    st.caption("Edit the system instruction sent to the AI. The live market data is appended automatically.")
+                    _default_prompt = DEFAULT_SETTINGS.get('ai_prompts', {}).get(_pk, '')
+                    _current_prompt = _ai_prmp.get(_pk, _default_prompt)
+                    _new_prompt = st.text_area(
+                        "Prompt", value=_current_prompt,
+                        height=200, key=f"ai_prompt_{_pk}",
+                        label_visibility="collapsed"
+                    )
+                    _pc1, _pc2 = st.columns([1, 4])
+                    if _pc1.button("💾 Save", key=f"ai_save_{_pk}", type="primary"):
+                        _ai_prmp[_pk] = _new_prompt
+                        _save_ai_settings(_ai_feat, _ai_prmp)
+                        st.success("Prompt saved")
+                    if _pc2.button("↩ Reset to default", key=f"ai_reset_{_pk}"):
+                        _ai_prmp[_pk] = _default_prompt
+                        _save_ai_settings(_ai_feat, _ai_prmp)
+                        st.success("Reset to default")
+                        st.rerun()
+
+    with _stab_rank:
+            st.title("🎛️ Rank Score Settings")
+            st.caption("Adjust scoring parameters for each benchmark and screener. "
+                       "Save named profiles per tab. Load any saved profile. Reset to factory defaults at any time.")
+
+            _rs_base = os.path.join(BASE, 'rank_profiles')
+            os.makedirs(_rs_base, exist_ok=True)
+
+            # ── Profile helpers ───────────────────────────────────────────────────────
+            def _prof_dir(tab_key):
+                d = os.path.join(_rs_base, tab_key)
+                os.makedirs(d, exist_ok=True)
+                return d
+
+            def _list_profiles(tab_key):
+                return sorted(f[:-5] for f in os.listdir(_prof_dir(tab_key)) if f.endswith('.json'))
+
+            def _load_profile(tab_key, name):
+                p = os.path.join(_prof_dir(tab_key), f"{name}.json")
+                return json.load(open(p)) if os.path.exists(p) else {}
+
+            def _save_profile(tab_key, name, settings):
+                p = os.path.join(_prof_dir(tab_key), f"{name}.json")
+                json.dump(settings, open(p,'w'), indent=2)
+
+            def _active_settings(tab_key, defaults):
+                """Load active settings: check rank_settings.json first, else defaults."""
+                p = os.path.join(BASE, 'rank_settings.json')
+                if os.path.exists(p):
+                    try:
+                        return {**defaults, **json.load(open(p)).get(tab_key, {})}
+                    except: pass
+                return defaults.copy()
+
+            def _save_active(tab_key, settings):
+                p = os.path.join(BASE, 'rank_settings.json')
+                try:    rs = json.load(open(p))
+                except: rs = {}
+                rs[tab_key] = settings
+                json.dump(rs, open(p,'w'), indent=2)
+                st.success(f"✓ Active settings saved to rank_settings.json")
+
+            # ── Weight guidance ───────────────────────────────────────────────────────
+            WEIGHT_GUIDE = """
+        <div style="background:rgba(255,180,0,0.08);border:1px solid rgba(255,180,0,0.3);
+        border-radius:6px;padding:8px 14px;font-size:11px;margin-bottom:12px;line-height:1.8">
+        <b>Weight guidance:</b> &nbsp;
+        <code>0.0</code> = disabled &nbsp;|&nbsp;
+        <code>0.01–0.1</code> = minor influence &nbsp;|&nbsp;
+        <code>0.2–0.3</code> = moderate &nbsp;|&nbsp;
+        <code>0.4–0.5</code> = standard weight &nbsp;|&nbsp;
+        <code>0.6–1.0</code> = high emphasis &nbsp;|&nbsp;
+        <code>>1.0</code> = dominant factor<br>
+        <b>Bonus values:</b> &nbsp;
+        <code>0.5</code> = small boost &nbsp;|&nbsp;
+        <code>1.0</code> = standard bonus &nbsp;|&nbsp;
+        <code>-0.5</code> = mild penalty &nbsp;|&nbsp;
+        <code>-1.0</code> = strong penalty<br>
+        <b>Vol multiplier:</b> &nbsp;
+        <code>1.0</code> = neutral &nbsp;|&nbsp;
+        <code>1.1</code> = 10%% boost for high volume &nbsp;|&nbsp;
+        <code>0.9</code> = 10%% penalty for low volume
+        </div>"""
+
+            # ── Benchmark score widget ────────────────────────────────────────────────
+
+
+            def _profile_bar(tab_key, cur, k):
+                """Render profile load/save bar. Returns updated settings dict."""
+                profiles = _list_profiles(tab_key)
+                pb1, pb2, pb3, pb4 = st.columns([3, 2, 2, 1])
+                sel = pb1.selectbox("Load profile", ["— current —"] + profiles, key=f"prof_sel_{k}")
+                if sel != "— current —":
+                    loaded = _load_profile(tab_key, sel)
+                    if loaded:
+                        cur = {**cur, **loaded}
+                        st.session_state[f"prof_loaded_{k}"] = cur
+                pname = pb2.text_input("Save as", placeholder="profile name", key=f"prof_name_{k}")
+                if pb3.button("💾 Save profile", key=f"prof_save_{k}") and pname.strip():
+                    _save_profile(tab_key, pname.strip(), cur)
+                    st.success(f"Saved profile '{pname.strip()}'")
+                if pb4.button("↩ Defaults", key=f"prof_def_{k}"):
+                    st.session_state[f"prof_loaded_{k}"] = None
+                    # Increment reset counter — widgets use it as key suffix to force re-render
+                    st.session_state[f"reset_ctr_{k}"] = st.session_state.get(f"reset_ctr_{k}", 0) + 1
+                    st.rerun()
+                return cur
+
+            def _bm_score_widgets(tab_key, script, defaults):
+                cur = _active_settings(tab_key, defaults)
+                # Apply any loaded profile from session state
+                if st.session_state.get(f"prof_loaded_{tab_key}"):
+                    cur = {**cur, **st.session_state[f"prof_loaded_{tab_key}"]}
+                st.markdown(unsafe_allow_html=True, body=WEIGHT_GUIDE)
+                cur = _profile_bar(tab_key, cur, tab_key)
+                _rk = st.session_state.get(f"reset_ctr_{tab_key}", 0)  # key suffix for reset
+                def _w_tag(v):
+                    if v == 0: return "off"
+                    elif v <= 0.1: return "minor"
+                    elif v <= 0.3: return "moderate"
+                    elif v <= 0.5: return "standard"
+                    elif v <= 1.0: return "high"
+                    else: return "dominant"
+                st.code(
+                    f"score = (ret_12m × {cur['ret_12m_weight']} [{_w_tag(cur['ret_12m_weight'])}])"
+                    f" + (persist × {cur['persist_weight']} [{_w_tag(cur['persist_weight'])}])"
+                    f" + (dd × -{cur['dd_weight_large']}..{cur['dd_weight_small']} [penalty])"
+                    f" + (mqs × {cur['mqs_weight']} [{_w_tag(cur['mqs_weight'])}])"
+                    f" + trend_bonus({cur['trend_bonus']}) + lead_bonus({cur['lead_bonus']})"
+                    f" + rs_trend_bonus  →  × vol_multiplier",
+                    language="python")
+                st.markdown("#### Return & Quality")
+                c1,c2,c3 = st.columns(3)
+                v_ret  = c1.number_input("12m Return weight — standard 0.4", -2.0, 2.0, float(cur['ret_12m_weight']),  0.05, key=f"ret_{tab_key}_{_rk}", help="Primary momentum signal. 0.4 = standard. Higher = more return-chasing.")
+                v_per  = c2.number_input("Persistence weight — standard 0.01", 0.0, 0.5, float(cur['persist_weight']),  0.005, format="%.3f", key=f"per_{tab_key}_{_rk}", help="% up-days. Small influence — keep low (0.01). Increase to reward consistency.")
+                v_mqs  = c3.number_input("MQS weight — standard 0.2", -2.0, 2.0, float(cur['mqs_weight']),   0.05, key=f"mqs_{tab_key}_{_rk}", help="Momentum Quality Score. 0.2 = standard. Rewards clean rises with low volatility.")
+                st.markdown("#### Drawdown Penalty (applied negative)")
+                c1,c2,c3,c4 = st.columns(4)
+                v_ddl = c1.number_input("Large cap — std 0.4", 0.0, 2.0, float(cur['dd_weight_large']),  0.05, key=f"ddl_{tab_key}_{_rk}", help="Higher = larger stocks penalised more for big drawdowns")
+                v_ddm = c2.number_input("Mid cap — std 0.3",   0.0, 2.0, float(cur['dd_weight_mid']),    0.05, key=f"ddm_{tab_key}_{_rk}")
+                v_dds = c3.number_input("Small cap — std 0.2", 0.0, 2.0, float(cur['dd_weight_small']),  0.05, key=f"dds_{tab_key}_{_rk}")
+                v_dde = c4.number_input("ETF — std 0.3",       0.0, 2.0, float(cur['dd_weight_etf']),    0.05, key=f"dde_{tab_key}_{_rk}")
+                st.markdown("#### Trend & Leadership Bonus")
+                c1,c2 = st.columns(2)
+                v_tb = c1.number_input("Trend bonus (above 200 SMA) — std 1.0", 0.0, 3.0, float(cur['trend_bonus']), 0.05, key=f"tb_{tab_key}_{_rk}", help="Added when price > 200 SMA. 1.0 = standard single-point bonus.")
+                v_lb = c2.number_input("Lead bonus (RS ratio > 1.0) — std 1.0",  0.0, 3.0, float(cur['lead_bonus']),  0.05, key=f"lb_{tab_key}_{_rk}", help="Added when stock outperforms benchmark over 12m.")
+                st.markdown("#### RS Trend Bonus")
+                c1,c2,c3,c4,c5 = st.columns(5)
+                v_rsu  = c1.number_input("Strong Up — std 1.0",   -2.0, 2.0, float(cur['rs_trend_strong_up']),    0.05, key=f"rsu_{tab_key}_{_rk}")
+                v_ru   = c2.number_input("Up — std 0.5",          -2.0, 2.0, float(cur['rs_trend_up']),           0.05, key=f"ru_{tab_key}_{_rk}")
+                v_rf   = c3.number_input("Flat — std 0.0",        -2.0, 2.0, float(cur['rs_trend_flat']),         0.05, key=f"rf_{tab_key}_{_rk}")
+                v_rd   = c4.number_input("Down — std -0.5",       -2.0, 2.0, float(cur['rs_trend_down']),         0.05, key=f"rd_{tab_key}_{_rk}")
+                v_rsd  = c5.number_input("Strong Down — std -1.0",-2.0, 2.0, float(cur['rs_trend_strong_down']),  0.05, key=f"rsd_{tab_key}_{_rk}")
+                st.markdown("#### Volume Multiplier")
+                c1,c2,c3 = st.columns(3)
+                v_vh = c1.number_input("High vol — std 1.1 (+10%%)", 0.0, 3.0, float(cur['vol_high']), 0.05, key=f"vh_{tab_key}_{_rk}", help="Multiplies final score. 1.1 = 10%% boost for high volume days.")
+                v_vm = c2.number_input("Med vol — std 1.0 (neutral)", 0.0, 3.0, float(cur['vol_med']),  0.05, key=f"vm_{tab_key}_{_rk}")
+                v_vl = c3.number_input("Low vol — std 0.9 (-10%%)",  0.0, 3.0, float(cur['vol_low']),  0.05, key=f"vl_{tab_key}_{_rk}")
+                new_s = {
+                    'ret_12m_weight': v_ret, 'persist_weight': v_per, 'mqs_weight': v_mqs,
+                    'trend_bonus': v_tb, 'lead_bonus': v_lb,
+                    'dd_weight_large': v_ddl, 'dd_weight_mid': v_ddm, 'dd_weight_small': v_dds, 'dd_weight_etf': v_dde,
+                    'vol_high': v_vh, 'vol_med': v_vm, 'vol_low': v_vl,
+                    'rs_trend_strong_up': v_rsu, 'rs_trend_up': v_ru, 'rs_trend_flat': v_rf,
+                    'rs_trend_down': v_rd, 'rs_trend_strong_down': v_rsd,
+                }
+                b1,b2 = st.columns([2,1])
+                if b1.button("💾 Save as Active", type="primary", key=f"save_{tab_key}"):
+                    _save_active(tab_key, new_s)
+                if b2.button("🔄 Save & Run", key=f"run_{tab_key}"):
+                    _save_active(tab_key, new_s)
+                    run_script(os.path.join(STOCKS, script), STOCKS)
+                    st.success("Done")
+                return new_s
+
+            def _sc_score_widgets(tab_key, bm_script, sc_script, defaults):
+                cur = _active_settings(tab_key, defaults)
+                if st.session_state.get(f"prof_loaded_{tab_key}"):
+                    cur = {**cur, **st.session_state[f"prof_loaded_{tab_key}"]}
+                st.markdown(unsafe_allow_html=True, body=WEIGHT_GUIDE)
+                cur = _profile_bar(tab_key, cur, tab_key)
+                _rk = st.session_state.get(f"reset_ctr_{tab_key}", 0)  # key suffix for reset
+                st.markdown("#### Score Weights")
+                def _w_tag(v):
+                    if v == 0: return "off"
+                    elif v <= 0.1: return "minor"
+                    elif v <= 0.3: return "moderate"
+                    elif v <= 0.5: return "standard"
+                    elif v <= 1.0: return "high"
+                    else: return "dominant"
+                st.code(
+                    f"score = (ret_12m × {cur['ret_12m_weight']} [{_w_tag(cur['ret_12m_weight'])}])"
+                    f" + (persist × {cur['persist_weight']} [{_w_tag(cur['persist_weight'])}])"
+                    f" + (dd × -w_dd [penalty])"
+                    f" + (mqs × {cur['mqs_weight']} [{_w_tag(cur['mqs_weight'])}])"
+                    f" + (peer_rs × {cur['peer_rs_weight']} [{_w_tag(cur['peer_rs_weight'])}])"
+                    f" + rs_trend_bonus + regime_bonus  →  × vol_multiplier",
+                    language="python")
+                c1,c2,c3,c4 = st.columns(4)
+                v_ret  = c1.number_input("12m Return — std 0.4",    -2.0, 2.0, float(cur['ret_12m_weight']),  0.05, key=f"ret_{tab_key}_{_rk}", help="Primary return signal. 0.4 standard.")
+                v_per  = c2.number_input("Persistence — std 0.01",   0.0, 0.5, float(cur['persist_weight']),  0.005, format="%.3f", key=f"per_{tab_key}_{_rk}", help="Consistency of up-days. Keep small.")
+                v_mqs  = c3.number_input("MQS — std 0.2",           -2.0, 2.0, float(cur['mqs_weight']),      0.05, key=f"mqs_{tab_key}_{_rk}", help="Quality score. Rewards clean trends.")
+                v_prs  = c4.number_input("Peer RS — std 0.02",       0.0, 0.5, float(cur['peer_rs_weight']),  0.005, format="%.3f", key=f"prs_{tab_key}_{_rk}", help="% outperforming sector peers. Keep small — already 0-100 scale.")
+                st.markdown("#### Drawdown Penalty")
+                c1,c2,c3,c4 = st.columns(4)
+                v_ddl = c1.number_input("Large — std 0.4", 0.0, 2.0, float(cur['dd_weight_large']),  0.05, key=f"ddl_{tab_key}_{_rk}")
+                v_ddm = c2.number_input("Mid — std 0.3",   0.0, 2.0, float(cur['dd_weight_mid']),    0.05, key=f"ddm_{tab_key}_{_rk}")
+                v_dds = c3.number_input("Small — std 0.2", 0.0, 2.0, float(cur['dd_weight_small']),  0.05, key=f"dds_{tab_key}_{_rk}")
+                v_dde = c4.number_input("ETF — std 0.3",   0.0, 2.0, float(cur['dd_weight_etf']),    0.05, key=f"dde_{tab_key}_{_rk}")
+                st.markdown("#### RS Trend Bonus")
+                c1,c2,c3,c4,c5 = st.columns(5)
+                v_rsu = c1.number_input("Strong Up — std 1.0",   -2.0, 2.0, float(cur['rs_trend_strong_up']),   0.05, key=f"rsu_{tab_key}_{_rk}")
+                v_ru  = c2.number_input("Up — std 0.5",          -2.0, 2.0, float(cur['rs_trend_up']),          0.05, key=f"ru_{tab_key}_{_rk}")
+                v_rf  = c3.number_input("Flat — std 0.0",        -2.0, 2.0, float(cur['rs_trend_flat']),        0.05, key=f"rf_{tab_key}_{_rk}")
+                v_rd  = c4.number_input("Down — std -0.5",       -2.0, 2.0, float(cur['rs_trend_down']),        0.05, key=f"rd_{tab_key}_{_rk}")
+                v_rsd = c5.number_input("Strong Down — std -1.0",-2.0, 2.0, float(cur['rs_trend_strong_down']), 0.05, key=f"rsd_{tab_key}_{_rk}")
+                st.markdown("#### Regime Bonus")
+                c1,c2,c3,c4 = st.columns(4)
+                v_rl  = c1.number_input("Leader — std 1.0",    -2.0, 2.0, float(cur['regime_bonus_leader']),    0.05, key=f"rl_{tab_key}_{_rk}", help="Top peer RS + above trend. 1.0 = strong boost.")
+                v_rc  = c2.number_input("Contender — std 0.5", -2.0, 2.0, float(cur['regime_bonus_contender']), 0.05, key=f"rc_{tab_key}_{_rk}")
+                v_rlag= c3.number_input("Laggard — std 0.0",   -2.0, 2.0, float(cur['regime_bonus_laggard']),   0.05, key=f"rlag_{tab_key}_{_rk}")
+                v_rw  = c4.number_input("Weak — std -0.5",     -2.0, 2.0, float(cur['regime_bonus_weak']),      0.05, key=f"rw_{tab_key}_{_rk}", help="Below trend + low peer RS. -0.5 = penalty.")
+                st.markdown("#### Volume Multiplier")
+                c1,c2,c3 = st.columns(3)
+                v_vh = c1.number_input("High — std 1.1", 0.0, 3.0, float(cur['vol_high']), 0.05, key=f"vh_{tab_key}_{_rk}")
+                v_vm = c2.number_input("Med — std 1.0",  0.0, 3.0, float(cur['vol_med']),  0.05, key=f"vm_{tab_key}_{_rk}")
+                v_vl = c3.number_input("Low — std 0.9",  0.0, 3.0, float(cur['vol_low']),  0.05, key=f"vl_{tab_key}_{_rk}")
+                st.divider()
+                st.markdown("#### Filter Parameters")
+                fc1, fc2 = st.columns(2)
+                v_cap = fc1.number_input("Min market cap ($)", 0, 100_000_000_000,
+                                          int(cur.get('min_market_cap', 0)), 10_000_000, key=f"cap_{tab_key}_{_rk}")
+                v_vol = fc2.number_input("Min avg daily volume ($)", 0, 100_000_000,
+                                          int(cur.get('min_vol_avg', 0)), 10_000, key=f"vol_{tab_key}_{_rk}")
+                _valid_regimes = ['LEADER','CONTENDER','LAGGARD','WEAK']
+                _reg_default = [r for r in cur.get('regime_filter', ['LEADER','CONTENDER']) if r in _valid_regimes] or ['LEADER','CONTENDER']
+                v_reg = st.multiselect("Allowed regimes", _valid_regimes,
+                                        default=_reg_default, key=f"reg_{tab_key}_{_rk}")
+                new_s = {
+                    'ret_12m_weight': v_ret, 'persist_weight': v_per, 'mqs_weight': v_mqs, 'peer_rs_weight': v_prs,
+                    'dd_weight_large': v_ddl, 'dd_weight_mid': v_ddm, 'dd_weight_small': v_dds, 'dd_weight_etf': v_dde,
+                    'vol_high': v_vh, 'vol_med': v_vm, 'vol_low': v_vl,
+                    'rs_trend_strong_up': v_rsu, 'rs_trend_up': v_ru, 'rs_trend_flat': v_rf,
+                    'rs_trend_down': v_rd, 'rs_trend_strong_down': v_rsd,
+                    'regime_bonus_leader': v_rl, 'regime_bonus_contender': v_rc,
+                    'regime_bonus_laggard': v_rlag, 'regime_bonus_weak': v_rw,
+                    'min_market_cap': v_cap, 'min_vol_avg': v_vol, 'regime_filter': v_reg,
+                }
+                b1,b2,b3 = st.columns([2,2,1])
+                if b1.button("💾 Save as Active", type="primary", key=f"save_{tab_key}"):
+                    _save_active(tab_key, new_s)
+                if b2.button("🔄 Save & Run Screener", key=f"run_sc_{tab_key}"):
+                    _save_active(tab_key, new_s)
+                    run_script(os.path.join(STOCKS, sc_script), STOCKS)
+                    st.success("Screener done")
+                if b3.button("📊 Run Benchmark", key=f"run_bm_{tab_key}"):
+                    run_script(os.path.join(STOCKS, bm_script), STOCKS)
+                    st.success("Benchmark done")
+                return new_s
+
+            # ── Tabs ──────────────────────────────────────────────────────────────────
+            _rs_tabs = st.tabs([
+                "🇦🇺 AU Benchmark", "🇺🇸 US Benchmark", "🪨 Comm Benchmark",
+                "🔍 AU Screener",   "🔍 US Screener",   "🔍 Comm Screener",
+            ])
+            with _rs_tabs[0]: _bm_score_widgets('au_benchmark',   'au_total_market_benchmark.py',       BM_DEFAULTS)
+            with _rs_tabs[1]: _bm_score_widgets('us_benchmark',   'us_total_market_benchmark.py',       BM_DEFAULTS)
+            with _rs_tabs[2]: _bm_score_widgets('comm_benchmark', 'all_major_commodities_benchmark.py', BM_DEFAULTS)
+            with _rs_tabs[3]: _sc_score_widgets('au_screener',   'au_total_market_benchmark.py',   'au_total_market_screener.py',       SC_DEFAULTS)
+            with _rs_tabs[4]: _sc_score_widgets('us_screener',   'us_total_market_benchmark.py',   'us_total_market_screener.py',       SC_DEFAULTS)
+            with _rs_tabs[5]: _sc_score_widgets('comm_screener', 'all_major_commodities_benchmark.py', 'all_major_commodities_screener.py', SC_DEFAULTS)
+
+    with _stab_act:
+            st.title("⚙️ Actionable Report Settings")
+            st.caption("Configure filters for actionable export files. Saved to actionable_settings.json.")
+            _as_file = os.path.join(BASE, 'actionable_settings.json')
+            _AS_DEFAULTS = {
+                'au_market'  : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
+                'us_market'  : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
+                'commodities': {'min_score':0.0,'regimes':['LEADER','CONTENDER'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small','ETF']},
+                'uranium'    : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
+                'au_gold'    : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
             }
-            _save_ai_settings(_new_feat, _ai_prmp)
-            st.success(f"Saved — using {'Claude' if _provider == 'anthropic' else 'ChatGPT'}")
-
-    # ── Prompt tabs ───────────────────────────────────────────────────────────
-    _prompt_defs = [
-        ('au_breadth',       'AU Breadth', '🇦🇺 AU Breadth', _ai_tabs[1]),
-        ('us_breadth',       'US Breadth', '🇺🇸 US Breadth', _ai_tabs[2]),
-        ('consumer_credit',  'Debt Markets — Consumer Credit', '💳 Consumer', _ai_tabs[3]),
-        ('au_benchmark',     'AU Benchmark', '📊 AU Benchmark', _ai_tabs[4]),
-        ('us_benchmark',     'US Benchmark', '📊 US Benchmark', _ai_tabs[5]),
-        ('comm_benchmark',   'Commodities Benchmark', '🪨 Commodities', _ai_tabs[6]),
-    ]
-
-    for _pk, _plabel, _ptab_label, _ptab in _prompt_defs:
-        with _ptab:
-            st.markdown(f"#### {_plabel} Prompt")
-            st.caption("Edit the system instruction sent to the AI. The live market data is appended automatically.")
-            _default_prompt = DEFAULT_SETTINGS.get('ai_prompts', {}).get(_pk, '')
-            _current_prompt = _ai_prmp.get(_pk, _default_prompt)
-            _new_prompt = st.text_area(
-                "Prompt", value=_current_prompt,
-                height=200, key=f"ai_prompt_{_pk}",
-                label_visibility="collapsed"
-            )
-            _pc1, _pc2 = st.columns([1, 4])
-            if _pc1.button("💾 Save", key=f"ai_save_{_pk}", type="primary"):
-                _ai_prmp[_pk] = _new_prompt
-                _save_ai_settings(_ai_feat, _ai_prmp)
-                st.success("Prompt saved")
-            if _pc2.button("↩ Reset to default", key=f"ai_reset_{_pk}"):
-                _ai_prmp[_pk] = _default_prompt
-                _save_ai_settings(_ai_feat, _ai_prmp)
-                st.success("Reset to default")
-                st.rerun()
-
-elif page == "Actionable Settings":
-    st.title("⚙️ Actionable Report Settings")
-    st.caption("Configure filters for actionable export files. Saved to actionable_settings.json.")
-    _as_file = os.path.join(BASE, 'actionable_settings.json')
-    _AS_DEFAULTS = {
-        'au_market'  : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
-        'us_market'  : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
-        'commodities': {'min_score':0.0,'regimes':['LEADER','CONTENDER'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small','ETF']},
-        'uranium'    : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
-        'au_gold'    : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
-    }
-    def _load_as():
-        if os.path.exists(_as_file):
-            try: return {k:{**_AS_DEFAULTS[k],**json.load(open(_as_file)).get(k,{})} for k in _AS_DEFAULTS}
-            except: pass
-        return {k:dict(v) for k,v in _AS_DEFAULTS.items()}
-    def _save_as(s):
-        with open(_as_file,'w') as _f: json.dump(s,_f,indent=2)
-        st.success("Saved to actionable_settings.json")
-    _as=_load_as()
-    _as_tabs=st.tabs(["🇦🇺 AU Market","🇺🇸 US Market","⛏ Commodities","☢ Uranium","🥇 AU Gold"])
-    for _k,_t in zip(['au_market','us_market','commodities','uranium','au_gold'],_as_tabs):
-        with _t:
-            _s=_as[_k]
-            st.markdown("#### Filter Parameters")
-            st.caption("Settings saved here are displayed under each table on the Actionable & Exports page.")
-            _c1,_c2=st.columns(2)
-            _ms =_c1.number_input("Min score_final",-5.0,10.0,float(_s['min_score']),0.1,key=f"as_ms_{_k}")
-            _acc_opts = ['EARLY','PROGRESS','SHIFT','-']
-            _acc_def  = _s['acc_watch'] if isinstance(_s['acc_watch'],list) else (['EARLY','PROGRESS','SHIFT'] if _s['acc_watch'] else [])
-            _acc=_c2.multiselect("Acc watch filter",_acc_opts,default=_acc_def,key=f"as_acc_{_k}",help="Leave empty = no filter. Select values to only show stocks with those acc_watch values.")
-            _reg=st.multiselect("Allowed regimes",['LEADER','CONTENDER','LAGGARD','WEAK','TREND+LEAD','TREND_ONLY'],default=_s['regimes'],key=f"as_reg_{_k}")
-            _vol=st.multiselect("Volume filter",['HIGH','MED','LOW'],default=_s['vol'],key=f"as_vol_{_k}")
-            _cap=st.multiselect("Cap bands",['large','mid','small','ETF'],default=_s['cap_bands'],key=f"as_cap_{_k}")
-            st.markdown("")
-            if st.button("💾 Save",type="primary",key=f"as_save_{_k}"):
-                _as[_k]={'min_score':_ms,'acc_watch':_acc,'regimes':_reg,'vol':_vol,'cap_bands':_cap}
-                _save_as(_as)
-
-
-elif page == "General Settings":
-    st.title("⚙ Dashboard Settings")
-    st.caption("Changes take effect after saving and reloading the page")
-
-    current = load_settings()
-
-    # ── Pages ─────────────────────────────────────────────────────────────────
-    st.subheader("Pages")
-    st.markdown("Toggle pages on or off. Settings is always visible.")
-
-    updated_pages = {}
-    cols = st.columns(3)
-    for i, (name, icon) in enumerate(ALL_PAGES):
-        if name == 'Settings':
-            continue
-        with cols[i % 3]:
-            updated_pages[name] = st.toggle(
-                name,
-                value=current['pages'].get(name, True),
-                key=f"setting_{name}"
-            )
-
-    # ── AI Features ───────────────────────────────────────────────────────────
-    st.divider()
-    st.subheader("AI Features")
-    st.caption("Requires an Anthropic API key — get one free at console.anthropic.com")
-
-    ai_enabled = st.toggle(
-        "Enable AI assessments",
-        value=current.get('ai_features', {}).get('enabled', False),
-        key='setting_ai_enabled'
-    )
-    if ai_enabled:
-        api_key = st.text_input(
-            "Anthropic API Key",
-            value=current.get('ai_features', {}).get('anthropic_api_key', ''),
-            type="password",
-            key='setting_api_key',
-            help="Stored locally in dashboard_settings.json — never pushed to GitHub"
-        )
-        model = st.selectbox(
-            "Model",
-            ['claude-sonnet-4-6', 'claude-haiku-4-5-20251001'],
-            index=0,
-            key='setting_model'
-        )
-    else:
-        api_key = current.get('ai_features', {}).get('anthropic_api_key', '')
-        model   = current.get('ai_features', {}).get('model', 'claude-sonnet-4-6')
-
-    # ── Save / Reset ──────────────────────────────────────────────────────────
-    st.divider()
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("💾 Save & Reload", type="primary"):
-            current['pages']       = updated_pages
-            current['ai_features'] = {
-                'enabled'          : ai_enabled,
-                'anthropic_api_key': api_key,
-                'model'            : model,
+            def _load_as():
+                if os.path.exists(_as_file):
+                    try: return {k:{**_AS_DEFAULTS[k],**json.load(open(_as_file)).get(k,{})} for k in _AS_DEFAULTS}
+                    except: pass
+                return {k:dict(v) for k,v in _AS_DEFAULTS.items()}
+            def _save_as(s):
+                with open(_as_file,'w') as _f: json.dump(s,_f,indent=2)
+                st.success("Saved to actionable_settings.json")
+            _as=_load_as()
+            _as_tabs=st.tabs(["🇦🇺 AU Market","🇺🇸 US Market","⛏ Commodities","☢ Uranium","🥇 AU Gold"])
+            _SMA_OPTS = ['Above 20', 'Below 20', 'Above 50', 'Below 50', 'Above 200', 'Below 200']
+            _SMA_DEFAULTS = {
+                'EARLY'   : ['Below 20', 'Below 50', 'Below 200'],
+                'PROGRESS': ['Above 20', 'Below 50', 'Below 200'],
+                'SHIFT'   : ['Above 20', 'Above 50', 'Below 200'],
             }
-            save_settings(current)
-            st.success("Settings saved")
-            st.rerun()
-    with col2:
-        if st.button("Reset to defaults", type="secondary"):
-            save_settings(DEFAULT_SETTINGS)
-            st.success("Reset to defaults")
-            st.rerun()
 
-    # ── Display Settings ───────────────────────────────────────────────────────
-    st.divider()
-    st.subheader("Display")
+            for _k,_t in zip(['au_market','us_market','commodities','uranium','au_gold'],_as_tabs):
+                with _t:
+                    _s=_as[_k]
+                    st.markdown("#### Filter Parameters")
+                    st.caption("Settings saved here are displayed under each table on the Actionable & Exports page.")
+                    _c1,_c2=st.columns(2)
+                    _ms =_c1.number_input("Min score_final",-5.0,10.0,float(_s['min_score']),0.1,key=f"as_ms_{_k}")
+                    _acc_opts = ['EARLY','PROGRESS','SHIFT','TRENDING','REACCUM','CONSOLIDATE','-']
+                    _acc_def  = _s['acc_watch'] if isinstance(_s['acc_watch'],list) else (['EARLY','PROGRESS','SHIFT'] if _s['acc_watch'] else [])
+                    _acc=_c2.multiselect("Acc watch filter",_acc_opts,default=_acc_def,key=f"as_acc_{_k}",help="Leave empty = no filter.")
+                    _reg=st.multiselect("Allowed regimes",['LEADER','CONTENDER','LAGGARD','WEAK','TREND+LEAD','TREND_ONLY'],default=_s['regimes'],key=f"as_reg_{_k}")
+                    _vol=st.multiselect("Volume filter",['HIGH','MED','LOW'],default=_s['vol'],key=f"as_vol_{_k}")
+                    _cap=st.multiselect("Cap bands",['large','mid','small','ETF'],default=_s['cap_bands'],key=f"as_cap_{_k}")
 
-    # Theme
-    st.markdown("**Theme**")
-    st.caption("Sets chart backgrounds and colours. Restart may be required for full effect.")
+                    st.markdown("#### SMA Conditions per Acc Watch Type")
+                    st.caption("Each type has 4 independent criteria. Leave empty = no filter for that criterion.")
 
-    cfg_file = os.path.join(BASE, '.streamlit', 'config.toml')
-    current_base = 'dark'
-    if os.path.isfile(cfg_file):
-        import re as _re2
-        txt = open(cfg_file).read()
-        m = _re2.search(r'base\s*=\s*"([^"]*)"', txt)
-        if m: current_base = m.group(1).lower()
+                    _PRICE_OPTS = ['Price > SMA20', 'Price < SMA20',
+                                   'Price > SMA50', 'Price < SMA50',
+                                   'Price > SMA200','Price < SMA200']
+                    _SMA20_OPTS = ['SMA20 > SMA50', 'SMA20 < SMA50',
+                                   'SMA20 > SMA200','SMA20 < SMA200']
+                    _SMA50_OPTS = ['SMA50 > SMA20', 'SMA50 < SMA20',
+                                   'SMA50 > SMA200','SMA50 < SMA200']
+                    _SMA200_OPTS= ['SMA200 > SMA20','SMA200 < SMA20',
+                                   'SMA200 > SMA50','SMA200 < SMA50']
 
-    theme_names  = list(THEMES.keys())
-    theme_idx    = 1 if current_base == 'light' else 0
-    selected_theme = st.radio("Theme", theme_names, horizontal=True,
-                               index=theme_idx, key='disp_theme')
+                    _ACC_TYPES = [
+                        ('EARLY',       {'price': ['Price < SMA20','Price < SMA50','Price < SMA200'],
+                                         'sma20': ['SMA20 < SMA50','SMA20 < SMA200'],
+                                         'sma50': ['SMA50 < SMA200'], 'sma200': []}),
+                        ('PROGRESS',    {'price': ['Price > SMA20','Price < SMA50','Price < SMA200'],
+                                         'sma20': ['SMA20 < SMA50','SMA20 < SMA200'],
+                                         'sma50': ['SMA50 < SMA200'], 'sma200': []}),
+                        ('SHIFT',       {'price': ['Price > SMA20','Price > SMA50','Price < SMA200'],
+                                         'sma20': ['SMA20 < SMA200'],
+                                         'sma50': ['SMA50 < SMA200'], 'sma200': []}),
+                        ('TRENDING',    {'price': ['Price > SMA20','Price > SMA50','Price > SMA200'],
+                                         'sma20': ['SMA20 > SMA50','SMA20 > SMA200'],
+                                         'sma50': ['SMA50 > SMA200'], 'sma200': []}),
+                        ('REACCUM',     {'price': ['Price < SMA20','Price > SMA50','Price > SMA200'],
+                                         'sma20': ['SMA20 > SMA50','SMA20 > SMA200'],
+                                         'sma50': ['SMA50 > SMA200'], 'sma200': []}),
+                        ('CONSOLIDATE', {'price': ['Price < SMA20','Price > SMA200'],
+                                         'sma20': ['SMA20 < SMA50','SMA20 > SMA200'],
+                                         'sma50': ['SMA50 > SMA200'], 'sma200': []}),
+                    ]
 
-    if selected_theme == 'Custom':
-        pass  # reserved for future custom picker
+                    _sma_settings = {}
+                    st.markdown("---")
+                    for _atype, _adefaults in _ACC_TYPES:
+                        st.markdown(f"**{_atype}**")
+                        _r1, _r2, _r3, _r4 = st.columns(4)
+                        _key_p   = f"as_{_atype}_price_{_k}"
+                        _key_20  = f"as_{_atype}_sma20_{_k}"
+                        _key_50  = f"as_{_atype}_sma50_{_k}"
+                        _key_200 = f"as_{_atype}_sma200_{_k}"
+                        _saved   = _s.get(f'sma_{_atype.lower()}', {})
+                        if isinstance(_saved, list): _saved = {}  # reset old format
+                        _logic_sel = st.radio("Logic", ["AND","OR"], horizontal=True,
+                                       index=0 if _saved.get('logic','AND')=='AND' else 1,
+                                       key=f"as_{_atype}_logic_{_k}")
+                        _p_sel  = _r1.multiselect("Price vs SMA",  _PRICE_OPTS,
+                                    default=_saved.get('price',  _adefaults['price']),  key=_key_p)
+                        _20_sel = _r2.multiselect("SMA20 vs SMAs", _SMA20_OPTS,
+                                    default=_saved.get('sma20',  _adefaults['sma20']),  key=_key_20)
+                        _50_sel = _r3.multiselect("SMA50 vs SMAs", _SMA50_OPTS,
+                                    default=_saved.get('sma50',  _adefaults['sma50']),  key=_key_50)
+                        _200_sel= _r4.multiselect("SMA200 vs SMAs",_SMA200_OPTS,
+                                    default=_saved.get('sma200', _adefaults['sma200']), key=_key_200)
+                        _sma_settings[f'sma_{_atype.lower()}'] = {
+                            'logic': _logic_sel,
+                            'price': _p_sel, 'sma20': _20_sel,
+                            'sma50': _50_sel, 'sma200': _200_sel,
+                        }
+                        st.markdown("---")
+                    st.markdown("")
+                    if st.button("💾 Save",type="primary",key=f"as_save_{_k}"):
+                        _as[_k]={
+                            'min_score'   : _ms,
+                            'acc_watch'   : _acc,
+                            'regimes'     : _reg,
+                            'vol'         : _vol,
+                            'cap_bands'   : _cap,
+                            **_sma_settings,
+                        }
+                        _save_as(_as)
 
-    tc1, tc2 = st.columns(2)
-    with tc1:
-        if st.button(f"Apply {selected_theme} Theme", type="primary", key='apply_theme'):
-            _write_streamlit_config(THEMES[selected_theme])
-            _s = load_settings()
-            _s['theme'] = selected_theme.lower()
-            save_settings(_s)
-            st.success(f"{selected_theme} theme applied — reload the page to see effect")
-            st.rerun()
-    with tc2:
-        st.caption("After applying, use the Streamlit menu (top right ☰) to also toggle the app theme if needed.")
+    with _stab_gen:
+            st.title("⚙ Dashboard Settings")
+            st.caption("Changes take effect after saving and reloading the page")
 
-    # Font size
-    st.markdown("**Text Size**")
-    st.caption("Applies immediately — no reload needed.")
-    font_size = st.radio("Text size",
-                          ["Normal", "Large (+2px)", "Extra Large (+4px)"],
-                          horizontal=True, key="st_font_size")
-    _size_map = {"Normal": 0, "Large (+2px)": 2, "Extra Large (+4px)": 4}
-    _delta = _size_map.get(font_size, 0)
-    if _delta > 0:
-        st.markdown(f"""<style>
-        html, body, [class*="css"] {{ font-size: calc(1rem + {_delta}px) !important; }}
-        .stMarkdown p, .stMarkdown li, .stCaption, label {{
-            font-size: calc(1rem + {_delta}px) !important;
-        }}
-        h1 {{ font-size: calc(2rem   + {_delta}px) !important; }}
-        h2 {{ font-size: calc(1.5rem + {_delta}px) !important; }}
-        h3 {{ font-size: calc(1.25rem + {_delta}px) !important; }}
-        </style>""", unsafe_allow_html=True)
+            current = load_settings()
 
-    with st.expander("Current config.toml"):
-        if os.path.isfile(cfg_file):
-            st.code(open(cfg_file).read(), language="toml")
-        else:
-            st.caption("No config.toml yet — created on first Apply.")
+            # ── Pages ─────────────────────────────────────────────────────────────────
+            st.subheader("Pages")
+            st.markdown("Toggle pages on or off. Settings is always visible.")
 
-    # ── Network Access ────────────────────────────────────────────────────────
-    st.divider()
-    st.subheader("Network Access")
-    st.caption(
-        "Controls which network interfaces Streamlit listens on. "
-        "Restart Streamlit after changing. Uses .streamlit/config.toml."
-    )
+            updated_pages = {}
+            cols = st.columns(3)
+            for i, (name, icon) in enumerate(ALL_PAGES):
+                if name == 'Settings':
+                    continue
+                with cols[i % 3]:
+                    updated_pages[name] = st.toggle(
+                        name,
+                        value=current['pages'].get(name, True),
+                        key=f"setting_{name}"
+                    )
 
-    _net_cfg_file = os.path.join(BASE, '.streamlit', 'config.toml')
-    _net_current  = '0.0.0.0'
-    if os.path.isfile(_net_cfg_file):
-        import re as _re_net
-        _nc_txt = open(_net_cfg_file).read()
-        _nm = _re_net.search(r'address\s*=\s*"([^"]*)"', _nc_txt)
-        if _nm: _net_current = _nm.group(1)
+            # ── AI Features ───────────────────────────────────────────────────────────
+            st.divider()
+            st.subheader("AI Features")
+            st.caption("Requires an Anthropic API key — get one free at console.anthropic.com")
 
-    _net_options = {
-        'Localhost only (127.0.0.1)'          : '127.0.0.1',
-        'Local network only (LAN/Tailscale)'  : '0.0.0.0',
-        'Custom address'                       : 'custom',
-    }
-    _net_labels   = list(_net_options.keys())
-    _net_vals     = list(_net_options.values())
-    _net_idx      = _net_vals.index(_net_current) if _net_current in _net_vals else 2
+            ai_enabled = st.toggle(
+                "Enable AI assessments",
+                value=current.get('ai_features', {}).get('enabled', False),
+                key='setting_ai_enabled'
+            )
+            if ai_enabled:
+                api_key = st.text_input(
+                    "Anthropic API Key",
+                    value=current.get('ai_features', {}).get('anthropic_api_key', ''),
+                    type="password",
+                    key='setting_api_key',
+                    help="Stored locally in dashboard_settings.json — never pushed to GitHub"
+                )
+                model = st.selectbox(
+                    "Model",
+                    ['claude-sonnet-4-6', 'claude-haiku-4-5-20251001'],
+                    index=0,
+                    key='setting_model'
+                )
+            else:
+                api_key = current.get('ai_features', {}).get('anthropic_api_key', '')
+                model   = current.get('ai_features', {}).get('model', 'claude-sonnet-4-6')
 
-    _net_sel = st.radio("Listen on", _net_labels, index=_net_idx,
-                         key='net_mode',
-                         help="Localhost only = most secure, only your machine. "
-                              "Local network = accessible from other devices on LAN or via Tailscale. "
-                              "Custom = specify exact IP.")
+            # ── Save / Reset ──────────────────────────────────────────────────────────
+            st.divider()
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("💾 Save & Reload", type="primary"):
+                    current['pages']       = updated_pages
+                    current['ai_features'] = {
+                        'enabled'          : ai_enabled,
+                        'anthropic_api_key': api_key,
+                        'model'            : model,
+                    }
+                    save_settings(current)
+                    st.success("Settings saved")
+                    st.rerun()
+            with col2:
+                if st.button("Reset to defaults", type="secondary"):
+                    save_settings(DEFAULT_SETTINGS)
+                    st.success("Reset to defaults")
+                    st.rerun()
 
-    _custom_addr = ''
-    if _net_sel == 'Custom address':
-        _custom_addr = st.text_input("IP address", value=_net_current
-                                      if _net_current not in ('127.0.0.1','0.0.0.0') else '',
-                                      placeholder="e.g. 192.168.1.100", key='net_custom_addr')
+            # ── Display Settings ───────────────────────────────────────────────────────
+            st.divider()
+            st.subheader("Display")
 
-    _net_addr = _net_options.get(_net_sel, _custom_addr or '0.0.0.0')
-    if _net_sel == 'Custom address':
-        _net_addr = _custom_addr or '0.0.0.0'
+            # Theme
+            st.markdown("**Theme**")
+            st.caption("Sets chart backgrounds and colours. Restart may be required for full effect.")
 
-    _port_current = 8501
-    if os.path.isfile(_net_cfg_file):
-        _pm = _re_net.search(r'port\s*=\s*(\d+)', open(_net_cfg_file).read())
-        if _pm: _port_current = int(_pm.group(1))
+            cfg_file = os.path.join(BASE, '.streamlit', 'config.toml')
+            current_base = 'dark'
+            if os.path.isfile(cfg_file):
+                import re as _re2
+                txt = open(cfg_file).read()
+                m = _re2.search(r'base\s*=\s*"([^"]*)"', txt)
+                if m: current_base = m.group(1).lower()
 
-    _port = st.number_input("Port", min_value=1024, max_value=65535,
-                             value=_port_current, step=1, key='net_port')
+            theme_names  = list(THEMES.keys())
+            theme_idx    = 1 if current_base == 'light' else 0
+            selected_theme = st.radio("Theme", theme_names, horizontal=True,
+                                       index=theme_idx, key='disp_theme')
 
-    st.info(
-        f"Current: {_net_current}:{_port_current} — "
-        f"If seeing your public/NAT IP in the Streamlit banner, switch to Localhost only "
-        f"(http://localhost:{_port_current}) or Local network with Tailscale.",
-        icon="🌐"
-    )
+            if selected_theme == 'Custom':
+                pass  # reserved for future custom picker
 
-    if st.button("💾 Apply Network Settings", type="primary", key='net_apply'):
-        # Read existing config
-        import re as _re_net2
-        if os.path.isfile(_net_cfg_file):
-            _nc = open(_net_cfg_file).read()
-        else:
-            _nc = '[server]\n'
+            tc1, tc2 = st.columns(2)
+            with tc1:
+                if st.button(f"Apply {selected_theme} Theme", type="primary", key='apply_theme'):
+                    _write_streamlit_config(THEMES[selected_theme])
+                    _s = load_settings()
+                    _s['theme'] = selected_theme.lower()
+                    save_settings(_s)
+                    st.success(f"{selected_theme} theme applied — reload the page to see effect")
+                    st.rerun()
+            with tc2:
+                st.caption("After applying, use the Streamlit menu (top right ☰) to also toggle the app theme if needed.")
 
-        # Update or insert address
-        if 'address' in _nc:
-            _nc = _re_net2.sub(r'address\s*=\s*"[^"]*"', f'address = "{_net_addr}"', _nc)
-        else:
-            _nc = _nc.rstrip() + '\n' + f'address = "{_net_addr}"\n'
+            # Font size
+            st.markdown("**Text Size**")
+            st.caption("Applies immediately — no reload needed.")
+            font_size = st.radio("Text size",
+                                  ["Normal", "Large (+2px)", "Extra Large (+4px)"],
+                                  horizontal=True, key="st_font_size")
+            _size_map = {"Normal": 0, "Large (+2px)": 2, "Extra Large (+4px)": 4}
+            _delta = _size_map.get(font_size, 0)
+            if _delta > 0:
+                st.markdown(f"""<style>
+                html, body, [class*="css"] {{ font-size: calc(1rem + {_delta}px) !important; }}
+                .stMarkdown p, .stMarkdown li, .stCaption, label {{
+                    font-size: calc(1rem + {_delta}px) !important;
+                }}
+                h1 {{ font-size: calc(2rem   + {_delta}px) !important; }}
+                h2 {{ font-size: calc(1.5rem + {_delta}px) !important; }}
+                h3 {{ font-size: calc(1.25rem + {_delta}px) !important; }}
+                </style>""", unsafe_allow_html=True)
 
-        # Update or insert port
-        if _re_net2.search(r'port\s*=\s*\d+', _nc):
-            _nc = _re_net2.sub(r'port\s*=\s*\d+', f'port = {_port}', _nc)
-        else:
-            _nc = _nc.rstrip() + '\n' + f'port = {_port}\n'
+            with st.expander("Current config.toml"):
+                if os.path.isfile(cfg_file):
+                    st.code(open(cfg_file).read(), language="toml")
+                else:
+                    st.caption("No config.toml yet — created on first Apply.")
 
-        os.makedirs(os.path.dirname(_net_cfg_file), exist_ok=True)
-        with open(_net_cfg_file, 'w') as _f: _f.write(_nc)
-        st.success(f"Network settings saved — restart Streamlit to apply (address={_net_addr}, port={_port})")
+            # ── Network Access ────────────────────────────────────────────────────────
+            st.divider()
+            st.subheader("Network Access")
+            st.caption(
+                "Controls which network interfaces Streamlit listens on. "
+                "Restart Streamlit after changing. Uses .streamlit/config.toml."
+            )
+
+            _net_cfg_file = os.path.join(BASE, '.streamlit', 'config.toml')
+            _net_current  = '0.0.0.0'
+            if os.path.isfile(_net_cfg_file):
+                import re as _re_net
+                _nc_txt = open(_net_cfg_file).read()
+                _nm = _re_net.search(r'address\s*=\s*"([^"]*)"', _nc_txt)
+                if _nm: _net_current = _nm.group(1)
+
+            _net_options = {
+                'Localhost only (127.0.0.1)'          : '127.0.0.1',
+                'Local network only (LAN/Tailscale)'  : '0.0.0.0',
+                'Custom address'                       : 'custom',
+            }
+            _net_labels   = list(_net_options.keys())
+            _net_vals     = list(_net_options.values())
+            _net_idx      = _net_vals.index(_net_current) if _net_current in _net_vals else 2
+
+            _net_sel = st.radio("Listen on", _net_labels, index=_net_idx,
+                                 key='net_mode',
+                                 help="Localhost only = most secure, only your machine. "
+                                      "Local network = accessible from other devices on LAN or via Tailscale. "
+                                      "Custom = specify exact IP.")
+
+            _custom_addr = ''
+            if _net_sel == 'Custom address':
+                _custom_addr = st.text_input("IP address", value=_net_current
+                                              if _net_current not in ('127.0.0.1','0.0.0.0') else '',
+                                              placeholder="e.g. 192.168.1.100", key='net_custom_addr')
+
+            _net_addr = _net_options.get(_net_sel, _custom_addr or '0.0.0.0')
+            if _net_sel == 'Custom address':
+                _net_addr = _custom_addr or '0.0.0.0'
+
+            _port_current = 8501
+            if os.path.isfile(_net_cfg_file):
+                _pm = _re_net.search(r'port\s*=\s*(\d+)', open(_net_cfg_file).read())
+                if _pm: _port_current = int(_pm.group(1))
+
+            _port = st.number_input("Port", min_value=1024, max_value=65535,
+                                     value=_port_current, step=1, key='net_port')
+
+            st.info(
+                f"Current: {_net_current}:{_port_current} — "
+                f"If seeing your public/NAT IP in the Streamlit banner, switch to Localhost only "
+                f"(http://localhost:{_port_current}) or Local network with Tailscale.",
+                icon="🌐"
+            )
+
+            if st.button("💾 Apply Network Settings", type="primary", key='net_apply'):
+                # Read existing config
+                import re as _re_net2
+                if os.path.isfile(_net_cfg_file):
+                    _nc = open(_net_cfg_file).read()
+                else:
+                    _nc = '[server]\n'
+
+                # Update or insert address
+                if 'address' in _nc:
+                    _nc = _re_net2.sub(r'address\s*=\s*"[^"]*"', f'address = "{_net_addr}"', _nc)
+                else:
+                    _nc = _nc.rstrip() + '\n' + f'address = "{_net_addr}"\n'
+
+                # Update or insert port
+                if _re_net2.search(r'port\s*=\s*\d+', _nc):
+                    _nc = _re_net2.sub(r'port\s*=\s*\d+', f'port = {_port}', _nc)
+                else:
+                    _nc = _nc.rstrip() + '\n' + f'port = {_port}\n'
+
+                os.makedirs(os.path.dirname(_net_cfg_file), exist_ok=True)
+                with open(_net_cfg_file, 'w') as _f: _f.write(_nc)
+                st.success(f"Network settings saved — restart Streamlit to apply (address={_net_addr}, port={_port})")

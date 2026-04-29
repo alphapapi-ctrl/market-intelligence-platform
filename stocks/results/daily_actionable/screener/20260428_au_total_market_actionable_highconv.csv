@@ -1,0 +1,2 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+188,17,COH.AX,Cochlear Limited,Health technology,Medical specialties,large,95.25,6.36,-0.4328,-0.4422,-0.4842,STRONG_UP,-66.76,-63.8,-69.54,-69.66,47.83,92.21,1.8107,HIGH,EARLY,156.6355,172.0395,252.9088,0,-33.0947,WEAK,24.3049

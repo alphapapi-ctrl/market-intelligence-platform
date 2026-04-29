@@ -1,0 +1,23 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+8,-4,SPD.AX,Southern Palladium Limited,palladium,producer,small,1.77,5.4871,1.0709,1.2,1.0028,FLAT,60.91,669.57,257.58,-51.85,44.66,108.6,0.6648,LOW,-,1.6276,1.7307,1.3718,1,275.3479,TREND+LEAD,63.508
+54,1,SBSW,"ticker
+SBSW    Sibanye Gold ADR
+SBSW    Sibanye Gold ADR
+Name: name, dtype: object",palladium,producer,large,12.5,1.9981,1.0224,1.0538,0.8755,FLAT,15.67,180.23,153.7,-45.72,56.4,76.9,0.5403,LOW,-,12.7955,13.4716,12.0108,1,132.1877,TREND+LEAD,43.2094
+84,-1,GENM.TO,"ticker
+GENM.TO    Generation Mining Ltd
+GENM.TO    Generation Mining Ltd
+Name: name, dtype: object",palladium,explorer,small,0.65,2.5052,1.0436,1.1292,1.2326,STRONG_DOWN,22.64,251.35,140.74,-41.76,45.2,77.27,0.1402,LOW,-,0.6455,0.6728,0.5785,1,147.0309,TREND+LEAD,36.194
+87,1,IMPUY,Impala Platinum,palladium,producer,large,14.57,1.7639,1.003,1.0706,0.894,FLAT,27.74,147.39,202.92,-44.16,55.2,86.66,0.0838,LOW,-,15.2195,15.9269,13.4449,1,93.8808,TREND+LEAD,35.6235
+97,-4,7JR.MU,Northam Platinum,palladium,producer,small,17.9,4.5211,0.973,1.0428,1.7652,STRONG_DOWN,109.5,534.08,530.51,-24.8,40.48,143.88,0.0,LOW,-,18.185,15.5218,10.2891,1,150.2597,TREND+LEAD,34.6977
+191,-17,RPH1.SG,"ticker
+RPH1.SG    Anglo American Platinum
+RPH1.SG    Anglo American Platinum
+Name: name, dtype: object",palladium,producer,small,11.8,1.7379,0.9931,1.1056,1.1098,STRONG_DOWN,35.62,143.73,146.42,-35.19,52.38,84.33,0.0,LOW,-,12.43,12.5477,9.9004,1,89.2769,TREND+LEAD,24.2929
+193,-7,WPM,"ticker
+WPM    Wheaton Precious Metals
+WPM    Wheaton Precious Metals
+WPM    Wheaton Precious Metals
+WPM    Wheaton Precious Metals
+Name: name, dtype: object",palladium,royalties_financial_services,large,136.51,1.1902,1.0046,1.0667,1.2497,STRONG_DOWN,39.3,66.92,158.29,-30.84,56.8,59.85,,LOW,-,140.6637,141.5431,117.4416,1,63.5081,TREND+LEAD,24.186
+268,13,IVPAF,Ivanhoe Mines Ltd,palladium,producer,large,8.73,0.6594,1.0833,1.059,0.8764,STRONG_UP,-17.64,-7.52,-42.15,-46.64,51.2,69.88,0.0443,LOW,PROGRESS,8.4188,9.3341,9.8781,0,-5.5107,WEAK,17.1322
