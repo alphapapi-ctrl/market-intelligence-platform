@@ -1,0 +1,5 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+395,34,COH.AX,Cochlear Limited,Health technology,Medical specialties,mid,90.0,0.3023,0.9589,0.5245,0.3521,UP,-69.23,-66.57,-71.33,-71.26,47.04,92.04,2.7834,HIGH,EARLY,148.928,167.8048,250.8733,0,-34.0213,WEAK,16.8057
+1618,34,CWY.AX,Cleanaway Waste Management Ltd.,Industrial services,Environmental services,mid,2.2,0.7849,0.9356,0.9512,0.9131,DOWN,-12.52,-13.2,-14.72,-24.39,42.29,29.82,2.0458,HIGH,EARLY,2.3185,2.3632,2.5685,0,-18.7151,WEAK,3.7885
+1629,30,BOQ.AX,Bank of Queensland Limited,Finance,Major banks,mid,6.7,0.8357,1.0353,0.9699,1.0072,DOWN,-2.62,-7.58,21.16,-19.25,49.01,29.64,1.6709,HIGH,EARLY,7.032,6.9518,6.9136,0,-12.5284,WEAK,3.552
+1678,1,CEN.AX,Contact Energy Limited,Utilities,Electric utilities,mid,7.53,0.8327,0.9352,0.9428,0.9556,STRONG_DOWN,-6.93,-7.91,3.21,-13.96,45.85,48.08,1.9973,HIGH,EARLY,7.7335,7.7248,7.949,0,-7.5399,WEAK,2.3176

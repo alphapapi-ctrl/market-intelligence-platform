@@ -1,0 +1,26 @@
+ticker,name,sector,type
+GC=F,Gold Futures,Precious Metals,futures
+SI=F,Silver Futures,Precious Metals,futures
+PL=F,Platinum Futures,Precious Metals,futures
+PA=F,Palladium Futures,Precious Metals,futures
+CL=F,Crude Oil WTI Futures,Energy,futures
+BZ=F,Brent Crude Futures,Energy,futures
+NG=F,Natural Gas Futures,Energy,futures
+HO=F,Heating Oil Futures,Energy,futures
+RB=F,RBOB Gasoline Futures,Energy,futures
+HG=F,Copper Futures,Base Metals,futures
+ALI=F,Aluminium Futures,Base Metals,futures
+ZNC=F,Zinc Futures,Base Metals,futures
+ZW=F,Wheat Futures,Agriculture,futures
+ZC=F,Corn Futures,Agriculture,futures
+ZS=F,Soybean Futures,Agriculture,futures
+ZO=F,Oat Futures,Agriculture,futures
+KC=F,Coffee Futures,Agriculture,futures
+CC=F,Cocoa Futures,Agriculture,futures
+CT=F,Cotton Futures,Agriculture,futures
+SB=F,Sugar Futures,Agriculture,futures
+LE=F,Live Cattle Futures,Livestock,futures
+GF=F,Feeder Cattle Futures,Livestock,futures
+HE=F,Lean Hogs Futures,Livestock,futures
+^SPGSCI,S&P GSCI Index,Index,index
+DBC,Invesco DB Commodity ETF,Index,etf

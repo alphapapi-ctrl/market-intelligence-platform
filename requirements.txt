@@ -8,3 +8,5 @@ plotly
 streamlit-option-menu
 kaleido
 pandas-datareader
+pillow
+matplotlib

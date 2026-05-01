@@ -1,0 +1,45 @@
+ticker,name,sector,type
+SPY,SPDR S&P 500 ETF,US Equity Broad,etf
+QQQ,Invesco Nasdaq 100 ETF,US Equity Broad,etf
+IWM,iShares Russell 2000 ETF,US Equity Broad,etf
+DIA,SPDR Dow Jones ETF,US Equity Broad,etf
+RSP,Invesco S&P 500 Equal Weight,US Equity Broad,etf
+XLK,Technology Select SPDR,US Sector,etf
+XLF,Financial Select SPDR,US Sector,etf
+XLE,Energy Select SPDR,US Sector,etf
+XLV,Health Care Select SPDR,US Sector,etf
+XLI,Industrial Select SPDR,US Sector,etf
+XLY,Consumer Disc Select SPDR,US Sector,etf
+XLP,Consumer Staples Select SPDR,US Sector,etf
+XLB,Materials Select SPDR,US Sector,etf
+XLU,Utilities Select SPDR,US Sector,etf
+XLRE,Real Estate Select SPDR,US Sector,etf
+XLC,Communication Services SPDR,US Sector,etf
+GLD,SPDR Gold Shares,Commodities,etf
+SLV,iShares Silver Trust,Commodities,etf
+USO,United States Oil Fund,Commodities,etf
+UNG,United States Natural Gas Fund,Commodities,etf
+PDBC,Invesco Optimum Yield Comm ETF,Commodities,etf
+COPX,Global X Copper Miners ETF,Commodities,etf
+TLT,iShares 20+ Year Treasury ETF,Fixed Income,etf
+IEF,iShares 7-10 Year Treasury ETF,Fixed Income,etf
+SHY,iShares 1-3 Year Treasury ETF,Fixed Income,etf
+HYG,iShares HY Corporate Bond ETF,Fixed Income,etf
+LQD,iShares IG Corporate Bond ETF,Fixed Income,etf
+EFA,iShares MSCI EAFE ETF,International,etf
+EEM,iShares MSCI Emerging Markets,International,etf
+FXI,iShares China Large-Cap ETF,International,etf
+EWJ,iShares MSCI Japan ETF,International,etf
+EWA,iShares MSCI Australia ETF,International,etf
+VXX,iPath S&P 500 VIX ST Futures,Volatility,etf
+UVXY,ProShares Ultra VIX ST Futures,Volatility,etf
+ARKK,ARK Innovation ETF,Thematic,etf
+ARKG,ARK Genomic Revolution ETF,Thematic,etf
+BOTZ,Global X Robotics & AI ETF,Thematic,etf
+LIT,Global X Lithium & Battery ETF,Thematic,etf
+ICLN,iShares Global Clean Energy ETF,Thematic,etf
+IOZ.AX,iShares Core S&P/ASX 200 ETF,AU Equity,etf
+STW.AX,SPDR S&P/ASX 200 ETF,AU Equity,etf
+VAS.AX,Vanguard Australian Shares ETF,AU Equity,etf
+NDQ.AX,BetaShares Nasdaq 100 ETF,AU Equity,etf
+GOLD.AX,BetaShares Gold Bullion ETF,AU Commodities,etf

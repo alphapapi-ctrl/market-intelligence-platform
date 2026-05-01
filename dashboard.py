@@ -179,6 +179,9 @@ DEFAULT_SETTINGS = {
         'au_benchmark':  "You are a quantitative analyst. Analyse this AU market relative strength data and provide a 4-5 sentence assessment covering: top momentum leaders, laggards to avoid, sector rotation signals, and any regime changes visible in the data.",
         'us_benchmark':  "You are a quantitative analyst. Analyse this US market relative strength data and provide a 4-5 sentence assessment covering: top momentum leaders, laggards to avoid, sector rotation signals, and any regime changes visible in the data.",
         'comm_benchmark': "You are a commodity market analyst. Analyse this commodity relative strength data and provide a 4-5 sentence assessment covering: leading commodities, lagging groups, rotation signals, and what this implies for risk appetite.",
+        'sea_sectors':   "You are a market seasonality analyst. Analyse the monthly seasonal data provided and give a 4-5 sentence assessment. Highlight: (1) the 2-3 strongest months by average return and % positive, (2) the 2-3 weakest months to be cautious of, (3) how the current presidential year compares to the historical average for the same year-in-term, (4) any notable seasonal edge or caution for the current month. Be specific with numbers.",
+        'sea_stocks':    "You are a market seasonality analyst. Analyse the monthly seasonal data for this stock/ETF and give a 4-5 sentence assessment. Highlight: (1) the 2-3 strongest months by average return and % positive, (2) the 2-3 weakest months, (3) how the current presidential year-in-term affects this instrument's seasonality, (4) any strong correlation with the benchmark if provided. Be specific with numbers.",
+        'sea_presidential': "You are a market seasonality analyst specialising in presidential cycle analysis. Analyse the monthly data for this presidential year pattern and give a 4-5 sentence assessment. Highlight: (1) which months show the strongest edge vs the full-history average, (2) typical drawdown risk for this year-in-term, (3) current YTD performance vs historical expectation, (4) any cautionary or favourable seasonal signals for the months ahead.",
     },
     'ai_features': {
         'enabled'          : False,
@@ -256,6 +259,7 @@ page = option_menu(
     icons       = [p[1] for p in active_pages],
     default_index = 0,
     orientation = "horizontal",
+    key         = "main_nav_menu",
     styles      = {
         "container"        : {"padding": "0!important", "background-color": "#2c3e50"},
         "icon"             : {"color": "#b0bec5", "font-size": "13px"},
@@ -997,6 +1001,48 @@ def _render_zweig_history(result):
 # ═══════════════════════════════════════════════════════════════════════════════
 # MACRO PAGE
 # ═══════════════════════════════════════════════════════════════════════════════
+@st.cache_data(ttl=1800, show_spinner="Fetching RRG price data...")
+def _fetch_custom_rrg(bm, tickers, tail, smooth):
+    import yfinance as _yf2
+    _all   = list(set([bm] + list(tickers)))
+    _days  = max(tail * 4, 120)
+    _end   = pd.Timestamp.today()
+    _start = _end - pd.Timedelta(days=_days)
+    try:
+        _raw = _yf2.download(_all, start=_start, end=_end,
+                              auto_adjust=True, progress=False)['Close']
+        if isinstance(_raw, pd.Series): _raw = _raw.to_frame()
+        return _raw.dropna(how='all')
+    except: return None
+
+@st.cache_data(ttl=3600)
+def _fetch_stk(ticker, _v=2):
+    import yfinance as _yf
+    df = _yf.download(ticker, start="1990-01-01", auto_adjust=True, progress=False)
+    if df is None or df.empty: return None
+    if isinstance(df.columns, pd.MultiIndex):
+        df = df['Close']
+        if isinstance(df, pd.DataFrame): df = df.iloc[:, 0]
+    else:
+        df = df['Close']
+    c = df.squeeze().dropna()
+    if isinstance(c, pd.DataFrame): c = c.iloc[:, 0]
+    c.index = pd.to_datetime(c.index).tz_localize(None)
+    return c
+
+@st.cache_data(ttl=1800, show_spinner=False)
+def _fetch_sea(ticker, _v=4):
+    import yfinance as _yf
+    try:
+        _tk = _yf.Ticker(ticker)
+        df  = _tk.history(start="1928-01-01", auto_adjust=True)
+        if df is None or df.empty: return None
+        close = df['Close'].squeeze().dropna()
+        if isinstance(close, pd.DataFrame): close = close.iloc[:, 0]
+        close.index = pd.to_datetime(close.index).tz_localize(None)
+        return close
+    except: return None
+
 if page == "Macro":
     import yfinance as yf
     import plotly.graph_objects as go
@@ -1036,6 +1082,30 @@ if page == "Macro":
 
         import re
         d = {}
+
+        # ── Load companion JSON snapshot for richer data ─────────────────────
+        # The report.txt is text-formatted; the JSON snapshot has full numeric data
+        snap_path = os.path.join(MACRO, 'results', 'macro_snapshot_prev.json')
+        if os.path.exists(snap_path):
+            try:
+                with open(snap_path, 'r') as _sf:
+                    _snap = json.load(_sf)
+                # Merge useful numeric fields directly
+                for _k in ('margin_chg_1m', 'margin_chg_3m', 'margin_peak', 'margin_from_peak',
+                           'margin_acceleration', 'cu_gold_ratio', 'cu_gold_chg_5d',
+                           'cu_gold_chg_21d', 'cu_gold_chg_63d', 'gold_spx_ratio',
+                           'gold_copper_ratio', 'cape_manual', 'pres_cycle_ret',
+                           'pres_cycle_dd', 'pres_cycle_dd_now', 'pres_cycle_year',
+                           'consumer_sentiment', 'pmi_manual', 'unemployment',
+                           'vix', 'vvix', 'vix_vvix'):
+                    if _k in _snap and _snap[_k] is not None:
+                        d[_k] = _snap[_k]
+                # Map JSON keys → dashboard keys where names differ
+                if 'cape_manual' in _snap: d['cape'] = _snap['cape_manual']
+                if 'pmi_manual'  in _snap: d['pmi']  = _snap['pmi_manual']
+                if 'consumer_sentiment' in _snap: d['consumer_sent'] = _snap['consumer_sentiment']
+            except Exception:
+                pass
 
         # VIX
         m = re.search(r'VIX:\s*([\d.]+)', text)
@@ -1202,7 +1272,9 @@ if page == "Macro":
         results = {}
         tickers = [v[0] for v in LIVE_TICKERS.values()]
         try:
-            raw = yf.download(tickers, period='10d', auto_adjust=True, progress=False)
+            @st.cache_data(ttl=300)
+            def _fetch_live(_t): return yf.download(list(_t), period='10d', auto_adjust=True, progress=False)
+            raw = _fetch_live(tuple(tickers))
             closes = raw['Close']
             for key, (ticker, label, group) in LIVE_TICKERS.items():
                 if ticker in closes.columns:
@@ -1270,7 +1342,7 @@ if page == "Macro":
                     st.dataframe(
                         df_grp.style.apply(_live_style, axis=1)
                             .format({'1D %': '{:+.2f}%', '5D %': '{:+.2f}%'}),
-                        use_container_width=True, hide_index=True
+                        width='stretch', hide_index=True
                     )
 
     st.divider()
@@ -1314,8 +1386,9 @@ if page == "Macro":
         from datetime import timedelta as _td_hgx
         import pandas as _pd_hgx
         # Use Ticker object to avoid MultiIndex issues with newer yfinance
-        _hgx_tkr  = yf.Ticker('^HGX')
-        _hgx_hist = _hgx_tkr.history(period='5y')
+        @st.cache_data(ttl=3600)
+        def _fetch_hgx(): return yf.Ticker('^HGX').history(period='5y')
+        _hgx_hist = _fetch_hgx()
         if _hgx_hist.empty:
             raise ValueError("No HGX data returned")
         _hgx_data = _hgx_hist['Close'].dropna()
@@ -1546,9 +1619,9 @@ Currently <b>{_hgx_curr:,.0f}</b>. Signal resets <b>{_reset_date}</b> (18 months
          'value_fn':lambda:f"{macro.get('hy_spread',0):.2f}% (warn >4%, stress >6%)",
          'detail':'HY spreads widening signals credit stress and risk-off'},
         {'key':'margin','label':'📈 Margin Debt Over-leverage','lead_time':'6–12 months',
-         'check':lambda:macro.get('margin_m2',0)>1.4,
-         'value_fn':lambda:f"Margin/M2: {macro.get('margin_m2',0):.4f} (extreme >1.4) | Accel: {macro.get('margin_acceleration',0):+.3f}%",
-         'detail':'Margin/M2 ratio extreme — leveraged speculation at peak'},
+         'check':lambda:(macro.get('margin_from_peak') is not None and macro.get('margin_from_peak') > -2.0),
+         'value_fn':lambda:f"From peak: {macro.get('margin_from_peak',0):+.2f}% (extreme >-2%) | 3m: {macro.get('margin_chg_3m',0):+.2f}% | Accel: {macro.get('margin_acceleration',0):+.3f}%",
+         'detail':'Margin debt within 2% of all-time peak — leveraged speculation extreme'},
     ]
 
     _active_triggers=[ind for ind in _RECESSION_INDICATORS if ind['check']()]
@@ -1627,12 +1700,27 @@ Currently <b>{_hgx_curr:,.0f}</b>. Signal resets <b>{_reset_date}</b> (18 months
                              'Signal': f"{'✓' if _cpi_good else '⚠'} {'Contained' if _cpi_good else 'Elevated'} — target 2%",
                              '_colour': '#2dc653' if _cpi_good else '#e63946'})
 
+        # Volatility regime (VIX)
+        _vix = macro.get('vix')
+        _vvix = macro.get('vvix')
+        if _vix is not None:
+            if _vix < 15:
+                _vix_st = '✓ COMPLACENT — risk on environment'; _vix_c = '#2dc653'
+            elif _vix < 20:
+                _vix_st = '✓ NORMAL — healthy volatility'; _vix_c = '#2dc653'
+            elif _vix < 30:
+                _vix_st = '→ ELEVATED — caution warranted'; _vix_c = '#f77f00'
+            else:
+                _vix_st = '⚠ STRESSED — risk off environment'; _vix_c = '#e63946'
+            _vix_val = f"{_vix:.2f}" + (f" | VVIX {_vvix:.1f}" if _vvix is not None else "")
+            _ec_rows.append({'Indicator':'VIX/Volatility','Value':_vix_val,'Signal':_vix_st,'_colour':_vix_c})
+
         if _ec_rows:
             import pandas as _pd3
             _ec_df = _pd3.DataFrame(_ec_rows)[['Indicator','Value','Signal']]
             def _ec_style(row):
                 return ['','',f"color:{_ec_rows[row.name]['_colour']}"]
-            st.dataframe(_ec_df.style.apply(_ec_style,axis=1),use_container_width=True,hide_index=True)
+            st.dataframe(_ec_df.style.apply(_ec_style,axis=1),width='stretch',hide_index=True)
 
     with col2:
         st.markdown("**Consumer Cycle**")
@@ -1650,7 +1738,7 @@ Currently <b>{_hgx_curr:,.0f}</b>. Signal resets <b>{_reset_date}</b> (18 months
         if sec:
             lbl = macro.get('sector_ratio_label',''); good = 'NEUTRAL' in lbl or 'RISK ON' in lbl; colour = '#2dc653' if good else '#f77f00'
             _cc_rows.append({'Indicator':'Sector Risk On/Off','Value':str(sec),'Signal':lbl[:60],'_c':colour})
-            ad_div = macro.get('ad_divergence')
+        ad_div = macro.get('ad_divergence')
         if ad_div:
             good = 'BULLISH' in ad_div; colour = '#2dc653' if good else '#e63946' if 'BEARISH' in ad_div else '#f77f00'
             _cc_rows.append({'Indicator':'A/D Divergence','Value':'','Signal':ad_div[:60],'_c':colour})
@@ -1658,27 +1746,55 @@ Currently <b>{_hgx_curr:,.0f}</b>. Signal resets <b>{_reset_date}</b> (18 months
             import pandas as _pd4
             _cc_df = _pd4.DataFrame(_cc_rows)[['Indicator','Value','Signal']]
             def _cc_style(row): return ['','',f"color:{_cc_rows[row.name]['_c']}"]
-            st.dataframe(_cc_df.style.apply(_cc_style,axis=1),use_container_width=True,hide_index=True)
+            st.dataframe(_cc_df.style.apply(_cc_style,axis=1),width='stretch',hide_index=True)
 
     with col3:
         st.markdown("**Valuation**")
-        vals = [
-            ("SPX/M2",        macro.get('spx_m2'),   0.25, "Extreme above 0.25"),
-            ("Margin/M2",     macro.get('margin_m2'),1.4,  "Extreme above 1.4"),
-            ("Margin Accel %", macro.get('margin_acceleration'), 0.5, "Accelerating — leverage building"),
-            ("Buffett Ind %", macro.get('buffett'),  150,  "Extreme above 150%"),
-            ("Shiller CAPE",  macro.get('cape'),     30,   "Extreme above 30"),
-        ]
+        # Margin Debt — from JSON snapshot (% off all-time peak is the key extreme signal)
+        _mfp = macro.get('margin_from_peak')
+        _m3m = macro.get('margin_chg_3m')
+        _m1m = macro.get('margin_chg_1m')
+        _macc = macro.get('margin_acceleration')
+
+        vals = []
+        # Margin Debt vs Peak — extreme when within 2% of all-time high
+        if _mfp is not None:
+            extreme = _mfp > -2.0  # within 2% of peak = extreme
+            vals.append(("Margin Debt vs Peak", f"{_mfp:+.2f}%", extreme,
+                         "EXTREME — within 2% of all-time high" if extreme else "Off peak — normal range"))
+        # 3-month margin debt change
+        if _m3m is not None:
+            extreme = _m3m > 5.0  # >5% in 3 months = leverage building
+            vals.append(("Margin Debt 3m Δ", f"{_m3m:+.2f}%", extreme,
+                         "Leverage building rapidly" if extreme else "Stable / deleveraging"))
+        # Margin acceleration
+        if _macc is not None:
+            extreme = _macc > 0.5
+            vals.append(("Margin Accel %", f"{_macc:+.3f}%", extreme,
+                         "Accelerating — leverage building" if extreme else "Decelerating / stable"))
+        # Buffett Indicator (only if parsed)
+        _buf = macro.get('buffett')
+        if _buf is not None:
+            extreme = _buf > 150
+            vals.append(("Buffett Ind %", f"{_buf}", extreme,
+                         "Extreme above 150%" if extreme else "Normal range"))
+        # Shiller CAPE
+        _cape = macro.get('cape')
+        if _cape is not None:
+            extreme = _cape > 30
+            vals.append(("Shiller CAPE", f"{_cape}", extreme,
+                         "Extreme above 30 — bubble territory" if extreme else "Normal range"))
+
         _val_rows = []
-        for lbl, val, threshold, warning in vals:
-            if val is None: continue
-            extreme = val > threshold; colour = '#e63946' if extreme else '#2dc653'; icon = '⚠' if extreme else '✓'
-            _val_rows.append({'Indicator':lbl,'Value':str(val),'Signal':f"{icon} {warning if extreme else 'Normal range'}", '_c':colour})
+        for lbl, val_str, extreme, signal_text in vals:
+            colour = '#e63946' if extreme else '#2dc653'
+            icon = '⚠' if extreme else '✓'
+            _val_rows.append({'Indicator':lbl,'Value':val_str,'Signal':f"{icon} {signal_text}", '_c':colour})
         if _val_rows:
             import pandas as _pd5
             _val_df = _pd5.DataFrame(_val_rows)[['Indicator','Value','Signal']]
             def _val_style(row): return ['','',f"color:{_val_rows[row.name]['_c']}"]
-            st.dataframe(_val_df.style.apply(_val_style,axis=1),use_container_width=True,hide_index=True)
+            st.dataframe(_val_df.style.apply(_val_style,axis=1),width='stretch',hide_index=True)
 
     with col4:
         st.markdown("**Credit & Rates**")
@@ -1703,7 +1819,7 @@ Currently <b>{_hgx_curr:,.0f}</b>. Signal resets <b>{_reset_date}</b> (18 months
             import pandas as _pd6
             _cr_df = _pd6.DataFrame(_cr_rows)[['Indicator','Value','Signal']]
             def _cr_style(row): return ['','',f"color:{_cr_rows[row.name]['_c']}"]
-            st.dataframe(_cr_df.style.apply(_cr_style,axis=1),use_container_width=True,hide_index=True)
+            st.dataframe(_cr_df.style.apply(_cr_style,axis=1),width='stretch',hide_index=True)
 
     # Focus instruments expander
     focus_raw = macro.get('focus_raw', '')
@@ -1759,71 +1875,176 @@ Currently <b>{_hgx_curr:,.0f}</b>. Signal resets <b>{_reset_date}</b> (18 months
     # SECTION 3 — MACRO CYCLE POSITIONING
     # ══════════════════════════════════════════════════════════════════════════
     st.subheader("🔄 Macro Cycle Positioning")
+    _cyc1, _cyc2 = st.columns(2)
 
-    # Business and Fed cycles as status cards
-    biz_col, fed_col, pres_col = st.columns(3)
-
-    with biz_col:
-        biz   = macro.get('biz_cycle', 'UNKNOWN')
-        score = macro.get('biz_score', 0)
-        biz_colours = {
-            'EARLY EXPANSION': '#2dc653', 'MID EXPANSION': '#80b918',
-            'LATE EXPANSION': '#f77f00',  'LATE CYCLE': '#e63946',
-            'EARLY CONTRACTION': '#c1121f','RECESSION': '#9b0000',
-            'EARLY RECOVERY': '#2dc653',
+    with _cyc1:
+        _CYCLE_INFO = {
+            'FULL RECESSION'    : ('Healthcare, Utilities, Finance',     'Value / Size / Yield',      'PMI < 45',  'Defensive'),
+            'EARLY RECOVERY'    : ('Finance, Technology, Cyclicals',     'Value / Size / Yield',      'PMI 45-50', 'Defensive > Growth'),
+            'EARLY EXPANSION'   : ('Technology, Industrials, Materials', 'Momentum / Size / Value',   'PMI > 50',  'Growth'),
+            'MID EXPANSION'     : ('Basic Materials, Energy, Staples',   'Momentum / Size / Value',   'PMI > 55',  'Cyclical'),
+            'LATE EXPANSION'    : ('Energy, Staples, Healthcare',        'Momentum / Size / Value',   'PMI 50-55', 'Growth > Value'),
+            'LATE CYCLE'        : ('Energy, Staples, Healthcare',        'Low vol / Quality / Value', 'PMI < 50',  'Value'),
+            'EARLY CONTRACTION' : ('Healthcare, Utilities, Finance',     'Low vol / Quality / Value', 'PMI < 45',  'Defensive'),
         }
-        colour = biz_colours.get(biz, '#888888')
-        st.markdown(f"""
-            <div class="macro-card" style="border-left:4px solid {colour};text-align:center;padding:16px">
-                <div class="macro-label">BUSINESS CYCLE</div>
-                <div style="color:{colour};font-size:20px;font-weight:bold;margin:6px 0">{biz}</div>
-                <div class="macro-label">Signal score: {score}/10</div>
-            </div>
-        """, unsafe_allow_html=True)
-
-    with fed_col:
-        fed  = macro.get('fed_cycle', 'UNKNOWN')
-        fed_colours = {
-            'QT': '#e63946', 'QT SLOWING': '#f77f00',
-            'QT SLOWING — PRE PIVOT': '#f77f00',
-            'PRE PIVOT': '#fcbf49', 'QE': '#2dc653',
-            'FULL EASING': '#2dc653',
+        _BIZ_COLOURS = {
+            'EARLY EXPANSION':'#2dc653','MID EXPANSION':'#80b918','LATE EXPANSION':'#f77f00',
+            'LATE CYCLE':'#e63946','EARLY CONTRACTION':'#c1121f','FULL RECESSION':'#9b0000',
+            'EARLY RECOVERY':'#2dc653',
         }
-        colour = next((v for k, v in fed_colours.items() if k in fed), '#888888')
-        st.markdown(f"""
-            <div class="macro-card" style="border-left:4px solid {colour};text-align:center;padding:16px">
-                <div class="macro-label">FED CYCLE</div>
-                <div style="color:{colour};font-size:16px;font-weight:bold;margin:6px 0">{fed}</div>
-                <div class="macro-label">Funds: {macro.get('fed_funds','')}% &nbsp;|&nbsp; BS: ${macro.get('fed_bs','')}T</div>
-            </div>
-        """, unsafe_allow_html=True)
+        _PHASE_ORDER = ['FULL RECESSION','EARLY RECOVERY','EARLY EXPANSION',
+                        'MID EXPANSION','LATE EXPANSION','LATE CYCLE','EARLY CONTRACTION']
+        biz        = macro.get('biz_cycle', '')
+        score      = macro.get('biz_score', 0)
+        biz_upper  = biz.upper()
+        biz_colour = next((v for k,v in _BIZ_COLOURS.items() if k in biz_upper), '#888')
+        phase_idx  = next((i for i,k in enumerate(_PHASE_ORDER) if k in biz_upper), -1)
+        info       = next((v for k,v in _CYCLE_INFO.items() if k in biz_upper), ('—','—','—','—'))
 
-    with pres_col:
-        p_ret  = macro.get('pres_ret', 0)
-        p_hist = macro.get('pres_hist', 0)
-        p_dd   = macro.get('pres_dd', 0)
-        p_day  = macro.get('pres_day', 0)
-        ahead  = p_ret - p_hist
-        colour = '#2dc653' if ahead > 0 else '#e63946'
-        st.markdown(f"""
-            <div class="macro-card" style="border-left:4px solid {colour};text-align:center;padding:16px">
-                <div class="macro-label">PRESIDENTIAL CYCLE — DAY {p_day}</div>
-                <div style="color:{colour};font-size:20px;font-weight:bold;margin:6px 0">{p_ret:+.1f}%</div>
-                <div class="macro-label">vs hist avg {p_hist:.1f}% &nbsp;
-                    <span style="color:{colour}">({ahead:+.1f}%)</span></div>
-                <div style="color:#e63946;font-size:11px;margin-top:4px">DD from high: {p_dd:.1f}%</div>
-            </div>
-        """, unsafe_allow_html=True)
+        if biz:
+            import math as _math
+            _n = len(_PHASE_ORDER)
+            _labels_short = ['Recession','Early Recov','Early Exp','Mid Exp','Late Exp','Late Cycle','Contraction']
+            _svg_parts = []
+            _pts = []
+            for _i in range(_n):
+                _a = _math.pi + (_i/(_n-1)) * _math.pi * 1.6
+                _x = 50 + 40*_math.cos(_a)
+                _y = 52 - 30*_math.sin(_a)
+                _pts.append((_x,_y))
+            _path = 'M ' + ' L '.join(f'{x:.1f},{y:.1f}' for x,y in _pts)
+            _svg_parts.append(f'<path d="{_path}" stroke="#555" stroke-width="1" fill="none" opacity="0.3"/>')
+            for _i,(_x,_y) in enumerate(_pts):
+                _is_curr = _i == phase_idx
+                _c = biz_colour if _is_curr else '#555'
+                _r = 9 if _is_curr else 4
+                _op = '1' if _is_curr else '0.4'
+                _lbl = _labels_short[_i]
+                _svg_parts.append(f'<circle cx="{_x:.1f}" cy="{_y:.1f}" r="{_r}" fill="{_c}" opacity="{_op}"/>')
+                _svg_parts.append(f'<text x="{_x:.1f}" y="{_y+14:.1f}" text-anchor="middle" font-size="5" fill="{_c}" opacity="{_op}">{_lbl}</text>')
+            _wave_svg = '<svg viewBox="0 0 100 80" style="width:100%;max-height:100px">' + ''.join(_svg_parts) + '</svg>'
+            st.markdown(
+                f"<div style='border-left:4px solid {biz_colour};padding:12px 16px;border-radius:0 8px 8px 0'>"
+                f"<div style='font-size:11px;color:#888;font-weight:600'>BUSINESS CYCLE</div>"
+                f"<div style='color:{biz_colour};font-size:18px;font-weight:bold;margin:4px 0'>{biz} "
+                f"<span style='font-size:11px;color:#888'>score: {score}/10</span></div>"
+                f"{_wave_svg}"
+                f"<div style='font-size:11px;margin-top:6px'>"
+                f"<b>Sectors:</b> {info[0]} &nbsp;|&nbsp; <b>Factor:</b> {info[1]} &nbsp;|&nbsp; "
+                f"<b>ISM:</b> {info[2]} &nbsp;|&nbsp; <b>Style:</b> {info[3]}"
+                f"</div></div>",
+                unsafe_allow_html=True
+            )
+        else:
+            st.info("Run macro report to populate business cycle data.")
+
+    with _cyc2:
+        @st.cache_data(ttl=3600)
+        def _pres_cycle_stats():
+            try:
+                import yfinance as _yf
+                import numpy as _np2
+                from datetime import datetime as _dt
+                _spx = _yf.download('^GSPC', start='1927-01-01', auto_adjust=True, progress=False)['Close'].squeeze().dropna()
+                _spx.index = pd.to_datetime(_spx.index).tz_localize(None)
+                _PRESIDENTS = [
+                    ("Hoover",1929,1933,"R"),("Roosevelt",1933,1945,"D"),("Truman",1945,1953,"D"),
+                    ("Eisenhower",1953,1961,"R"),("Kennedy",1961,1963,"D"),("Johnson",1963,1969,"D"),
+                    ("Nixon",1969,1974,"R"),("Ford",1974,1977,"R"),("Carter",1977,1981,"D"),
+                    ("Reagan",1981,1989,"R"),("Bush Sr",1989,1993,"R"),("Clinton",1993,2001,"D"),
+                    ("Bush Jr",2001,2009,"R"),("Obama",2009,2017,"D"),("Trump",2017,2021,"R"),
+                    ("Biden",2021,2025,"D"),("Trump",2025,2029,"R"),
+                ]
+                _now   = _dt.now()
+                _curr  = next(((n,s,e,p) for n,s,e,p in _PRESIDENTS if s<=_now.year<e), None)
+                if not _curr: return {}
+                _nm,_s,_e,_p = _curr
+                _yit  = _now.year - _s + 1
+                _ytdd = _spx[_spx.index.year==_now.year]
+                _ytdr = round((_ytdd.iloc[-1]/_ytdd.iloc[0]-1)*100,2) if len(_ytdd)>1 else 0
+                _yrets,_ydds,_mrets = [],[],[]
+                for _hn,_hs,_he,_hp in _PRESIDENTS[:-1]:
+                    _hy = _hs+(_yit-1)
+                    if _hy>=_he: continue
+                    _yd = _spx[_spx.index.year==_hy]
+                    if len(_yd)<20: continue
+                    _yrets.append(round((_yd.iloc[-1]/_yd.iloc[0]-1)*100,2))
+                    _ydds.append(round(float(((_yd-_yd.expanding().max())/_yd.expanding().max()*100).min()),2))
+                    _md = _yd[_yd.index.month==_now.month]
+                    if len(_md)>=2: _mrets.append(round((_md.iloc[-1]/_md.iloc[0]-1)*100,2))
+                _n = len(_yrets)
+                return {
+                    'president':_nm,'party':_p,'term_start':_s,'yr_in_term':_yit,'ytd_ret':_ytdr,
+                    'hist_avg':round(_np2.mean(_yrets),2) if _yrets else 0,
+                    'hist_med':round(_np2.median(_yrets),2) if _yrets else 0,
+                    'hist_pos':round(sum(r>0 for r in _yrets)/_n*100,1) if _n else 0,
+                    'avg_dd':round(_np2.mean(_ydds),2) if _ydds else 0,
+                    'worst_dd':round(min(_ydds),2) if _ydds else 0,
+                    'n_dds':len([d for d in _ydds if d<-10]),
+                    'mo_avg':round(_np2.mean(_mrets),2) if _mrets else 0,
+                    'mo_pos':round(sum(r>0 for r in _mrets)/len(_mrets)*100,1) if _mrets else 0,
+                    'curr_mo':_now.strftime('%B'),'n_yrs':_n,
+                }
+            except: return {}
+
+        _ps = _pres_cycle_stats()
+        if _ps:
+            _pc_col  = '#4C8BF5' if _ps.get('party')=='D' else '#E8534A'
+            _ytd     = _ps.get('ytd_ret', 0)
+            _ahead   = _ytd - _ps.get('hist_avg', 0)
+            _ytd_col = '#2dc653' if _ytd >= 0 else '#e63946'
+            _ahd_col = '#2dc653' if _ahead >= 0 else '#e63946'
+            st.markdown(
+                f"<div style='border-left:4px solid {_pc_col};padding:12px 16px;border-radius:0 8px 8px 0'>"
+                f"<div style='font-size:11px;color:#888;font-weight:600'>PRESIDENTIAL CYCLE</div>"
+                f"<div style='color:{_pc_col};font-size:18px;font-weight:bold;margin:4px 0'>"
+                f"{_ps['president']} Year {_ps['yr_in_term']} "
+                f"<span style='font-size:11px;color:#888'>({_ps['party']}, since {_ps['term_start']})</span></div>"
+                f"<div style='display:flex;gap:20px;flex-wrap:wrap;font-size:12px;margin-top:8px'>"
+                f"<div><div style='color:#888;font-size:10px'>YTD RETURN</div>"
+                f"<div style='color:{_ytd_col};font-weight:bold;font-size:16px'>{_ytd:+.1f}%</div>"
+                f"<div style='color:{_ahd_col};font-size:10px'>{_ahead:+.1f}% vs hist avg</div></div>"
+                f"<div><div style='color:#888;font-size:10px'>HIST AVG Yr {_ps['yr_in_term']} ({_ps['n_yrs']} presidents)</div>"
+                f"<div style='font-weight:bold'>{_ps['hist_avg']:+.1f}% avg &nbsp; {_ps['hist_med']:+.1f}% median</div>"
+                f"<div style='color:#888;font-size:10px'>{_ps['hist_pos']}% of years positive</div></div>"
+                f"<div><div style='color:#888;font-size:10px'>AVG DRAWDOWN Yr {_ps['yr_in_term']}</div>"
+                f"<div style='color:#e63946;font-weight:bold'>{_ps['avg_dd']:.1f}% avg &nbsp; {_ps['worst_dd']:.1f}% worst</div>"
+                f"<div style='color:#888;font-size:10px'>{_ps['n_dds']}/{_ps['n_yrs']} years had DD >10%</div></div>"
+                f"<div><div style='color:#888;font-size:10px'>{_ps['curr_mo'].upper()} SEASONALITY</div>"
+                f"<div style='font-weight:bold'>{_ps['mo_avg']:+.1f}% hist avg</div>"
+                f"<div style='color:#888;font-size:10px'>{_ps['mo_pos']}% of years positive</div></div>"
+                f"</div></div>",
+                unsafe_allow_html=True
+            )
+        else:
+            st.info("Loading presidential cycle data...")
 
     st.markdown("<div style='margin-top:16px'></div>", unsafe_allow_html=True)
 
-# ═══════════════════════════════════════════════════════════════════════════════
-# CONSUMER CREDIT PAGE
-# ═══════════════════════════════════════════════════════════════════════════════
+# ══════════════════════════════════════════════════════════════════════════════════════════════════════
 elif page == "Seasonality":
     import plotly.graph_objects as go
     import plotly.express as px
     st.title("📅 Seasonality")
+
+    # Presidential year lookup — available to all seasonality tabs
+    _PRES_YEAR_MAP = {}
+    _TERMS = [
+        ("Hoover",1929,"R"),("Roosevelt T1",1933,"D"),("Roosevelt T2",1937,"D"),
+        ("Roosevelt T3",1941,"D"),("Roosevelt T4",1945,"D"),("Truman",1945,"D"),
+        ("Eisenhower T1",1953,"R"),("Eisenhower T2",1957,"R"),
+        ("Kennedy",1961,"D"),("Johnson",1963,"D"),("Nixon T1",1969,"R"),
+        ("Nixon T2",1973,"R"),("Ford",1974,"R"),("Carter",1977,"D"),
+        ("Reagan T1",1981,"R"),("Reagan T2",1985,"R"),("Bush Sr",1989,"R"),
+        ("Clinton T1",1993,"D"),("Clinton T2",1997,"D"),("Bush Jr T1",2001,"R"),
+        ("Bush Jr T2",2005,"R"),("Obama T1",2009,"D"),("Obama T2",2013,"D"),
+        ("Trump T1",2017,"R"),("Biden",2021,"D"),("Trump T2",2025,"R"),
+    ]
+    for _pn,_ps,_pp in _TERMS:
+        for _yi in range(1,5):
+            _yr = _ps + (_yi-1)
+            if _yr not in _PRES_YEAR_MAP:
+                _PRES_YEAR_MAP[_yr] = _yi
 
     _sea_tab1, _sea_tab2, _sea_tab3 = st.tabs(["📊 Sectors", "🔍 Stocks", "🇺🇸 Presidential Cycle"])
 
@@ -1876,22 +2097,27 @@ elif page == "Seasonality":
 
     # ── Tab 1: Seasonality Charts ───────────────────────────────────────────────
     with _sea_tab1:
-        _sc1, _sc2, _sc3, _sc4 = st.columns([3, 2, 2, 2])
+        _sc1, _sc2, _sc3, _sc4, _sc5, _sc6 = st.columns([3, 2, 2, 1, 2, 1])
         _groups    = list(_INSTRUMENTS.keys())
         _grp_sel   = _sc1.selectbox("Asset class", _groups, key="sea_group")
         _inst_map  = _INSTRUMENTS[_grp_sel]
         _inst_sel  = _sc2.selectbox("Instrument", list(_inst_map.keys()), key="sea_inst")
         _ticker    = _inst_map[_inst_sel]
-        _show_sea_avg = _sc4.toggle("Show average line", value=True, key="sea_show_avg")
+        _show_sea_avg    = _sc5.toggle("Show average line", value=True, key="sea_show_avg")
+        _gen_sea_report = _sc6.checkbox("📸 JPG", key="sea_gen_jpg")
+        if 'sea_jpg_ready' in st.session_state and st.session_state['sea_jpg_ready']:
+            _sc6.download_button("⬇ JPG", data=st.session_state['sea_jpg_data'],
+                                 file_name=st.session_state['sea_jpg_name'],
+                                 mime="image/jpeg", key="sea_jpg_top_dl")
+        _pres_yr_filter  = _sc4.multiselect("Pres. Yr", [1,2,3,4], default=[],
+                                            key="sea_pres_yr",
+                                            help="Filter to US presidential term years. Empty = all years.")
 
-        @st.cache_data(ttl=3600)
-        def _fetch_sea(ticker):
-            import yfinance as _yf
-            df = _yf.download(ticker, start="1928-01-01", auto_adjust=True, progress=False)
-            if df.empty: return None
-            close = df["Close"].squeeze().dropna()
-            close.index = pd.to_datetime(close.index).tz_localize(None)
-            return close
+        # Clear cached JPG if instrument or settings changed
+        _sea_cache_key = f"{_ticker}_{_yr_range if '_yr_range' in dir() else ''}"
+        if st.session_state.get('_sea_cache_key') != _sea_cache_key:
+            st.session_state['sea_jpg_ready'] = False
+            st.session_state['_sea_cache_key'] = _sea_cache_key
 
         _sea_data = _fetch_sea(_ticker)
         if _sea_data is None or len(_sea_data) < 252:
@@ -1913,6 +2139,10 @@ elif page == "Seasonality":
                 help="Select years to hide from the chart and tables"
             )
             _selected_yrs = [y for y in _all_yrs_in_range if y not in _yr_excl]
+
+            # Apply presidential year filter
+            if _pres_yr_filter:
+                _selected_yrs = [y for y in _selected_yrs if _PRES_YEAR_MAP.get(y) in _pres_yr_filter]
 
             _sea_filt = _sea_data[
                 (_sea_data.index.year.isin(_selected_yrs))
@@ -1961,7 +2191,14 @@ elif page == "Seasonality":
                         _avg_vals.append(sum(_pts) / len(_pts))
 
                 _fig_sea = go.Figure()
-                _palette = px.colors.qualitative.Light24 + px.colors.qualitative.Pastel
+                _palette = [
+                    '#1f77b4','#ff7f0e','#2ca02c','#d62728','#9467bd',
+                    '#8c564b','#e377c2','#7f7f7f','#bcbd22','#17becf',
+                    '#0055d4','#e65c00','#1a7a1a','#a00000','#5a3e8e',
+                    '#4a2c2a','#9b3d7d','#4d4d4d','#7d7d00','#005f6b',
+                    '#3399ff','#ff9933','#33cc33','#ff3333','#cc66ff',
+                    '#996633','#ff66cc','#999999','#cccc00','#33cccc',
+                ]
                 for _i, (_yr, (_doys, _vals)) in enumerate(_yearly.items()):
                     _fig_sea.add_trace(go.Scatter(
                         x=_doys, y=_vals,
@@ -2049,7 +2286,11 @@ elif page == "Seasonality":
                 # Year col in table is ~8% width; spacer nudges chart to match
                 _ch_spacer, _ch_plot = st.columns([0.03, 0.97])
                 with _ch_plot:
-                    st.plotly_chart(_fig_sea2, use_container_width=True)
+                    st.plotly_chart(_fig_sea2, width='stretch')
+                # Store for report generation
+                st.session_state['_sea_fig']  = _fig_sea2
+                st.session_state['_sea_inst'] = _inst_sel
+                st.session_state['_sea_yr']   = _yr_range
 
                 # ── Monthly Returns Heatmap ────────────────────────────────────
                 st.markdown("#### Monthly Returns (%)")
@@ -2134,7 +2375,7 @@ elif page == "Seasonality":
                                  for v in (pd.to_numeric(_df_heat[col.name], errors="coerce")
                                            if col.name != "Year" else _df_heat[col.name])]
                     if col.name in _df_heat.columns else [""] * len(col), axis=0
-                ), use_container_width=True, hide_index=True)
+                ), width='stretch', hide_index=True)
 
                 # Summary table
                 st.markdown("#### Summary")
@@ -2158,10 +2399,150 @@ elif page == "Seasonality":
 
                 _num_summ_cols = [c for c in _df_summ.columns if c != "Year"]
                 st.dataframe(
-                    _df_summ.style.applymap(_summ_heat, subset=_num_summ_cols),
-                    use_container_width=True, hide_index=True
+                    _df_summ.style.map(_summ_heat, subset=_num_summ_cols),
+                    width='stretch', hide_index=True
                 )
+                # Store dataframes for report
+                st.session_state['_sea_df_disp'] = _df_disp
+                st.session_state['_sea_df_summ'] = _df_summ
+                st.session_state['_sea_filt']    = _sea_filt
+                st.session_state['_sea_sel_yrs'] = _selected_yrs
 
+                # ── AI Assessment ──────────────────────────────────────────────
+                _sea_ai_settings = load_settings()
+                if _sea_ai_settings.get('ai_features', {}).get('enabled', False):
+                    import importlib as _imp_sea, sys as _sys_sea
+                    if MACRO not in _sys_sea.path: _sys_sea.path.insert(0, MACRO)
+                    _imp_sea.invalidate_caches()
+                    from ai_assessment import render_ai_assessment
+                    _sea_pfx = load_settings().get('ai_prompts', {}).get(
+                        'sea_sectors', DEFAULT_SETTINGS['ai_prompts']['sea_sectors'])
+                    _sea_ai_data = (
+                        f"Instrument: {_inst_sel} ({_ticker})\n"
+                        f"Year range: {_yr_range[0]}–{_yr_range[1]}\n"
+                        f"Presidential year filter: {_pres_yr_filter if _pres_yr_filter else 'All years'}\n"
+                        f"Current presidential year-in-term: {_PRES_YEAR_MAP.get(pd.Timestamp.now().year, 'N/A')}\n\n"
+                        f"MONTHLY RETURNS TABLE:\n{_df_disp.to_string(index=False)}\n\n"
+                        f"SUMMARY STATISTICS:\n{_df_summ.to_string(index=False)}"
+                    )
+                    render_ai_assessment(_sea_pfx + "\n\n" + _sea_ai_data,
+                                         _sea_ai_settings, 'sea_sectors_summary')
+
+                # ── JPG Report ────────────────────────────────────────────────
+                if _gen_sea_report:
+                    _r_inst    = st.session_state.get('_sea_inst', _inst_sel)
+                    _r_yr      = st.session_state.get('_sea_yr',   _yr_range)
+                    _r_df_disp = st.session_state.get('_sea_df_disp', _df_disp)
+                    _r_df_summ = st.session_state.get('_sea_df_summ', _df_summ)
+                    _r_filt    = st.session_state.get('_sea_filt',    _sea_filt)
+                    _r_sel_yrs = st.session_state.get('_sea_sel_yrs', _selected_yrs)
+                    try:
+                        import io, matplotlib
+                        matplotlib.use('Agg')
+                        import matplotlib.pyplot as _plt
+                        from PIL import Image as _PIL_IMG
+
+                        def _cell_color(v):
+                            try:
+                                n = float(str(v).replace('%',''))
+                                if n > 0:   return (45/255,198/255,83/255,  min(n/9,1)*0.7)
+                                elif n < 0: return (230/255,57/255,70/255, min(abs(n)/9,1)*0.7)
+                            except: pass
+                            return (1,1,1,0)
+
+                        def _render_table_img(df, title):
+                            _nc, _nr = len(df.columns), len(df)
+                            _widths  = [2.2] + [0.85]*(_nc-1)
+                            _fig2, _ax2 = _plt.subplots(figsize=(sum(_widths), 0.35*_nr+0.7))
+                            _ax2.axis('off')
+                            _tbl2 = _ax2.table(cellText=df.values, colLabels=df.columns,
+                                               cellLoc='center', loc='center',
+                                               colWidths=[w/sum(_widths) for w in _widths])
+                            _tbl2.auto_set_font_size(False); _tbl2.set_fontsize(7.5)
+                            for _ci2 in range(_nc):
+                                _tbl2[0,_ci2].set_facecolor('#2d2d2d')
+                                _tbl2[0,_ci2].set_text_props(color='white', fontweight='bold')
+                            for _ri2 in range(_nr):
+                                for _ci2 in range(_nc):
+                                    _tbl2[_ri2+1,_ci2].set_facecolor(_cell_color(df.iloc[_ri2,_ci2]))
+                                if _nc > 0:
+                                    _tbl2[_ri2+1,0].set_text_props(ha='left', fontsize=7)
+                            _ax2.set_title(title, fontsize=9, pad=4, loc='left', color='#333')
+                            _fig2.tight_layout(pad=0.3)
+                            _b2 = io.BytesIO()
+                            _fig2.savefig(_b2, format='png', dpi=150, bbox_inches='tight')
+                            _plt.close(_fig2); _b2.seek(0)
+                            return _PIL_IMG.open(_b2).copy()
+
+                        # Spaghetti chart via matplotlib
+                        _fig_r, _ax_r = _plt.subplots(figsize=(16, 6))
+                        _ax_r.set_facecolor('#f8f8f8')
+                        _fig_r.patch.set_facecolor('white')
+                        _MO_T = [16,46,75,106,136,167,197,228,259,289,320,350]
+                        _MO_N = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+                        _CLR  = ['#1f77b4','#ff7f0e','#2ca02c','#d62728','#9467bd','#8c564b',
+                                 '#e377c2','#7f7f7f','#bcbd22','#17becf','#0055d4','#e65c00',
+                                 '#1a7a1a','#a00000','#5a3e8e','#4a2c2a','#9b3d7d','#006400',
+                                 '#8B0000','#00008B','#FF8C00','#4B0082','#006666']
+                        _ci_r = 0
+                        for _yr_r in sorted(_selected_yrs):
+                            _yd_r = _sea_filt[_sea_filt.index.year == _yr_r]
+                            if len(_yd_r) < 5: continue
+                            _b_r = float(_yd_r.iloc[0])
+                            if _b_r == 0: continue
+                            _ix_r = (_yd_r / _b_r - 1) * 100
+                            _ax_r.plot([d.timetuple().tm_yday for d in _ix_r.index],
+                                       _ix_r.values, color=_CLR[_ci_r % len(_CLR)],
+                                       linewidth=0.9, alpha=0.75, label=str(_yr_r))
+                            _ci_r += 1
+                        if _show_sea_avg and _ci_r > 1:
+                            _avd = {}
+                            for _yr_r in _selected_yrs:
+                                _yd_r = _sea_filt[_sea_filt.index.year == _yr_r]
+                                if len(_yd_r) < 5: continue
+                                _b_r = float(_yd_r.iloc[0])
+                                if _b_r == 0: continue
+                                _ix_r = (_yd_r / _b_r - 1) * 100
+                                for _d_r, _v_r in zip([d.timetuple().tm_yday for d in _ix_r.index], _ix_r.values):
+                                    _avd.setdefault(_d_r, []).append(float(_v_r))
+                            _ax_r.plot(sorted(_avd), [sum(_avd[d])/len(_avd[d]) for d in sorted(_avd)],
+                                       'k--', linewidth=1.5, label='Average')
+                        _ax_r.set_xticks(_MO_T); _ax_r.set_xticklabels(_MO_N, fontsize=8)
+                        _ax_r.set_xlim(0, 366)
+                        _ax_r.set_ylabel('Return from Jan 1 (%)', fontsize=8)
+                        _ax_r.set_title(f"{_inst_sel} — Seasonal Returns ({_yr_range[0]}–{_yr_range[1]})",
+                                        fontsize=10, loc='left')
+                        _ax_r.legend(fontsize=6, ncol=max(1,_ci_r//8+1),
+                                     loc='upper left', bbox_to_anchor=(1.01,1))
+                        _ax_r.grid(True, alpha=0.3)
+                        _fig_r.tight_layout()
+                        _rb = io.BytesIO()
+                        _fig_r.savefig(_rb, format='png', dpi=150, bbox_inches='tight')
+                        _plt.close(_fig_r); _rb.seek(0)
+                        _chart_img_r = _PIL_IMG.open(_rb).copy()
+
+                        _heat_img_r = _render_table_img(_r_df_disp, f"Monthly Returns — {_r_inst}")
+                        _summ_img_r = _render_table_img(_r_df_summ, "Summary")
+
+                        _imgs_r  = [_chart_img_r, _heat_img_r, _summ_img_r]
+                        _max_w_r = max(im.width for im in _imgs_r)
+                        _tot_h_r = sum(im.height for im in _imgs_r) + 30
+                        _canvas_r = _PIL_IMG.new('RGB', (_max_w_r, _tot_h_r), 'white')
+                        _yp = 10
+                        for _im_r in _imgs_r:
+                            _canvas_r.paste(_im_r, (0, _yp)); _yp += _im_r.height
+                        _out_r = io.BytesIO()
+                        _canvas_r.save(_out_r, format='JPEG', quality=92)
+                        _out_r.seek(0)
+                        _fname = f"seasonality_{_r_inst.replace(' ','_')}_{_r_yr[0]}_{_r_yr[1]}.jpg"
+                        st.session_state['sea_jpg_ready'] = True
+                        st.session_state['sea_jpg_data']  = _out_r.getvalue()
+                        st.session_state['sea_jpg_name']  = _fname
+                    except Exception as _e:
+                        import traceback
+                        st.session_state['_sea_report_requested'] = False
+                        st.error(f"Report failed: {_e}")
+                        st.code(traceback.format_exc())
     # ── Tab 2: Presidential Cycle ───────────────────────────────────────────────
 
     # ── Sector mappings for stock comparison ──────────────────────────────────
@@ -2309,10 +2690,11 @@ elif page == "Seasonality":
         _is_au = _stk_ticker and _stk_ticker.endswith('.AX')
 
         # ── Sector comparison ─────────────────────────────────────────────────
-        _cmp_mode = _st_c3.radio("Compare to", ["Auto sector", "Manual ticker", "None"],
+        _cmp_mode = _st_c3.radio("Compare to", ["Auto sector", "Manual ticker", "Self average", "None"],
                                   horizontal=True, key="stk_cmp_mode")
         _cmp_ticker = None
         _cmp_label  = None
+        _cmp_is_self_avg = False
 
         if _cmp_mode == "Manual ticker":
             _mc1, _mc2 = st.columns([2, 4])
@@ -2321,6 +2703,11 @@ elif page == "Seasonality":
             if _cmp_manual.strip():
                 _cmp_ticker = _cmp_manual.strip().upper()
                 _cmp_label  = _cmp_ticker
+
+        elif _cmp_mode == "Self average":
+            _cmp_is_self_avg = True
+            _cmp_label = f"{_stk_ticker} (avg)" if _stk_ticker else None
+            # _cmp_ticker stays None — handled specially below
 
         elif _cmp_mode == "Auto sector" and _stk_ticker:
             # Try to get sector from watchlist
@@ -2359,17 +2746,14 @@ elif page == "Seasonality":
         if not _stk_ticker:
             st.info("Select a watchlist and stock to view seasonality.")
         else:
-            @st.cache_data(ttl=3600)
-            def _fetch_stk(ticker):
-                import yfinance as _yf
-                df = _yf.download(ticker, start="1990-01-01", auto_adjust=True, progress=False)
-                if df.empty: return None
-                c = df["Close"].squeeze().dropna()
-                c.index = pd.to_datetime(c.index).tz_localize(None)
-                return c
-
             _stk_data = _fetch_stk(_stk_ticker)
-            _cmp_data = _fetch_stk(_cmp_ticker) if _cmp_ticker else None
+            if _cmp_is_self_avg:
+                # Self-average: comparison is the stock's own historical mean pattern.
+                # We'll synthesize _cmp_data and _ann_rets_cmp after we know which years
+                # are selected (handled below in the per-year loop).
+                _cmp_data = None  # placeholder; populated below
+            else:
+                _cmp_data = _fetch_stk(_cmp_ticker) if _cmp_ticker else None
 
             if _stk_data is None or len(_stk_data) < 50:
                 st.warning(f"No data found for {_stk_ticker}")
@@ -2377,16 +2761,22 @@ elif page == "Seasonality":
                 _s_min = int(_stk_data.index.year.min())
                 _s_max = int(_stk_data.index.year.max())
 
-                _ss1, _ss2, _ss3 = st.columns([3, 3, 2])
+                _ss1, _ss2, _ss3, _ss4 = st.columns([3, 2, 1, 2])
                 _s_range = _ss1.slider("Year range", _s_min, _s_max,
                                         (_s_max - min(15, _s_max - _s_min), _s_max),
                                         key="stk_yr")
                 _s_excl  = _ss2.multiselect("Exclude years",
                                              list(range(_s_range[0], _s_range[1]+1)),
                                              default=[], key="stk_excl")
-                _show_stk_avg = _ss3.toggle("Show average", value=True, key="stk_avg")
+                _stk_pres_yr = _ss3.multiselect("Pres. Yr", [1,2,3,4], default=[],
+                                                  key="stk_pres_yr",
+                                                  help="Filter to US presidential term years")
+                _show_stk_avg    = _ss4.toggle("Show average", value=True, key="stk_avg")
+                _gen_stk_report  = st.button("📸 JPG", key="stk_gen_jpg", help="Generate JPG report")
 
                 _s_yrs = [y for y in range(_s_range[0], _s_range[1]+1) if y not in _s_excl]
+                if _stk_pres_yr:
+                    _s_yrs = [y for y in _s_yrs if _PRES_YEAR_MAP.get(y) in _stk_pres_yr]
 
                 # ── Build per-year indexed series ─────────────────────────────
                 _stk_yearly = {}
@@ -2414,6 +2804,34 @@ elif page == "Seasonality":
                                 _cmp_yearly[_yr] = (_cdoys, _ci.values.tolist())
                                 _ann_rets_cmp[_yr] = round(float(_ci.iloc[-1]), 2)
 
+                # ── Self-average mode: build comparison from the stock's own pattern ──
+                if _cmp_is_self_avg and _stk_yearly:
+                    # The "comparison" is the leave-one-out average of all OTHER years.
+                    # For each year Y, _cmp_yearly[Y] = average pattern across all other selected years.
+                    # This way correlation measures how well Y's pattern tracks the typical pattern.
+                    _all_doys_self = sorted(set(d for doys,_ in _stk_yearly.values() for d in doys))
+                    for _yr in list(_stk_yearly.keys()):
+                        _other_yrs = [y for y in _stk_yearly.keys() if y != _yr]
+                        if not _other_yrs:
+                            continue
+                        _xs_avg, _ys_avg = [], []
+                        for _d in _all_doys_self:
+                            _pts = []
+                            for _oy in _other_yrs:
+                                _odoys, _ovals = _stk_yearly[_oy]
+                                for _di, _dd in enumerate(_odoys):
+                                    if _dd == _d:
+                                        _pts.append(_ovals[_di])
+                                        break
+                            if _pts:
+                                _xs_avg.append(_d)
+                                _ys_avg.append(sum(_pts)/len(_pts))
+                        if _xs_avg:
+                            _cmp_yearly[_yr] = (_xs_avg, _ys_avg)
+                            _ann_rets_cmp[_yr] = round(_ys_avg[-1], 2)
+                    # Set a sentinel so downstream "if _cmp_data is not None" passes
+                    _cmp_data = _stk_data  # any non-None value
+
                 # ── Average series ────────────────────────────────────────────
                 def _build_avg(yearly):
                     _all_d = sorted(set(d for doys,_ in yearly.values() for d in doys))
@@ -2431,7 +2849,14 @@ elif page == "Seasonality":
                 # ── Spaghetti chart ───────────────────────────────────────────
                 _theme   = get_chart_theme()
                 _fig_stk = go.Figure()
-                _palette = px.colors.qualitative.Light24
+                _palette = [
+                    '#1f77b4','#ff7f0e','#2ca02c','#d62728','#9467bd',
+                    '#8c564b','#e377c2','#7f7f7f','#bcbd22','#17becf',
+                    '#0055d4','#e65c00','#1a7a1a','#a00000','#5a3e8e',
+                    '#4a2c2a','#9b3d7d','#4d4d4d','#7d7d00','#005f6b',
+                    '#3399ff','#ff9933','#33cc33','#ff3333','#cc66ff',
+                    '#996633','#ff66cc','#999999','#cccc00','#33cccc',
+                ]
 
                 for _i, (_yr, (_doys, _vals)) in enumerate(_stk_yearly.items()):
                     _fig_stk.add_trace(go.Scatter(
@@ -2502,7 +2927,7 @@ elif page == "Seasonality":
                 )
                 _stk_spacer, _stk_plot = st.columns([0.03, 0.97])
                 with _stk_plot:
-                    st.plotly_chart(_fig_stk, use_container_width=True)
+                    st.plotly_chart(_fig_stk, width='stretch')
 
                 # ── Correlation stats ─────────────────────────────────────────
                 if _cmp_data is not None and _ann_rets_cmp:
@@ -2577,7 +3002,7 @@ elif page == "Seasonality":
                                                  for v in (pd.to_numeric(_df_stk_heat[col.name], errors="coerce")
                                                            if col.name != "Year" else _df_stk_heat[col.name])]
                                     if col.name in _df_stk_heat.columns else [""]*len(col), axis=0
-                                ), use_container_width=True, hide_index=True
+                                ), width='stretch', hide_index=True
                             )
 
                             # Summary rows
@@ -2628,9 +3053,99 @@ elif page == "Seasonality":
                                     f"{x:.2f}%" if pd.notna(x) and x is not None else "—")
                             st.markdown("**Summary**")
                             st.dataframe(
-                                _df_stk_summ.style.applymap(_stk_summ_heat, subset=_stk_num_cols),
-                                use_container_width=True, hide_index=True
+                                _df_stk_summ.style.map(_stk_summ_heat, subset=_stk_num_cols),
+                                width='stretch', hide_index=True
                             )
+
+                        # ── JPG Report ────────────────────────────────────────
+                        # ── AI Assessment ──────────────────────────────────────────────
+                        _stk_ai_settings = load_settings()
+                        if _stk_ai_settings.get('ai_features', {}).get('enabled', False):
+                            import importlib as _imp_stk, sys as _sys_stk
+                            if MACRO not in _sys_stk.path: _sys_stk.path.insert(0, MACRO)
+                            _imp_stk.invalidate_caches()
+                            from ai_assessment import render_ai_assessment
+                            _stk_pfx = load_settings().get('ai_prompts', {}).get(
+                                'sea_stocks', DEFAULT_SETTINGS['ai_prompts']['sea_stocks'])
+                            _stk_ai_data = (
+                                f"Instrument: {_stk_ticker}\n"
+                                f"Year range: {_s_range[0]}–{_s_range[1]}\n"
+                                f"Presidential year filter: {_stk_pres_yr if _stk_pres_yr else 'All years'}\n"
+                                f"Current presidential year-in-term: {_PRES_YEAR_MAP.get(pd.Timestamp.now().year, 'N/A')}\n\n"
+                                f"MONTHLY RETURNS TABLE:\n{_df_stk_disp.to_string(index=False)}\n\n"
+                                f"SUMMARY STATISTICS:\n{_df_stk_summ.to_string(index=False)}"
+                            )
+                            render_ai_assessment(_stk_pfx + "\n\n" + _stk_ai_data,
+                                                 _stk_ai_settings, 'sea_stocks_summary')
+
+                        if _gen_stk_report:
+                            try:
+                                import io as _io2
+                                from PIL import Image as _Img2, ImageDraw as _IDraw2
+                                import plotly.io as _pio2
+                                import plotly.graph_objects as _go3
+
+                                _stk_imgs = []
+
+                                # Spaghetti chart
+                                _stk_imgs.append(_Img2.open(_io2.BytesIO(
+                                    _pio2.to_image(_fig_stk, format='png', width=1400, height=700, scale=2))))
+
+                                # Monthly heatmap table
+                                _stk_tbl_fig = _go3.Figure(data=[_go3.Table(
+                                    header=dict(values=list(_df_stk_disp.columns),
+                                                fill_color='#333', font=dict(color='white',size=11),
+                                                align='center', height=28),
+                                    cells=dict(values=[_df_stk_disp[c].tolist() for c in _df_stk_disp.columns],
+                                               font=dict(size=10), align='center', height=24)
+                                )])
+                                _stk_tbl_fig.update_layout(
+                                    margin=dict(l=10,r=10,t=30,b=10),
+                                    height=max(300, 28+len(_df_stk_disp)*24+40),
+                                    title=dict(text=f"Monthly Returns — {_stk_ticker}", font=dict(size=13)),
+                                    paper_bgcolor='white')
+                                _stk_imgs.append(_Img2.open(_io2.BytesIO(
+                                    _pio2.to_image(_stk_tbl_fig, format='png', width=1400, scale=2))))
+
+                                # Summary table
+                                _stk_summ_fig = _go3.Figure(data=[_go3.Table(
+                                    header=dict(values=list(_df_stk_summ.columns),
+                                                fill_color='#333', font=dict(color='white',size=11),
+                                                align='center', height=28),
+                                    cells=dict(values=[_df_stk_summ[c].tolist() for c in _df_stk_summ.columns],
+                                               font=dict(size=10), align='center', height=24)
+                                )])
+                                _stk_summ_fig.update_layout(
+                                    margin=dict(l=10,r=10,t=30,b=10),
+                                    height=max(200, 28+len(_df_stk_summ)*24+40),
+                                    title=dict(text="Summary", font=dict(size=13)),
+                                    paper_bgcolor='white')
+                                _stk_imgs.append(_Img2.open(_io2.BytesIO(
+                                    _pio2.to_image(_stk_summ_fig, format='png', width=1400, scale=2))))
+
+                                # Stack vertically
+                                _stk_total_h = sum(im.height for im in _stk_imgs)
+                                _stk_max_w   = max(im.width  for im in _stk_imgs)
+                                _stk_canvas  = _Img2.new('RGB', (_stk_max_w, _stk_total_h+60), color='white')
+                                _stk_draw    = _IDraw2.Draw(_stk_canvas)
+                                _stk_draw.text((20,10), f"Seasonality — {_stk_ticker} ({_s_range[0]}–{_s_range[1]})", fill='#333')
+                                _stk_y = 40
+                                for _im in _stk_imgs:
+                                    _stk_canvas.paste(_im, (0, _stk_y))
+                                    _stk_y += _im.height
+
+                                _stk_buf = _io2.BytesIO()
+                                _stk_canvas.save(_stk_buf, format='JPEG', quality=92)
+                                _stk_buf.seek(0)
+                                st.download_button(
+                                    label="⬇ Download JPG",
+                                    data=_stk_buf,
+                                    file_name=f"seasonality_{_stk_ticker}_{_s_range[0]}_{_s_range[1]}.jpg",
+                                    mime="image/jpeg",
+                                    key="stk_jpg_dl"
+                                )
+                            except Exception as _e:
+                                st.error(f"Report failed: {_e}")
 
                         # ── Combined annual returns + correlation table ────────────────
                         # Summary metrics
@@ -2684,7 +3199,7 @@ elif page == "Seasonality":
                                 lambda col: [_tbl_heat(v, col.name) for v in col]
                                 if col.name in _heat_cols else ['']*len(col), axis=0
                             ),
-                            use_container_width=True, hide_index=True
+                            width='stretch', hide_index=True
                         )
 
                         # Scatter plot — annual returns
@@ -2730,7 +3245,7 @@ elif page == "Seasonality":
                             margin=dict(l=60, r=40, t=60, b=60),
                             showlegend=False,
                         )
-                        st.plotly_chart(_fig_scatter, use_container_width=True)
+                        st.plotly_chart(_fig_scatter, width='stretch')
 
                     else:
                         st.info("Need at least 5 years of overlapping data for correlation analysis.")
@@ -2738,24 +3253,34 @@ elif page == "Seasonality":
 
     with _sea_tab3:
         # Presidents from 1929 onwards (S&P data reliable from ~1928)
+        # Split multi-term presidents into 4-year blocks
         _PRESIDENTS = [
-            ("Hoover",     1929, 1933, "Republican"),
-            ("Roosevelt",  1933, 1945, "Democrat"),
-            ("Truman",     1945, 1953, "Democrat"),
-            ("Eisenhower", 1953, 1961, "Republican"),
-            ("Kennedy",    1961, 1963, "Democrat"),
-            ("Johnson",    1963, 1969, "Democrat"),
-            ("Nixon",      1969, 1974, "Republican"),
-            ("Ford",       1974, 1977, "Republican"),
-            ("Carter",     1977, 1981, "Democrat"),
-            ("Reagan",     1981, 1989, "Republican"),
-            ("Bush Sr",    1989, 1993, "Republican"),
-            ("Clinton",    1993, 2001, "Democrat"),
-            ("Bush Jr",    2001, 2009, "Republican"),
-            ("Obama",      2009, 2017, "Democrat"),
-            ("Trump",      2017, 2021, "Republican"),
-            ("Biden",      2021, 2025, "Democrat"),
-            ("Trump",      2025, 2029, "Republican"),
+            ("Hoover",         1929, 1933, "Republican"),
+            ("Roosevelt T1",   1933, 1937, "Democrat"),
+            ("Roosevelt T2",   1937, 1941, "Democrat"),
+            ("Roosevelt T3",   1941, 1945, "Democrat"),
+            ("Roosevelt T4",   1945, 1945, "Democrat"),
+            ("Truman",         1945, 1953, "Democrat"),
+            ("Eisenhower T1",  1953, 1957, "Republican"),
+            ("Eisenhower T2",  1957, 1961, "Republican"),
+            ("Kennedy",        1961, 1963, "Democrat"),
+            ("Johnson",        1963, 1969, "Democrat"),
+            ("Nixon T1",       1969, 1973, "Republican"),
+            ("Nixon T2",       1973, 1974, "Republican"),
+            ("Ford",           1974, 1977, "Republican"),
+            ("Carter",         1977, 1981, "Democrat"),
+            ("Reagan T1",      1981, 1985, "Republican"),
+            ("Reagan T2",      1985, 1989, "Republican"),
+            ("Bush Sr",        1989, 1993, "Republican"),
+            ("Clinton T1",     1993, 1997, "Democrat"),
+            ("Clinton T2",     1997, 2001, "Democrat"),
+            ("Bush Jr T1",     2001, 2005, "Republican"),
+            ("Bush Jr T2",     2005, 2009, "Republican"),
+            ("Obama T1",       2009, 2013, "Democrat"),
+            ("Obama T2",       2013, 2017, "Democrat"),
+            ("Trump T1",       2017, 2021, "Republican"),
+            ("Biden",          2021, 2025, "Democrat"),
+            ("Trump T2",       2025, 2029, "Republican"),
         ]
 
         _pc1, _pc2, _pc3 = st.columns([2, 2, 3])
@@ -2869,7 +3394,7 @@ elif page == "Seasonality":
             )
             _pc_spacer, _pc_plot = st.columns([0.115, 0.885])
             with _pc_plot:
-                st.plotly_chart(_fig_pc, use_container_width=True)
+                st.plotly_chart(_fig_pc, width='stretch')
 
 
             # ── Monthly Returns Heatmap ───────────────────────────────────────
@@ -2944,9 +3469,9 @@ elif page == "Seasonality":
                                             (pd.to_numeric(_df_pc_heat2[col.name], errors='coerce')
                                              if col.name in _MO_NAMES_PC else _df_pc_heat2[col.name])]
                                if col.name in _df_pc_heat2.columns else [""]*len(col), axis=0)
-                        .applymap(_pres_col_style, subset=["President"]),
+                        .map(_pres_col_style, subset=["President"]),
                     column_config=_pc_col_cfg,
-                    use_container_width=True, hide_index=True
+                    width='stretch', hide_index=True
                 )
 
                 # Summary rows
@@ -2991,10 +3516,39 @@ elif page == "Seasonality":
                 _pc_summ_col_cfg["Yearly"] = st.column_config.TextColumn(width="small")
                 st.dataframe(
                     _df_pc_summ.style
-                        .applymap(_pc_summ_heat, subset=_pc_num_cols),
+                        .map(_pc_summ_heat, subset=_pc_num_cols),
                     column_config=_pc_summ_col_cfg,
-                    use_container_width=True, hide_index=True
+                    width='stretch', hide_index=True
                 )
+
+            # ── AI Assessment ──────────────────────────────────────────────
+            _pc_ai_settings = load_settings()
+            if _pc_ai_settings.get('ai_features', {}).get('enabled', False):
+                import importlib as _imp_pc, sys as _sys_pc
+                if MACRO not in _sys_pc.path: _sys_pc.path.insert(0, MACRO)
+                _imp_pc.invalidate_caches()
+                from ai_assessment import render_ai_assessment
+                _pc_pfx = load_settings().get('ai_prompts', {}).get(
+                    'sea_presidential', DEFAULT_SETTINGS['ai_prompts']['sea_presidential'])
+                if st.button("🤖 AI Presidential Cycle Summary", key="ai_sea_pres_btn"):
+                    _ps2 = _pres_cycle_stats()
+                    _pc_ai_data = (
+                        f"Presidential cycle context:\n"
+                        f"Current president: {_ps2.get('president','?')} Year {_ps2.get('yr_in_term','?')} ({_ps2.get('party','?')})\n"
+                        f"YTD S&P 500: {_ps2.get('ytd_ret',0):+.1f}%\n"
+                        f"Historical avg Yr {_ps2.get('yr_in_term','?')}: {_ps2.get('hist_avg',0):+.1f}% "
+                        f"(median {_ps2.get('hist_med',0):+.1f}%, {_ps2.get('hist_pos',0):.0f}% positive)\n"
+                        f"Avg max drawdown Yr {_ps2.get('yr_in_term','?')}: {_ps2.get('avg_dd',0):.1f}% "
+                        f"(worst {_ps2.get('worst_dd',0):.1f}%, {_ps2.get('n_dds',0)}/{_ps2.get('n_yrs',0)} yrs >10% DD)\n"
+                        f"Current month ({_ps2.get('curr_mo','?')}) hist avg: {_ps2.get('mo_avg',0):+.1f}% "
+                        f"({_ps2.get('mo_pos',0):.0f}% positive)\n\n"
+                        f"Year filter: Yr {_yr_sel}\n"
+                        f"Party filter: {_party_sel}\n\n"
+                        f"MONTHLY RETURNS TABLE:\n{_df_pc_heat.to_string(index=False) if '_df_pc_heat' in dir() else 'not available'}\n\n"
+                        f"SUMMARY:\n{_df_pc_summ.to_string(index=False) if '_df_pc_summ' in dir() else 'not available'}"
+                    )
+                    render_ai_assessment(_pc_pfx + "\n\n" + _pc_ai_data,
+                                         _pc_ai_settings, 'sea_pres_summary')
 
             # ── Summary table ─────────────────────────────────────────────────
             st.markdown("#### Presidential Year Returns")
@@ -3045,9 +3599,9 @@ elif page == "Seasonality":
 
             st.dataframe(
                 _df_pc.style
-                    .applymap(_pc_heat,    subset=["Yr 1","Yr 2","Yr 3","Yr 4"])
-                    .applymap(_party_style, subset=["Party"]),
-                use_container_width=True, hide_index=True
+                    .map(_pc_heat,    subset=["Yr 1","Yr 2","Yr 3","Yr 4"])
+                    .map(_party_style, subset=["Party"]),
+                width='stretch', hide_index=True
             )
 
 
@@ -4698,9 +5252,10 @@ elif page == "Relative Strength Charts":
     st.title("📡 Relative Rotation Graph")
     st.caption("RS-Ratio vs RS-Momentum — tails show last 63 trading days")
 
-    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs([
+    tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
         "🇦🇺 AU vs XJO", "🇺🇸 US vs SPY/RSP", "📈 Dow 30 vs DJI",
-        "🇦🇺 AU Breadth RRG", "🇺🇸 US Breadth RRG", "⛏ Comm Breadth RRG"
+        "🇦🇺 AU Breadth RRG", "🇺🇸 US Breadth RRG", "⛏ Comm Breadth RRG",
+        "⚙️ Custom RRG"
     ])
 
     def build_rrg(history_file, title):
@@ -4976,7 +5531,7 @@ elif page == "Relative Strength Charts":
 
         _sp1, _mid, _sp2 = st.columns([800, 10000, 800])
         with _mid:
-            st.plotly_chart(fig, use_container_width=True)
+            st.plotly_chart(fig, width='stretch')
 
         # ── Streamlit legend below chart ──────────────────────────────────────
         quad_groups = {'4_LAGGING': [], '2_WEAKENING': [], '3_IMPROVING': [], '1_LEADING': []}
@@ -5214,7 +5769,7 @@ elif page == "Relative Strength Charts":
             fig.add_annotation(x=x, y=y, text=txt, showarrow=False,
                                font=dict(size=10, color="rgba(128,128,128,0.5)"),
                                xanchor='center', yanchor='middle')
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, width='stretch')
 
     with tab4:
         au_hist_file = os.path.join(STOCKS, 'results', 'breadth', 'au_total_market', 'au_total_market_breadth_history.csv')
@@ -5293,6 +5848,190 @@ elif page == "Relative Strength Charts":
 # ═══════════════════════════════════════════════════════════════════════════════
 # DRAWDOWN ANALYSIS PAGE
 # ═══════════════════════════════════════════════════════════════════════════════
+
+    # ── Custom RRG ─────────────────────────────────────────────────────────────
+    with tab7:
+        import plotly.graph_objects as go
+
+        st.markdown("#### Custom RRG — Specify Benchmark + Universe")
+
+        _cc1, _cc2, _cc3 = st.columns([2,2,2])
+        _custom_bm = _cc1.text_input("Benchmark ticker", value="^GSPC",
+                                      placeholder="e.g. ^AXJO, SPY, GLD",
+                                      key="custom_rrg_bm").strip().upper()
+        _custom_tail   = _cc2.slider("Tail days", 1, 63, 20, key="custom_rrg_tail")
+        _custom_smooth = _cc3.slider("Smoothing", 1, 10, 3, key="custom_rrg_smooth")
+
+        st.markdown("**Universe**")
+        _cu1, _cu2 = st.columns([3,2])
+        _ug_source = _cu1.radio("Source", ["Watchlist", "Manual tickers", "AU Sectors", "US Sectors"],
+                                 horizontal=True, key="custom_rrg_src")
+
+        _custom_tickers = []
+        if _ug_source == "Watchlist":
+            _wl_files_rrg = sorted(glob.glob(os.path.join(STOCKS,'watchlist','*.csv')))
+            _wl_names_rrg = [os.path.basename(w) for w in _wl_files_rrg]
+            _wl_disp_rrg  = [b.replace('.csv','').replace('_',' ').title() for b in _wl_names_rrg]
+            _wl_sel_rrg   = st.selectbox("Watchlist", _wl_disp_rrg, key="custom_rrg_wl")
+            _wl_idx_rrg   = _wl_disp_rrg.index(_wl_sel_rrg)
+            _wl_path_rrg  = _wl_files_rrg[_wl_idx_rrg] if _wl_files_rrg else None
+
+            if _wl_path_rrg and os.path.exists(_wl_path_rrg):
+                try:
+                    _wl_df_rrg = pd.read_csv(_wl_path_rrg)
+                    # Filters
+                    _fc1, _fc2, _fc3 = st.columns(3)
+                    _sect_opts = sorted(_wl_df_rrg['sector'].dropna().unique().tolist()) if 'sector' in _wl_df_rrg.columns else []
+                    _cap_opts  = sorted(_wl_df_rrg['cap_band'].dropna().unique().tolist()) if 'cap_band' in _wl_df_rrg.columns else []
+                    _reg_opts  = sorted(_wl_df_rrg['regime_label'].dropna().unique().tolist()) if 'regime_label' in _wl_df_rrg.columns else []
+
+                    _f_sect = _fc1.multiselect("Sector filter",   _sect_opts, key="custom_rrg_sect")
+                    _f_cap  = _fc2.multiselect("Cap band filter", _cap_opts,  key="custom_rrg_cap")
+                    _f_reg  = _fc3.multiselect("Regime filter",   _reg_opts,  key="custom_rrg_reg")
+
+                    _fdf = _wl_df_rrg.copy()
+                    if _f_sect and 'sector'       in _fdf.columns: _fdf = _fdf[_fdf['sector'].isin(_f_sect)]
+                    if _f_cap  and 'cap_band'     in _fdf.columns: _fdf = _fdf[_fdf['cap_band'].isin(_f_cap)]
+                    if _f_reg  and 'regime_label' in _fdf.columns: _fdf = _fdf[_fdf['regime_label'].isin(_f_reg)]
+
+                    _ticker_col = 'ticker' if 'ticker' in _fdf.columns else _fdf.columns[0]
+                    _custom_tickers = _fdf[_ticker_col].dropna().tolist()[:20]
+                    st.caption(f"{len(_custom_tickers)} tickers selected (max 20)")
+                except Exception as _e:
+                    st.warning(f"Could not read watchlist: {_e}")
+        elif _ug_source == "Manual tickers":
+            _manual_input = st.text_area("Enter tickers (one per line or comma-separated)",
+                                          height=100, key="custom_rrg_manual",
+                                          placeholder="BHP.AX, CBA.AX, RIO.AX")
+            _custom_tickers = [t.strip().upper() for t in
+                                _manual_input.replace(',',' ').split() if t.strip()][:20]
+            if _custom_tickers:
+                st.caption(f"{len(_custom_tickers)} tickers entered")
+
+        elif _ug_source in ("AU Sectors", "US Sectors"):
+            _rrg_hist_file = os.path.join(STOCKS, 'results', 'rrg',
+                                           'au_rrg_history.csv' if _ug_source == "AU Sectors"
+                                           else 'us_rrg_history.csv')
+            if os.path.exists(_rrg_hist_file):
+                _rrg_h2 = load_csv(_rrg_hist_file)
+                if _rrg_h2 is not None:
+                    _sect_opts2 = sorted(_rrg_h2['name'].dropna().unique().tolist()) if 'name' in _rrg_h2.columns else                                   sorted(_rrg_h2['ticker'].dropna().unique().tolist())
+                    _f_sect2 = st.multiselect("Filter by sector/instrument", _sect_opts2, key="custom_rrg_sect2")
+                    if _f_sect2:
+                        _name_col = 'name' if 'name' in _rrg_h2.columns else 'ticker'
+                        _fh2 = _rrg_h2[_rrg_h2[_name_col].isin(_f_sect2)]
+                    else:
+                        _fh2 = _rrg_h2
+                    _custom_tickers = _fh2['ticker'].dropna().unique().tolist()[:20]
+                    st.caption(f"{len(_custom_tickers)} tickers | last: {_rrg_h2['date'].max()}")
+            else:
+                st.warning(f"No {_ug_source} RRG history found — run data collection first")
+
+        # Submit button to avoid constant re-fetching
+        _run_custom = st.button("▶ Build RRG", type="primary", key="custom_rrg_run")
+
+        if _run_custom and _custom_tickers:
+            _fig_crrg = go.Figure()
+            _theme    = get_chart_theme()
+            _COLOURS  = ['#00b4d8','#f77f00','#2dc653','#e63946','#9b5de5',
+                          '#f15bb5','#fee440','#06d6a0','#118ab2','#ef476f',
+                          '#aacc00','#48cae4','#fcbf49','#c77dff','#ff6b6b']
+
+            if _ug_source in ("AU Sectors", "US Sectors"):
+                # Use pre-computed history files
+                _rrg_hist_file = os.path.join(STOCKS, 'results', 'rrg',
+                                               'au_rrg_history.csv' if _ug_source == "AU Sectors"
+                                               else 'us_rrg_history.csv')
+                _rrg_h = load_csv(_rrg_hist_file)
+                if _rrg_h is not None:
+                    _rrg_h['date'] = pd.to_datetime(_rrg_h['date'])
+                    _rrg_h  = _rrg_h[_rrg_h['ticker'].isin(_custom_tickers)].sort_values('date')
+                    for _i, _tk in enumerate(_custom_tickers):
+                        _tdf = _rrg_h[_rrg_h['ticker']==_tk].tail(_custom_tail)
+                        if len(_tdf) < 2: continue
+                        _rs  = _tdf['rs_ratio'].ewm(span=_custom_smooth, adjust=False).mean()
+                        _mom = _tdf['rs_momentum'].ewm(span=_custom_smooth, adjust=False).mean()
+                        _lbl = _tdf['name'].iloc[-1] if 'name' in _tdf.columns else _tk
+                        _col = _COLOURS[_i % len(_COLOURS)]
+                        _fig_crrg.add_trace(go.Scatter(
+                            x=_rs.values, y=_mom.values, mode='lines',
+                            line=dict(width=1.5, color=_col), opacity=0.5,
+                            showlegend=False, hoverinfo='skip'))
+                        _fig_crrg.add_trace(go.Scatter(
+                            x=[_rs.iloc[-1]], y=[_mom.iloc[-1]],
+                            mode='markers+text', text=[_lbl], textposition='top center',
+                            textfont=dict(size=9, color=_col),
+                            marker=dict(size=9, color=_col), name=_lbl,
+                            hovertemplate=f"<b>{_lbl}</b><br>RS: %{{x:.2f}}<br>Mom: %{{y:.2f}}<extra></extra>"))
+                else:
+                    st.error("Could not load sector RRG history — run data collection first")
+
+            else:
+                # Watchlist/Manual: fetch live from yfinance
+                _price_df = _fetch_custom_rrg(_custom_bm, _custom_tickers,
+                                               _custom_tail, _custom_smooth)
+                if _price_df is None or _custom_bm not in _price_df.columns:
+                    st.error(f"Could not fetch data for benchmark {_custom_bm}")
+                else:
+                    _bm_series = _price_df[_custom_bm].dropna()
+                    for _i, _tk in enumerate(_custom_tickers):
+                        if _tk not in _price_df.columns: continue
+                        _tk_s  = _price_df[_tk].dropna()
+                        _common = _tk_s.index.intersection(_bm_series.index)
+                        if len(_common) < 10: continue
+                        _rs_raw    = _tk_s[_common] / _bm_series[_common]
+                        _rs_norm   = (_rs_raw / _rs_raw.mean()) * 100
+                        _rs_smooth = _rs_norm.ewm(span=_custom_smooth, adjust=False).mean()
+                        _rs_mom    = _rs_smooth.pct_change(5) * 100
+                        _rs_mom_s  = _rs_mom.ewm(span=_custom_smooth, adjust=False).mean()
+                        _rs_mom_n  = (_rs_mom_s / _rs_mom_s.abs().mean() * 10 + 100)
+                        _tail_rs   = _rs_smooth.iloc[-_custom_tail:]
+                        _tail_mom  = _rs_mom_n.reindex(_tail_rs.index)
+                        if _tail_rs.isna().all() or _tail_mom.isna().all(): continue
+                        _col = _COLOURS[_i % len(_COLOURS)]
+                        _fig_crrg.add_trace(go.Scatter(
+                            x=_tail_rs.values, y=_tail_mom.values, mode='lines',
+                            line=dict(width=1.5, color=_col), opacity=0.5,
+                            showlegend=False, hoverinfo='skip'))
+                        _fig_crrg.add_trace(go.Scatter(
+                            x=[_tail_rs.iloc[-1]], y=[_tail_mom.iloc[-1]],
+                            mode='markers+text', text=[_tk], textposition='top center',
+                            textfont=dict(size=9, color=_col),
+                            marker=dict(size=9, color=_col), name=_tk,
+                            hovertemplate=f"<b>{_tk}</b><br>RS: %{{x:.2f}}<br>Mom: %{{y:.2f}}<extra></extra>"))
+                    _missing = [t for t in _custom_tickers if t not in _price_df.columns]
+                    if _missing:
+                        st.caption(f"Not found: {', '.join(_missing)}")
+
+            # Shared chart layout
+            _bm_label = _ug_source if _ug_source in ("AU Sectors","US Sectors") else _custom_bm
+            _fig_crrg.add_hline(y=100, line_dash="dash", line_color="rgba(128,128,128,0.4)", line_width=1)
+            _fig_crrg.add_vline(x=100, line_dash="dash", line_color="rgba(128,128,128,0.4)", line_width=1)
+            _fig_crrg.update_layout(
+                plot_bgcolor=_theme['plot_bgcolor'], paper_bgcolor=_theme['paper_bgcolor'],
+                font=dict(color=_theme['font_color']),
+                xaxis=dict(title=f"RS-Ratio vs {_bm_label}", gridcolor=_theme['gridcolor'],
+                           zeroline=False, range=[55, 170]),
+                yaxis=dict(title="RS-Momentum", gridcolor=_theme['gridcolor'],
+                           zeroline=False, range=[55, 160]),
+                title=dict(text=f"Custom RRG — {_bm_label} | Tail: {_custom_tail}d",
+                           font=dict(size=14)),
+                height=650, showlegend=True,
+                legend=dict(orientation='h', yanchor='top', y=-0.08, xanchor='center', x=0.5,
+                            font=dict(size=9), bgcolor=_theme['plot_bgcolor'],
+                            borderwidth=1, bordercolor=_theme['gridcolor']),
+                margin=dict(l=60, r=40, t=60, b=120),
+            )
+            for _qt, _qx, _qy in [("Leading",112.5,112.5),("Weakening",87.5,112.5),
+                                    ("Lagging",87.5,87.5),("Improving",112.5,87.5)]:
+                _fig_crrg.add_annotation(x=_qx, y=_qy, text=_qt, showarrow=False,
+                                          font=dict(size=10, color="rgba(128,128,128,0.5)"),
+                                          xanchor='center', yanchor='middle')
+            st.plotly_chart(_fig_crrg, width='stretch')
+
+        elif not _run_custom and _custom_tickers:
+            st.info("Press **▶ Build RRG** to generate the chart.")
+
 
 elif page == "Drawdown Analysis":
     import sys
@@ -6182,6 +6921,9 @@ elif page == "Settings":
                 "📊 AU Benchmark",
                 "📊 US Benchmark",
                 "🪨 Commodities",
+                "📅 Sea Sectors",
+                "📅 Sea Stocks",
+                "📅 Sea Presidential",
             ])
 
             # ── General tab ───────────────────────────────────────────────────────────
@@ -6235,6 +6977,9 @@ elif page == "Settings":
                 ('au_benchmark',     'AU Benchmark', '📊 AU Benchmark', _ai_tabs[4]),
                 ('us_benchmark',     'US Benchmark', '📊 US Benchmark', _ai_tabs[5]),
                 ('comm_benchmark',   'Commodities Benchmark', '🪨 Commodities', _ai_tabs[6]),
+                ('sea_sectors',       'Seasonality — Sectors',  '📅 Sea Sectors',     _ai_tabs[7]),
+                ('sea_stocks',        'Seasonality — Stocks',   '📅 Sea Stocks',      _ai_tabs[8]),
+                ('sea_presidential',  'Seasonality — Presidential Cycle', '📅 Sea Presidential', _ai_tabs[9]),
             ]
 
             for _pk, _plabel, _ptab_label, _ptab in _prompt_defs:

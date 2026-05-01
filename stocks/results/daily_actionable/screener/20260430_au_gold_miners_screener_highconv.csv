@@ -1,0 +1,2 @@
+rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+81,16,CYL.AX,Catalyst Metals Limited,Gold,mid,5.65,17.65,-0.1123,-0.1308,-0.2258,STRONG_UP,-13.61,-0.35,507.53,-41.6,47.83,76.94,1.5201,HIGH,EARLY,6.494,6.8794,7.1402,0,-0.2193,WEAK,15.1426

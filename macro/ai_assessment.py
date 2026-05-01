@@ -8,7 +8,7 @@ Provides get_ai_assessment() and render_ai_assessment().
 import requests
 
 
-def get_ai_assessment(prompt, api_key, model='claude-sonnet-4-6', max_tokens=500):
+def get_ai_assessment(prompt, api_key, model='claude-sonnet-4-6', max_tokens=1500):
     """
     Call Claude API and return (text, error).
     Returns (text, None) on success, (None, error_msg) on failure.
@@ -29,9 +29,8 @@ def get_ai_assessment(prompt, api_key, model='claude-sonnet-4-6', max_tokens=500
                 "max_tokens": max_tokens,
                 "messages"  : [{"role": "user", "content": prompt}]
             },
-            timeout=30
+            timeout=60
         )
-        # Return full error message for debugging
         if response.status_code != 200:
             try:
                 err = response.json()
@@ -66,15 +65,22 @@ def render_ai_assessment(prompt, settings, section_key, cached_assessment=None):
         st.warning("AI features enabled but no API key set — add in Settings")
         return None
 
-    # Show cached assessment if available
-    if cached_assessment:
+    def _render_box(text):
+        # Convert newlines to <br> for HTML rendering
+        html_text = text.replace('\n', '<br>')
         st.markdown(f"""
-            <div class="macro-card" style="border-left:3px solid #9b5de5">
+            <div style="border-left:3px solid #9b5de5;padding:12px 16px;
+                        border-radius:0 8px 8px 0;margin:8px 0;
+                        background:rgba(155,93,229,0.05)">
                 <div style="color:#9b5de5;font-size:10px;font-weight:bold;
-                            margin-bottom:6px">🤖 AI ASSESSMENT</div>
-                <div style="font-size:12px;line-height:1.6">{cached_assessment}</div>
+                            letter-spacing:1px;margin-bottom:8px">🤖 AI ASSESSMENT</div>
+                <div style="font-size:13px;line-height:1.7;white-space:pre-wrap">{html_text}</div>
             </div>
         """, unsafe_allow_html=True)
+
+    # Show cached assessment if available
+    if cached_assessment:
+        _render_box(cached_assessment)
 
     # Generate button
     if st.button("🤖 Generate AI Assessment", key=f"ai_{section_key}"):
@@ -83,13 +89,7 @@ def render_ai_assessment(prompt, settings, section_key, cached_assessment=None):
         if error:
             st.error(error)
         elif text:
-            st.markdown(f"""
-                <div class="macro-card" style="border-left:3px solid #9b5de5">
-                    <div style="color:#9b5de5;font-size:10px;font-weight:bold;
-                                margin-bottom:6px">🤖 AI ASSESSMENT</div>
-                    <div style="font-size:12px;line-height:1.6">{text}</div>
-                </div>
-            """, unsafe_allow_html=True)
+            _render_box(text)
             return text
 
     return None
