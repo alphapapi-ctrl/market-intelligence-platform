@@ -1,0 +1,101 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+1,0,G11.AX,G11 Resources Limited,Non-energy minerals,Other metals/Minerals,small,0.34,,,,,FLAT,47.83,2166.67,996.77,-32.05,35.32,68.29,0.4738,LOW,-,0.316,0.3139,0.2123,1,1120.6131,TREND_ONLY,216.0472
+2,-1,SRL.AX,Sunrise Energy Metals Limited,Producer manufacturing,Industrial machinery,small,12.0,,,,,FLAT,169.06,2300.0,1933.9,-36.13,53.75,118.91,0.2273,LOW,-,11.2725,9.7178,6.3504,1,1039.6518,TREND_ONLY,202.8545
+3,-1,ELS.AX,Elsight Ltd.,Technology services,Packaged software,small,6.82,,,,,FLAT,354.67,1320.83,1583.95,-45.2,55.73,73.96,0.5741,LOW,-,6.8025,5.868,3.2235,1,995.2683,TREND_ONLY,192.9909
+4,-1,FTI.AX,Fortifai Limited,Technology services,Packaged software,small,0.73,,,,,FLAT,386.67,2333.33,106.46,-44.55,39.53,167.61,2.6983,HIGH,-,0.6618,0.5193,0.2836,1,550.3053,TREND_ONLY,142.1197
+5,-1,4DX.AX,4DMedical Ltd.,Technology services,Information technology services,mid,4.02,,,,,FLAT,127.12,1262.71,575.63,-41.03,48.22,115.11,1.3561,MED,-,5.518,4.8844,2.7841,1,528.9546,TREND_ONLY,124.133
+6,0,FDR.AX,Finder Energy Holdings Limited,Energy minerals,Integrated oil,small,0.435,,,,,FLAT,-4.4,1015.38,625.0,-44.63,41.5,88.45,3.5336,HIGH,-,0.5789,0.5864,0.3987,1,476.41,TREND_ONLY,120.103
+7,-2,FRS.AX,Forrestania Resources Limited,Non-energy minerals,Precious metals,small,0.51,,,,,FLAT,155.0,1033.33,2450.0,-51.75,49.8,98.68,1.0615,MED,-,0.4845,0.5224,0.3405,1,521.4835,TREND_ONLY,119.778
+8,-2,FML.AX,Focus Minerals Ltd,Non-energy minerals,Precious metals,small,2.31,,,,,FLAT,-7.23,926.67,1611.11,-47.86,46.64,75.69,0.5424,LOW,-,2.6155,2.839,2.2967,1,571.0098,TREND_ONLY,115.6023
+9,-2,ALR.AX,Altair Minerals limited,Non-energy minerals,Other metals/Minerals,small,0.045,,,,,FLAT,200.0,2150.0,1025.0,-37.04,30.83,141.74,1.0772,MED,-,0.0371,0.0286,0.0209,1,467.6485,TREND_ONLY,110.346
+10,-2,TM1.AX,Terra Metals Limited,Non-energy minerals,Precious metals,small,0.29,,,,,FLAT,56.76,1218.18,437.04,-46.49,43.48,104.95,0.4648,LOW,-,0.327,0.3266,0.1952,1,504.6836,TREND_ONLY,104.438
+11,-2,AFA.AX,ASF Group Limited,Finance,Financial conglomerates,small,0.056,,,,,FLAT,-84.0,1300.0,14.29,-88.57,17.39,72.24,5.2374,HIGH,-,0.0617,0.0594,0.053,1,312.943,TREND_ONLY,94.7941
+12,-2,MRD.AX,Mount Ridley Mines Limited,Non-energy minerals,Other metals/Minerals,small,0.031,,,,,FLAT,520.0,1450.0,933.33,-61.4,29.02,99.0,0.3658,LOW,-,0.0319,0.0294,0.0212,1,425.0404,TREND_ONLY,93.4905
+13,-2,A1G.AX,African Gold Ltd,Non-energy minerals,Precious metals,small,1.04,,,,,FLAT,240.98,700.0,3597.78,-37.36,46.43,73.54,0.0,LOW,-,1.024,0.9613,0.5675,1,441.95,TREND_ONLY,89.6637
+14,-2,VMM.AX,Viridis Mining and Minerals Limited,Non-energy minerals,Precious metals,small,2.69,,,,,FLAT,100.75,860.71,95.64,-58.06,49.01,107.93,0.3659,LOW,-,2.313,2.1637,1.5977,1,390.8423,TREND_ONLY,84.7921
+15,-2,BCA.AX,Black Canyon Limited,Non-energy minerals,Other metals/Minerals,small,0.39,,,,,FLAT,4.0,550.0,254.55,-43.88,40.71,75.85,1.5042,HIGH,-,0.3488,0.3344,0.3742,1,295.1945,TREND_ONLY,78.0142
+16,-2,RMI.AX,Resource Minerals International Ltd,Non-energy minerals,Other metals/Minerals,small,0.043,,,,,FLAT,48.28,975.0,79.17,-58.62,27.27,76.86,0.0,LOW,-,0.0357,0.0316,0.0264,1,345.9309,TREND_ONLY,77.0246
+17,-2,AII.AX,Almonty Industries Inc. Shs Chess Depository Interests repr 1 shs,Non-energy minerals,Other metals/Minerals,mid,29.56,,,,,FLAT,171.44,643.65,2798.04,-42.31,52.96,99.0,0.4108,LOW,-,28.2605,26.0468,14.4581,1,344.3192,TREND_ONLY,76.6449
+18,-2,G50.AX,G50 Corp Limited,Non-energy minerals,Precious metals,small,0.85,,,,,FLAT,73.47,672.73,431.25,-47.15,47.04,90.12,0.5495,LOW,-,0.7643,0.7588,0.5678,1,351.1439,TREND_ONLY,74.9881
+19,-2,SPL.AX,Starpharma Holdings Limited,Health technology,Pharmaceuticals: major,small,0.71,,,,,FLAT,102.86,671.74,491.67,-28.09,44.27,82.88,0.7942,LOW,-,0.6378,0.523,0.3426,1,358.8066,TREND_ONLY,72.9081
+20,-2,DTR.AX,Dateline Resources Limited,Non-energy minerals,Precious metals,small,0.23,,,,,FLAT,-16.36,751.85,1990.91,-71.54,47.04,112.7,0.3991,LOW,-,0.3298,0.3804,0.3138,0,313.8164,WEAK,72.4942
+21,-2,KLR.AX,Kaili Resources Limited,Non-energy minerals,Precious metals,small,0.1,,,,,FLAT,-48.72,1150.0,900.0,-91.39,17.0,69.12,0.0154,LOW,-,0.1022,0.1181,0.1998,0,282.8414,WEAK,71.6547
+22,-2,LIN.AX,Lindian Resources Limited,Non-energy minerals,Other metals/Minerals,small,0.82,,,,,FLAT,173.33,720.0,530.77,-36.3,43.87,106.75,1.0536,MED,-,0.8868,0.7768,0.4306,1,295.8913,TREND_ONLY,70.257
+23,-2,LTR.AX,Liontown Limited,Non-energy minerals,Other metals/Minerals,mid,2.64,,,,,FLAT,130.57,412.62,115.51,-34.62,52.17,76.54,1.0042,MED,-,2.1232,1.8365,1.4238,1,281.2446,TREND_ONLY,69.3071
+24,-2,PLS.AX,PLS Group Limited,Non-energy minerals,Other metals/Minerals,large,6.14,,,,,FLAT,86.06,314.86,51.23,-30.79,54.94,57.31,0.8169,LOW,-,5.679,5.1274,3.7052,1,301.8439,TREND_ONLY,67.4943
+25,-2,EOS.AX,Electro Optic Systems Holdings Limited,Electronic technology,Aerospace & defense,small,9.3,,,,,FLAT,42.64,650.0,483.07,-57.47,50.2,109.73,0.323,LOW,-,9.823,9.4214,7.3403,1,297.3663,TREND_ONLY,67.1123
+26,-2,D3E.AX,D3 Energy Limited,Energy minerals,Integrated oil,small,0.42,,,,,FLAT,-7.69,556.25,78.72,-55.08,42.29,78.04,0.7102,LOW,-,0.397,0.4067,0.3895,1,301.4327,TREND_ONLY,67.0054
+27,-2,MPW.AX,Metal Powder Works Limited,Producer manufacturing,Industrial machinery,small,2.62,,,,,FLAT,-11.78,495.45,622.76,-71.96,49.41,87.64,0.531,LOW,-,2.6305,2.3771,2.6026,1,279.3292,TREND_ONLY,65.9104
+28,-2,EDU.AX,EDU Holdings Limited,Commercial services,Miscellaneous commercial services,small,0.845,,,,,FLAT,40.91,519.06,806.71,-35.05,45.85,76.58,0.3768,LOW,-,0.849,0.7522,0.6541,1,310.7733,TREND_ONLY,64.9795
+29,-2,EUR.AX,European Lithium Ltd.,Non-energy minerals,Other metals/Minerals,small,0.43,,,,,FLAT,109.76,696.3,743.14,-67.74,38.74,136.67,2.1535,HIGH,-,0.2767,0.2528,0.1942,1,197.3697,TREND_ONLY,62.364
+30,-2,MM1.AX,Midas Minerals Limited,Non-energy minerals,Precious metals,small,0.87,,,,,FLAT,102.33,461.29,1142.86,-33.65,45.06,79.12,1.1332,MED,-,0.8465,0.8466,0.5671,1,262.7116,TREND_ONLY,62.0681
+31,-2,LLM.AX,Loyal Metals Limited.,Non-energy minerals,Precious metals,small,0.425,,,,,FLAT,13.33,507.14,77.08,-35.54,35.18,77.11,4.5055,HIGH,-,0.3241,0.3073,0.3022,1,231.3745,TREND_ONLY,61.8896
+32,-2,LKY.AX,Locksley Resources Limited,Non-energy minerals,Precious metals,small,0.145,,,,,FLAT,-56.72,559.09,504.17,-77.52,35.97,81.44,0.7724,LOW,-,0.1738,0.1712,0.2635,0,246.9364,WEAK,60.7386
+33,-2,GNP.AX,GenusPlus Group Ltd.,Industrial services,Engineering & construction,small,9.5,,,,,FLAT,43.91,223.72,426.13,-14.97,51.38,45.81,2.0759,HIGH,-,8.498,7.9801,6.4778,1,250.9193,TREND_ONLY,60.5952
+34,-2,MIN.AX,Mineral Resources Limited,Non-energy minerals,Steel,large,66.7,,,,,FLAT,38.38,219.14,-9.46,-30.29,56.13,53.45,1.2421,MED,-,59.9525,57.4204,48.4341,1,230.1264,TREND_ONLY,60.0791
+35,-2,SPD.AX,Southern Palladium Ltd.,Non-energy minerals,Other metals/Minerals,small,1.57,,,,,FLAT,50.96,597.78,201.92,-51.85,44.66,105.2,0.9161,LOW,-,1.6554,1.682,1.3912,1,253.7715,TREND_ONLY,58.0158
+36,-2,SFM.AX,Santa Fe Minerals Ltd.,Non-energy minerals,Precious metals,small,0.28,,,,,FLAT,19.15,656.76,471.43,-40.58,31.23,79.16,0.5586,LOW,-,0.279,0.3106,0.2754,1,259.102,TREND_ONLY,57.0382
+37,-2,CUF.AX,CuFe Ltd,Non-energy minerals,Steel,small,0.039,,,,,FLAT,-22.0,609.09,160.0,-42.0,32.41,87.13,1.3702,MED,-,0.0377,0.0405,0.0318,1,226.5653,TREND_ONLY,56.9735
+38,-2,GLN.AX,Galan Lithium Limited,Process industries,Chemicals: agricultural,small,0.545,,,,,FLAT,275.86,445.0,94.64,-36.17,42.29,80.85,1.1546,MED,-,0.467,0.4093,0.2686,1,232.765,TREND_ONLY,56.4899
+39,-2,DVL.AX,dorsaVi Ltd.,Electronic technology,Electronic equipment/Instruments,small,0.039,,,,,FLAT,-18.75,457.14,178.57,-59.38,36.36,70.35,0.7638,LOW,-,0.0306,0.0292,0.0376,1,236.2717,TREND_ONLY,55.6403
+40,-2,GL1.AX,Global Lithium Resources Ltd.,Non-energy minerals,Other metals/Minerals,small,0.575,,,,,FLAT,8.49,238.24,49.35,-29.55,43.08,48.23,2.0379,HIGH,-,0.5542,0.5211,0.4592,1,212.7965,TREND_ONLY,55.3883
+41,-2,AYA.AX,Artrya Limited,Technology services,Packaged software,small,4.06,,,,,FLAT,24.54,510.53,1231.15,-48.32,46.64,99.18,0.7189,LOW,-,3.9505,3.4642,3.0604,1,240.0781,TREND_ONLY,54.6193
+42,-2,BNZ.AX,Benz Mining Corp. Shs Chess Depository Interests Repr 1 sh,Non-energy minerals,Precious metals,small,2.13,,,,,FLAT,42.0,453.25,1320.0,-47.53,49.41,102.14,0.273,LOW,-,2.3385,2.5317,1.8239,1,219.2571,TREND_ONLY,50.5481
+43,-2,EQR.AX,EQ Resources Limited,Non-energy minerals,Precious metals,small,0.255,,,,,FLAT,431.25,493.02,400.0,-42.86,44.27,127.0,1.6559,HIGH,-,0.307,0.302,0.1277,1,171.8594,TREND_ONLY,50.4445
+44,-2,NH3.AX,NH3 Clean Energy Limited,Non-energy minerals,Precious metals,small,0.115,,,,,FLAT,18.56,342.31,475.0,-48.15,42.69,88.36,7.0992,HIGH,-,0.0898,0.082,0.0805,1,165.3816,TREND_ONLY,49.5027
+45,-2,NYR.AX,"Nyrada, Inc. Shs Chess Depository Interests Repr 1 Shs",Health technology,Pharmaceuticals: major,small,0.58,,,,,FLAT,-17.73,427.27,517.02,-64.86,42.69,92.22,0.4463,LOW,-,0.5857,0.5721,0.586,0,197.7909,WEAK,49.1996
+46,-2,SLS.AX,Solstice Minerals Limited,Non-energy minerals,Other metals/Minerals,small,1.66,,,,,FLAT,426.98,773.68,937.5,-33.47,39.13,178.88,1.5471,HIGH,-,1.249,1.0907,0.5572,1,169.2434,TREND_ONLY,48.9816
+47,-2,LDX.AX,Lumos Diagnostics Holdings Ltd.,Health technology,Medical specialties,small,0.17,,,,,FLAT,-17.07,507.14,246.94,-53.12,38.74,96.58,0.3975,LOW,-,0.1775,0.2323,0.2015,0,203.4242,WEAK,48.3523
+48,-2,SGQ.AX,St. George Mining Ltd.,Non-energy minerals,Other metals/Minerals,small,0.12,,,,,FLAT,14.29,445.45,566.67,-48.48,39.53,87.28,0.7787,LOW,-,0.128,0.1295,0.0987,1,201.7509,TREND_ONLY,47.451
+49,-2,HCH.AX,Hot Chili Limited,Non-energy minerals,Other metals/Minerals,small,1.885,,,,,FLAT,96.35,296.84,50.8,-41.54,46.64,86.33,2.0352,HIGH,-,1.5297,1.4885,1.1835,1,160.3697,TREND_ONLY,46.7893
+50,-2,QFE.AX,QuickFee Ltd.,Commercial services,Miscellaneous commercial services,small,0.076,,,,,FLAT,87.98,293.05,142.9,-23.64,29.25,38.37,0.0413,LOW,-,0.0774,0.076,0.0531,1,223.3966,TREND_ONLY,46.2348
+51,-2,ELV.AX,Elevra Lithium Limited,Non-energy minerals,Other metals/Minerals,mid,13.52,,,,,FLAT,247.56,280.85,280.85,-36.31,54.25,79.66,0.8163,LOW,-,10.595,8.791,,0,191.2609,WEAK,45.73
+52,-2,CDA.AX,Codan Limited,Consumer durables,Tools & hardware,mid,43.33,,,,,FLAT,19.29,173.48,319.96,-26.32,54.94,53.22,1.2385,MED,-,35.8105,35.0666,31.7362,1,179.0863,TREND_ONLY,45.4566
+53,-2,DGR.AX,DGR Global Limited,Non-energy minerals,Other metals/Minerals,small,0.029,,,,,FLAT,45.0,480.0,93.33,-40.0,26.09,82.83,1.6374,HIGH,-,0.031,0.0312,0.0253,1,151.1916,TREND_ONLY,45.0111
+54,-2,MI6.AX,Minerals 260 Limited,Non-energy minerals,Precious metals,small,0.72,,,,,FLAT,161.82,476.0,388.14,-34.38,41.5,99.95,0.8306,LOW,-,0.7495,0.6743,0.387,1,197.6388,TREND_ONLY,44.3005
+55,-2,NSR.AX,National Storage REIT,Finance,Real estate investment trusts,mid,2.79,,,,,FLAT,23.43,25.34,43.66,-11.46,34.78,4.05,0.0,LOW,-,2.788,2.777,2.5514,1,217.5743,TREND_ONLY,43.1118
+56,-2,EXR.AX,Elixir Energy Limited,Energy minerals,Oil & gas production,small,0.145,,,,,FLAT,262.5,457.69,31.82,-24.53,38.74,89.19,0.4121,LOW,-,0.1428,0.1104,0.0677,1,198.8003,TREND_ONLY,42.6458
+57,-2,AEG.AX,Aland Equity Group Limited,Finance,Investment managers,small,0.076,,,,,FLAT,,484.62,484.62,-16.67,44.87,131.86,5.0621,HIGH,-,0.0437,0.0374,,0,164.9074,WEAK,42.5729
+58,-2,BPM.AX,BPM Minerals Ltd.,Non-energy minerals,Construction materials,small,0.215,,,,,FLAT,79.17,593.55,207.14,-51.47,37.94,139.09,0.3344,LOW,-,0.2335,0.2434,0.1625,1,161.904,TREND_ONLY,41.3356
+59,-2,EDE.AX,Eden Innovations Ltd,Producer manufacturing,Trucks/Construction/Farm machinery,small,0.19,,,,,FLAT,280.0,850.0,533.33,-63.33,30.04,178.36,0.363,LOW,-,0.1724,0.1554,0.0813,1,143.1599,TREND_ONLY,40.9485
+60,-2,ANX.AX,Anax Metals Limited,Non-energy minerals,Other metals/Minerals,small,0.035,,,,,FLAT,288.89,600.0,29.63,-60.0,29.64,118.42,0.1357,LOW,-,0.0334,0.0288,0.0159,1,150.1773,TREND_ONLY,40.7087
+61,-2,KCN.AX,Kingsgate Consolidated Limited,Non-energy minerals,Precious metals,small,6.33,,,,,FLAT,83.34,261.53,313.84,-43.14,56.92,87.88,0.6639,LOW,-,5.6695,5.76,4.5568,1,169.3903,TREND_ONLY,40.1592
+62,-2,HAV.AX,Havilah Resources Limited,Non-energy minerals,Other metals/Minerals,small,0.625,,,,,FLAT,150.0,257.14,190.7,-22.06,40.32,54.63,0.7987,LOW,-,0.5979,0.6072,0.4299,1,189.7858,TREND_ONLY,39.8708
+63,-2,PC2.AX,PC Gold Ltd.,Non-energy minerals,Precious metals,small,1.22,,,,,FLAT,454.55,320.69,320.69,-25.86,50.76,87.83,0.1122,LOW,-,1.199,1.0149,,0,185.3377,WEAK,39.6269
+64,-2,ELT.AX,Elementos Limited,Non-energy minerals,Other metals/Minerals,small,0.395,,,,,FLAT,17.91,419.74,132.35,-31.65,39.53,97.24,0.2052,LOW,-,0.3777,0.389,0.2912,1,170.6314,TREND_ONLY,38.7275
+65,-2,CXO.AX,Core Lithium Ltd,Non-energy minerals,Other metals/Minerals,small,0.325,,,,,FLAT,170.83,357.75,132.14,-41.79,38.34,85.56,0.709,LOW,-,0.3217,0.2672,0.1962,1,160.3085,TREND_ONLY,38.4607
+66,-2,CXU.AX,Cauldron Energy Limited,Non-energy minerals,Other metals/Minerals,small,0.069,,,,,FLAT,245.0,666.67,72.5,-44.44,35.57,183.3,1.3063,MED,-,0.0557,0.0387,0.0237,1,129.369,TREND_ONLY,38.2842
+67,-2,RML.AX,Resolution Minerals Ltd.,Non-energy minerals,Precious metals,small,0.065,,,,,FLAT,-21.69,712.5,306.25,-66.96,32.81,186.27,0.5287,LOW,-,0.0684,0.0546,0.0594,1,125.5013,TREND_ONLY,37.9533
+68,25,CBE.AX,Cobre Limited,Non-energy minerals,Other metals/Minerals,small,0.235,,,,,FLAT,135.0,360.78,235.71,-40.0,41.11,124.28,2.202,HIGH,-,0.1832,0.1801,0.1148,1,119.3422,TREND_ONLY,37.6449
+69,-3,SNX.AX,"Sierra Nevada Gold, Inc.. Shs Chess Depository Interests Repr 1 Sh",Non-energy minerals,Precious metals,small,0.067,,,,,FLAT,81.08,294.12,31.37,-60.32,37.94,112.0,2.398,HIGH,-,0.0492,0.0478,0.0383,1,99.6323,TREND_ONLY,37.451
+70,-3,BMM.AX,Bayan Mining And Minerals Limited,Non-energy minerals,Other metals/Minerals,small,0.085,,,,,FLAT,-29.17,193.1,54.55,-76.36,38.74,85.58,2.5879,HIGH,-,0.0895,0.0873,0.1227,0,87.4133,WEAK,37.3059
+71,-3,WC8.AX,Wildcat Resources Ltd.,Non-energy minerals,Precious metals,small,0.615,,,,,FLAT,186.05,215.38,30.85,-39.02,46.25,82.26,1.8466,HIGH,-,0.4578,0.4218,0.3042,1,121.0982,TREND_ONLY,37.2324
+72,-3,EMP.AX,Emperor Energy Ltd,Energy minerals,Oil & gas production,small,0.13,,,,,FLAT,78.08,364.29,1081.82,-31.72,37.94,97.33,1.3567,MED,-,0.1106,0.1207,0.0849,1,142.0014,TREND_ONLY,37.0808
+73,-3,PLG.AX,Pearl Gull Iron Limited,Non-energy minerals,Steel,small,0.031,,,,,FLAT,24.0,342.86,29.17,-33.33,16.6,35.52,0.0,LOW,-,0.031,0.031,0.0241,1,160.2317,TREND_ONLY,36.6748
+74,-3,DRO.AX,DroneShield Limited,Electronic technology,Aerospace & defense,mid,3.61,,,,,FLAT,-11.3,173.48,345.68,-74.02,49.01,101.18,0.3951,LOW,-,3.6475,3.7452,3.6083,1,84.0333,TREND_ONLY,36.627
+75,-3,LYC.AX,Lynas Rare Earths Limited,Non-energy minerals,Other metals/Minerals,large,19.14,,,,,FLAT,29.41,133.13,195.83,-43.67,52.96,65.13,0.7517,LOW,-,20.0835,19.367,15.9128,1,108.254,TREND_ONLY,36.6128
+76,-3,SRG.AX,SRG Global Limited,Industrial services,Engineering & construction,small,2.96,,,,,FLAT,9.25,133.78,284.19,-23.42,49.41,39.0,0.5476,LOW,-,2.8215,2.7006,2.4856,1,169.4847,TREND_ONLY,36.0991
+77,-3,TOR.AX,Torque Metals Ltd.,Non-energy minerals,Precious metals,small,0.445,,,,,FLAT,78.0,378.49,256.0,-36.23,45.45,113.84,0.7775,LOW,-,0.4912,0.4267,0.3201,1,151.1119,TREND_ONLY,35.9432
+78,-2,ASM.AX,Australian Strategic Materials Ltd,Non-energy minerals,Precious metals,small,1.67,,,,,FLAT,81.52,147.41,65.35,-71.93,45.85,68.23,1.2186,MED,-,1.5568,1.5311,1.0112,1,99.0566,TREND_ONLY,35.7454
+79,-2,BCN.AX,Beacon Minerals Limited,Non-energy minerals,Precious metals,small,2.86,,,,,FLAT,20.01,180.41,151.41,-38.13,46.64,72.64,1.8944,HIGH,-,3.2635,3.4682,2.796,1,115.8381,TREND_ONLY,35.7298
+80,-2,FAL.AX,Falcon Metals Ltd,Non-energy minerals,Precious metals,small,0.485,,,,,FLAT,-27.07,321.74,259.26,-61.21,41.5,104.28,0.149,LOW,-,0.5145,0.5758,0.6707,0,128.0416,WEAK,35.597
+81,-2,LMS.AX,Litchfield Minerals Ltd.,Non-energy minerals,Other metals/Minerals,small,0.5,,,,,FLAT,-25.93,284.62,,-55.41,37.15,109.77,1.7711,HIGH,-,0.4292,0.4589,0.4145,1,96.3238,TREND_ONLY,35.5924
+82,-2,FLG.AX,Flagship Minerals limited,Non-energy minerals,Other metals/Minerals,small,0.255,,,,,FLAT,30.77,240.0,59.38,-44.44,41.9,93.31,1.923,HIGH,-,0.2536,0.2598,0.1792,1,107.7698,TREND_ONLY,35.5531
+83,-2,SKS.AX,SKS Technologies Group Limited,Electronic technology,Electronic equipment/Instruments,small,6.45,,,,,FLAT,72.6,245.69,775.08,-26.7,50.99,78.01,0.6004,LOW,-,5.837,4.8998,3.8389,1,160.5896,TREND_ONLY,35.5055
+84,-2,AAI.AX,Alcoa Corporation shs Chess Depository Interests Repr 1 Sh,Non-energy minerals,Aluminum,large,89.62,,,,,FLAT,51.05,134.42,75.9,-19.1,51.78,47.84,0.4948,LOW,-,97.096,91.6504,69.6724,1,145.4917,TREND_ONLY,34.4644
+85,-2,AQI.AX,Alicanto Minerals Ltd,Non-energy minerals,Other metals/Minerals,small,1.485,,,,,FLAT,209.38,312.5,486.96,-47.03,38.34,108.48,1.3356,MED,-,1.711,1.7603,1.0905,1,110.4466,TREND_ONLY,33.6287
+86,-2,WGN.AX,Wagners Holding Co. Ltd.,Non-energy minerals,Construction materials,small,4.56,,,,,FLAT,66.42,146.87,399.43,-18.85,49.01,45.68,0.667,LOW,-,4.2605,4.217,3.3193,1,157.5717,TREND_ONLY,33.1757
+87,-2,AGY.AX,Argosy Minerals Limited,Non-energy minerals,Other metals/Minerals,small,0.072,,,,,FLAT,38.46,278.95,-42.4,-59.2,38.74,94.2,0.5597,LOW,-,0.0746,0.0702,0.0641,1,114.7178,TREND_ONLY,33.1081
+88,-2,KCC.AX,Kincora Copper Limited Shs Chess Depository Interests Repr 1 Sh,Non-energy minerals,Other metals/Minerals,small,0.94,,,,,FLAT,-14.55,193.75,141.03,-43.31,43.48,84.73,1.6709,HIGH,-,0.862,0.9744,0.9408,0,99.4246,WEAK,32.7324
+89,-2,VTM.AX,Victory Metals Limited,Non-energy minerals,Precious metals,small,1.675,,,,,FLAT,65.84,228.43,628.26,-46.36,45.75,84.65,0.196,LOW,-,1.7418,1.5196,1.3271,1,123.4582,TREND_ONLY,32.2514
+90,-2,LKE.AX,Lake Resources N.L.,Non-energy minerals,Other metals/Minerals,small,0.095,,,,,FLAT,179.41,179.41,63.79,-58.06,35.57,79.45,1.782,HIGH,-,0.0919,0.0851,0.067,1,80.3232,TREND_ONLY,32.175
+91,-2,WTM.AX,Waratah Minerals Limited,Non-energy minerals,Other metals/Minerals,small,0.715,,,,,FLAT,10.0,257.5,495.83,-43.03,43.08,88.36,0.4551,LOW,-,0.7118,0.6707,0.6195,1,125.5444,TREND_ONLY,32.1081
+92,-2,CP8.AX,Canadian Phosphate Limited,Process industries,Chemicals: agricultural,small,0.12,,,,,FLAT,100.0,300.0,328.57,-46.67,28.06,94.35,2.2046,HIGH,-,0.0899,0.0775,0.0684,1,89.221,TREND_ONLY,32.0747
+93,-2,NC1.AX,Nico Resources Limited,Non-energy minerals,Other metals/Minerals,small,0.245,,,,,FLAT,68.97,245.07,68.97,-57.14,34.39,109.06,2.3292,HIGH,-,0.1905,0.2014,0.1612,1,77.2783,TREND_ONLY,31.5786
+94,-2,OKJ.AX,Oakajee Corporation Ltd,Finance,Financial conglomerates,small,0.06,,,,,FLAT,62.16,400.0,275.0,-36.21,16.6,51.93,0.0,LOW,-,0.0576,0.061,0.0548,1,127.8644,TREND_ONLY,31.5728
+95,-1,ILU.AX,Iluka Resources Limited,Non-energy minerals,Other metals/Minerals,mid,8.36,,,,,FLAT,26.3,104.01,12.5,-46.77,50.99,56.56,0.745,LOW,-,7.5935,6.8131,6.3881,1,93.771,TREND_ONLY,30.79
+96,-1,TSO.AX,Tesoro Gold Ltd,Non-energy minerals,Precious metals,small,1.13,,,,,FLAT,34.52,189.74,93.16,-41.05,45.45,82.81,1.2899,MED,-,1.039,0.9959,0.9396,1,104.1406,TREND_ONLY,30.7516
+97,-1,HMD.AX,HeraMED Ltd,Technology services,Packaged software,small,0.049,,,,,FLAT,48.48,188.24,180.0,-63.16,33.2,75.8,1.2679,MED,-,0.0474,0.0437,0.0366,1,82.4461,TREND_ONLY,30.7062
+98,-1,CBO.AX,Cobram Estate Olives Ltd.,Process industries,Agricultural commodities/Milling,small,3.92,,,,,FLAT,22.75,111.55,124.82,-27.23,46.64,38.39,0.506,LOW,-,3.6145,3.3264,3.2317,1,135.5247,TREND_ONLY,30.5672
+99,-1,IFL.AX,Insignia Financial Ltd,Finance,Investment managers,mid,4.79,,,,,FLAT,6.21,26.39,97.93,-17.5,41.04,7.87,0.0,LOW,-,4.78,4.7184,4.5764,1,137.5921,TREND_ONLY,30.4059
+100,-1,NMG.AX,New Murchison Gold Limited,Non-energy minerals,Precious metals,small,0.05,,,,,FLAT,61.29,233.33,400.0,-50.67,39.2,84.76,0.8969,LOW,-,0.0487,0.0525,0.0409,1,107.9125,TREND_ONLY,30.1877

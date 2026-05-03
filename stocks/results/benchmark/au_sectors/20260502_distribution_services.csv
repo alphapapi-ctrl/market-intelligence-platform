@@ -1,0 +1,26 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+254,-2,DBI.AX,Dalrymple Bay Infrastructure Ltd.,Distribution services,Wholesale distributors,mid,5.55,,,,,FLAT,29.85,41.48,124.41,-15.87,52.57,27.11,0.4965,LOW,-,5.261,5.0885,4.6429,1,80.4449,TREND_ONLY,19.8375
+466,-1,IMD.AX,Imdex Ltd,Distribution services,Wholesale distributors,mid,4.09,,,,,FLAT,19.73,37.3,99.27,-23.08,54.15,46.76,0.2848,LOW,-,3.975,3.9739,3.5441,1,43.1995,TREND_ONLY,15.0792
+490,-2,AVM.AX,Advance Metals Limited,Distribution services,Wholesale distributors,small,0.085,,,,,FLAT,-8.6,66.67,226.92,-58.92,39.13,131.7,0.2463,LOW,-,0.0939,0.1029,0.0992,0,19.8076,WEAK,14.7631
+613,2,PFM.AX,Platformo Ltd,Distribution services,Electronics distributors,small,0.031,,,,,FLAT,,-46.09,-46.09,-77.65,27.78,265.41,0.0695,LOW,-,0.0284,0.0397,,0,-4.8238,WEAK,13.1928
+822,2,SGLLV.AX,Ricegrowers Ltd. Class B,Distribution services,Wholesale distributors,small,12.65,,,,,FLAT,-26.1,21.93,113.46,-33.33,48.62,40.24,0.174,LOW,-,13.3085,13.1276,14.9973,0,26.4936,WEAK,11.2848
+878,4,SPA.AX,SPACETALK Limited,Distribution services,Wholesale distributors,small,0.089,,,,,FLAT,-28.8,-56.59,-56.47,-71.71,26.09,82.9,1.2206,MED,-,0.0664,0.0733,0.1152,0,-17.8083,WEAK,10.8149
+950,0,EZZ.AX,EZZ Life Science Holdings Ltd.,Distribution services,Medical distributors,small,0.64,,,,,FLAT,-76.95,-53.48,-16.62,-80.56,42.69,65.29,2.3119,HIGH,-,0.783,0.9742,1.8289,0,-34.9707,WEAK,10.2639
+963,3,RDX.AX,Redox Limited,Distribution services,Wholesale distributors,small,3.27,,,,,FLAT,17.04,18.4,12.44,-33.0,45.85,46.3,0.1739,LOW,-,3.3345,3.2095,2.8199,1,18.2193,TREND_ONLY,10.1484
+1017,2,NTD.AX,NTAW Holdings Limited.,Distribution services,Wholesale distributors,small,0.2,,,,,FLAT,-31.03,0.0,-61.9,-53.52,24.9,79.47,0.0,LOW,-,0.1855,0.1912,0.2561,0,0.0,WEAK,9.8577
+1019,2,BAP.AX,Bapcor Ltd,Distribution services,Wholesale distributors,small,0.575,,,,,FLAT,-76.72,-88.73,-86.52,-89.75,41.11,103.3,0.2682,LOW,-,0.6157,0.7171,2.28,0,-35.3106,WEAK,9.8497
+1078,0,REH.AX,Reece Limited,Distribution services,Wholesale distributors,mid,13.8,,,,,FLAT,14.76,-13.72,-47.88,-41.36,47.83,47.15,0.4705,LOW,-,13.62,14.2452,12.9163,1,-13.9174,TREND_ONLY,9.4931
+1198,1,RPM.AX,RPM Automotive Group Ltd.,Distribution services,Wholesale distributors,small,0.025,,,,,FLAT,-60.94,-50.0,-62.12,-65.71,28.85,81.35,0.0207,LOW,-,0.0258,0.0308,0.0527,0,-17.732,WEAK,8.7157
+1288,1,HT8.AX,Harris Technology Group Limited,Distribution services,Electronics distributors,small,0.011,,,,,FLAT,0.0,0.0,37.5,-41.18,11.86,162.37,0.942,LOW,-,0.0105,0.0112,0.0109,1,0.0,TREND_ONLY,7.9691
+1306,1,NX1.AX,Nexalis Therapeutics Limited,Distribution services,Medical distributors,small,0.022,,,,,FLAT,,0.0,0.0,-41.38,45.16,152.9,0.8214,LOW,-,0.0219,,,0,0.0,WEAK,7.8548
+1331,2,MGH.AX,MAAS Group Holdings Ltd.,Distribution services,Wholesale distributors,small,4.43,,,,,FLAT,-4.99,13.96,7.43,-30.26,47.83,71.41,0.5748,LOW,-,4.5085,4.588,4.575,0,9.3502,WEAK,7.6106
+1368,1,BUB.AX,Bubs Australia Ltd.,Distribution services,Food distributors,small,0.1,,,,,FLAT,-39.39,-13.04,-31.03,-45.95,28.46,57.83,0.8479,LOW,-,0.1052,0.1116,0.1384,0,-6.4191,WEAK,7.3247
+1397,1,AMO.AX,Ambertech Limited,Distribution services,Electronics distributors,small,0.12,,,,,FLAT,-31.43,-22.55,-60.03,-43.21,16.6,82.87,0.3436,LOW,-,0.1193,0.1277,0.1562,0,-4.5179,WEAK,7.0328
+1487,2,PGC.AX,Paragon Care Limited,Distribution services,Medical distributors,small,0.15,,,,,FLAT,-51.61,-65.52,-53.85,-65.91,31.62,63.62,0.1486,LOW,-,0.1682,0.18,0.2647,0,-32.563,WEAK,6.0512
+1495,1,MTS.AX,Metcash Limited,Distribution services,Food distributors,mid,2.7,,,,,FLAT,-28.42,-13.5,-21.58,-34.51,43.08,22.06,2.085,HIGH,EARLY,2.9065,3.0132,3.4784,0,-26.3682,WEAK,6.0018
+1508,2,SGH.AX,SGH Limited,Distribution services,Wholesale distributors,large,40.0,,,,,FLAT,-18.97,-21.69,-7.54,-30.09,49.41,32.26,1.1198,MED,EARLY,40.917,42.298,46.4221,0,-33.2194,WEAK,5.7995
+1511,2,CYG.AX,Coventry Group Limited,Distribution services,Wholesale distributors,small,0.38,,,,,FLAT,-34.48,-58.92,-73.93,-60.0,28.85,60.25,0.3578,LOW,-,0.397,0.4241,0.5635,0,-28.2126,WEAK,5.7693
+1513,2,AX1.AX,Accent Group Ltd,Distribution services,Wholesale distributors,small,0.62,,,,,FLAT,-50.68,-65.76,-62.7,-67.75,39.92,72.14,0.5048,LOW,-,0.667,0.8044,1.0711,0,-36.3916,WEAK,5.767
+1621,0,WRX.AX,Western Ridge Resources Limited,Distribution services,Wholesale distributors,small,0.033,,,,,FLAT,,-10.81,-10.81,-23.81,37.78,110.02,0.967,LOW,-,0.0356,,,0,-3.7123,WEAK,3.9187
+1683,-1,VSL.AX,Vulcan Steel Ltd.,Distribution services,Wholesale distributors,small,5.17,,,,,FLAT,-28.16,-29.89,-25.81,-36.33,43.48,51.41,1.1537,MED,-,5.302,5.8268,6.6729,0,-25.2833,WEAK,2.5246
+1711,-1,SNL.AX,Supply Network Limited,Distribution services,Wholesale distributors,small,32.14,,,,,FLAT,-10.47,-17.28,67.67,-24.94,48.22,38.16,2.1114,HIGH,-,32.3955,32.7287,34.1336,0,-21.8371,WEAK,1.137

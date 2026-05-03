@@ -1,0 +1,147 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+3,-1,ELS.AX,Elsight Ltd.,Technology services,Packaged software,small,6.82,,,,,FLAT,354.67,1320.83,1583.95,-45.2,55.73,73.96,0.5741,LOW,-,6.8025,5.868,3.2235,1,995.2683,TREND_ONLY,192.9909
+4,-1,FTI.AX,Fortifai Limited,Technology services,Packaged software,small,0.73,,,,,FLAT,386.67,2333.33,106.46,-44.55,39.53,167.61,2.6983,HIGH,-,0.6618,0.5193,0.2836,1,550.3053,TREND_ONLY,142.1197
+5,-1,4DX.AX,4DMedical Ltd.,Technology services,Information technology services,mid,4.02,,,,,FLAT,127.12,1262.71,575.63,-41.03,48.22,115.11,1.3561,MED,-,5.518,4.8844,2.7841,1,528.9546,TREND_ONLY,124.133
+41,-2,AYA.AX,Artrya Limited,Technology services,Packaged software,small,4.06,,,,,FLAT,24.54,510.53,1231.15,-48.32,46.64,99.18,0.7189,LOW,-,3.9505,3.4642,3.0604,1,240.0781,TREND_ONLY,54.6193
+97,-1,HMD.AX,HeraMED Ltd,Technology services,Packaged software,small,0.049,,,,,FLAT,48.48,188.24,180.0,-63.16,33.2,75.8,1.2679,MED,-,0.0474,0.0437,0.0366,1,82.4461,TREND_ONLY,30.7062
+116,-1,ROC.AX,RocketBoots Ltd.,Technology services,Packaged software,small,0.26,,,,,FLAT,73.33,205.88,147.62,-51.11,37.55,97.85,1.4706,MED,-,0.314,0.2938,0.2217,1,79.0075,TREND_ONLY,27.7225
+119,-1,SKK.AX,Stakk Ltd,Technology services,Packaged software,small,0.02,,,,,FLAT,-63.64,185.71,400.0,-74.24,26.09,85.76,1.2116,MED,-,0.0202,0.0198,0.027,0,56.4982,WEAK,27.1514
+121,-1,RNT.AX,Rent.com.au Ltd,Technology services,Internet software/Services,small,0.065,,,,,FLAT,54.76,242.11,91.18,-24.24,35.57,74.05,0.2011,LOW,-,0.0637,0.0557,0.0464,1,116.2955,TREND_ONLY,26.9381
+135,-1,DUG.AX,DUG Technology Ltd,Technology services,Packaged software,small,2.25,,,,,FLAT,4.65,85.95,-18.18,-43.11,42.29,55.78,3.5358,HIGH,-,2.0517,2.0293,2.0375,1,65.1639,TREND_ONLY,25.2136
+140,-1,AI1.AX,Adisyn Limited,Technology services,Information technology services,small,0.21,,,,,FLAT,208.82,320.0,1212.5,-52.5,42.51,221.46,1.1838,MED,-,0.11,0.0723,0.0661,1,61.4251,TREND_ONLY,24.9901
+148,-1,ICE.AX,iCetana Ltd.,Technology services,Packaged software,small,0.04,,,,,FLAT,-42.86,150.0,66.67,-68.13,25.3,96.95,3.9433,HIGH,-,0.0373,0.0369,0.0549,0,39.1439,WEAK,24.5386
+161,0,KLV.AX,Klevo Rewards Limited,Technology services,Packaged software,small,0.052,,,,,FLAT,477.78,477.78,477.78,-55.56,13.83,169.06,3.094,HIGH,-,0.0305,0.028,0.0147,1,39.0847,TREND_ONLY,23.6262
+226,-2,ESK.AX,Etherstack Plc Shs Chess Depository Interests repr 1 sh,Technology services,Packaged software,small,0.605,,,,,FLAT,2.54,101.67,146.94,-36.84,37.55,62.19,1.1305,MED,-,0.6207,0.583,0.5469,1,61.3858,TREND_ONLY,20.9273
+257,-2,VR1.AX,Vection Technologies Ltd.,Technology services,Packaged software,small,0.03,,,,,FLAT,-30.23,114.29,30.43,-64.38,36.36,102.02,0.9381,LOW,-,0.0314,0.0314,0.0401,0,40.7315,WEAK,19.6587
+261,-2,WTC.AX,Wisetech Global Ltd.,Technology services,Packaged software,large,43.73,,,,,FLAT,-37.73,-53.82,-51.8,-69.59,47.83,80.84,0.4447,LOW,SHIFT,42.1055,43.6068,72.3894,0,-31.8423,WEAK,19.5575
+292,-2,RKT.AX,RocketDNA Ltd,Technology services,Data processing services,small,0.024,,,,,FLAT,26.32,140.0,200.0,-42.42,32.66,84.68,0.254,LOW,-,0.0229,0.0233,0.0193,1,53.9962,TREND_ONLY,18.6029
+311,-1,YOJ.AX,Yojee Ltd.,Technology services,Packaged software,small,0.345,,,,,FLAT,-13.75,81.58,618.75,-55.56,42.69,83.64,0.0747,LOW,-,0.287,0.2844,0.3819,0,41.638,WEAK,18.1735
+338,-1,PKY.AX,Pathkey.AI Limited,Technology services,Internet software/Services,small,0.05,,,,,FLAT,150.0,92.31,163.16,-56.25,27.27,141.94,5.6813,HIGH,-,0.0321,0.0276,0.0224,1,17.7345,TREND_ONLY,17.5327
+341,-1,BB1.AX,Blinklab Limited,Technology services,Packaged software,small,0.675,,,,,FLAT,3.05,84.93,107.69,-39.63,41.9,66.1,0.4139,LOW,-,0.7435,0.794,0.7279,0,53.8371,WEAK,17.5069
+342,-1,RC1.AX,Redcastle Resources Limited,Technology services,Packaged software,small,0.17,,,,,FLAT,70.0,112.5,0.0,-47.73,24.9,108.59,1.504,HIGH,-,0.1713,0.1634,0.1209,1,25.7966,TREND_ONLY,17.4948
+345,-1,CDE.AX,Codeifai Limited,Technology services,Packaged software,small,0.007,,,,,FLAT,-46.15,-30.0,-65.0,-91.25,28.31,167.31,1.1073,MED,-,0.0083,0.0095,0.0137,0,-5.0762,WEAK,17.3979
+349,-1,SHO.AX,SportsHero Limited,Technology services,Packaged software,small,0.074,,,,,FLAT,89.74,184.62,1544.44,-45.19,35.57,151.7,0.2444,LOW,-,0.0819,0.101,0.0589,1,43.2879,TREND_ONLY,17.3608
+352,-1,360.AX,"Life360, Inc. Shs Chess Depository Interests Repr 3 Sh",Technology services,Packaged software,mid,20.0,,,,,FLAT,-59.27,-12.89,37.08,-67.69,50.59,83.15,0.641,LOW,EARLY,20.4135,20.6722,35.3281,0,-7.8437,WEAK,17.2733
+359,-1,XPN.AX,XPON Technologies Group Ltd.,Technology services,Packaged software,small,0.012,,,,,FLAT,9.09,100.0,-7.69,-66.67,26.88,169.16,1.119,MED,-,0.0161,0.0166,0.0133,0,15.8903,WEAK,17.1809
+376,-1,WRK.AX,Wrkr Ltd,Technology services,Packaged software,small,0.115,,,,,FLAT,-13.21,91.67,,-39.39,30.43,54.95,0.2653,LOW,-,0.1127,0.1171,0.1228,0,50.7628,WEAK,16.8314
+385,-1,IFG.AX,Infocus Group Holdings Limited,Technology services,Packaged software,small,0.011,,,,,FLAT,-35.29,57.14,-26.67,-81.08,27.73,177.59,0.0069,LOW,-,0.0118,0.01,0.0145,0,8.9226,WEAK,16.6558
+387,-1,SNS.AX,SenSen Networks Ltd.,Technology services,Information technology services,small,0.034,,,,,FLAT,-67.62,17.24,13.33,-75.2,30.43,85.36,1.1074,MED,-,0.0385,0.0454,0.0642,0,6.1464,WEAK,16.6425
+390,0,EMD.AX,Emyria Ltd,Technology services,Packaged software,small,0.05,,,,,FLAT,-16.67,66.67,-1.96,-51.35,39.13,92.68,1.4876,MED,-,0.0495,0.0482,0.0534,0,28.147,WEAK,16.5574
+392,0,XRO.AX,Xero Limited,Technology services,Packaged software,large,80.57,,,,,FLAT,-44.97,-52.68,-34.83,-63.74,45.45,64.77,0.7505,LOW,SHIFT,78.406,78.3506,122.6669,0,-36.9631,WEAK,16.5125
+403,0,1TT.AX,Thrive Tribe Technologies Limited,Technology services,Packaged software,small,0.002,,,,,FLAT,-50.0,-90.0,-99.29,-95.0,10.99,355.15,0.1218,LOW,-,0.0011,0.001,,0,-2.785,WEAK,16.3736
+411,0,ATV.AX,Activeport Group Limited,Technology services,Packaged software,small,0.011,,,,,FLAT,-56.0,22.22,-87.78,-84.09,29.64,161.07,0.2122,LOW,-,0.0106,0.0104,0.0198,0,4.0893,WEAK,16.219
+416,0,APX.AX,Appen Ltd.,Technology services,Information technology services,small,1.195,,,,,FLAT,53.21,55.19,95.9,-55.48,43.48,124.98,1.2047,MED,-,1.4833,1.5313,1.0862,1,19.202,TREND_ONLY,16.092
+422,0,TRI.AX,TrivarX Limited,Technology services,Packaged software,small,0.021,,,,,FLAT,-19.23,61.54,-27.59,-53.33,29.24,124.19,4.2204,HIGH,-,0.0176,0.0201,0.0171,1,14.489,TREND_ONLY,16.0626
+428,-1,FDV.AX,Frontier Digital Ventures Ltd.,Technology services,Internet software/Services,small,0.38,,,,,FLAT,-21.65,38.18,-30.28,-56.48,39.53,57.02,0.5148,LOW,-,0.377,0.3284,0.3498,1,26.4701,TREND_ONLY,15.8742
+435,-1,SIS.AX,Simble Solutions Ltd.,Technology services,Packaged software,small,0.006,,,,,FLAT,20.0,100.0,100.0,-50.0,13.83,87.03,4.3113,HIGH,-,0.0063,0.0062,0.0057,1,15.8911,TREND_ONLY,15.6382
+486,-2,SPX.AX,Spenda Limited,Technology services,Packaged software,small,0.0015,,,,,FLAT,-50.0,-70.0,-83.33,-88.89,24.11,264.74,0.5243,LOW,-,0.0018,0.0022,0.0037,0,-6.3749,WEAK,14.8177
+501,-2,AR9.AX,archTIS Ltd.,Technology services,Information technology services,small,0.062,,,,,FLAT,-38.0,3.33,-31.11,-77.74,34.39,78.65,0.2755,LOW,-,0.0666,0.071,0.1166,0,1.4575,WEAK,14.5771
+507,-1,X2M.AX,X2M Connect Limited,Technology services,Information technology services,small,0.003,,,,,FLAT,-76.92,-85.0,-93.33,-90.0,20.55,199.18,0.0783,LOW,-,0.0042,0.0048,0.0103,0,-8.7697,WEAK,14.5004
+515,1,ACE.AX,Acusensus Ltd,Technology services,Information technology services,small,1.52,,,,,FLAT,-15.56,46.15,117.14,-35.34,41.9,50.18,0.4439,LOW,-,1.562,1.5672,1.4765,1,38.5382,TREND_ONLY,14.2913
+520,1,OLL.AX,OpenLearning Ltd.,Technology services,Internet software/Services,small,0.02,,,,,FLAT,-51.22,53.85,-4.76,-60.78,20.95,70.01,0.8594,LOW,-,0.024,0.0264,0.029,0,16.1131,WEAK,14.2232
+540,1,NVQ.AX,Noviqtech Limited,Technology services,Information technology services,small,0.036,,,,,FLAT,44.0,20.0,-10.0,-61.9,30.83,159.57,1.1046,MED,-,0.0234,0.0231,0.0261,1,3.8641,TREND_ONLY,14.0411
+547,1,FCT.AX,FirstWave Cloud Technology Ltd.,Technology services,Information technology services,small,0.004,,,,,FLAT,-63.64,-77.78,-81.82,-85.0,21.34,244.08,0.6033,LOW,-,0.0036,0.0038,0.0093,0,-6.8001,WEAK,13.988
+560,1,QOR.AX,Qoria Limited,Technology services,Packaged software,small,0.305,,,,,FLAT,-61.15,-24.69,-29.07,-71.11,43.87,108.08,1.7122,HIGH,-,0.2997,0.3012,0.537,0,-10.0223,WEAK,13.8132
+563,1,FMR.AX,FMR Resources Limited,Technology services,Packaged software,small,0.22,,,,,FLAT,-40.54,27.54,1275.0,-64.29,38.74,109.6,0.0,LOW,-,0.1975,0.241,0.3096,0,9.7332,WEAK,13.772
+571,1,ENL.AX,Enlitic Inc Chess Depository intrests Repr 1 Shs,Technology services,Packaged software,small,0.01,,,,,FLAT,-65.52,-79.17,-98.33,-87.5,28.06,194.24,0.4448,LOW,-,0.0094,0.0082,0.0222,0,-11.4365,WEAK,13.659
+587,2,XF1.AX,Xref Ltd,Technology services,Packaged software,small,0.12,,,,,FLAT,-25.0,9.09,-7.69,-71.71,22.53,107.7,0.0,LOW,-,0.0964,0.095,0.1444,0,1.9017,WEAK,13.4856
+590,2,LU7.AX,Lithium Universe Limited,Technology services,Internet software/Services,small,0.008,,,,,FLAT,-40.74,60.0,-66.67,-58.82,26.88,121.61,0.2389,LOW,-,0.0089,0.0095,0.0111,0,13.2621,WEAK,13.4327
+601,2,RLG.AX,RooLife Group Ltd.,Technology services,Packaged software,small,0.004,,,,,FLAT,-20.0,-20.0,-33.33,-62.5,17.79,147.38,3.2366,HIGH,-,0.0035,0.0035,0.0045,0,-2.4142,WEAK,13.3266
+624,0,8CO.AX,8Common Ltd,Technology services,Information technology services,small,0.025,,,,,FLAT,-16.67,38.89,-16.67,-62.0,22.53,96.65,0.0,LOW,-,0.0226,0.0224,0.0286,0,9.0654,WEAK,13.1345
+625,1,ERD.AX,EROAD Limited,Technology services,Packaged software,small,0.795,,,,,FLAT,-55.59,-3.93,2.58,-74.41,47.43,49.73,0.1234,LOW,-,0.7875,0.7507,1.3714,0,-3.7458,WEAK,13.1323
+626,1,DXN.AX,DXN Ltd.,Technology services,Data processing services,small,0.024,,,,,FLAT,-55.56,-25.0,-4.0,-78.08,27.67,114.03,0.0,LOW,-,0.0197,0.0218,0.0427,0,-6.0664,WEAK,13.1215
+627,1,BTN.AX,Butn Limited,Technology services,Packaged software,small,0.027,,,,,FLAT,-71.58,-80.0,-46.0,-82.86,11.07,99.27,0.0,LOW,-,0.0289,0.037,0.0743,0,-8.9211,WEAK,13.1206
+636,0,TNE.AX,Technology One Limited,Technology services,Packaged software,mid,27.95,,,,,FLAT,-23.5,-9.5,77.73,-52.18,51.38,57.97,0.664,LOW,-,28.8375,27.1406,31.8821,0,-8.419,WEAK,13.0014
+637,0,TNY.AX,Tinybeans Group Ltd,Technology services,Packaged software,small,0.082,,,,,FLAT,-17.17,26.15,2.5,-56.88,32.81,65.11,0.6389,LOW,-,0.0804,0.0784,0.0949,0,13.1794,WEAK,13.0001
+640,0,PHX.AX,PharmX Technologies Limited,Technology services,Information technology services,small,0.088,,,,,FLAT,-37.14,15.79,183.87,-48.24,35.18,64.77,1.5055,HIGH,-,0.1043,0.1115,0.1259,0,8.5761,WEAK,12.956
+641,0,NXT.AX,Nextdc Limited,Technology services,Data processing services,mid,14.25,,,,,FLAT,-10.38,13.55,-12.2,-37.41,50.59,52.47,0.8457,LOW,SHIFT,13.6086,13.245,14.3054,0,13.0605,WEAK,12.9557
+647,0,BEO.AX,Beonic Limited,Technology services,Internet software/Services,small,0.1,,,,,FLAT,-53.49,-50.0,-56.52,-70.0,26.45,113.79,2.2194,HIGH,-,0.1065,0.1322,,0,-11.6223,WEAK,12.914
+659,0,EPX.AX,EPX Limited,Technology services,Packaged software,small,0.22,,,,,FLAT,-31.25,-15.38,-12.0,-60.71,15.81,77.66,1.8066,HIGH,-,0.2247,0.2247,0.273,0,-3.132,WEAK,12.7734
+665,2,DWG.AX,DataWorks Group Limited,Technology services,Packaged software,small,0.12,,,,,FLAT,93.55,-22.58,-50.0,-70.97,21.34,137.35,0.6216,LOW,-,0.146,0.1571,0.1035,1,-3.5083,TREND_ONLY,12.7039
+681,2,SP8.AX,StreamPlay Studios Limited,Technology services,Packaged software,small,0.01,,,,,FLAT,-16.67,25.0,66.67,-46.67,18.18,71.09,3.3114,HIGH,-,0.01,0.0096,0.0099,1,6.3933,TREND_ONLY,12.5339
+698,1,CLU.AX,Cluey Ltd,Technology services,Information technology services,small,0.017,,,,,FLAT,-78.21,-78.75,-79.27,-81.52,12.25,81.4,0.1736,LOW,-,0.0246,0.0348,0.0648,0,-11.8512,WEAK,12.3671
+706,1,WHK.AX,WhiteHawk Ltd.,Technology services,Packaged software,small,0.006,,,,,FLAT,-40.0,-60.0,-64.71,-64.71,18.97,132.66,2.1605,HIGH,-,0.007,0.0067,0.009,0,-8.5798,WEAK,12.2933
+728,1,BET.AX,Betmakers Technology Group Ltd.,Technology services,Packaged software,small,0.18,,,,,FLAT,5.88,71.43,63.64,-30.43,35.18,81.18,0.3598,LOW,-,0.181,0.1764,0.1753,1,30.9541,TREND_ONLY,12.0729
+732,1,JCS.AX,JCurve Solutions Limited,Technology services,Information technology services,small,0.036,,,,,FLAT,-35.71,50.0,38.46,-36.84,18.58,58.14,3.9451,HIGH,-,0.0423,0.0412,0.0442,0,15.9787,WEAK,12.0445
+757,1,DCC.AX,DigitalX Limited,Technology services,Packaged software,small,0.033,,,,,FLAT,-42.11,-41.07,-28.26,-78.33,33.2,101.52,0.0579,LOW,-,0.0304,0.0304,0.0499,0,-13.4316,WEAK,11.8327
+761,1,HAL.AX,Halo Technologies Holdings Ltd,Technology services,Internet software/Services,small,0.022,,,,,FLAT,-26.67,-21.43,-74.12,-69.23,18.97,95.53,0.2334,LOW,-,0.0219,0.0308,0.0325,0,-4.2552,WEAK,11.7891
+767,1,PLY.AX,Playside Studios Ltd,Technology services,Packaged software,small,0.265,,,,,FLAT,6.0,60.61,-68.82,-34.85,39.92,98.23,0.2943,LOW,-,0.287,0.275,0.2418,1,24.6299,TREND_ONLY,11.7338
+773,2,DUB.AX,Dubber Corporation Limited,Technology services,Packaged software,small,0.012,,,,,FLAT,-29.41,-69.23,-75.51,-73.17,28.06,96.53,1.7235,HIGH,-,0.0117,0.0126,0.0167,0,-20.1245,WEAK,11.6741
+777,2,PRO.AX,Prophecy International Holdings Ltd,Technology services,Packaged software,small,0.1,,,,,FLAT,-42.86,-76.47,-88.89,-82.04,24.9,112.18,0.0008,LOW,-,0.0997,0.1031,0.1942,0,-16.9738,WEAK,11.6607
+787,3,ADS.AX,Adslot Ltd,Technology services,Information technology services,small,0.001,,,,,FLAT,0.0,0.0,-66.67,-50.0,0.4,82.69,1.7336,HIGH,-,0.001,0.001,0.001,1,0.0,TREND_ONLY,11.5544
+788,3,HUB.AX,HUB24 Limited,Technology services,Packaged software,mid,82.71,,,,,FLAT,-28.85,9.84,113.39,-35.43,54.55,66.28,0.5974,LOW,EARLY,86.6125,87.1412,98.1425,0,8.0958,WEAK,11.5497
+796,3,HTG.AX,Harvest Technology Group Ltd.,Technology services,Packaged software,small,0.011,,,,,FLAT,-38.89,-42.11,-56.0,-62.96,26.88,101.93,2.6057,HIGH,-,0.0116,0.0124,0.017,0,-11.1036,WEAK,11.5188
+832,2,NOR.AX,Norwood Systems Ltd,Technology services,Packaged software,small,0.011,,,,,FLAT,-38.89,-47.62,-79.25,-61.54,18.18,82.8,2.4081,HIGH,-,0.0105,0.0116,0.0157,0,-10.4555,WEAK,11.229
+844,3,TD1.AX,Tali Digital Ltd,Technology services,Packaged software,small,0.042,,,,,FLAT,-58.0,-58.0,,-73.33,12.25,64.31,0.0,LOW,-,0.0436,0.0458,0.0754,0,-11.048,WEAK,11.1122
+856,4,CCA.AX,Change Financial Ltd,Technology services,Packaged software,small,0.09,,,,,FLAT,21.62,42.86,47.54,-28.57,35.18,55.26,0.9563,LOW,-,0.0846,0.0839,0.0782,1,27.284,TREND_ONLY,10.9746
+867,4,IME.AX,ImExHS Ltd,Technology services,Packaged software,small,0.41,,,,,FLAT,60.78,22.39,-18.81,-36.23,22.92,55.83,3.6172,HIGH,-,0.389,0.3978,0.3305,1,9.191,TREND_ONLY,10.8932
+881,4,UNT.AX,Unith Ltd,Technology services,Packaged software,small,0.008,,,,,FLAT,-11.11,-27.27,-38.46,-58.33,26.48,140.88,1.0335,MED,-,0.0087,0.0077,0.0081,0,-5.1262,WEAK,10.7965
+882,4,B4P.AX,Beforepay Group Limited,Technology services,Packaged software,small,1.4,,,,,FLAT,-37.22,10.67,133.33,-53.09,38.74,87.63,0.1251,LOW,-,1.4545,1.4846,2.019,0,4.7179,WEAK,10.7925
+918,4,5GN.AX,5G Networks Limited,Technology services,Data processing services,small,0.064,,,,,FLAT,-54.29,-54.29,-57.33,-66.45,26.88,77.09,1.9366,HIGH,-,0.0586,0.0659,0.1182,0,-18.9285,WEAK,10.5116
+968,3,COS.AX,Cosol Limited,Technology services,Information technology services,small,0.235,,,,,FLAT,-52.53,-67.2,-76.1,-75.99,34.39,115.24,0.1152,LOW,-,0.2227,0.2381,0.4536,0,-20.0539,WEAK,10.1361
+973,2,JAN.AX,Janison Education Group Ltd.,Technology services,Packaged software,small,0.12,,,,,FLAT,-45.45,-31.43,-57.14,-65.52,29.64,90.98,0.1925,LOW,-,0.1174,0.1414,0.2051,0,-10.239,WEAK,10.1042
+975,2,CT1.AX,Constellation Technologies Limited,Technology services,Packaged software,small,0.0025,,,,,FLAT,25.0,66.67,66.67,-50.0,7.51,262.04,0.0158,LOW,-,0.0024,0.0023,0.002,1,1.9106,TREND_ONLY,10.1015
+977,2,VFX.AX,Visionflex Group Limited,Technology services,Packaged software,small,0.055,,,,,FLAT,-56.0,-63.33,-84.28,-66.67,21.79,131.51,0.6613,LOW,-,0.0634,0.0789,,0,-10.4938,WEAK,10.0798
+980,1,HYD.AX,Hydrix Limited,Technology services,Packaged software,small,0.014,,,,,FLAT,-12.5,-6.67,-12.5,-56.52,18.97,90.88,0.0,LOW,-,0.012,0.0129,0.0155,0,-1.3916,WEAK,10.0698
+989,1,AV1.AX,Adveritas Limited,Technology services,Packaged software,small,0.09,,,,,FLAT,-40.0,-5.26,42.86,-56.22,32.81,84.28,0.0,LOW,-,0.0931,0.0936,0.1309,0,-2.0489,WEAK,10.0271
+1025,2,STH.AX,StepChange Holdings Ltd.,Technology services,Information technology services,small,0.155,,,,,FLAT,0.0,-22.5,-22.5,-50.0,20.49,112.68,1.0068,MED,-,0.1346,0.1266,0.1416,1,-4.0915,TREND_ONLY,9.7966
+1043,0,CBL.AX,Control Bionics Ltd.,Technology services,Packaged software,small,0.056,,,,,FLAT,64.71,43.59,30.23,-31.65,26.48,66.15,0.8251,LOW,-,0.0596,0.0583,0.0523,1,17.4491,TREND_ONLY,9.6831
+1049,0,BVS.AX,Bravura Solutions Limited,Technology services,Packaged software,small,2.11,,,,,FLAT,-26.35,4.06,70.28,-48.72,47.43,79.23,0.3298,LOW,-,2.076,2.0431,2.2719,0,2.4329,WEAK,9.649
+1051,0,AIM.AX,Ai-Media Technologies Limited,Technology services,Packaged software,small,0.25,,,,,FLAT,-70.24,-63.77,-28.57,-78.42,45.06,111.27,0.0701,LOW,-,0.2347,0.2749,0.606,0,-25.8236,WEAK,9.6433
+1053,0,SEK.AX,Seek Limited,Technology services,Internet software/Services,mid,13.84,,,,,FLAT,-47.78,-33.32,-38.13,-53.34,43.08,51.3,0.3489,LOW,EARLY,14.6095,14.9072,22.0535,0,-27.9817,WEAK,9.6329
+1055,0,EOL.AX,Energy One Limited,Technology services,Packaged software,small,14.43,,,,,FLAT,-21.62,17.7,249.98,-36.26,49.41,60.9,0.7753,LOW,-,13.9255,13.8592,15.7567,0,14.3618,WEAK,9.6203
+1077,0,GUM.AX,Gumtree Australia Markets Limited,Technology services,Internet software/Services,small,0.125,,,,,FLAT,-26.47,19.05,-30.56,-45.24,7.51,21.2,0.0,LOW,-,0.125,0.1242,0.1334,0,6.7475,WEAK,9.4939
+1082,0,ID8.AX,Identitii Ltd,Technology services,Packaged software,small,0.006,,,,,FLAT,-25.0,-25.0,-45.45,-54.55,14.62,168.59,0.1422,LOW,-,0.0066,0.0068,0.0071,0,-2.168,WEAK,9.4703
+1086,0,FCL.AX,FINEOS Corporation Holdings Plc Shs Chess Depositary Interests Repr 1 Sh,Technology services,Packaged software,small,2.86,,,,,FLAT,-3.7,19.17,58.89,-34.98,45.06,70.36,0.171,LOW,-,2.5195,2.4496,2.7345,1,12.2747,TREND_ONLY,9.4304
+1092,0,REM.AX,RemSense Technologies Limited,Technology services,Packaged software,small,0.044,,,,,FLAT,15.79,-35.29,131.58,-60.29,24.51,76.85,0.4817,LOW,-,0.0462,0.0478,0.0418,1,-11.2565,TREND_ONLY,9.3696
+1093,0,CCG.AX,Comms Group Ltd,Technology services,Packaged software,small,0.07,,,,,FLAT,1.87,7.1,28.63,-33.82,32.02,50.47,13.8399,HIGH,-,0.0675,0.0671,0.0637,1,4.5046,TREND_ONLY,9.3649
+1121,0,OVT.AX,Ovanti Ltd,Technology services,Packaged software,small,0.03,,,,,FLAT,,150.0,150.0,-25.0,50.0,364.83,0.318,LOW,-,,,,0,20.5575,WEAK,9.1903
+1141,0,SDR.AX,SiteMinder Limited,Technology services,Internet software/Services,small,2.96,,,,,FLAT,-59.62,-29.36,-46.86,-64.9,48.22,87.2,0.8271,LOW,-,3.07,3.1326,5.3812,0,-16.2331,WEAK,9.0883
+1143,0,IOD.AX,IODM Ltd.,Technology services,Packaged software,small,0.17,,,,,FLAT,6.25,17.24,-10.53,-43.59,22.92,136.81,0.0,LOW,-,0.1635,0.1622,0.1393,1,2.8885,TREND_ONLY,9.0845
+1156,1,FLN.AX,Freelancer Ltd.,Technology services,Internet software/Services,small,0.145,,,,,FLAT,-39.58,-30.95,-30.95,-60.94,30.04,77.71,0.0,LOW,-,0.1446,0.1632,0.2244,0,-11.9651,WEAK,8.9744
+1158,1,MP1.AX,Megaport Ltd.,Technology services,Data processing services,small,8.94,,,,,FLAT,-45.32,-22.73,-32.83,-62.11,50.2,79.59,0.5358,LOW,-,8.1245,8.0088,12.5309,0,-14.3373,WEAK,8.9691
+1161,1,M7T.AX,Mach7 Technologies Ltd.,Technology services,Packaged software,small,0.265,,,,,FLAT,-10.17,-23.19,-62.14,-62.5,37.94,61.91,0.8375,LOW,-,0.2909,0.299,0.3714,0,-14.2104,WEAK,8.9501
+1167,0,BMT.AX,Beamtree Holdings Ltd,Technology services,Packaged software,small,0.12,,,,,FLAT,-40.0,-41.46,-33.33,-64.06,30.04,81.55,0.0,LOW,-,0.1404,0.1464,0.1972,0,-15.2736,WEAK,8.9026
+1169,0,EXT.AX,Excite Technology Services Limited,Technology services,Information technology services,small,0.007,,,,,FLAT,-30.0,-46.15,-30.0,-57.14,23.67,136.76,0.019,LOW,-,0.0074,0.0077,0.0088,0,-7.9882,WEAK,8.8942
+1171,0,SKO.AX,Serko Ltd.,Technology services,Packaged software,small,1.35,,,,,FLAT,-45.78,-61.32,-56.31,-65.62,31.23,74.96,2.1837,HIGH,-,1.4405,1.5375,2.2003,0,-25.5465,WEAK,8.8899
+1180,0,TAL.AX,Talius Group Limited,Technology services,Packaged software,small,0.074,,,,,FLAT,-1.33,5.71,-7.5,-44.21,33.85,62.86,0.3913,LOW,-,0.0618,0.067,,0,3.0771,WEAK,8.8369
+1185,0,HPG.AX,hipages Group Holdings Ltd.,Technology services,Packaged software,small,0.775,,,,,FLAT,-42.16,-16.67,-29.55,-51.58,36.36,67.03,1.1811,MED,-,0.72,0.765,1.0943,0,-9.0407,WEAK,8.8048
+1193,1,VRS.AX,Veris Limited,Technology services,Data processing services,small,0.058,,,,,FLAT,-18.31,24.14,8.34,-34.5,29.64,58.93,0.1207,LOW,-,0.0568,0.0592,0.0678,0,12.1436,WEAK,8.7495
+1199,1,1CG.AX,One Click Group Limited,Technology services,Packaged software,small,0.009,,,,,FLAT,-25.0,28.57,12.5,-40.74,22.13,105.35,0.0237,LOW,-,0.0091,0.0091,0.01,0,6.0018,WEAK,8.7156
+1206,2,FLX.AX,Felix Group Holdings Ltd.,Technology services,Internet software/Services,small,0.081,,,,,FLAT,-61.43,-58.46,-57.37,-65.96,20.16,66.62,0.3122,LOW,-,0.0897,0.1057,0.1681,0,-17.6912,WEAK,8.6594
+1217,2,ONE.AX,Oneview Healthcare PLC Chess Depository Interests repr 1,Technology services,Packaged software,small,0.16,,,,,FLAT,-15.79,-44.83,-38.46,-60.0,30.83,107.05,0.795,LOW,-,0.1803,0.2024,0.2571,0,-12.9102,WEAK,8.5923
+1238,0,W2V.AX,WAY 2 VAT LTD,Technology services,Packaged software,small,0.08,,,,,FLAT,,-23.81,-23.81,-54.0,34.15,94.48,0.3117,LOW,-,0.075,0.0874,,0,-8.606,WEAK,8.3926
+1239,1,DTL.AX,Data#3 Limited.,Technology services,Information technology services,small,8.08,,,,,FLAT,-7.13,10.09,14.0,-33.82,52.17,52.88,0.3963,LOW,-,7.3505,7.1653,8.342,0,9.9559,WEAK,8.3855
+1243,1,CHL.AX,Camplify Holdings Ltd.,Technology services,Internet software/Services,small,0.205,,,,,FLAT,-40.58,-53.93,-74.9,-65.71,35.57,96.15,0.4169,LOW,-,0.2362,0.2623,0.3527,0,-19.952,WEAK,8.3624
+1244,1,CAR.AX,CAR Group Limited,Technology services,Internet software/Services,mid,25.26,,,,,FLAT,-28.36,-23.21,-20.86,-45.57,48.62,47.25,0.6352,LOW,SHIFT,24.7515,24.4274,31.4564,0,-23.8784,WEAK,8.3598
+1248,1,NXL.AX,Nuix Ltd.,Technology services,Packaged software,small,1.49,,,,,FLAT,-39.92,-41.57,-26.96,-66.14,45.85,89.14,0.4741,LOW,-,1.3125,1.4705,2.0313,0,-21.3812,WEAK,8.3196
+1287,1,AD1.AX,AdNeo Limited,Technology services,Internet software/Services,small,0.04,,,,,FLAT,-4.76,-24.53,-55.56,-48.15,15.02,55.83,0.4445,LOW,-,0.0382,0.0326,0.0378,1,-6.5989,TREND_ONLY,7.9761
+1297,1,3PL.AX,3P Learning Ltd.,Technology services,Packaged software,small,0.285,,,,,FLAT,-52.89,-53.66,-77.11,-60.29,27.27,87.85,0.0091,LOW,-,0.284,0.3459,0.5482,0,-16.6564,WEAK,7.9063
+1309,2,ODA.AX,Orcoda Limited,Technology services,Packaged software,small,0.048,,,,,FLAT,-32.39,-35.14,-80.41,-46.59,17.39,54.81,3.39,HIGH,-,0.0513,0.0542,0.0658,0,-11.1476,WEAK,7.834
+1312,2,RDY.AX,ReadyTech Holdings Ltd.,Technology services,Packaged software,small,1.38,,,,,FLAT,-33.33,-34.29,-58.93,-59.82,43.08,82.68,0.2291,LOW,-,1.2717,1.2857,2.0458,0,-17.8644,WEAK,7.8163
+1316,2,5GG.AX,Pentanet Ltd,Technology services,Internet software/Services,small,0.022,,,,,FLAT,-18.52,-37.14,-53.19,-52.5,31.23,80.79,1.1617,MED,-,0.0223,0.023,0.0258,0,-14.3579,WEAK,7.7921
+1326,2,AVA.AX,Ava Risk Group Ltd.,Technology services,Information technology services,small,0.06,,,,,FLAT,-20.0,-39.39,-55.56,-59.09,35.18,64.27,1.2943,MED,-,0.0579,0.0549,0.0695,0,-21.5634,WEAK,7.6995
+1343,2,TWL.AX,Trade Window Holdings Ltd.,Technology services,Packaged software,small,0.15,,,,,FLAT,,-41.18,-41.18,-50.0,24.39,114.44,0.2641,LOW,-,0.193,,,0,-8.7757,WEAK,7.4916
+1345,2,RTH.AX,RAS Technology Holdings Limited,Technology services,Data processing services,small,0.65,,,,,FLAT,-40.37,-18.75,-50.19,-53.12,37.15,53.49,0.2737,LOW,-,0.6745,0.7227,0.8966,0,-13.0223,WEAK,7.4844
+1351,0,KNO.AX,Knosys Ltd.,Technology services,Packaged software,small,0.018,,,,,FLAT,-40.0,-43.75,-58.14,-52.63,14.62,57.77,0.4431,LOW,-,0.0206,0.0205,0.0265,0,-11.0719,WEAK,7.4545
+1359,1,SHG.AX,Singular Health Group Ltd,Technology services,Information technology services,small,0.205,,,,,FLAT,-22.64,-31.67,105.0,-50.0,36.36,80.83,1.043,MED,-,0.2272,0.2322,0.2676,0,-14.2447,WEAK,7.388
+1373,1,NOV.AX,Novatti Group Ltd.,Technology services,Packaged software,small,0.022,,,,,FLAT,-37.14,-18.52,-56.0,-47.5,27.27,62.2,0.6624,LOW,-,0.0247,0.0253,0.0301,0,-8.119,WEAK,7.2673
+1386,1,ALC.AX,Alcidion Group Limited,Technology services,Packaged software,small,0.1,,,,,FLAT,6.38,13.64,78.57,-30.71,32.41,61.43,0.2485,LOW,-,0.1021,0.1018,0.1035,0,7.1944,WEAK,7.1636
+1391,1,STV.AX,Swift TV Limited,Technology services,Internet software/Services,small,0.009,,,,,FLAT,,-10.0,-10.0,-36.36,21.92,115.97,1.2035,MED,-,0.0098,0.0097,,0,-1.8901,WEAK,7.0732
+1399,1,CCR.AX,Credit Clear Limited,Technology services,Packaged software,small,0.215,,,,,FLAT,-23.21,-2.27,-14.0,-38.33,34.78,64.2,0.2245,LOW,-,0.2007,0.2042,0.2442,0,-1.2312,WEAK,6.9826
+1400,1,3DP.AX,Pointerra Ltd.,Technology services,Information technology services,small,0.03,,,,,FLAT,-30.23,-48.28,-21.05,-55.38,30.83,86.4,0.7278,LOW,-,0.0314,0.0351,0.0437,0,-17.2262,WEAK,6.9714
+1411,1,ART.AX,Airtasker Ltd,Technology services,Internet software/Services,small,0.25,,,,,FLAT,-32.43,-19.35,-3.85,-51.65,40.32,52.5,0.2085,LOW,-,0.2379,0.2374,0.3213,0,-14.8645,WEAK,6.9146
+1413,1,RCL.AX,ReadCloud Ltd.,Technology services,Packaged software,small,0.076,,,,,FLAT,-30.91,-24.0,40.74,-48.15,19.37,44.52,0.0,LOW,-,0.0748,0.0792,0.0926,0,-10.4421,WEAK,6.8754
+1431,2,CF1.AX,Complii Fintech Solutions Ltd,Technology services,Packaged software,small,0.018,,,,,FLAT,-30.77,-33.33,-88.75,-42.86,19.37,105.77,0.0,LOW,-,0.0183,0.0192,0.0228,0,-6.1044,WEAK,6.6703
+1467,3,BPG.AX,Black Pearl Group Limited,Technology services,Packaged software,small,0.655,,,,,FLAT,,-25.14,-25.14,-42.86,28.97,79.61,0.6783,LOW,-,0.6829,0.7135,,0,-9.1495,WEAK,6.2381
+1496,1,MME.AX,MoneyMe Ltd.,Technology services,Internet software/Services,small,0.085,,,,,FLAT,-26.09,-43.33,23.19,-51.25,28.85,67.52,0.0,LOW,-,0.0848,0.09,0.112,0,-18.5155,WEAK,5.9959
+1505,1,RKN.AX,Reckon Limited,Technology services,Packaged software,small,0.455,,,,,FLAT,-24.79,0.68,-7.34,-30.0,36.76,34.25,0.0606,LOW,-,0.4784,0.4923,0.5586,0,0.7308,WEAK,5.8648
+1528,2,HSN.AX,Hansen Technologies Limited,Technology services,Information technology services,small,4.95,,,,,FLAT,-10.74,-3.93,10.74,-32.2,46.64,54.43,0.3986,LOW,-,4.891,4.98,5.4199,0,-3.3678,WEAK,5.5954
+1556,1,OCL.AX,Objective Corporation Limited,Technology services,Packaged software,small,11.53,,,,,FLAT,-36.28,-28.61,-3.76,-51.61,45.85,51.99,0.4628,LOW,-,11.591,12.1945,16.5651,0,-25.2321,WEAK,5.0577
+1568,1,IRI.AX,Integrated Research Limited,Technology services,Packaged software,small,0.305,,,,,FLAT,-18.67,-23.96,-19.38,-44.57,34.78,44.15,0.4906,LOW,-,0.3015,0.3026,0.3504,0,-18.8778,WEAK,4.8513
+1588,1,VGL.AX,Vista Group International Ltd,Technology services,Packaged software,small,1.46,,,,,FLAT,-40.16,-55.49,-9.88,-61.69,41.9,61.07,0.3016,LOW,-,1.4867,1.4816,2.1995,0,-38.0701,WEAK,4.4289
+1597,1,AHE.AX,Adheris Health Limited,Technology services,Packaged software,small,0.02,,,,,FLAT,,-6.98,-6.98,-25.0,27.45,82.8,0.4697,LOW,-,0.0194,0.0201,,0,-2.3129,WEAK,4.3056
+1675,-1,UBN.AX,Urbanise.com Ltd.,Technology services,Packaged software,small,0.65,,,,,FLAT,-10.96,-15.03,83.1,-29.55,20.16,20.84,0.0,LOW,-,0.6475,0.652,0.7238,0,-14.5422,WEAK,2.8287
+1685,-1,IRE.AX,IRESS Limited,Technology services,Packaged software,small,6.68,,,,,FLAT,-21.41,-15.56,-18.42,-30.06,44.27,36.8,0.612,LOW,-,6.915,7.0092,8.0883,0,-18.7187,WEAK,2.3838
+1698,-1,CXZ.AX,Connexion Mobility Ltd,Technology services,Packaged software,small,0.023,,,,,FLAT,-11.54,-14.81,-20.69,-17.86,21.34,39.52,0.0,LOW,-,0.0246,0.0254,0.0261,0,-7.9997,WEAK,1.9136
+1706,-1,GTK.AX,Gentrack Group Ltd,Technology services,Packaged software,small,4.78,,,,,FLAT,-40.62,-57.32,-35.14,-60.9,43.08,46.53,0.6851,LOW,-,5.033,5.7678,7.5638,0,-53.0713,WEAK,1.5905

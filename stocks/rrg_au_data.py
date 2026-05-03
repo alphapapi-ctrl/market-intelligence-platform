@@ -42,6 +42,9 @@ def fetch_prices(tickers, benchmark, start, end):
 
 def calculate_rrg(prices, benchmark, tickers):
     results = []
+    if benchmark not in prices.columns or prices[benchmark].dropna().empty:
+        print(f"ERROR: Benchmark {benchmark} has no data — cannot calculate RRG.")
+        return pd.DataFrame()
     bench   = prices[benchmark].dropna()
 
     for ticker, (name, group) in tickers.items():
@@ -136,6 +139,9 @@ if __name__ == "__main__":
 
     print(f"Calculating RRG data for {len(TICKERS)} tickers...")
     new_df = calculate_rrg(prices, BENCHMARK, TICKERS)
+    if new_df.empty or 'date' not in new_df.columns:
+        print("No RRG data calculated — skipping save.")
+        exit(0)
     new_df = new_df[new_df['date'] >= start_from]
     print(f"New rows: {len(new_df)}")
 

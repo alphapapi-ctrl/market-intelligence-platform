@@ -1,0 +1,44 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+33,-2,GNP.AX,GenusPlus Group Ltd.,Industrial services,Engineering & construction,small,9.5,,,,,FLAT,43.91,223.72,426.13,-14.97,51.38,45.81,2.0759,HIGH,-,8.498,7.9801,6.4778,1,250.9193,TREND_ONLY,60.5952
+76,-3,SRG.AX,SRG Global Limited,Industrial services,Engineering & construction,small,2.96,,,,,FLAT,9.25,133.78,284.19,-23.42,49.41,39.0,0.5476,LOW,-,2.8215,2.7006,2.4856,1,169.4847,TREND_ONLY,36.0991
+109,-1,MND.AX,Monadelphous Group Limited,Industrial services,Engineering & construction,mid,29.05,,,,,FLAT,28.74,87.42,140.35,-16.25,54.94,37.76,0.5591,LOW,-,28.7755,28.9269,25.1788,1,127.1954,TREND_ONLY,28.5418
+113,-1,CVL.AX,Civmec Limited,Industrial services,Engineering & construction,small,1.585,,,,,FLAT,10.42,94.35,95.98,-18.28,47.04,33.76,0.3323,LOW,-,1.4625,1.536,1.4042,1,131.4708,TREND_ONLY,28.1682
+128,1,TEA.AX,Tasmea Limited,Industrial services,Engineering & construction,small,5.47,,,,,FLAT,11.89,119.15,263.09,-33.21,50.2,57.8,0.4337,LOW,-,5.1495,4.5811,4.3764,1,103.4842,TREND_ONLY,25.9357
+129,-2,BSA.AX,BSA Limited,Industrial services,Engineering & construction,small,0.34,,,,,FLAT,161.54,385.71,-51.43,-38.95,36.36,151.05,0.2513,LOW,-,0.3345,0.3514,0.1908,1,92.8472,TREND_ONLY,25.8893
+159,0,SHA.AX,Shape Australia Corporation Limited,Industrial services,Engineering & construction,small,6.05,,,,,FLAT,3.58,96.45,238.44,-20.27,48.22,50.56,1.465,MED,-,6.463,6.5828,5.6646,1,91.9839,TREND_ONLY,23.8188
+164,0,SXE.AX,Southern Cross Electrical Engineering Limited,Industrial services,Engineering & construction,small,3.9,,,,,FLAT,65.95,118.35,243.27,-19.42,50.59,57.63,0.8821,LOW,-,3.4238,3.1565,2.4435,1,103.8932,TREND_ONLY,23.5277
+239,-2,CNQ.AX,Clean TeQ Water Ltd,Industrial services,Environmental services,small,0.38,,,,,FLAT,-24.75,105.41,10.14,-46.61,39.92,70.28,0.8427,LOW,-,0.3748,0.379,0.3438,1,59.8717,TREND_ONLY,20.3554
+295,-1,VBC.AX,Verbrec Ltd,Industrial services,Engineering & construction,small,0.2,,,,,FLAT,74.81,166.83,102.79,-30.77,37.15,96.04,0.016,LOW,-,0.2092,0.2069,0.1577,1,64.5347,TREND_ONLY,18.5398
+298,-1,FLC.AX,Fluence Corporation Limited,Industrial services,Environmental services,small,0.079,,,,,FLAT,-31.3,88.1,-53.53,-47.14,42.29,72.06,0.533,LOW,-,0.088,0.083,0.083,0,51.7006,WEAK,18.4891
+315,-1,DUR.AX,Duratec Limited,Industrial services,Engineering & construction,small,2.73,,,,,FLAT,29.73,68.8,179.79,-22.75,47.43,45.82,0.5736,LOW,-,2.821,2.5121,2.0274,1,71.2182,TREND_ONLY,18.0388
+350,-1,MSV.AX,Mitchell Services Limited,Industrial services,Contract drilling,small,0.505,,,,,FLAT,65.27,118.16,38.53,-26.15,42.29,79.13,0.7618,LOW,-,0.498,0.4829,0.3426,1,63.1491,TREND_ONLY,17.3298
+370,-1,GNG.AX,GR Engineering Services Ltd,Industrial services,Engineering & construction,small,4.6,,,,,FLAT,32.35,71.19,136.96,-25.53,51.38,58.87,0.5485,LOW,-,4.3495,4.2848,4.0424,1,62.1285,TREND_ONLY,16.9472
+375,-1,SYL.AX,Symal Group Limited,Industrial services,Engineering & construction,small,2.3,,,,,FLAT,-2.88,67.9,30.24,-39.48,46.4,76.59,1.0766,MED,-,2.2935,2.3978,2.3886,0,41.1382,WEAK,16.8593
+407,0,VNT.AX,Ventia Services Group Limited,Industrial services,Engineering & construction,mid,5.42,,,,,FLAT,1.46,30.17,65.89,-20.1,57.71,31.96,0.5056,LOW,-,5.2305,5.4409,5.4093,1,54.4691,TREND_ONLY,16.3094
+424,-1,VYS.AX,Vysarn Ltd,Industrial services,Engineering & construction,small,0.74,,,,,FLAT,12.12,82.72,196.0,-26.44,43.08,63.2,0.3926,LOW,-,0.7118,0.7456,0.6545,1,56.383,TREND_ONLY,16.0436
+533,1,DOW.AX,Downer EDI Limited,Industrial services,Engineering & construction,mid,7.42,,,,,FLAT,-2.05,33.19,70.69,-14.01,48.22,29.58,0.6284,LOW,EARLY,7.6425,7.7524,7.4893,0,54.1092,WEAK,14.0758
+564,1,MCE.AX,Matrix Composites & Engineering Ltd,Industrial services,Oilfield services/Equipment,small,0.3925,,,,,FLAT,53.92,96.25,13.77,-33.9,33.99,113.84,1.0014,MED,-,0.3774,0.3009,0.2615,1,28.738,TREND_ONLY,13.7525
+581,1,WEL.AX,Winchester Energy Ltd,Industrial services,Contract drilling,small,0.002,,,,,FLAT,0.0,100.0,0.0,-66.67,6.72,173.17,0.0,LOW,-,0.0021,0.0021,0.002,1,3.8806,TREND_ONLY,13.5696
+630,1,SLC.AX,Superloop Ltd.,Industrial services,Engineering & construction,small,3.4,,,,,FLAT,9.32,31.27,153.73,-36.34,48.22,48.98,0.3323,LOW,-,3.3125,3.1384,2.9316,1,30.7889,TREND_ONLY,13.0798
+694,2,SRJ.AX,SRJ Technologies Group PLC Shs Chess Depository Interests repr 1 Shs,Industrial services,Engineering & construction,small,0.01,,,,,FLAT,-28.57,-41.18,-86.67,-76.47,26.88,135.27,0.0,LOW,-,0.0096,0.01,0.0126,0,-8.1823,WEAK,12.3855
+720,0,H2G.AX,GreenHy2 Limited,Industrial services,Oilfield services/Equipment,small,0.009,,,,,FLAT,0.0,-10.0,-10.0,-68.18,24.9,139.23,0.0852,LOW,-,0.0111,0.0106,0.0114,0,-1.7884,WEAK,12.1386
+741,1,FHE.AX,Frontier Energy Limited,Industrial services,Engineering & construction,small,0.265,,,,,FLAT,-11.67,35.9,-27.4,-42.65,35.57,67.27,0.113,LOW,-,0.26,0.2354,0.2467,1,18.9813,TREND_ONLY,11.993
+781,2,MYE.AX,Mastermyne Group Limited,Industrial services,Engineering & construction,small,0.2,,,,,FLAT,53.85,33.33,-26.02,-31.43,24.9,48.74,2.0562,HIGH,-,0.182,0.1834,0.1511,1,17.0291,TREND_ONLY,11.6316
+807,2,CLG.AX,Close the Loop Ltd.,Industrial services,Environmental services,small,0.022,,,,,FLAT,-52.17,-67.65,-92.9,-76.83,32.41,110.34,1.1187,MED,-,0.0251,0.025,0.0372,0,-19.8699,WEAK,11.4455
+926,4,LYL.AX,Lycopodium Limited,Industrial services,Engineering & construction,small,12.75,,,,,FLAT,0.45,21.38,13.73,-19.95,48.22,29.12,0.4693,LOW,-,12.9635,13.3927,12.9115,0,35.3982,WEAK,10.4736
+1102,0,WOR.AX,Worley Limited,Industrial services,Engineering & construction,mid,12.07,,,,,FLAT,-14.05,1.61,-13.17,-31.36,49.01,37.65,0.6738,LOW,SHIFT,11.711,11.3268,12.6878,0,2.0955,WEAK,9.2913
+1111,-1,MLG.AX,MLG Oz Ltd,Industrial services,Engineering & construction,small,0.78,,,,,FLAT,-12.26,22.43,17.86,-32.35,42.69,58.45,0.6158,LOW,-,0.7705,0.8612,0.8748,0,16.3826,WEAK,9.2368
+1112,0,SOP.AX,Synertec Corporation Limited,Industrial services,Engineering & construction,small,0.023,,,,,FLAT,-11.54,15.0,-76.29,-45.45,20.55,68.54,0.0,LOW,-,0.0267,0.0258,0.0244,0,4.4974,WEAK,9.2295
+1125,0,IFN.AX,Infragreen Group Limited,Industrial services,Environmental services,small,0.385,,,,,FLAT,-61.35,-65.15,-65.15,-73.64,35.71,100.38,0.2548,LOW,-,0.371,0.3744,,0,-23.1761,WEAK,9.1704
+1148,1,PKD.AX,Parkd Ltd.,Industrial services,Engineering & construction,small,0.032,,,,,FLAT,6.67,6.67,10.34,-45.0,23.72,118.1,0.196,LOW,-,0.0285,0.0284,0.032,1,1.339,TREND_ONLY,9.0285
+1224,2,MCO.AX,Myeco Group Ltd,Industrial services,Environmental services,small,0.013,,,,,FLAT,-13.33,-23.53,-69.05,-50.0,20.0,142.69,0.7672,LOW,-,0.0117,0.0139,,0,-3.298,WEAK,8.5017
+1325,2,AMX.AX,Aerometrex Ltd.,Industrial services,Engineering & construction,small,0.235,,,,,FLAT,-9.62,-4.08,-31.88,-42.86,24.11,86.67,0.0,LOW,-,0.2384,0.2572,0.2464,0,-1.1354,WEAK,7.7127
+1362,1,PWN.AX,Parkway Corporate Limited,Industrial services,Environmental services,small,0.01,,,,,FLAT,-28.57,0.0,11.11,-40.0,20.16,71.99,0.2712,LOW,-,0.01,0.0102,0.0116,0,0.0,WEAK,7.3814
+1515,2,SIO.AX,Simonds Group Ltd.,Industrial services,Engineering & construction,small,0.135,,,,,FLAT,-3.57,-18.18,-28.95,-34.29,12.65,90.64,0.0,LOW,-,0.13,0.1331,0.1425,0,-2.5375,WEAK,5.7638
+1531,2,EGL.AX,Environmental Group Limited,Industrial services,Engineering & construction,small,0.215,,,,,FLAT,-8.51,-8.51,-20.37,-33.93,33.6,60.76,0.0086,LOW,-,0.2089,0.2139,0.2387,0,-4.7063,WEAK,5.532
+1604,1,LLC.AX,Lendlease Group,Industrial services,Engineering & construction,mid,3.33,,,,,FLAT,-39.08,-33.25,-42.76,-44.3,43.48,32.46,0.3863,LOW,PROGRESS,3.2925,3.5306,4.7496,0,-44.5325,WEAK,4.2168
+1616,0,DEM.AX,De.mem Ltd.,Industrial services,Engineering & construction,small,0.076,,,,,FLAT,-29.3,-33.91,-39.2,-39.2,30.83,58.66,0.7423,LOW,-,0.086,0.0914,0.1029,0,-17.8237,WEAK,4.0031
+1620,0,CWY.AX,Cleanaway Waste Management Ltd.,Industrial services,Environmental services,mid,2.26,,,,,FLAT,-10.14,-11.85,-12.72,-24.39,42.29,30.09,0.8795,LOW,EARLY,2.313,2.3577,2.563,0,-16.6496,WEAK,3.9263
+1625,0,BWN.AX,Bhagwan Marine Ltd.,Industrial services,Engineering & construction,small,0.405,,,,,FLAT,-29.92,-21.87,-34.79,-39.1,35.97,40.93,0.8961,LOW,-,0.3951,0.41,0.4876,0,-19.2213,WEAK,3.8232
+1635,0,SND.AX,Saunders International Limited,Industrial services,Engineering & construction,small,0.83,,,,,FLAT,2.47,-0.86,-1.23,-19.05,35.18,44.12,0.0021,LOW,-,0.8353,0.8591,0.8351,0,-0.6822,WEAK,3.6197
+1688,-1,ACF.AX,Acrow Limited,Industrial services,Engineering & construction,small,0.87,,,,,FLAT,-18.45,-13.89,-14.67,-26.99,41.5,34.21,0.8303,LOW,-,0.9216,0.9068,0.9959,0,-16.8527,WEAK,2.1482

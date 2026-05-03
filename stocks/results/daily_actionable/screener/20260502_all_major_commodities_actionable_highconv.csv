@@ -1,0 +1,3 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+124,-2,EGO,Eldorado Gold Corp,gold,producer,large,29.86,0.877,0.9962,0.9054,0.8267,STRONG_UP,17.25,63.44,104.3,-40.34,56.4,64.23,1.9091,HIGH,EARLY,33.468,36.5005,32.0871,0,55.7051,WEAK,32.0043
+242,29,LCID,LUCID GROUP INC,lithium,producer,mid,6.54,0.1085,1.056,0.5489,0.5023,STRONG_UP,-62.69,-74.15,-76.47,-81.6,40.0,75.3,1.5621,HIGH,EARLY,7.467,8.9916,15.1355,0,-39.3892,WEAK,19.4761
