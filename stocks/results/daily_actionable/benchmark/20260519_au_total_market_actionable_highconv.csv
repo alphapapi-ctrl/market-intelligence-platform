@@ -1,0 +1,8 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+258,716,TUA.AX,Tuas Ltd.,Communications,Wireless telecommunications,mid,2.27,0.3743,0.4,0.3952,0.3695,UP,-65.34,-60.31,-42.53,-72.72,39.13,129.71,20.461,HIGH,EARLY,5.767,5.9474,6.7069,0,-18.1953,WEAK,20.7097
+334,84,ORI.AX,Orica Limited,Process industries,Industrial specialties,mid,22.52,1.1754,1.035,1.1513,0.9033,UP,-4.28,24.61,26.7,-28.9,53.75,37.15,1.7332,HIGH,SHIFT,21.539,20.846,22.5306,0,35.6119,WEAK,18.6212
+690,245,ALL.AX,Aristocrat Leisure Limited,Consumer services,Casinos/Gaming,large,51.4,0.7858,1.1417,1.1011,1.0777,UP,-9.7,-16.68,12.88,-38.11,51.38,37.84,1.5906,HIGH,SHIFT,48.154,47.1658,57.5103,0,-22.6538,WEAK,12.8263
+884,425,BXB.AX,Brambles Limited,Transportation,Air freight/Couriers,large,17.63,0.7866,0.8297,0.8154,0.7859,UP,-24.42,-16.6,32.15,-31.83,49.01,44.89,3.0249,HIGH,EARLY,22.0545,22.388,23.3158,0,-18.1242,WEAK,11.0339
+1529,93,CPU.AX,Computershare Limited,Commercial services,Miscellaneous commercial services,large,32.09,0.7547,1.0989,1.1015,1.0894,DOWN,-9.36,-19.98,28.71,-32.38,49.41,23.2,1.6738,HIGH,SHIFT,30.472,29.5764,33.5316,0,-42.5628,WEAK,4.789
+1568,-13,CWY.AX,Cleanaway Waste Management Ltd.,Industrial services,Environmental services,mid,2.16,0.7712,1.0045,0.9757,0.9476,UP,-12.75,-18.23,-16.58,-25.76,41.11,31.92,1.5398,HIGH,EARLY,2.2555,2.307,2.5304,0,-23.484,WEAK,4.2563
+1601,6,PMV.AX,Premier Investments Limited,Retail trade,Apparel/Footwear retail,mid,11.29,0.5157,0.9574,0.9151,0.8589,UP,-32.34,-45.33,-59.03,-49.1,43.08,32.49,2.843,HIGH,EARLY,12.1945,12.4522,15.7638,0,-60.1039,WEAK,3.8046

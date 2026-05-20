@@ -1,0 +1,3 @@
+rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+56,-9,TCG.AX,Turaco Gold Limited,Gold,mid,0.54,47.02,0.0,-0.081,-0.036,FLAT,18.68,38.46,140.0,-37.93,47.43,75.77,4.8292,HIGH,EARLY,0.5877,0.6199,0.6015,0,24.0759,WEAK,18.989
+59,11,STK.AX,Strickland Metals Limited,Gold,mid,0.11,21.19,-0.214,-0.388,-0.3604,FLAT,-38.89,0.0,11.11,-55.1,35.18,82.8,4.6882,HIGH,EARLY,0.1603,0.1877,0.1849,0,0.0,WEAK,18.4862

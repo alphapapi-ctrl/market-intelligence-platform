@@ -1,0 +1,11 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+14,0,INSM,Insmed Incorporated,Health Care,Biotechnology,large,117.99,100.0,0.1312,-0.1477,-0.096,FLAT,-39.08,79.84,363.61,-52.06,55.2,69.88,2.3981,HIGH,EARLY,131.543,142.0446,155.9787,0,63.064,LAGGARD,39.939
+24,10,GILD,Gilead Sciences,Health Care,Biotechnology,large,133.05,88.89,-0.0165,0.029,-0.0218,FLAT,9.9,38.84,109.48,-17.54,52.8,22.57,1.0623,MED,-,133.0,137.8696,126.6291,1,90.8545,LEADER,28.648
+36,-1,AMGN,Amgen,Health Care,Biotechnology,large,336.45,77.78,0.0299,0.0433,0.0252,FLAT,0.81,32.3,14.83,-16.57,52.8,22.94,0.8245,LOW,-,339.0155,349.629,323.4589,1,74.3513,LEADER,22.24
+40,0,REGN,Regeneron Pharmaceuticals,Health Care,Biotechnology,large,719.88,66.67,0.0227,0.0319,0.0198,FLAT,6.98,26.68,-26.4,-21.43,49.6,28.19,1.0956,MED,-,727.057,745.1824,688.9857,1,46.9476,CONTENDER,20.3976
+44,-3,ALNY,Alnylam Pharmaceuticals,Health Care,Biotechnology,large,291.48,55.56,-0.0239,-0.0774,0.0449,FLAT,-35.51,8.94,97.09,-42.01,54.0,37.01,0.8162,LOW,EARLY,302.8915,314.2102,391.713,0,13.0501,LAGGARD,18.9909
+63,-1,IDXX,Idexx Laboratories,Health Care,Biotechnology,large,528.68,33.33,-0.085,-0.0414,-0.0466,FLAT,-25.8,3.78,1.45,-31.04,50.4,32.28,1.1029,MED,EARLY,563.694,575.0444,641.8373,0,5.9031,WEAK,14.2823
+72,3,VRTX,Vertex Pharmaceuticals,Health Care,Biotechnology,large,453.06,44.44,0.0736,0.1028,0.0743,FLAT,5.55,7.57,5.71,-23.56,49.2,32.47,0.847,LOW,-,432.9785,445.6712,434.9092,1,11.4769,LAGGARD,11.8174
+80,3,GEHC,GE HealthCare,Health Care,Medical Electronics,large,61.89,22.22,0.0165,-0.1098,-0.1159,STRONG_UP,-15.62,-14.88,-22.87,-32.47,51.6,41.05,0.9501,LOW,EARLY,65.9585,69.7115,75.8014,0,-18.7048,WEAK,9.5831
+90,-3,DXCM,DexCom,Health Care,Medical/Dental Instruments,large,58.57,0.0,-0.0474,0.0288,-0.0032,FLAT,0.76,-32.3,-53.5,-38.75,48.4,37.05,1.5122,HIGH,EARLY,60.987,63.715,68.4521,0,-42.201,WEAK,7.606
+98,1,ISRG,Intuitive Surgical,Health Care,Industrial Specialties,large,432.27,11.11,-0.0558,-0.0288,0.0032,STRONG_DOWN,-24.45,-23.62,12.51,-29.15,47.2,31.15,1.0135,MED,EARLY,456.945,465.8368,497.665,0,-35.7888,WEAK,3.602

@@ -1,0 +1,11 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+80,23,MTA,Metalla Royalty & Str.,gold,royalties_financial_services,mid,7.38,65.42,-0.0146,0.0761,0.0199,FLAT,11.14,154.48,144.37,-33.04,55.2,55.62,1.0783,MED,-,6.9135,7.1558,6.863,1,153.3162,CONTENDER,43.5536
+100,1,GROY,Gold Royalty Corp,gold,royalties_financial_services,mid,3.72,59.81,0.0102,0.0161,-0.0785,FLAT,11.04,141.56,107.82,-39.54,54.0,50.46,0.5968,LOW,SHIFT,3.5665,3.6666,3.8189,0,151.4894,LAGGARD,40.0161
+116,6,ASA,ASA Gold & Precious Metals,gold,royalties_financial_services,mid,70.66,62.62,0.0137,0.0388,0.0705,STRONG_DOWN,50.53,145.06,293.63,-32.51,59.2,57.09,0.8563,LOW,-,66.5021,65.7298,55.0658,1,150.42,CONTENDER,37.5855
+124,-7,MAH.AX,Machahon Holdings,gold,royalties_financial_services,mid,0.785,79.44,-0.0139,-0.0724,0.2379,FLAT,62.58,196.23,260.22,-22.01,45.06,58.41,0.396,LOW,-,0.7903,0.7406,0.5786,1,151.3827,LEADER,36.6335
+187,35,TFPM,Triple Flag Precious Metals,gold,royalties_financial_services,large,35.33,30.84,0.0341,0.0054,0.0394,FLAT,18.96,77.7,119.57,-26.03,56.4,46.07,0.6663,LOW,-,33.6195,34.6992,32.1297,1,95.1249,LAGGARD,27.8357
+194,4,OR,Osisko Gold royalties_financial_services,gold,royalties_financial_services,large,39.61,24.3,-0.0243,0.0063,-0.0044,FLAT,22.67,71.08,149.33,-31.13,60.4,53.65,0.4142,LOW,-,38.9785,39.0995,36.9237,1,80.0243,LAGGARD,26.8481
+222,30,FNV,Franco-Nevada Corp,gold,royalties_financial_services,large,237.0,14.95,-0.0361,-0.064,0.0128,FLAT,21.84,50.58,91.18,-20.62,56.4,39.96,1.3782,MED,-,239.673,246.2268,218.9824,1,71.3843,LAGGARD,23.5902
+246,16,RGLD,Royal Gold Inc,gold,royalties_financial_services,large,245.35,13.08,-0.011,-0.0816,-0.0471,FLAT,33.34,46.22,98.09,-29.27,54.8,45.52,0.6194,LOW,-,245.207,251.9865,221.0206,1,55.6465,LAGGARD,21.4486
+268,-7,FISH.V,Sailfish Royalty Corp.,gold,royalties_financial_services,small,3.72,39.25,0.0012,0.0521,-0.1037,FLAT,13.41,87.03,208.23,-26.84,44.8,56.62,,LOW,-,3.625,3.6624,3.3031,1,68.8653,LAGGARD,18.65
+278,-1,VROY.V,Vizsla royalties_financial_services,gold,royalties_financial_services,small,3.15,16.82,0.0248,0.1986,-0.0529,FLAT,-25.88,57.5,146.09,-52.48,50.4,70.04,0.1753,LOW,-,3.0015,2.9448,3.6274,0,41.3764,WEAK,17.4075

@@ -1,0 +1,5 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+31,6,ZS,Zscaler,Technology,EDP Services,large,174.69,15.91,0.1899,0.2121,-0.1845,FLAT,-41.66,-30.84,-3.27,-64.89,50.4,68.35,1.9373,HIGH,SHIFT,144.518,142.7854,226.2506,0,-22.7372,WEAK,23.7682
+68,-14,REGN,Regeneron Pharmaceuticals,Health Care,Biotechnology,large,629.68,66.67,-0.1098,-0.0958,-0.0647,STRONG_DOWN,-8.98,6.13,-35.79,-22.39,48.4,33.88,4.1499,HIGH,EARLY,716.798,739.7526,690.9316,0,8.7601,LAGGARD,12.7049
+72,14,CTSH,Cognizant,Technology,EDP Services,large,51.395,13.64,0.0716,-0.2362,-0.4301,STRONG_UP,-28.56,-36.11,-23.96,-46.71,49.2,39.28,2.0953,HIGH,EARLY,52.2728,57.5403,69.2403,0,-45.2321,WEAK,11.8337
+77,5,DXCM,DexCom,Health Care,Medical/Dental Instruments,large,65.09,0.0,0.0907,0.0739,0.0344,STRONG_UP,12.11,-25.15,-50.2,-38.75,48.8,37.08,2.8823,HIGH,SHIFT,60.7225,63.172,68.0789,0,-33.0986,WEAK,10.7445

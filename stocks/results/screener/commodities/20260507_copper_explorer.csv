@@ -1,0 +1,13 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+15,5,FDY.TO,Faraday Copper,copper,explorer,mid,4.77,98.78,-0.01,0.047,0.7407,STRONG_DOWN,138.5,503.8,601.47,-33.95,50.0,93.22,0.5471,LOW,-,4.889,4.6462,2.7405,1,270.2196,LEADER,61.8477
+17,-8,ABRA.TO,"ticker
+ABRA.TO    AbraSilver Resources
+ABRA.TO    AbraSilver Resources
+ABRA.TO    AbraSilver Resources
+Name: name, dtype: object",copper,explorer,mid,17.3,97.56,0.0481,0.3196,0.5139,STRONG_DOWN,166.56,444.03,565.38,-43.5,54.8,97.66,0.5856,LOW,-,16.0825,14.3604,10.0325,1,249.156,LEADER,60.4409
+38,27,OM.TO,"ticker
+OM.TO    Osisko Metals
+OM.TO    Osisko Metals
+Name: name, dtype: object",copper,explorer,mid,1.61,91.46,0.0043,0.1866,0.573,STRONG_DOWN,222.0,265.91,705.0,-34.19,42.0,68.07,1.7641,HIGH,-,1.541,1.3658,0.8068,1,164.0691,LEADER,51.022
+136,0,MOON.V,Blue Moon Metals,copper,explorer,mid,9.63,85.37,-0.0595,-0.119,1.0815,FLAT,171.27,221.0,2307.5,-28.19,53.2,98.26,0.6841,LOW,-,10.4785,8.9086,5.3492,1,119.654,LEADER,32.8601
+341,-9,2362.HK,JInchuan Group Interntional,copper,explorer,large,0.64,8.54,-0.0293,-0.014,0.0959,STRONG_DOWN,0.0,0.0,-16.68,0.0,0.0,0.0,,LOW,EARLY,0.64,0.64,0.64,0,,WEAK,-1.1963

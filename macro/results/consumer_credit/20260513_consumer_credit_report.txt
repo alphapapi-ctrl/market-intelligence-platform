@@ -1,0 +1,35 @@
+══════════════════════════════════════════════════════════════════════
+  CONSUMER CREDIT HEALTH REPORT — 13 May 2026
+══════════════════════════════════════════════════════════════════════
+
+  CONSUMER CREDIT
+  ──────────────────────────────────────────────────────────────────
+  ! Credit Card Delinquency Rate %               2.94  ▼ -0.040 qoq  WARN
+  ✓ Credit Card Charge-Off Rate %                2.81  ▼ -0.080 qoq  OK
+  ✓ Auto Loan Delinquency Rate %                 1.48  ▼ -0.010 qoq  OK
+  ! Mortgage Delinquency Rate %                  1.78  → +0.000 qoq  WARN
+  ✓ Total Consumer Credit $B                  5140.54  ▲ +24.860 qoq  OK
+
+  CORPORATE CREDIT
+  ──────────────────────────────────────────────────────────────────
+  ✓ HY Spread %                                  2.79  ▼ -0.020 qoq  OK
+  ✓ IG Spread %                                  0.78  ▼ -0.010 qoq  OK
+
+  SOVEREIGN CREDIT
+  ──────────────────────────────────────────────────────────────────
+  ! Federal Debt % GDP                         122.57  ▲ +1.539 qoq  WARN
+  ✓ Federal Deficit % GDP                       -5.77  ▲ +0.427 qoq  OK
+
+  PRIVATE EQUITY & BDC
+  ──────────────────────────────────────────────────────────────────
+  BX     Blackstone                     $  122.76  1m: -1.9%
+  KKR    KKR & Co                       $   99.47  1m: -1.0%
+  APO    Apollo Global                  $  131.93  1m: +14.9%
+  CG     Carlyle Group                  $   50.04  1m: -2.2%
+  PSP    Listed PE ETF                  $   60.95  1m: +0.7%
+  BIZD   BDC ETF                        $   12.67  1m: -1.4%
+  ARCC   Ares Capital (BDC)             $   18.77  1m: +0.8%
+  MAIN   Main Street Capital (BDC)      $   52.92  1m: -5.7%
+  BKLN   Leveraged Loan ETF             $   20.64  1m: +1.0%
+
+══════════════════════════════════════════════════════════════════════

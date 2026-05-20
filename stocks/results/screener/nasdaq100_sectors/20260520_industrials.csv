@@ -1,0 +1,12 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+27,-3,CSX,CSX Corporation,Industrials,Railroads,large,46.08,100.0,-0.0081,0.0988,0.1699,STRONG_DOWN,36.44,49.8,42.07,-11.89,56.0,26.15,0.5845,LOW,-,45.1415,42.5784,37.7087,1,106.6402,LEADER,25.9589
+43,-7,FER,Ferrovial,Industrials,"Military, Government, Technical",large,64.99,90.0,-0.0794,-0.0401,-0.0714,FLAT,4.24,26.83,69.17,-17.13,50.0,31.07,1.0061,MED,-,68.0763,66.8244,63.5005,1,43.1796,LEADER,18.8952
+49,0,ODFL,Old Dominion Freight Line,Industrials,Trucking Freight/Courier Services,large,204.46,80.0,0.0413,-0.0632,0.1098,FLAT,57.94,21.4,15.69,-26.06,52.4,42.45,0.8916,LOW,-,205.192,200.2006,167.8146,1,26.4122,LEADER,17.0244
+59,-2,AXON,Axon Enterprise,Industrials,Ordnance & Accessories,large,392.34,0.0,-0.0031,-0.0001,-0.0991,FLAT,-27.78,-47.18,34.35,-60.28,51.6,68.98,0.6625,LOW,EARLY,396.684,421.649,580.4387,0,-35.2907,WEAK,15.193
+67,3,FAST,Fastenal,Industrials,Construction & Materials,large,43.57,70.0,-0.0505,-0.0158,-0.032,FLAT,10.94,8.6,36.42,-21.9,52.8,27.89,0.5862,LOW,EARLY,44.2577,45.0036,44.3061,0,16.2812,LAGGARD,12.5808
+78,0,HON,Honeywell,Industrials,Aerospace,large,217.15,60.0,-0.0442,0.0189,-0.0772,FLAT,11.91,4.61,17.47,-16.03,47.2,23.75,1.3323,MED,-,213.7652,222.5475,209.1405,1,9.1537,CONTENDER,10.4332
+81,-1,VRSK,Verisk Analytics,Industrials,Diversified Commercial Services,large,170.71,10.0,0.0177,-0.0368,-0.0578,STRONG_UP,-21.73,-45.05,-31.44,-50.81,45.6,39.21,0.94,LOW,EARLY,173.679,181.9135,216.7074,0,-52.3953,WEAK,9.7387
+82,2,PYPL,PayPal,Industrials,Diversified Commercial Services,large,43.83,20.0,-0.0769,-0.1128,0.1142,FLAT,-28.8,-39.31,-31.97,-49.92,48.0,36.78,0.7201,LOW,EARLY,47.5262,46.6671,57.399,0,-51.3066,WEAK,8.9365
+92,-3,ADP,Automatic Data Processing,Industrials,Diversified Commercial Services,large,220.44,40.0,0.0171,0.1229,0.0898,FLAT,-10.84,-29.99,-8.32,-40.78,48.0,32.11,0.9596,LOW,SHIFT,209.5455,206.0389,248.5371,0,-44.8349,WEAK,7.2045
+96,-1,PAYX,Paychex,Industrials,Diversified Commercial Services,large,94.48,30.0,0.0112,0.0578,0.0971,STRONG_DOWN,-12.48,-37.61,-19.42,-44.95,45.6,30.98,0.8246,LOW,SHIFT,91.4476,90.8903,108.3981,0,-55.3634,WEAK,5.6816
+99,0,CTAS,Cintas,Industrials,Garments & Clothing,large,172.2,50.0,0.0162,0.0159,-0.1163,STRONG_UP,-5.82,-22.0,0.45,-27.68,48.0,23.92,0.8401,LOW,PROGRESS,170.1987,175.2848,190.1643,0,-44.1511,LAGGARD,4.1704

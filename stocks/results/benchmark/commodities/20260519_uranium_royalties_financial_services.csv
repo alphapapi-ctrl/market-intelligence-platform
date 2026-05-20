@@ -1,0 +1,2 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+184,-27,UROY,Uranium Royalty Corp.,uranium,royalties_financial_services,small,3.6,1.0497,0.957,1.1387,0.942,FLAT,-0.55,92.51,26.76,-39.74,50.0,61.23,1.2145,MED,-,3.8705,3.7172,3.8018,0,75.5458,WEAK,24.9272

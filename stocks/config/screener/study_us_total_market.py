@@ -1,5 +1,5 @@
 config = {
-    'name'        : 'us_total_market',
+    'name'        : 'us_sp500',
     'csv_file'    : 'watchlist/us_all_watchlist.csv',
-    'results_dir' : 'results/screener/us_total_market/',
+    'results_dir' : 'results/screener/us_sp500/',
 }

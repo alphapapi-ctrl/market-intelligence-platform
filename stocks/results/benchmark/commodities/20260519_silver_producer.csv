@@ -1,0 +1,50 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+8,-1,SCZ.V,Santacruz Silver Mining,silver,producer,mid,12.02,2.2225,1.0579,1.0454,1.0938,FLAT,54.9,409.32,567.78,-57.28,50.2,88.78,1.1213,MED,-,11.8905,11.771,11.1888,1,231.4482,TREND+LEAD,67.6129
+19,2,HL,Hecla Mining Co,silver,producer,large,17.26,1.5274,0.9511,0.98,0.8696,FLAT,18.28,250.03,179.36,-46.39,52.8,64.89,0.8416,LOW,-,18.5195,18.8776,16.7652,1,203.4428,TREND+LEAD,56.4954
+25,-3,DSV.TO,Discovery Silver Corp,silver,producer,large,9.29,1.4324,1.0457,0.9337,1.0791,FLAT,39.7,228.27,649.19,-36.96,53.41,72.1,1.0509,MED,-,9.3305,9.2622,7.5075,1,169.096,TREND+LEAD,52.0504
+29,-10,SVM,Silvercorp Metals,silver,producer,mid,13.16,1.5999,0.9821,1.1611,1.3442,STRONG_DOWN,94.39,266.66,225.13,-34.46,57.2,69.59,0.5221,LOW,-,13.0305,11.8452,8.7982,1,219.1801,TREND+LEAD,51.1314
+34,9,AG,First Majestic Silver,silver,producer,large,19.73,1.5161,0.9238,1.0063,0.9686,FLAT,64.32,247.45,148.22,-42.92,52.4,77.58,0.6085,LOW,-,20.888,21.2506,16.9658,1,167.1346,TREND+LEAD,48.6978
+41,29,PAAS,Pan American Silver,silver,producer,large,55.19,1.0462,0.9809,1.0319,1.0581,STRONG_DOWN,43.69,139.75,150.99,-31.9,55.6,58.75,1.7764,HIGH,-,56.188,55.6368,47.3332,1,132.2598,TREND+LEAD,45.4597
+44,10,MUX,"ticker
+MUX    McEwen Mining Inc
+MUX    McEwen Mining Inc
+Name: name, dtype: object",silver,producer,mid,22.04,1.3211,0.955,0.938,1.0032,FLAT,27.77,202.75,84.74,-36.28,57.6,65.69,0.6634,LOW,-,23.2565,22.5772,19.6562,1,177.7781,TREND+LEAD,44.8439
+60,12,GSVR.V,Guanajuato Silver Co Ltd,silver,producer,small,0.61,1.5658,1.0169,0.943,1.1666,FLAT,56.41,258.82,117.86,-53.85,46.18,104.38,1.7762,HIGH,-,0.6465,0.6226,0.5509,1,114.5092,TREND+LEAD,40.8858
+66,-5,SKE,"ticker
+SKE    Skeena Resources Ltd
+SKE    Skeena Resources Ltd
+Name: name, dtype: object",silver,producer,mid,29.88,1.0929,1.0053,0.9617,1.0158,FLAT,70.35,150.46,435.48,-31.09,56.8,52.85,0.7938,LOW,-,31.265,30.891,24.4035,1,161.7064,TREND+LEAD,40.3543
+70,-23,KCN.AX,"ticker
+KCN.AX    Kingsgate Consolidated Ord Shs
+KCN.AX    Kingsgate Consolidated Ord Shs
+Name: name, dtype: object",silver,producer,mid,5.87,1.3925,1.0051,1.1224,1.1413,STRONG_DOWN,28.61,219.12,217.42,-43.14,55.73,84.01,0.6077,LOW,-,6.363,5.7513,4.7851,1,145.3571,TREND+LEAD,40.0025
+78,32,SVRS.V,Silver Storm Mining,silver,producer,small,0.59,1.6091,1.1943,1.1361,1.1284,STRONG_UP,126.92,268.75,227.78,-50.0,39.36,104.4,3.3272,HIGH,-,0.513,0.4998,0.4073,1,101.3218,TREND+LEAD,38.2063
+80,7,EXK,Endeavour Silver Corp,silver,producer,mid,9.49,1.2436,0.9387,1.0323,0.9028,FLAT,23.09,184.98,139.04,-41.64,53.6,75.42,0.5464,LOW,-,9.789,9.7228,9.0629,1,131.4664,TREND+LEAD,37.8551
+97,-1,CDE,Coeur Mining Inc,silver,producer,large,17.5,1.025,0.9835,0.971,0.8593,STRONG_UP,18.16,134.9,193.13,-40.44,52.4,73.76,0.7298,LOW,EARLY,18.498,19.127,18.2408,0,95.8341,WEAK,34.5658
+108,-29,ASM,"ticker
+ASM    Avino Silver & Gold Mines
+ASM    Avino Silver & Gold Mines
+Name: name, dtype: object",silver,producer,mid,6.94,1.0515,0.987,1.0022,0.835,FLAT,47.97,140.97,554.72,-52.4,50.4,76.47,0.7678,LOW,-,6.942,6.8236,6.1995,1,92.9122,TREND+LEAD,33.6333
+112,-11,SSRM,"ticker
+SSRM    SSR Mining Inc
+SSRM    SSR Mining Inc
+Name: name, dtype: object",silver,producer,mid,30.72,1.2355,0.9743,1.0563,1.2816,STRONG_DOWN,44.43,183.13,424.23,-30.88,56.8,81.59,0.5584,LOW,-,31.2365,30.0972,24.4695,1,127.491,TREND+LEAD,33.3565
+115,-66,MKR.AX,"ticker
+MKR.AX    Manuka Resources Ord Shs
+MKR.AX    Manuka Resources Ord Shs
+Name: name, dtype: object",silver,producer,small,0.11,1.5484,1.1335,1.2073,1.0168,FLAT,61.76,254.84,103.7,-60.45,44.27,106.03,0.5527,LOW,-,0.0991,0.1029,0.0896,1,106.4011,TREND+LEAD,33.149
+116,11,USL.AX,Unico Silver,silver,producer,small,0.695,1.3785,1.01,1.0449,0.9697,FLAT,2.96,215.91,275.68,-50.88,45.06,99.57,1.1615,MED,-,0.6705,0.6857,0.6766,1,97.7088,TREND+LEAD,33.032
+127,33,SLVR.V,Silver Tiger Metals,silver,producer,small,0.83,1.2489,1.0226,1.0011,1.023,FLAT,16.9,186.21,196.43,-50.38,48.59,80.56,0.7624,LOW,-,0.8515,0.8346,0.8173,1,112.3112,TREND+LEAD,32.1921
+193,-13,SS1.AX,Sun Silver,silver,producer,small,1.27,0.916,0.9662,0.9418,0.787,STRONG_UP,10.92,109.92,77.62,-53.28,48.22,91.28,1.2881,MED,-,1.3455,1.4082,1.3856,0,58.0655,WEAK,24.191
+208,-17,VZLA,Vizsla Silver Corp,silver,producer,mid,3.42,0.6141,1.0069,1.0664,1.0116,FLAT,-25.65,40.74,,-56.27,54.4,57.64,0.5835,LOW,EARLY,3.4885,3.439,4.2273,0,38.4507,WEAK,22.7503
+212,-40,FSM,"ticker
+FSM    Fortuna Mining
+FSM    Fortuna Mining
+Name: name, dtype: object",silver,producer,mid,9.49,0.7475,0.9942,0.978,1.0083,FLAT,13.65,71.3,60.3,-37.26,53.2,64.47,0.6701,LOW,-,10.0115,10.1248,9.4733,1,58.8357,TREND_ONLY,22.2861
+222,-45,ITRG,"ticker
+ITRG    Integra Resources
+ITRG    Integra Resources
+Name: name, dtype: object",silver,producer,mid,2.52,0.6545,0.9918,0.8753,0.7808,STRONG_UP,-14.29,50.0,175.41,-45.67,49.2,59.62,0.8231,LOW,EARLY,2.7985,2.9184,3.1591,0,41.2613,WEAK,21.2807
+265,16,IPT.V,Impact Silver,silver,producer,small,0.3,0.7273,1.0627,1.2664,0.9788,FLAT,11.11,66.67,-3.23,-60.71,38.55,86.63,0.7816,LOW,-,0.269,0.2654,0.3278,0,29.6664,WEAK,16.8547
+294,-6,MMA.AX,Maronan Metals ltd,silver,producer,small,0.315,0.5976,1.0202,0.9878,0.7514,STRONG_UP,-4.55,36.96,0.0,-55.64,38.74,92.37,0.0,LOW,-,0.3275,0.3446,0.3689,0,15.4996,WEAK,14.1868
+311,-1,WAM.V,Western Alaska Minerals,silver,producer,small,0.82,0.4647,1.1766,1.118,0.9887,STRONG_UP,-5.75,6.49,24.24,-52.11,45.38,91.46,0.8592,LOW,-,0.756,0.8262,1.0069,0,3.2219,WEAK,11.2915

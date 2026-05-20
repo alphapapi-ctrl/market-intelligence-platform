@@ -1,0 +1,16 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+55,-3,CDA.AX,Codan Limited,Consumer durables,Tools & hardware,mid,43.92,2.4915,1.2096,1.3524,1.1742,UP,21.85,174.46,326.49,-26.32,54.94,53.19,0.7679,LOW,-,36.4055,35.2579,31.8558,1,180.2022,TREND+LEAD,42.0153
+105,13,AMS.AX,Atomos Ltd.,Consumer durables,Electronics/Appliances,small,0.023,4.1757,1.0019,1.5118,0.8603,UP,4.55,360.0,-45.88,-66.67,29.25,133.33,0.4827,LOW,-,0.0231,0.022,0.02,1,78.977,TREND+LEAD,29.1257
+378,18,AUA.AX,Audeara Ltd.,Consumer durables,Electronics/Appliances,small,0.031,0.938,0.7576,0.5011,0.3865,STRONG_UP,-3.13,3.33,-26.19,-72.73,23.32,99.21,2.6872,HIGH,-,0.0513,0.0621,0.0455,0,0.7835,WEAK,17.5442
+381,102,VMT.AX,Vmoto Limited,Consumer durables,Motor vehicles,small,0.14,1.8968,1.2752,1.7927,2.0492,DOWN,100.0,108.96,21.74,-48.7,32.81,146.53,4.2153,HIGH,-,0.1057,0.0826,0.0738,1,24.3965,TREND+LEAD,17.4715
+824,23,KMD.AX,KMD Brands Limited,Consumer durables,Recreational products,small,0.051,0.1543,1.0019,0.7184,0.2146,UP,-79.6,-83.0,-88.67,-84.69,26.88,98.62,0.7184,LOW,-,0.0544,0.1209,0.2074,0,-22.6226,WEAK,11.5653
+1102,71,HIQ.AX,HitIQ Limited,Consumer durables,Recreational products,small,0.012,0.4357,0.9619,0.9101,0.6733,UP,-20.0,-52.0,-36.84,-60.0,22.13,117.4,0.2905,LOW,-,0.0131,0.0143,0.0184,0,-9.802,WEAK,9.4976
+1126,111,SHM.AX,Shriro Holdings Ltd.,Consumer durables,Home furnishings,small,0.775,1.0907,1.0019,0.9982,1.0033,UP,3.89,20.15,19.78,-13.89,33.6,23.71,0.0432,LOW,-,0.776,0.7662,0.725,1,28.5583,TREND+LEAD,9.3656
+1133,-112,ATP.AX,Atlas Pearls Ltd,Consumer durables,Other consumer specialties,small,0.105,0.7335,1.0019,0.986,0.5438,UP,-43.24,-19.2,15.27,-54.29,33.2,103.31,0.3754,LOW,-,0.1029,0.117,0.1654,0,-6.1698,WEAK,9.3413
+1207,3,BRG.AX,Breville Group Limited,Consumer durables,Electronics/Appliances,mid,29.5,0.944,0.9628,1.0821,0.9301,DOWN,0.01,3.99,16.31,-28.97,49.01,37.89,0.9238,LOW,SHIFT,29.197,28.7419,30.3376,0,5.1626,WEAK,8.7566
+1408,-72,AMA.AX,AMA Group Limited,Consumer durables,Automotive aftermarket,small,0.55,0.6657,0.9501,1.1298,0.7557,DOWN,-40.22,-26.67,13.89,-56.82,37.55,58.73,0.3343,LOW,-,0.5365,0.5794,0.7983,0,-17.0498,WEAK,6.9506
+1537,-19,AGI.AX,Ainsworth Game Technology Limited,Consumer durables,Recreational products,small,1.1,1.0036,1.0253,1.0738,1.0286,DOWN,7.84,10.55,-5.98,-20.16,33.2,59.92,0.0,LOW,-,1.069,1.0783,1.0353,1,5.847,TREND+LEAD,5.468
+1607,-131,TWD.AX,Tamawood Limited,Consumer durables,Homebuilding,small,2.91,0.9266,1.0159,1.0139,1.0805,DOWN,3.37,2.08,8.56,-20.21,32.02,29.92,0.0,LOW,-,2.8538,2.8286,2.7305,1,2.225,TREND_ONLY,4.334
+1622,15,FWD.AX,Fleetwood Limited,Consumer durables,Homebuilding,small,1.66,0.5923,1.0142,0.9772,0.6416,UP,-40.99,-34.75,18.01,-47.08,45.45,55.11,0.3161,LOW,-,1.681,1.8043,2.4284,0,-28.6593,WEAK,4.0497
+1640,70,GWA.AX,GWA Group Limited,Consumer durables,Home furnishings,small,2.07,0.8501,1.0319,0.9766,0.8109,UP,-13.53,-6.35,-8.18,-23.57,42.69,27.84,1.1804,MED,-,2.061,2.172,2.3732,0,-9.7434,WEAK,3.6668
+1661,34,AOV.AX,Amotiv Limited,Consumer durables,Motor vehicles,small,6.38,0.7851,0.9957,0.9292,0.7833,UP,-26.7,-13.51,-35.85,-35.51,46.25,26.74,1.1764,MED,-,6.689,6.8516,8.1944,0,-23.3671,WEAK,3.337

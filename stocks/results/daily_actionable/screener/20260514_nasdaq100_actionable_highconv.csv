@@ -1,0 +1,9 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+14,0,INSM,Insmed Incorporated,Health Care,Biotechnology,large,117.99,100.0,0.1312,-0.1477,-0.096,FLAT,-39.08,79.84,363.61,-52.06,55.2,69.88,2.3981,HIGH,EARLY,131.543,142.0446,155.9787,0,63.064,LAGGARD,39.939
+35,8,ZS,Zscaler,Technology,EDP Services,large,152.43,15.91,-0.032,-0.0002,-0.3769,FLAT,-53.99,-37.64,-13.79,-64.89,50.4,66.21,1.5533,HIGH,SHIFT,140.2365,142.6412,228.1202,0,-28.6549,WEAK,22.4363
+46,1,SHOP,Shopify,Technology,Computer Software,large,95.4,25.0,-0.1759,-0.4159,-0.4068,FLAT,-39.98,-14.4,64.4,-46.71,48.8,64.92,1.8225,HIGH,EARLY,119.1635,120.5192,141.294,0,-10.8252,WEAK,18.6443
+47,3,CHTR,Charter Communications,Telecommunications,Cable & Other Pay Television Services,large,143.06,0.0,-0.087,-0.3511,-0.2897,FLAT,-31.62,-65.43,-48.56,-66.52,47.2,65.71,1.697,HIGH,EARLY,185.0435,206.038,227.4734,0,-47.0009,WEAK,18.6099
+60,0,CEG,Constellation Energy,Utilities,Electric Utilities,large,274.89,0.0,-0.1104,-0.0263,-0.0224,STRONG_DOWN,-21.64,-4.12,27.76,-38.77,48.8,51.09,2.0493,HIGH,EARLY,302.005,299.6477,325.9649,0,-3.9336,WEAK,15.0621
+78,12,PDD,PDD Holdings,Technology,EDP Services,large,99.6,22.73,-0.0485,-0.1879,-0.2751,STRONG_UP,-27.36,-16.23,-28.19,-30.7,49.6,33.31,1.5016,HIGH,PROGRESS,99.592,100.4688,114.3497,0,-24.1598,WEAK,9.7171
+83,-4,MELI,Mercado Libre,Consumer Discretionary,Catalog/Specialty Distribution,large,1562.0,6.25,-0.1602,-0.1518,-0.2394,FLAT,-25.6,-39.08,-7.24,-40.42,48.8,46.2,2.2148,HIGH,EARLY,1781.059,1746.2128,2065.9416,0,-41.2788,WEAK,8.6558
+90,-3,DXCM,DexCom,Health Care,Medical/Dental Instruments,large,58.57,0.0,-0.0474,0.0288,-0.0032,FLAT,0.76,-32.3,-53.5,-38.75,48.4,37.05,1.5122,HIGH,EARLY,60.987,63.715,68.4521,0,-42.201,WEAK,7.606

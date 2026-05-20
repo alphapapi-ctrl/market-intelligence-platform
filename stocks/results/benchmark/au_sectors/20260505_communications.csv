@@ -1,0 +1,11 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+306,40,TLS.AX,Telstra Group Limited,Communications,Wireless telecommunications,large,5.36,1.1173,1.0191,0.9751,1.1296,UP,12.08,23.09,62.6,-7.45,47.04,13.51,0.4282,LOW,-,5.354,5.2778,4.9032,1,80.379,TREND+LEAD,19.0067
+361,-75,FRX.AX,FlexiRoam Ltd,Communications,Wireless telecommunications,small,0.02,3.0259,0.9542,0.8574,0.8782,UP,100.0,233.33,-25.93,-48.0,17.39,107.78,0.379,LOW,-,0.0198,0.0199,0.0149,1,37.6477,TREND+LEAD,17.7631
+817,11,CNU.AX,Chorus Limited,Communications,Major telecommunications,mid,8.27,1.0527,1.0281,1.0427,1.031,UP,2.95,15.96,40.62,-12.34,50.2,22.53,0.8238,LOW,-,7.98,7.8527,7.9312,1,35.5619,TREND+LEAD,11.5922
+835,-24,ABB.AX,Aussie Broadband Ltd.,Communications,Specialty telecommunications,small,5.23,1.1662,0.9925,1.0699,1.1928,DOWN,-11.67,28.47,38.35,-28.57,43.08,40.82,0.3868,LOW,-,5.238,5.0279,5.0764,1,30.0456,TREND+LEAD,11.491
+944,0,TUA.AX,Tuas Ltd.,Communications,Wireless telecommunications,mid,6.0,0.9691,1.0312,1.0217,0.8475,UP,-14.65,6.76,50.0,-30.89,39.92,33.04,0.8739,LOW,PROGRESS,5.9935,6.102,6.6897,0,8.1695,WEAK,10.6444
+1097,82,HFY.AX,Hubify Ltd.,Communications,Specialty telecommunications,small,0.014,1.4121,0.9352,0.812,1.571,UP,75.0,55.56,27.27,-41.67,12.65,351.54,0.0163,LOW,-,0.0159,0.0155,0.0101,1,1.9991,TREND+LEAD,9.5243
+1146,239,MAQ.AX,Macquarie Technology Group Limited,Communications,Specialty telecommunications,small,69.73,1.0425,0.9935,1.1332,1.0315,UP,5.33,14.84,-18.44,-19.22,49.8,44.52,1.1092,MED,-,69.047,65.5522,65.8329,1,16.5984,TREND+LEAD,9.221
+1543,40,SPK.AX,Spark New Zealand Limited,Communications,Major telecommunications,mid,1.7,0.8666,1.0019,0.9689,0.9174,UP,-17.87,-4.53,-49.96,-24.36,42.69,17.56,0.6702,LOW,EARLY,1.74,1.7749,1.934,0,-11.0238,WEAK,5.4108
+1585,2,ITS.AX,Infotrust Ltd,Communications,Major telecommunications,small,0.44,0.7329,0.9797,0.9641,0.7935,UP,,-19.27,-19.27,-31.67,35.0,73.01,0.7041,LOW,-,0.4522,0.4567,,0,-9.2359,WEAK,4.7338
+1682,-20,TPG.AX,TPG Telecom Limited,Communications,Wireless telecommunications,mid,4.21,0.7834,0.9856,1.0174,1.1009,STRONG_DOWN,-22.14,-13.7,2.18,-35.15,51.38,19.83,0.2752,LOW,-,4.244,4.0727,4.4089,0,-35.5008,WEAK,2.6135

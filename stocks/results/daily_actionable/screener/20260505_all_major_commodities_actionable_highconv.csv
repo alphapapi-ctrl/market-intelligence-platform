@@ -1,0 +1,4 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+145,53,MARI.TO,Marimaca Copper,copper,producer,mid,7.68,0.7921,0.9639,0.897,0.7269,STRONG_UP,-27.82,62.03,98.96,-38.9,47.2,47.91,1.6553,HIGH,EARLY,8.495,8.8668,10.3865,0,61.1061,WEAK,28.1725
+233,9,LCID,LUCID GROUP INC,lithium,producer,mid,6.69,0.1201,1.0959,0.6018,0.5262,STRONG_UP,-62.31,-71.65,-78.07,-81.6,40.4,74.42,1.6519,HIGH,EARLY,7.335,8.9344,15.013,0,-38.8976,WEAK,19.5997
+239,41,STK.AX,Strickland Metals,gold,explorer,mid,0.145,0.8619,0.8565,0.7748,0.8752,FLAT,-23.68,52.63,45.0,-40.82,36.76,87.37,2.3903,HIGH,EARLY,0.199,0.2063,0.1858,0,22.1442,WEAK,18.9783

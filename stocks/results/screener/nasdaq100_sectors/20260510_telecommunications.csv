@@ -1,0 +1,5 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+30,0,CSCO,Cisco,Telecommunications,Computer Communications Equipment,large,96.57,100.0,0.1042,0.2651,0.306,STRONG_DOWN,37.41,60.2,111.73,-13.57,55.42,36.93,1.0921,MED,-,88.911,83.0153,75.0273,1,90.3346,LEADER,26.2899
+53,0,CHTR,Charter Communications,Telecommunications,Cable & Other Pay Television Services,large,154.86,0.0,-0.0593,-0.2817,-0.3343,STRONG_UP,-28.92,-61.53,-43.8,-63.75,47.79,66.29,1.3523,MED,EARLY,196.213,211.1994,230.2197,0,-44.3565,WEAK,17.3605
+91,0,CMCSA,Comcast,Telecommunications,Cable & Other Pay Television Services,large,25.4,33.33,-0.0576,-0.08,-0.1714,STRONG_UP,1.57,-18.52,-25.62,-25.72,48.59,38.34,1.1586,MED,EARLY,27.9285,28.7254,28.2878,0,-23.4717,WEAK,7.1721
+97,0,TMUS,T-Mobile US,Telecommunications,Telecommunications Service Providers,large,193.63,66.67,0.0576,0.08,0.1714,STRONG_DOWN,-2.73,-18.05,21.63,-28.51,49.8,29.77,0.6247,LOW,PROGRESS,193.1435,203.6238,214.2423,0,-30.1972,LAGGARD,5.5114

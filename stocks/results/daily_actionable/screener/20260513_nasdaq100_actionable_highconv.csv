@@ -1,0 +1,4 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+14,4,INSM,Insmed Incorporated,Health Care,Biotechnology,large,116.0,100.0,-0.1571,-0.2013,-0.1156,FLAT,-39.56,76.53,349.09,-52.06,54.8,69.76,3.0483,HIGH,EARLY,132.9805,142.6248,155.8975,0,60.1207,LAGGARD,39.2725
+45,15,TRI,Thomson Reuters,Technology,Computer Software,large,87.265,4.55,-0.0465,-0.1765,-0.2401,STRONG_UP,-34.87,-51.75,-46.21,-61.67,44.4,52.05,1.5856,HIGH,EARLY,92.5503,93.6417,129.7653,0,-44.1459,WEAK,18.3335
+79,2,MELI,Mercado Libre,Consumer Discretionary,Catalog/Specialty Distribution,large,1578.78,6.25,-0.1375,-0.1414,-0.2319,STRONG_UP,-24.53,-37.23,-5.88,-40.42,49.2,46.18,2.0176,HIGH,EARLY,1796.565,1749.253,2069.9022,0,-39.663,WEAK,10.1238

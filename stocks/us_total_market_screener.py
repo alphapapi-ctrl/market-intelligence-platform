@@ -311,12 +311,12 @@ def save_results(df, results_dir, study_name):
          (df['regime_label'] == 'LEADER'))
     ].copy()
 
-    actionable_file = f"{actionable_dir}{today}_us_total_market_actionable.csv"
+    actionable_file = f"{actionable_dir}{today}_{study_name}_actionable.csv"
     actionable_df.to_csv(actionable_file)
     print(f"Actionable saved to {actionable_file}")
 
     tv_tickers = ','.join(actionable_df['ticker'].tolist())
-    tv_file    = f"{actionable_dir}{today}_us_total_market_actionable_tvimport.txt"
+    tv_file    = f"{actionable_dir}{today}_{study_name}_actionable_tvimport.txt"
     with open(tv_file, 'w') as f:
         f.write(tv_tickers)
     print(f"TradingView import saved to {tv_file}")

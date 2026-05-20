@@ -1,15 +1,15 @@
 {
-  "date": "20260502",
+  "date": "20260520",
   "alerts": [
     {
       "type": "WARN",
       "key": "cc_delinquency",
-      "message": "Credit Card Delinquency Rate %: 2.94 \u25bc -0.040 qoq"
+      "message": "Credit Card Delinquency Rate %: 2.92 \u25bc -0.020 qoq"
     },
     {
       "type": "WARN",
       "key": "mortgage_delinquency",
-      "message": "Mortgage Delinquency Rate %: 1.78 \u25bc +0.000 qoq"
+      "message": "Mortgage Delinquency Rate %: 1.89 \u25b2 +0.100 qoq"
     },
     {
       "type": "WARN",

@@ -1,0 +1,15 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+8,23,APM.TO,Andean Precious Metals,gold,producer,mid,7.66,2.1803,1.2262,1.1988,1.0643,STRONG_UP,9.59,314.05,811.9,-51.34,56.0,76.02,2.481,HIGH,SHIFT,6.7815,7.0438,7.7163,0,231.3474,WEAK,72.0365
+167,6,ARTG.V,Artemis Gold Inc,gold,producer,large,33.15,0.8702,1.0878,0.9194,1.0288,FLAT,-6.86,65.25,229.85,-30.26,52.4,52.59,7.9686,HIGH,EARLY,35.75,37.14,35.8994,0,65.0185,WEAK,28.482
+170,14,TFPM,Triple Flag Precious Metals,gold,royalties_financial_services,large,31.98,0.85,1.006,1.0103,1.0333,STRONG_DOWN,3.84,61.42,94.59,-26.03,56.4,44.94,1.6396,HIGH,EARLY,33.3385,34.412,32.2895,0,77.0806,WEAK,28.2016
+179,-15,HSTR.V,"ticker
+HSTR.V    Heliostar Metals Ord Shs
+HSTR.V    Heliostar Metals Ord Shs
+Name: name, dtype: object",gold,producer,mid,2.08,0.9204,1.0329,0.9085,0.9398,FLAT,7.22,74.79,670.37,-44.21,48.4,69.09,7.712,HIGH,EARLY,2.2705,2.332,2.2306,0,52.393,WEAK,26.9772
+183,0,1818.HK,Zhaojin Mining,gold,producer,large,24.02,0.7125,0.9358,0.8443,0.7963,STRONG_UP,-18.52,35.3,71.34,-41.07,50.81,57.84,2.6832,HIGH,EARLY,28.876,30.5696,29.9096,0,31.0104,WEAK,26.7073
+236,30,AMMN.JK,"ticker
+AMMN.JK    Amman Mineral Internasional
+AMMN.JK    Amman Mineral Internasional
+Name: name, dtype: object",copper,producer,large,3700.0,0.2436,0.841,0.6785,0.5494,STRONG_UP,-46.76,-47.33,-64.25,-57.95,45.57,78.12,3.5858,HIGH,EARLY,5017.5,5421.2,6927.925,0,-27.6097,WEAK,20.8169
+264,16,STK.AX,Strickland Metals,gold,explorer,mid,0.135,0.6181,1.0056,0.7385,0.6886,STRONG_UP,-28.95,17.39,40.63,-44.9,35.18,76.38,1.8445,HIGH,EARLY,0.1653,0.1901,0.1851,0,8.0103,WEAK,18.1428
+290,4,CYL.AX,Catalyst Metals,gold,producer,mid,5.93,0.4565,1.2316,1.0594,0.9014,STRONG_UP,-20.3,-13.3,581.61,-47.72,49.01,75.24,2.5319,HIGH,PROGRESS,5.788,6.2162,7.172,0,-8.6661,WEAK,15.4216

@@ -801,7 +801,7 @@ def render_zweig_section(history_df, prefix, label, show_sector=True):
         # Find all sector keys
         total_cols  = [c for c in history_df.columns if c.startswith(f'{prefix}_') and c.endswith('_total')]
         sector_keys = [c.replace(f'{prefix}_','').replace('_total','') for c in total_cols
-                       if 'nan' not in c and 'index' not in c]
+                       if c not in ('nan', 'index')]
 
         sector_rows = []
         for sec_key in sector_keys:
@@ -2190,7 +2190,6 @@ elif page == "Seasonality":
                         _avg_doy.append(_d)
                         _avg_vals.append(sum(_pts) / len(_pts))
 
-                _fig_sea = go.Figure()
                 _palette = [
                     '#1f77b4','#ff7f0e','#2ca02c','#d62728','#9467bd',
                     '#8c564b','#e377c2','#7f7f7f','#bcbd22','#17becf',
@@ -2199,52 +2198,47 @@ elif page == "Seasonality":
                     '#3399ff','#ff9933','#33cc33','#ff3333','#cc66ff',
                     '#996633','#ff66cc','#999999','#cccc00','#33cccc',
                 ]
-                for _i, (_yr, (_doys, _vals)) in enumerate(_yearly.items()):
-                    _fig_sea.add_trace(go.Scatter(
+
+                # Assign colours by original year order so they stay consistent
+                _yr_color = {_yr: _palette[_i % len(_palette)]
+                             for _i, _yr in enumerate(_yearly.keys())}
+
+                # Sort years by annual return (final indexed value) descending
+                _legend_order = sorted(
+                    [(_yr, _vals[-1]) for _yr, (_doys, _vals) in _yearly.items()],
+                    key=lambda x: x[1], reverse=True
+                )
+                _top40 = {y for y, _ in _legend_order[:40]}
+
+                # Build figure directly in sorted order — best return at top of legend
+                _fig_sea2 = go.Figure()
+                for _yr, _annual in _legend_order:
+                    _doys, _vals = _yearly[_yr]
+                    _sign = '+' if _annual >= 0 else ''
+                    _fig_sea2.add_trace(go.Scatter(
                         x=_doys, y=_vals,
-                        mode='lines', name=str(_yr),
-                        line=dict(width=1, color=_palette[_i % len(_palette)]),
+                        mode='lines',
+                        name=f"{_yr} ({_sign}{_annual:.1f}%)",
+                        line=dict(width=1, color=_yr_color[_yr]),
                         opacity=0.45,
+                        showlegend=_yr in _top40,
                         hovertemplate=f"<b>{_yr}</b><br>Day %{{x}}: %{{y:.2f}}%<extra></extra>"
                     ))
-                # Average line — dotted, theme-aware
+
+                # Average line last — always shown, always on top visually
                 if _show_sea_avg:
                     _avg_col = '#111111' if _get_theme_mode() == 'light' else '#ffffff'
-                    _fig_sea.add_trace(go.Scatter(
+                    _fig_sea2.add_trace(go.Scatter(
                         x=_avg_doy, y=_avg_vals,
                         mode='lines', name='Average',
                         line=dict(width=2.5, color=_avg_col, dash='dot'),
                         hovertemplate="<b>Average</b><br>Day %{x}: %{y:.2f}%<extra></extra>"
                     ))
-                _fig_sea.add_hline(y=0, line_dash="dash", line_color="rgba(128,128,128,0.4)", line_width=1)
+                _fig_sea2.add_hline(y=0, line_dash="dash", line_color="rgba(128,128,128,0.4)", line_width=1)
 
                 # X-axis ticks at month starts (approx day of year)
                 _mo_days = [1, 32, 60, 91, 121, 152, 182, 213, 244, 274, 305, 335]
                 _mo_names = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
-                # Legend: sort by final value descending, cap at 40 entries
-                _legend_order = []
-                for _yr, (_doys, _vals) in _yearly.items():
-                    _legend_order.append((_yr, _vals[-1]))
-                _legend_order.sort(key=lambda x: x[1], reverse=True)
-                _top40 = {y for y, _ in _legend_order[:40]}
-
-                # Re-add traces with legend visibility controlled
-                _fig_sea2 = go.Figure()
-                for _tr in _fig_sea.data:
-                    try:
-                        _yr_int = int(_tr.name)
-                        _show = _yr_int in _top40
-                    except:
-                        _show = True  # Average line always shown
-                    _fig_sea2.add_trace(go.Scatter(
-                        x=list(_tr.x), y=list(_tr.y),
-                        mode=_tr.mode, name=_tr.name,
-                        line=dict(width=_tr.line.width, color=_tr.line.color,
-                                  dash=_tr.line.dash if _tr.line.dash else 'solid'),
-                        opacity=_tr.opacity if _tr.opacity is not None else 1.0,
-                        showlegend=_show,
-                        hovertemplate=_tr.hovertemplate,
-                    ))
                 _fig_sea2.update_layout(
                     plot_bgcolor =_theme['plot_bgcolor'],
                     paper_bgcolor=_theme['paper_bgcolor'],
@@ -2858,12 +2852,26 @@ elif page == "Seasonality":
                     '#996633','#ff66cc','#999999','#cccc00','#33cccc',
                 ]
 
-                for _i, (_yr, (_doys, _vals)) in enumerate(_stk_yearly.items()):
+                # Assign colours by original year order so they stay consistent
+                _stk_yr_color = {_yr: _palette[_i % len(_palette)]
+                                 for _i, _yr in enumerate(_stk_yearly.keys())}
+
+                # Sort years by annual return descending — best return at top of legend
+                _stk_legend_order = sorted(
+                    [(_yr, _ann_rets_stk[_yr]) for _yr in _stk_yearly if _yr in _ann_rets_stk],
+                    key=lambda x: x[1], reverse=True
+                )
+                _stk_top40 = {y for y, _ in _stk_legend_order[:40]}
+
+                for _yr, _annual in _stk_legend_order:
+                    _doys, _vals = _stk_yearly[_yr]
+                    _sign = '+' if _annual >= 0 else ''
                     _fig_stk.add_trace(go.Scatter(
                         x=_doys, y=_vals, mode='lines',
-                        name=str(_yr),
-                        line=dict(width=1, color=_palette[_i % len(_palette)]),
+                        name=f"{_yr} ({_sign}{_annual:.1f}%)",
+                        line=dict(width=1, color=_stk_yr_color[_yr]),
                         opacity=0.4,
+                        showlegend=_yr in _stk_top40,
                         hovertemplate=f"<b>{_stk_ticker} {_yr}</b><br>Day %{{x}}: %{{y:.2f}}%<extra></extra>"
                     ))
 
@@ -2929,7 +2937,198 @@ elif page == "Seasonality":
                 with _stk_plot:
                     st.plotly_chart(_fig_stk, width='stretch')
 
-                # ── Correlation stats ─────────────────────────────────────────
+                # ── Monthly returns heatmap ───────────────────────────────────
+                st.markdown("#### Monthly Returns (%)")
+                _MO_NAMES = ["Jan","Feb","Mar","Apr","May","Jun",
+                             "Jul","Aug","Sep","Oct","Nov","Dec","Yearly"]
+                _stk_mo_rows = []
+                for _yr in sorted(_ann_rets_stk.keys(), reverse=True):
+                    _yd2 = _stk_data[_stk_data.index.year == _yr]
+                    if len(_yd2) < 20: continue
+                    _row = {"Year": _yr}
+                    for _mi, _mn in enumerate(_MO_NAMES[:12], 1):
+                        _md = _yd2[_yd2.index.month == _mi]
+                        if len(_md) >= 2:
+                            _row[_mn] = round((_md.iloc[-1]/_md.iloc[0]-1)*100, 2)
+                        else:
+                            _row[_mn] = None
+                    _row["Yearly"] = _ann_rets_stk[_yr]
+                    _stk_mo_rows.append(_row)
+
+                _df_stk_disp = pd.DataFrame()
+                _df_stk_summ = pd.DataFrame()
+                if _stk_mo_rows:
+                    _df_stk_heat = pd.DataFrame(_stk_mo_rows)
+                    def _stk_heat_style(val, col):
+                        if col == "Year" or val is None: return ""
+                        try:
+                            v = float(val)
+                            if v > 0:
+                                intensity = min(int(abs(v)/9*180), 200)
+                                return f"background-color:rgba(45,198,83,{intensity/255:.2f});color:#0a3d1a"
+                            elif v < 0:
+                                intensity = min(int(abs(v)/9*180), 200)
+                                return f"background-color:rgba(230,57,70,{intensity/255:.2f});color:#3d0a0a"
+                        except: pass
+                        return ""
+                    _df_stk_disp = _df_stk_heat.copy()
+                    for _cn in _MO_NAMES:
+                        if _cn in _df_stk_disp.columns:
+                            _df_stk_disp[_cn] = _df_stk_disp[_cn].apply(
+                                lambda x: f"{x:.2f}%" if pd.notna(x) and x is not None else "")
+                    st.dataframe(
+                        _df_stk_disp.style.apply(
+                            lambda col: [_stk_heat_style(v, col.name)
+                                         for v in (pd.to_numeric(_df_stk_heat[col.name], errors="coerce")
+                                                   if col.name != "Year" else _df_stk_heat[col.name])]
+                            if col.name in _df_stk_heat.columns else [""]*len(col), axis=0
+                        ), width='stretch', hide_index=True
+                    )
+
+                    # Summary rows
+                    _stk_summ = []
+                    def _stk_best_fmt(c):
+                        if c.empty: return None
+                        idx = c.idxmax()
+                        yr  = _df_stk_heat.loc[idx, 'Year'] if idx in _df_stk_heat.index else ''
+                        return f"{round(c.max(),2)}% ({yr})"
+                    def _stk_worst_fmt(c):
+                        if c.empty: return None
+                        idx = c.idxmin()
+                        yr  = _df_stk_heat.loc[idx, 'Year'] if idx in _df_stk_heat.index else ''
+                        return f"{round(c.min(),2)}% ({yr})"
+
+                    for _lbl, _fn in [
+                        ("Average",    lambda c: round(c.mean(), 2)),
+                        ("% Positive", lambda c: round((c>0).sum()/c.count()*100, 2)),
+                        ("% Negative", lambda c: -round((c<0).sum()/c.count()*100, 2)),
+                        ("Median",     lambda c: round(c.median(), 2)),
+                        ("Best",       lambda c: _stk_best_fmt(c)),
+                        ("Worst",      lambda c: _stk_worst_fmt(c)),
+                    ]:
+                        _sr = {"Year": _lbl}
+                        for _cn in _MO_NAMES:
+                            if _cn in _df_stk_heat.columns:
+                                _col = pd.to_numeric(_df_stk_heat[_cn], errors='coerce').dropna()
+                                _sr[_cn] = _fn(_col) if len(_col) > 0 else None
+                            else:
+                                _sr[_cn] = None
+                        _stk_summ.append(_sr)
+                    _df_stk_summ = pd.DataFrame(_stk_summ)
+                    def _stk_summ_heat(v):
+                        try:
+                            n = float(str(v).replace("%","").replace("+",""))
+                            if n > 0:
+                                intensity = min(n/9, 1.0)
+                                return f"background-color:rgba(45,198,83,{intensity*0.7:.2f});color:#0a3d1a"
+                            elif n < 0:
+                                intensity = min(abs(n)/9, 1.0)
+                                return f"background-color:rgba(230,57,70,{intensity*0.7:.2f});color:#3d0a0a"
+                        except: pass
+                        return ""
+                    _stk_num_cols = [c for c in _df_stk_summ.columns if c != "Year"]
+                    for _cn in _stk_num_cols:
+                        _df_stk_summ[_cn] = _df_stk_summ[_cn].apply(
+                            lambda x: x if isinstance(x, str) else
+                            f"{x:.2f}%" if pd.notna(x) and x is not None else "—")
+                    st.markdown("**Summary**")
+                    st.dataframe(
+                        _df_stk_summ.style.map(_stk_summ_heat, subset=_stk_num_cols),
+                        width='stretch', hide_index=True
+                    )
+
+                # ── AI Assessment ─────────────────────────────────────────────
+                if not _df_stk_disp.empty and not _df_stk_summ.empty:
+                    _stk_ai_settings = load_settings()
+                    if _stk_ai_settings.get('ai_features', {}).get('enabled', False):
+                        import importlib as _imp_stk, sys as _sys_stk
+                        if MACRO not in _sys_stk.path: _sys_stk.path.insert(0, MACRO)
+                        _imp_stk.invalidate_caches()
+                        from ai_assessment import render_ai_assessment
+                        _stk_pfx = load_settings().get('ai_prompts', {}).get(
+                            'sea_stocks', DEFAULT_SETTINGS['ai_prompts']['sea_stocks'])
+                        _stk_ai_data = (
+                            f"Instrument: {_stk_ticker}\n"
+                            f"Year range: {_s_range[0]}–{_s_range[1]}\n"
+                            f"Presidential year filter: {_stk_pres_yr if _stk_pres_yr else 'All years'}\n"
+                            f"Current presidential year-in-term: {_PRES_YEAR_MAP.get(pd.Timestamp.now().year, 'N/A')}\n\n"
+                            f"MONTHLY RETURNS TABLE:\n{_df_stk_disp.to_string(index=False)}\n\n"
+                            f"SUMMARY STATISTICS:\n{_df_stk_summ.to_string(index=False)}"
+                        )
+                        render_ai_assessment(_stk_pfx + "\n\n" + _stk_ai_data,
+                                             _stk_ai_settings, 'sea_stocks_summary')
+
+                # ── JPG Report ────────────────────────────────────────────────
+                if _gen_stk_report and not _df_stk_disp.empty:
+                    try:
+                        import io as _io2
+                        from PIL import Image as _Img2, ImageDraw as _IDraw2
+                        import plotly.io as _pio2
+                        import plotly.graph_objects as _go3
+
+                        _stk_imgs = []
+
+                        # Spaghetti chart
+                        _stk_imgs.append(_Img2.open(_io2.BytesIO(
+                            _pio2.to_image(_fig_stk, format='png', width=1400, height=700, scale=2))))
+
+                        # Monthly heatmap table
+                        _stk_tbl_fig = _go3.Figure(data=[_go3.Table(
+                            header=dict(values=list(_df_stk_disp.columns),
+                                        fill_color='#333', font=dict(color='white',size=11),
+                                        align='center', height=28),
+                            cells=dict(values=[_df_stk_disp[c].tolist() for c in _df_stk_disp.columns],
+                                       font=dict(size=10), align='center', height=24)
+                        )])
+                        _stk_tbl_fig.update_layout(
+                            margin=dict(l=10,r=10,t=30,b=10),
+                            height=max(300, 28+len(_df_stk_disp)*24+40),
+                            title=dict(text=f"Monthly Returns — {_stk_ticker}", font=dict(size=13)),
+                            paper_bgcolor='white')
+                        _stk_imgs.append(_Img2.open(_io2.BytesIO(
+                            _pio2.to_image(_stk_tbl_fig, format='png', width=1400, scale=2))))
+
+                        # Summary table
+                        _stk_summ_fig = _go3.Figure(data=[_go3.Table(
+                            header=dict(values=list(_df_stk_summ.columns),
+                                        fill_color='#333', font=dict(color='white',size=11),
+                                        align='center', height=28),
+                            cells=dict(values=[_df_stk_summ[c].tolist() for c in _df_stk_summ.columns],
+                                       font=dict(size=10), align='center', height=24)
+                        )])
+                        _stk_summ_fig.update_layout(
+                            margin=dict(l=10,r=10,t=30,b=10),
+                            height=max(200, 28+len(_df_stk_summ)*24+40),
+                            title=dict(text="Summary", font=dict(size=13)),
+                            paper_bgcolor='white')
+                        _stk_imgs.append(_Img2.open(_io2.BytesIO(
+                            _pio2.to_image(_stk_summ_fig, format='png', width=1400, scale=2))))
+
+                        # Stack vertically
+                        _stk_total_h = sum(im.height for im in _stk_imgs)
+                        _stk_max_w   = max(im.width  for im in _stk_imgs)
+                        _stk_canvas  = _Img2.new('RGB', (_stk_max_w, _stk_total_h+60), color='white')
+                        _stk_draw    = _IDraw2.Draw(_stk_canvas)
+                        _stk_draw.text((20,10), f"Seasonality — {_stk_ticker} ({_s_range[0]}–{_s_range[1]})", fill='#333')
+                        _stk_y = 40
+                        for _im in _stk_imgs:
+                            _stk_canvas.paste(_im, (0, _stk_y))
+                            _stk_y += _im.height
+
+                        _stk_buf = _io2.BytesIO()
+                        _stk_canvas.save(_stk_buf, format='JPEG', quality=92)
+                        _stk_buf.seek(0)
+                        st.download_button(
+                            label="⬇ Download JPG",
+                            data=_stk_buf,
+                            file_name=f"seasonality_{_stk_ticker}_{_s_range[0]}_{_s_range[1]}.jpg",
+                            mime="image/jpeg",
+                            key="stk_jpg_dl"
+                        )
+                    except Exception as _e:
+                        st.error(f"Report failed: {_e}")
+
+                # ── Correlation stats (only when a comparison is selected) ────
                 if _cmp_data is not None and _ann_rets_cmp:
                     st.markdown(f"#### {_stk_ticker} vs {_cmp_label} — Annual Return Correlation")
 
@@ -2959,196 +3158,7 @@ elif page == "Seasonality":
                         _weak   = sum(1 for v in _roll_corr.values() if v < 0.3)
                         _n_roll = len(_roll_corr)
 
-                        # ── Monthly returns heatmap (same as Sectors tab) ────────────
-                        st.markdown("#### Monthly Returns (%)")
-                        _MO_NAMES = ["Jan","Feb","Mar","Apr","May","Jun",
-                                     "Jul","Aug","Sep","Oct","Nov","Dec","Yearly"]
-                        _stk_mo_rows = []
-                        for _yr in sorted(_ann_rets_stk.keys(), reverse=True):
-                            _yd2 = _stk_data[_stk_data.index.year == _yr]
-                            if len(_yd2) < 20: continue
-                            _row = {"Year": _yr}
-                            for _mi, _mn in enumerate(_MO_NAMES[:12], 1):
-                                _md = _yd2[_yd2.index.month == _mi]
-                                if len(_md) >= 2:
-                                    _row[_mn] = round((_md.iloc[-1]/_md.iloc[0]-1)*100, 2)
-                                else:
-                                    _row[_mn] = None
-                            _row["Yearly"] = _ann_rets_stk[_yr]
-                            _stk_mo_rows.append(_row)
-
-                        if _stk_mo_rows:
-                            _df_stk_heat = pd.DataFrame(_stk_mo_rows)
-                            def _stk_heat_style(val, col):
-                                if col == "Year" or val is None: return ""
-                                try:
-                                    v = float(val)
-                                    if v > 0:
-                                        intensity = min(int(abs(v)/9*180), 200)
-                                        return f"background-color:rgba(45,198,83,{intensity/255:.2f});color:#0a3d1a"
-                                    elif v < 0:
-                                        intensity = min(int(abs(v)/9*180), 200)
-                                        return f"background-color:rgba(230,57,70,{intensity/255:.2f});color:#3d0a0a"
-                                except: pass
-                                return ""
-                            _df_stk_disp = _df_stk_heat.copy()
-                            for _cn in _MO_NAMES:
-                                if _cn in _df_stk_disp.columns:
-                                    _df_stk_disp[_cn] = _df_stk_disp[_cn].apply(
-                                        lambda x: f"{x:.2f}%" if pd.notna(x) and x is not None else "")
-                            st.dataframe(
-                                _df_stk_disp.style.apply(
-                                    lambda col: [_stk_heat_style(v, col.name)
-                                                 for v in (pd.to_numeric(_df_stk_heat[col.name], errors="coerce")
-                                                           if col.name != "Year" else _df_stk_heat[col.name])]
-                                    if col.name in _df_stk_heat.columns else [""]*len(col), axis=0
-                                ), width='stretch', hide_index=True
-                            )
-
-                            # Summary rows
-                            _stk_summ = []
-                            def _stk_best_fmt(c):
-                                if c.empty: return None
-                                idx = c.idxmax()
-                                yr  = _df_stk_heat.loc[idx, 'Year'] if idx in _df_stk_heat.index else ''
-                                return f"{round(c.max(),2)}% ({yr})"
-                            def _stk_worst_fmt(c):
-                                if c.empty: return None
-                                idx = c.idxmin()
-                                yr  = _df_stk_heat.loc[idx, 'Year'] if idx in _df_stk_heat.index else ''
-                                return f"{round(c.min(),2)}% ({yr})"
-
-                            for _lbl, _fn in [
-                                ("Average",    lambda c: round(c.mean(), 2)),
-                                ("% Positive", lambda c: round((c>0).sum()/c.count()*100, 2)),
-                                ("% Negative", lambda c: -round((c<0).sum()/c.count()*100, 2)),
-                                ("Median",     lambda c: round(c.median(), 2)),
-                                ("Best",       lambda c: _stk_best_fmt(c)),
-                                ("Worst",      lambda c: _stk_worst_fmt(c)),
-                            ]:
-                                _sr = {"Year": _lbl}
-                                for _cn in _MO_NAMES:
-                                    if _cn in _df_stk_heat.columns:
-                                        _col = pd.to_numeric(_df_stk_heat[_cn], errors='coerce').dropna()
-                                        _sr[_cn] = _fn(_col) if len(_col) > 0 else None
-                                    else:
-                                        _sr[_cn] = None
-                                _stk_summ.append(_sr)
-                            _df_stk_summ = pd.DataFrame(_stk_summ)
-                            def _stk_summ_heat(v):
-                                try:
-                                    n = float(str(v).replace("%","").replace("+",""))
-                                    if n > 0:
-                                        intensity = min(n/9, 1.0)
-                                        return f"background-color:rgba(45,198,83,{intensity*0.7:.2f});color:#0a3d1a"
-                                    elif n < 0:
-                                        intensity = min(abs(n)/9, 1.0)
-                                        return f"background-color:rgba(230,57,70,{intensity*0.7:.2f});color:#3d0a0a"
-                                except: pass
-                                return ""
-                            _stk_num_cols = [c for c in _df_stk_summ.columns if c != "Year"]
-                            for _cn in _stk_num_cols:
-                                _df_stk_summ[_cn] = _df_stk_summ[_cn].apply(
-                                    lambda x: x if isinstance(x, str) else
-                                    f"{x:.2f}%" if pd.notna(x) and x is not None else "—")
-                            st.markdown("**Summary**")
-                            st.dataframe(
-                                _df_stk_summ.style.map(_stk_summ_heat, subset=_stk_num_cols),
-                                width='stretch', hide_index=True
-                            )
-
-                        # ── JPG Report ────────────────────────────────────────
-                        # ── AI Assessment ──────────────────────────────────────────────
-                        _stk_ai_settings = load_settings()
-                        if _stk_ai_settings.get('ai_features', {}).get('enabled', False):
-                            import importlib as _imp_stk, sys as _sys_stk
-                            if MACRO not in _sys_stk.path: _sys_stk.path.insert(0, MACRO)
-                            _imp_stk.invalidate_caches()
-                            from ai_assessment import render_ai_assessment
-                            _stk_pfx = load_settings().get('ai_prompts', {}).get(
-                                'sea_stocks', DEFAULT_SETTINGS['ai_prompts']['sea_stocks'])
-                            _stk_ai_data = (
-                                f"Instrument: {_stk_ticker}\n"
-                                f"Year range: {_s_range[0]}–{_s_range[1]}\n"
-                                f"Presidential year filter: {_stk_pres_yr if _stk_pres_yr else 'All years'}\n"
-                                f"Current presidential year-in-term: {_PRES_YEAR_MAP.get(pd.Timestamp.now().year, 'N/A')}\n\n"
-                                f"MONTHLY RETURNS TABLE:\n{_df_stk_disp.to_string(index=False)}\n\n"
-                                f"SUMMARY STATISTICS:\n{_df_stk_summ.to_string(index=False)}"
-                            )
-                            render_ai_assessment(_stk_pfx + "\n\n" + _stk_ai_data,
-                                                 _stk_ai_settings, 'sea_stocks_summary')
-
-                        if _gen_stk_report:
-                            try:
-                                import io as _io2
-                                from PIL import Image as _Img2, ImageDraw as _IDraw2
-                                import plotly.io as _pio2
-                                import plotly.graph_objects as _go3
-
-                                _stk_imgs = []
-
-                                # Spaghetti chart
-                                _stk_imgs.append(_Img2.open(_io2.BytesIO(
-                                    _pio2.to_image(_fig_stk, format='png', width=1400, height=700, scale=2))))
-
-                                # Monthly heatmap table
-                                _stk_tbl_fig = _go3.Figure(data=[_go3.Table(
-                                    header=dict(values=list(_df_stk_disp.columns),
-                                                fill_color='#333', font=dict(color='white',size=11),
-                                                align='center', height=28),
-                                    cells=dict(values=[_df_stk_disp[c].tolist() for c in _df_stk_disp.columns],
-                                               font=dict(size=10), align='center', height=24)
-                                )])
-                                _stk_tbl_fig.update_layout(
-                                    margin=dict(l=10,r=10,t=30,b=10),
-                                    height=max(300, 28+len(_df_stk_disp)*24+40),
-                                    title=dict(text=f"Monthly Returns — {_stk_ticker}", font=dict(size=13)),
-                                    paper_bgcolor='white')
-                                _stk_imgs.append(_Img2.open(_io2.BytesIO(
-                                    _pio2.to_image(_stk_tbl_fig, format='png', width=1400, scale=2))))
-
-                                # Summary table
-                                _stk_summ_fig = _go3.Figure(data=[_go3.Table(
-                                    header=dict(values=list(_df_stk_summ.columns),
-                                                fill_color='#333', font=dict(color='white',size=11),
-                                                align='center', height=28),
-                                    cells=dict(values=[_df_stk_summ[c].tolist() for c in _df_stk_summ.columns],
-                                               font=dict(size=10), align='center', height=24)
-                                )])
-                                _stk_summ_fig.update_layout(
-                                    margin=dict(l=10,r=10,t=30,b=10),
-                                    height=max(200, 28+len(_df_stk_summ)*24+40),
-                                    title=dict(text="Summary", font=dict(size=13)),
-                                    paper_bgcolor='white')
-                                _stk_imgs.append(_Img2.open(_io2.BytesIO(
-                                    _pio2.to_image(_stk_summ_fig, format='png', width=1400, scale=2))))
-
-                                # Stack vertically
-                                _stk_total_h = sum(im.height for im in _stk_imgs)
-                                _stk_max_w   = max(im.width  for im in _stk_imgs)
-                                _stk_canvas  = _Img2.new('RGB', (_stk_max_w, _stk_total_h+60), color='white')
-                                _stk_draw    = _IDraw2.Draw(_stk_canvas)
-                                _stk_draw.text((20,10), f"Seasonality — {_stk_ticker} ({_s_range[0]}–{_s_range[1]})", fill='#333')
-                                _stk_y = 40
-                                for _im in _stk_imgs:
-                                    _stk_canvas.paste(_im, (0, _stk_y))
-                                    _stk_y += _im.height
-
-                                _stk_buf = _io2.BytesIO()
-                                _stk_canvas.save(_stk_buf, format='JPEG', quality=92)
-                                _stk_buf.seek(0)
-                                st.download_button(
-                                    label="⬇ Download JPG",
-                                    data=_stk_buf,
-                                    file_name=f"seasonality_{_stk_ticker}_{_s_range[0]}_{_s_range[1]}.jpg",
-                                    mime="image/jpeg",
-                                    key="stk_jpg_dl"
-                                )
-                            except Exception as _e:
-                                st.error(f"Report failed: {_e}")
-
-                        # ── Combined annual returns + correlation table ────────────────
-                        # Summary metrics
+                        # ── Combined annual returns + correlation table ────────
                         _m1, _m2, _m3, _m4 = st.columns(4)
                         _m1.metric("Overall Correlation", f"{_corr:.2f}")
                         _m2.metric("Strong (≥0.7)", f"{_strong}/{_n_roll} yrs" if _n_roll else "—",
@@ -3177,13 +3187,11 @@ elif page == "Seasonality":
                             try:
                                 n = float(str(val).replace('%','').replace('+',''))
                                 if '3yr Corr' in col:
-                                    # Correlation: green=strong positive, red=negative
                                     if n >= 0.7:   return 'background-color:rgba(45,198,83,0.6);color:#0a3d1a;font-weight:bold'
                                     elif n >= 0.3:  return 'background-color:rgba(247,127,0,0.5);color:#3d2000;font-weight:bold'
                                     elif n >= 0:    return 'background-color:rgba(247,127,0,0.2);color:#3d2000'
                                     else:           return 'background-color:rgba(230,57,70,0.5);color:#3d0a0a;font-weight:bold'
                                 else:
-                                    # Return: green/red scaled to 9%
                                     if n > 0:
                                         intensity = min(n / 9, 1.0)
                                         return f'background-color:rgba(45,198,83,{intensity*0.7:.2f});color:#0a3d1a'
@@ -4192,7 +4200,7 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
             sec_cols  = [c for c in history.columns if c.startswith('sec_') and c.endswith('_total')
                          and not c.startswith('sp_sec_') and not c.startswith('rus_sec_')]
             sec_keys  = [c.replace('sec_','').replace('_total','') for c in sec_cols
-                         if 'nan' not in c and 'index' not in c]
+                         if c not in ('nan', 'index')]
             df_sector = build_sector_table(history, sec_keys, prefix='sec')
             if df_sector is not None:
                 _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
@@ -4357,7 +4365,7 @@ elif page == "US Market":
             run_script(os.path.join(STOCKS, 'us_total_market_screener.py'), STOCKS)
             st.rerun()
 
-    tab1, tab2, tab3, tab4 = st.tabs(["Breadth", "Zweig Thrust", "Benchmark", "Screener"])
+    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["Breadth", "Zweig Thrust", "S&P 500 Benchmark", "S&P 500 Screener", "Nasdaq 100 Screener", "Nasdaq Benchmark"])
 
     with tab1:
         st.subheader("US Market Breadth")
@@ -4497,7 +4505,7 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
             sec_cols = [c for c in history.columns if c.startswith('sec_') and c.endswith('_total')
                         and not c.startswith('sp_sec_') and not c.startswith('rus_sec_')]
             sec_keys = [c.replace('sec_','').replace('_total','') for c in sec_cols
-                        if 'nan' not in c and 'index' not in c]
+                        if c not in ('nan', 'index')]
             _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
             with _lbc2:
                 st.markdown("**Layer 1 Sector Breadth**")
@@ -4538,7 +4546,7 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
 
             sp_sec_cols = [c for c in history.columns if c.startswith('sp_sec_') and c.endswith('_total')]
             sp_sec_keys = [c.replace('sp_sec_','').replace('_total','') for c in sp_sec_cols
-                           if 'nan' not in c and 'index' not in c]
+                           if c not in ('nan', 'index')]
             if sp_sec_keys:
                 _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
                 with _lbc2:
@@ -4580,7 +4588,7 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
 
             rus_sec_cols = [c for c in history.columns if c.startswith('rus_sec_') and c.endswith('_total')]
             rus_sec_keys = [c.replace('rus_sec_','').replace('_total','') for c in rus_sec_cols
-                            if 'nan' not in c and 'index' not in c]
+                            if c not in ('nan', 'index')]
             if rus_sec_keys:
                 _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
                 with _lbc2:
@@ -4608,16 +4616,16 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
             st.warning("No breadth history found — run US breadth script first")
 
     with tab3:
-        st.subheader("Benchmark vs SPY")
+        st.subheader("S&P 500 Benchmark")
         st.markdown("""
             <div class="info-card">
                 Ranks US stocks by relative strength versus <b style="color:#ccc">SPY</b> (S&P 500 ETF).
-                Same regime and scoring methodology as AU Benchmark. 
+                Same regime and scoring methodology as AU Benchmark.
                 <b style="color:#ccc">Acc Watch</b> signals are particularly useful in the US market — large/mid cap institutional accumulation below key SMAs often precedes significant moves.
                 Filter by sector to identify which industries are producing the most leaders relative to the broader market.
             </div>
         """, unsafe_allow_html=True)
-        bm_file = os.path.join(STOCKS, 'results', 'benchmark', 'us_total_markets', 'us_total_market_latest_formatted.csv')
+        bm_file = os.path.join(STOCKS, 'results', 'benchmark', 'us_sp500', 'us_sp500_latest_formatted.csv')
         df = load_csv(bm_file, index_col='rank')
         if df is not None:
             st.caption(f"Last updated: {file_age(bm_file)} — {len(df)} stocks")
@@ -4672,7 +4680,7 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
             st.rerun()
 
     with tab4:
-        st.subheader("Sector Peer Screener")
+        st.subheader("S&P 500 Sector Peer Screener")
         st.markdown("""
             <div class="info-card">
                 Ranks US stocks by relative strength versus their <b style="color:#ccc">sector peers</b>.
@@ -4680,7 +4688,7 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                 Cross-reference with the RRG Charts page to confirm sector-level momentum before drilling into individual names.
             </div>
         """, unsafe_allow_html=True)
-        sc_file = os.path.join(STOCKS, 'results', 'screener', 'us_total_market', 'us_total_market_latest_formatted.csv')
+        sc_file = os.path.join(STOCKS, 'results', 'screener', 'us_sp500', 'us_sp500_latest_formatted.csv')
         df = load_csv(sc_file, index_col='rank')
         if df is not None:
             st.caption(f"Last updated: {file_age(sc_file)} — {len(df)} stocks")
@@ -4689,8 +4697,6 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                     'vol_label','acc_watch','regime_label','score_final']
             cols = [c for c in cols if c in df.columns]
 
-            # Format numeric columns
-           
             col1, col2, col3 = st.columns(3)
             with col1:
                 regime_filter = st.multiselect("Filter regime",
@@ -4717,9 +4723,106 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
                          width='stretch', height=600)
         else:
-            st.warning("No screener results found")
-        if st.button("🔄 Run US Screener", key='us_sc'):
+            st.warning("No screener results found — run S&P 500 screener first")
+        if st.button("🔄 Run S&P 500 Screener", key='us_sc'):
             run_script(os.path.join(STOCKS, 'us_total_market_screener.py'), STOCKS)
+            st.rerun()
+
+    with tab5:
+        st.subheader("Nasdaq 100 Screener")
+        st.markdown("""
+            <div class="info-card">
+                Ranks <b style="color:#ccc">Nasdaq 100</b> stocks by relative strength versus their sector peers <i>within the Nasdaq 100 universe</i>.
+                Peer RS scores reflect competition against the highest-quality tech-heavy names — a score above 75 is particularly meaningful here.
+            </div>
+        """, unsafe_allow_html=True)
+        ndx_sc_file = os.path.join(STOCKS, 'results', 'screener', 'nasdaq100', 'nasdaq100_latest_formatted.csv')
+        df = load_csv(ndx_sc_file, index_col='rank')
+        if df is not None:
+            st.caption(f"Last updated: {file_age(ndx_sc_file)} — {len(df)} stocks")
+            cols = ['delta_rank','ticker','name','sector','cap_band','close',
+                    'peer_rs_score','rs_trend','ret_6m','ret_12m','max_dd',
+                    'vol_label','acc_watch','regime_label','score_final']
+            cols = [c for c in cols if c in df.columns]
+
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                regime_filter = st.multiselect("Filter regime",
+                    ['LEADER','CONTENDER','LAGGARD','WEAK'],
+                    default=['LEADER','CONTENDER'],
+                    key='ndx_sc_regime')
+            with col2:
+                sector_filter = st.multiselect("Filter sector",
+                    sorted(df['sector'].dropna().unique().tolist()),
+                    key='ndx_sc_sector')
+            with col3:
+                acc_filter = st.multiselect("Filter acc_watch",
+                    ['EARLY','PROGRESS','SHIFT','-'],
+                    default=[],
+                    key='ndx_sc_acc')
+
+            if regime_filter:
+                df = df[df['regime_label'].isin(regime_filter)]
+            if sector_filter:
+                df = df[df['sector'].isin(sector_filter)]
+            if acc_filter:
+                df = df[df['acc_watch'].isin(acc_filter)]
+
+            st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
+                         width='stretch', height=600)
+        else:
+            st.warning("No Nasdaq 100 screener results found — run Nasdaq 100 screener first")
+        if st.button("🔄 Run Nasdaq 100 Screener", key='ndx_sc'):
+            run_script(os.path.join(STOCKS, 'nasdaq100_screener.py'), STOCKS)
+            st.rerun()
+
+    with tab6:
+        st.subheader("Nasdaq Benchmark (All US Stocks vs ^NDX)")
+        st.markdown("""
+            <div class="info-card">
+                Ranks the full US stock universe by relative strength versus the <b style="color:#ccc">Nasdaq 100 (^NDX)</b>.
+                Identifies which S&P 500 names are keeping pace with or outperforming the Nasdaq — useful for spotting non-tech leadership and rotation signals.
+                <b style="color:#ccc">TREND+LEAD</b> = above 200 SMA and outperforming ^NDX over 12 months.
+            </div>
+        """, unsafe_allow_html=True)
+        ndx_bm_file = os.path.join(STOCKS, 'results', 'benchmark', 'us_nasdaq', 'us_nasdaq_benchmark_latest_formatted.csv')
+        df = load_csv(ndx_bm_file, index_col='rank')
+        if df is not None:
+            st.caption(f"Last updated: {file_age(ndx_bm_file)} — {len(df)} stocks")
+            cols = ['delta_rank','ticker','name','sector','cap_band','close',
+                    'rs_ratio','rs_trend','ret_6m','ret_12m','max_dd',
+                    'vol_label','acc_watch','regime_label','score_final']
+            cols = [c for c in cols if c in df.columns]
+
+            col1, col2, col3 = st.columns(3)
+            with col1:
+                regime_filter = st.multiselect("Filter regime",
+                    ['TREND+LEAD','TREND_ONLY','WEAK'],
+                    default=['TREND+LEAD','TREND_ONLY'],
+                    key='ndx_bm_regime')
+            with col2:
+                sector_filter = st.multiselect("Filter sector",
+                    sorted(df['sector'].dropna().unique().tolist()),
+                    key='ndx_bm_sector')
+            with col3:
+                acc_filter = st.multiselect("Filter acc_watch",
+                    ['EARLY','PROGRESS','SHIFT','-'],
+                    default=[],
+                    key='ndx_bm_acc')
+
+            if regime_filter:
+                df = df[df['regime_label'].isin(regime_filter)]
+            if sector_filter:
+                df = df[df['sector'].isin(sector_filter)]
+            if acc_filter:
+                df = df[df['acc_watch'].isin(acc_filter)]
+
+            st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
+                         width='stretch', height=600)
+        else:
+            st.warning("No Nasdaq benchmark results found — run Nasdaq benchmark first")
+        if st.button("🔄 Run Nasdaq Benchmark", key='ndx_bm'):
+            run_script(os.path.join(STOCKS, 'us_nasdaq_benchmark.py'), STOCKS)
             st.rerun()
 
 # ═══════════════════════════════════════════════════════════════════════════════
@@ -5778,7 +5881,7 @@ elif page == "Relative Strength Charts":
             sec_cols = [c for c in au_hist.columns if c.startswith('sec_') and c.endswith('_total')
                         and not c.startswith('sp_') and not c.startswith('rus_')]
             sec_keys = [c.replace('sec_','').replace('_total','') for c in sec_cols
-                        if 'nan' not in c and 'index' not in c]
+                        if c not in ('nan', 'index')]
 
             st.caption(f"Latest: {au_hist.iloc[-1]['date']} — {file_age(au_hist_file)}")
 
@@ -5803,7 +5906,7 @@ elif page == "Relative Strength Charts":
         if us_hist is not None:
             sp_cols = [c for c in us_hist.columns if c.startswith('sp_sec_') and c.endswith('_total')]
             sp_keys = [c.replace('sp_sec_','').replace('_total','') for c in sp_cols
-                       if 'nan' not in c and 'index' not in c]
+                       if c not in ('nan', 'index')]
 
             st.caption(f"Latest: {us_hist.iloc[-1]['date']} — {file_age(us_hist_file)}")
 
@@ -6602,9 +6705,11 @@ elif page == "Actionable & Exports":
                 ("High Conviction", "au_total_market_actionable_highconv.csv",         "au_total_market_actionable_highconv_tvimport.txt",          True,  "screener"),
             ]),
             ("🇺🇸 US Market", "us_market", [
-                ("Benchmark",       "us_benchmark_actionable.csv",                     "us_benchmark_actionable_tvimport.txt",                     False, "screener"),
-                ("Screener",        "us_total_market_actionable.csv",                  "us_total_market_actionable_tvimport.txt",                  False, "screener"),
-                ("High Conviction", "us_total_market_actionable_highconv.csv",         "us_total_market_actionable_highconv_tvimport.txt",          True,  "screener"),
+                ("S&P 500 Benchmark",     "us_benchmark_actionable.csv",                       "us_benchmark_actionable_tvimport.txt",                       False, "screener"),
+                ("S&P 500 Screener",      "us_sp500_actionable.csv",                           "us_sp500_actionable_tvimport.txt",                           False, "screener"),
+                ("S&P 500 High Conv",     "us_sp500_actionable_highconv.csv",                  "us_sp500_actionable_highconv_tvimport.txt",                  True,  "screener"),
+                ("Nasdaq 100 Screener",   "nasdaq100_actionable.csv",                          "nasdaq100_actionable_tvimport.txt",                          False, "screener"),
+                ("Nasdaq Benchmark",      "us_nasdaq_benchmark_actionable.csv",                "us_nasdaq_benchmark_actionable_tvimport.txt",                False, "screener"),
             ]),
             ("⛏ Commodities", "commodities", [
                 ("Benchmark",       "commodities_actionable.csv",                      "commodities_actionable_tvimport.txt",                      False, "screener"),
@@ -6654,12 +6759,16 @@ elif page == "Run Scripts":
             run_script(os.path.join(STOCKS, 'au_total_market_breadth.py'), STOCKS)
 
         st.subheader("US Market")
-        if st.button("Run US Screener"):
+        if st.button("Run S&P 500 Screener"):
             run_script(os.path.join(STOCKS, 'us_total_market_screener.py'), STOCKS)
-        if st.button("Run US Benchmark"):
+        if st.button("Run S&P 500 Benchmark"):
             run_script(os.path.join(STOCKS, 'us_total_market_benchmark.py'), STOCKS)
         if st.button("Run US Breadth"):
             run_script(os.path.join(STOCKS, 'us_total_market_breadth.py'), STOCKS)
+        if st.button("Run Nasdaq 100 Screener"):
+            run_script(os.path.join(STOCKS, 'nasdaq100_screener.py'), STOCKS)
+        if st.button("Run Nasdaq Benchmark"):
+            run_script(os.path.join(STOCKS, 'us_nasdaq_benchmark.py'), STOCKS)
 
     with col2:
         st.subheader("Commodities")
@@ -6692,6 +6801,8 @@ elif page == "Run Scripts":
                 ('us_total_market_screener.py', STOCKS),
                 ('us_total_market_benchmark.py', STOCKS),
                 ('us_total_market_breadth.py', STOCKS),
+                ('nasdaq100_screener.py', STOCKS),
+                ('us_nasdaq_benchmark.py', STOCKS),
                 ('all_major_commodities_screener.py', STOCKS),
                 ('all_major_commodities_benchmark.py', STOCKS),
                 ('all_major_commodities_breadth.py', STOCKS),
@@ -6718,6 +6829,8 @@ elif page == "Run Scripts":
                 ('us_total_market_screener.py',   STOCKS),
                 ('us_total_market_benchmark.py',  STOCKS),
                 ('us_total_market_breadth.py',    STOCKS),
+                ('nasdaq100_screener.py',         STOCKS),
+                ('us_nasdaq_benchmark.py',        STOCKS),
                 ('uranium_benchmark.py',          STOCKS),
                 ('uranium_screener.py',           STOCKS),
                 ('rrg_us_data.py',                STOCKS),
@@ -6738,6 +6851,8 @@ elif page == "Run Scripts":
             run_script(os.path.join(BASE, 'utilities', 'fetch_market_caps_uranium.py'), os.path.join(BASE, 'utilities'))
         if st.button("Fetch Market Caps — AU Gold"):
             run_script(os.path.join(BASE, 'utilities', 'fetch_market_caps_au_gold.py'), os.path.join(BASE, 'utilities'))
+        if st.button("Fetch Market Caps — Nasdaq 100"):
+            run_script(os.path.join(BASE, 'utilities', 'fetch_market_caps_nasdaq100.py'), os.path.join(BASE, 'utilities'))
         if st.button("📈 Run DeMark Scan"):
             import sys
             sys.path.insert(0, STOCKS)

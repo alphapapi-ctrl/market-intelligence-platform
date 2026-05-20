@@ -1,0 +1,5 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+33,3,AEP,American Electric Power,Utilities,Electric Utilities,large,131.94,100.0,0.0106,-0.0088,0.0541,FLAT,9.29,36.72,54.32,-8.14,52.4,19.89,0.7964,LOW,-,133.034,131.7951,119.0063,1,96.7381,LEADER,23.647
+44,11,XEL,Xcel Energy,Utilities,Power Generation,large,79.9,66.67,-0.0072,0.0198,-0.0289,FLAT,0.89,20.67,52.95,-11.5,52.8,22.1,1.8976,HIGH,-,80.1825,80.2504,76.8467,1,49.3753,CONTENDER,18.611
+60,-2,CEG,Constellation Energy,Utilities,Electric Utilities,large,293.6,0.0,-0.0895,0.0088,0.0289,STRONG_DOWN,-18.45,1.22,39.1,-38.77,48.8,49.56,1.1774,MED,EARLY,302.997,300.6386,326.2277,0,1.2052,WEAK,14.7419
+86,9,EXC,Exelon,Utilities,Power Generation,large,44.98,33.33,0.0072,-0.0655,-0.0413,FLAT,-0.21,7.44,25.82,-12.69,50.4,23.35,0.8862,LOW,EARLY,46.1565,47.7392,45.3102,0,16.0679,WEAK,8.091

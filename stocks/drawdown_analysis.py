@@ -125,6 +125,12 @@ def get_inputs():
 
 # ── Calculate drawdown analysis for one period ────────────────────────────────
 def calculate_period(prices, volumes, watchlist_df, start_date, label, bench_override=None, weights=None):
+    # Unpack scoring weights — fall back to defaults if not provided
+    _w        = weights or {}
+    w_rs_bench = _w.get('rs_vs_bench',   1.0)
+    w_peer_rs  = _w.get('peer_rs_score', 0.5)
+    w_dd_bench = _w.get('dd_vs_bench',   0.5)
+
     names     = watchlist_df.set_index('ticker')['name']
     sectors   = watchlist_df.set_index('ticker')['sector'].to_dict() if 'sector' in watchlist_df.columns else {}
     commodity = watchlist_df.set_index('ticker')['commodity'].to_dict() if 'commodity' in watchlist_df.columns else {}

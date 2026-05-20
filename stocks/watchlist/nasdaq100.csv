@@ -1,0 +1,103 @@
+ticker,name,sector,industry,market_cap,cap_band,benchmark
+^NDX,NASDAQ-100,index,index,,small,benchmark
+ADBE,Adobe Inc.,Technology,Computer Software,102278766592.0,large,^NDX
+AMD,Advanced Micro Devices,Technology,Semiconductors,742233079808.0,large,^NDX
+ABNB,Airbnb,Consumer Discretionary,Diversified Commercial Services,84119379968.0,large,^NDX
+ALNY,Alnylam Pharmaceuticals,Health Care,Biotechnology,39392882688.0,large,^NDX
+GOOGL,Alphabet Inc. (Class A),Technology,Computer Software,4855869472768.0,large,^NDX
+GOOG,Alphabet Inc. (Class C),Technology,Computer Software,4810436771840.0,large,^NDX
+AMZN,Amazon,Consumer Discretionary,Catalog/Specialty Distribution,2933248491520.0,large,^NDX
+AEP,American Electric Power,Utilities,Electric Utilities,70820700160.0,large,^NDX
+AMGN,Amgen,Health Care,Biotechnology,179118014464.0,large,^NDX
+ADI,Analog Devices,Technology,Semiconductors,203346788352.0,large,^NDX
+AAPL,Apple Inc.,Technology,Computer Manufacturing,4308095467520.0,large,^NDX
+AMAT,Applied Materials,Technology,Semiconductors,345569492992.0,large,^NDX
+APP,AppLovin,Technology,Computer Software,157404463104.0,large,^NDX
+ARM,Arm Holdings,Technology,Semiconductors,226918989824.0,large,^NDX
+ASML,ASML Holding,Technology,Industrial Machinery,613592662016.0,large,^NDX
+ADSK,Autodesk,Technology,Computer Software,51625013248.0,large,^NDX
+ADP,Automatic Data Processing,Industrials,Diversified Commercial Services,85141397504.0,large,^NDX
+AXON,Axon Enterprise,Industrials,Ordnance & Accessories,32526163968.0,large,^NDX
+BKR,Baker Hughes,Energy,Oil Equipment & Services,63383265280.0,large,^NDX
+BKNG,Booking Holdings,Consumer Discretionary,Transportation Services,128575578112.0,large,^NDX
+AVGO,Broadcom,Technology,Semiconductors,2035907428352.0,large,^NDX
+CDNS,Cadence Design Systems,Technology,Computer Software,100038467584.0,large,^NDX
+CHTR,Charter Communications,Telecommunications,Cable & Other Pay Television Services,21862881280.0,large,^NDX
+CTAS,Cintas,Industrials,Garments & Clothing,66802544640.0,large,^NDX
+CSCO,Cisco,Telecommunications,Computer Communications Equipment,381441179648.0,large,^NDX
+CCEP,Coca-Cola Europacific Partners,Consumer Staples,Soft Drinks,41873424384.0,large,^NDX
+CTSH,Cognizant,Technology,EDP Services,24444639232.0,large,^NDX
+CMCSA,Comcast,Telecommunications,Cable & Other Pay Television Services,90734608384.0,large,^NDX
+CEG,Constellation Energy,Utilities,Electric Utilities,110003527680.0,large,^NDX
+CPRT,Copart,Consumer Discretionary,Retail,32694685696.0,large,^NDX
+CSGP,CoStar Group,Real Estate,Real Estate,13381817344.0,large,^NDX
+COST,Costco,Consumer Discretionary,Department/Specialty Retail Stores,447552225280.0,large,^NDX
+CRWD,CrowdStrike,Technology,Computer Software,134336749568.0,large,^NDX
+CSX,CSX Corporation,Industrials,Railroads,83300368384.0,large,^NDX
+DDOG,Datadog,Technology,Computer Software,71248994304.0,large,^NDX
+DXCM,DexCom,Health Care,Medical/Dental Instruments,23387762688.0,large,^NDX
+FANG,Diamondback Energy,Energy,Oil & Gas Production,53083820032.0,large,^NDX
+DASH,DoorDash,Technology,EDP Services,71427366912.0,large,^NDX
+EA,Electronic Arts,Consumer Discretionary,Miscellaneous Amusement & Recreation Services,50160852992.0,large,^NDX
+EXC,Exelon,Utilities,Power Generation,44929069056.0,large,^NDX
+FAST,Fastenal,Industrials,Construction & Materials,50708705280.0,large,^NDX
+FER,Ferrovial,Industrials,"Military, Government, Technical",50500628480.0,large,^NDX
+FTNT,Fortinet,Technology,Computer Peripheral Equipment,83510878208.0,large,^NDX
+GEHC,GE HealthCare,Health Care,Medical Electronics,28871981056.0,large,^NDX
+GILD,Gilead Sciences,Health Care,Biotechnology,163055386624.0,large,^NDX
+HON,Honeywell,Industrials,Aerospace,135044153344.0,large,^NDX
+IDXX,Idexx Laboratories,Health Care,Biotechnology,44183154688.0,large,^NDX
+INSM,Insmed Incorporated,Health Care,Biotechnology,21967859712.0,large,^NDX
+INTC,Intel,Technology,Semiconductors,627847921664.0,large,^NDX
+INTU,Intuit,Technology,Computer Software,110282801152.0,large,^NDX
+ISRG,Intuitive Surgical,Health Care,Industrial Specialties,159394529280.0,large,^NDX
+KDP,Keurig Dr Pepper,Consumer Staples,Soft Drinks,39224930304.0,large,^NDX
+KLAC,KLA Corporation,Technology,Electronic Components,244167639040.0,large,^NDX
+KHC,Kraft Heinz,Consumer Staples,Packaged Foods,28411232256.0,large,^NDX
+LRCX,Lam Research,Technology,Industrial Machinery,367730393088.0,large,^NDX
+LIN,Linde plc,Basic Materials,Major Chemicals,228011196416.0,large,^NDX
+MAR,Marriott International,Consumer Discretionary,Hotels/Resorts,93129547776.0,large,^NDX
+MRVL,Marvell Technology,Technology,Semiconductors,148771586048.0,large,^NDX
+MELI,Mercado Libre,Consumer Discretionary,Catalog/Specialty Distribution,82764169216.0,large,^NDX
+META,Meta Platforms,Technology,Computer Software,1547498946560.0,large,^NDX
+MCHP,Microchip Technology,Technology,Semiconductors,53621112832.0,large,^NDX
+MU,Micron Technology,Technology,Semiconductors,842203070464.0,large,^NDX
+MSFT,Microsoft,Technology,Computer Software,3083691884544.0,large,^NDX
+MSTR,MicroStrategy,Technology,Computer Software,65740513280.0,large,^NDX
+MDLZ,Mondelez International,Consumer Staples,Packaged Foods,79008645120.0,large,^NDX
+MPWR,Monolithic Power Systems,Technology,Semiconductors,78649270272.0,large,^NDX
+MNST,Monster Beverage,Consumer Staples,Soft Drinks,84384374784.0,large,^NDX
+NFLX,"Netflix, Inc.",Consumer Discretionary,Consumer Electronics,368402759680.0,large,^NDX
+NVDA,Nvidia,Technology,Semiconductors,5230436024320.0,large,^NDX
+NXPI,NXP Semiconductors,Technology,Semiconductors,74415849472.0,large,^NDX
+ORLY,O'Reilly Automotive,Consumer Discretionary,Auto & Home Supply Stores,77369933824.0,large,^NDX
+ODFL,Old Dominion Freight Line,Industrials,Trucking Freight/Courier Services,41246351360.0,large,^NDX
+PCAR,Paccar,Consumer Discretionary,Motor Vehicles,60159778816.0,large,^NDX
+PLTR,Palantir Technologies,Technology,Computer Software,330349608960.0,large,^NDX
+PANW,Palo Alto Networks,Technology,Computer Peripheral Equipment,168590688256.0,large,^NDX
+PAYX,Paychex,Industrials,Diversified Commercial Services,33654261760.0,large,^NDX
+PYPL,PayPal,Industrials,Diversified Commercial Services,40021123072.0,large,^NDX
+PDD,PDD Holdings,Technology,EDP Services,140603097088.0,large,^NDX
+PEP,PepsiCo,Consumer Staples,Soft Drinks,211356401664.0,large,^NDX
+QCOM,Qualcomm,Technology,Broadcasting & Communications Equipment,230920863744.0,large,^NDX
+REGN,Regeneron Pharmaceuticals,Health Care,Biotechnology,74948378624.0,large,^NDX
+ROP,Roper Technologies,Technology,Computer Software,34646949888.0,large,^NDX
+ROST,Ross Stores,Consumer Discretionary,Clothing/Shoe/Accessory Stores,73037094912.0,large,^NDX
+SNDK,Sandisk,Technology,Electronic Components,231366557696.0,large,^NDX
+STX,Seagate Technology,Technology,Electronic Components,175490580480.0,large,^NDX
+SHOP,Shopify,Technology,Computer Software,143274049536.0,large,^NDX
+SBUX,Starbucks,Consumer Discretionary,Restaurants,119588716544.0,large,^NDX
+SNPS,Synopsys,Technology,Computer Software,98937954304.0,large,^NDX
+TMUS,T-Mobile US,Telecommunications,Telecommunications Service Providers,209547296768.0,large,^NDX
+TTWO,Take-Two Interactive,Consumer Discretionary,Miscellaneous Amusement & Recreation Services,40821927936.0,large,^NDX
+TSLA,"Tesla, Inc.",Consumer Discretionary,Automobiles & Parts,1608764358656.0,large,^NDX
+TXN,Texas Instruments,Technology,Semiconductors,261924700160.0,large,^NDX
+TRI,Thomson Reuters,Technology,Computer Software,40571920384.0,large,^NDX
+VRSK,Verisk Analytics,Industrials,Diversified Commercial Services,22518722560.0,large,^NDX
+VRTX,Vertex Pharmaceuticals,Health Care,Biotechnology,109090652160.0,large,^NDX
+WMT,Walmart,Consumer Discretionary,Department/Specialty Retail Stores,1039656222720.0,large,^NDX
+WBD,Warner Bros. Discovery,Consumer Discretionary,Miscellaneous Amusement & Recreation Services,67968479232.0,large,^NDX
+WDC,Western Digital,Technology,Electronic Components,165447434240.0,large,^NDX
+WDAY,"Workday, Inc.",Technology,EDP Services,31917303808.0,large,^NDX
+XEL,Xcel Energy,Utilities,Power Generation,49560760320.0,large,^NDX
+ZS,Zscaler,Technology,EDP Services,24461090816.0,large,^NDX
