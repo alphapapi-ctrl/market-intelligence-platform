@@ -1,0 +1,5 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+43,11,INTU,Intuit,Technology,Computer Software,large,307.07,6.82,-0.2383,-0.3002,-0.386,STRONG_UP,-52.57,-53.52,-53.51,-61.71,47.2,64.1,5.6812,HIGH,EARLY,389.186,404.3083,558.86,0,-39.4117,WEAK,19.4656
+66,-3,WDAY,"Workday, Inc.",Technology,EDP Services,large,121.85,2.27,-0.0449,-0.0387,-0.2996,FLAT,-45.57,-55.21,-53.11,-58.65,49.6,54.42,1.5666,HIGH,EARLY,123.7825,125.7962,188.1316,0,-50.3234,WEAK,14.5375
+71,3,REGN,Regeneron Pharmaceuticals,Health Care,Biotechnology,large,642.59,55.56,-0.1227,-0.1351,-0.076,FLAT,-8.2,8.25,-34.14,-22.39,48.8,34.63,1.5113,HIGH,EARLY,698.985,730.5872,691.0545,0,11.6308,LAGGARD,14.2058
+100,0,CPRT,Copart,Consumer Discretionary,Retail,large,34.4,0.0,0.0567,0.0218,-0.0831,STRONG_UP,-16.85,-43.29,-36.24,-46.75,47.2,25.05,1.9137,HIGH,SHIFT,33.278,33.2696,39.9345,0,-81.5693,WEAK,3.5035

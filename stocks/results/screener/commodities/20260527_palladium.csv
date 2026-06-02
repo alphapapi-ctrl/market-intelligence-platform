@@ -1,0 +1,24 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+86,-45,SPD.AX,Southern Palladium Limited,palladium,producer,small,1.41,87.5,-0.0832,-0.1276,-0.1001,FLAT,34.29,252.5,166.04,-51.85,44.66,87.68,0.1915,LOW,-,1.5475,1.5599,1.4665,0,128.6114,LAGGARD,35.369
+100,6,SBSW,"ticker
+SBSW    Sibanye Gold ADR
+SBSW    Sibanye Gold ADR
+Name: name, dtype: object",palladium,producer,large,12.16,75.0,0.0159,0.0264,-0.0128,FLAT,12.83,106.14,144.39,-45.72,54.4,69.67,0.8157,LOW,EARLY,12.3775,12.4287,12.3835,0,82.8792,LAGGARD,33.5992
+131,31,IMPUY,Impala Platinum,palladium,producer,large,14.52,50.0,0.0013,0.0516,-0.0443,FLAT,35.83,96.18,150.29,-44.16,54.4,84.0,0.1432,LOW,-,14.8875,14.7912,13.9539,1,62.2902,CONTENDER,29.2957
+149,17,7JR.MU,Northam Platinum,palladium,producer,small,16.2,100.0,-0.1104,-0.0669,0.5237,STRONG_DOWN,88.23,297.01,422.74,-24.8,37.45,138.05,7.937,HIGH,-,17.38,17.1714,11.4348,1,80.5717,LEADER,27.1006
+211,-19,WPM,"ticker
+WPM    Wheaton Precious Metals
+WPM    Wheaton Precious Metals
+WPM    Wheaton Precious Metals
+WPM    Wheaton Precious Metals
+Name: name, dtype: object",palladium,royalties_financial_services,large,130.27,25.0,-0.0029,0.0052,0.0792,STRONG_DOWN,31.44,52.86,129.75,-30.84,56.4,52.26,0.5008,LOW,-,131.2115,133.666,121.2633,1,57.0501,LAGGARD,21.6193
+218,30,RPH1.SG,"ticker
+RPH1.SG    Anglo American Platinum
+RPH1.SG    Anglo American Platinum
+Name: name, dtype: object",palladium,producer,small,11.9,62.5,0.031,0.0133,0.1673,FLAT,43.93,105.17,148.51,-35.19,51.0,81.24,0.0,LOW,-,11.72,11.9101,10.3857,1,66.0228,CONTENDER,20.6309
+247,6,CHN.AX,Challice Mining,palladium,producer,mid,1.445,12.5,0.0078,-0.0247,-0.0436,STRONG_UP,-15.25,18.44,-16.23,-53.73,47.04,73.92,0.3771,LOW,EARLY,1.5002,1.5004,1.8733,0,11.7362,WEAK,17.7844
+252,22,IVPAF,Ivanhoe Mines Ltd,palladium,producer,large,8.65,0.0,0.0017,0.0445,0.0152,FLAT,-2.96,5.88,-42.72,-46.64,51.6,63.19,0.0996,LOW,SHIFT,8.4266,8.4025,9.9085,0,4.7976,WEAK,17.6895
+260,-32,GENM.TO,"ticker
+GENM.TO    Generation Mining Ltd
+GENM.TO    Generation Mining Ltd
+Name: name, dtype: object",palladium,explorer,small,0.61,37.5,-0.0356,-0.0185,-0.0024,STRONG_DOWN,12.96,71.83,125.93,-41.76,45.2,66.03,0.867,LOW,-,0.6275,0.6238,0.6052,1,49.171,LAGGARD,16.808

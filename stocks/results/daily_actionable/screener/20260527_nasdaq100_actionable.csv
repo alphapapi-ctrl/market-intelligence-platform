@@ -1,0 +1,4 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+4,0,MU,Micron Technology,Technology,Semiconductors,large,895.88,95.45,0.2307,0.5943,0.8642,STRONG_DOWN,332.38,831.75,580.01,-30.28,58.0,86.56,1.5988,HIGH,-,687.313,528.3699,326.3303,1,557.3213,LEADER,142.3315
+11,3,MRVL,Marvell Technology,Technology,Semiconductors,large,208.26,84.09,0.13,0.2027,1.35,STRONG_DOWN,169.22,227.21,167.48,-26.36,54.4,70.73,1.6068,HIGH,-,173.732,139.8898,96.4913,1,174.7493,LEADER,53.4913
+32,2,AEP,American Electric Power,Utilities,Electric Utilities,large,130.9,100.0,-0.0162,-0.0118,0.0421,STRONG_DOWN,9.97,31.23,58.12,-8.14,52.4,19.38,1.5698,HIGH,-,131.2176,131.34,119.895,1,84.4312,LEADER,25.0703

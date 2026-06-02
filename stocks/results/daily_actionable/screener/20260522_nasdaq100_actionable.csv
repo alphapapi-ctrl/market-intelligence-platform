@@ -1,0 +1,2 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+15,6,ARM,Arm Holdings,Technology,Semiconductors,large,298.23,75.0,0.4085,0.3729,1.1738,FLAT,117.7,130.69,165.26,-41.47,53.2,91.86,2.4712,HIGH,-,221.059,178.2219,146.215,1,75.6854,LEADER,38.8078

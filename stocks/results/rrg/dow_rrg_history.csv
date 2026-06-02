@@ -337,6 +337,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,AAPL,Apple,tech,113.8962,109.599,300.23
 2026-05-18,AAPL,Apple,tech,112.7194,106.6781,297.84
 2026-05-19,AAPL,Apple,tech,114.911,105.7654,298.97
+2026-05-20,AAPL,Apple,tech,113.4663,105.6277,302.25
+2026-05-21,AAPL,Apple,tech,111.3069,101.3161,304.99
+2026-05-22,AAPL,Apple,tech,110.4274,100.5111,308.82
+2026-05-26,AAPL,Apple,tech,110.3539,103.5033,308.33
+2026-05-27,AAPL,Apple,tech,111.4129,107.7843,310.85
 2025-01-14,AMGN,Amgen,healthcare,100.66,100.0,256.8998
 2025-01-15,AMGN,Amgen,healthcare,99.7042,100.0,258.6695
 2025-01-16,AMGN,Amgen,healthcare,100.0443,100.0,259.1408
@@ -675,6 +680,10 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,AMGN,Amgen,healthcare,88.0707,81.1749,326.31
 2026-05-18,AMGN,Amgen,healthcare,86.0309,79.5954,324.39
 2026-05-19,AMGN,Amgen,healthcare,88.8039,85.0072,330.75
+2026-05-21,AMGN,Amgen,healthcare,86.962,86.8367,337.42
+2026-05-22,AMGN,Amgen,healthcare,86.8087,85.6217,339.3
+2026-05-26,AMGN,Amgen,healthcare,86.3598,86.7249,335.94
+2026-05-27,AMGN,Amgen,healthcare,87.2438,89.7809,336.06
 2025-01-14,AMZN,Amazon,consumer,98.2263,100.0,217.76
 2025-01-15,AMZN,Amazon,consumer,99.1086,100.0,223.35
 2025-01-16,AMZN,Amazon,consumer,98.0702,100.0,220.66
@@ -1013,6 +1022,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,AMZN,Amazon,consumer,131.3336,123.086,264.14
 2026-05-18,AMZN,Amazon,consumer,129.2714,123.5894,264.86
 2026-05-19,AMZN,Amazon,consumer,126.674,120.1764,259.34
+2026-05-20,AMZN,Amazon,consumer,125.1622,116.0171,265.01
+2026-05-21,AMZN,Amazon,consumer,126.9305,116.7323,268.46
+2026-05-22,AMZN,Amazon,consumer,124.1471,116.9005,266.32
+2026-05-26,AMZN,Amazon,consumer,123.5,111.1277,265.29
+2026-05-27,AMZN,Amazon,consumer,127.7912,120.1472,271.85
 2025-01-14,AXP,American Express,financials,103.5464,100.0,296.2607
 2025-01-15,AXP,American Express,financials,105.9176,100.0,308.0575
 2025-01-16,AXP,American Express,financials,105.8002,100.0,307.229
@@ -1351,6 +1365,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,AXP,American Express,financials,91.2883,98.0868,313.48
 2026-05-18,AXP,American Express,financials,90.4226,99.3096,312.24
 2026-05-19,AXP,American Express,financials,90.6127,98.3363,309.31
+2026-05-20,AXP,American Express,financials,89.0915,96.9835,309.82
+2026-05-21,AXP,American Express,financials,93.863,103.6603,309.7
+2026-05-22,AXP,American Express,financials,94.8816,107.8544,311.78
+2026-05-26,AXP,American Express,financials,93.4458,107.3383,310.72
+2026-05-27,AXP,American Express,financials,91.3871,103.0467,312.54
 2025-01-14,BA,Boeing,industrial,102.8335,100.0,167.02
 2025-01-15,BA,Boeing,industrial,100.6636,100.0,166.2
 2025-01-16,BA,Boeing,industrial,102.4793,100.0,168.93
@@ -1689,6 +1708,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,BA,Boeing,industrial,90.3628,100.4907,220.49
 2026-05-18,BA,Boeing,industrial,92.2889,102.511,220.61
 2026-05-19,BA,Boeing,industrial,92.0569,103.8437,215.01
+2026-05-20,BA,Boeing,industrial,95.0293,108.5915,222.2
+2026-05-21,BA,Boeing,industrial,92.4924,100.7585,219.61
+2026-05-22,BA,Boeing,industrial,91.2358,98.6729,219.02
+2026-05-26,BA,Boeing,industrial,93.1806,99.2245,218.9
+2026-05-27,BA,Boeing,industrial,95.5619,101.3661,224.3
 2025-01-14,CAT,Caterpillar,industrial,100.7848,100.0,364.494
 2025-01-15,CAT,Caterpillar,industrial,100.0308,100.0,367.7508
 2025-01-16,CAT,Caterpillar,industrial,101.702,100.0,373.303
@@ -2027,6 +2051,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,CAT,Caterpillar,industrial,116.393,95.5641,888.31
 2026-05-18,CAT,Caterpillar,industrial,115.0559,93.6102,863.95
 2026-05-19,CAT,Caterpillar,industrial,113.3859,90.9127,860.15
+2026-05-20,CAT,Caterpillar,industrial,114.1863,92.0253,872.56
+2026-05-21,CAT,Caterpillar,industrial,111.3112,89.2514,865.95
+2026-05-22,CAT,Caterpillar,industrial,111.5647,83.8999,879.89
+2026-05-26,CAT,Caterpillar,industrial,116.436,88.6283,908.55
+2026-05-27,CAT,Caterpillar,industrial,118.3443,91.3631,909.93
 2025-01-14,CRM,Salesforce,tech,93.4399,100.0,320.6396
 2025-01-15,CRM,Salesforce,tech,91.2433,100.0,318.2809
 2025-01-16,CRM,Salesforce,tech,91.0579,100.0,317.1313
@@ -2365,6 +2394,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,CRM,Salesforce,tech,94.3994,119.2249,173.51
 2026-05-18,CRM,Salesforce,tech,95.7686,119.3284,179.48
 2026-05-19,CRM,Salesforce,tech,97.1357,116.7275,179.42
+2026-05-20,CRM,Salesforce,tech,96.763,114.4712,180.1
+2026-05-21,CRM,Salesforce,tech,96.286,115.6697,176.31
+2026-05-22,CRM,Salesforce,tech,94.6528,124.7808,180.07
+2026-05-26,CRM,Salesforce,tech,91.8086,117.4849,179.08
+2026-05-27,CRM,Salesforce,tech,87.1962,110.6888,177.51
 2025-01-14,CVX,Chevron,energy,104.7449,100.0,148.4962
 2025-01-15,CVX,Chevron,energy,103.9797,100.0,149.8496
 2025-01-16,CVX,Chevron,energy,104.8352,100.0,150.8434
@@ -2703,6 +2737,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,CVX,Chevron,energy,105.8583,90.9632,191.1
 2026-05-18,CVX,Chevron,energy,106.612,95.5754,196.12
 2026-05-19,CVX,Chevron,energy,106.8162,97.297,197.25
+2026-05-20,CVX,Chevron,energy,104.1713,92.6202,191.33
+2026-05-21,CVX,Chevron,energy,101.1736,89.8137,191.01
+2026-05-22,CVX,Chevron,energy,101.3361,89.5693,191.43
+2026-05-26,CVX,Chevron,energy,99.2202,88.5366,184.71
+2026-05-27,CVX,Chevron,energy,97.6915,88.8063,182.4
 2025-01-14,DIS,Disney,consumer,97.6191,100.0,106.9374
 2025-01-15,DIS,Disney,consumer,96.084,100.0,106.9967
 2025-01-16,DIS,Disney,consumer,94.7062,100.0,105.2955
@@ -3041,6 +3080,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,DIS,Disney,consumer,97.4341,104.4944,102.72
 2026-05-18,DIS,Disney,consumer,96.9757,101.6365,103.91
 2026-05-19,DIS,Disney,consumer,96.5612,102.203,102.29
+2026-05-20,DIS,Disney,consumer,97.8235,106.3277,104.08
+2026-05-21,DIS,Disney,consumer,96.2821,104.212,103.58
+2026-05-22,DIS,Disney,consumer,94.4257,101.5391,103.0
+2026-05-26,DIS,Disney,consumer,96.4067,104.2064,103.28
+2026-05-27,DIS,Disney,consumer,96.4704,104.6056,104.18
 2025-01-14,GS,Goldman Sachs,financials,99.7774,100.0,557.1672
 2025-01-15,GS,Goldman Sachs,financials,104.06,100.0,590.6929
 2025-01-16,GS,Goldman Sachs,financials,105.4411,100.0,597.5853
@@ -3379,6 +3423,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,GS,Goldman Sachs,financials,104.0999,110.3219,948.47
 2026-05-18,GS,Goldman Sachs,financials,101.8379,105.4367,946.36
 2026-05-19,GS,Goldman Sachs,financials,101.9167,103.5567,928.74
+2026-05-20,GS,Goldman Sachs,financials,106.2326,108.8541,982.12
+2026-05-21,GS,Goldman Sachs,financials,108.0456,109.9932,988.17
+2026-05-22,GS,Goldman Sachs,financials,107.9653,106.4245,996.73
+2026-05-26,GS,Goldman Sachs,financials,106.3999,106.0169,994.52
+2026-05-27,GS,Goldman Sachs,financials,105.3891,104.2816,996.47
 2025-01-14,HD,Home Depot,consumer,97.8897,100.0,380.6806
 2025-01-15,HD,Home Depot,consumer,99.5601,100.0,393.5806
 2025-01-16,HD,Home Depot,consumer,100.5136,100.0,396.7208
@@ -3717,6 +3766,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,HD,Home Depot,consumer,78.2011,85.835,297.51
 2026-05-18,HD,Home Depot,consumer,78.6587,85.1692,299.81
 2026-05-19,HD,Home Depot,consumer,80.4731,87.1128,302.44
+2026-05-20,HD,Home Depot,consumer,81.1666,90.3064,310.58
+2026-05-21,HD,Home Depot,consumer,81.3207,90.8569,313.78
+2026-05-22,HD,Home Depot,consumer,79.6939,89.6988,313.07
+2026-05-26,HD,Home Depot,consumer,81.622,92.9608,310.54
+2026-05-27,HD,Home Depot,consumer,83.3774,95.1203,317.85
 2025-01-14,HON,Honeywell,industrial,99.1142,100.0,200.542
 2025-01-15,HON,Honeywell,industrial,97.9656,100.0,201.4966
 2025-01-16,HON,Honeywell,industrial,99.5288,100.0,204.3877
@@ -4055,6 +4109,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,HON,Honeywell,industrial,88.8139,81.3954,213.24
 2026-05-18,HON,Honeywell,industrial,90.9864,85.1995,217.23
 2026-05-19,HON,Honeywell,industrial,91.1935,86.6199,217.15
+2026-05-20,HON,Honeywell,industrial,89.3495,87.8167,217.39
+2026-05-21,HON,Honeywell,industrial,90.3004,91.0993,223.8
+2026-05-22,HON,Honeywell,industrial,91.9141,94.9054,227.92
+2026-05-26,HON,Honeywell,industrial,94.7998,97.5073,231.72
+2026-05-27,HON,Honeywell,industrial,94.9386,98.7469,231.55
 2025-01-14,IBM,IBM,tech,96.8305,100.0,211.0622
 2025-01-15,IBM,IBM,tech,96.2524,100.0,213.2722
 2025-01-16,IBM,IBM,tech,97.5573,100.0,215.8214
@@ -4393,6 +4452,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,IBM,IBM,tech,85.535,99.1952,219.3
 2026-05-18,IBM,IBM,tech,86.0016,103.309,222.75
 2026-05-19,IBM,IBM,tech,87.4466,101.8152,222.33
+2026-05-20,IBM,IBM,tech,87.4624,101.3535,225.0
+2026-05-21,IBM,IBM,tech,110.7336,129.0977,252.97
+2026-05-22,IBM,IBM,tech,108.4093,137.006,253.84
+2026-05-26,IBM,IBM,tech,104.249,131.9253,250.69
+2026-05-27,IBM,IBM,tech,103.8245,133.4736,255.2
 2025-01-14,INTC,Intel,tech,95.4298,100.0,19.2
 2025-01-15,INTC,Intel,tech,96.4196,100.0,19.72
 2025-01-16,INTC,Intel,tech,96.3276,100.0,19.67
@@ -4731,6 +4795,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,INTC,Intel,tech,235.5682,163.2673,108.77
 2026-05-18,INTC,Intel,tech,237.8331,163.3369,108.17
 2026-05-19,INTC,Intel,tech,248.4765,187.2665,110.8
+2026-05-20,INTC,Intel,tech,267.6219,219.436,118.96
+2026-05-21,INTC,Intel,tech,263.5997,219.848,118.5
+2026-05-22,INTC,Intel,tech,252.6249,171.232,119.84
+2026-05-26,INTC,Intel,tech,258.3667,132.5132,123.52
+2026-05-27,INTC,Intel,tech,261.8054,135.777,121.77
 2025-01-14,JNJ,Johnson & Johnson,healthcare,102.2306,100.0,139.708
 2025-01-15,JNJ,Johnson & Johnson,healthcare,100.72,100.0,139.9203
 2025-01-16,JNJ,Johnson & Johnson,healthcare,102.8281,100.0,142.6228
@@ -5069,6 +5138,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,JNJ,Johnson & Johnson,healthcare,93.6783,85.7114,226.71
 2026-05-18,JNJ,Johnson & Johnson,healthcare,93.8929,87.3623,228.92
 2026-05-19,JNJ,Johnson & Johnson,healthcare,93.7059,89.9025,230.0
+2026-05-20,JNJ,Johnson & Johnson,healthcare,94.3427,90.595,229.32
+2026-05-21,JNJ,Johnson & Johnson,healthcare,91.9696,88.5939,231.73
+2026-05-22,JNJ,Johnson & Johnson,healthcare,92.5084,88.2047,233.0
+2026-05-26,JNJ,Johnson & Johnson,healthcare,92.5929,89.3404,230.18
+2026-05-27,JNJ,Johnson & Johnson,healthcare,93.3834,92.8289,231.29
 2025-01-14,JPM,JPMorgan Chase,financials,106.3695,100.0,241.2629
 2025-01-15,JPM,JPMorgan Chase,financials,106.7022,100.0,246.0206
 2025-01-16,JPM,JPMorgan Chase,financials,107.6845,100.0,247.8924
@@ -5407,6 +5481,8 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,JPM,JPMorgan Chase,financials,97.4755,95.0729,297.81
 2026-05-18,JPM,JPMorgan Chase,financials,97.8452,98.2059,300.73
 2026-05-19,JPM,JPMorgan Chase,financials,96.5433,93.5386,295.7
+2026-05-20,JPM,JPMorgan Chase,financials,96.9138,93.1809,301.98
+2026-05-21,JPM,JPMorgan Chase,financials,99.297,96.0336,303.0
 2025-01-14,KO,Coca-Cola,consumer,100.3708,100.0,59.8505
 2025-01-15,KO,Coca-Cola,consumer,98.3079,100.0,59.5901
 2025-01-16,KO,Coca-Cola,consumer,99.2289,100.0,60.0531
@@ -5745,6 +5821,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,KO,Coca-Cola,consumer,102.2967,93.5827,80.82
 2026-05-18,KO,Coca-Cola,consumer,102.805,95.1277,81.2
 2026-05-19,KO,Coca-Cola,consumer,104.5945,100.6895,81.92
+2026-05-20,KO,Coca-Cola,consumer,102.0557,97.8524,81.55
+2026-05-21,KO,Coca-Cola,consumer,98.4609,94.3742,81.17
+2026-05-22,KO,Coca-Cola,consumer,98.812,94.1671,81.48
+2026-05-26,KO,Coca-Cola,consumer,98.7208,92.4978,80.46
+2026-05-27,KO,Coca-Cola,consumer,99.7802,96.9402,81.62
 2025-01-14,MCD,McDonald's,consumer,98.0427,100.0,273.6334
 2025-01-15,MCD,McDonald's,consumer,96.694,100.0,274.333
 2025-01-16,MCD,McDonald's,consumer,95.9691,100.0,271.8453
@@ -6083,6 +6164,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,MCD,McDonald's,consumer,84.8463,83.3493,276.39
 2026-05-18,MCD,McDonald's,consumer,86.5881,85.172,282.47
 2026-05-19,MCD,McDonald's,consumer,86.3769,86.417,280.8
+2026-05-20,MCD,McDonald's,consumer,84.9482,85.6796,280.27
+2026-05-21,MCD,McDonald's,consumer,82.8992,84.2566,284.18
+2026-05-22,MCD,McDonald's,consumer,82.8587,84.5917,282.27
+2026-05-26,MCD,McDonald's,consumer,82.6909,85.6485,279.26
+2026-05-27,MCD,McDonald's,consumer,82.5343,89.1388,280.92
 2025-01-14,MMM,3M,industrial,109.2212,100.0,134.0659
 2025-01-15,MMM,3M,industrial,107.8904,100.0,134.6229
 2025-01-16,MMM,3M,industrial,109.1595,100.0,135.9908
@@ -6421,6 +6507,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,MMM,3M,industrial,87.2454,96.987,146.22
 2026-05-18,MMM,3M,industrial,92.8659,100.5563,152.53
 2026-05-19,MMM,3M,industrial,90.5511,94.7858,149.36
+2026-05-20,MMM,3M,industrial,88.9691,93.1289,149.78
+2026-05-21,MMM,3M,industrial,88.4534,97.2367,151.6
+2026-05-22,MMM,3M,industrial,89.4938,100.4991,152.44
+2026-05-26,MMM,3M,industrial,91.7127,99.3979,154.03
+2026-05-27,MMM,3M,industrial,91.7409,99.3572,155.17
 2025-01-14,MRK,Merck,healthcare,102.4645,100.0,95.3334
 2025-01-15,MRK,Merck,healthcare,101.2423,100.0,95.7543
 2025-01-16,MRK,Merck,healthcare,102.0209,100.0,96.3379
@@ -6759,6 +6850,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,MRK,Merck,healthcare,92.3097,86.5292,111.38
 2026-05-18,MRK,Merck,healthcare,93.1614,84.6744,112.56
 2026-05-19,MRK,Merck,healthcare,94.5011,89.403,114.24
+2026-05-20,MRK,Merck,healthcare,92.3967,90.669,113.0
+2026-05-21,MRK,Merck,healthcare,91.5028,88.0336,115.88
+2026-05-22,MRK,Merck,healthcare,96.7407,91.0246,122.41
+2026-05-26,MRK,Merck,healthcare,96.5749,91.6714,119.72
+2026-05-27,MRK,Merck,healthcare,99.2387,96.7682,120.24
 2025-01-14,MSFT,Microsoft,tech,95.497,100.0,411.6865
 2025-01-15,MSFT,Microsoft,tech,96.3478,100.0,422.2245
 2025-01-16,MSFT,Microsoft,tech,96.1089,100.0,420.5111
@@ -7097,6 +7193,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,MSFT,Microsoft,tech,106.5723,113.5208,421.92
 2026-05-18,MSFT,Microsoft,tech,106.1828,115.4355,423.54
 2026-05-19,MSFT,Microsoft,tech,104.8247,115.9415,417.42
+2026-05-20,MSFT,Microsoft,tech,105.1864,110.0445,421.06
+2026-05-21,MSFT,Microsoft,tech,105.7929,110.2304,419.09
+2026-05-22,MSFT,Microsoft,tech,104.8387,117.7352,418.57
+2026-05-26,MSFT,Microsoft,tech,102.0564,112.3586,416.03
+2026-05-27,MSFT,Microsoft,tech,100.6206,113.9494,412.67
 2025-01-14,NKE,Nike,consumer,94.2874,100.0,69.078
 2025-01-15,NKE,Nike,consumer,92.6229,100.0,68.9809
 2025-01-16,NKE,Nike,consumer,92.822,100.0,69.0198
@@ -7435,6 +7536,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,NKE,Nike,consumer,65.0478,89.7335,41.88
 2026-05-18,NKE,Nike,consumer,65.343,90.9516,42.57
 2026-05-19,NKE,Nike,consumer,65.1252,90.3094,42.42
+2026-05-20,NKE,Nike,consumer,67.4959,94.6808,44.19
+2026-05-21,NKE,Nike,consumer,68.74,98.0658,44.39
+2026-05-22,NKE,Nike,consumer,68.2123,98.8448,44.67
+2026-05-26,NKE,Nike,consumer,69.9687,100.7087,44.94
+2026-05-27,NKE,Nike,consumer,70.7407,98.5484,45.98
 2025-01-14,NVDA,Nvidia,tech,99.0866,100.0,131.7168
 2025-01-15,NVDA,Nvidia,tech,100.7886,100.0,136.1954
 2025-01-16,NVDA,Nvidia,tech,98.97,100.0,133.5262
@@ -7763,6 +7869,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,NVDA,Nvidia,tech,121.8382,112.8838,225.32
 2026-05-18,NVDA,Nvidia,tech,118.2185,109.3511,222.32
 2026-05-19,NVDA,Nvidia,tech,117.489,105.5712,220.61
+2026-05-20,NVDA,Nvidia,tech,116.8311,107.3034,223.47
+2026-05-21,NVDA,Nvidia,tech,111.2263,101.7387,219.51
+2026-05-22,NVDA,Nvidia,tech,108.5606,102.4858,215.33
+2026-05-26,NVDA,Nvidia,tech,107.7422,96.1047,214.86
+2026-05-27,NVDA,Nvidia,tech,112.3935,98.1411,212.6
 2025-01-14,PG,Procter & Gamble,consumer,96.5666,100.0,153.3762
 2025-01-15,PG,Procter & Gamble,consumer,94.9419,100.0,153.2898
 2025-01-16,PG,Procter & Gamble,consumer,95.5987,100.0,154.1059
@@ -8101,6 +8212,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,PG,Procter & Gamble,consumer,89.4116,88.1568,141.57
 2026-05-18,PG,Procter & Gamble,consumer,91.4156,89.4478,142.39
 2026-05-19,PG,Procter & Gamble,consumer,89.8425,92.5444,141.3
+2026-05-20,PG,Procter & Gamble,consumer,88.5759,90.3954,142.44
+2026-05-21,PG,Procter & Gamble,consumer,84.8961,88.6655,143.4
+2026-05-22,PG,Procter & Gamble,consumer,85.603,88.5916,144.44
+2026-05-26,PG,Procter & Gamble,consumer,86.4438,86.238,142.96
+2026-05-27,PG,Procter & Gamble,consumer,88.6966,88.2933,147.49
 2025-01-14,RTX,Raytheon,industrial,106.3267,100.0,116.8951
 2025-01-15,RTX,Raytheon,industrial,104.2639,100.0,116.5233
 2025-01-16,RTX,Raytheon,industrial,105.6306,100.0,117.8638
@@ -8439,6 +8555,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,RTX,Raytheon,industrial,84.4093,84.34,171.18
 2026-05-18,RTX,Raytheon,industrial,86.1535,88.4303,175.95
 2026-05-19,RTX,Raytheon,industrial,85.2833,86.9256,174.49
+2026-05-20,RTX,Raytheon,industrial,84.6719,89.1801,174.85
+2026-05-21,RTX,Raytheon,industrial,84.5855,91.6924,175.98
+2026-05-22,RTX,Raytheon,industrial,87.0751,95.245,177.01
+2026-05-26,RTX,Raytheon,industrial,89.9209,99.4754,178.97
+2026-05-27,RTX,Raytheon,industrial,87.6973,101.8127,176.59
 2025-01-14,TRV,Travelers,financials,100.3396,100.0,232.2823
 2025-01-15,TRV,Travelers,financials,99.9776,100.0,235.2724
 2025-01-16,TRV,Travelers,financials,101.1334,100.0,237.6156
@@ -8777,6 +8898,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,TRV,Travelers,financials,100.5561,89.3822,299.76
 2026-05-18,TRV,Travelers,financials,102.8477,91.945,305.99
 2026-05-19,TRV,Travelers,financials,102.3097,93.1723,305.52
+2026-05-20,TRV,Travelers,financials,100.2577,90.4921,306.96
+2026-05-21,TRV,Travelers,financials,97.9939,90.3232,307.23
+2026-05-22,TRV,Travelers,financials,97.9049,88.5311,306.46
+2026-05-26,TRV,Travelers,financials,98.4417,90.9384,304.84
+2026-05-27,TRV,Travelers,financials,96.0769,88.9439,299.94
 2025-01-14,UNH,UnitedHealth,healthcare,108.886,100.0,526.5775
 2025-01-15,UNH,UnitedHealth,healthcare,107.0512,100.0,526.2676
 2025-01-16,UNH,UnitedHealth,healthcare,100.7434,100.0,494.4739
@@ -9115,6 +9241,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,UNH,UnitedHealth,healthcare,137.3165,143.4226,393.85
 2026-05-18,UNH,UnitedHealth,healthcare,136.7053,138.5677,391.13
 2026-05-19,UNH,UnitedHealth,healthcare,135.3825,143.3118,389.24
+2026-05-20,UNH,UnitedHealth,healthcare,132.1788,132.0125,383.3
+2026-05-21,UNH,UnitedHealth,healthcare,132.4986,132.1128,382.48
+2026-05-22,UNH,UnitedHealth,healthcare,138.9355,139.1217,388.47
+2026-05-26,UNH,UnitedHealth,healthcare,131.0407,128.3544,376.86
+2026-05-27,UNH,UnitedHealth,healthcare,131.9491,104.7067,384.01
 2025-01-14,V,Visa,financials,101.5935,100.0,306.2786
 2025-01-15,V,Visa,financials,102.2652,100.0,313.4032
 2025-01-16,V,Visa,financials,102.7415,100.0,314.3643
@@ -9453,6 +9584,11 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,V,Visa,financials,102.182,104.2126,325.75
 2026-05-18,V,Visa,financials,104.0188,107.6901,332.64
 2026-05-19,V,Visa,financials,103.7229,109.5399,329.91
+2026-05-20,V,Visa,financials,102.4754,107.4837,330.75
+2026-05-21,V,Visa,financials,105.0601,110.1555,331.12
+2026-05-22,V,Visa,financials,104.292,110.3803,328.88
+2026-05-26,V,Visa,financials,102.4973,108.1911,326.48
+2026-05-27,V,Visa,financials,101.3156,106.5604,327.61
 2025-01-14,VZ,Verizon,telecom,95.6209,100.0,35.2964
 2025-01-15,VZ,Verizon,telecom,93.8193,100.0,35.2042
 2025-01-16,VZ,Verizon,telecom,94.3619,100.0,35.3517
@@ -9791,6 +9927,10 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,VZ,Verizon,telecom,96.2071,78.3546,46.37
 2026-05-18,VZ,Verizon,telecom,98.7323,81.4501,46.76
 2026-05-19,VZ,Verizon,telecom,99.6891,84.2729,47.74
+2026-05-20,VZ,Verizon,telecom,97.8013,81.833,47.82
+2026-05-22,VZ,Verizon,telecom,95.6955,79.2441,48.35
+2026-05-26,VZ,Verizon,telecom,98.0376,82.204,48.49
+2026-05-27,VZ,Verizon,telecom,97.89,80.7796,48.24
 2025-01-14,WMT,Walmart,consumer,99.8813,100.0,89.745
 2025-01-15,WMT,Walmart,consumer,98.8513,100.0,90.2887
 2025-01-16,WMT,Walmart,consumer,98.9647,100.0,90.2492
@@ -10129,3 +10269,8 @@ date,ticker,name,group,rs_ratio,rs_momentum,close
 2026-05-15,WMT,Walmart,consumer,102.4368,95.9188,131.45
 2026-05-18,WMT,Walmart,consumer,105.6748,99.1835,133.34
 2026-05-19,WMT,Walmart,consumer,107.9662,101.9548,134.2
+2026-05-20,WMT,Walmart,consumer,105.9937,97.5622,130.85
+2026-05-21,WMT,Walmart,consumer,93.9764,85.1999,121.34
+2026-05-22,WMT,Walmart,consumer,92.6172,82.772,120.27
+2026-05-26,WMT,Walmart,consumer,92.8265,83.572,118.57
+2026-05-27,WMT,Walmart,consumer,93.4891,85.7969,118.54

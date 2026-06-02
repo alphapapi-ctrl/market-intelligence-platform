@@ -1,0 +1,3 @@
+rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+3,1,OKLO,OKLO INC,Uranium,large,68.7,55.56,0.1706,-0.0013,0.1829,FLAT,-22.08,27.46,536.7,-73.83,49.2,99.06,1.5516,HIGH,SHIFT,68.274,61.759,85.9167,0,13.6377,LAGGARD,37.3698
+15,6,NNE,NANO NUCLEAR ENERGY INC,Uranium,mid,29.07,26.67,0.2451,0.2237,0.2157,STRONG_UP,-2.42,-16.68,429.51,-66.45,47.2,100.91,2.3613,HIGH,SHIFT,25.4407,23.6484,31.7403,0,-7.8024,WEAK,21.7945

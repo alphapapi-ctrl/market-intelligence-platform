@@ -1,0 +1,2 @@
+rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+17,2,NNE,NANO NUCLEAR ENERGY INC,Uranium,mid,29.7,30.43,0.0121,0.3226,0.2685,FLAT,-9.17,-3.98,364.06,-66.45,48.0,100.65,1.5923,HIGH,SHIFT,26.5243,24.2224,31.5957,0,-1.8965,WEAK,22.1412

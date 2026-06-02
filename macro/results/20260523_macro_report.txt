@@ -1,0 +1,204 @@
+══════════════════════════════════════════════════════════════════════
+  DAILY MACRO SNAPSHOT — 23 May 2026
+══════════════════════════════════════════════════════════════════════
+
+  VIX: 16.7   VVIX: 91.16   VIX/VVIX: 0.1832
+  REGIME: RISK ON
+  Low fear confirmed — volatility structure healthy
+
+──────────────────────────────────────────────────────────────────────
+  CHANGE ALERTS — since last run
+──────────────────────────────────────────────────────────────────────
+  → WATCH  Oil             ▼ 1.65% (prev: 98.0 → now: 96.38)
+
+──────────────────────────────────────────────────────────────────────
+  TODAY'S FOCUS INSTRUMENTS
+──────────────────────────────────────────────────────────────────────
+  ASX:
+    • XMJ — Materials
+    • XDJ — Consumer Disc
+    • XFJ — Financials
+    • XRE — Real Estate
+    • XEJ — Energy
+    • XIJ — IT
+  US:
+    • SMH — Semiconductors
+    • XLK — Technology
+    • XLY — Consumer Disc
+    • XRT — Retail
+    • IBB — Biotech
+    • KRE — Regional Banks
+    • XLF — Financials
+    • XLI — Industrials
+  Ratios:
+    • NDX/SPX — Tech leadership
+    • SMH/NDX — Semi vs Nasdaq
+    • IWM/SPX — Small cap risk appetite
+    • XDJ/XSJ — ASX cyclical vs defensive
+    • XJO/SPY — ASX vs US
+
+──────────────────────────────────────────────────────────────────────
+  ECONOMIC REGIME INDICATORS
+──────────────────────────────────────────────────────────────────────
+  Unemployment:  4.3%  → TICKING UP — late cycle signal
+  PMI Mfg:       50.3  ✓ EXPANSION — moderate growth
+  Non-Farm Pay:  158,736 (000s)
+  Consumer Sent:  49.8  ⚠ VERY LOW — recession level pessimism
+
+──────────────────────────────────────────────────────────────────────
+  CONSUMER CYCLE INDICATORS
+──────────────────────────────────────────────────────────────────────
+  XLY/XLP ratio:     1.4054  ▲ 3.79% 5d  ▲ 7.65% 63d  ✓ RISK ON — discretionary leading
+  RSPD/RSPS ratio:   1.7956  ▲ 3.74% 5d  ▲ 1.08% 63d  ✓ RISK ON — equal weight disc leading
+  Sector Groups Risk On/Off ratio: 1.482  ▲ 0.18% 5d  ▼ 2.51% 10d  → WEAKENING — defensive rotation building
+  A/D Line:          ⚠ BEARISH — breadth deteriorating while price rises
+
+──────────────────────────────────────────────────────────────────────
+  VALUATION & LEVERAGE
+──────────────────────────────────────────────────────────────────────
+  SPX/M2 ratio:      0.3294  ⚠ EXTREME — dot-com bubble levels
+  Margin/M2 ratio:   1.6359  ⚠ EXTREME — forced deleveraging risk
+  ⚠ MARGIN DECLINING — ▼ 0.37% 1m  ▼ 0.98% 3m — deleveraging signal
+  Margin -0.98% from peak
+  Margin Debt Accel:     -0.043%  → STABLE
+  Buffett Indicator: 232.74%  ⚠ EXTREME — significantly above historical average of 100%
+  Shiller CAPE:      37.5  ⚠ EXTREME — dot-com bubble territory  (manual — update monthly)
+
+══════════════════════════════════════════════════════════════════════
+  MACRO CYCLE POSITIONS
+══════════════════════════════════════════════════════════════════════
+
+  ──────────────────────────────────────────────────────────────────
+  18-21 YEAR LAND CYCLE
+  ──────────────────────────────────────────────────────────────────
+  Phase:    DOWNTURN
+  Context:  Credit contraction, real estate stress, recession risk
+  Years in: 19.8
+  ITB Housing ETF:  $90.97  ▼ 17.25% 63d  ▼ 2.65% 126d
+  Watch for next phase:
+    → Commercial real estate distress accelerating
+    → Credit tightening for property development
+    → Rising vacancy rates in office/retail
+    → Regional bank stress from CRE exposure
+
+  ──────────────────────────────────────────────────────────────────
+  40/80 YEAR RATE CYCLE (US10Y)
+  ──────────────────────────────────────────────────────────────────
+  Phase:    EARLY UP
+  Context:  Rates rising from historic lows, structural shift
+  Years in: 5.8
+  US10Y now: 4.57%
+  Key levels: Structural=4.0% | Mid=6.0% | Peak=8.0%
+  Watch for next phase:
+    → US10Y holding above 4% confirms structural up cycle
+    → Watch for break above 5% = acceleration signal
+    → AU10Y tracking US — RBA forced to follow
+    → Bond market pricing inflation re-acceleration
+
+  ──────────────────────────────────────────────────────────────────
+  COMMODITY VS EQUITY ALTERNATING CYCLE (GOLD/DOW)
+  ──────────────────────────────────────────────────────────────────
+  Phase:    MID
+  Context:  Industrial metals accelerate — copper/nickel lead
+  Years in: 5.8
+  Supercycle: METALS RUN → ENERGY MID CYCLE
+  Metals rotation:
+    → Tier 1: Copper (electrification backbone)
+    → Tier 1: Lithium (battery/storage)
+    → Tier 2: Uranium (nuclear baseload)
+    → Tier 2: Rare Earths (EV/defence)
+    → Tier 3: Manganese/Cobalt (supply chain)
+  Watch for next phase:
+    → SPGSCI/DJI ratio breaking higher = commodity cycle confirmed
+    → Gold/Dow ratio declining from highs = equity cycle returning
+    → Copper breakout above prior highs = Phase 2 acceleration
+    → Agriculture ETFs breaking out = late cycle signal
+
+  ──────────────────────────────────────────────────────────────────
+  US PRESIDENTIAL/ELECTION CYCLE
+  ──────────────────────────────────────────────────────────────────
+  Phase:    YEAR 2
+  Context:  Mid-term year, choppy and poor SPX returns historically
+  Years in: 2.3
+  Cycle start: Nov 2024 (Trump Term 2)  Day 568
+  Current year of cycle: Year 2
+  ────────────────────────────────────────────────────
+  Metric                            Current   Hist Avg
+  ────────────────────────────────────────────────────
+  SPX return since Nov 2024      30.45%     8.47%
+  Max drawdown this cycle        -18.9%     -18.0%
+  Current DD from cycle high     -0.37%
+  Cycle high (SPX)               7501.24
+  ✓ Running 21.98% ahead of historical average
+  Watch for next phase:
+    → Mid-term elections Nov 2026 — watch policy shift
+    → SPX historically underperforms in year 1-2
+    → Tariff/trade policy changes = volatility catalyst
+    → Fed independence risk = bond market vigilantes
+
+  ──────────────────────────────────────────────────────────────────
+  BUSINESS/ECONOMIC CYCLE
+  ──────────────────────────────────────────────────────────────────
+  Phase:    EARLY EXPANSION  (signal score: 3)
+  Sector signals:
+    • XLK/SPX +18.7% 63d — Tech leading
+    • XLY/XLP +7.7% 63d — Discretionary leading Staples
+  Watch for next phase:
+    → Unemployment rate rising above 4.5% = recession confirmed
+    → Yield curve re-inversion = double dip risk
+    → Credit spreads widening above 500bps = stress signal
+    → Fed pivoting to QE = late cycle confirmed
+
+  ──────────────────────────────────────────────────────────────────
+  FED QT/QE CYCLE
+  ──────────────────────────────────────────────────────────────────
+  Phase:    QT SLOWING — PRE PIVOT
+  Fed Funds: 3.64%
+  Balance sheet: $6.71T
+  Watch for next phase:
+    → Fed balance sheet stabilising = QT effectively over
+    → First repo market stress = forced QE pivot
+    → Fed funds rate below 3% = full easing cycle
+    → Watch SOFR spreads for liquidity stress signals
+
+══════════════════════════════════════════════════════════════════════
+  LIVE MARKET READINGS
+══════════════════════════════════════════════════════════════════════
+──────────────────────────────────────────────────────────────────────
+  RATES & BONDS
+──────────────────────────────────────────────────────────────────────
+  US10Y:        4.57%   US2Y: 4.08%   US3M: 3.68%
+  Yield Curve:  0.49% (10Y-2Y)   Fed Funds: 3.64%
+  AU10Y:        4.96%
+  ✓ Yield curve positive — un-inverted
+  Yield Curve Velocity:  +0.020% 5d  -0.020% 21d  → STABLE
+
+──────────────────────────────────────────────────────────────────────
+  FED & LIQUIDITY
+──────────────────────────────────────────────────────────────────────
+  Fed Balance Sheet: $6.71T   Fed Funds: 3.64%
+  HY Spread: 2.78%   IG Spread: 5.21%
+  US10Y 3M trend: RISING (+0.53% over 3 months)
+  US2Y  3M trend: RISING (+0.65% over 3 months)
+  ✓ HY spreads contained — credit conditions healthy
+
+──────────────────────────────────────────────────────────────────────
+  COMMODITIES
+──────────────────────────────────────────────────────────────────────
+  Gold:    $4508.2  ▼ 0.97% 5d
+  Silver:  $75.86
+  Copper:  $6.39  ▲ 1.82% 5d
+  Oil:     $96.38  ▼ 11.30% 5d
+  Gold/SPX ratio:    0.6032
+  Gold/Copper ratio: 706.1
+  Cu/Gold ratio:     0.001416  ▲ 3.21% 5d  ▲ 27.69% 63d  ✓ RISING — industrial demand expanding, growth signal
+
+──────────────────────────────────────────────────────────────────────
+  EQUITIES & RISK
+──────────────────────────────────────────────────────────────────────
+  SPX:  7473.47  ▲ 0.95% 5d
+  NDX:  29481.64  ▲ 1.68% 5d
+  IWM:  285.12
+  DXY:  99.32
+
+══════════════════════════════════════════════════════════════════════

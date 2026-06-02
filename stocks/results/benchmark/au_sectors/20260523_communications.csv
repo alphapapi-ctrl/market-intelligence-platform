@@ -1,0 +1,10 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+226,6,TUA.AX,Tuas Ltd.,Communications,Wireless telecommunications,mid,2.31,0.3802,1.0008,0.3825,0.3742,UP,-64.46,-59.33,-41.96,-73.32,39.53,138.96,4.7233,HIGH,EARLY,5.0185,5.638,6.6458,0,-16.8779,WEAK,21.2062
+380,-78,TLS.AX,Telstra Group Limited,Communications,Wireless telecommunications,large,5.38,1.1014,0.978,1.0116,1.1004,DOWN,12.04,17.82,69.34,-7.45,44.66,13.51,2.0409,HIGH,-,5.3575,5.3408,4.9466,1,58.915,TREND+LEAD,17.359
+395,-43,FRX.AX,FlexiRoam Ltd,Communications,Wireless telecommunications,small,0.019,2.9602,0.9343,0.961,0.8511,UP,35.71,216.67,-32.14,-48.0,17.79,111.82,0.0,LOW,-,0.021,0.0197,0.016,1,34.4706,TREND+LEAD,17.1348
+414,-50,ABB.AX,Aussie Broadband Ltd.,Communications,Specialty telecommunications,small,5.31,1.2466,0.9928,0.9948,1.0801,DOWN,5.04,33.35,56.52,-28.57,43.87,25.18,0.5557,LOW,-,5.297,5.1122,5.1418,1,58.1124,TREND+LEAD,16.5677
+754,39,CNU.AX,Chorus Limited,Communications,Major telecommunications,mid,8.34,1.0976,0.9942,1.0403,1.0736,DOWN,6.02,17.41,36.21,-12.34,50.99,21.13,0.3556,LOW,-,8.2365,8.0041,7.9842,1,42.0137,TREND+LEAD,11.8659
+812,247,HFY.AX,Hubify Ltd.,Communications,Specialty telecommunications,small,0.012,1.4022,0.9835,0.8093,1.3738,UP,33.33,50.0,9.09,-52.38,12.65,349.5,0.0005,LOW,-,0.0131,0.0151,0.0104,1,1.8097,TREND+LEAD,11.398
+1066,70,MAQ.AX,Macquarie Technology Group Limited,Communications,Specialty telecommunications,small,74.94,1.1464,0.9853,1.0678,1.208,DOWN,20.99,22.63,-13.85,-19.22,50.99,41.46,0.4765,LOW,-,73.2355,68.5348,66.187,1,27.8334,TREND+LEAD,9.46
+1419,-114,ITS.AX,Infotrust Ltd,Communications,Major telecommunications,small,0.435,0.7461,1.0186,0.9671,0.8875,UP,,-20.18,-20.18,-40.83,33.64,82.74,0.0059,LOW,-,0.424,0.4396,,0,-8.2061,WEAK,6.5524
+1679,-40,TPG.AX,TPG Telecom Limited,Communications,Wireless telecommunications,mid,4.13,0.7791,0.9764,0.9627,1.1274,DOWN,10.0,-16.65,-4.27,-35.15,49.41,19.67,0.5612,LOW,EARLY,4.1735,4.141,4.3302,0,-41.8336,WEAK,1.8952

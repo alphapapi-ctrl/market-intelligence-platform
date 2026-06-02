@@ -1,0 +1,4 @@
+rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+17,4,SBM.AX,St Barbara Limited,Gold,mid,0.575,65.13,-0.0254,-0.0286,-0.1204,STRONG_UP,2.68,74.24,144.68,-39.53,43.87,68.02,1.9132,HIGH,EARLY,0.6112,0.6304,0.5878,0,47.8832,LAGGARD,26.9213
+47,17,NST.AX,Northern Star Resources Limited,Gold,large,18.81,18.42,-0.0552,-0.075,-0.1913,STRONG_UP,-29.66,-8.24,42.26,-45.32,51.78,67.94,1.8819,HIGH,EARLY,20.213,21.093,23.8531,0,-6.2783,WEAK,20.0481
+72,5,TCG.AX,Turaco Gold Limited,Gold,mid,0.48,21.71,-0.1351,-0.1701,-0.1852,STRONG_UP,-3.03,-4.0,128.57,-44.83,46.25,75.19,2.5907,HIGH,EARLY,0.5493,0.5903,0.603,0,-2.4604,WEAK,15.7714

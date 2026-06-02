@@ -1,0 +1,21 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+115,39,BRMS.JK,"ticker
+BRMS.JK    Bumi Resources Minerals
+BRMS.JK    Bumi Resources Minerals
+Name: name, dtype: object",copper,producer,large,595.0,0.6949,0.93,0.6676,0.5961,STRONG_UP,-36.02,53.35,288.89,-56.87,44.17,86.88,2.4635,HIGH,EARLY,702.5,763.8,861.69,0,27.1235,WEAK,32.8106
+127,38,IE,"ticker
+IE         Ivanhoe Electric
+IE    Ivanhoe Electric Inc.
+Name: name, dtype: object",gold,producer,mid,13.46,1.029,1.0837,1.035,1.0296,STRONG_UP,3.86,83.13,14.75,-45.93,54.8,77.27,1.5234,HIGH,SHIFT,13.1885,12.989,13.7212,0,58.9554,WEAK,31.2957
+154,47,III.TO,Imperial Metals,copper,producer,mid,6.86,0.6728,0.9596,0.9179,0.7107,STRONG_UP,-6.54,48.48,178.86,-54.57,52.0,70.09,8.2425,HIGH,PROGRESS,6.5515,7.2138,7.8076,0,35.9711,WEAK,27.8071
+181,35,LUG.TO,Lundin Gold Inc,gold,producer,large,92.05,0.8154,0.9889,0.9948,0.9553,FLAT,-19.69,45.12,396.71,-33.77,56.0,61.19,3.8136,HIGH,PROGRESS,90.2775,99.0892,101.6032,0,41.2891,WEAK,24.7569
+186,-4,AMMN.JK,"ticker
+AMMN.JK    Amman Mineral Internasional
+AMMN.JK    Amman Mineral Internasional
+Name: name, dtype: object",copper,producer,large,3300.0,0.2167,0.9907,0.5844,0.4493,STRONG_UP,-47.62,-52.17,-73.49,-67.05,44.58,79.94,17.9804,HIGH,EARLY,3729.25,4607.9,6630.225,0,-29.0957,WEAK,24.4618
+199,44,IVN.TO,Ivanhoe Mines Class A,copper,producer,large,12.21,0.5205,0.9464,1.0026,0.8564,FLAT,-13.65,14.86,-38.24,-45.14,52.4,63.43,1.5724,HIGH,SHIFT,11.715,11.556,13.6826,0,12.2789,WEAK,23.2048
+205,64,VUL.AX,VULCAN ENERGY RESOURCES LTD,lithium,producer,mid,3.99,0.424,1.0876,1.0412,0.9384,STRONG_UP,-20.65,2.84,-16.0,-61.57,49.8,59.09,2.1311,HIGH,SHIFT,3.652,3.55,4.4382,0,2.3893,WEAK,22.504
+223,32,NST.AX,Northern Star Resources,gold,producer,large,18.81,0.5156,0.8976,0.8766,0.7703,STRONG_UP,-29.66,-8.24,42.26,-45.32,51.78,67.94,1.8819,HIGH,EARLY,20.213,21.093,23.8531,0,-6.2783,WEAK,20.1929
+241,29,ATX.V,ATEX Resources,copper,producer,mid,2.92,0.5753,0.9297,0.8619,0.7178,STRONG_UP,17.74,26.96,98.64,-36.07,49.0,59.38,3.5069,HIGH,EARLY,3.082,3.1914,3.0627,0,22.2444,WEAK,18.5545
+284,15,YCA.L,Yellow Cake PLC,uranium,producer,mid,569.0,0.7114,0.9595,1.0729,0.9934,FLAT,8.9,18.2,-12.53,-23.13,47.62,30.81,1.9191,HIGH,EARLY,581.525,590.0,578.995,0,28.1252,WEAK,14.4243
+312,11,1211.HK,BYD CO LTD-H,lithium,producer,large,91.3,0.2907,0.9753,0.8536,0.798,STRONG_UP,-4.1,-29.5,28.13,-36.08,44.49,43.04,1.5972,HIGH,EARLY,96.3075,102.069,101.9773,0,-30.4929,WEAK,10.6264

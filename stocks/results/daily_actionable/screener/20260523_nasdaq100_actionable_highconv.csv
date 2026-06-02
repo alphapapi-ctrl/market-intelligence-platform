@@ -1,0 +1,6 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+47,-4,INTU,Intuit,Technology,Computer Software,large,319.94,2.27,-0.2468,-0.2833,-0.3369,STRONG_UP,-49.56,-55.21,-50.98,-61.71,47.2,63.79,3.0576,HIGH,EARLY,385.3855,402.0313,556.5886,0,-40.8517,WEAK,19.0412
+63,3,WDAY,"Workday, Inc.",Technology,EDP Services,large,128.14,6.82,-0.0462,-0.0214,-0.2476,FLAT,-40.9,-46.16,-50.89,-55.52,50.0,54.0,1.9298,HIGH,SHIFT,124.2015,125.6762,187.6269,0,-42.7425,WEAK,14.9724
+72,-7,TTWO,Take-Two Interactive,Consumer Discretionary,Miscellaneous Amusement & Recreation Services,large,227.55,31.25,-0.0601,0.0846,0.0983,STRONG_DOWN,-3.32,1.14,49.38,-27.68,50.4,31.66,3.5878,HIGH,SHIFT,226.4,212.562,231.8857,0,1.8113,WEAK,12.1746
+88,2,PDD,PDD Holdings,Technology,EDP Services,large,94.52,20.45,-0.0452,-0.1272,-0.3472,STRONG_UP,-16.3,-20.73,-38.48,-31.57,50.0,33.5,1.7748,HIGH,EARLY,97.924,99.6332,113.7684,0,-30.9422,WEAK,8.5422
+99,1,CPRT,Copart,Consumer Discretionary,Retail,large,33.79,0.0,0.012,0.0267,-0.0782,FLAT,-17.63,-37.04,-36.86,-39.82,47.2,24.55,1.7226,HIGH,SHIFT,33.314,33.266,39.8679,0,-71.2156,WEAK,1.6596

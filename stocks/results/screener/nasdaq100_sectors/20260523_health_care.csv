@@ -1,0 +1,11 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+24,-5,INSM,Insmed Incorporated,Health Care,Biotechnology,large,106.24,100.0,-0.0447,-0.2024,-0.2217,STRONG_UP,-46.78,57.32,350.17,-52.06,54.4,68.94,0.859,LOW,EARLY,119.9655,137.315,155.9924,0,45.2329,LAGGARD,30.2795
+37,2,AMGN,Amgen,Health Care,Biotechnology,large,339.3,88.89,0.0211,0.0187,0.0061,STRONG_UP,3.16,28.65,17.71,-16.57,52.8,23.17,0.5558,LOW,-,331.621,341.5848,322.5379,1,65.2946,LEADER,21.6966
+39,1,GILD,Gilead Sciences,Health Care,Biotechnology,large,134.36,77.78,0.0113,0.0568,0.0284,FLAT,8.82,28.46,116.28,-17.54,52.4,22.51,0.9709,LOW,-,131.7535,135.8586,127.3325,1,66.2616,LEADER,21.1156
+55,-2,ALNY,Alnylam Pharmaceuticals,Health Care,Biotechnology,large,297.45,44.44,0.0142,-0.0149,0.0068,FLAT,-33.28,2.58,99.12,-42.01,53.6,34.27,0.576,LOW,PROGRESS,296.81,310.317,388.3452,0,4.0401,WEAK,16.6924
+58,-1,IDXX,Idexx Laboratories,Health Care,Biotechnology,large,559.37,66.67,-0.0113,0.0149,-0.0299,FLAT,-18.86,11.52,8.38,-31.04,50.8,31.27,0.8227,LOW,PROGRESS,553.8675,566.3022,640.1175,0,18.7211,LAGGARD,16.2429
+68,3,REGN,Regeneron Pharmaceuticals,Health Care,Biotechnology,large,638.88,55.56,-0.02,-0.1371,-0.0629,FLAT,-13.08,9.19,-34.31,-22.39,48.8,34.54,1.307,MED,EARLY,693.4066,728.4549,691.4884,0,12.9775,LAGGARD,13.1874
+70,2,DXCM,DexCom,Health Care,Medical/Dental Instruments,large,72.1,11.11,0.0828,0.1975,0.0996,FLAT,23.42,-14.68,-42.6,-38.75,50.0,39.27,1.3345,MED,-,62.328,63.4578,67.9539,1,-18.697,LAGGARD,12.4241
+75,-2,GEHC,GE HealthCare,Health Care,Medical Electronics,large,64.23,22.22,0.0193,-0.0552,-0.1269,STRONG_UP,-14.0,-6.96,-18.76,-32.47,52.8,41.9,0.6985,LOW,PROGRESS,62.707,68.0685,75.4921,0,-8.7728,WEAK,11.4102
+81,1,VRTX,Vertex Pharmaceuticals,Health Care,Biotechnology,large,434.52,33.33,-0.0409,0.0363,0.0046,FLAT,2.89,-0.34,-3.61,-23.56,48.0,30.05,1.3181,MED,PROGRESS,433.032,440.2872,434.7456,0,-0.5422,WEAK,9.9608
+95,2,ISRG,Intuitive Surgical,Health Care,Industrial Specialties,large,438.1,0.0,-0.0403,-0.0799,-0.0046,FLAT,-20.67,-18.8,9.97,-29.15,48.0,31.52,1.006,MED,EARLY,445.3835,458.1972,495.973,0,-28.6313,WEAK,5.8385
