@@ -1,0 +1,11 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+62,58,AIS.AX,Aeris Resources,copper,producer,mid,0.44,1.2,0.9516,0.9732,0.8201,FLAT,-5.38,175.0,57.14,-46.67,45.85,73.48,8.9284,HIGH,SHIFT,0.421,0.4019,0.4588,0,109.1964,WEAK,41.7987
+142,32,LEU,Centrus Energy -A,uranium,producer,mid,199.13,0.8861,1.038,0.9867,0.9686,STRONG_UP,-20.78,51.49,322.87,-61.35,52.4,78.21,1.5942,HIGH,SHIFT,191.055,193.3816,248.8333,0,34.496,WEAK,29.7376
+143,5,MARI.TO,Marimaca Copper,copper,producer,mid,7.99,0.7279,0.9089,0.8514,0.7395,STRONG_UP,-26.97,66.81,102.79,-38.9,48.0,47.51,4.2467,HIGH,EARLY,8.266,8.3554,10.2231,0,67.4949,WEAK,29.6078
+169,2,AMMN.JK,"ticker
+AMMN.JK    Amman Mineral Internasional
+AMMN.JK    Amman Mineral Internasional
+Name: name, dtype: object",copper,producer,large,3890.0,0.2451,1.1497,0.6431,0.4915,STRONG_UP,-38.25,-43.83,-66.82,-67.05,44.58,88.62,5.9557,HIGH,PROGRESS,3676.25,4575.2,6607.3,0,-22.0469,WEAK,26.0492
+203,63,NST.AX,Northern Star Resources,gold,producer,large,21.03,0.606,1.0374,0.9826,0.8449,STRONG_UP,-22.05,1.24,55.81,-45.32,51.78,72.74,1.9154,HIGH,PROGRESS,20.094,21.1346,23.872,0,0.8835,WEAK,21.8102
+209,23,SMR,Nuscale Power Corp,uranium,producer,mid,13.95,0.2567,1.0852,1.1743,1.0989,FLAT,-22.84,-56.12,82.83,-82.86,46.0,94.5,1.9769,HIGH,SHIFT,12.0355,11.538,22.1941,0,-27.3168,WEAK,21.5932
+252,0,ATX.V,ATEX Resources,copper,producer,mid,2.85,0.5315,0.8791,0.7698,0.6707,STRONG_UP,19.25,21.79,93.88,-36.07,49.0,59.56,2.3265,HIGH,EARLY,3.0595,3.1858,3.0689,0,17.9306,WEAK,17.5827

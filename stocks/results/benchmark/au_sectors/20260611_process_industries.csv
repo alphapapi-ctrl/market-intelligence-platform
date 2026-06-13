@@ -1,0 +1,52 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+47,6,MPP.AX,Metro Performance Glass Ltd,Process industries,Industrial specialties,small,0.88,,,,,FLAT,2566.67,1585.92,1240.63,-54.55,9.88,114.95,0.0,LOW,-,0.8238,0.8707,0.3682,1,136.3105,TREND_ONLY,40.6031
+48,3,GLN.AX,Galan Lithium Limited,Process industries,Chemicals: agricultural,small,0.37,,,,,FLAT,54.17,281.44,89.74,-36.17,42.29,77.71,1.0286,MED,-,0.4422,0.4579,0.3117,1,153.1622,TREND_ONLY,39.9151
+112,0,CBO.AX,Cobram Estate Olives Ltd.,Process industries,Agricultural commodities/Milling,small,3.99,,,,,FLAT,38.06,92.77,123.86,-27.23,45.45,35.41,0.7369,LOW,-,4.002,3.78,3.4111,1,119.0755,TREND_ONLY,27.528
+148,-31,CP8.AX,Canadian Phosphate Limited,Process industries,Chemicals: agricultural,small,0.155,,,,,FLAT,106.67,307.89,244.44,-43.75,29.25,111.05,0.037,LOW,-,0.1776,0.1336,0.0823,1,81.0979,TREND_ONLY,24.2943
+166,9,NHE.AX,Noble Helium Ltd.,Process industries,Chemicals: specialty,small,0.028,,,,,FLAT,-31.71,180.0,-54.1,-48.0,37.55,135.17,2.5452,HIGH,-,0.0374,0.0334,0.0351,0,50.0037,WEAK,22.7659
+170,14,PNN.AX,Power Minerals Limited,Process industries,Chemicals: agricultural,small,0.125,,,,,FLAT,19.05,115.52,-13.79,-64.89,38.34,83.92,0.8831,LOW,-,0.1303,0.1247,0.1116,1,52.7756,TREND_ONLY,22.3907
+190,124,DNL.AX,Dyno Nobel Limited,Process industries,Chemicals: agricultural,mid,3.83,,,,,FLAT,17.48,48.33,39.93,-18.49,48.22,27.37,0.5068,LOW,-,3.7175,3.4416,3.2549,1,85.1457,TREND_ONLY,21.3765
+219,94,DSM.AX,Desert Minerals Ltd.,Process industries,Chemicals: agricultural,small,0.54,,,,,FLAT,151.16,116.0,116.0,-35.38,38.36,86.46,3.9437,HIGH,-,0.3918,0.3075,,0,51.4661,WEAK,20.0385
+287,-23,PSC.AX,Prospect Resources Ltd.,Process industries,Chemicals: agricultural,small,0.285,,,,,FLAT,42.5,90.0,103.57,-42.11,39.53,68.77,0.984,LOW,-,0.3032,0.3136,0.2796,1,51.7333,TREND_ONLY,18.0216
+391,40,ORI.AX,Orica Limited,Process industries,Industrial specialties,mid,23.04,,,,,FLAT,-2.08,23.84,34.1,-28.9,53.75,32.79,0.7028,LOW,-,22.7877,21.5503,22.3929,1,39.0844,TREND_ONLY,15.8578
+508,237,ATC.AX,Altech Batteries Limited,Process industries,Chemicals: specialty,small,0.009,,,,,FLAT,-67.86,-76.32,,-84.48,32.41,133.1,2.4795,HIGH,-,0.0112,0.0148,0.0269,0,-18.583,WEAK,14.5181
+535,48,EVG.AX,Evion Group NL,Process industries,Chemicals: agricultural,small,0.04,,,,,FLAT,23.08,122.22,100.0,-43.59,32.41,141.86,0.2724,LOW,-,0.0466,0.0367,0.0314,1,27.9235,TREND_ONLY,14.0541
+648,140,SDV.AX,SciDev Ltd,Process industries,Chemicals: major diversified,small,0.092,,,,,FLAT,-78.6,-69.33,-75.47,-82.94,33.6,90.7,6.668,HIGH,-,0.0937,0.1226,0.2986,0,-25.6847,WEAK,12.6607
+653,-19,INR.AX,ioneer Limited,Process industries,Chemicals: agricultural,small,0.13,,,,,FLAT,-23.53,13.04,-23.53,-62.96,32.02,80.74,0.6593,LOW,-,0.1455,0.14,0.1605,0,5.1728,WEAK,12.599
+673,101,DTZ.AX,Dotz Nano Limited,Process industries,Chemicals: specialty,small,0.038,,,,,FLAT,-15.56,-17.39,-73.79,-72.92,34.39,118.16,0.3129,LOW,-,0.0423,0.036,0.0453,0,-5.0617,WEAK,12.4614
+675,-116,LPM.AX,Lithium Plus Minerals Ltd.,Process industries,Chemicals: agricultural,small,0.095,,,,,FLAT,-32.14,55.74,-42.42,-52.5,25.69,100.21,0.0953,LOW,-,0.1106,0.1216,0.1262,0,14.289,WEAK,12.4539
+678,141,JAT.AX,Jatcorp ltd,Process industries,Chemicals: specialty,small,0.145,,,,,FLAT,-5.69,-65.48,-71.57,-78.49,24.51,170.3,0.6769,LOW,-,0.1362,0.1386,0.1657,0,-9.4235,WEAK,12.4168
+698,-253,CAN.AX,Cann Group Ltd.,Process industries,Agricultural commodities/Milling,small,0.004,,,,,FLAT,-50.0,-69.23,-91.67,-78.95,19.37,126.04,0.8809,LOW,-,0.0046,0.0051,0.0089,0,-10.6395,WEAK,12.221
+716,123,MCA.AX,Murray Cod Australia Limited,Process industries,Agricultural commodities/Milling,small,0.15,,,,,FLAT,-85.71,-83.05,-83.52,-87.83,36.76,111.71,1.303,MED,-,0.1629,0.2339,0.7341,0,-27.3292,WEAK,12.1356
+804,-151,NUF.AX,Nufarm Limited,Process industries,Chemicals: agricultural,small,2.9,,,,,FLAT,27.19,29.46,-38.3,-33.52,42.69,51.54,0.8658,LOW,-,2.65,2.4609,2.2884,1,24.4049,TREND_ONLY,11.3668
+825,-18,FIN.AX,Fin Resources Limited,Process industries,Chemicals: agricultural,small,0.007,,,,,FLAT,-22.22,40.0,-30.0,-53.33,21.74,124.17,0.2466,LOW,-,0.0092,0.0103,0.0097,0,7.0033,WEAK,11.1997
+843,-198,3DA.AX,Amaero Ltd,Process industries,Chemicals: major diversified,small,0.305,,,,,FLAT,35.56,0.0,-19.74,-59.62,37.55,89.45,0.7758,LOW,-,0.3455,0.3442,0.3086,0,0.0,WEAK,11.0696
+871,328,MNC.AX,Merino & Co Limited,Process industries,Textiles,small,0.1,,,,,FLAT,-20.0,-28.57,-57.45,-51.43,10.28,163.67,5.2055,HIGH,-,0.126,0.1116,0.1245,0,-1.7946,WEAK,10.9072
+873,-275,FUL.AX,Fulcrum Lithium Ltd.,Process industries,Chemicals: agricultural,small,0.085,,,,,FLAT,10.39,88.89,-52.78,-41.38,20.55,111.54,0.2041,LOW,-,0.1008,0.1096,0.0914,0,16.3768,WEAK,10.9012
+889,-227,LBL.AX,Laserbond Limited,Process industries,Industrial specialties,small,0.51,,,,,FLAT,-18.56,38.35,-24.12,-21.65,40.32,43.39,0.3697,LOW,-,0.5307,0.5405,0.5546,0,35.6332,WEAK,10.8119
+901,73,5EA.AX,"5E Advanced Materials, Inc. Shs Chess Depository Interests Repr 0.1 Sh",Process industries,Chemicals: specialty,small,0.25,,,,,FLAT,-54.55,-60.0,-95.06,-82.71,44.08,109.8,0.0,LOW,-,0.24,0.2298,0.48,0,-24.0874,WEAK,10.7328
+940,-144,PAT.AX,Patriot Resources limited,Process industries,Chemicals: agricultural,small,0.073,,,,,FLAT,28.07,12.31,14.06,-51.47,31.23,168.34,0.2523,LOW,-,0.0905,0.0861,0.0577,1,2.2833,TREND_ONLY,10.451
+947,432,WOA.AX,Wide Open Agriculture Ltd.,Process industries,Agricultural commodities/Milling,small,0.009,,,,,FLAT,-47.06,-52.63,-55.0,-60.87,27.27,103.88,5.2998,HIGH,-,0.0124,0.0133,0.0164,0,-13.8165,WEAK,10.4202
+980,4,BNL.AX,Blue Star Helium Limited,Process industries,Chemicals: specialty,small,0.006,,,,,FLAT,0.0,0.0,-40.0,-55.56,24.51,157.9,0.3617,LOW,-,0.0069,0.0075,0.0064,0,0.0,WEAK,10.2214
+1005,281,LIT.AX,Livium Ltd.,Process industries,Chemicals: agricultural,small,0.009,,,,,FLAT,-18.18,-10.0,-64.71,-46.67,22.92,98.97,4.6977,HIGH,-,0.0093,0.0097,0.0109,0,-2.3159,WEAK,9.966
+1055,-41,ECS.AX,Ecs Botanics Holdings Ltd,Process industries,Agricultural commodities/Milling,small,0.005,,,,,FLAT,-16.67,-47.37,-66.67,-60.0,18.18,132.11,0.1176,LOW,-,0.0051,0.0051,0.006,0,-6.5185,WEAK,9.6198
+1062,-388,BGT.AX,Bio-Gene Technology Ltd.,Process industries,Chemicals: agricultural,small,0.0215,,,,,FLAT,-17.31,7.5,-57.0,-50.0,24.11,95.27,0.5043,LOW,-,0.0261,0.0316,0.0295,0,1.898,WEAK,9.5856
+1162,-117,QXR.AX,QX Resources Ltd,Process industries,Chemicals: agricultural,small,0.003,,,,,FLAT,0.0,0.0,-62.5,-48.86,15.81,135.27,0.5878,LOW,-,0.0036,0.004,0.0043,0,0.0,WEAK,8.9371
+1212,-8,RLF.AX,RLF AgTech Ltd,Process industries,Agricultural commodities/Milling,small,0.036,,,,,FLAT,-49.3,-34.55,-21.74,-59.09,34.39,94.66,0.7363,LOW,-,0.0464,0.0547,0.0624,0,-12.5504,WEAK,8.5623
+1322,32,INF.AX,Infinity Metals Limited,Process industries,Chemicals: agricultural,small,0.011,,,,,FLAT,-38.89,-38.89,-78.85,-54.17,26.09,82.62,0.4502,LOW,-,0.0127,0.0128,0.0155,0,-12.2805,WEAK,7.6349
+1324,-8,HZR.AX,Hazer Group Ltd.,Process industries,Chemicals: specialty,small,0.33,,,,,FLAT,-25.0,-10.81,-27.47,-46.61,38.34,69.21,0.5271,LOW,-,0.3536,0.3649,0.4276,0,-5.9888,WEAK,7.618
+1361,-60,AJX.AX,Alexium International Group Limited,Process industries,Chemicals: specialty,small,0.007,,,,,FLAT,16.67,0.0,-36.36,-37.5,12.65,133.21,0.0,LOW,-,0.0068,0.007,0.0068,1,0.0,TREND_ONLY,7.3138
+1366,-118,ANO.AX,Advance ZincTek Limited,Process industries,Chemicals: specialty,small,0.8,,,,,FLAT,-31.08,3.39,13.44,-38.74,13.04,42.22,0.7125,LOW,-,0.785,0.8433,0.9715,0,1.046,WEAK,7.291
+1380,-161,SEA.AX,Sea Forest Limited,Process industries,Agricultural commodities/Milling,small,2.28,,,,,FLAT,-15.56,1.33,1.33,-36.35,39.85,52.52,0.9781,LOW,-,2.3138,2.3059,,0,1.0117,WEAK,7.0886
+1397,-158,RIC.AX,Ridley Corporation Limited,Process industries,Agricultural commodities/Milling,small,2.86,,,,,FLAT,9.98,3.61,49.94,-26.45,43.08,22.46,0.3467,LOW,-,2.751,2.7349,2.7147,1,6.9309,TREND_ONLY,6.8593
+1493,75,AMC.AX,Amcor PLC Shs Chess Depository Interests,Process industries,Containers/Packaging,large,55.35,,,,,FLAT,-9.24,-17.22,-17.98,-29.01,49.01,30.05,0.8416,LOW,SHIFT,53.1758,54.2878,59.4828,0,-28.0826,WEAK,5.7678
+1504,-11,LGP.AX,Little Green Pharma Ltd.,Process industries,Chemicals: major diversified,small,0.085,,,,,FLAT,-29.17,-26.09,-26.09,-39.29,27.67,48.6,3.9518,HIGH,-,0.092,0.0949,0.1165,0,-14.8524,WEAK,5.5659
+1509,-8,ORA.AX,Orora Limited,Process industries,Containers/Packaging,small,1.37,,,,,FLAT,-35.69,-22.62,-27.56,-45.33,39.13,53.83,0.8212,LOW,-,1.2915,1.4282,1.9085,0,-16.4432,WEAK,5.4704
+1525,-28,FRM.AX,Farm Pride Foods Limited,Process industries,Agricultural commodities/Milling,small,0.22,,,,,FLAT,2.33,-26.67,126.8,-45.21,29.64,47.39,0.0226,LOW,-,0.2167,0.2252,0.2547,0,-16.6786,WEAK,5.3064
+1582,-18,ELD.AX,Elders Limited,Process industries,Agricultural commodities/Milling,small,5.23,,,,,FLAT,-24.43,-13.2,-29.38,-30.03,50.59,54.27,2.3303,HIGH,-,5.7098,6.5347,6.8552,0,-12.3015,WEAK,4.3987
+1587,16,AIH.AX,Advanced Innergy Holdings Ltd.,Process industries,Industrial specialties,small,0.77,,,,,FLAT,-21.43,-19.79,-19.79,-30.23,37.09,61.07,2.5302,HIGH,-,0.8128,0.8468,,0,-12.0202,WEAK,4.3271
+1611,18,SHV.AX,Select Harvests Limited,Process industries,Agricultural commodities/Milling,small,3.9,,,,,FLAT,-18.07,-13.91,17.12,-31.92,46.64,39.3,5.055,HIGH,-,3.7385,3.7824,4.0756,0,-16.5047,WEAK,3.8432
+1629,2,WAT.AX,Waterco Limited,Process industries,Chemicals: major diversified,small,5.13,,,,,FLAT,4.78,-24.66,3.58,-30.56,15.81,29.99,0.0,LOW,-,5.291,5.3664,5.269,0,-12.9986,WEAK,3.2146
+1655,-12,DBF.AX,Duxton Farms Limited,Process industries,Agricultural commodities/Milling,small,0.5,,,,,FLAT,-39.02,-51.03,-55.58,-56.59,36.36,39.94,1.6971,HIGH,-,0.556,0.6063,0.7953,0,-46.4542,WEAK,2.4053
+1659,-5,GAP.AX,Gale Pacific Limited,Process industries,Textiles,small,0.08,,,,,FLAT,-10.11,-13.04,-42.86,-23.0,27.67,31.02,0.2649,LOW,-,0.0799,0.0813,0.0878,0,-11.6349,WEAK,2.2478
+1679,0,ING.AX,Inghams Group Ltd.,Process industries,Agricultural commodities/Milling,small,2.1,,,,,FLAT,-14.94,-42.15,-33.48,-53.67,39.53,36.82,0.9912,LOW,-,2.004,1.9668,2.2621,0,-45.2489,WEAK,1.7198

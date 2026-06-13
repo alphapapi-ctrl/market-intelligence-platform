@@ -1,0 +1,2 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+9,0,MRVL,Marvell Technology,Technology,Semiconductors,large,288.85,88.64,0.0468,0.6973,1.8723,STRONG_DOWN,192.39,318.91,318.29,-26.36,54.8,96.73,2.5945,HIGH,-,214.4595,169.1595,104.5085,1,180.6678,LEADER,55.3014

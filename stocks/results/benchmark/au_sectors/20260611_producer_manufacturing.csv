@@ -1,0 +1,44 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+1,0,SRL.AX,Sunrise Energy Metals Limited,Producer manufacturing,Industrial machinery,small,13.66,,,,,FLAT,116.14,2659.6,3152.38,-36.13,54.15,84.12,0.6818,LOW,-,14.129,12.485,8.0307,1,1712.0437,TREND_ONLY,325.1832
+73,85,T3D.AX,333D Limited,Producer manufacturing,Industrial machinery,small,0.053,,,,,FLAT,29.27,960.0,783.33,-91.6,20.95,441.05,6.3467,HIGH,-,0.0272,0.0278,0.0542,0,45.6003,WEAK,34.6385
+85,-31,EVZ.AX,EVZ Limited,Producer manufacturing,Industrial machinery,small,0.71,,,,,FLAT,228.11,365.7,397.82,-18.75,29.64,71.47,0.4604,LOW,-,0.6095,0.4662,0.2839,1,151.6624,TREND_ONLY,32.7075
+93,61,BSL.AX,Bluescope Steel Limited,Producer manufacturing,Metal fabrication,large,32.79,,,,,FLAT,46.15,56.42,76.66,-19.09,50.99,26.52,1.0961,MED,-,31.1165,29.7498,25.4701,1,108.4703,TREND_ONLY,30.5656
+100,2,MYG.AX,Mayfield Group Holdings Limited,Producer manufacturing,Electrical products,small,2.99,,,,,FLAT,19.2,173.19,317.19,-43.45,45.06,71.34,0.2249,LOW,-,2.987,2.6004,2.3163,1,109.3933,TREND_ONLY,28.9908
+109,-24,KOV.AX,Korvest Ltd.,Producer manufacturing,Metal fabrication,small,19.82,,,,,FLAT,42.78,97.56,145.86,-18.0,54.15,40.31,0.2002,LOW,-,17.999,16.3576,14.4839,1,131.0506,TREND_ONLY,28.1177
+110,41,AHL.AX,Adrad Holdings Limited,Producer manufacturing,Auto parts: OEM,small,1.43,,,,,FLAT,40.69,131.26,94.75,-19.51,37.55,38.47,0.6839,LOW,-,1.3204,1.2641,0.9973,1,128.1172,TREND_ONLY,27.8334
+139,0,EDE.AX,Eden Innovations Ltd,Producer manufacturing,Trucks/Construction/Farm machinery,small,0.155,,,,,FLAT,222.92,287.5,416.67,-62.31,31.23,129.45,0.3225,LOW,-,0.205,0.1868,0.1039,1,69.3598,TREND_ONLY,25.4666
+160,-55,14D.AX,1414 Degrees Ltd.,Producer manufacturing,Building products,small,0.09,,,,,FLAT,291.3,400.0,50.0,-79.27,30.04,321.78,0.0,LOW,-,0.0909,0.0534,0.0342,1,37.3423,TREND_ONLY,23.1506
+164,-5,CCE.AX,Carnegie Clean Energy Ltd,Producer manufacturing,Electrical products,small,0.16,,,,,FLAT,128.57,201.89,280.95,-71.58,37.15,218.74,1.3814,MED,-,0.1142,0.0815,0.0755,1,34.2877,TREND_ONLY,22.8526
+217,-51,FGR.AX,First Graphene Ltd,Producer manufacturing,Electrical products,small,0.06,,,,,FLAT,-14.29,122.22,11.11,-46.46,41.9,84.71,0.2892,LOW,-,0.0581,0.0606,0.072,0,60.4546,WEAK,20.0617
+220,-64,MPW.AX,Metal Powder Works Limited,Producer manufacturing,Industrial machinery,small,1.89,,,,,FLAT,38.97,57.5,421.38,-71.96,45.85,73.6,0.5462,LOW,-,2.1985,2.4177,2.6212,0,35.8203,WEAK,20.0201
+314,-4,CXL.AX,Calix Ltd.,Producer manufacturing,Industrial machinery,small,0.395,,,,,FLAT,-28.18,31.67,-67.49,-76.76,45.06,82.93,0.7238,LOW,-,0.48,0.5558,0.703,0,17.2061,WEAK,17.4334
+415,103,SGI.AX,Stealth Group holdings Ltd.,Producer manufacturing,Miscellaneous manufacturing,small,0.9,,,,,FLAT,-25.0,23.32,,-52.1,41.11,60.84,2.192,HIGH,-,0.9677,0.9547,1.0279,0,15.7592,WEAK,15.4839
+547,-33,PWH.AX,PWR Holdings Ltd.,Producer manufacturing,Auto parts: OEM,small,8.67,,,,,FLAT,7.76,32.28,-21.41,-16.42,50.99,40.36,5.0739,HIGH,-,9.198,8.9888,8.6191,1,40.7868,TREND_ONLY,13.8384
+611,227,IG6.AX,International Graphite Limited,Producer manufacturing,Electrical products,small,0.046,,,,,FLAT,-29.23,-11.54,-45.88,-66.67,35.97,120.87,1.0763,MED,-,0.0478,0.0496,0.061,0,-3.4338,WEAK,12.9608
+727,575,VEE.AX,Veem Ltd.,Producer manufacturing,Industrial machinery,small,0.53,,,,,FLAT,-30.26,-35.76,-68.95,-75.94,39.13,61.86,1.7762,HIGH,-,0.5135,0.5292,0.8483,0,-22.6187,WEAK,12.0038
+733,166,RFT.AX,Rectifier Technologies Ltd,Producer manufacturing,Electrical products,small,0.006,,,,,FLAT,50.0,20.0,-33.33,-50.0,9.88,253.58,6.543,HIGH,-,0.004,0.0039,0.0039,1,0.7792,TREND_ONLY,11.9181
+753,61,ZGL.AX,Zicom Group Limited,Producer manufacturing,Industrial machinery,small,0.12,,,,,FLAT,-22.58,46.34,103.39,-44.12,26.88,66.81,0.0,LOW,-,0.1125,0.108,0.1346,0,18.6448,WEAK,11.7064
+840,-31,CMG.AX,Critical Minerals Group Ltd.,Producer manufacturing,Electrical products,small,0.094,,,,,FLAT,-14.55,16.05,-39.35,-57.27,23.32,129.12,0.0,LOW,-,0.1009,0.1061,0.1267,0,2.8986,WEAK,11.098
+882,-184,AL3.AX,AML3D Ltd,Producer manufacturing,Industrial machinery,small,0.145,,,,,FLAT,-6.45,0.0,113.24,-58.46,35.18,102.99,0.2928,LOW,-,0.1579,0.179,0.1907,0,0.0,WEAK,10.8394
+895,-186,LIS.AX,Li-S Energy Ltd,Producer manufacturing,Electrical products,small,0.14,,,,,FLAT,-3.45,40.0,,-39.47,37.55,84.52,0.8187,LOW,-,0.1396,0.1316,0.144,0,17.7709,WEAK,10.7853
+897,-69,SIX.AX,Sprintex Limited,Producer manufacturing,Auto parts: OEM,small,0.059,,,,,FLAT,9.26,34.09,13.46,-42.71,26.88,60.75,0.8471,LOW,-,0.0647,0.0692,0.0641,0,15.0842,WEAK,10.7676
+950,-43,RWL.AX,Rubicon Water Limited,Producer manufacturing,Industrial machinery,small,0.066,,,,,FLAT,-66.15,-67.0,-83.7,-76.0,25.3,93.58,0.4732,LOW,-,0.089,0.1154,0.1607,0,-18.1139,WEAK,10.406
+995,299,FBR.AX,FBR Limited,Producer manufacturing,Industrial machinery,small,0.004,,,,,FLAT,0.0,-27.27,,-50.0,26.09,237.92,1.2637,MED,-,0.0037,0.0037,0.004,1,-2.9907,TREND_ONLY,10.0537
+1009,0,FOS.AX,FOS Capital Ltd,Producer manufacturing,Electrical products,small,0.14,,,,,FLAT,-48.15,-53.28,-38.57,-65.01,16.21,91.37,0.0,LOW,-,0.1292,0.1283,0.2106,0,-9.4527,WEAK,9.9544
+1029,-145,MBH.AX,Maggie Beer Holdings Ltd.,Producer manufacturing,Industrial conglomerates,small,0.07,,,,,FLAT,-33.33,9.37,-11.39,-41.82,28.46,47.29,1.3162,MED,-,0.0745,0.0776,0.0808,0,5.642,WEAK,9.8145
+1061,-42,XRF.AX,XRF Scientific Limited,Producer manufacturing,Industrial machinery,small,1.82,,,,,FLAT,-1.89,19.18,44.68,-30.85,44.66,43.21,0.9364,LOW,-,1.8163,1.8195,1.9664,0,19.8284,WEAK,9.5931
+1104,-253,A3D.AX,Aurora Labs Ltd.,Producer manufacturing,Industrial machinery,small,0.053,,,,,FLAT,20.45,6.0,-32.91,-43.66,40.71,74.09,0.28,LOW,-,0.0536,0.0544,0.0519,1,3.2968,TREND_ONLY,9.2902
+1215,-222,ABV.AX,Advanced Braking Technology Limited,Producer manufacturing,Auto parts: OEM,small,0.105,,,,,FLAT,-4.55,20.69,90.91,-27.59,26.48,57.5,4.2069,HIGH,-,0.1144,0.122,0.1198,0,9.528,WEAK,8.5483
+1220,48,EGY.AX,Energy Technologies Limited,Producer manufacturing,Electrical products,small,0.024,,,,,FLAT,20.0,-20.0,-31.43,-46.87,9.88,89.56,0.0,LOW,-,0.0253,0.025,0.023,1,-2.2063,TREND_ONLY,8.5064
+1308,-149,AVL.AX,Australian Vanadium Limited,Producer manufacturing,Electrical products,small,0.18,,,,,FLAT,-23.4,-28.0,,-53.33,30.43,78.27,0.4762,LOW,-,0.1894,0.2066,0.2433,0,-10.8859,WEAK,7.813
+1316,95,QPM.AX,QPM Energy Limited,Producer manufacturing,Electrical products,small,0.021,,,,,FLAT,-41.67,-46.15,-34.38,-55.32,29.64,65.98,1.5345,HIGH,-,0.0232,0.0267,0.034,0,-20.7336,WEAK,7.732
+1357,133,ANN.AX,Ansell Limited,Producer manufacturing,Miscellaneous manufacturing,mid,28.96,,,,,FLAT,-18.9,-5.09,17.49,-32.42,47.83,23.87,0.9789,LOW,SHIFT,26.813,27.1924,31.7911,0,-10.2052,WEAK,7.3286
+1451,-295,AAL.AX,Alfabs Australia Ltd.,Producer manufacturing,Trucks/Construction/Farm machinery,small,0.23,,,,,FLAT,-40.26,-33.99,-1.98,-57.41,37.15,52.79,0.0466,LOW,-,0.2838,0.3,0.4007,0,-23.9226,WEAK,6.2397
+1479,2,TTT.AX,Titomic Ltd,Producer manufacturing,Industrial machinery,small,0.225,,,,,FLAT,12.5,-30.77,171.08,-47.22,35.57,70.45,0.5202,LOW,-,0.2355,0.2541,0.244,0,-15.5353,WEAK,5.9126
+1482,84,RWC.AX,Reliance Worldwide Corp. Ltd.,Producer manufacturing,Building products,mid,3.43,,,,,FLAT,-15.42,-22.21,-26.12,-35.81,44.27,37.39,1.3677,MED,SHIFT,3.158,3.119,3.6374,0,-26.3007,WEAK,5.8367
+1579,-47,ASB.AX,Austal Limited,Producer manufacturing,Trucks/Construction/Farm machinery,small,3.93,,,,,FLAT,-38.69,-34.61,,-56.96,46.25,47.15,0.8356,LOW,-,3.958,4.2584,6.1253,0,-33.9484,WEAK,4.4337
+1594,22,ANG.AX,Austin Engineering Limited,Producer manufacturing,Industrial machinery,small,0.165,,,,,FLAT,-18.25,-46.07,-66.73,-53.98,33.6,43.15,2.2144,HIGH,-,0.1758,0.1791,0.2286,0,-35.8706,WEAK,4.151
+1628,-14,BLX.AX,Beacon Lighting Group Ltd,Producer manufacturing,Electrical products,small,1.53,,,,,FLAT,-45.2,-56.37,-32.7,-60.22,37.15,48.97,0.406,LOW,-,1.5647,1.6059,2.4222,0,-42.7627,WEAK,3.2737
+1645,-19,MXI.AX,MaxiPARTS Limited,Producer manufacturing,Trucks/Construction/Farm machinery,small,1.5,,,,,FLAT,-36.15,-33.38,-14.92,-42.21,32.02,38.61,0.124,LOW,-,1.541,1.7153,2.1035,0,-27.6809,WEAK,2.7833
+1661,-1334,RAN.AX,Range International Limited,Producer manufacturing,Miscellaneous manufacturing,small,0.195,,,,,FLAT,,-11.36,-11.36,-11.36,0.0,,1.1933,MED,-,,,,0,,WEAK,2.2265
+1699,-3,ARB.AX,ARB Corporation Limited,Producer manufacturing,Auto parts: OEM,small,18.85,,,,,FLAT,-40.88,-37.85,-48.21,-57.25,45.85,33.12,0.7743,LOW,-,18.3805,19.1529,28.2713,0,-52.393,WEAK,1.1507

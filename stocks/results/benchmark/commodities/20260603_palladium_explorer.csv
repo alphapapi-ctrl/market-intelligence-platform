@@ -1,0 +1,5 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+167,47,GENM.TO,"ticker
+GENM.TO    Generation Mining Ltd
+GENM.TO    Generation Mining Ltd
+Name: name, dtype: object",palladium,explorer,small,0.64,1.681,1.0645,1.1631,1.0892,FLAT,4.92,106.45,137.04,-41.76,45.6,64.42,1.0792,MED,-,0.6275,0.628,0.6128,1,75.3523,TREND+LEAD,26.3043

@@ -1,0 +1,5 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+31,12,MSTR,MicroStrategy,Technology,Computer Software,large,136.08,0.0,-0.1744,-0.3844,-0.3796,FLAT,-20.62,-64.88,-16.38,-76.53,43.6,69.71,1.65,HIGH,EARLY,169.823,156.0196,205.3131,0,-40.5767,WEAK,24.3905
+46,-1,INTU,Intuit,Technology,Computer Software,large,322.14,2.27,-0.01,-0.3332,-0.5747,STRONG_UP,-48.75,-57.53,-42.37,-62.05,47.2,66.81,1.7761,HIGH,EARLY,363.0155,386.6656,544.6349,0,-40.6429,WEAK,19.2266
+62,7,CEG,Constellation Energy,Utilities,Electric Utilities,large,272.65,0.0,-0.0298,-0.1088,-0.0977,FLAT,-23.84,-12.44,32.49,-38.77,48.8,53.15,2.1762,HIGH,EARLY,287.5757,290.9645,321.7298,0,-11.4235,WEAK,14.4777
+95,1,ISRG,Intuitive Surgical,Health Care,Industrial Specialties,large,402.3,0.0,-0.0111,-0.0888,-0.0629,FLAT,-29.09,-27.1,-0.39,-32.14,47.2,32.77,1.6099,HIGH,EARLY,433.3245,451.0774,494.3163,0,-39.0329,WEAK,5.4043

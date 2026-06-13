@@ -1,0 +1,77 @@
+════════════════════════════════════════════════════════════════════════════════
+  COMMODITIES BREADTH — 2026-06-10
+════════════════════════════════════════════════════════════════════════════════
+
+  OVERALL
+────────────────────────────────────────────────────────────────────────────────
+  Metric                       Today       D5      D20      D63
+────────────────────────────────────────────────────────────────────────────────
+  Total                          337     +331       +3        0
+  Leaders                         49      +48      -32      -34
+  Contenders                      34      +32      -39      -47
+  Laggards                       108     +107       -9      -20
+  Weak                           146     +144      +83     +101
+  Above 20 SMA                    11      +10     -212      -75
+  Above 50 SMA                    31      +28     -205     -112
+  Above 200 SMA                  103     +100     -154     -182
+  High Volume                     46      +46       +7      +28
+  Acc Early                      152     +151     +133     +131
+  Acc Progress                     0        0       -2       -1
+  Acc Shift                        0        0      -11       -2
+  Large Leaders                   16      +15      -13      -15
+  Mid Leaders                     19      +19      -12      -11
+  Small Leaders                   14      +14       -7       -8
+
+  BY TYPE
+────────────────────────────────────────────────────────────────────────────────
+  Type                       Total   Lead  Ab200    dL5   dL63
+────────────────────────────────────────────────────────────────────────────────
+  Explorer                      43     10     12    +10     -6
+  Producer                     282     38     89    +37    -29
+  Royalties Financial Serv      12      1      2    n/a     +1
+
+  BY COMMODITY
+────────────────────────────────────────────────────────────────────────────────
+  Commodity     Total   Lead    dL5   dL63   Ab20   Ab50  Ab200   HVol   AccE
+────────────────────────────────────────────────────────────────────────────────
+  Copper           83     16    +15     -4      5     15     44     14     22
+  Gold            107     11    +11    -15      4      7     20     13     74
+  Lithium          41     10    +10     +1      0      4     26      3     13
+  Palladium         9      1    n/a     -2      0      0      1      2      5
+  Platinum          4      0    n/a     -1      0      0      0      1      1
+  Silver           30      2    n/a     -6      0      1      2      1     15
+  Uranium          63      9    n/a     -7      2      4     10     12     22
+
+  JUNIOR vs SENIOR ROTATION
+────────────────────────────────────────────────────────────────────────────────
+  Commodity/Band        Total   Lead  Ab200    dL5   dL63
+────────────────────────────────────────────────────────────────────────────────
+  Copper large             30      6     17     +5      0
+  Copper mid               26      6     16     +6     -3
+  Copper small             27      4     11     +4     -1
+
+  Gold large               40      2      4     +2     -7
+  Gold mid                 50      6     11     +6     -6
+  Gold small               17      3      5     +3     -2
+
+  Lithium large            26      5     18     +5      0
+  Lithium mid              13      4      7     +4     +1
+  Lithium small             2      1      1     +1      0
+
+  Palladium large           4      0      0    n/a      0
+  Palladium mid             1      0      0    n/a      0
+  Palladium small           4      1      1    n/a     -2
+
+  Platinum large            0      0      0    n/a      0
+  Platinum mid              1      0      0    n/a     -1
+  Platinum small            3      0      0    n/a      0
+
+  Silver large              5      0      0    n/a     -2
+  Silver mid               12      2      2    n/a     -1
+  Silver small             13      0      0    n/a     -3
+
+  Uranium large            13      3      4    n/a     -6
+  Uranium mid              14      1      1    n/a     -1
+  Uranium small            36      5      5    n/a      0
+
+════════════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,20 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+283,-25,PME.AX,"Pro Medicus, Ltd.",Health services,Services to the health industry,large,161.58,,,,,FLAT,-34.31,-41.94,,-67.24,41.5,49.88,0.8837,LOW,SHIFT,138.6985,135.3172,202.8654,0,-34.8938,WEAK,18.148
+748,13,PIQ.AX,Proteomics International Laboratories Ltd.,Health services,Medical/Nursing services,small,0.12,,,,,FLAT,-71.93,-69.62,-87.23,-85.71,32.81,111.12,0.9582,LOW,-,0.1428,0.2009,0.3626,0,-20.5565,WEAK,11.7723
+1069,-59,GLH.AX,Global Health Limited,Health services,Medical/Nursing services,small,0.058,,,,,FLAT,-35.56,-13.43,-44.76,-57.04,17.79,52.27,0.0,LOW,-,0.0603,0.0644,0.0838,0,-4.5718,WEAK,9.556
+1097,182,OCA.AX,Oceania Healthcare Ltd.,Health services,Medical/Nursing services,small,0.595,,,,,FLAT,-22.22,12.26,22.68,-36.59,21.74,57.28,1.8938,HIGH,-,0.5878,0.5879,0.6548,0,4.6547,WEAK,9.3669
+1129,-108,BDX.AX,BCAL Diagnostics Limited,Health services,Medical/Nursing services,small,0.07,,,,,FLAT,-30.0,1.45,-36.36,-48.15,35.18,69.09,0.0,LOW,-,0.0771,0.0819,0.0926,0,0.738,WEAK,9.1217
+1152,-148,DOC.AX,Doctor Care Anywhere Group PLC Shs Chess Depository Interests Repr 1 sh,Health services,Medical/Nursing services,small,0.125,,,,,FLAT,-3.85,13.64,92.31,-42.86,31.23,81.56,0.2282,LOW,-,0.1331,0.1378,0.148,0,5.2215,WEAK,8.9848
+1224,43,RHC.AX,Ramsay Health Care Limited,Health services,Hospital/Nursing management,mid,38.43,,,,,FLAT,8.68,5.71,-17.58,-21.37,43.87,24.19,0.9556,LOW,-,37.233,38.4744,35.8891,1,10.358,TREND_ONLY,8.4997
+1241,111,REG.AX,Regis Healthcare Ltd.,Health services,Medical/Nursing services,mid,6.03,,,,,FLAT,-20.22,-16.78,60.46,-37.13,47.04,49.46,1.0336,MED,EARLY,6.2185,6.2572,6.7889,0,-15.9607,WEAK,8.3501
+1248,99,HLS.AX,Healius Limited,Health services,Medical/Nursing services,small,0.315,,,,,FLAT,-68.5,-62.5,-67.76,-69.71,35.57,68.17,2.5307,HIGH,-,0.3435,0.4493,0.7365,0,-32.6115,WEAK,8.2779
+1250,-394,MVF.AX,Monash IVF Group Ltd,Health services,Medical/Nursing services,small,0.685,,,,,FLAT,-17.95,15.27,-46.05,-29.34,37.15,39.41,0.4093,LOW,-,0.712,0.7168,0.7055,0,14.3966,WEAK,8.2619
+1315,-229,RAD.AX,Radiopharm Theranostics Limited,Health services,Medical/Nursing services,small,0.02,,,,,FLAT,-4.76,-23.08,-33.33,-51.35,27.67,68.62,0.3579,LOW,-,0.0202,0.0202,0.0238,0,-9.3054,WEAK,7.734
+1467,33,RHT.AX,Resonance Health Ltd,Health services,Medical/Nursing services,small,0.041,,,,,FLAT,-12.77,-4.65,-32.79,-34.55,28.46,58.98,0.7586,LOW,-,0.0411,0.0427,0.0434,0,-2.2444,WEAK,6.0544
+1574,-101,IDX.AX,Integral Diagnostics Ltd,Health services,Medical/Nursing services,small,2.01,,,,,FLAT,-17.5,-9.79,-9.55,-32.78,42.29,29.1,1.7057,HIGH,-,2.0877,2.1911,2.4588,0,-14.2294,WEAK,4.5032
+1600,-78,MAP.AX,Microba Life Sciences Limited,Health services,Medical/Nursing services,small,0.063,,,,,FLAT,-16.0,-53.33,-65.95,-53.33,33.2,56.17,0.0,LOW,-,0.0702,0.0722,0.0792,0,-31.5234,WEAK,4.032
+1618,-30,SNZ.AX,Summerset Group Holdings Limited,Health services,Hospital/Nursing management,small,6.75,,,,,FLAT,-38.46,-35.06,-22.36,-46.68,36.76,43.53,1.2479,MED,-,6.405,6.706,8.992,0,-29.6054,WEAK,3.6423
+1625,-2,RYM.AX,Ryman Healthcare Ltd.,Health services,Medical/Nursing services,small,1.855,,,,,FLAT,-26.68,-23.03,-23.03,-37.93,43.53,49.47,0.0686,LOW,-,1.8103,1.7824,,0,-20.2639,WEAK,3.4888
+1653,36,SHL.AX,Sonic Healthcare Limited,Health services,Medical/Nursing services,mid,20.28,,,,,FLAT,-10.27,-20.31,-11.12,-33.43,45.45,23.49,1.3134,MED,SHIFT,18.9515,19.5154,21.2421,0,-39.3009,WEAK,2.5421
+1658,-7,IIQ.AX,Inoviq Ltd,Health services,Medical/Nursing services,small,0.315,,,,,FLAT,-8.7,-26.74,-44.25,-29.21,31.23,47.22,0.9435,LOW,-,0.3284,0.3324,0.3549,0,-17.6879,WEAK,2.2588
+1690,7,ACL.AX,Australian Clinical Labs Ltd,Health services,Medical/Nursing services,small,2.11,,,,,FLAT,-24.66,-19.37,-0.15,-36.05,43.87,28.03,0.7351,LOW,-,1.9782,1.9853,2.3675,0,-30.3176,WEAK,1.3569

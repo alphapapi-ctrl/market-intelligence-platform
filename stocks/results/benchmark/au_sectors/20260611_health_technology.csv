@@ -1,0 +1,111 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+4,0,SPL.AX,Starpharma Holdings Limited,Health technology,Pharmaceuticals: major,small,0.7,,,,,FLAT,79.49,686.52,614.29,-28.09,47.04,67.86,0.5068,LOW,-,0.6755,0.6562,0.4208,1,475.8879,TREND_ONLY,94.0608
+74,7,SDI.AX,SDI Limited,Health technology,Medical specialties,small,1.355,,,,,FLAT,39.69,64.79,79.85,-16.26,39.13,16.89,1.4227,MED,-,1.3295,1.2755,1.0454,1,150.0989,TREND_ONLY,34.4222
+77,2,LDX.AX,Lumos Diagnostics Holdings Ltd.,Health technology,Medical specialties,small,0.105,,,,,FLAT,-57.14,238.71,208.82,-67.19,35.57,74.86,0.0806,LOW,-,0.1177,0.1531,0.2072,0,113.4238,WEAK,33.69
+92,-5,NYR.AX,"Nyrada, Inc. Shs Chess Depository Interests Repr 1 Shs",Health technology,Pharmaceuticals: major,small,0.49,,,,,FLAT,-42.35,180.0,620.59,-67.39,41.11,76.22,0.7125,LOW,-,0.5208,0.5542,0.6153,0,97.0848,WEAK,30.6235
+200,-37,VBS.AX,Vectus Biosystems Limited,Health technology,Pharmaceuticals: major,small,0.125,,,,,FLAT,13.64,160.42,47.06,-79.55,18.97,92.88,0.0,LOW,-,0.1113,0.1266,0.1293,0,32.7638,WEAK,20.9647
+223,-49,RAC.AX,Racura Oncology Ltd,Health technology,Pharmaceuticals: major,small,2.37,,,,,FLAT,-11.24,99.16,24.74,-54.26,47.04,88.92,,LOW,-,2.5605,2.6752,2.7401,0,52.4569,WEAK,19.9894
+247,31,TTX.AX,Tetratherix Limited,Health technology,Medical specialties,small,5.52,,,,,FLAT,45.26,82.78,82.78,-39.25,42.5,83.14,1.584,HIGH,-,6.179,5.3338,4.3311,1,42.3167,TREND_ONLY,19.3264
+253,-65,CLV.AX,Clover Corporation Limited,Health technology,Pharmaceuticals: other,small,0.89,,,,,FLAT,13.84,122.53,87.65,-22.24,43.48,69.56,0.4245,LOW,-,0.9137,0.9538,0.7759,1,76.587,TREND_ONLY,19.0713
+271,-76,ZNO.AX,Zoono Group Limited,Health technology,Pharmaceuticals: major,small,0.07,,,,,FLAT,-12.5,94.44,150.0,-68.39,35.18,120.13,0.0792,LOW,-,0.0686,0.0681,0.0614,1,27.658,TREND_ONLY,18.3953
+275,-20,VFY.AX,Vitrafy Life Sciences Ltd.,Health technology,Medical specialties,small,3.8,,,,,FLAT,175.36,153.33,91.92,-30.12,32.81,78.21,0.0,LOW,-,2.749,2.3114,1.6793,1,64.3251,TREND_ONLY,18.2974
+298,23,RHY.AX,Rhythm Biosciences Limited,Health technology,Medical specialties,small,0.1075,,,,,FLAT,36.08,82.2,53.57,-58.82,39.92,92.12,0.2656,LOW,-,0.1226,0.1495,0.1339,0,35.6227,WEAK,17.6549
+300,-128,ADO.AX,AnteoTech Ltd,Health technology,Medical specialties,small,0.026,,,,,FLAT,52.94,188.89,,-60.0,33.99,214.69,0.7605,LOW,-,0.0254,0.0171,0.0177,1,29.9051,TREND_ONLY,17.6188
+305,0,ACW.AX,Actinogen Medical Limited,Health technology,Pharmaceuticals: other,small,0.034,,,,,FLAT,-35.85,61.9,3.03,-52.86,40.71,79.52,1.1945,MED,-,0.038,0.0406,0.0422,0,31.6919,WEAK,17.5651
+312,-110,AVE.AX,Avecho Biotechnology Limited,Health technology,Pharmaceuticals: major,small,0.012,,,,,FLAT,50.0,166.67,200.0,-33.33,30.43,108.34,1.0008,MED,-,0.0124,0.0111,0.0089,1,46.8125,TREND_ONLY,17.4995
+354,-137,AVR.AX,Anteris Technologies Global Corp.,Health technology,Medical specialties,small,13.05,,,,,FLAT,97.43,63.13,-31.5,-42.93,41.5,76.92,1.0311,MED,-,11.879,9.557,7.9408,1,34.0573,TREND_ONLY,16.565
+363,3,NSB.AX,Neuroscientific Biopharmaceuticals Ltd.,Health technology,Biotechnology,small,0.063,,,,,FLAT,-42.73,-5.97,46.51,-74.8,33.6,125.06,2.126,HIGH,-,0.0925,0.0996,0.1223,0,-1.604,WEAK,16.4465
+364,176,CYP.AX,Cynata Therapeutics Limited,Health technology,Biotechnology,small,0.265,,,,,FLAT,0.0,60.61,-19.7,-36.25,41.11,70.71,3.184,HIGH,-,0.286,0.3082,0.2897,0,35.2357,WEAK,16.4457
+369,208,IPD.AX,Impedimed Limited,Health technology,Medical specialties,small,0.006,,,,,FLAT,-83.78,-80.65,-91.3,-89.47,29.25,157.23,3.1777,HIGH,-,0.0069,0.0107,0.0269,0,-15.0027,WEAK,16.3497
+377,34,ILA.AX,Island Pharmaceuticals Ltd,Health technology,Pharmaceuticals: major,small,0.365,,,,,FLAT,-26.26,82.5,488.71,-44.74,38.34,76.83,0.5905,LOW,-,0.3795,0.3721,0.4012,0,41.1695,WEAK,16.1058
+399,20,IBX.AX,Imagion Biosystems Ltd.,Health technology,Medical specialties,small,0.016,,,,,FLAT,-20.0,45.45,-78.38,-73.47,31.62,126.55,0.9425,LOW,-,0.0151,0.0175,0.0235,0,11.3574,WEAK,15.7171
+424,178,RCE.AX,Recce Pharmaceuticals Ltd.,Health technology,Pharmaceuticals: major,small,0.515,,,,,FLAT,-13.45,60.94,-2.83,-39.01,45.85,69.1,0.3167,LOW,-,0.5127,0.5039,0.5048,1,40.4339,TREND_ONLY,15.3819
+448,233,ADR.AX,Adherium Ltd.,Health technology,Medical specialties,small,0.002,,,,,FLAT,-50.0,-71.43,-88.24,-75.0,15.02,198.56,2.923,HIGH,-,0.0022,0.0022,0.0038,0,-5.4032,WEAK,15.1622
+457,-17,ATX.AX,Amplia Therapeutics Ltd.,Health technology,Biotechnology,small,0.11,,,,,FLAT,-10.2,92.98,54.93,-69.01,31.62,261.01,0.1907,LOW,-,0.1336,0.1527,0.1443,0,11.2643,WEAK,15.0687
+458,395,OSL.AX,OncoSil Medical Ltd,Health technology,Medical specialties,small,0.57,,,,,FLAT,-45.97,-41.84,-71.5,-80.35,33.6,110.24,3.7056,HIGH,-,0.4817,0.4936,0.9454,0,-12.7514,WEAK,15.0572
+469,-177,CHM.AX,Chimeric Therapeutics Limited,Health technology,Biotechnology,small,0.08,,,,,FLAT,-77.14,-82.22,-94.75,-86.67,18.58,466.92,0.6812,LOW,-,0.1121,0.1467,0.2394,0,-3.2718,WEAK,14.8829
+470,356,ANR.AX,Anatara Lifesciences Ltd,Health technology,Pharmaceuticals: major,small,0.009,,,,,FLAT,-30.77,80.0,-77.5,-47.06,15.02,66.04,12.1846,HIGH,-,0.0093,0.0093,0.0117,0,18.195,WEAK,14.8733
+483,164,NOX.AX,Noxopharm Ltd.,Health technology,Pharmaceuticals: major,small,0.085,,,,,FLAT,-14.14,28.79,8.97,-54.4,34.39,124.87,1.9067,HIGH,-,0.0738,0.0699,0.0824,1,7.9284,TREND_ONLY,14.7672
+491,-150,1AI.AX,Algorae Pharmaceuticals Limited,Health technology,Pharmaceuticals: other,small,0.011,,,,,FLAT,-31.25,100.0,0.0,-54.17,24.9,102.59,0.6079,LOW,-,0.0122,0.013,0.0133,0,24.2714,WEAK,14.7036
+503,-109,LTP.AX,LTR Pharma Limited,Health technology,Biotechnology,small,0.425,,,,,FLAT,-1.16,32.81,-54.05,-51.7,34.78,93.5,2.2966,HIGH,-,0.3933,0.4066,0.4978,0,12.2056,WEAK,14.5862
+506,-21,IMM.AX,Immutep Ltd,Health technology,Biotechnology,small,0.046,,,,,FLAT,-81.96,-82.96,-89.3,-92.17,37.55,267.24,0.2983,LOW,-,0.0548,0.0567,0.2456,0,-11.6572,WEAK,14.5316
+545,-26,NC6.AX,Nanollose Ltd,Health technology,Biotechnology,small,0.06,,,,,FLAT,33.33,9.09,185.71,-55.29,36.36,57.68,2.6323,HIGH,-,0.0721,0.0759,0.0631,0,5.7307,WEAK,13.8645
+565,95,COH.AX,Cochlear Limited,Health technology,Medical specialties,mid,104.93,,,,,FLAT,-60.81,-60.43,-66.69,-71.26,47.43,88.64,0.9095,LOW,PROGRESS,97.787,119.8204,221.0979,0,-32.333,WEAK,13.6296
+568,32,CSL.AX,CSL Limited,Health technology,Biotechnology,large,102.95,,,,,FLAT,-43.79,-56.2,-62.59,-65.25,47.83,42.07,1.1518,MED,PROGRESS,97.3975,117.499,162.6077,0,-63.8963,WEAK,13.5742
+597,30,PTX.AX,Prescient Therapeutics Limited,Health technology,Biotechnology,small,0.065,,,,,FLAT,-23.53,22.64,41.3,-52.38,37.55,96.59,1.2407,MED,-,0.0716,0.0606,0.0609,1,8.802,TREND_ONLY,13.2025
+610,-64,PEB.AX,Pacific Edge Limited,Health technology,Biotechnology,small,0.255,,,,,FLAT,96.15,142.86,210.98,-34.09,23.72,107.89,0.0008,LOW,-,0.2212,0.1786,0.1638,1,31.4077,TREND_ONLY,12.9674
+617,69,COV.AX,CLEO Diagnostics Ltd,Health technology,Medical specialties,small,0.51,,,,,FLAT,-20.93,41.67,70.0,-46.24,42.29,77.87,0.4424,LOW,-,0.5892,0.5937,0.5439,0,22.6285,WEAK,12.9269
+644,61,OSX.AX,Osteopore Ltd.,Health technology,Medical specialties,small,0.005,,,,,FLAT,-28.57,-64.29,-91.94,-80.77,22.53,141.64,0.4653,LOW,-,0.0064,0.0063,0.009,0,-10.2256,WEAK,12.6693
+651,-14,AGN.AX,Argenica Therapeutics Ltd,Health technology,Biotechnology,small,0.11,,,,,FLAT,-56.0,-84.72,-84.06,-85.53,31.62,95.55,6.0581,HIGH,-,0.1275,0.1508,0.2451,0,-28.0368,WEAK,12.6235
+657,90,AT1.AX,Atomo Diagnostics Ltd.,Health technology,Medical specialties,small,0.016,,,,,FLAT,-51.52,-5.88,-42.86,-63.64,29.25,80.89,1.1148,MED,-,0.02,0.0242,0.0299,0,-2.1271,WEAK,12.5716
+661,259,CCO.AX,Calmer Co International Limited,Health technology,Pharmaceuticals: major,small,0.002,,,,,FLAT,-50.0,-33.33,-75.0,-60.0,17.79,181.52,10.812,HIGH,-,0.0021,0.0025,0.0034,0,-3.2669,WEAK,12.5303
+664,9,BP8.AX,BPH Global Limited,Health technology,Pharmaceuticals: other,small,0.002,,,,,FLAT,0.0,0.0,-50.0,-66.67,6.32,323.91,0.0,LOW,-,0.0018,0.0019,0.002,1,0.0,TREND_ONLY,12.5075
+687,181,CU6.AX,Clarity Pharmaceuticals Ltd.,Health technology,Medical specialties,small,2.11,,,,,FLAT,-28.47,-5.38,-59.34,-62.98,48.22,74.89,1.2098,MED,-,2.5315,2.8336,3.4756,0,-3.4648,WEAK,12.3637
+693,485,ATH.AX,Alterity Therapeutics Ltd.,Health technology,Pharmaceuticals: major,small,0.475,,,,,FLAT,5.56,-20.83,90.0,-56.25,23.72,131.53,5.2043,HIGH,-,0.461,0.4739,0.4706,1,-3.7571,TREND_ONLY,12.2677
+697,230,PER.AX,Percheron Therapeutics Limited,Health technology,Pharmaceuticals: major,small,0.004,,,,,FLAT,-46.67,-60.0,-95.18,-63.64,21.74,163.89,1.9761,HIGH,-,0.0044,0.0045,0.0073,0,-7.959,WEAK,12.225
+701,-154,1AD.AX,AdAlta Ltd.,Health technology,Biotechnology,small,0.0035,,,,,FLAT,0.0,40.0,,-60.0,18.18,119.42,0.4443,LOW,-,0.0043,0.0043,0.0039,0,6.0894,WEAK,12.2037
+719,446,ARX.AX,Aroa Biosurgery Ltd,Health technology,Medical specialties,small,0.645,,,,,FLAT,-0.77,22.86,5.74,-35.85,40.32,55.07,1.6117,HIGH,-,0.6385,0.5962,0.6624,0,16.7351,WEAK,12.1128
+720,143,TRP.AX,Tissue Repair Ltd,Health technology,Pharmaceuticals: major,small,0.11,,,,,FLAT,-66.67,-38.89,-50.0,-74.39,29.25,77.99,1.1712,MED,-,0.115,0.1359,0.2416,0,-14.5852,WEAK,12.0979
+722,-110,MSB.AX,Mesoblast Limited,Health technology,Biotechnology,mid,2.01,,,,,FLAT,-26.37,11.67,86.11,-35.34,45.85,46.2,0.5797,LOW,EARLY,2.0585,2.1059,2.382,0,11.5783,WEAK,12.0805
+732,80,IMU.AX,Imugene Ltd,Health technology,Biotechnology,small,0.093,,,,,FLAT,-73.43,-81.76,-95.28,-82.16,32.41,117.66,1.389,MED,-,0.1026,0.1196,0.2557,0,-22.5225,WEAK,11.9245
+765,56,CMB.AX,Cambium Bio Ltd,Health technology,Biotechnology,small,0.425,,,,,FLAT,-10.53,84.78,-29.17,-42.5,19.76,87.47,0.0647,LOW,-,0.41,0.4166,0.4794,0,19.1529,WEAK,11.5806
+821,-20,VHL.AX,Vitasora Health Limited,Health technology,Medical specialties,small,0.0105,,,,,FLAT,-61.11,-74.39,-62.5,-78.05,26.09,126.05,0.0,LOW,-,0.0114,0.0156,0.0225,0,-15.3974,WEAK,11.2445
+856,69,EXL.AX,Elixinol Wellness Ltd,Health technology,Pharmaceuticals: other,small,0.007,,,,,FLAT,-36.36,-53.33,-78.13,-65.0,18.97,266.82,0.0579,LOW,-,0.0092,0.008,0.0106,0,-3.7918,WEAK,10.9962
+860,78,RGT.AX,Argent Biopharma Ltd,Health technology,Pharmaceuticals: other,small,0.035,,,,,FLAT,-50.0,-60.67,-88.14,-78.0,30.04,105.24,0.0007,LOW,-,0.0377,0.0378,0.0657,0,-17.319,WEAK,10.9745
+861,34,IMC.AX,Immuron Limited,Health technology,Pharmaceuticals: major,small,0.037,,,,,FLAT,-43.08,-47.89,-57.95,-72.34,32.81,130.13,0.157,LOW,-,0.0363,0.032,0.0487,0,-12.074,WEAK,10.9708
+862,232,NTI.AX,Neurotech International Ltd.,Health technology,Medical specialties,small,0.012,,,,,FLAT,-29.41,-36.84,-80.0,-60.0,29.25,99.02,2.9909,HIGH,-,0.012,0.0122,0.0147,0,-10.883,WEAK,10.9654
+865,-30,BIT.AX,Biotron Limited,Health technology,Biotechnology,small,0.002,,,,,FLAT,-33.33,0.0,-96.0,-60.0,17.39,214.55,0.0,LOW,-,0.0024,0.0026,0.0031,0,0.0,WEAK,10.9565
+884,80,TLX.AX,Telix Pharmaceuticals Limited,Health technology,Biotechnology,mid,13.53,,,,,FLAT,-7.27,-47.13,-18.79,-66.49,45.06,49.0,0.5903,LOW,-,13.5645,14.1792,13.38,1,-43.3383,TREND_ONLY,10.8373
+908,-93,MEM.AX,Memphasys Ltd,Health technology,Biotechnology,small,0.0055,,,,,FLAT,37.5,37.5,-38.89,-50.0,19.37,141.2,0.0,LOW,-,0.0051,0.0052,0.005,1,5.1443,TREND_ONLY,10.6853
+918,256,ACR.AX,Acrux Limited,Health technology,Pharmaceuticals: major,small,0.016,,,,,FLAT,0.0,-30.43,-80.0,-60.87,18.58,117.87,,LOW,-,0.0112,0.0112,0.0135,1,-4.7975,TREND_ONLY,10.6007
+935,-89,CVB.AX,Curvebeam AI Ltd.,Health technology,Biotechnology,small,0.042,,,,,FLAT,-40.0,-41.67,-78.46,-76.0,38.34,84.6,0.4513,LOW,-,0.0504,0.0556,0.0767,0,-18.883,WEAK,10.4761
+939,-39,BOT.AX,Botanix Pharmaceuticals Limited,Health technology,Pharmaceuticals: major,small,0.02,,,,,FLAT,-82.61,-93.75,-92.73,-94.12,28.85,75.98,0.1972,LOW,-,0.0244,0.0299,0.0942,0,-35.5974,WEAK,10.4562
+945,-6,PAB.AX,Patrys Limited,Health technology,Pharmaceuticals: major,small,0.043,,,,,FLAT,34.37,22.86,22.86,-44.44,34.01,68.56,0.5594,LOW,-,0.0382,0.0325,,0,11.3386,WEAK,10.4285
+1042,-67,S66.AX,Star Combo Pharma Ltd.,Health technology,Pharmaceuticals: other,small,0.12,,,,,FLAT,-45.45,-9.62,-0.08,-55.56,24.51,83.55,0.9318,LOW,-,0.181,0.1983,0.2115,0,-2.8234,WEAK,9.6785
+1053,-75,IXC.AX,Invex Therapeutics Ltd.,Health technology,Biotechnology,small,0.091,,,,,FLAT,-24.17,13.75,30.0,-43.75,18.97,81.77,1.2717,MED,-,0.113,0.1106,0.1178,0,3.1899,WEAK,9.6327
+1078,-131,CC5.AX,Clever Culture Systems Limited,Health technology,Medical specialties,small,0.021,,,,,FLAT,-22.22,16.67,50.0,-45.95,30.04,98.5,0.7377,LOW,-,0.0221,0.0233,0.0278,0,5.0829,WEAK,9.5163
+1090,-162,BIO.AX,Biome Australia Ltd,Health technology,Pharmaceuticals: major,small,0.27,,,,,FLAT,-31.65,-41.3,-15.62,-63.41,36.76,70.27,2.0658,HIGH,-,0.2577,0.2946,0.4027,0,-21.6073,WEAK,9.4192
+1109,-375,VLS.AX,Vita Life Sciences Limited,Health technology,Pharmaceuticals: other,small,2.56,,,,,FLAT,9.85,26.44,25.23,-19.5,37.15,36.44,0.712,LOW,-,2.482,2.5081,2.428,1,26.9556,TREND_ONLY,9.2415
+1124,-2,CQT.AX,Conneqt Health Limited,Health technology,Medical specialties,small,0.026,,,,,FLAT,-55.17,-36.59,-55.17,-57.38,31.23,91.39,1.0895,MED,-,0.0321,0.0344,0.0375,0,-12.502,WEAK,9.1416
+1141,-83,NXN.AX,Nexsen Limited,Health technology,Biotechnology,small,0.23,,,,,FLAT,48.39,-17.86,-17.86,-55.17,37.8,106.69,0.6397,LOW,-,0.2432,0.2116,,0,-6.3267,WEAK,9.0677
+1143,-197,RNV.AX,Renerve Limited,Health technology,Biotechnology,small,0.077,,,,,FLAT,-23.0,-30.0,-59.47,-57.14,30.04,70.31,1.1899,MED,-,0.0814,0.0924,0.1057,0,-12.8175,WEAK,9.0449
+1155,313,FPH.AX,Fisher & Paykel Healthcare Corporation Limited,Health technology,Medical specialties,large,31.7,,,,,FLAT,-4.66,-5.1,18.13,-23.14,49.01,31.83,1.8251,HIGH,SHIFT,29.327,29.9328,31.9456,0,-7.8513,WEAK,8.971
+1156,70,EPN.AX,Epsilon Healthcare Limited,Health technology,Pharmaceuticals: major,small,0.023,,,,,FLAT,-4.17,-4.17,-4.17,-50.0,11.07,66.1,0.7796,LOW,-,0.0226,0.0213,0.025,0,-0.6978,WEAK,8.959
+1161,-110,CSX.AX,CleanSpace Holdings Ltd.,Health technology,Medical specialties,small,0.32,,,,,FLAT,-50.77,-20.99,18.52,-62.79,33.99,49.54,0.2949,LOW,-,0.3788,0.4155,0.6027,0,-14.3999,WEAK,8.9406
+1167,-165,SOM.AX,Somnomed Limited,Health technology,Medical specialties,small,0.58,,,,,FLAT,-25.16,-2.52,141.67,-40.45,35.18,53.03,8.2119,HIGH,-,0.5713,0.5835,0.7054,0,-1.6724,WEAK,8.907
+1175,-50,TGH.AX,Terragen Holdings Ltd,Health technology,Biotechnology,small,0.02,,,,,FLAT,-13.04,-20.0,53.85,-51.72,14.62,100.12,0.0,LOW,-,0.0184,0.0203,0.0214,0,-2.9205,WEAK,8.8435
+1189,-43,DXB.AX,Dimerix Limited,Health technology,Pharmaceuticals: major,small,0.165,,,,,FLAT,-70.54,-69.16,-70.54,-73.6,40.71,110.16,0.4089,LOW,-,0.1915,0.2606,0.4355,0,-25.5579,WEAK,8.765
+1198,-60,EBR.AX,"EBR Systems, Inc. Shs Chess Depository Interests Repr 1 Sh",Health technology,Medical specialties,small,0.37,,,,,FLAT,-60.0,-68.24,-66.96,-74.83,40.32,76.69,2.0868,HIGH,-,0.4636,0.5602,0.8949,0,-35.8776,WEAK,8.7128
+1245,47,NEU.AX,Neuren Pharmaceuticals Limited,Health technology,Pharmaceuticals: generic,small,13.24,,,,,FLAT,-32.96,-4.27,-30.39,-48.68,48.22,42.21,0.5774,LOW,-,13.449,12.8326,16.5043,0,-4.8735,WEAK,8.3038
+1260,-238,SLD.AX,Saluda Medical Inc CHESS Depository Interest,Health technology,Medical specialties,small,0.42,,,,,FLAT,-67.19,-66.93,-66.93,-76.55,32.54,69.36,0.522,LOW,-,0.4375,0.5732,,0,-31.3996,WEAK,8.179
+1266,-3,EYE.AX,Nova Eye Medical Ltd,Health technology,Medical specialties,small,0.115,,,,,FLAT,-17.86,0.0,-46.51,-43.59,33.2,72.18,0.3781,LOW,-,0.1176,0.1231,0.1431,0,0.0,WEAK,8.145
+1267,0,OAK.AX,Oakridge Internatinal Ltd,Health technology,Medical specialties,small,0.084,,,,,FLAT,0.0,15.07,20.0,-37.0,17.79,60.1,0.0,LOW,-,0.0841,0.0782,0.0821,1,4.4604,TREND_ONLY,8.1272
+1272,71,ALA.AX,Arovella Therapeutics Limited,Health technology,Pharmaceuticals: major,small,0.065,,,,,FLAT,-16.67,-18.75,-53.57,-43.48,33.99,79.9,1.6038,HIGH,-,0.0718,0.0747,0.0833,0,-7.9764,WEAK,8.1022
+1297,-7,CMP.AX,Compumedics Limited,Health technology,Medical specialties,small,0.25,,,,,FLAT,-35.9,-9.09,-15.25,-44.44,30.83,45.13,1.1097,MED,-,0.2707,0.2806,0.321,0,-6.2103,WEAK,7.9179
+1298,-200,PAR.AX,Paradigm Biopharmaceuticals Ltd.,Health technology,Pharmaceuticals: generic,small,0.14,,,,,FLAT,-58.82,-53.33,-41.67,-69.89,33.2,66.7,0.936,LOW,-,0.163,0.1922,0.2888,0,-26.5467,WEAK,7.9086
+1300,113,IDT.AX,IDT Australia Limited,Health technology,Pharmaceuticals: major,small,0.033,,,,,FLAT,-36.54,-68.57,-72.5,-68.57,27.67,57.99,4.3301,HIGH,-,0.0372,0.0397,0.051,0,-32.7189,WEAK,7.8899
+1302,-360,OIL.AX,Optiscan Imaging Limited,Health technology,Medical specialties,small,0.125,,,,,FLAT,13.64,-3.85,-28.57,-41.15,31.62,79.22,0.2641,LOW,-,0.117,0.1123,0.1023,1,-1.5352,TREND_ONLY,7.8514
+1314,-29,NUZ.AX,Neurizon Therapeutics Limited,Health technology,Pharmaceuticals: major,small,0.061,,,,,FLAT,-39.0,-59.33,-74.58,-65.71,33.2,63.64,1.5535,HIGH,-,0.065,0.0751,0.1011,0,-30.9533,WEAK,7.7506
+1330,-124,PYC.AX,PYC Therapeutics Limited,Health technology,Pharmaceuticals: major,small,1.16,,,,,FLAT,-23.18,-2.11,10.48,-41.38,42.69,55.74,0.7607,LOW,-,1.3288,1.2608,1.3471,0,-1.6158,WEAK,7.5342
+1343,21,EVE.AX,EVE Health Group Limited,Health technology,Pharmaceuticals: other,small,0.023,,,,,FLAT,-8.0,-42.5,-42.5,-52.5,25.3,92.72,0.1609,LOW,-,0.0248,0.0265,0.0254,0,-11.5967,WEAK,7.4373
+1363,14,NGS.AX,Nutritional Growth Solutions Ltd.,Health technology,Pharmaceuticals: other,small,0.021,,,,,FLAT,-8.7,-22.22,-30.0,-40.74,11.86,93.24,0.0,LOW,-,0.0215,0.0203,0.0204,1,-2.8266,TREND_ONLY,7.3012
+1372,-12,AFP.AX,AFT Pharmaceuticals Ltd.,Health technology,Pharmaceuticals: major,small,3.25,,,,,FLAT,1.88,30.6,16.6,-17.27,24.11,40.15,0.0006,LOW,-,3.079,3.064,2.8881,1,18.3762,TREND_ONLY,7.1935
+1376,-68,FRE.AX,Firebrick Pharma Limited,Health technology,Pharmaceuticals: major,small,0.04,,,,,FLAT,-24.53,-48.72,-29.82,-50.62,25.69,110.83,0.3821,LOW,-,0.0431,0.0517,0.0593,0,-11.2926,WEAK,7.1348
+1381,-230,IVX.AX,Invion Ltd.,Health technology,Pharmaceuticals: major,small,0.047,,,,,FLAT,-51.04,-59.13,-88.25,-69.66,27.27,52.77,0.276,LOW,-,0.0495,0.0575,0.0839,0,-30.5569,WEAK,7.0711
+1383,-207,RMD.AX,ResMed Inc. CHESS Depositary Interests on a ratio of 10 CDIs per ord.sh,Health technology,Medical specialties,large,28.21,,,,,FLAT,-26.28,-27.22,-9.8,-42.45,51.38,29.15,0.9813,LOW,PROGRESS,28.191,29.7768,36.0173,0,-47.9796,WEAK,7.0101
+1402,-28,IMR.AX,"Imricor Medical Systems, Inc. Shs Chess Depository Interests Repr 1 Sh",Health technology,Medical specialties,small,1.68,,,,,FLAT,23.99,-0.3,273.33,-29.08,42.69,48.26,1.8001,HIGH,-,1.7673,1.8651,1.6938,0,-0.2625,WEAK,6.8081
+1403,-75,MVP.AX,Medical Developments International Limited,Health technology,Pharmaceuticals: major,small,0.39,,,,,FLAT,-25.71,-33.9,-4.88,-51.32,38.34,87.8,0.4885,LOW,-,0.4005,0.4136,0.5157,0,-14.8025,WEAK,6.7962
+1413,-44,ENP.AX,Entropy Neurodynamics Limited,Health technology,Pharmaceuticals: major,small,0.031,,,,,FLAT,-8.82,-6.06,47.62,-38.64,32.81,72.15,,LOW,-,0.0345,0.0334,0.0341,0,-2.756,WEAK,6.7326
+1428,-48,PKP.AX,Peak Processing Limited,Health technology,Pharmaceuticals: other,small,0.015,,,,,FLAT,-25.0,-42.31,-40.0,-50.0,23.32,71.25,0.0285,LOW,-,0.0158,0.0167,0.0185,0,-13.8472,WEAK,6.5651
+1442,38,OCC.AX,Orthocell Ltd,Health technology,Medical specialties,small,0.75,,,,,FLAT,-28.23,-40.48,108.33,-52.94,38.74,70.5,1.1731,MED,-,0.7902,0.838,1.0097,0,-22.2418,WEAK,6.3651
+1457,-32,TRU.AX,TruScreen Group Ltd.,Health technology,Medical specialties,small,0.015,,,,,FLAT,-6.25,-16.67,-21.05,-33.33,21.74,111.15,1.417,MED,-,0.015,0.0145,0.0155,0,-3.2599,WEAK,6.1648
+1498,-38,SNT.AX,Syntara Limited,Health technology,Pharmaceuticals: major,small,0.025,,,,,FLAT,-16.67,-63.24,8.7,-64.71,32.02,55.11,1.0203,MED,-,0.0259,0.029,0.0302,0,-36.741,WEAK,5.6611
+1523,39,CYC.AX,Cyclopharm Limited,Health technology,Medical specialties,small,0.59,,,,,FLAT,-39.8,-42.72,-62.78,-52.03,37.94,68.86,0.5079,LOW,-,0.7107,0.746,0.819,0,-23.5367,WEAK,5.3165
+1539,-44,EMV.AX,EMvision Medical Devices Ltd.,Health technology,Medical specialties,small,1.52,,,,,FLAT,-17.39,-14.12,-21.65,-35.86,41.11,39.98,2.3016,HIGH,-,1.6953,1.7162,1.8019,0,-14.5235,WEAK,5.0841
+1544,-135,VIT.AX,Vitura Health Limited,Health technology,Pharmaceuticals: other,small,0.03,,,,,FLAT,-53.85,-53.89,-69.1,-58.25,32.02,55.28,0.9855,LOW,-,0.0342,0.0364,0.0534,0,-31.2133,WEAK,4.9608
+1560,-30,SIG.AX,Sigma Healthcare Ltd,Health technology,Pharmaceuticals: major,large,2.76,,,,,FLAT,-0.35,-11.37,137.43,-19.32,43.08,25.51,2.1457,HIGH,EARLY,2.869,2.81,2.902,0,-19.1946,WEAK,4.7019
+1563,-118,AVH.AX,AVITA Medical Inc Shs Chess Depository Interests repr 0.2 shs,Health technology,Medical specialties,small,1.14,,,,,FLAT,7.04,-37.19,-58.55,-47.93,37.55,59.97,0.7677,LOW,-,1.1812,1.2176,1.2498,0,-23.2864,WEAK,4.6399
+1598,-8,MYX.AX,Mayne Pharma Group Ltd.,Health technology,Pharmaceuticals: major,small,2.41,,,,,FLAT,-24.69,-52.84,-48.28,-66.19,45.85,53.93,0.8039,LOW,-,2.34,2.441,3.5177,0,-44.9212,WEAK,4.0508
+1631,-6,EBO.AX,EBOS Group Limited,Health technology,Medical specialties,mid,17.2,,,,,FLAT,-26.78,-47.79,-39.85,-56.65,45.06,30.61,1.1065,MED,PROGRESS,16.517,17.3982,21.7536,0,-70.3529,WEAK,3.1839
+1647,-65,CUV.AX,Clinuvel Pharmaceuticals Limited,Health technology,Pharmaceuticals: major,small,8.72,,,,,FLAT,-31.34,-15.42,-40.32,-36.04,48.62,30.8,1.212,MED,-,9.073,9.1762,10.9001,0,-24.3471,WEAK,2.7631
+1673,-3,NAN.AX,Nanosonics Limited,Health technology,Medical specialties,small,3.37,,,,,FLAT,-19.57,-22.53,19.08,-34.67,47.83,41.78,0.6951,LOW,-,3.2575,3.4354,3.8872,0,-25.791,WEAK,1.9476

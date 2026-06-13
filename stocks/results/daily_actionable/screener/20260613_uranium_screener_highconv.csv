@@ -1,0 +1,2 @@
+rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+5,5,DML.TO,DENISON MINES CORP,Uranium,mid,4.28,91.3,0.0163,0.0272,0.0215,FLAT,12.63,91.93,46.08,-34.0,52.0,58.82,1.9059,HIGH,EARLY,4.487,4.8742,4.4518,0,81.2695,LAGGARD,32.0844

@@ -1,0 +1,3 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+23,0,BKR,Baker Hughes,Energy,Oil Equipment & Services,large,64.84,100.0,0.0254,-0.0412,-0.0209,FLAT,32.73,72.08,108.02,-16.86,57.6,38.77,0.6404,LOW,-,64.9075,64.082,54.1414,1,107.092,LEADER,28.8241
+51,0,FANG,Diamondback Energy,Energy,Oil & Gas Production,large,198.195,0.0,-0.0254,0.0412,0.0209,FLAT,26.4,43.04,8.1,-12.53,52.8,35.51,0.9558,LOW,-,199.7364,195.8293,163.3775,1,64.0037,LAGGARD,16.6616

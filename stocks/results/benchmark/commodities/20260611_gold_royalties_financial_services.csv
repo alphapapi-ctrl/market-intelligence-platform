@@ -1,0 +1,11 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+22,0,MAH.AX,Machahon Holdings,gold,royalties_financial_services,mid,0.9,2.2119,1.0861,1.5089,1.8478,STRONG_DOWN,61.65,216.6,240.54,-22.01,45.85,52.64,0.6279,LOW,-,0.9143,0.8394,0.6355,1,188.6649,TREND+LEAD,41.9948
+109,0,ASA,ASA Gold & Precious Metals,gold,royalties_financial_services,mid,52.4,1.1127,0.9855,0.976,1.009,FLAT,-2.69,59.28,203.19,-35.5,57.2,55.92,2.0035,HIGH,EARLY,61.4765,64.2535,57.8465,0,60.6331,WEAK,27.0443
+137,0,MTA,Metalla Royalty & Str.,gold,royalties_financial_services,mid,6.65,1.2834,1.0109,1.1859,1.0884,FLAT,-14.52,83.7,121.67,-33.04,53.6,58.16,0.9812,LOW,EARLY,7.2115,7.0016,7.1622,0,77.1391,WEAK,24.4896
+168,0,FISH.V,Sailfish Royalty Corp.,gold,royalties_financial_services,small,4.2,1.2294,1.1568,1.4859,1.4126,FLAT,26.13,75.97,265.4,-26.84,44.4,41.58,0.3264,LOW,-,4.077,3.8068,3.474,1,81.1261,TREND+LEAD,21.907
+179,0,GROY,Gold Royalty Corp,gold,royalties_financial_services,mid,2.7,0.8733,1.0163,0.9552,0.8925,STRONG_UP,-33.82,25.0,86.21,-48.18,52.0,53.59,1.1411,MED,EARLY,3.1625,3.4216,3.8419,0,24.2583,WEAK,20.9257
+184,0,FNV,Franco-Nevada Corp,gold,royalties_financial_services,large,208.46,0.8861,1.0341,1.1576,1.0643,FLAT,2.9,26.84,78.26,-25.64,55.6,38.88,3.8335,HIGH,EARLY,226.076,237.943,224.4394,0,38.3838,WEAK,20.4557
+187,0,VROY.V,Vizsla royalties_financial_services,gold,royalties_financial_services,small,3.21,1.024,1.038,1.3412,1.2702,FLAT,-29.91,46.58,150.78,-52.48,50.8,77.06,3.8494,HIGH,-,3.6085,3.1826,3.71,0,30.7037,WEAK,20.1641
+208,0,TFPM,Triple Flag Precious Metals,gold,royalties_financial_services,large,26.85,0.7815,1.0339,1.002,0.9653,STRONG_UP,-19.47,11.86,78.05,-34.87,54.8,47.38,1.1799,MED,EARLY,30.7734,32.8283,32.6469,0,13.7228,WEAK,18.288
+216,0,RGLD,Royal Gold Inc,gold,royalties_financial_services,large,197.07,0.7956,1.0478,1.0571,0.9843,FLAT,-2.61,13.88,64.17,-35.12,53.2,43.84,1.0138,MED,EARLY,220.211,238.9346,226.6964,0,16.8475,WEAK,18.005
+225,0,OR,Osisko Gold royalties_financial_services,gold,royalties_financial_services,large,31.47,0.8531,1.0202,1.0456,1.0084,FLAT,-9.17,22.11,90.98,-33.96,58.0,51.29,0.8828,LOW,EARLY,35.7365,37.83,37.5345,0,24.997,WEAK,17.3266

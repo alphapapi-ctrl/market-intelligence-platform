@@ -1,0 +1,2 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+1,288,SVL.AX,Silver Mines Ord Shs,silver,explorer,small,0.135,0.6298,1.0076,0.9164,0.8697,STRONG_UP,-35.71,3.85,-20.59,-51.79,36.11,71.27,,LOW,-,0.159,0.1658,0.1863,0,1.9487,WEAK,10.9118
