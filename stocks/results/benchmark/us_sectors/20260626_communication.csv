@@ -1,0 +1,2 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+55,953,CNK,CINEMARK HOLDINGS INC,Communication,,mid,32.37,0.888,0.9751,1.2181,1.0124,FLAT,43.4,7.75,,-28.13,50.4,39.65,,LOW,-,31.8995,29.3987,27.0288,1,9.8523,TREND_ONLY,10.75

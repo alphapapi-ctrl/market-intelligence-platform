@@ -1,0 +1,7 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+23,0,MNST,Monster Beverage,Consumer Staples,Soft Drinks,large,97.6,100.0,-0.0074,-0.0016,0.2152,STRONG_DOWN,27.3,54.72,98.54,-17.7,58.0,33.62,0.9994,LOW,-,93.2145,87.1346,77.5956,1,94.4081,LEADER,25.8845
+50,0,CCEP,Coca-Cola Europacific Partners,Consumer Staples,Soft Drinks,large,106.61,80.0,0.0368,0.0575,0.0317,FLAT,18.8,13.4,52.88,-18.22,56.0,25.89,1.3805,MED,-,98.751,95.2503,92.6197,1,28.9908,LEADER,16.2998
+58,0,PEP,PepsiCo,Consumer Staples,Soft Drinks,large,144.22,60.0,0.0074,-0.0753,-0.2369,STRONG_UP,2.45,10.75,-4.43,-19.03,46.8,22.95,1.4515,MED,PROGRESS,141.9875,146.4404,147.4822,0,21.9165,LAGGARD,14.7063
+71,0,KDP,Keurig Dr Pepper,Consumer Staples,Soft Drinks,large,33.3,40.0,-0.023,0.0016,0.1917,STRONG_DOWN,21.79,1.87,8.09,-27.48,52.0,27.16,1.2104,MED,-,31.5763,29.9724,27.7038,1,3.5752,LAGGARD,12.0345
+80,0,KHC,Kraft Heinz,Consumer Staples,Packaged Foods,large,25.37,20.0,0.0578,0.0387,-0.0317,STRONG_UP,8.3,1.55,-11.15,-23.19,52.8,29.27,0.986,LOW,-,23.535,23.0341,23.2566,1,2.788,LAGGARD,10.591
+96,0,MDLZ,Mondelez International,Consumer Staples,Packaged Foods,large,60.91,0.0,-0.0096,-0.096,-0.0977,STRONG_UP,15.09,-8.64,-2.28,-25.93,48.0,23.29,0.9916,LOW,-,60.8283,60.4924,57.8083,1,-17.817,LAGGARD,7.4286

@@ -1,0 +1,5 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+1,5,KW,KENNEDY WILSON HOLDINGS INC,Real Estate,,small,10.92,1.2249,1.0074,0.9683,0.817,STRONG_UP,14.73,70.07,,-17.27,47.56,3.36,,LOW,-,10.8972,10.8404,9.6351,1,991.8415,TREND+LEAD,185.0204
+14,262,XHR,XENIA HOTELS RESORTS REIT INC,Real Estate,,small,20.1,1.2076,1.0575,1.1492,1.0966,FLAT,35.8,67.67,,-16.23,52.0,28.98,,LOW,-,18.4275,17.17,14.9101,1,121.4264,TREND+LEAD,27.2898
+28,847,CDP,COPT DEFENSE PROPERTIES,Real Estate,,mid,33.69,0.876,1.0029,1.0087,0.8611,FLAT,19.37,21.63,,-10.71,50.4,18.98,,LOW,-,32.9525,32.285,30.2112,1,57.4339,TREND_ONLY,14.6613
+50,1396,AVB,AvalonBay Communities,Real Estate,Multi-Family Residential REITs,large,179.89,0.6482,0.9814,0.9452,0.888,STRONG_UP,1.32,-10.0,,-20.43,50.0,21.15,,LOW,-,184.5575,181.6144,177.8934,1,-23.6363,TREND_ONLY,5.3143

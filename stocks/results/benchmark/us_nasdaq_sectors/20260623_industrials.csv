@@ -1,0 +1,6 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+4,53,NWPX,NWPX INFRASTRUCTURE INC,Industrials,,small,140.92,2.543,1.0819,1.2504,1.4771,STRONG_DOWN,123.29,253.09,,-15.7,55.2,49.95,,LOW,-,124.754,108.5444,74.9778,1,279.696,TREND+LEAD,55.4792
+39,1120,IR,Ingersoll Rand,Industrials,Industrial Machinery & Supplies & Components,large,77.87,0.6852,1.0209,1.0719,0.7545,FLAT,-1.19,-4.86,,-30.56,48.4,37.97,,LOW,SHIFT,73.3015,76.5487,81.4003,0,-6.195,WEAK,10.3046
+43,1169,ALH,ALLIANCE LAUNDRY HOLDINGS INC,Industrials,,mid,26.44,0.7672,1.0315,1.0552,1.0638,STRONG_DOWN,26.02,6.53,6.53,-29.22,53.45,36.21,0.6422,LOW,-,25.5455,25.1576,,0,9.6346,WEAK,9.2282
+49,1325,TIC,TIC SOLUTIONS INC,Industrials,,small,8.07,0.5504,0.95,0.9163,0.83,STRONG_UP,-21.8,-23.58,,-54.66,48.0,51.01,,LOW,-,8.33,8.6308,10.0028,0,-22.1882,WEAK,7.092
+52,1325,BCC,BOISE CASCADE,Industrials,,mid,72.54,0.5936,1.0198,1.049,0.8069,FLAT,-6.09,-17.58,,-29.6,42.0,38.79,,LOW,PROGRESS,69.8285,73.2834,75.8321,0,-19.0352,WEAK,4.8804

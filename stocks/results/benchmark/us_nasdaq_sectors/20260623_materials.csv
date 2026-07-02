@@ -1,0 +1,4 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+10,100,NUE,Nucor,Materials,Steel,large,244.93,1.4214,0.9506,1.0464,1.2196,STRONG_DOWN,56.25,97.35,,-18.43,55.6,30.53,,LOW,-,252.3815,231.1418,176.9146,1,177.2947,TREND+LEAD,40.2987
+11,262,UAMY,UNITED STATES ANTIMONY CORP,Materials,,small,7.8,2.0653,1.0495,0.9202,0.6954,STRONG_UP,73.72,186.76,,-74.3,48.0,114.76,,LOW,-,8.186,9.3646,8.2985,0,78.117,WEAK,30.3394
+25,799,SW,Smurfit Westrock,Materials,Paper & Plastic Packaging Products & Materials,large,45.39,0.7942,1.0264,1.1635,0.9455,FLAT,19.92,10.27,,-32.21,48.8,47.51,,LOW,-,41.843,40.5695,40.3715,1,10.5467,TREND_ONLY,14.8702

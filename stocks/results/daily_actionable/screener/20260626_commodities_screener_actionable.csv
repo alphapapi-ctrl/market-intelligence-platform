@@ -1,0 +1,5 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+4,0,002738.SZ,SINOMINE RESOURCE GROUP CO-A,lithium,producer,large,58.15,50.0,0.0431,0.0679,-0.046,FLAT,-6.79,86.91,,-43.33,49.38,58.06,1.1822,MED,EARLY,59.921,71.6816,67.3145,0,73.9129,LAGGARD,33.956
+5,0,300450.SZ,WUXI LEAD INTELLIGENT EQUI-A,lithium,producer,large,43.95,0.0,0.0171,0.0513,-0.0515,FLAT,-7.47,76.69,,-39.34,48.96,55.21,0.918,LOW,EARLY,46.172,50.9774,52.153,0,68.01,WEAK,26.6709
+6,0,WRN,Western Copper and Gold Ord Shs,gold,producer,mid,2.17,100.0,-0.0315,-0.0123,0.0455,STRONG_DOWN,-24.13,75.0,,-48.4,52.0,68.95,,LOW,EARLY,2.5405,2.7216,2.634,0,56.5627,LAGGARD,24.8873
+7,0,NFG.V,New Found Gold Corp,gold,explorer,mid,2.15,0.0,0.0315,0.0123,-0.0455,STRONG_UP,-49.65,6.97,,-56.9,49.2,61.84,,LOW,EARLY,2.3515,2.6404,3.2329,0,5.5415,WEAK,17.2783

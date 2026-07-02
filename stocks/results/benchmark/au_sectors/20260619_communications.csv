@@ -1,0 +1,10 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+215,116,FRX.AX,FlexiRoam Ltd,Communications,Wireless telecommunications,small,0.018,3.3309,1.0448,0.902,1.0039,UP,20.0,260.0,-33.33,-48.0,18.58,113.98,2.2391,HIGH,-,0.0177,0.0193,0.0171,1,42.3829,TREND+LEAD,22.8826
+382,-140,TUA.AX,Tuas Ltd.,Communications,Wireless telecommunications,mid,2.58,0.4012,0.9643,1.1065,0.4023,DOWN,-64.02,-56.64,-40.42,-75.96,38.74,143.54,0.624,LOW,PROGRESS,2.356,4.3068,6.1964,0,-15.2862,WEAK,17.4524
+569,-356,ABB.AX,Aussie Broadband Ltd.,Communications,Specialty telecommunications,small,5.18,1.1977,0.9177,0.9376,1.0275,DOWN,6.45,29.45,46.41,-28.57,43.48,29.8,1.1588,MED,-,5.459,5.3482,5.2074,0,42.9633,WEAK,14.3592
+957,56,MAQ.AX,Macquarie Technology Group Limited,Communications,Specialty telecommunications,small,76.74,1.1402,1.0096,1.0099,1.1346,DOWN,20.3,23.24,-14.76,-19.22,49.8,31.93,0.7204,LOW,-,75.566,73.0914,67.0172,1,36.2427,TREND+LEAD,10.9651
+1058,-30,HFY.AX,Hubify Ltd.,Communications,Specialty telecommunications,small,0.01,1.028,0.897,0.9521,0.5926,UP,25.0,11.11,0.0,-52.38,12.65,92.3,0.5033,LOW,-,0.0109,0.013,0.0107,0,1.5228,WEAK,10.3064
+1240,-337,TLS.AX,Telstra Group Limited,Communications,Wireless telecommunications,large,5.07,0.9918,0.9621,0.8793,0.907,UP,7.56,7.2,53.38,-10.45,43.08,15.08,0.8806,LOW,-,5.1765,5.2858,4.9793,1,20.5594,TREND_ONLY,8.7763
+1286,124,ITS.AX,Infotrust Ltd,Communications,Major telecommunications,small,0.36,0.7931,1.0765,0.8463,0.7938,UP,-37.93,-14.29,-9.84,-45.0,28.46,60.86,1.3266,MED,-,0.3745,0.4082,0.4901,0,-6.6804,WEAK,8.3914
+1463,-79,CNU.AX,Chorus Limited,Communications,Major telecommunications,mid,7.94,0.9781,0.9613,0.9197,0.9677,UP,0.31,5.71,31.6,-12.34,49.01,21.09,0.6168,LOW,EARLY,8.0445,8.0832,7.9696,0,13.2698,WEAK,6.632
+1692,-26,SPK.AX,Spark New Zealand Limited,Communications,Major telecommunications,mid,1.545,0.724,0.9528,0.9137,0.823,UP,-20.13,-21.75,-49.98,-31.36,43.08,20.72,1.0138,MED,EARLY,1.5815,1.66,1.8529,0,-45.2271,WEAK,1.2064

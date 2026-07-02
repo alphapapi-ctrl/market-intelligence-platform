@@ -1,0 +1,2 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+6,0,WRN,Western Copper and Gold Ord Shs,gold,producer,mid,2.17,100.0,-0.0315,-0.0123,0.0455,STRONG_DOWN,-24.13,75.0,,-48.4,52.0,68.95,,LOW,EARLY,2.5405,2.7216,2.634,0,56.5627,LAGGARD,24.8873

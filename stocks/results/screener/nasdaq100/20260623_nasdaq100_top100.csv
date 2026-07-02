@@ -1,0 +1,2 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+1,46,CHTR,Charter Communications,Telecommunications,Cable & Other Pay Television Services,large,125.54,50.0,-0.1264,-0.1569,-0.4204,STRONG_UP,-39.21,-68.02,-56.08,-69.98,48.4,69.25,1.1419,MED,EARLY,138.0135,164.1534,210.9439,0,-47.5416,LAGGARD,20.6956

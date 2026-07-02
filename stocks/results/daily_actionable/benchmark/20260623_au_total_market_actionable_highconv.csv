@@ -1,0 +1,6 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+175,111,WTC.AX,Wisetech Global Ltd.,Technology services,Packaged software,large,30.08,0.2646,0.8272,0.7962,0.6985,UP,-55.7,-71.57,-67.88,-74.96,44.66,73.45,3.7101,HIGH,EARLY,37.6885,40.079,59.5016,0,-43.5155,WEAK,24.1354
+722,485,A2M.AX,a2 Milk Company Limited,Consumer non-durables,Food: meat/fish/dairy,mid,6.77,0.8069,1.159,1.1743,0.6835,DOWN,-23.54,-13.28,5.93,-47.45,50.2,51.71,3.0905,HIGH,SHIFT,5.693,6.37,8.3958,0,-12.8903,WEAK,12.7664
+1220,36,PMV.AX,Premier Investments Limited,Retail trade,Apparel/Footwear retail,mid,14.63,0.7345,1.0483,1.2266,1.092,DOWN,1.32,-21.06,-51.78,-49.1,46.64,31.02,2.2414,HIGH,SHIFT,13.247,12.6312,14.783,0,-31.6678,WEAK,9.1065
+1456,0,MTS.AX,Metcash Limited,Distribution services,Food distributors,mid,3.12,0.8028,0.9743,1.0043,1.0308,STRONG_DOWN,-5.17,-13.72,-6.68,-35.73,42.29,28.69,1.8467,HIGH,SHIFT,3.1045,2.9688,3.316,0,-20.231,WEAK,6.6449
+1647,59,AFI.AX,Australian Foundation Investment Co. Ltd.,Miscellaneous,Investment trusts/Mutual funds,mid,6.7,0.8971,1.0592,1.0042,0.974,UP,-2.85,-3.58,1.72,-13.38,42.29,16.8,2.228,HIGH,SHIFT,6.4875,6.5644,6.8679,0,-9.0185,WEAK,3.4308

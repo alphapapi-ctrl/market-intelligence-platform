@@ -1,0 +1,4 @@
+rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+10,0,NEM.AX,Newmont Corporation,Gold,large,135.43,68.46,-0.0066,-0.0023,-0.0135,FLAT,-10.1,50.6,120.7,-29.94,56.52,47.5,1.6786,HIGH,EARLY,141.6245,149.7066,149.5215,0,60.2084,LAGGARD,28.7699
+35,0,OBM.AX,Ora Banda Mining Ltd,Gold,mid,1.105,69.13,-0.0221,-0.0811,0.1295,FLAT,-28.25,51.37,234.85,-39.1,50.59,89.49,2.6129,HIGH,EARLY,1.1887,1.2985,1.3029,0,29.0401,LAGGARD,21.5952
+49,0,PNR.AX,Pantoro Gold Limited,Gold,mid,2.29,18.12,-0.0458,-0.1457,-0.2106,STRONG_UP,-55.62,-27.3,37.45,-65.95,50.99,68.62,1.8896,HIGH,EARLY,2.5705,2.9866,4.452,0,-20.2872,WEAK,18.6897

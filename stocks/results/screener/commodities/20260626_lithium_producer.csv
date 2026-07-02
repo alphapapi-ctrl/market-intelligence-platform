@@ -1,0 +1,4 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+3,0,LTR.AX,LIONTOWN LTD,lithium,producer,large,1.76,100.0,-0.0603,-0.1192,0.0974,FLAT,10.34,151.43,,-34.62,49.41,73.01,1.386,MED,-,2.1305,2.263,1.6827,1,102.4803,LEADER,38.4439
+4,0,002738.SZ,SINOMINE RESOURCE GROUP CO-A,lithium,producer,large,58.15,50.0,0.0431,0.0679,-0.046,FLAT,-6.79,86.91,,-43.33,49.38,58.06,1.1822,MED,EARLY,59.921,71.6816,67.3145,0,73.9129,LAGGARD,33.956
+5,0,300450.SZ,WUXI LEAD INTELLIGENT EQUI-A,lithium,producer,large,43.95,0.0,0.0171,0.0513,-0.0515,FLAT,-7.47,76.69,,-39.34,48.96,55.21,0.918,LOW,EARLY,46.172,50.9774,52.153,0,68.01,WEAK,26.6709

@@ -1,0 +1,20 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+103,54,IPG.AX,IPD Group Ltd,Utilities,Electric utilities,small,6.29,2.0782,1.0431,0.9675,1.426,UP,55.15,124.62,50.34,-23.36,48.62,47.69,1.1682,MED,-,5.8715,5.739,4.4985,1,127.0463,TREND+LEAD,32.5659
+213,-63,APA.AX,APA Group,Utilities,Gas distributors,large,10.42,1.2057,0.9459,0.9586,1.0324,DOWN,17.71,30.31,42.36,-6.66,52.17,18.45,1.5977,HIGH,-,10.3705,10.2756,9.3009,1,85.7156,TREND+LEAD,23.0451
+344,-64,EWC.AX,Energy World Corporation Ltd,Utilities,Electric utilities,small,0.058,2.4393,0.97,1.2843,1.4472,DOWN,1.75,163.64,480.0,-67.05,37.55,228.23,0.4929,LOW,-,0.0504,0.0442,0.047,1,26.9226,TREND+LEAD,18.2921
+363,83,KPO.AX,Kalina Power Limited,Utilities,Alternative power generation,small,0.013,2.4056,1.069,1.0315,0.9482,STRONG_UP,0.0,160.0,225.0,-56.52,28.06,136.06,0.7352,LOW,-,0.0135,0.0127,0.0143,0,32.9972,WEAK,17.8416
+714,17,JNS.AX,Janus Electric Holdings Limited,Utilities,Alternative power generation,small,0.135,0.7347,0.8594,0.7561,1.0667,DOWN,98.53,-20.59,2150.0,-70.81,27.67,122.89,1.0417,MED,-,0.1621,0.175,0.1377,0,-4.6357,WEAK,12.9292
+953,-25,TPC.AX,TPC Consolidated Limited,Utilities,Electric utilities,small,3.4,0.3618,1.0484,0.9017,0.8224,UP,-41.28,-60.9,-67.38,-65.5,14.62,51.3,1.7783,HIGH,-,3.417,3.7914,5.2006,0,-17.3558,WEAK,11.0346
+1162,253,LPE.AX,Locality Planning Energy Holdings Limited,Utilities,Electric utilities,small,0.08,0.6168,1.1961,0.8558,0.8245,UP,-27.27,-33.33,-27.27,-52.86,20.95,56.17,6.3326,HIGH,-,0.0803,0.0882,0.1033,0,-12.4325,WEAK,9.5278
+1284,-17,GNE.AX,Genesis Energy Limited,Utilities,Electric utilities,mid,2.17,1.0208,1.0053,1.0409,1.1092,DOWN,8.68,10.33,26.01,-17.79,44.66,30.63,0.2714,LOW,-,2.102,2.0076,2.0051,1,15.0567,TREND+LEAD,8.4026
+1317,-72,LGI.AX,LGI LTD,Utilities,Alternative power generation,small,3.25,1.0264,1.0345,0.9155,0.8397,UP,-17.45,10.94,10.05,-31.03,37.15,42.29,0.197,LOW,-,3.322,3.4796,3.7872,0,9.608,WEAK,8.1386
+1366,-18,TML.AX,Timah Resources Ltd,Utilities,Electric utilities,small,0.047,1.2425,0.9867,0.9521,0.9482,STRONG_UP,14.63,34.29,56.67,-31.43,5.53,0.0,0.0,LOW,-,0.047,0.047,0.0419,1,,TREND+LEAD,7.6306
+1370,-215,GHY.AX,Gold Hydrogen Ltd.,Utilities,Electric utilities,small,0.385,0.6597,0.8835,0.8525,1.0897,DOWN,-12.5,-28.7,-73.26,-54.2,37.94,99.83,0.2313,LOW,-,0.4525,0.3867,0.4382,0,-10.9087,WEAK,7.5806
+1400,31,VPR.AX,Volt Group Ltd.,Utilities,Electric utilities,small,0.155,1.0244,0.9559,0.9224,1.0498,UP,14.81,10.71,-22.5,-26.67,27.67,64.41,0.0005,LOW,-,0.1566,0.1554,0.1513,1,4.6028,TREND+LEAD,7.2667
+1558,-32,MCY.AX,Mercury NZ Ltd.,Utilities,Electric utilities,mid,5.45,0.9521,0.9603,0.9104,0.9937,DOWN,1.39,2.91,-2.46,-17.68,45.45,39.82,0.6068,LOW,EARLY,5.6435,5.5557,5.5144,0,3.316,WEAK,5.34
+1567,22,TEE.AX,Top End Energy Limited,Utilities,Electric utilities,small,0.037,0.778,0.9867,0.9521,0.9232,UP,19.35,-15.91,-69.17,-39.58,24.51,25.62,0.0,LOW,-,0.037,0.037,0.0374,0,-15.2198,WEAK,4.9982
+1572,-8,DEL.AX,Delorean Corporation Ltd,Utilities,Electric utilities,small,0.095,0.5327,1.008,1.0163,0.9099,DOWN,-32.14,-42.42,156.76,-51.67,33.2,61.81,0.2117,LOW,-,0.0942,0.095,0.1176,0,-22.7873,WEAK,4.895
+1634,-10,MEZ.AX,Meridian Energy Limited,Utilities,Alternative power generation,large,4.51,0.8264,0.931,0.9175,0.9337,DOWN,-6.19,-10.68,-18.97,-17.02,44.66,31.54,1.3031,MED,EARLY,4.7865,4.729,4.8307,0,-15.1186,WEAK,3.6882
+1651,-19,CEN.AX,Contact Energy Limited,Utilities,Electric utilities,mid,7.92,0.9037,1.0006,0.9196,0.9399,DOWN,-0.79,-2.33,4.72,-13.66,44.66,42.95,0.0124,LOW,SHIFT,7.8638,7.8933,7.9389,0,-2.4254,WEAK,3.1952
+1685,7,AGL.AX,AGL Energy Limited,Utilities,Electric utilities,mid,8.55,0.819,0.9709,0.8956,0.8745,UP,-6.97,-11.48,-9.1,-19.04,45.85,22.13,0.6209,LOW,EARLY,8.6465,9.086,9.046,0,-23.7819,WEAK,1.6814
+1699,5,RIV.AX,Rivco Australia Limited,Utilities,Water utilities,small,1.42,0.8547,0.9867,0.9657,0.9067,UP,-1.73,-7.62,-7.62,-11.11,35.23,22.66,3.5848,HIGH,-,1.4305,1.432,,0,-11.8536,WEAK,0.7404

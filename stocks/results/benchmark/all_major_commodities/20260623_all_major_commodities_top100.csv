@@ -1,0 +1,2 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+1,318,AAG.V,Aftermath Silver,silver,explorer,small,0.66,0.555,0.8745,0.8989,0.9129,STRONG_DOWN,-25.84,-2.94,,-51.15,40.4,78.83,,LOW,-,0.7465,0.7788,0.8778,0,-1.5073,WEAK,8.3887

@@ -1,0 +1,5 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+23,0,MNST,Monster Beverage,Consumer Staples,Soft Drinks & Non-alcoholic Beverages,large,95.83,100.0,0.0257,0.0999,0.5204,STRONG_DOWN,23.38,54.09,,-17.7,57.6,33.75,,LOW,-,91.0825,85.023,76.7653,1,92.3175,LEADER,25.5023
+50,-14,HLF,HERBALIFE LTD,Consumer Staples,,small,11.97,66.67,-0.0433,-0.0134,-0.0351,FLAT,-12.82,43.53,,-43.39,47.6,52.33,,LOW,-,11.8495,13.6382,13.1792,0,39.591,LAGGARD,16.7217
+69,0,HSY,Hershey Company (The),Consumer Staples,Packaged Foods & Meats,large,176.68,33.33,-0.0257,-0.0942,0.0351,FLAT,-1.87,8.96,,-27.12,50.4,30.9,,LOW,EARLY,181.2175,185.6501,191.3706,0,14.622,WEAK,13.031
+101,0,MZTI,MARZETTI,Consumer Staples,,mid,112.41,0.0,0.0265,0.0134,-0.0453,STRONG_UP,-30.26,-32.82,,-43.14,46.4,32.49,,LOW,PROGRESS,108.8859,115.6452,149.4444,0,-46.878,WEAK,3.9592

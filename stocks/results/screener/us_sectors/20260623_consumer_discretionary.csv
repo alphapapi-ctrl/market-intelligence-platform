@@ -1,0 +1,7 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+16,204,PHIN,PHINIA INC,Consumer Discretionary,,mid,81.33,100.0,0.0116,0.1195,0.2847,STRONG_DOWN,37.22,94.05,,-20.37,56.0,37.78,,LOW,-,79.6405,76.3172,65.2859,1,139.4074,LEADER,33.2358
+31,0,GOLF,ACUSHNET HOLDINGS CORP,Consumer Discretionary,,mid,107.09,80.0,0.1405,0.229,0.2052,FLAT,31.41,49.3,,-17.93,52.4,36.49,,LOW,-,93.7688,93.2551,87.9404,1,70.794,LEADER,20.5731
+62,1024,URBN,URBAN OUTFITTERS INC,Consumer Discretionary,,mid,72.75,60.0,-0.0276,-0.067,0.2218,FLAT,-11.35,8.76,,-26.32,48.4,41.41,,LOW,-,73.956,71.8356,70.2963,1,10.2394,CONTENDER,10.9466
+66,990,YUM,Yum! Brands,Consumer Discretionary,Restaurants,large,150.74,40.0,0.0139,-0.0717,-0.2061,STRONG_UP,-1.63,8.66,,-12.41,50.0,21.64,0.9321,LOW,EARLY,151.2967,154.0466,151.8739,0,20.0162,WEAK,9.7217
+72,1124,BKNG,Booking Holdings,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",large,167.77,0.0,-0.0116,0.067,-0.2052,FLAT,-21.16,-20.69,,-33.35,50.4,36.55,,LOW,PROGRESS,166.8896,168.9635,189.562,0,-28.5357,WEAK,6.7987
+73,1203,MCD,McDonald's,Consumer Discretionary,Restaurants,large,270.1,20.0,-0.0283,-0.0964,-0.28,STRONG_UP,-14.45,-4.44,,-19.82,50.0,18.75,,LOW,EARLY,279.2681,284.9062,301.5365,0,-11.8508,WEAK,6.2461

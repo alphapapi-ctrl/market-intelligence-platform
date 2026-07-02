@@ -1,0 +1,4 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+19,0,MSTR,MicroStrategy,Technology,Computer Software,large,100.77,0.0,0.1997,-0.1336,-0.4211,STRONG_UP,-33.68,-75.06,-22.61,-81.95,43.2,84.04,1.6256,HIGH,EARLY,109.269,145.0152,181.2632,0,-38.582,WEAK,28.2649
+86,0,BKNG,Booking Holdings,Consumer Discretionary,Transportation Services,large,184.56,18.75,0.0168,0.1332,0.0918,FLAT,-13.43,-18.61,19.72,-33.35,50.4,38.97,1.6987,HIGH,SHIFT,172.323,168.229,187.9609,0,-24.0658,WEAK,9.7145
+88,0,ORLY,O'Reilly Automotive,Consumer Discretionary,Auto & Home Supply Stores,large,90.25,31.25,0.0075,0.0432,-0.0333,FLAT,-1.05,-1.18,32.65,-20.58,51.6,28.32,1.8941,HIGH,PROGRESS,89.3815,90.7358,94.8324,0,-2.1546,WEAK,9.2811

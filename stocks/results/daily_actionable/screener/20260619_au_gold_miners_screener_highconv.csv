@@ -1,0 +1,6 @@
+rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+4,5,DTR.AX,Dateline Resources Limited,Gold,mid,0.17,82.67,0.4362,-0.0811,-0.5993,STRONG_UP,-26.09,115.19,1788.89,-82.31,45.85,108.68,1.7353,HIGH,PROGRESS,0.1655,0.2286,0.3155,0,48.5964,LAGGARD,41.7834
+48,31,TCG.AX,Turaco Gold Limited,Gold,mid,0.545,36.0,0.1427,0.09,-0.0744,STRONG_UP,-33.54,13.54,186.84,-49.43,46.25,83.55,2.4095,HIGH,PROGRESS,0.5038,0.5598,0.6024,0,7.4961,WEAK,19.8714
+50,52,CYL.AX,Catalyst Metals Limited,Gold,mid,6.44,33.33,0.2408,0.2408,0.1087,UP,-0.31,12.0,557.14,-51.04,49.41,80.54,1.9637,HIGH,SHIFT,5.392,5.7332,7.0228,0,7.3618,WEAK,19.7924
+56,38,OBM.AX,Ora Banda Mining Ltd,Gold,mid,1.29,53.33,0.1254,-0.0153,0.0556,FLAT,0.0,38.71,263.38,-39.1,50.2,95.2,1.5906,HIGH,EARLY,1.2935,1.3532,1.2984,0,20.412,LAGGARD,19.2894
+57,2,STK.AX,Strickland Metals Limited,Gold,mid,0.096,12.0,-0.0343,-0.04,-0.4201,STRONG_UP,-49.47,-28.89,-12.73,-61.63,34.39,87.68,2.0002,HIGH,EARLY,0.1048,0.1454,0.1813,0,-11.3309,WEAK,18.9103

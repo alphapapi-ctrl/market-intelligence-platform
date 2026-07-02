@@ -1,0 +1,8 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+316,395,MSB.AX,Mesoblast Limited,Health technology,Biotechnology,mid,2.06,1.1413,1.0424,0.9856,0.9436,STRONG_UP,-25.63,23.35,88.99,-36.48,46.25,46.03,1.7877,HIGH,PROGRESS,2.0385,2.089,2.3734,0,23.4649,WEAK,18.9122
+321,-59,PDN.AX,Paladin Energy Ltd,Non-energy minerals,Other metals/Minerals,mid,10.09,1.2514,1.0254,0.9465,0.8801,STRONG_UP,18.43,35.25,-26.35,-35.56,51.78,76.25,1.6423,HIGH,EARLY,10.6835,11.679,10.4675,0,23.9408,WEAK,18.8265
+784,268,HUB.AX,HUB24 Limited,Technology services,Packaged software,mid,78.73,0.9086,0.9687,0.9312,0.9197,UP,-18.85,-1.8,76.51,-35.43,52.57,46.29,1.9452,HIGH,EARLY,82.836,83.8288,94.1993,0,-2.0473,WEAK,12.3618
+1151,257,REG.AX,Regis Healthcare Ltd.,Health services,Medical/Nursing services,mid,6.16,0.7649,1.0216,1.0147,0.9833,UP,-15.29,-17.33,50.58,-37.13,47.04,49.64,1.5394,HIGH,EARLY,6.2645,6.2564,6.7442,0,-16.42,WEAK,9.6317
+1256,153,PMV.AX,Premier Investments Limited,Retail trade,Apparel/Footwear retail,mid,14.17,0.7063,0.9895,1.1876,1.0731,DOWN,0.07,-23.66,-49.49,-49.1,46.25,32.43,1.5698,HIGH,SHIFT,12.966,12.573,14.8506,0,-33.7477,WEAK,8.6331
+1306,203,FBU.AX,Fletcher Building Limited,Non-energy minerals,Construction materials,mid,2.68,0.8521,1.0132,1.0588,0.9274,DOWN,-15.46,-7.9,0.0,-32.74,43.08,30.95,1.814,HIGH,SHIFT,2.6045,2.477,2.8447,0,-11.0014,WEAK,8.273
+1640,-104,CLW.AX,Charter Hall Long WALE REIT,Finance,Real estate investment trusts,mid,3.7,0.8503,0.9762,1.0182,1.0273,STRONG_DOWN,-5.46,-8.1,23.3,-25.05,43.48,19.0,1.5607,HIGH,SHIFT,3.5395,3.5112,3.8266,0,-18.5279,WEAK,3.533

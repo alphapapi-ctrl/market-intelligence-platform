@@ -5386,7 +5386,7 @@ elif page == "Relative Strength Charts":
             sel_groups  = st.multiselect("Filter groups", groups, default=groups, key=f"grp_{title}")
         with col3:
             show_labels = st.toggle("Show labels", value=True, key=f"lbl_{title}")
-            smooth_span = st.slider("Smoothing (EWM span)", 1, 20, 20, key=f"span_{title}")
+            smooth_span = st.slider("Smoothing (EWM span)", 1, 20, 4, key=f"span_{title}")
         with col4:
             all_tickers = sorted(history['ticker'].unique().tolist())
             sel_tickers = st.multiselect("Filter tickers", all_tickers, default=[],
@@ -5397,7 +5397,7 @@ elif page == "Relative Strength Charts":
         cutoff_to   = latest_date - pd.Timedelta(days=max(0, tail_to - 1))
         df      = history[(history['date'] >= cutoff_from) & (history['date'] <= cutoff_to + pd.Timedelta(days=2))].copy()
         # Cap to tail_from rows per ticker
-        df      = df.groupby('ticker', group_keys=False).apply(lambda x: x.sort_values('date').tail(tail_from))
+        df      = df.sort_values(['ticker', 'date']).groupby('ticker', group_keys=False).tail(tail_from)
         df      = df[df['group'].isin(sel_groups)]
         if sel_tickers:
             df = df[df['ticker'].isin(sel_tickers)]
@@ -5704,14 +5704,18 @@ elif page == "Relative Strength Charts":
             font=dict(color='#1a1a1a' if _get_theme_mode()=='light' else 'white'),
         )
 
-        img_bytes = fig_export.to_image(format='png', width=2400, height=1000, scale=2)
-        st.download_button(
-            label     = f"⬇ Download PNG ({tail_days}d tail)",
-            data      = img_bytes,
-            file_name = f"rrg_{title.replace(' ','_').replace('/','_')}_{tail_to}to{tail_from}d_{datetime.today().strftime('%Y%m%d')}.png",
-            mime      = 'image/png',
-            key       = f"dl_rrg_{title}"
-        )
+        _png_ss_key = f"png_rrg_{title}"
+        if st.button(f"📸 Render PNG ({tail_days}d tail)", key=f"prep_rrg_{title}"):
+            with st.spinner("Rendering PNG…"):
+                st.session_state[_png_ss_key] = fig_export.to_image(format='png', width=2400, height=1000, scale=2)
+        if _png_ss_key in st.session_state:
+            st.download_button(
+                label     = f"⬇ Download PNG",
+                data      = st.session_state[_png_ss_key],
+                file_name = f"rrg_{title.replace(' ','_').replace('/','_')}_{tail_to}to{tail_from}d_{datetime.today().strftime('%Y%m%d')}.png",
+                mime      = 'image/png',
+                key       = f"dl_rrg_{title}"
+            )
 
     with tab1:
         build_rrg(
@@ -5784,7 +5788,7 @@ elif page == "Relative Strength Charts":
             mask = tot > 0
             pct = pd.Series(index=hist_df.index, dtype=float)
             pct[mask] = (sig[mask] / tot[mask]) * 100
-            rs_series[sk] = pct.fillna(method='ffill')
+            rs_series[sk] = pct.ffill()
 
         if not rs_series:
             st.warning("No matching sector columns found.")

@@ -1,5 +1,5 @@
 {
-  "date": "20260611",
+  "date": "20260703",
   "alerts": [
     {
       "type": "WARN",
@@ -14,7 +14,7 @@
     {
       "type": "WARN",
       "key": "debt_gdp",
-      "message": "Federal Debt % GDP: 122.5682 \u25b2 +1.539 qoq"
+      "message": "Federal Debt % GDP: 122.5939 \u25b2 +0.026 qoq"
     }
   ]
 }

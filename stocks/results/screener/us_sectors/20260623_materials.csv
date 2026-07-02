@@ -1,0 +1,2 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+43,888,KOP,KOPPERS HOLDINGS INC,Materials,,small,44.42,50.0,0.0005,0.1233,0.2332,STRONG_DOWN,58.63,41.14,,-23.96,51.6,39.3,1.0072,MED,-,42.3239,40.9102,33.0824,1,54.0097,CONTENDER,16.7745

@@ -1,0 +1,6 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+36,873,ULTA,Ulta Beauty,Consumer Discretionary,Other Specialty Retail,large,485.52,0.8743,1.0825,0.9755,0.8156,STRONG_UP,-19.63,6.09,,-36.23,50.4,30.43,,LOW,PROGRESS,475.605,505.6694,562.6563,0,10.0825,WEAK,16.2332
+39,915,XPEL,XPEL INC,Consumer Discretionary,,small,47.9,1.1021,1.0718,1.0267,1.041,FLAT,-8.2,33.72,,-31.79,52.8,44.57,,LOW,-,45.5735,45.3558,44.0308,1,39.9515,TREND+LEAD,15.3101
+43,976,TSCO,Tractor Supply,Consumer Discretionary,Other Specialty Retail,large,30.75,0.4991,1.0341,1.022,0.5919,STRONG_UP,-39.04,-39.45,-40.23,-52.69,48.0,41.48,1.0984,MED,PROGRESS,30.387,32.744,47.1435,0,-45.6457,WEAK,13.2691
+47,1224,WGO,WINNEBAGO INDUSTRIES INC,Consumer Discretionary,,small,30.88,0.9255,1.0953,1.0654,0.8427,STRONG_UP,-25.61,12.3,,-44.04,50.4,45.14,,LOW,-,28.5721,29.8911,35.2279,0,13.7377,WEAK,11.7979
+52,0,NVR,"NVR, Inc.",Consumer Discretionary,Homebuilding,large,6814.4399,0.7714,1.0676,1.1391,0.9144,FLAT,-7.14,-6.4,,-34.88,48.8,32.66,,LOW,SHIFT,6333.2515,6258.7922,7134.7595,0,-9.5638,WEAK,11.2515
