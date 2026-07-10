@@ -138,8 +138,9 @@ DEFAULT_SETTINGS = {
         'Commodities'         : True,
         'RRG Charts'          : True,
         'Drawdown Analysis'   : True,
-        'Actionable & Exports': True,
+        'Screeners & Exports': True,
         'DeMark Signals'      : True,
+        'Fundamental Analysis': True,
         'Run Scripts'         : True,
         'Settings'            : True,
     },
@@ -188,7 +189,30 @@ DEFAULT_SETTINGS = {
         'provider'         : 'anthropic',
         'anthropic_api_key': '',
         'model'            : 'claude-sonnet-4-6',
-    }
+        'openai_api_key'   : '',
+        'openai_model'     : 'gpt-4o',
+        'ollama_url'       : 'http://localhost:11434',
+        'ollama_model'     : 'llama3.1:8b',
+    },
+    'fa_features': {
+        'provider'      : 'ollama',
+        'ollama_url'    : 'http://localhost:11434',
+        'lmstudio_url'  : 'http://localhost:1234',
+        'openai_url'    : 'https://api.openai.com',
+        'openai_api_key': '',
+        'model'         : 'llama3.1:8b',
+    },
+    'burry_screener': {
+        'max_market_cap'   : 300_000_000,
+        'max_pe'           : 15.0,
+        'max_pb'           : 1.5,
+        'max_ps'           : 1.0,
+        'max_debt_equity'  : 50.0,
+        'min_current_ratio': 1.5,
+        'min_roe'          : 0.0,
+        'max_shares'       : 100_000_000,
+        'markets'          : ['us'],
+    },
 }
 
 
@@ -219,6 +243,12 @@ def load_settings():
                 merged = DEFAULT_SETTINGS.copy()
                 merged['pages'].update(saved.get('pages', {}))
                 merged['ai_features'].update(saved.get('ai_features', {}))
+                if 'fa_features' not in merged:
+                    merged['fa_features'] = DEFAULT_SETTINGS.get('fa_features', {}).copy()
+                merged['fa_features'].update(saved.get('fa_features', {}))
+                if 'burry_screener' not in merged:
+                    merged['burry_screener'] = DEFAULT_SETTINGS.get('burry_screener', {}).copy()
+                merged['burry_screener'].update(saved.get('burry_screener', {}))
                 if 'theme' in saved:
                     merged['theme'] = saved['theme']
                 return merged
@@ -243,8 +273,9 @@ ALL_PAGES = [
     ("Seasonality",              "calendar3"),
     ("DeMark Signals",           "graph-up"),
     ("Relative Strength Charts", "broadcast"),
-    ("Actionable & Exports",     "file-earmark-arrow-down"),
+    ("Screeners & Exports",     "file-earmark-arrow-down"),
     ("Drawdown Analysis",        "graph-down"),
+    ("Fundamental Analysis",     "bank"),
     ("Run Scripts",              "play-circle"),
     ("Settings",             "gear"),
 ]
@@ -3638,8 +3669,10 @@ elif page == "Debt Markets":
     st.markdown("""
         <div class="info-card">
             Tracks the health of consumer, corporate and sovereign credit markets using
-            Federal Reserve (FRED) data. Most series are updated quarterly — signals here
-            are slow-moving but highly reliable leading indicators of economic stress.
+            Federal Reserve (FRED) data and daily credit ETF prices. Delinquency series
+            are quarterly — slow-moving but highly reliable leading indicators. Credit ETFs
+            (HYG, JNK, LQD, TLT, EMB), MOVE index, yields and breakeven inflation are
+            <b>daily</b> for real-time signals.
             <b>Rate of change</b> is more important than the level — accelerating
             delinquencies signal deteriorating credit conditions before they appear in
             employment or GDP data. Alerts feed into the Macro page change alerts.
@@ -3665,9 +3698,10 @@ elif page == "Debt Markets":
         with open(json_file, 'r') as f:
             snap = json.load(f)
 
-        credit_data = snap.get('credit_data', {})
-        pe_data     = snap.get('pe_data', {})
-        alerts      = snap.get('alerts', [])
+        credit_data    = snap.get('credit_data', {})
+        pe_data        = snap.get('pe_data', {})
+        credit_market  = snap.get('credit_market', {})
+        alerts         = snap.get('alerts', [])
 
         report_date = datetime.strptime(sel_date, '%Y%m%d').strftime('%d %b %Y')
         st.caption(f"Report date: {report_date}")
@@ -3920,6 +3954,156 @@ HY spread: {hy.get('current','n/a')}% (qoq: {hy.get('roc','n/a')})
 IG spread: {ig.get('current','n/a')}% (qoq: {ig.get('roc','n/a')})
 BKLN 1m return: {bkln_d.get('ret_1m','n/a')}%"""
             render_ai_assessment(prompt, ai_settings, 'corporate_credit_assessment')
+
+        st.divider()
+
+        # ══════════════════════════════════════════════════════════════════════
+        # SECTION 2b — REAL-TIME CREDIT MARKET ETFs
+        # ══════════════════════════════════════════════════════════════════════
+        st.subheader("📊 Real-Time Credit Markets")
+        st.markdown("""
+            <div class="info-card">
+                Daily credit ETF prices provide a real-time view of credit market risk appetite.
+                <b>HYG/JNK</b> track high-yield bonds — falling prices signal risk-off.
+                <b>LQD</b> tracks investment-grade — weakness here confirms stress spreading.
+                <b>TLT/SHY</b> reflect Treasury demand (flight-to-safety).
+                <b>EMB</b> tracks emerging market debt — sensitive to dollar strength and global risk.
+                <b>MOVE</b> is bond-market volatility — spikes precede equity volatility (VIX) by days.
+            </div>
+        """, unsafe_allow_html=True)
+
+        if credit_market:
+            cm_rows = []
+            for ticker, d in credit_market.items():
+                cm_rows.append({
+                    'Ticker'  : ticker,
+                    'Name'    : d['name'],
+                    'Price'   : f"{d['price']:.2f}" if d.get('price') is not None else 'n/a',
+                    '1W %'    : f"{d['ret_1w']:+.1f}%" if d.get('ret_1w') is not None else 'n/a',
+                    '1M %'    : f"{d['ret_1m']:+.1f}%" if d.get('ret_1m') is not None else 'n/a',
+                    '3M %'    : f"{d['ret_3m']:+.1f}%" if d.get('ret_3m') is not None else 'n/a',
+                    '12M %'   : f"{d['ret_12m']:+.1f}%" if d.get('ret_12m') is not None else 'n/a',
+                })
+
+            df_cm = pd.DataFrame(cm_rows)
+
+            def colour_cm_ret(val):
+                try:
+                    v = float(str(val).replace('%','').replace('+',''))
+                    if v > 0: return 'color: #2dc653'
+                    if v < 0: return 'color: #e63946'
+                except: pass
+                return ''
+
+            st.dataframe(
+                df_cm.style.map(colour_cm_ret, subset=['1W %','1M %','3M %','12M %']),
+                width='stretch', hide_index=True
+            )
+
+            move_data = credit_market.get('^MOVE', {})
+            if move_data:
+                move_colour = '#e63946' if move_data.get('price', 0) > 120 else '#f77f00' if move_data.get('price', 0) > 100 else '#2dc653'
+                move_1w = f"{move_data['ret_1w']:+.1f}%" if move_data.get('ret_1w') is not None else 'n/a'
+                move_1m = f"{move_data['ret_1m']:+.1f}%" if move_data.get('ret_1m') is not None else 'n/a'
+                st.markdown(f"""
+                    <div class="macro-card" style="border-left:4px solid {move_colour}">
+                        <div class="macro-label">MOVE Index — Bond Market Volatility</div>
+                        <div style="font-size:22px;font-weight:bold;color:{move_colour}">{move_data['price']:.1f}</div>
+                        <div style="font-size:11px;color:#888">
+                            1w: <span style="color:{move_colour}">{move_1w}</span>
+                            &nbsp;|&nbsp; 1m: {move_1m}
+                            &nbsp;|&nbsp; <span style="color:#888">Below 80 = calm &nbsp;|&nbsp; 100-120 = elevated &nbsp;|&nbsp; 120+ = stress</span>
+                        </div>
+                    </div>
+                """, unsafe_allow_html=True)
+        else:
+            st.info("No credit market ETF data — run a fresh report to populate")
+
+        st.divider()
+
+        # ══════════════════════════════════════════════════════════════════════
+        # SECTION 2c — RATES & YIELD CURVE
+        # ══════════════════════════════════════════════════════════════════════
+        st.subheader("📈 Rates & Yield Curve")
+        st.markdown("""
+            <div class="info-card">
+                Daily Treasury yields and the yield curve from FRED. An inverted curve
+                (10Y-2Y below zero) has preceded every US recession since the 1960s.
+                The <b>un-inversion</b> is often the more immediate recession signal —
+                the curve steepening back toward positive after an inversion period
+                typically occurs as the Fed begins cutting into weakness.
+            </div>
+        """, unsafe_allow_html=True)
+
+        rate_keys = ['us10y', 'us02y', 'us03m', 'yield_curve', 'fed_funds']
+        rate_cols = st.columns(len([k for k in rate_keys if k in credit_data]))
+        col_idx = 0
+        for key in rate_keys:
+            if key not in credit_data:
+                continue
+            d = credit_data[key]
+            val = d['current']
+            roc = d.get('roc', 0) or 0
+            arrow = '▲' if roc > 0 else '▼' if roc < 0 else '→'
+            colour = '#e63946' if key == 'yield_curve' and val < 0 else '#2dc653' if key == 'yield_curve' and val > 0 else '#00b4d8'
+            with rate_cols[col_idx]:
+                st.markdown(f"""
+                    <div class="macro-card" style="border-left:3px solid {colour}">
+                        <div class="macro-label">{d['label']}</div>
+                        <div style="font-size:20px;font-weight:bold;color:{colour}">{val:.2f}%</div>
+                        <div style="font-size:11px;color:#888">{arrow} {roc:+.3f}</div>
+                    </div>
+                """, unsafe_allow_html=True)
+            col_idx += 1
+
+        st.divider()
+
+        # ══════════════════════════════════════════════════════════════════════
+        # SECTION 2d — INFLATION EXPECTATIONS
+        # ══════════════════════════════════════════════════════════════════════
+        st.subheader("🔥 Inflation Expectations")
+        st.markdown("""
+            <div class="info-card">
+                Breakeven inflation rates from TIPS spreads — what the bond market is
+                pricing for future inflation. Rising breakevens with falling equities
+                signals stagflation risk. 5Y breakevens above 3% historically trigger
+                hawkish Fed response. Divergence between 5Y and 10Y suggests market
+                expects near-term inflation pressure to be transitory vs structural.
+            </div>
+        """, unsafe_allow_html=True)
+
+        inf_keys = ['breakeven_5y', 'breakeven_10y']
+        ic1, ic2 = st.columns(2)
+        for i, key in enumerate(inf_keys):
+            if key not in credit_data:
+                continue
+            d = credit_data[key]
+            val = d['current']
+            roc = d.get('roc', 0) or 0
+            level = d.get('alert_level', 'OK')
+            arrow = '▲' if roc > 0 else '▼' if roc < 0 else '→'
+            colours = {'ALERT': '#e63946', 'WARN': '#f77f00', 'OK': '#2dc653'}
+            colour = colours.get(level, '#888')
+            icon = '⚠' if level == 'ALERT' else '!' if level == 'WARN' else '✓'
+            thresh = THRESHOLDS.get(key, {}) if 'THRESHOLDS' in dir() else {}
+            thresh_txt = f"WARN >{d.get('warn','?')}% | ALERT >{d.get('alert','?')}%" if thresh else ''
+
+            with [ic1, ic2][i]:
+                st.markdown(f"""
+                    <div class="macro-card" style="border-left:4px solid {colour}">
+                        <div style="display:flex;justify-content:space-between;align-items:center">
+                            <div>
+                                <div class="macro-label">{d['label']}</div>
+                                <div style="font-size:22px;font-weight:bold;color:{colour}">{val:.2f}%</div>
+                                <div style="font-size:11px;color:#888">{arrow} {roc:+.3f}</div>
+                            </div>
+                            <div style="text-align:right">
+                                <div style="color:{colour};font-size:18px">{icon} {level}</div>
+                            </div>
+                        </div>
+                    </div>
+                """, unsafe_allow_html=True)
+                credit_chart(key, d['label'])
 
         st.divider()
 
@@ -6511,8 +6695,8 @@ elif page == "Drawdown Analysis":
 # ═══════════════════════════════════════════════════════════════════════════════
 # ACTIONABLE & TRADINGVIEW EXPORTS PAGE
 # ═══════════════════════════════════════════════════════════════════════════════
-elif page == "Actionable & Exports":
-    st.title("📋 Actionable & TradingView Exports")
+elif page == "Screeners & Exports":
+    st.title("📋 Screeners & TradingView Exports")
     st.caption("Filtered actionable stocks grouped by market. Run scripts to generate files.")
 
     _act_screener_dir  = os.path.join(STOCKS, 'results', 'daily_actionable', 'screener')
@@ -6732,11 +6916,434 @@ elif page == "Actionable & Exports":
             ]),
         ]
 
-        _grp_tabs = st.tabs([g[0] for g in _GROUPS])
+        _grp_tabs = st.tabs([g[0] for g in _GROUPS] + ["🔍 Burry Value Screen"])
         for _gtab, (_glabel, _cfg_key, _studies) in zip(_grp_tabs, _GROUPS):
             with _gtab:
                 for _slabel, _csv_stem, _tv_stem, _is_hc, _subdir in _studies:
                     _show_section(_slabel, _csv_stem, _tv_stem, _is_hc, _cfg_key, _subdir)
+
+        # ── Burry Value Screen tab ────────────────────────────────────────────
+        with _grp_tabs[-1]:
+            st.markdown("##### Michael Burry Value Screen")
+            st.caption("Small/micro-cap, absolutely cheap, strong balance sheet, low share count — based on Burry's VIC write-ups.")
+
+            _burry_settings = load_settings()
+            _burry_cfg = _burry_settings.get('burry_screener', DEFAULT_SETTINGS['burry_screener'])
+
+            # show current filter summary
+            _bcap_m = _burry_cfg.get('max_market_cap', 300_000_000)
+            _bcap_label = f"${_bcap_m/1e9:.1f}B" if _bcap_m >= 1e9 else f"${_bcap_m/1e6:.0f}M"
+            st.caption(
+                f"Filters — MCap: **< {_bcap_label}** | "
+                f"P/E: **< {_burry_cfg.get('max_pe', 15)}** | "
+                f"P/B: **< {_burry_cfg.get('max_pb', 1.5)}** | "
+                f"P/S: **< {_burry_cfg.get('max_ps', 1.0)}** | "
+                f"D/E: **< {_burry_cfg.get('max_debt_equity', 50)}** | "
+                f"Current Ratio: **> {_burry_cfg.get('min_current_ratio', 1.5)}** | "
+                f"Shares: **< {_burry_cfg.get('max_shares', 100_000_000)/1e6:.0f}M**"
+            )
+
+            # inline adjustable filters (initialise from saved defaults, expander overrides)
+            _bf_mcap   = int(_burry_cfg.get('max_market_cap', 300_000_000) / 1e6)
+            _bf_pe     = float(_burry_cfg.get('max_pe', 15.0))
+            _bf_pb     = float(_burry_cfg.get('max_pb', 1.5))
+            _bf_ps     = float(_burry_cfg.get('max_ps', 1.0))
+            _bf_de     = float(_burry_cfg.get('max_debt_equity', 50.0))
+            _bf_cr     = float(_burry_cfg.get('min_current_ratio', 1.5))
+            _bf_roe    = float(_burry_cfg.get('min_roe', 0.0))
+            _bf_shares = int(_burry_cfg.get('max_shares', 100_000_000) / 1e6)
+            _bf_markets = _burry_cfg.get('markets', ['us'])
+
+            with st.expander("⚙️ Adjust Filters", expanded=False):
+                _bf_c1, _bf_c2, _bf_c3, _bf_c4 = st.columns(4)
+                _bf_mcap = _bf_c1.number_input("Max Market Cap ($M)", 10, 5000,
+                                                _bf_mcap, step=50, key='burry_f_mcap')
+                _bf_pe   = _bf_c2.number_input("Max P/E", 1.0, 100.0,
+                                                _bf_pe, step=1.0, key='burry_f_pe')
+                _bf_pb   = _bf_c3.number_input("Max P/B", 0.1, 10.0,
+                                                _bf_pb, step=0.1, key='burry_f_pb')
+                _bf_ps   = _bf_c4.number_input("Max P/S", 0.1, 10.0,
+                                                _bf_ps, step=0.1, key='burry_f_ps')
+
+                _bf_c5, _bf_c6, _bf_c7, _bf_c8 = st.columns(4)
+                _bf_de   = _bf_c5.number_input("Max D/E", 0.0, 200.0,
+                                                _bf_de, step=5.0, key='burry_f_de')
+                _bf_cr   = _bf_c6.number_input("Min Current Ratio", 0.0, 10.0,
+                                                _bf_cr, step=0.1, key='burry_f_cr')
+                _bf_roe  = _bf_c7.number_input("Min ROE (%)", -100.0, 100.0,
+                                                _bf_roe, step=1.0, key='burry_f_roe')
+                _bf_shares = _bf_c8.number_input("Max Shares (M)", 1, 1000,
+                                                  _bf_shares, step=10, key='burry_f_shares')
+
+                st.caption("Select the stock universe from the dropdown below to choose the market.")
+
+            # scan source — all available screener and benchmark universes
+            _BURRY_SOURCES = {
+                'AU Total Market (Screener)'  : os.path.join(STOCKS, 'results', 'screener', 'au_total_market', 'au_total_market_latest_formatted.csv'),
+                'US S&P 500 (Screener)'       : os.path.join(STOCKS, 'results', 'screener', 'us_sp500', 'us_sp500_latest_formatted.csv'),
+                'NASDAQ 100 (Screener)'       : os.path.join(STOCKS, 'results', 'screener', 'nasdaq100', 'nasdaq100_latest_formatted.csv'),
+                'US Total Market (Screener)'  : os.path.join(STOCKS, 'results', 'screener', 'us_total_market', 'us_total_market_latest_formatted.csv'),
+                'Commodities (Screener)'      : os.path.join(STOCKS, 'results', 'screener', 'all_major_commodities', 'all_major_commodities_latest_formatted.csv'),
+                'Uranium (Screener)'          : os.path.join(STOCKS, 'results', 'screener', 'uranium', 'uranium_latest_formatted.csv'),
+                'AU Gold Miners (Screener)'   : os.path.join(STOCKS, 'results', 'screener', 'au_gold_miners', 'au_gold_miners_latest_formatted.csv'),
+                'AU Total Market (Benchmark)' : os.path.join(STOCKS, 'results', 'benchmark', 'au_total_market', 'au_total_market_latest_formatted.csv'),
+                'US Benchmark'                : os.path.join(STOCKS, 'results', 'benchmark', 'us_benchmark', 'us_benchmark_latest_formatted.csv'),
+                'NASDAQ Benchmark'            : os.path.join(STOCKS, 'results', 'benchmark', 'us_nasdaq_benchmark', 'us_nasdaq_benchmark_latest_formatted.csv'),
+                'Commodities Benchmark'       : os.path.join(STOCKS, 'results', 'benchmark', 'commodities', 'commodities_latest_formatted.csv'),
+            }
+            _BURRY_SOURCES = {k: v for k, v in _BURRY_SOURCES.items() if os.path.exists(v)}
+
+            _burry_dir = os.path.join(STOCKS, 'results', 'daily_actionable', 'burry_screen')
+            os.makedirs(_burry_dir, exist_ok=True)
+
+            def _format_burry_df(df):
+                """Format raw Burry screen dataframe for display."""
+                fmt = df.copy()
+                if 'mkt_cap' in fmt.columns:
+                    fmt['mkt_cap'] = pd.to_numeric(fmt['mkt_cap'], errors='coerce').apply(
+                        lambda x: f"${x/1e6:.0f}M" if pd.notna(x) else '')
+                for _fc in ['P/E', 'P/B', 'P/S', 'EV/FCF', 'D/E', 'cur_ratio']:
+                    if _fc in fmt.columns:
+                        fmt[_fc] = pd.to_numeric(fmt[_fc], errors='coerce').apply(
+                            lambda x: f"{x:.2f}" if pd.notna(x) else '')
+                if 'ROE' in fmt.columns:
+                    fmt['ROE'] = pd.to_numeric(fmt['ROE'], errors='coerce').apply(
+                        lambda x: f"{x*100:.1f}%" if pd.notna(x) and abs(x) < 10 else
+                                  (f"{x:.1f}%" if pd.notna(x) else ''))
+                if 'shares' in fmt.columns:
+                    fmt['shares'] = pd.to_numeric(fmt['shares'], errors='coerce').apply(
+                        lambda x: f"{x/1e6:.1f}M" if pd.notna(x) and x >= 1e6 else
+                                  (f"{x/1e3:.0f}K" if pd.notna(x) else ''))
+                if 'FCF' in fmt.columns:
+                    fmt['FCF'] = pd.to_numeric(fmt['FCF'], errors='coerce').apply(
+                        lambda x: f"${x/1e6:.1f}M" if pd.notna(x) else '')
+                if 'price' in fmt.columns:
+                    fmt['price'] = pd.to_numeric(fmt['price'], errors='coerce').apply(
+                        lambda x: f"${x:.2f}" if pd.notna(x) else '')
+                if '52w_chg' in fmt.columns:
+                    fmt['52w_chg'] = pd.to_numeric(fmt['52w_chg'], errors='coerce').apply(
+                        lambda x: f"{x*100:.1f}%" if pd.notna(x) and abs(x) < 10 else
+                                  (f"{x:.1f}%" if pd.notna(x) else ''))
+                return fmt
+
+            if not _BURRY_SOURCES:
+                st.info("No screener data found — run scan scripts first to populate the stock universe.")
+            else:
+                _burry_source = st.selectbox("Stock Universe", list(_BURRY_SOURCES.keys()), key='burry_universe')
+
+                if st.button("🔍 Run Burry Screen", type="primary", key='burry_run'):
+                    _src_path = _BURRY_SOURCES[_burry_source]
+                    _src_df = load_csv(_src_path)
+                    if _src_df is None or len(_src_df) == 0:
+                        st.error("No tickers in source file")
+                    else:
+                        _tickers = _src_df['ticker'].dropna().unique().tolist()
+                        _progress = st.progress(0, text="Screening...")
+                        _results = []
+
+                        import yfinance as yf
+                        from datetime import datetime
+
+                        for _i, _t in enumerate(_tickers):
+                            _progress.progress((_i + 1) / len(_tickers), text=f"Screening {_t} ({_i+1}/{len(_tickers)})")
+                            try:
+                                _info = yf.Ticker(_t).info
+                                if not _info or not _info.get('regularMarketPrice'):
+                                    continue
+
+                                _mcap = _info.get('marketCap')
+                                _pe   = _info.get('trailingPE')
+                                _pb   = _info.get('priceToBook')
+                                _ps   = _info.get('priceToSalesTrailing12Months')
+                                _de   = _info.get('debtToEquity')
+                                _cr   = _info.get('currentRatio')
+                                _roe  = _info.get('returnOnEquity')
+                                _so   = _info.get('sharesOutstanding')
+                                _fcf  = _info.get('freeCashflow')
+                                _ev   = _info.get('enterpriseValue')
+
+                                if _mcap is not None and _mcap > _bf_mcap * 1e6:
+                                    continue
+                                if _pe is not None and (_pe <= 0 or _pe > _bf_pe):
+                                    continue
+                                if _pb is not None and _pb > _bf_pb:
+                                    continue
+                                if _ps is not None and _ps > _bf_ps:
+                                    continue
+                                if _de is not None and _de > _bf_de:
+                                    continue
+                                if _cr is not None and _cr < _bf_cr:
+                                    continue
+                                if _roe is not None and _roe * 100 < _bf_roe:
+                                    continue
+                                if _so is not None and _so > _bf_shares * 1e6:
+                                    continue
+
+                                if _mcap is None:
+                                    continue
+                                if all(v is None for v in [_pe, _pb, _ps]):
+                                    continue
+
+                                _ev_fcf = None
+                                if _ev and _fcf and _fcf > 0:
+                                    _ev_fcf = _ev / _fcf
+
+                                _results.append({
+                                    'ticker': _t,
+                                    'name': _info.get('shortName', _info.get('longName', _t)),
+                                    'sector': _info.get('sector', ''),
+                                    'mkt_cap': _mcap,
+                                    'price': _info.get('regularMarketPrice', _info.get('currentPrice')),
+                                    'P/E': _pe,
+                                    'P/B': _pb,
+                                    'P/S': _ps,
+                                    'EV/FCF': _ev_fcf,
+                                    'D/E': _de,
+                                    'cur_ratio': _cr,
+                                    'ROE': _roe,
+                                    'shares': _so,
+                                    'FCF': _fcf,
+                                    '52w_chg': _info.get('52WeekChange'),
+                                })
+                            except Exception:
+                                continue
+
+                        _progress.empty()
+
+                        if not _results:
+                            st.warning("No stocks passed all filters. Try relaxing the criteria.")
+                        else:
+                            _rdf = pd.DataFrame(_results)
+
+                            # derive a short source tag for the filename
+                            _src_tag = _burry_source.lower().replace(' ', '_').replace('(', '').replace(')', '')
+                            _date_str = datetime.now().strftime('%Y%m%d')
+                            _csv_name = f"{_date_str}_burry_{_src_tag}.csv"
+                            _tv_name  = f"{_date_str}_burry_{_src_tag}_tvimport.txt"
+                            _csv_path = os.path.join(_burry_dir, _csv_name)
+                            _tv_path  = os.path.join(_burry_dir, _tv_name)
+
+                            _rdf.to_csv(_csv_path, index=False)
+                            _tv_tickers = ','.join(_rdf['ticker'].tolist())
+                            with open(_tv_path, 'w') as _f:
+                                _f.write(_tv_tickers)
+
+                            st.success(f"Found {len(_rdf)} stocks — saved to `{_csv_name}`")
+                            st.dataframe(_format_burry_df(_rdf), width='stretch',
+                                         height=min(len(_rdf)*35+40, 500))
+
+                            _dl1, _dl2, _ = st.columns([1, 1, 3])
+                            _dl1.download_button("⬇ TradingView", _tv_tickers,
+                                                  file_name=_tv_name, mime='text/plain',
+                                                  key='burry_tv_export')
+                            _dl2.download_button("⬇ CSV", _rdf.to_csv(index=False),
+                                                  file_name=_csv_name, mime='text/csv',
+                                                  key='burry_csv_export')
+
+            # ── Past runs ─────────────────────────────────────────────────────
+            st.markdown("---")
+            st.markdown("##### Past Runs")
+            _past_csvs = sorted(glob.glob(os.path.join(_burry_dir, '*_burry_*.csv')), reverse=True)
+            _past_csvs = [f for f in _past_csvs if '_tvimport' not in f]
+
+            if not _past_csvs:
+                st.caption("No saved runs yet — run a screen above to get started.")
+            else:
+                _past_labels = [os.path.basename(f).replace('.csv', '') for f in _past_csvs]
+                _sel_past = st.selectbox("Select run", _past_labels, key='burry_past_sel')
+                _sel_idx  = _past_labels.index(_sel_past)
+                _sel_csv  = _past_csvs[_sel_idx]
+                _sel_tv   = _sel_csv.replace('.csv', '_tvimport.txt')
+
+                _past_df = load_csv(_sel_csv)
+                if _past_df is not None and len(_past_df) > 0:
+                    st.caption(f"{len(_past_df)} stocks")
+                    st.dataframe(_format_burry_df(_past_df), width='stretch',
+                                 height=min(len(_past_df)*35+40, 500))
+
+                    _pdl1, _pdl2, _ = st.columns([1, 1, 3])
+                    if os.path.exists(_sel_tv):
+                        _tv_data = open(_sel_tv).read().strip()
+                        _pdl1.download_button("⬇ TradingView", _tv_data,
+                                               file_name=os.path.basename(_sel_tv),
+                                               mime='text/plain', key='burry_past_tv')
+                    _pdl2.download_button("⬇ CSV", open(_sel_csv, encoding='utf-8').read(),
+                                           file_name=os.path.basename(_sel_csv),
+                                           mime='text/csv', key='burry_past_csv')
+                else:
+                    st.caption("Empty results file")
+
+
+elif page == "Fundamental Analysis":
+    st.title("Fundamental Analysis")
+    st.caption("Burry/Buffett lens — local LLM with RAG context from methodology documents")
+
+    _fa_settings = load_settings()
+    _fa_cfg = _fa_settings.get('fa_features', DEFAULT_SETTINGS.get('fa_features', {}))
+
+    _fa_tab_single, _fa_tab_compare = st.tabs(["🔎 Single Ticker", "⚖️ Value Comparison"])
+
+    # ── Scan selector — actionable runs (folder → specific run) ─────────────
+    _RAW_SCREENERS = {
+        'AU Total Market (Screener)'  : os.path.join(STOCKS, 'results', 'screener', 'au_total_market', 'au_total_market_latest_formatted.csv'),
+        'US S&P 500 (Screener)'       : os.path.join(STOCKS, 'results', 'screener', 'us_sp500', 'us_sp500_latest_formatted.csv'),
+        'NASDAQ 100 (Screener)'       : os.path.join(STOCKS, 'results', 'screener', 'nasdaq100', 'nasdaq100_latest_formatted.csv'),
+        'US Total Market (Screener)'  : os.path.join(STOCKS, 'results', 'screener', 'us_total_market', 'us_total_market_latest_formatted.csv'),
+        'Commodities (Screener)'      : os.path.join(STOCKS, 'results', 'screener', 'all_major_commodities', 'all_major_commodities_latest_formatted.csv'),
+        'Uranium (Screener)'          : os.path.join(STOCKS, 'results', 'screener', 'uranium', 'uranium_latest_formatted.csv'),
+        'AU Gold Miners (Screener)'   : os.path.join(STOCKS, 'results', 'screener', 'au_gold_miners', 'au_gold_miners_latest_formatted.csv'),
+        'AU Total Market (Benchmark)' : os.path.join(STOCKS, 'results', 'benchmark', 'au_total_market', 'au_total_market_latest_formatted.csv'),
+    }
+
+    _ACT_DIR = os.path.join(STOCKS, 'results', 'daily_actionable')
+    _act_folders = []
+    if os.path.isdir(_ACT_DIR):
+        for _d in sorted(os.listdir(_ACT_DIR)):
+            _dp = os.path.join(_ACT_DIR, _d)
+            if os.path.isdir(_dp) and glob.glob(os.path.join(_dp, '*.csv')):
+                _act_folders.append(_d)
+
+    _RAW_LABEL = 'Raw screeners (latest)'
+    _folder_options = _act_folders + [_RAW_LABEL]
+
+    import sys as _sys
+    if os.path.join(BASE, 'utilities') not in _sys.path:
+        _sys.path.insert(0, os.path.join(BASE, 'utilities'))
+
+    with _fa_tab_single:
+        _fa_col1, _fa_col2, _fa_col3 = st.columns([1.5, 2.5, 1])
+        with _fa_col1:
+            _sel_folder = st.selectbox("Scan folder", _folder_options, key='fa_folder_select')
+        with _fa_col2:
+            if _sel_folder == _RAW_LABEL:
+                _sel_scan = st.selectbox("Scan", list(_RAW_SCREENERS.keys()), key='fa_scan_select')
+                _scan_path = _RAW_SCREENERS.get(_sel_scan, '')
+            else:
+                _run_files = sorted(
+                    glob.glob(os.path.join(_ACT_DIR, _sel_folder, '*.csv')),
+                    key=os.path.basename, reverse=True)
+                def _run_label(p):
+                    b = os.path.basename(p)[:-4]  # strip .csv
+                    if len(b) > 9 and b[:8].isdigit() and b[8] == '_':
+                        return f"{b[:4]}-{b[4:6]}-{b[6:8]} · {b[9:]}"
+                    return b
+                _sel_run = st.selectbox("Run", _run_files, format_func=_run_label,
+                                        key=f'fa_run_select_{_sel_folder}')
+                _scan_path = _sel_run or ''
+        with _fa_col3:
+            st.markdown("<br>", unsafe_allow_html=True)
+            _prov_badges = {'ollama': '🟢 Ollama', 'lmstudio': '🔵 LM Studio',
+                            'openai': '🟣 OpenAI'}
+            _fa_provider_label = f"{_prov_badges.get(_fa_cfg.get('provider'), '🟢 Ollama')} — {_fa_cfg.get('model', 'llama3.1:8b')}"
+            st.caption(_fa_provider_label)
+
+        # ── Load and display scan data ───────────────────────────────────────
+        if os.path.exists(_scan_path):
+            _scan_df = pd.read_csv(_scan_path)
+            _display_cols = [c for c in ['rank', 'ticker', 'name', 'sector', 'cap_band', 'close',
+                                          'regime_label', 'score_final', 'rel_vol', 'vol_label',
+                                          'ret_12m', 'max_dd', 'rs_trend'] if c in _scan_df.columns]
+            if not _display_cols:
+                _display_cols = list(_scan_df.columns[:12])
+
+            st.dataframe(
+                _scan_df[_display_cols],
+                width="stretch",
+                height=350,
+                hide_index=True,
+            )
+            st.caption(f"{len(_scan_df)} stocks — {_scan_path.split(os.sep)[-1]}")
+        else:
+            _scan_df = None
+            st.info(f"No scan data found at expected path — run the relevant screener first.")
+
+        st.divider()
+
+        # ── Ticker analysis ──────────────────────────────────────────────────
+        st.markdown("##### Analyse a Ticker")
+        _fa_tc1, _fa_tc2 = st.columns([2, 1])
+        with _fa_tc1:
+            _fa_ticker = st.text_input("Ticker", placeholder="e.g. AAPL, BHP.AX, LULU", key='fa_ticker_input')
+        with _fa_tc2:
+            st.markdown("<br>", unsafe_allow_html=True)
+            _fa_go = st.button("Analyse", key='fa_analyse_btn', type='primary')
+
+        if _fa_go and _fa_ticker.strip():
+            _ticker = _fa_ticker.strip().upper()
+            from fa_assessment import render_fa_assessment
+            render_fa_assessment(_ticker, _fa_settings)
+        elif _fa_go:
+            st.warning("Enter a ticker symbol")
+
+    # ── Value comparison tab — pick 2-6 candidates, one LLM call decides ────
+    with _fa_tab_compare:
+        st.caption("Head-to-head value comparison — e.g. two or three similar miners, "
+                   "let the balance sheet decide. Best kept to 2-6 tickers.")
+
+        # candidate sources: current scan, watchlist file, manual entry
+        _cmp_sources = []
+        if _scan_df is not None and 'ticker' in _scan_df.columns:
+            _cmp_sources.append("Current scan (Single Ticker tab)")
+        _WL_DIR = os.path.join(STOCKS, 'watchlist')
+        _wl_files = sorted(glob.glob(os.path.join(_WL_DIR, '*.csv'))) if os.path.isdir(_WL_DIR) else []
+        if _wl_files:
+            _cmp_sources.append("Watchlist file")
+        _cmp_sources.append("Manual entry only")
+
+        _cmp_src = st.radio("Pick candidates from", _cmp_sources, horizontal=True,
+                            key='fa_cmp_source')
+
+        _cmp_pool = []
+        if _cmp_src == "Current scan (Single Ticker tab)" and _scan_df is not None:
+            _pool_df = _scan_df
+            if 'name' in _pool_df.columns:
+                _pool_labels = {r['ticker']: f"{r['ticker']} — {r['name']}"
+                                for _, r in _pool_df.iterrows()}
+            else:
+                _pool_labels = {t: t for t in _pool_df['ticker']}
+            _cmp_pool = st.multiselect(
+                "Candidates", list(_pool_labels.keys()),
+                format_func=lambda t: _pool_labels.get(t, t),
+                max_selections=6, key='fa_cmp_scan_pick')
+        elif _cmp_src == "Watchlist file":
+            _sel_wl = st.selectbox("Watchlist", _wl_files,
+                                   format_func=lambda p: os.path.basename(p)[:-4],
+                                   key='fa_cmp_wl_select')
+            try:
+                _wl_df = pd.read_csv(_sel_wl)
+                _tkr_col = next((c for c in _wl_df.columns
+                                 if c.lower() in ('ticker', 'symbol', 'code')),
+                                _wl_df.columns[0])
+                _wl_tickers = _wl_df[_tkr_col].dropna().astype(str).str.strip().tolist()
+            except Exception:
+                _wl_tickers = []
+            _cmp_pool = st.multiselect("Candidates", _wl_tickers,
+                                       max_selections=6, key='fa_cmp_wl_pick')
+
+        _cmp_manual = st.text_input(
+            "Add tickers (comma separated)",
+            placeholder="e.g. BHP.AX, RIO.AX, FMG.AX", key='fa_cmp_manual')
+        _manual_list = [t.strip().upper() for t in _cmp_manual.split(',') if t.strip()]
+
+        _cmp_tickers = list(dict.fromkeys(list(_cmp_pool) + _manual_list))  # dedupe, keep order
+
+        if _cmp_tickers:
+            st.caption(f"Comparing: {', '.join(_cmp_tickers)}")
+        _cmp_go = st.button("Compare", key='fa_cmp_btn', type='primary',
+                            disabled=len(_cmp_tickers) < 2)
+
+        if _cmp_go:
+            if len(_cmp_tickers) > 6:
+                st.warning("Capped to the first 6 tickers to keep the comparison focused.")
+                _cmp_tickers = _cmp_tickers[:6]
+            from fa_assessment import render_fa_comparison
+            _cmp_text = render_fa_comparison(_cmp_tickers, _fa_settings)
+            if _cmp_text:
+                st.session_state['fa_cmp_last'] = (_cmp_tickers, _cmp_text)
+        elif 'fa_cmp_last' in st.session_state:
+            _last_tickers, _last_text = st.session_state['fa_cmp_last']
+            with st.expander(f"Last comparison: {', '.join(_last_tickers)}", expanded=False):
+                st.markdown(_last_text)
 
 
 elif page == "Run Scripts":
@@ -7011,10 +7618,11 @@ elif page == "DeMark Signals":
 # ═══════════════════════════════════════════════════════════════════════════════
 elif page == "Settings":
     st.title("⚙️ Settings")
-    _stab_ai, _stab_rank, _stab_act, _stab_gen = st.tabs([
+    _stab_ai, _stab_fa, _stab_rank, _stab_act, _stab_gen = st.tabs([
         "🤖 AI",
+        "📊 Fundamental Analysis",
         "🎛️ Rank",
-        "📋 Actionable",
+        "📋 Screeners",
         "🔧 General",
     ])
 
@@ -7049,10 +7657,17 @@ elif page == "Settings":
             with _ai_tabs[0]:
                 _ai_enabled = st.toggle("Enable AI Assessments", value=_ai_feat.get('enabled', False))
                 st.markdown("#### Active Provider")
-                _provider = st.radio("Active provider", options=["anthropic", "openai"],
-                                      index=0 if _ai_feat.get('provider', 'anthropic') == 'anthropic' else 1,
+                _provider_list = ["anthropic", "openai", "ollama"]
+                _provider_labels = {
+                    "anthropic": "🟣 Claude (Anthropic)",
+                    "openai":    "🟢 ChatGPT (OpenAI)",
+                    "ollama":    "🦙 Ollama (Local)",
+                }
+                _cur_prov = _ai_feat.get('provider', 'anthropic')
+                _provider = st.radio("Active provider", options=_provider_list,
+                                      index=_provider_list.index(_cur_prov) if _cur_prov in _provider_list else 0,
                                       horizontal=True,
-                                      format_func=lambda x: "🟣 Claude (Anthropic)" if x == "anthropic" else "🟢 ChatGPT (OpenAI)",
+                                      format_func=lambda x: _provider_labels.get(x, x),
                                       help="Select which API to use for all AI assessments",
                                       label_visibility="collapsed")
 
@@ -7075,6 +7690,13 @@ elif page == "Settings":
                                               index=['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo'].index(
                                                   _ai_feat.get('openai_model', 'gpt-4o')))
 
+                st.divider()
+                st.markdown("#### 🦙 Ollama (Local)")
+                _ollama_url   = st.text_input("Ollama URL", value=_ai_feat.get('ollama_url', 'http://localhost:11434'),
+                                               help="URL where Ollama is running")
+                _ollama_model = st.text_input("Ollama Model", value=_ai_feat.get('ollama_model', 'llama3.1:8b'),
+                                               help="e.g. llama3.1:8b, mistral, gemma2")
+
                 st.markdown("")
                 if st.button("💾 Save General Settings", type="primary", key='ai_save_general'):
                     _new_feat = {
@@ -7084,9 +7706,12 @@ elif page == "Settings":
                         'model'            : _claude_model,
                         'openai_api_key'   : _openai_key,
                         'openai_model'     : _openai_model,
+                        'ollama_url'       : _ollama_url,
+                        'ollama_model'     : _ollama_model,
                     }
                     _save_ai_settings(_new_feat, _ai_prmp)
-                    st.success(f"Saved — using {'Claude' if _provider == 'anthropic' else 'ChatGPT'}")
+                    _prov_names = {'anthropic': 'Claude', 'openai': 'ChatGPT', 'ollama': f'Ollama ({_ollama_model})'}
+                    st.success(f"Saved — using {_prov_names.get(_provider, _provider)}")
 
             # ── Prompt tabs ───────────────────────────────────────────────────────────
             _prompt_defs = [
@@ -7122,6 +7747,87 @@ elif page == "Settings":
                         _save_ai_settings(_ai_feat, _ai_prmp)
                         st.success("Reset to default")
                         st.rerun()
+
+    with _stab_fa:
+            st.title("📊 Fundamental Analysis Settings")
+            st.caption("Configure the local LLM connection for Burry/Buffett fundamental analysis.")
+
+            _fa_s   = load_settings()
+            _fa_feat = _fa_s.get('fa_features', DEFAULT_SETTINGS.get('fa_features', {}))
+
+            st.markdown("#### LLM Provider")
+            _fa_prov_labels = {"ollama": "🟢 Ollama", "lmstudio": "🔵 LM Studio",
+                               "openai": "🟣 OpenAI (ChatGPT)"}
+            _fa_prov_opts = list(_fa_prov_labels.keys())
+            _fa_cur_prov = _fa_feat.get('provider', 'ollama')
+            _fa_provider = st.radio("Provider", options=_fa_prov_opts,
+                                     index=_fa_prov_opts.index(_fa_cur_prov)
+                                           if _fa_cur_prov in _fa_prov_opts else 0,
+                                     horizontal=True,
+                                     format_func=lambda x: _fa_prov_labels[x],
+                                     label_visibility="collapsed",
+                                     key='fa_provider_radio')
+
+            st.divider()
+
+            if _fa_provider == 'ollama':
+                st.markdown("#### 🟢 Ollama")
+                _fa_ollama_url = st.text_input("Ollama URL", value=_fa_feat.get('ollama_url', 'http://localhost:11434'),
+                                                key='fa_ollama_url')
+                _fa_model = st.text_input("Model", value=_fa_feat.get('model', 'llama3.1:8b'),
+                                           help="Model name as shown by 'ollama list'", key='fa_model_ollama')
+            elif _fa_provider == 'openai':
+                st.markdown("#### 🟣 OpenAI (ChatGPT)")
+                _fa_openai_url = st.text_input("API base URL", value=_fa_feat.get('openai_url', 'https://api.openai.com'),
+                                               help="Change only for OpenAI-compatible proxies", key='fa_openai_url')
+                _fa_openai_key = st.text_input("API key", value=_fa_feat.get('openai_api_key', ''),
+                                               type="password", key='fa_openai_key')
+                _fa_model = st.text_input("Model", value=_fa_feat.get('model') if str(_fa_feat.get('model', '')).startswith('gpt') else 'gpt-4o-mini',
+                                           help="e.g. gpt-4o-mini, gpt-4o", key='fa_model_openai')
+                st.caption("⚠️ Hosted API — your financial data and RAG excerpts are sent to OpenAI. The key is stored in plain text in dashboard_settings.json.")
+            else:
+                st.markdown("#### 🔵 LM Studio")
+                _fa_lmstudio_url = st.text_input("LM Studio URL", value=_fa_feat.get('lmstudio_url', 'http://localhost:1234'),
+                                                   key='fa_lmstudio_url')
+                _fa_model = st.text_input("Model", value=_fa_feat.get('model', 'llama3.1:8b'),
+                                           help="Model identifier loaded in LM Studio", key='fa_model_lmstudio')
+
+            st.divider()
+            st.markdown("#### RAG Vector Store")
+            _chroma_dir = os.path.join(BASE, 'data', 'fa_chromadb')
+            _docs_dir = os.path.join(BASE, 'docs', 'fa_reference')
+            _doc_count = len([f for f in os.listdir(_docs_dir) if f.endswith('.txt')]) if os.path.exists(_docs_dir) else 0
+            _chroma_exists = os.path.exists(_chroma_dir) and os.listdir(_chroma_dir)
+
+            st.caption(f"Reference docs: **{_doc_count}** files in docs/fa_reference/")
+            if _chroma_exists:
+                st.caption("Vector store: ✅ Built")
+            else:
+                st.caption("Vector store: ❌ Not built — click below to build")
+
+            if st.button("🔄 Rebuild Vector Store", key='fa_rebuild_rag'):
+                import sys as _sys
+                if os.path.join(BASE, 'utilities') not in _sys.path:
+                    _sys.path.insert(0, os.path.join(BASE, 'utilities'))
+                with st.spinner("Building vector store..."):
+                    from fa_rag_setup import build_vector_store
+                    build_vector_store()
+                st.success("Vector store rebuilt successfully")
+
+            st.divider()
+            if st.button("💾 Save FA Settings", type="primary", key='fa_save_settings'):
+                _new_fa = {
+                    'provider'      : _fa_provider,
+                    'ollama_url'    : _fa_ollama_url if _fa_provider == 'ollama' else _fa_feat.get('ollama_url', 'http://localhost:11434'),
+                    'lmstudio_url'  : _fa_lmstudio_url if _fa_provider == 'lmstudio' else _fa_feat.get('lmstudio_url', 'http://localhost:1234'),
+                    'openai_url'    : _fa_openai_url if _fa_provider == 'openai' else _fa_feat.get('openai_url', 'https://api.openai.com'),
+                    'openai_api_key': _fa_openai_key if _fa_provider == 'openai' else _fa_feat.get('openai_api_key', ''),
+                    'model'         : _fa_model,
+                }
+                s = load_settings()
+                s['fa_features'] = _new_fa
+                save_settings(s)
+                st.success(f"Saved — using {_fa_provider} with model {_fa_model}")
 
     with _stab_rank:
             st.title("🎛️ Rank Score Settings")
@@ -7376,7 +8082,7 @@ elif page == "Settings":
             with _rs_tabs[5]: _sc_score_widgets('comm_screener', 'all_major_commodities_benchmark.py', 'all_major_commodities_screener.py', SC_DEFAULTS)
 
     with _stab_act:
-            st.title("⚙️ Actionable Report Settings")
+            st.title("⚙️ Screener Settings")
             st.caption("Configure filters for actionable export files. Saved to actionable_settings.json.")
             _as_file = os.path.join(BASE, 'actionable_settings.json')
             _AS_DEFAULTS = {
@@ -7395,7 +8101,7 @@ elif page == "Settings":
                 with open(_as_file,'w') as _f: json.dump(s,_f,indent=2)
                 st.success("Saved to actionable_settings.json")
             _as=_load_as()
-            _as_tabs=st.tabs(["🇦🇺 AU Market","🇺🇸 US Market","⛏ Commodities","☢ Uranium","🥇 AU Gold"])
+            _as_tabs=st.tabs(["🇦🇺 AU Market","🇺🇸 US Market","⛏ Commodities","☢ Uranium","🥇 AU Gold","🔍 Burry Screen"])
             _SMA_OPTS = ['Above 20', 'Below 20', 'Above 50', 'Below 50', 'Above 200', 'Below 200']
             _SMA_DEFAULTS = {
                 'EARLY'   : ['Below 20', 'Below 50', 'Below 200'],
@@ -7407,7 +8113,7 @@ elif page == "Settings":
                 with _t:
                     _s=_as[_k]
                     st.markdown("#### Filter Parameters")
-                    st.caption("Settings saved here are displayed under each table on the Actionable & Exports page.")
+                    st.caption("Settings saved here are displayed under each table on the Screeners & Exports page.")
                     _c1,_c2=st.columns(2)
                     _ms =_c1.number_input("Min score_final",-5.0,10.0,float(_s['min_score']),0.1,key=f"as_ms_{_k}")
                     _acc_opts = ['EARLY','PROGRESS','SHIFT','TRENDING','REACCUM','CONSOLIDATE','-']
@@ -7491,6 +8197,60 @@ elif page == "Settings":
                         }
                         _save_as(_as)
 
+            # ── Burry Screen settings tab ─────────────────────────────────────
+            with _as_tabs[5]:
+                st.markdown("#### Burry Value Screen Defaults")
+                st.caption("Default filter values for the Burry screen. You can also adjust filters inline on the Screeners page.")
+                _bs = load_settings().get('burry_screener', DEFAULT_SETTINGS['burry_screener'])
+
+                _bs_c1, _bs_c2, _bs_c3, _bs_c4 = st.columns(4)
+                _bs_mcap = _bs_c1.number_input("Max Market Cap ($M)", 10, 5000,
+                                                int(_bs.get('max_market_cap', 300_000_000) / 1e6),
+                                                step=50, key='bs_mcap')
+                _bs_pe   = _bs_c2.number_input("Max P/E", 1.0, 100.0,
+                                                float(_bs.get('max_pe', 15.0)),
+                                                step=1.0, key='bs_pe')
+                _bs_pb   = _bs_c3.number_input("Max P/B", 0.1, 10.0,
+                                                float(_bs.get('max_pb', 1.5)),
+                                                step=0.1, key='bs_pb')
+                _bs_ps   = _bs_c4.number_input("Max P/S", 0.1, 10.0,
+                                                float(_bs.get('max_ps', 1.0)),
+                                                step=0.1, key='bs_ps')
+
+                _bs_c5, _bs_c6, _bs_c7, _bs_c8 = st.columns(4)
+                _bs_de   = _bs_c5.number_input("Max D/E", 0.0, 200.0,
+                                                float(_bs.get('max_debt_equity', 50.0)),
+                                                step=5.0, key='bs_de')
+                _bs_cr   = _bs_c6.number_input("Min Current Ratio", 0.0, 10.0,
+                                                float(_bs.get('min_current_ratio', 1.5)),
+                                                step=0.1, key='bs_cr')
+                _bs_roe  = _bs_c7.number_input("Min ROE (%)", -100.0, 100.0,
+                                                float(_bs.get('min_roe', 0.0)),
+                                                step=1.0, key='bs_roe')
+                _bs_shares = _bs_c8.number_input("Max Shares (M)", 1, 1000,
+                                                  int(_bs.get('max_shares', 100_000_000) / 1e6),
+                                                  step=10, key='bs_shares')
+
+                _bs_markets = st.multiselect("Default Markets", ['us', 'au'],
+                                              default=_bs.get('markets', ['us']),
+                                              key='bs_markets')
+
+                if st.button("💾 Save Burry Defaults", type="primary", key='bs_save'):
+                    _s = load_settings()
+                    _s['burry_screener'] = {
+                        'max_market_cap'   : _bs_mcap * 1_000_000,
+                        'max_pe'           : _bs_pe,
+                        'max_pb'           : _bs_pb,
+                        'max_ps'           : _bs_ps,
+                        'max_debt_equity'  : _bs_de,
+                        'min_current_ratio': _bs_cr,
+                        'min_roe'          : _bs_roe,
+                        'max_shares'       : _bs_shares * 1_000_000,
+                        'markets'          : _bs_markets,
+                    }
+                    save_settings(_s)
+                    st.success("Burry screen defaults saved")
+
     with _stab_gen:
             st.title("⚙ Dashboard Settings")
             st.caption("Changes take effect after saving and reloading the page")
@@ -7516,30 +8276,16 @@ elif page == "Settings":
             # ── AI Features ───────────────────────────────────────────────────────────
             st.divider()
             st.subheader("AI Features")
-            st.caption("Requires an Anthropic API key — get one free at console.anthropic.com")
+            st.caption("Quick toggle — configure providers in the 🤖 AI Settings tab above.")
 
             ai_enabled = st.toggle(
                 "Enable AI assessments",
                 value=current.get('ai_features', {}).get('enabled', False),
                 key='setting_ai_enabled'
             )
-            if ai_enabled:
-                api_key = st.text_input(
-                    "Anthropic API Key",
-                    value=current.get('ai_features', {}).get('anthropic_api_key', ''),
-                    type="password",
-                    key='setting_api_key',
-                    help="Stored locally in dashboard_settings.json — never pushed to GitHub"
-                )
-                model = st.selectbox(
-                    "Model",
-                    ['claude-sonnet-4-6', 'claude-haiku-4-5-20251001'],
-                    index=0,
-                    key='setting_model'
-                )
-            else:
-                api_key = current.get('ai_features', {}).get('anthropic_api_key', '')
-                model   = current.get('ai_features', {}).get('model', 'claude-sonnet-4-6')
+            _cur_ai = current.get('ai_features', {})
+            api_key = _cur_ai.get('anthropic_api_key', '')
+            model   = _cur_ai.get('model', 'claude-sonnet-4-6')
 
             # ── Save / Reset ──────────────────────────────────────────────────────────
             st.divider()
@@ -7547,11 +8293,9 @@ elif page == "Settings":
             with col1:
                 if st.button("💾 Save & Reload", type="primary"):
                     current['pages']       = updated_pages
-                    current['ai_features'] = {
-                        'enabled'          : ai_enabled,
-                        'anthropic_api_key': api_key,
-                        'model'            : model,
-                    }
+                    _existing_ai = current.get('ai_features', {})
+                    _existing_ai['enabled'] = ai_enabled
+                    current['ai_features'] = _existing_ai
                     save_settings(current)
                     st.success("Settings saved")
                     st.rerun()

@@ -14,3 +14,9 @@ rank_profiles/
 
 # Config with keys
 config.py
+
+# ChromaDB vector store (rebuild with fa_rag_setup.py)
+data/fa_chromadb/
+
+# Python bytecode
+__pycache__/
