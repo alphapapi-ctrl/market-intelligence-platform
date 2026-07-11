@@ -175,6 +175,7 @@ DEFAULT_SETTINGS = {
         'au_breadth':    "You are a market breadth analyst for the Australian stock market (ASX).\nAnalyse these breadth readings and provide a concise 4-5 sentence assessment.\nFocus on: (1) overall market health and trend, (2) cap band divergences (large vs small),\n(3) key sector rotations, (4) what the breadth signals suggest about near-term direction.\nBe direct and specific — mention actual numbers.",
         'us_breadth':    "You are a market breadth analyst for the US stock market.\nAnalyse these breadth readings and provide a concise 4-5 sentence assessment.\nFocus on: (1) overall market health across all 3 layers, (2) divergences between layers,\n(3) key sector rotations in Layer 2, (4) what the breadth signals suggest about near-term direction.\nBe direct and specific — mention actual numbers.",
         'consumer_credit': "You are a macro credit analyst. Analyse these US consumer credit readings and provide a 3-4 sentence assessment focusing on: credit stress signals, delinquency trends, and what this means for consumer spending and equity markets.",
+        'hhdc_flows': "You are a macro credit analyst specialising in the NY Fed Household Debt and Credit report. Analyse these transition rates into delinquency and origination quality data. These are FLOW measures (share of current balances newly going delinquent each quarter, all lenders) which lead bank-reported stock delinquency rates by 1-2 quarters. Note the student loan series is distorted by the 2020-2024 payment moratorium.",
         'corporate_credit': "Analyse these US corporate credit readings in 3-4 sentences. Focus on HY spreads, investment grade conditions, and systemic risk signals.",
         'sovereign_credit': "Analyse US sovereign credit health in 3-4 sentences. Focus on yield curve shape, duration risk, and what rates signal about macro conditions.",
         'au_benchmark':  "You are a quantitative analyst. Analyse this AU market relative strength data and provide a 4-5 sentence assessment covering: top momentum leaders, laggards to avoid, sector rotation signals, and any regime changes visible in the data.",
@@ -3887,9 +3888,146 @@ Credit card delinquency: {cc.get('current','n/a')}% (qoq change: {cc.get('roc','
 Auto loan delinquency: {aut.get('current','n/a')}% (qoq: {aut.get('roc','n/a')})
 Mortgage delinquency: {mor.get('current','n/a')}% (qoq: {mor.get('roc','n/a')})
 Charge-off rate: {cho.get('current','n/a')}% (qoq: {cho.get('roc','n/a')})"""
+            _f90c = credit_data.get('flow90_cc', {})
+            _f90a = credit_data.get('flow90_auto', {})
+            _f90m = credit_data.get('flow90_mortgage', {})
+            _msub = credit_data.get('mortgage_subprime_share', {})
+            _asub = credit_data.get('auto_subprime_share', {})
+            if _f90c:
+                prompt += f"""
+
+NY Fed transition flows into 90+ delinquency (leading, all lenders):
+CC flow: {_f90c.get('current','n/a')}% (qoq: {_f90c.get('roc','n/a')})
+Auto flow: {_f90a.get('current','n/a')}% (qoq: {_f90a.get('roc','n/a')})
+Mortgage flow: {_f90m.get('current','n/a')}% (qoq: {_f90m.get('roc','n/a')})
+Subprime origination share — mortgage: {_msub.get('current','n/a')}%, auto: {_asub.get('current','n/a')}%"""
             render_ai_assessment(prompt, ai_settings, 'consumer_credit_assessment')
 
         st.divider()
+
+        # ══════════════════════════════════════════════════════════════════════
+        # SECTION 1B — NY FED HOUSEHOLD DEBT FLOWS (Equifax panel)
+        # ══════════════════════════════════════════════════════════════════════
+        if any(k in credit_data for k in ('flow90_cc', 'flow30_cc', 'hh_debt_total')):
+            _hhdc_q = snap.get('hhdc_quarter', '')
+            st.subheader(f"🏠 Household Debt Flows — NY Fed{f' ({_hhdc_q})' if _hhdc_q else ''}")
+            st.markdown("""
+                <div class="info-card">
+                    NY Fed Quarterly Report on Household Debt and Credit, built from the
+                    Equifax consumer credit panel (all lenders, not just banks). These are
+                    <b>transition rates</b> — the share of current balances newly flowing into
+                    delinquency each quarter — which lead the bank-reported stock delinquency
+                    rates above by 1-2 quarters. Subprime origination share shows the credit
+                    quality of NEW lending: rising subprime share late in the cycle is how
+                    lenders reach for growth before the bust.
+                </div>
+            """, unsafe_allow_html=True)
+
+            h1, h2 = st.columns(2)
+            with h1:
+                credit_card('flow90_cc',
+                    'Share of current credit card balances newly transitioning to 90+ days delinquent (annualised).',
+                    'The most sensitive consumer stress flow. Pre-GFC normal ~5%, GFC peak ~13.7%. Leads the bank-reported CC delinquency stock rate.',
+                    'WARN >7.0% | ALERT >9.5%')
+                credit_chart('flow90_cc', 'CC Flow into Serious Delinquency (90+)')
+
+                credit_card('flow90_auto',
+                    'Share of current auto loan balances newly transitioning to 90+ days delinquent.',
+                    'Consumers default on autos before housing. GFC peak ~5.3%. Rising alongside subprime share = lending quality problem.',
+                    'WARN >2.5% | ALERT >4.0%')
+                credit_chart('flow90_auto', 'Auto Flow into Serious Delinquency (90+)')
+
+                credit_card('mortgage_subprime_share',
+                    'Share of mortgage origination volume to <620 credit scores.',
+                    'Pre-GFC this ran 10-15%; post-2010 lending standards keep it under 5%. A sustained rise is a late-cycle warning.',
+                    'WARN >8% | ALERT >12%')
+                credit_chart('mortgage_subprime_share', 'Mortgage Subprime Origination Share %')
+
+            with h2:
+                credit_card('flow90_mortgage',
+                    'Share of current mortgage balances newly transitioning to 90+ days delinquent.',
+                    'The confirmation signal — when mortgage flows rise the stress has spread to middle-income households. GFC peak ~8.9%.',
+                    'WARN >2.0% | ALERT >4.0%')
+                credit_chart('flow90_mortgage', 'Mortgage Flow into Serious Delinquency (90+)')
+
+                credit_card('flow90_student',
+                    'Share of current student loan balances newly transitioning to 90+ days delinquent.',
+                    'Distorted by the 2020-2024 payment moratorium and reporting pause — the post-resumption spike overstates fresh stress. Watch the trend, not the level.',
+                    'WARN >8% | ALERT >12%')
+                credit_chart('flow90_student', 'Student Flow into Serious Delinquency (90+)')
+
+                credit_card('auto_subprime_share',
+                    'Share of auto loan origination volume to <620 credit scores.',
+                    'Auto lending routinely runs more subprime than mortgages (~15-20%). Above ~25% signals aggressive reach-for-yield by lenders.',
+                    'WARN >22% | ALERT >28%')
+                credit_chart('auto_subprime_share', 'Auto Subprime Origination Share %')
+
+            credit_card('hh_debt_total',
+                'Total US household debt across all products in trillions (mortgage, HELOC, auto, credit card, student, other).',
+                'Level matters less than composition and flows — but contraction here is deleveraging, which is recessionary.',
+                'Monitor trend and composition')
+            credit_chart('hh_debt_total', 'Total Household Debt ($T)')
+
+            with st.expander("ℹ Early-delinquency flows (30+ days)"):
+                e1, e2, e3 = st.columns(3)
+                for _col, _key, _title in [(e1, 'flow30_cc', 'CC 30+ Flow'),
+                                            (e2, 'flow30_auto', 'Auto 30+ Flow'),
+                                            (e3, 'flow30_mortgage', 'Mortgage 30+ Flow')]:
+                    with _col:
+                        if _key in credit_data:
+                            _d = credit_data[_key]
+                            st.metric(_title, f"{_d['current']:.2f}%",
+                                      delta=f"{_d.get('roc') or 0:+.2f} qoq",
+                                      delta_color="inverse")
+                st.caption("30+ flows are noisier but turn first — a sustained 2-3 quarter "
+                           "rise here precedes the 90+ flows above.")
+
+            # AI assessment for household debt flows
+            _hh_ai_settings = load_settings()
+            if _hh_ai_settings.get('ai_features', {}).get('enabled', False):
+                import sys as _hh_sys
+                import importlib as _hh_il
+                if MACRO not in _hh_sys.path:
+                    _hh_sys.path.insert(0, MACRO)
+                _hh_il.invalidate_caches()
+                from ai_assessment import render_ai_assessment
+
+                def _hh_line(key, name):
+                    d = credit_data.get(key, {})
+                    if not d:
+                        return f"{name}: n/a"
+                    return (f"{name}: {d.get('current','n/a')}% "
+                            f"(qoq: {d.get('roc','n/a')}, 3m: {d.get('roc_3m','n/a')}, "
+                            f"level: {d.get('alert_level','OK')})")
+
+                _hh_pfx = load_settings().get('ai_prompts', {}).get('hhdc_flows',
+                    DEFAULT_SETTINGS['ai_prompts']['hhdc_flows'])
+                _hh_total = credit_data.get('hh_debt_total', {})
+                _hh_prompt = f"""{_hh_pfx}
+Provide a 4-5 sentence assessment: (1) where consumer stress is accelerating vs easing,
+(2) whether stress is spreading from consumer credit to housing, (3) what origination
+quality says about lender behaviour, (4) what to watch next quarter. Be direct and quantitative.
+
+Report quarter: {_hhdc_q or 'n/a'}
+Flows into serious delinquency (90+):
+{_hh_line('flow90_cc', 'Credit card')}
+{_hh_line('flow90_auto', 'Auto loan')}
+{_hh_line('flow90_mortgage', 'Mortgage')}
+{_hh_line('flow90_student', 'Student loan (moratorium-distorted)')}
+
+Flows into early delinquency (30+):
+{_hh_line('flow30_cc', 'Credit card')}
+{_hh_line('flow30_auto', 'Auto loan')}
+{_hh_line('flow30_mortgage', 'Mortgage')}
+
+Origination quality:
+{_hh_line('mortgage_subprime_share', 'Mortgage subprime share')}
+{_hh_line('auto_subprime_share', 'Auto subprime share')}
+
+Total household debt: ${_hh_total.get('current','n/a')}T (qoq: {_hh_total.get('roc','n/a')})"""
+                render_ai_assessment(_hh_prompt, _hh_ai_settings, 'hhdc_flows_assessment')
+
+            st.divider()
 
         # ══════════════════════════════════════════════════════════════════════
         # SECTION 2 — CORPORATE CREDIT

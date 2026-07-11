@@ -10,3 +10,7 @@ kaleido
 pandas-datareader
 pillow
 matplotlib
+chromadb
+sentence-transformers
+pypdf
+openpyxl

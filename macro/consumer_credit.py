@@ -23,12 +23,21 @@ FRED_SERIES = {
     'auto_delinquency'  : ('DRALACBS',    'Auto Loan Delinquency Rate %'),
     'mortgage_delinquency':('DRSFRMACBS', 'Mortgage Delinquency Rate %'),
     'consumer_credit'   : ('TOTALSL',     'Total Consumer Credit $B'),
-    # Corporate credit
-    'hy_spread'         : ('BAMLH0A0HYM2','HY Spread %'),
-    'ig_spread'         : ('BAMLC0A0CM',  'IG Spread %'),
+    # Corporate credit (aligned with macro_data.py)
+    'hy_spread'         : ('BAMLH0A0HYM2','HY OAS Spread %'),
+    'ig_spread'         : ('BAMLC0A0CMEY','IG OAS Spread %'),
     # Sovereign
     'debt_gdp'          : ('GFDEGDQ188S', 'Federal Debt % GDP'),
     'deficit_gdp'       : ('FYFSGDA188S', 'Federal Deficit % GDP'),
+    # Rates (aligned with macro_data.py — daily)
+    'us10y'             : ('DGS10',       'US 10-Year Yield %'),
+    'us02y'             : ('DGS2',        'US 2-Year Yield %'),
+    'us03m'             : ('DGS3MO',      'US 3-Month Yield %'),
+    'yield_curve'       : ('T10Y2Y',      '10Y-2Y Yield Curve %'),
+    'fed_funds'         : ('FEDFUNDS',    'Fed Funds Rate %'),
+    # Inflation (daily)
+    'breakeven_5y'      : ('T5YIE',       '5Y Breakeven Inflation %'),
+    'breakeven_10y'     : ('T10YIE',      '10Y Breakeven Inflation %'),
 }
 
 # ── PE/BDC ETF Tickers ────────────────────────────────────────────────────────
@@ -44,6 +53,17 @@ PE_TICKERS = {
     'BKLN' : 'Leveraged Loan ETF',
 }
 
+# Daily credit market ETFs and volatility
+CREDIT_MARKET_TICKERS = {
+    'HYG'  : 'HY Corporate Bond ETF',
+    'JNK'  : 'HY Bond ETF (SPDR)',
+    'LQD'  : 'IG Corporate Bond ETF',
+    'TLT'  : '20+ Year Treasury ETF',
+    'SHY'  : '1-3 Year Treasury ETF',
+    'EMB'  : 'EM Bond ETF',
+    '^MOVE': 'MOVE Index (Bond Vol)',
+}
+
 # ── Alert thresholds ──────────────────────────────────────────────────────────
 THRESHOLDS = {
     'cc_delinquency'     : {'warn': 2.5,  'alert': 3.5},
@@ -53,6 +73,18 @@ THRESHOLDS = {
     'hy_spread'          : {'warn': 4.0,  'alert': 6.0},
     'ig_spread'          : {'warn': 1.5,  'alert': 2.5},
     'debt_gdp'           : {'warn': 110,  'alert': 130},
+    'breakeven_5y'       : {'warn': 2.8,  'alert': 3.5},
+    'breakeven_10y'      : {'warn': 2.6,  'alert': 3.2},
+    # NY Fed HHDC flow-into-delinquency (transition rates, all lenders)
+    'flow90_cc'          : {'warn': 7.0,  'alert': 9.5},
+    'flow90_auto'        : {'warn': 2.5,  'alert': 4.0},
+    'flow90_mortgage'    : {'warn': 2.0,  'alert': 4.0},
+    'flow90_student'     : {'warn': 8.0,  'alert': 12.0},
+    'flow30_cc'          : {'warn': 9.0,  'alert': 12.0},
+    'flow30_auto'        : {'warn': 8.5,  'alert': 10.5},
+    'flow30_mortgage'    : {'warn': 5.0,  'alert': 8.0},
+    'mortgage_subprime_share': {'warn': 8.0, 'alert': 12.0},
+    'auto_subprime_share'    : {'warn': 22.0, 'alert': 28.0},
 }
 
 ROC_THRESHOLDS = {
@@ -60,6 +92,9 @@ ROC_THRESHOLDS = {
     'auto_delinquency'   : {'warn': 0.1,  'alert': 0.2},
     'mortgage_delinquency': {'warn': 0.1, 'alert': 0.2},
     'hy_spread'          : {'warn': 0.5,  'alert': 1.0},
+    'flow90_cc'          : {'warn': 0.4,  'alert': 0.8},
+    'flow90_auto'        : {'warn': 0.2,  'alert': 0.4},
+    'flow90_mortgage'    : {'warn': 0.15, 'alert': 0.3},
 }
 
 def fetch_fred_series(fred, series_id, periods=20):
@@ -144,6 +179,46 @@ def fetch_pe_data():
 
     return results
 
+def fetch_credit_market_data():
+    """Fetch daily credit ETF and MOVE index data"""
+    tickers  = list(CREDIT_MARKET_TICKERS.keys())
+    end_date = datetime.today().strftime('%Y-%m-%d')
+    start    = (datetime.today() - timedelta(days=365)).strftime('%Y-%m-%d')
+    results  = {}
+
+    try:
+        raw    = yf.download(tickers, start=start, end=end_date,
+                             auto_adjust=True, progress=False)
+        closes = raw['Close'] if isinstance(raw.columns, pd.MultiIndex) else raw
+
+        if isinstance(closes.columns, pd.MultiIndex):
+            closes.columns = closes.columns.get_level_values(-1)
+
+        for ticker, name in CREDIT_MARKET_TICKERS.items():
+            if ticker not in closes.columns:
+                continue
+            series = closes[ticker].dropna()
+            if len(series) < 2:
+                continue
+            price    = round(float(series.iloc[-1]), 2)
+            ret_1w   = round((series.iloc[-1] / series.iloc[-5] - 1) * 100, 2) if len(series) >= 5 else None
+            ret_1m   = round((series.iloc[-1] / series.iloc[-21] - 1) * 100, 2) if len(series) >= 21 else None
+            ret_3m   = round((series.iloc[-1] / series.iloc[-63] - 1) * 100, 2) if len(series) >= 63 else None
+            ret_12m  = round((series.iloc[-1] / series.iloc[-252] - 1) * 100, 2) if len(series) >= 252 else None
+            results[ticker] = {
+                'name'   : name,
+                'price'  : price,
+                'ret_1w' : ret_1w,
+                'ret_1m' : ret_1m,
+                'ret_3m' : ret_3m,
+                'ret_12m': ret_12m,
+            }
+    except Exception as e:
+        print(f"Credit market data error: {e}")
+
+    return results
+
+
 def run_consumer_credit():
     """Main function — fetch all data, calculate signals, save results"""
     os.makedirs(RESULTS_DIR, exist_ok=True)
@@ -195,17 +270,67 @@ def run_consumer_credit():
         else:
             print(f"  OK: {label} = {current}")
 
+    # NY Fed Household Debt & Credit (Equifax panel — flows lead the FRED stocks)
+    print("Fetching NY Fed HHDC data...")
+    hhdc_quarter = None
+    try:
+        try:
+            from nyfed_hhdc import fetch_hhdc_series
+        except ImportError:
+            from macro.nyfed_hhdc import fetch_hhdc_series
+        _hhdc_cache = os.path.join(RESULTS_DIR, 'hhdc_cache')
+        hhdc_series, hhdc_quarter = fetch_hhdc_series(_hhdc_cache)
+        for key, d in hhdc_series.items():
+            series  = d['series']
+            current = round(float(series.iloc[-1]), 4)
+            prior   = round(float(series.iloc[-2]), 4) if len(series) >= 2 else None
+            roc     = calc_roc(series)
+            roc_3m  = calc_roc_3m(series)
+            level   = get_alert_level(key, current, roc)
+
+            data[key] = {
+                'label'       : d['label'],
+                'current'     : current,
+                'prior'       : prior,
+                'roc'         : roc,
+                'roc_3m'      : roc_3m,
+                'alert_level' : level,
+                'history'     : {str(k): round(float(v), 4)
+                                 for k, v in series.items()},
+            }
+
+            if level in ['ALERT', 'WARN']:
+                direction = '▲' if roc and roc > 0 else '▼'
+                alerts.append({
+                    'type'   : level,
+                    'key'    : key,
+                    'message': f"{d['label']}: {current} {direction} {roc:+.3f} qoq",
+                })
+                print(f"  {level}: {d['label']} = {current} (roc: {roc:+.3f})")
+            else:
+                print(f"  OK: {d['label']} = {current}")
+        if hhdc_quarter:
+            print(f"  HHDC report quarter: {hhdc_quarter}")
+    except Exception as e:
+        print(f"NY Fed HHDC fetch failed (non-fatal): {e}")
+
     # PE/BDC data
     print("Fetching PE/BDC data...")
     pe_data = fetch_pe_data()
 
+    # Credit market ETFs and MOVE
+    print("Fetching credit market ETFs & MOVE...")
+    credit_market = fetch_credit_market_data()
+
     # Build snapshot
     snapshot = {
-        'date'       : today,
-        'generated'  : datetime.now().isoformat(),
-        'credit_data': data,
-        'pe_data'    : pe_data,
-        'alerts'     : alerts,
+        'date'         : today,
+        'generated'    : datetime.now().isoformat(),
+        'credit_data'  : data,
+        'pe_data'      : pe_data,
+        'credit_market': credit_market,
+        'alerts'       : alerts,
+        'hhdc_quarter' : hhdc_quarter,
     }
 
     # Save JSON snapshot
@@ -233,7 +358,14 @@ def run_consumer_credit():
         'CONSUMER CREDIT'  : ['cc_delinquency', 'cc_chargeoff',
                                'auto_delinquency', 'mortgage_delinquency',
                                'consumer_credit'],
+        'HOUSEHOLD DEBT FLOWS (NY FED)': ['flow90_cc', 'flow90_auto',
+                               'flow90_mortgage', 'flow90_student',
+                               'flow30_cc', 'flow30_auto', 'flow30_mortgage',
+                               'mortgage_subprime_share', 'auto_subprime_share',
+                               'hh_debt_total'],
         'CORPORATE CREDIT' : ['hy_spread', 'ig_spread'],
+        'RATES & CURVE'    : ['us10y', 'us02y', 'us03m', 'yield_curve', 'fed_funds'],
+        'INFLATION EXPECTATIONS': ['breakeven_5y', 'breakeven_10y'],
         'SOVEREIGN CREDIT' : ['debt_gdp', 'deficit_gdp'],
     }
 
@@ -251,6 +383,17 @@ def run_consumer_credit():
                 f"{arrow} {d['roc']:+.3f} qoq  {d['alert_level']}"
             )
         report_lines.append('')
+
+    report_lines.append('  CREDIT MARKET (DAILY)')
+    report_lines.append('  ' + '─' * 66)
+    for ticker, cm in credit_market.items():
+        parts = []
+        if cm.get('ret_1w') is not None: parts.append(f"1w: {cm['ret_1w']:+.1f}%")
+        if cm.get('ret_1m') is not None: parts.append(f"1m: {cm['ret_1m']:+.1f}%")
+        if cm.get('ret_3m') is not None: parts.append(f"3m: {cm['ret_3m']:+.1f}%")
+        ret_str = '  '.join(parts)
+        report_lines.append(f"  {ticker:<6} {cm['name']:<28} {cm['price']:>8.2f}  {ret_str}")
+    report_lines.append('')
 
     report_lines.append('  PRIVATE EQUITY & BDC')
     report_lines.append('  ' + '─' * 66)
