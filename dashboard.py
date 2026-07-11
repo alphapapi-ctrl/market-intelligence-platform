@@ -175,6 +175,7 @@ DEFAULT_SETTINGS = {
         'au_breadth':    "You are a market breadth analyst for the Australian stock market (ASX).\nAnalyse these breadth readings and provide a concise 4-5 sentence assessment.\nFocus on: (1) overall market health and trend, (2) cap band divergences (large vs small),\n(3) key sector rotations, (4) what the breadth signals suggest about near-term direction.\nBe direct and specific — mention actual numbers.",
         'us_breadth':    "You are a market breadth analyst for the US stock market.\nAnalyse these breadth readings and provide a concise 4-5 sentence assessment.\nFocus on: (1) overall market health across all 3 layers, (2) divergences between layers,\n(3) key sector rotations in Layer 2, (4) what the breadth signals suggest about near-term direction.\nBe direct and specific — mention actual numbers.",
         'consumer_credit': "You are a macro credit analyst. Analyse these US consumer credit readings and provide a 3-4 sentence assessment focusing on: credit stress signals, delinquency trends, and what this means for consumer spending and equity markets.",
+        'au_credit': "You are a macro credit analyst covering Australia. Analyse these Australian debt market readings from RBA statistical tables. Note Australia has no free arrears series — household stress is read through leverage ratios and credit growth composition. Australian household debt-to-income is among the highest in the developed world.",
         'hhdc_flows': "You are a macro credit analyst specialising in the NY Fed Household Debt and Credit report. Analyse these transition rates into delinquency and origination quality data. These are FLOW measures (share of current balances newly going delinquent each quarter, all lenders) which lead bank-reported stock delinquency rates by 1-2 quarters. Note the student loan series is distorted by the 2020-2024 payment moratorium.",
         'corporate_credit': "Analyse these US corporate credit readings in 3-4 sentences. Focus on HY spreads, investment grade conditions, and systemic risk signals.",
         'sovereign_credit': "Analyse US sovereign credit health in 3-4 sentences. Focus on yield curve shape, duration risk, and what rates signal about macro conditions.",
@@ -3659,6 +3660,7 @@ elif page == "Debt Markets":
         st.markdown("<br>", unsafe_allow_html=True)
         if st.button("🔄 Run Debt Data", key='top_debt_refresh'):
             run_script(os.path.join(MACRO, 'consumer_credit.py'), MACRO)
+            run_script(os.path.join(MACRO, 'au_credit.py'), MACRO)
             st.rerun()
     with _dh4:
         st.markdown("<br>", unsafe_allow_html=True)
@@ -3680,560 +3682,74 @@ elif page == "Debt Markets":
         </div>
     """, unsafe_allow_html=True)
 
-    # ── Load latest snapshot ──────────────────────────────────────────────────
-    credit_dir   = os.path.join(MACRO, 'results', 'consumer_credit')
-    json_files   = sorted(glob.glob(os.path.join(credit_dir, '*_consumer_credit.json')),
-                          reverse=True)
+    _tab_us, _tab_au = st.tabs(['🇺🇸 United States', '🇦🇺 Australia'])
 
-    if not json_files:
-        st.warning("No consumer credit data found — run the script first")
-        if st.button("▶ Run Debt Markets Report", type="primary"):
-            run_script(os.path.join(MACRO, 'consumer_credit.py'), MACRO)
-            st.rerun()
-    else:
-        # Date selector
-        dates      = [os.path.basename(f)[:8] for f in json_files][:30]
-        sel_date   = st.selectbox("Report date", dates, index=0)
-        json_file  = os.path.join(credit_dir, f"{sel_date}_consumer_credit.json")
+    with _tab_us:
+        # ── Load latest snapshot ──────────────────────────────────────────────────
+        credit_dir   = os.path.join(MACRO, 'results', 'consumer_credit')
+        json_files   = sorted(glob.glob(os.path.join(credit_dir, '*_consumer_credit.json')),
+                              reverse=True)
 
-        with open(json_file, 'r') as f:
-            snap = json.load(f)
-
-        credit_data    = snap.get('credit_data', {})
-        pe_data        = snap.get('pe_data', {})
-        credit_market  = snap.get('credit_market', {})
-        alerts         = snap.get('alerts', [])
-
-        report_date = datetime.strptime(sel_date, '%Y%m%d').strftime('%d %b %Y')
-        st.caption(f"Report date: {report_date}")
-
-        # ── Alerts banner ─────────────────────────────────────────────────────
-        if alerts:
-            st.markdown("**⚠ Active Alerts**")
-            for alert in alerts:
-                colour = '#e63946' if alert['type'] == 'ALERT' else '#f77f00'
-                st.markdown(f"""
-                    <div class="macro-card" style="border-left:3px solid {colour}">
-                        <span style="color:{colour};font-weight:bold">{alert['type']}</span>
-                        &nbsp; {alert['message']}
-                    </div>
-                """, unsafe_allow_html=True)
-            st.divider()
-
-        # ── Helper: indicator card ────────────────────────────────────────────
-        def credit_card(key, description, context, thresholds_text):
-            if key not in credit_data:
-                return
-            d       = credit_data[key]
-            val     = d['current']
-            roc     = d.get('roc', 0) or 0
-            roc_3m  = d.get('roc_3m', 0) or 0
-            level   = d.get('alert_level', 'OK')
-            arrow   = '▲' if roc > 0 else '▼' if roc < 0 else '→'
-            colours = {'ALERT': '#e63946', 'WARN': '#f77f00', 'OK': '#2dc653'}
-            colour  = colours.get(level, '#888')
-            icon    = '⚠' if level == 'ALERT' else '!' if level == 'WARN' else '✓'
-
-            st.markdown(f"""
-                <div class="macro-card" style="border-left:4px solid {colour}">
-                    <div style="display:flex;justify-content:space-between;align-items:center">
-                        <div>
-                            <div class="macro-label">{d['label']}</div>
-                            <div style="font-size:22px;font-weight:bold;color:{colour}">
-                                {val:.2f}{'%' if key != 'consumer_credit' else 'B'}
-                            </div>
-                            <div style="font-size:11px;color:#888">
-                                {arrow} {roc:+.3f} qoq &nbsp;|&nbsp; 3m: {roc_3m:+.3f}
-                            </div>
-                        </div>
-                        <div style="text-align:right">
-                            <div style="color:{colour};font-size:18px">{icon} {level}</div>
-                        </div>
-                    </div>
-                </div>
-            """, unsafe_allow_html=True)
-
-            with st.expander("ℹ What this means"):
-                st.markdown(f"""
-                    <div style="font-size:12px;color:#aaa;line-height:1.7">
-                        <b style="color:#ccc">What it measures:</b> {description}<br><br>
-                        <b style="color:#ccc">Current context:</b> {context}<br><br>
-                        <b style="color:#ccc">Thresholds:</b> {thresholds_text}
-                    </div>
-                """, unsafe_allow_html=True)
-
-        # ── Helper: history chart ─────────────────────────────────────────────
-        def credit_chart(key, title, recession_shade=True):
-            if key not in credit_data:
-                return
-            history = credit_data[key].get('history', {})
-            if not history:
-                return
-            dates_h = list(history.keys())
-            values  = list(history.values())
-            suffix  = 'B' if key == 'consumer_credit' else '%'
-
-            fig = go.Figure()
-            fig.add_trace(go.Scatter(
-                x=dates_h, y=values,
-                mode='lines+markers',
-                line=dict(color='#00b4d8', width=2),
-                marker=dict(size=5),
-                name=title,
-                hovertemplate=f"%{{x}}: %{{y:.2f}}{suffix}<extra></extra>"
-            ))
-
-            # Trend line
-            if len(values) >= 4:
-                x_num   = list(range(len(values)))
-                n       = len(x_num)
-                sum_x   = sum(x_num)
-                sum_y   = sum(values)
-                sum_xy  = sum(x * y for x, y in zip(x_num, values))
-                sum_x2  = sum(x * x for x in x_num)
-                slope   = (n * sum_xy - sum_x * sum_y) / (n * sum_x2 - sum_x ** 2)
-                intercept = (sum_y - slope * sum_x) / n
-                trend   = [slope * x + intercept for x in x_num]
-                t_colour= '#e63946' if slope > 0 else '#2dc653'
-                fig.add_trace(go.Scatter(
-                    x=dates_h, y=trend,
-                    mode='lines',
-                    line=dict(color=t_colour, width=1, dash='dash'),
-                    name='Trend', opacity=0.6
-                ))
-
-            fig.update_layout(
-                title       = title,
-                height      = 250,
-                plot_bgcolor= get_chart_theme()['plot_bgcolor'],
-                paper_bgcolor= get_chart_theme()['paper_bgcolor'],
-                font        = dict(color=get_chart_theme()['font_color']),
-                xaxis       = dict(gridcolor=get_chart_theme()['gridcolor']),
-                yaxis       = dict(gridcolor=get_chart_theme()['gridcolor'],
-                                   ticksuffix=suffix),
-                showlegend  = False,
-                margin      = dict(l=50,r=20,t=40,b=30),
-            )
-            st.plotly_chart(fig, width='stretch')
-
-        # ══════════════════════════════════════════════════════════════════════
-        # SECTION 1 — CONSUMER CREDIT
-        # ══════════════════════════════════════════════════════════════════════
-        st.subheader("💳 Consumer Credit Markets")
-        st.markdown("""
-            <div class="info-card">
-                Consumer credit delinquency rates measure the percentage of loans
-                30+ days past due. Rising delinquencies signal financial stress among
-                households — typically 2-4 quarters ahead of broader economic weakness.
-                Credit card and auto loans are the canary in the coal mine as they
-                reflect lower income household stress first. Mortgage delinquencies
-                rising confirms the stress is spreading to middle income households.
-            </div>
-        """, unsafe_allow_html=True)
-
-        c1, c2 = st.columns(2)
-        with c1:
-            credit_card('cc_delinquency',
-                'Percentage of credit card balances 30+ days past due.',
-                'Rising above 3% signals consumer stress. Above 4% is crisis territory last seen in 2009-2010.',
-                'WARN >2.5% | ALERT >3.5%')
-            credit_chart('cc_delinquency', 'Credit Card Delinquency Rate')
-
-            credit_card('auto_delinquency',
-                'Percentage of auto loan balances 30+ days past due.',
-                'Auto loans are often the first to default — consumers prioritise housing and food. Rising auto defaults lead credit card defaults by 1-2 quarters.',
-                'WARN >1.5% | ALERT >2.5%')
-            credit_chart('auto_delinquency', 'Auto Loan Delinquency Rate')
-
-        with c2:
-            credit_card('cc_chargeoff',
-                'Percentage of credit card debt written off as uncollectable.',
-                'Charge-offs lag delinquencies by 1-2 quarters. Charge-off rate rising above delinquency rate signals banks are accelerating write-downs.',
-                'WARN >3.0% | ALERT >4.5%')
-            credit_chart('cc_chargeoff', 'Credit Card Charge-Off Rate')
-
-            credit_card('mortgage_delinquency',
-                'Percentage of mortgage balances 30+ days past due.',
-                'Mortgage delinquencies rising above 2% historically precede housing market stress by 2-3 quarters. Currently near historic lows.',
-                'WARN >1.5% | ALERT >2.5%')
-            credit_chart('mortgage_delinquency', 'Mortgage Delinquency Rate')
-
-        credit_card('consumer_credit',
-            'Total outstanding consumer credit in billions — credit cards, auto loans, student loans (excludes mortgages).',
-            'Decelerating growth signals consumers are tapped out. Contraction (negative QoQ) is recessionary.',
-            'Monitor rate of change — deceleration is the key signal')
-        credit_chart('consumer_credit', 'Total Consumer Credit Outstanding ($B)')
-
-        # Load AI settings and render assessment
-        ai_settings = load_settings()
-        if ai_settings.get('ai_features', {}).get('enabled', False):
-            import sys
-            import importlib
-            if MACRO not in sys.path:
-                sys.path.insert(0, MACRO)
-            importlib.invalidate_caches()
-            from ai_assessment import render_ai_assessment
-            cc  = credit_data.get('cc_delinquency', {})
-            aut = credit_data.get('auto_delinquency', {})
-            mor = credit_data.get('mortgage_delinquency', {})
-            cho = credit_data.get('cc_chargeoff', {})
-            _cc_prefix = load_settings().get('ai_prompts', {}).get('consumer_credit',
-                DEFAULT_SETTINGS['ai_prompts']['consumer_credit'])
-            prompt = f"""{_cc_prefix} 
-and provide a 4-5 sentence assessment. Focus on acceleration/deceleration trends, 
-what the combined picture suggests about consumer financial health, and what 
-to watch over the next 1-2 quarters. Be direct and quantitative.
-
-Credit card delinquency: {cc.get('current','n/a')}% (qoq change: {cc.get('roc','n/a')}, 3m: {cc.get('roc_3m','n/a')})
-Auto loan delinquency: {aut.get('current','n/a')}% (qoq: {aut.get('roc','n/a')})
-Mortgage delinquency: {mor.get('current','n/a')}% (qoq: {mor.get('roc','n/a')})
-Charge-off rate: {cho.get('current','n/a')}% (qoq: {cho.get('roc','n/a')})"""
-            _f90c = credit_data.get('flow90_cc', {})
-            _f90a = credit_data.get('flow90_auto', {})
-            _f90m = credit_data.get('flow90_mortgage', {})
-            _msub = credit_data.get('mortgage_subprime_share', {})
-            _asub = credit_data.get('auto_subprime_share', {})
-            if _f90c:
-                prompt += f"""
-
-NY Fed transition flows into 90+ delinquency (leading, all lenders):
-CC flow: {_f90c.get('current','n/a')}% (qoq: {_f90c.get('roc','n/a')})
-Auto flow: {_f90a.get('current','n/a')}% (qoq: {_f90a.get('roc','n/a')})
-Mortgage flow: {_f90m.get('current','n/a')}% (qoq: {_f90m.get('roc','n/a')})
-Subprime origination share — mortgage: {_msub.get('current','n/a')}%, auto: {_asub.get('current','n/a')}%"""
-            render_ai_assessment(prompt, ai_settings, 'consumer_credit_assessment')
-
-        st.divider()
-
-        # ══════════════════════════════════════════════════════════════════════
-        # SECTION 1B — NY FED HOUSEHOLD DEBT FLOWS (Equifax panel)
-        # ══════════════════════════════════════════════════════════════════════
-        if any(k in credit_data for k in ('flow90_cc', 'flow30_cc', 'hh_debt_total')):
-            _hhdc_q = snap.get('hhdc_quarter', '')
-            st.subheader(f"🏠 Household Debt Flows — NY Fed{f' ({_hhdc_q})' if _hhdc_q else ''}")
-            st.markdown("""
-                <div class="info-card">
-                    NY Fed Quarterly Report on Household Debt and Credit, built from the
-                    Equifax consumer credit panel (all lenders, not just banks). These are
-                    <b>transition rates</b> — the share of current balances newly flowing into
-                    delinquency each quarter — which lead the bank-reported stock delinquency
-                    rates above by 1-2 quarters. Subprime origination share shows the credit
-                    quality of NEW lending: rising subprime share late in the cycle is how
-                    lenders reach for growth before the bust.
-                </div>
-            """, unsafe_allow_html=True)
-
-            h1, h2 = st.columns(2)
-            with h1:
-                credit_card('flow90_cc',
-                    'Share of current credit card balances newly transitioning to 90+ days delinquent (annualised).',
-                    'The most sensitive consumer stress flow. Pre-GFC normal ~5%, GFC peak ~13.7%. Leads the bank-reported CC delinquency stock rate.',
-                    'WARN >7.0% | ALERT >9.5%')
-                credit_chart('flow90_cc', 'CC Flow into Serious Delinquency (90+)')
-
-                credit_card('flow90_auto',
-                    'Share of current auto loan balances newly transitioning to 90+ days delinquent.',
-                    'Consumers default on autos before housing. GFC peak ~5.3%. Rising alongside subprime share = lending quality problem.',
-                    'WARN >2.5% | ALERT >4.0%')
-                credit_chart('flow90_auto', 'Auto Flow into Serious Delinquency (90+)')
-
-                credit_card('mortgage_subprime_share',
-                    'Share of mortgage origination volume to <620 credit scores.',
-                    'Pre-GFC this ran 10-15%; post-2010 lending standards keep it under 5%. A sustained rise is a late-cycle warning.',
-                    'WARN >8% | ALERT >12%')
-                credit_chart('mortgage_subprime_share', 'Mortgage Subprime Origination Share %')
-
-            with h2:
-                credit_card('flow90_mortgage',
-                    'Share of current mortgage balances newly transitioning to 90+ days delinquent.',
-                    'The confirmation signal — when mortgage flows rise the stress has spread to middle-income households. GFC peak ~8.9%.',
-                    'WARN >2.0% | ALERT >4.0%')
-                credit_chart('flow90_mortgage', 'Mortgage Flow into Serious Delinquency (90+)')
-
-                credit_card('flow90_student',
-                    'Share of current student loan balances newly transitioning to 90+ days delinquent.',
-                    'Distorted by the 2020-2024 payment moratorium and reporting pause — the post-resumption spike overstates fresh stress. Watch the trend, not the level.',
-                    'WARN >8% | ALERT >12%')
-                credit_chart('flow90_student', 'Student Flow into Serious Delinquency (90+)')
-
-                credit_card('auto_subprime_share',
-                    'Share of auto loan origination volume to <620 credit scores.',
-                    'Auto lending routinely runs more subprime than mortgages (~15-20%). Above ~25% signals aggressive reach-for-yield by lenders.',
-                    'WARN >22% | ALERT >28%')
-                credit_chart('auto_subprime_share', 'Auto Subprime Origination Share %')
-
-            credit_card('hh_debt_total',
-                'Total US household debt across all products in trillions (mortgage, HELOC, auto, credit card, student, other).',
-                'Level matters less than composition and flows — but contraction here is deleveraging, which is recessionary.',
-                'Monitor trend and composition')
-            credit_chart('hh_debt_total', 'Total Household Debt ($T)')
-
-            with st.expander("ℹ Early-delinquency flows (30+ days)"):
-                e1, e2, e3 = st.columns(3)
-                for _col, _key, _title in [(e1, 'flow30_cc', 'CC 30+ Flow'),
-                                            (e2, 'flow30_auto', 'Auto 30+ Flow'),
-                                            (e3, 'flow30_mortgage', 'Mortgage 30+ Flow')]:
-                    with _col:
-                        if _key in credit_data:
-                            _d = credit_data[_key]
-                            st.metric(_title, f"{_d['current']:.2f}%",
-                                      delta=f"{_d.get('roc') or 0:+.2f} qoq",
-                                      delta_color="inverse")
-                st.caption("30+ flows are noisier but turn first — a sustained 2-3 quarter "
-                           "rise here precedes the 90+ flows above.")
-
-            # AI assessment for household debt flows
-            _hh_ai_settings = load_settings()
-            if _hh_ai_settings.get('ai_features', {}).get('enabled', False):
-                import sys as _hh_sys
-                import importlib as _hh_il
-                if MACRO not in _hh_sys.path:
-                    _hh_sys.path.insert(0, MACRO)
-                _hh_il.invalidate_caches()
-                from ai_assessment import render_ai_assessment
-
-                def _hh_line(key, name):
-                    d = credit_data.get(key, {})
-                    if not d:
-                        return f"{name}: n/a"
-                    return (f"{name}: {d.get('current','n/a')}% "
-                            f"(qoq: {d.get('roc','n/a')}, 3m: {d.get('roc_3m','n/a')}, "
-                            f"level: {d.get('alert_level','OK')})")
-
-                _hh_pfx = load_settings().get('ai_prompts', {}).get('hhdc_flows',
-                    DEFAULT_SETTINGS['ai_prompts']['hhdc_flows'])
-                _hh_total = credit_data.get('hh_debt_total', {})
-                _hh_prompt = f"""{_hh_pfx}
-Provide a 4-5 sentence assessment: (1) where consumer stress is accelerating vs easing,
-(2) whether stress is spreading from consumer credit to housing, (3) what origination
-quality says about lender behaviour, (4) what to watch next quarter. Be direct and quantitative.
-
-Report quarter: {_hhdc_q or 'n/a'}
-Flows into serious delinquency (90+):
-{_hh_line('flow90_cc', 'Credit card')}
-{_hh_line('flow90_auto', 'Auto loan')}
-{_hh_line('flow90_mortgage', 'Mortgage')}
-{_hh_line('flow90_student', 'Student loan (moratorium-distorted)')}
-
-Flows into early delinquency (30+):
-{_hh_line('flow30_cc', 'Credit card')}
-{_hh_line('flow30_auto', 'Auto loan')}
-{_hh_line('flow30_mortgage', 'Mortgage')}
-
-Origination quality:
-{_hh_line('mortgage_subprime_share', 'Mortgage subprime share')}
-{_hh_line('auto_subprime_share', 'Auto subprime share')}
-
-Total household debt: ${_hh_total.get('current','n/a')}T (qoq: {_hh_total.get('roc','n/a')})"""
-                render_ai_assessment(_hh_prompt, _hh_ai_settings, 'hhdc_flows_assessment')
-
-            st.divider()
-
-        # ══════════════════════════════════════════════════════════════════════
-        # SECTION 2 — CORPORATE CREDIT
-        # ══════════════════════════════════════════════════════════════════════
-        st.subheader("🏢 Corporate Credit")
-        st.markdown("""
-            <div class="info-card">
-                Corporate credit spreads measure the premium investors demand over
-                risk-free rates to hold corporate debt. Widening spreads signal
-                deteriorating credit conditions and reduced risk appetite — often
-                leading equity market stress by 4-8 weeks. HY spreads above 600bps
-                historically coincide with recession. The leveraged loan market
-                (BKLN) reflects the health of PE-backed companies.
-            </div>
-        """, unsafe_allow_html=True)
-
-        c1, c2 = st.columns(2)
-        with c1:
-            credit_card('hy_spread',
-                'Option-adjusted spread of US high yield bonds over US Treasuries.',
-                'Below 300bps = risk on. 300-500bps = caution. Above 500bps = stress. Above 800bps = crisis.',
-                'WARN >4.0% | ALERT >6.0%')
-            credit_chart('hy_spread', 'High Yield Spread')
-
-        with c2:
-            credit_card('ig_spread',
-                'Option-adjusted spread of US investment grade bonds over US Treasuries.',
-                'IG spreads widen after HY — when IG starts widening it confirms stress is spreading beyond junk. Above 2% is historically recessionary.',
-                'WARN >1.5% | ALERT >2.5%')
-            credit_chart('ig_spread', 'Investment Grade Spread')
-
-        # BKLN from PE data
-        if 'BKLN' in pe_data:
-            bkln    = pe_data['BKLN']
-            colour  = '#2dc653' if bkln.get('ret_1m') and bkln['ret_1m'] > 0 else '#e63946'
-            ret_1m  = f"{bkln['ret_1m']:+.1f}%" if bkln.get('ret_1m')  is not None else 'n/a'
-            ret_3m  = f"{bkln['ret_3m']:+.1f}%" if bkln.get('ret_3m')  is not None else 'n/a'
-            ret_12m = f"{bkln['ret_12m']:+.1f}%" if bkln.get('ret_12m') is not None else 'n/a'
-            st.markdown(f"""
-                <div class="macro-card">
-                    <div class="macro-label">Leveraged Loan ETF (BKLN) — PE credit proxy</div>
-                    <div style="font-size:18px;font-weight:bold">${bkln['price']}</div>
-                    <div style="font-size:11px;color:#888">
-                        1m: <span style="color:{colour}">{ret_1m}</span>
-                        &nbsp;|&nbsp; 3m: {ret_3m}
-                        &nbsp;|&nbsp; 12m: {ret_12m}
-                    </div>
-                </div>
-            """, unsafe_allow_html=True)
-
-        if ai_settings.get('ai_features', {}).get('enabled', False):
-            hy  = credit_data.get('hy_spread', {})
-            ig  = credit_data.get('ig_spread', {})
-            bkln_d = pe_data.get('BKLN', {})
-            _corp_prefix = load_settings().get('ai_prompts', {}).get('corporate_credit',
-                DEFAULT_SETTINGS['ai_prompts']['corporate_credit'])
-            prompt = f"""{_corp_prefix}
-Focus on what the spread levels and trend suggest about corporate credit conditions
-and risk appetite. Note any divergences between HY, IG and leveraged loans.
-
-HY spread: {hy.get('current','n/a')}% (qoq: {hy.get('roc','n/a')})
-IG spread: {ig.get('current','n/a')}% (qoq: {ig.get('roc','n/a')})
-BKLN 1m return: {bkln_d.get('ret_1m','n/a')}%"""
-            render_ai_assessment(prompt, ai_settings, 'corporate_credit_assessment')
-
-        st.divider()
-
-        # ══════════════════════════════════════════════════════════════════════
-        # SECTION 2b — REAL-TIME CREDIT MARKET ETFs
-        # ══════════════════════════════════════════════════════════════════════
-        st.subheader("📊 Real-Time Credit Markets")
-        st.markdown("""
-            <div class="info-card">
-                Daily credit ETF prices provide a real-time view of credit market risk appetite.
-                <b>HYG/JNK</b> track high-yield bonds — falling prices signal risk-off.
-                <b>LQD</b> tracks investment-grade — weakness here confirms stress spreading.
-                <b>TLT/SHY</b> reflect Treasury demand (flight-to-safety).
-                <b>EMB</b> tracks emerging market debt — sensitive to dollar strength and global risk.
-                <b>MOVE</b> is bond-market volatility — spikes precede equity volatility (VIX) by days.
-            </div>
-        """, unsafe_allow_html=True)
-
-        if credit_market:
-            cm_rows = []
-            for ticker, d in credit_market.items():
-                cm_rows.append({
-                    'Ticker'  : ticker,
-                    'Name'    : d['name'],
-                    'Price'   : f"{d['price']:.2f}" if d.get('price') is not None else 'n/a',
-                    '1W %'    : f"{d['ret_1w']:+.1f}%" if d.get('ret_1w') is not None else 'n/a',
-                    '1M %'    : f"{d['ret_1m']:+.1f}%" if d.get('ret_1m') is not None else 'n/a',
-                    '3M %'    : f"{d['ret_3m']:+.1f}%" if d.get('ret_3m') is not None else 'n/a',
-                    '12M %'   : f"{d['ret_12m']:+.1f}%" if d.get('ret_12m') is not None else 'n/a',
-                })
-
-            df_cm = pd.DataFrame(cm_rows)
-
-            def colour_cm_ret(val):
-                try:
-                    v = float(str(val).replace('%','').replace('+',''))
-                    if v > 0: return 'color: #2dc653'
-                    if v < 0: return 'color: #e63946'
-                except: pass
-                return ''
-
-            st.dataframe(
-                df_cm.style.map(colour_cm_ret, subset=['1W %','1M %','3M %','12M %']),
-                width='stretch', hide_index=True
-            )
-
-            move_data = credit_market.get('^MOVE', {})
-            if move_data:
-                move_colour = '#e63946' if move_data.get('price', 0) > 120 else '#f77f00' if move_data.get('price', 0) > 100 else '#2dc653'
-                move_1w = f"{move_data['ret_1w']:+.1f}%" if move_data.get('ret_1w') is not None else 'n/a'
-                move_1m = f"{move_data['ret_1m']:+.1f}%" if move_data.get('ret_1m') is not None else 'n/a'
-                st.markdown(f"""
-                    <div class="macro-card" style="border-left:4px solid {move_colour}">
-                        <div class="macro-label">MOVE Index — Bond Market Volatility</div>
-                        <div style="font-size:22px;font-weight:bold;color:{move_colour}">{move_data['price']:.1f}</div>
-                        <div style="font-size:11px;color:#888">
-                            1w: <span style="color:{move_colour}">{move_1w}</span>
-                            &nbsp;|&nbsp; 1m: {move_1m}
-                            &nbsp;|&nbsp; <span style="color:#888">Below 80 = calm &nbsp;|&nbsp; 100-120 = elevated &nbsp;|&nbsp; 120+ = stress</span>
-                        </div>
-                    </div>
-                """, unsafe_allow_html=True)
+        if not json_files:
+            st.warning("No consumer credit data found — run the script first")
+            if st.button("▶ Run Debt Markets Report", type="primary"):
+                run_script(os.path.join(MACRO, 'consumer_credit.py'), MACRO)
+                st.rerun()
         else:
-            st.info("No credit market ETF data — run a fresh report to populate")
+            # Date selector
+            dates      = [os.path.basename(f)[:8] for f in json_files][:30]
+            sel_date   = st.selectbox("Report date", dates, index=0)
+            json_file  = os.path.join(credit_dir, f"{sel_date}_consumer_credit.json")
 
-        st.divider()
+            with open(json_file, 'r') as f:
+                snap = json.load(f)
 
-        # ══════════════════════════════════════════════════════════════════════
-        # SECTION 2c — RATES & YIELD CURVE
-        # ══════════════════════════════════════════════════════════════════════
-        st.subheader("📈 Rates & Yield Curve")
-        st.markdown("""
-            <div class="info-card">
-                Daily Treasury yields and the yield curve from FRED. An inverted curve
-                (10Y-2Y below zero) has preceded every US recession since the 1960s.
-                The <b>un-inversion</b> is often the more immediate recession signal —
-                the curve steepening back toward positive after an inversion period
-                typically occurs as the Fed begins cutting into weakness.
-            </div>
-        """, unsafe_allow_html=True)
+            credit_data    = snap.get('credit_data', {})
+            pe_data        = snap.get('pe_data', {})
+            credit_market  = snap.get('credit_market', {})
+            alerts         = snap.get('alerts', [])
 
-        rate_keys = ['us10y', 'us02y', 'us03m', 'yield_curve', 'fed_funds']
-        rate_cols = st.columns(len([k for k in rate_keys if k in credit_data]))
-        col_idx = 0
-        for key in rate_keys:
-            if key not in credit_data:
-                continue
-            d = credit_data[key]
-            val = d['current']
-            roc = d.get('roc', 0) or 0
-            arrow = '▲' if roc > 0 else '▼' if roc < 0 else '→'
-            colour = '#e63946' if key == 'yield_curve' and val < 0 else '#2dc653' if key == 'yield_curve' and val > 0 else '#00b4d8'
-            with rate_cols[col_idx]:
-                st.markdown(f"""
-                    <div class="macro-card" style="border-left:3px solid {colour}">
-                        <div class="macro-label">{d['label']}</div>
-                        <div style="font-size:20px;font-weight:bold;color:{colour}">{val:.2f}%</div>
-                        <div style="font-size:11px;color:#888">{arrow} {roc:+.3f}</div>
-                    </div>
-                """, unsafe_allow_html=True)
-            col_idx += 1
+            report_date = datetime.strptime(sel_date, '%Y%m%d').strftime('%d %b %Y')
+            st.caption(f"Report date: {report_date}")
 
-        st.divider()
+            # ── Alerts banner ─────────────────────────────────────────────────────
+            if alerts:
+                st.markdown("**⚠ Active Alerts**")
+                for alert in alerts:
+                    colour = '#e63946' if alert['type'] == 'ALERT' else '#f77f00'
+                    st.markdown(f"""
+                        <div class="macro-card" style="border-left:3px solid {colour}">
+                            <span style="color:{colour};font-weight:bold">{alert['type']}</span>
+                            &nbsp; {alert['message']}
+                        </div>
+                    """, unsafe_allow_html=True)
+                st.divider()
 
-        # ══════════════════════════════════════════════════════════════════════
-        # SECTION 2d — INFLATION EXPECTATIONS
-        # ══════════════════════════════════════════════════════════════════════
-        st.subheader("🔥 Inflation Expectations")
-        st.markdown("""
-            <div class="info-card">
-                Breakeven inflation rates from TIPS spreads — what the bond market is
-                pricing for future inflation. Rising breakevens with falling equities
-                signals stagflation risk. 5Y breakevens above 3% historically trigger
-                hawkish Fed response. Divergence between 5Y and 10Y suggests market
-                expects near-term inflation pressure to be transitory vs structural.
-            </div>
-        """, unsafe_allow_html=True)
+            # ── Helper: indicator card ────────────────────────────────────────────
+            def credit_card(key, description, context, thresholds_text):
+                if key not in credit_data:
+                    return
+                d       = credit_data[key]
+                val     = d['current']
+                roc     = d.get('roc', 0) or 0
+                roc_3m  = d.get('roc_3m', 0) or 0
+                level   = d.get('alert_level', 'OK')
+                arrow   = '▲' if roc > 0 else '▼' if roc < 0 else '→'
+                colours = {'ALERT': '#e63946', 'WARN': '#f77f00', 'OK': '#2dc653'}
+                colour  = colours.get(level, '#888')
+                icon    = '⚠' if level == 'ALERT' else '!' if level == 'WARN' else '✓'
 
-        inf_keys = ['breakeven_5y', 'breakeven_10y']
-        ic1, ic2 = st.columns(2)
-        for i, key in enumerate(inf_keys):
-            if key not in credit_data:
-                continue
-            d = credit_data[key]
-            val = d['current']
-            roc = d.get('roc', 0) or 0
-            level = d.get('alert_level', 'OK')
-            arrow = '▲' if roc > 0 else '▼' if roc < 0 else '→'
-            colours = {'ALERT': '#e63946', 'WARN': '#f77f00', 'OK': '#2dc653'}
-            colour = colours.get(level, '#888')
-            icon = '⚠' if level == 'ALERT' else '!' if level == 'WARN' else '✓'
-            thresh = THRESHOLDS.get(key, {}) if 'THRESHOLDS' in dir() else {}
-            thresh_txt = f"WARN >{d.get('warn','?')}% | ALERT >{d.get('alert','?')}%" if thresh else ''
-
-            with [ic1, ic2][i]:
                 st.markdown(f"""
                     <div class="macro-card" style="border-left:4px solid {colour}">
                         <div style="display:flex;justify-content:space-between;align-items:center">
                             <div>
                                 <div class="macro-label">{d['label']}</div>
-                                <div style="font-size:22px;font-weight:bold;color:{colour}">{val:.2f}%</div>
-                                <div style="font-size:11px;color:#888">{arrow} {roc:+.3f}</div>
+                                <div style="font-size:22px;font-weight:bold;color:{colour}">
+                                    {val:.2f}{'%' if key != 'consumer_credit' else 'B'}
+                                </div>
+                                <div style="font-size:11px;color:#888">
+                                    {arrow} {roc:+.3f} qoq &nbsp;|&nbsp; 3m: {roc_3m:+.3f}
+                                </div>
                             </div>
                             <div style="text-align:right">
                                 <div style="color:{colour};font-size:18px">{icon} {level}</div>
@@ -4241,124 +3757,974 @@ BKLN 1m return: {bkln_d.get('ret_1m','n/a')}%"""
                         </div>
                     </div>
                 """, unsafe_allow_html=True)
-                credit_chart(key, d['label'])
 
-        st.divider()
+                with st.expander("ℹ What this means"):
+                    st.markdown(f"""
+                        <div style="font-size:12px;color:#aaa;line-height:1.7">
+                            <b style="color:#ccc">What it measures:</b> {description}<br><br>
+                            <b style="color:#ccc">Current context:</b> {context}<br><br>
+                            <b style="color:#ccc">Thresholds:</b> {thresholds_text}
+                        </div>
+                    """, unsafe_allow_html=True)
 
-        # ══════════════════════════════════════════════════════════════════════
-        # SECTION 3 — SOVEREIGN CREDIT
-        # ══════════════════════════════════════════════════════════════════════
-        st.subheader("🏛 Sovereign Credit")
-        st.markdown("""
-            <div class="info-card">
-                Sovereign credit health reflects the US government's fiscal position.
-                Rising debt/GDP and deficit spending are structural headwinds for
-                long-term bond yields and the dollar. The critical threshold is
-                when interest payments as a percentage of revenue become unsustainable —
-                historically above 20% triggers bond market vigilante activity.
-            </div>
-        """, unsafe_allow_html=True)
+            # ── Helper: history chart ─────────────────────────────────────────────
+            def credit_chart(key, title, recession_shade=True):
+                if key not in credit_data:
+                    return
+                history = credit_data[key].get('history', {})
+                if not history:
+                    return
+                dates_h = list(history.keys())
+                values  = list(history.values())
+                suffix  = 'B' if key == 'consumer_credit' else '%'
 
-        c1, c2 = st.columns(2)
-        with c1:
-            credit_card('debt_gdp',
-                'Total federal debt as a percentage of GDP.',
-                'US debt/GDP has risen from 35% in 2007 to 122%+ today. Above 130% historically associated with currency crises in smaller economies — the US reserve currency status provides buffer but is not unlimited.',
-                'WARN >110% | ALERT >130%')
-            credit_chart('debt_gdp', 'Federal Debt % GDP')
+                fig = go.Figure()
+                fig.add_trace(go.Scatter(
+                    x=dates_h, y=values,
+                    mode='lines+markers',
+                    line=dict(color='#00b4d8', width=2),
+                    marker=dict(size=5),
+                    name=title,
+                    hovertemplate=f"%{{x}}: %{{y:.2f}}{suffix}<extra></extra>"
+                ))
 
-        with c2:
-            credit_card('deficit_gdp',
-                'Annual federal budget deficit as a percentage of GDP. Negative = deficit.',
-                'Deficit above 5% of GDP during non-recession periods is historically unusual and inflationary. Running deficits this large during low unemployment is highly unusual.',
-                'Monitor trend — sustained deficits above 5% GDP are unsustainable')
-            credit_chart('deficit_gdp', 'Federal Deficit % GDP')
+                # Trend line
+                if len(values) >= 4:
+                    x_num   = list(range(len(values)))
+                    n       = len(x_num)
+                    sum_x   = sum(x_num)
+                    sum_y   = sum(values)
+                    sum_xy  = sum(x * y for x, y in zip(x_num, values))
+                    sum_x2  = sum(x * x for x in x_num)
+                    slope   = (n * sum_xy - sum_x * sum_y) / (n * sum_x2 - sum_x ** 2)
+                    intercept = (sum_y - slope * sum_x) / n
+                    trend   = [slope * x + intercept for x in x_num]
+                    t_colour= '#e63946' if slope > 0 else '#2dc653'
+                    fig.add_trace(go.Scatter(
+                        x=dates_h, y=trend,
+                        mode='lines',
+                        line=dict(color=t_colour, width=1, dash='dash'),
+                        name='Trend', opacity=0.6
+                    ))
 
-        if ai_settings.get('ai_features', {}).get('enabled', False):
-            dbt = credit_data.get('debt_gdp', {})
-            dfc = credit_data.get('deficit_gdp', {})
-            _sov_prefix = load_settings().get('ai_prompts', {}).get('sovereign_credit',
-                DEFAULT_SETTINGS['ai_prompts']['sovereign_credit'])
-            prompt = f"""{_sov_prefix}
-Focus on trajectory, sustainability and key risks over the next 12 months.
-Note what bond markets are likely pricing in given these readings.
+                fig.update_layout(
+                    title       = title,
+                    height      = 250,
+                    plot_bgcolor= get_chart_theme()['plot_bgcolor'],
+                    paper_bgcolor= get_chart_theme()['paper_bgcolor'],
+                    font        = dict(color=get_chart_theme()['font_color']),
+                    xaxis       = dict(gridcolor=get_chart_theme()['gridcolor']),
+                    yaxis       = dict(gridcolor=get_chart_theme()['gridcolor'],
+                                       ticksuffix=suffix),
+                    showlegend  = False,
+                    margin      = dict(l=50,r=20,t=40,b=30),
+                )
+                st.plotly_chart(fig, width='stretch')
 
-Federal debt/GDP: {dbt.get('current','n/a')}% (qoq change: {dbt.get('roc','n/a')})
-Federal deficit/GDP: {dfc.get('current','n/a')}% (qoq: {dfc.get('roc','n/a')})"""
-            render_ai_assessment(prompt, ai_settings, 'sovereign_credit_assessment')
+            # ══════════════════════════════════════════════════════════════════════
+            # SECTION 1 — CONSUMER CREDIT
+            # ══════════════════════════════════════════════════════════════════════
+            st.subheader("💳 Consumer Credit Markets")
+            st.markdown("""
+                <div class="info-card">
+                    Consumer credit delinquency rates measure the percentage of loans
+                    30+ days past due. Rising delinquencies signal financial stress among
+                    households — typically 2-4 quarters ahead of broader economic weakness.
+                    Credit card and auto loans are the canary in the coal mine as they
+                    reflect lower income household stress first. Mortgage delinquencies
+                    rising confirms the stress is spreading to middle income households.
+                </div>
+            """, unsafe_allow_html=True)
 
-        st.divider()
+            c1, c2 = st.columns(2)
+            with c1:
+                credit_card('cc_delinquency',
+                    'Percentage of credit card balances 30+ days past due.',
+                    'Rising above 3% signals consumer stress. Above 4% is crisis territory last seen in 2009-2010.',
+                    'WARN >2.5% | ALERT >3.5%')
+                credit_chart('cc_delinquency', 'Credit Card Delinquency Rate')
 
-        # ══════════════════════════════════════════════════════════════════════
-        # SECTION 4 — PRIVATE EQUITY & BDC
-        # ══════════════════════════════════════════════════════════════════════
-        st.subheader("🏦 Private Equity & BDC")
-        st.markdown("""
-            <div class="info-card">
-                Private equity firms and Business Development Companies (BDCs) are
-                sensitive leading indicators of credit market health. BDCs lend
-                directly to middle-market companies — their stock performance and
-                dividend sustainability reflect the health of PE-backed credit.
-                PE firm stock prices reflect deal flow, exit activity and credit
-                availability. Deterioration here often leads public market stress
-                by 2-4 months.
-            </div>
-        """, unsafe_allow_html=True)
+                credit_card('auto_delinquency',
+                    'Percentage of auto loan balances 30+ days past due.',
+                    'Auto loans are often the first to default — consumers prioritise housing and food. Rising auto defaults lead credit card defaults by 1-2 quarters.',
+                    'WARN >1.5% | ALERT >2.5%')
+                credit_chart('auto_delinquency', 'Auto Loan Delinquency Rate')
 
-        pe_rows = []
-        for ticker, d in pe_data.items():
-            if ticker == 'BKLN':
-                continue
-            pe_rows.append({
-                'Ticker'  : ticker,
-                'Name'    : d['name'],
-                'Price'   : f"${d['price']:.2f}" if d.get('price') is not None else 'n/a',
-                '1M %'    : f"{d['ret_1m']:+.1f}%" if d.get('ret_1m') is not None else 'n/a',
-                '3M %'    : f"{d['ret_3m']:+.1f}%" if d.get('ret_3m') is not None else 'n/a',
-                '12M %'   : f"{d['ret_12m']:+.1f}%" if d.get('ret_12m') is not None else 'n/a',
-            })
+            with c2:
+                credit_card('cc_chargeoff',
+                    'Percentage of credit card debt written off as uncollectable.',
+                    'Charge-offs lag delinquencies by 1-2 quarters. Charge-off rate rising above delinquency rate signals banks are accelerating write-downs.',
+                    'WARN >3.0% | ALERT >4.5%')
+                credit_chart('cc_chargeoff', 'Credit Card Charge-Off Rate')
 
-        if pe_rows:
-            df_pe = pd.DataFrame(pe_rows)
+                credit_card('mortgage_delinquency',
+                    'Percentage of mortgage balances 30+ days past due.',
+                    'Mortgage delinquencies rising above 2% historically precede housing market stress by 2-3 quarters. Currently near historic lows.',
+                    'WARN >1.5% | ALERT >2.5%')
+                credit_chart('mortgage_delinquency', 'Mortgage Delinquency Rate')
 
-            def colour_ret(val):
-                try:
-                    v = float(str(val).replace('%','').replace('+',''))
-                    if v > 0: return 'color: #2dc653'
-                    if v < 0: return 'color: #e63946'
-                except: pass
-                return ''
+            credit_card('consumer_credit',
+                'Total outstanding consumer credit in billions — credit cards, auto loans, student loans (excludes mortgages).',
+                'Decelerating growth signals consumers are tapped out. Contraction (negative QoQ) is recessionary.',
+                'Monitor rate of change — deceleration is the key signal')
+            credit_chart('consumer_credit', 'Total Consumer Credit Outstanding ($B)')
 
-            st.dataframe(
-                df_pe.style.map(colour_ret, subset=['1M %','3M %','12M %']),
-                width='stretch', hide_index=True
-            )
+            # Load AI settings and render assessment
+            ai_settings = load_settings()
+            if ai_settings.get('ai_features', {}).get('enabled', False):
+                import sys
+                import importlib
+                if MACRO not in sys.path:
+                    sys.path.insert(0, MACRO)
+                importlib.invalidate_caches()
+                from ai_assessment import render_ai_assessment
+                cc  = credit_data.get('cc_delinquency', {})
+                aut = credit_data.get('auto_delinquency', {})
+                mor = credit_data.get('mortgage_delinquency', {})
+                cho = credit_data.get('cc_chargeoff', {})
+                _cc_prefix = load_settings().get('ai_prompts', {}).get('consumer_credit',
+                    DEFAULT_SETTINGS['ai_prompts']['consumer_credit'])
+                prompt = f"""{_cc_prefix}
 
-        if ai_settings.get('ai_features', {}).get('enabled', False):
-            pe_summary = ', '.join([
-                f"{t}: 1m {d['ret_1m']:+.1f}% 3m {d['ret_3m']:+.1f}%"
-                for t, d in pe_data.items() if d.get('ret_1m')
-            ])
-            prompt = f"""Analyse the private equity and BDC sector performance in 3 sentences.
-Focus on what the collective performance signals about credit availability,
-deal flow and middle-market corporate health.
+    Write a structured assessment using these exact section headers:
 
-PE and BDC returns: {pe_summary}"""
-            render_ai_assessment(prompt, ai_settings, 'pe_assessment')
+    **STRESS READ** — Where consumer stress sits across card, auto and mortgage. Distinguish
+    the level from the trajectory (qoq and 3-month change). Note that charge-offs lag
+    delinquencies by 1-2 quarters — say what the delinquency-vs-chargeoff gap implies about
+    banks' write-down pace. Which borrower tier is under pressure (cards/autos = lower income
+    first, mortgage = middle income)?
 
-        st.divider()
+    **CROSS-CHECK WITH FLOWS** — If NY Fed transition-flow data is provided, use it: flows lead
+    the bank-reported stock rates by 1-2 quarters, so a rising flow with a flat stock rate is
+    an early warning. Comment on subprime origination share — is lending quality deteriorating?
 
-        # ── Date-specific report download ─────────────────────────────────────
-        rpt_file = os.path.join(credit_dir, f"{sel_date}_consumer_credit_report.txt")
-        if os.path.exists(rpt_file):
-            with open(rpt_file, 'r', encoding='utf-8') as f:
-                rpt_txt = f.read()
-            st.download_button(
-                label     = f"⬇ Download {sel_date} Report",
-                data      = rpt_txt,
-                file_name = f"{sel_date}_consumer_credit_report.txt",
-                mime      = 'text/plain'
-            )
+    **SPENDING & MARKETS** — What this combined picture implies for consumer spending and
+    equities over the next 1-2 quarters.
+
+    **WATCH LIST** — The 2-3 metrics and specific levels most worth watching next.
+
+    Be direct and quantitative — cite actual numbers and their changes. Aim for 300-400 words.
+
+    Credit card delinquency: {cc.get('current','n/a')}% (qoq change: {cc.get('roc','n/a')}, 3m: {cc.get('roc_3m','n/a')})
+    Auto loan delinquency: {aut.get('current','n/a')}% (qoq: {aut.get('roc','n/a')})
+    Mortgage delinquency: {mor.get('current','n/a')}% (qoq: {mor.get('roc','n/a')})
+    Charge-off rate: {cho.get('current','n/a')}% (qoq: {cho.get('roc','n/a')})"""
+                _f90c = credit_data.get('flow90_cc', {})
+                _f90a = credit_data.get('flow90_auto', {})
+                _f90m = credit_data.get('flow90_mortgage', {})
+                _msub = credit_data.get('mortgage_subprime_share', {})
+                _asub = credit_data.get('auto_subprime_share', {})
+                if _f90c:
+                    prompt += f"""
+
+    NY Fed transition flows into 90+ delinquency (leading, all lenders):
+    CC flow: {_f90c.get('current','n/a')}% (qoq: {_f90c.get('roc','n/a')})
+    Auto flow: {_f90a.get('current','n/a')}% (qoq: {_f90a.get('roc','n/a')})
+    Mortgage flow: {_f90m.get('current','n/a')}% (qoq: {_f90m.get('roc','n/a')})
+    Subprime origination share — mortgage: {_msub.get('current','n/a')}%, auto: {_asub.get('current','n/a')}%"""
+                render_ai_assessment(prompt, ai_settings, 'consumer_credit_assessment',
+                                     max_tokens=2000)
+
+            st.divider()
+
+            # ══════════════════════════════════════════════════════════════════════
+            # SECTION 1B — NY FED HOUSEHOLD DEBT FLOWS (Equifax panel)
+            # ══════════════════════════════════════════════════════════════════════
+            if any(k in credit_data for k in ('flow90_cc', 'flow30_cc', 'hh_debt_total')):
+                _hhdc_q = snap.get('hhdc_quarter', '')
+                st.subheader(f"🏠 Household Debt Flows — NY Fed{f' ({_hhdc_q})' if _hhdc_q else ''}")
+                st.markdown("""
+                    <div class="info-card">
+                        NY Fed Quarterly Report on Household Debt and Credit, built from the
+                        Equifax consumer credit panel (all lenders, not just banks). These are
+                        <b>transition rates</b> — the share of current balances newly flowing into
+                        delinquency each quarter — which lead the bank-reported stock delinquency
+                        rates above by 1-2 quarters. Subprime origination share shows the credit
+                        quality of NEW lending: rising subprime share late in the cycle is how
+                        lenders reach for growth before the bust.
+                    </div>
+                """, unsafe_allow_html=True)
+
+                h1, h2 = st.columns(2)
+                with h1:
+                    credit_card('flow90_cc',
+                        'Share of current credit card balances newly transitioning to 90+ days delinquent (annualised).',
+                        'The most sensitive consumer stress flow. Pre-GFC normal ~5%, GFC peak ~13.7%. Leads the bank-reported CC delinquency stock rate.',
+                        'WARN >7.0% | ALERT >9.5%')
+                    credit_chart('flow90_cc', 'CC Flow into Serious Delinquency (90+)')
+
+                    credit_card('flow90_auto',
+                        'Share of current auto loan balances newly transitioning to 90+ days delinquent.',
+                        'Consumers default on autos before housing. GFC peak ~5.3%. Rising alongside subprime share = lending quality problem.',
+                        'WARN >2.5% | ALERT >4.0%')
+                    credit_chart('flow90_auto', 'Auto Flow into Serious Delinquency (90+)')
+
+                    credit_card('mortgage_subprime_share',
+                        'Share of mortgage origination volume to <620 credit scores.',
+                        'Pre-GFC this ran 10-15%; post-2010 lending standards keep it under 5%. A sustained rise is a late-cycle warning.',
+                        'WARN >8% | ALERT >12%')
+                    credit_chart('mortgage_subprime_share', 'Mortgage Subprime Origination Share %')
+
+                with h2:
+                    credit_card('flow90_mortgage',
+                        'Share of current mortgage balances newly transitioning to 90+ days delinquent.',
+                        'The confirmation signal — when mortgage flows rise the stress has spread to middle-income households. GFC peak ~8.9%.',
+                        'WARN >2.0% | ALERT >4.0%')
+                    credit_chart('flow90_mortgage', 'Mortgage Flow into Serious Delinquency (90+)')
+
+                    credit_card('flow90_student',
+                        'Share of current student loan balances newly transitioning to 90+ days delinquent.',
+                        'Distorted by the 2020-2024 payment moratorium and reporting pause — the post-resumption spike overstates fresh stress. Watch the trend, not the level.',
+                        'WARN >8% | ALERT >12%')
+                    credit_chart('flow90_student', 'Student Flow into Serious Delinquency (90+)')
+
+                    credit_card('auto_subprime_share',
+                        'Share of auto loan origination volume to <620 credit scores.',
+                        'Auto lending routinely runs more subprime than mortgages (~15-20%). Above ~25% signals aggressive reach-for-yield by lenders.',
+                        'WARN >22% | ALERT >28%')
+                    credit_chart('auto_subprime_share', 'Auto Subprime Origination Share %')
+
+                credit_card('hh_debt_total',
+                    'Total US household debt across all products in trillions (mortgage, HELOC, auto, credit card, student, other).',
+                    'Level matters less than composition and flows — but contraction here is deleveraging, which is recessionary.',
+                    'Monitor trend and composition')
+                credit_chart('hh_debt_total', 'Total Household Debt ($T)')
+
+                with st.expander("ℹ Early-delinquency flows (30+ days)"):
+                    e1, e2, e3 = st.columns(3)
+                    for _col, _key, _title in [(e1, 'flow30_cc', 'CC 30+ Flow'),
+                                                (e2, 'flow30_auto', 'Auto 30+ Flow'),
+                                                (e3, 'flow30_mortgage', 'Mortgage 30+ Flow')]:
+                        with _col:
+                            if _key in credit_data:
+                                _d = credit_data[_key]
+                                st.metric(_title, f"{_d['current']:.2f}%",
+                                          delta=f"{_d.get('roc') or 0:+.2f} qoq",
+                                          delta_color="inverse")
+                    st.caption("30+ flows are noisier but turn first — a sustained 2-3 quarter "
+                               "rise here precedes the 90+ flows above.")
+
+                # AI assessment for household debt flows
+                _hh_ai_settings = load_settings()
+                if _hh_ai_settings.get('ai_features', {}).get('enabled', False):
+                    import sys as _hh_sys
+                    import importlib as _hh_il
+                    if MACRO not in _hh_sys.path:
+                        _hh_sys.path.insert(0, MACRO)
+                    _hh_il.invalidate_caches()
+                    from ai_assessment import render_ai_assessment
+
+                    def _hh_line(key, name):
+                        d = credit_data.get(key, {})
+                        if not d:
+                            return f"{name}: n/a"
+                        return (f"{name}: {d.get('current','n/a')}% "
+                                f"(qoq: {d.get('roc','n/a')}, 3m: {d.get('roc_3m','n/a')}, "
+                                f"level: {d.get('alert_level','OK')})")
+
+                    _hh_pfx = load_settings().get('ai_prompts', {}).get('hhdc_flows',
+                        DEFAULT_SETTINGS['ai_prompts']['hhdc_flows'])
+                    _hh_total = credit_data.get('hh_debt_total', {})
+                    _hh_prompt = f"""{_hh_pfx}
+
+    Write a structured assessment using these exact section headers:
+
+    **FLOW READ** — Where transition-into-delinquency is accelerating vs easing, by loan type.
+    Distinguish the 30+ early flows (turn first, noisier) from the 90+ serious flows they feed
+    1-2 quarters later — is the early-flow trajectory pointing to higher serious flows ahead?
+    Explicitly discount the student loan series (moratorium/reporting distortion) — note it but
+    don't treat its level as fresh stress.
+
+    **SPREADING?** — Is stress confined to lower-income tiers (cards, autos) or spreading to
+    housing (mortgage flows)? The mortgage flow is the confirmation signal for broad
+    middle-income stress — state clearly which regime we're in.
+
+    **LENDER BEHAVIOUR** — What subprime origination share (mortgage and auto) says about
+    lending standards. Rising subprime share late in the cycle is a reach-for-growth warning.
+
+    **NEXT QUARTER** — The 2-3 flows and specific levels most worth watching, and what would
+    escalate the read.
+
+    Be direct and quantitative — cite actual numbers and qoq changes, flag any WARN/ALERT.
+    Aim for 300-400 words.
+
+    Report quarter: {_hhdc_q or 'n/a'}
+    Flows into serious delinquency (90+):
+    {_hh_line('flow90_cc', 'Credit card')}
+    {_hh_line('flow90_auto', 'Auto loan')}
+    {_hh_line('flow90_mortgage', 'Mortgage')}
+    {_hh_line('flow90_student', 'Student loan (moratorium-distorted)')}
+
+    Flows into early delinquency (30+):
+    {_hh_line('flow30_cc', 'Credit card')}
+    {_hh_line('flow30_auto', 'Auto loan')}
+    {_hh_line('flow30_mortgage', 'Mortgage')}
+
+    Origination quality:
+    {_hh_line('mortgage_subprime_share', 'Mortgage subprime share')}
+    {_hh_line('auto_subprime_share', 'Auto subprime share')}
+
+    Total household debt: ${_hh_total.get('current','n/a')}T (qoq: {_hh_total.get('roc','n/a')})"""
+                    render_ai_assessment(_hh_prompt, _hh_ai_settings, 'hhdc_flows_assessment',
+                                         max_tokens=2000)
+
+                st.divider()
+
+            # ══════════════════════════════════════════════════════════════════════
+            # SECTION 2 — CORPORATE CREDIT
+            # ══════════════════════════════════════════════════════════════════════
+            st.subheader("🏢 Corporate Credit")
+            st.markdown("""
+                <div class="info-card">
+                    Corporate credit spreads measure the premium investors demand over
+                    risk-free rates to hold corporate debt. Widening spreads signal
+                    deteriorating credit conditions and reduced risk appetite — often
+                    leading equity market stress by 4-8 weeks. HY spreads above 600bps
+                    historically coincide with recession. The leveraged loan market
+                    (BKLN) reflects the health of PE-backed companies.
+                </div>
+            """, unsafe_allow_html=True)
+
+            c1, c2 = st.columns(2)
+            with c1:
+                credit_card('hy_spread',
+                    'Option-adjusted spread of US high yield bonds over US Treasuries.',
+                    'Below 300bps = risk on. 300-500bps = caution. Above 500bps = stress. Above 800bps = crisis.',
+                    'WARN >4.0% | ALERT >6.0%')
+                credit_chart('hy_spread', 'High Yield Spread')
+
+            with c2:
+                credit_card('ig_spread',
+                    'Option-adjusted spread of US investment grade bonds over US Treasuries.',
+                    'IG spreads widen after HY — when IG starts widening it confirms stress is spreading beyond junk. Above 2% is historically recessionary.',
+                    'WARN >1.5% | ALERT >2.5%')
+                credit_chart('ig_spread', 'Investment Grade Spread')
+
+            # BKLN from PE data
+            if 'BKLN' in pe_data:
+                bkln    = pe_data['BKLN']
+                colour  = '#2dc653' if bkln.get('ret_1m') and bkln['ret_1m'] > 0 else '#e63946'
+                ret_1m  = f"{bkln['ret_1m']:+.1f}%" if bkln.get('ret_1m')  is not None else 'n/a'
+                ret_3m  = f"{bkln['ret_3m']:+.1f}%" if bkln.get('ret_3m')  is not None else 'n/a'
+                ret_12m = f"{bkln['ret_12m']:+.1f}%" if bkln.get('ret_12m') is not None else 'n/a'
+                st.markdown(f"""
+                    <div class="macro-card">
+                        <div class="macro-label">Leveraged Loan ETF (BKLN) — PE credit proxy</div>
+                        <div style="font-size:18px;font-weight:bold">${bkln['price']}</div>
+                        <div style="font-size:11px;color:#888">
+                            1m: <span style="color:{colour}">{ret_1m}</span>
+                            &nbsp;|&nbsp; 3m: {ret_3m}
+                            &nbsp;|&nbsp; 12m: {ret_12m}
+                        </div>
+                    </div>
+                """, unsafe_allow_html=True)
+
+            if ai_settings.get('ai_features', {}).get('enabled', False):
+                hy  = credit_data.get('hy_spread', {})
+                ig  = credit_data.get('ig_spread', {})
+                bkln_d = pe_data.get('BKLN', {})
+                _corp_prefix = load_settings().get('ai_prompts', {}).get('corporate_credit',
+                    DEFAULT_SETTINGS['ai_prompts']['corporate_credit'])
+                prompt = f"""{_corp_prefix}
+    Focus on what the spread levels and trend suggest about corporate credit conditions
+    and risk appetite. Note any divergences between HY, IG and leveraged loans.
+
+    HY spread: {hy.get('current','n/a')}% (qoq: {hy.get('roc','n/a')})
+    IG spread: {ig.get('current','n/a')}% (qoq: {ig.get('roc','n/a')})
+    BKLN 1m return: {bkln_d.get('ret_1m','n/a')}%"""
+                render_ai_assessment(prompt, ai_settings, 'corporate_credit_assessment')
+
+            st.divider()
+
+            # ══════════════════════════════════════════════════════════════════════
+            # SECTION 2b — REAL-TIME CREDIT MARKET ETFs
+            # ══════════════════════════════════════════════════════════════════════
+            st.subheader("📊 Real-Time Credit Markets")
+            st.markdown("""
+                <div class="info-card">
+                    Daily credit ETF prices provide a real-time view of credit market risk appetite.
+                    <b>HYG/JNK</b> track high-yield bonds — falling prices signal risk-off.
+                    <b>LQD</b> tracks investment-grade — weakness here confirms stress spreading.
+                    <b>TLT/SHY</b> reflect Treasury demand (flight-to-safety).
+                    <b>EMB</b> tracks emerging market debt — sensitive to dollar strength and global risk.
+                    <b>MOVE</b> is bond-market volatility — spikes precede equity volatility (VIX) by days.
+                </div>
+            """, unsafe_allow_html=True)
+
+            if credit_market:
+                cm_rows = []
+                for ticker, d in credit_market.items():
+                    cm_rows.append({
+                        'Ticker'  : ticker,
+                        'Name'    : d['name'],
+                        'Price'   : f"{d['price']:.2f}" if d.get('price') is not None else 'n/a',
+                        '1W %'    : f"{d['ret_1w']:+.1f}%" if d.get('ret_1w') is not None else 'n/a',
+                        '1M %'    : f"{d['ret_1m']:+.1f}%" if d.get('ret_1m') is not None else 'n/a',
+                        '3M %'    : f"{d['ret_3m']:+.1f}%" if d.get('ret_3m') is not None else 'n/a',
+                        '12M %'   : f"{d['ret_12m']:+.1f}%" if d.get('ret_12m') is not None else 'n/a',
+                    })
+
+                df_cm = pd.DataFrame(cm_rows)
+
+                def colour_cm_ret(val):
+                    try:
+                        v = float(str(val).replace('%','').replace('+',''))
+                        if v > 0: return 'color: #2dc653'
+                        if v < 0: return 'color: #e63946'
+                    except: pass
+                    return ''
+
+                st.dataframe(
+                    df_cm.style.map(colour_cm_ret, subset=['1W %','1M %','3M %','12M %']),
+                    width='stretch', hide_index=True
+                )
+
+                move_data = credit_market.get('^MOVE', {})
+                if move_data:
+                    move_colour = '#e63946' if move_data.get('price', 0) > 120 else '#f77f00' if move_data.get('price', 0) > 100 else '#2dc653'
+                    move_1w = f"{move_data['ret_1w']:+.1f}%" if move_data.get('ret_1w') is not None else 'n/a'
+                    move_1m = f"{move_data['ret_1m']:+.1f}%" if move_data.get('ret_1m') is not None else 'n/a'
+                    st.markdown(f"""
+                        <div class="macro-card" style="border-left:4px solid {move_colour}">
+                            <div class="macro-label">MOVE Index — Bond Market Volatility</div>
+                            <div style="font-size:22px;font-weight:bold;color:{move_colour}">{move_data['price']:.1f}</div>
+                            <div style="font-size:11px;color:#888">
+                                1w: <span style="color:{move_colour}">{move_1w}</span>
+                                &nbsp;|&nbsp; 1m: {move_1m}
+                                &nbsp;|&nbsp; <span style="color:#888">Below 80 = calm &nbsp;|&nbsp; 100-120 = elevated &nbsp;|&nbsp; 120+ = stress</span>
+                            </div>
+                        </div>
+                    """, unsafe_allow_html=True)
+            else:
+                st.info("No credit market ETF data — run a fresh report to populate")
+
+            st.divider()
+
+            # ══════════════════════════════════════════════════════════════════════
+            # SECTION 2c — RATES & YIELD CURVE
+            # ══════════════════════════════════════════════════════════════════════
+            st.subheader("📈 Rates & Yield Curve")
+            st.markdown("""
+                <div class="info-card">
+                    Daily Treasury yields and the yield curve from FRED. An inverted curve
+                    (10Y-2Y below zero) has preceded every US recession since the 1960s.
+                    The <b>un-inversion</b> is often the more immediate recession signal —
+                    the curve steepening back toward positive after an inversion period
+                    typically occurs as the Fed begins cutting into weakness.
+                </div>
+            """, unsafe_allow_html=True)
+
+            rate_keys = ['us10y', 'us02y', 'us03m', 'yield_curve', 'fed_funds']
+            rate_cols = st.columns(len([k for k in rate_keys if k in credit_data]))
+            col_idx = 0
+            for key in rate_keys:
+                if key not in credit_data:
+                    continue
+                d = credit_data[key]
+                val = d['current']
+                roc = d.get('roc', 0) or 0
+                arrow = '▲' if roc > 0 else '▼' if roc < 0 else '→'
+                colour = '#e63946' if key == 'yield_curve' and val < 0 else '#2dc653' if key == 'yield_curve' and val > 0 else '#00b4d8'
+                with rate_cols[col_idx]:
+                    st.markdown(f"""
+                        <div class="macro-card" style="border-left:3px solid {colour}">
+                            <div class="macro-label">{d['label']}</div>
+                            <div style="font-size:20px;font-weight:bold;color:{colour}">{val:.2f}%</div>
+                            <div style="font-size:11px;color:#888">{arrow} {roc:+.3f}</div>
+                        </div>
+                    """, unsafe_allow_html=True)
+                col_idx += 1
+
+            st.divider()
+
+            # ══════════════════════════════════════════════════════════════════════
+            # SECTION 2d — INFLATION EXPECTATIONS
+            # ══════════════════════════════════════════════════════════════════════
+            st.subheader("🔥 Inflation Expectations")
+            st.markdown("""
+                <div class="info-card">
+                    Breakeven inflation rates from TIPS spreads — what the bond market is
+                    pricing for future inflation. Rising breakevens with falling equities
+                    signals stagflation risk. 5Y breakevens above 3% historically trigger
+                    hawkish Fed response. Divergence between 5Y and 10Y suggests market
+                    expects near-term inflation pressure to be transitory vs structural.
+                </div>
+            """, unsafe_allow_html=True)
+
+            inf_keys = ['breakeven_5y', 'breakeven_10y']
+            ic1, ic2 = st.columns(2)
+            for i, key in enumerate(inf_keys):
+                if key not in credit_data:
+                    continue
+                d = credit_data[key]
+                val = d['current']
+                roc = d.get('roc', 0) or 0
+                level = d.get('alert_level', 'OK')
+                arrow = '▲' if roc > 0 else '▼' if roc < 0 else '→'
+                colours = {'ALERT': '#e63946', 'WARN': '#f77f00', 'OK': '#2dc653'}
+                colour = colours.get(level, '#888')
+                icon = '⚠' if level == 'ALERT' else '!' if level == 'WARN' else '✓'
+                thresh = THRESHOLDS.get(key, {}) if 'THRESHOLDS' in dir() else {}
+                thresh_txt = f"WARN >{d.get('warn','?')}% | ALERT >{d.get('alert','?')}%" if thresh else ''
+
+                with [ic1, ic2][i]:
+                    st.markdown(f"""
+                        <div class="macro-card" style="border-left:4px solid {colour}">
+                            <div style="display:flex;justify-content:space-between;align-items:center">
+                                <div>
+                                    <div class="macro-label">{d['label']}</div>
+                                    <div style="font-size:22px;font-weight:bold;color:{colour}">{val:.2f}%</div>
+                                    <div style="font-size:11px;color:#888">{arrow} {roc:+.3f}</div>
+                                </div>
+                                <div style="text-align:right">
+                                    <div style="color:{colour};font-size:18px">{icon} {level}</div>
+                                </div>
+                            </div>
+                        </div>
+                    """, unsafe_allow_html=True)
+                    credit_chart(key, d['label'])
+
+            st.divider()
+
+            # ══════════════════════════════════════════════════════════════════════
+            # SECTION 3 — SOVEREIGN CREDIT
+            # ══════════════════════════════════════════════════════════════════════
+            st.subheader("🏛 Sovereign Credit")
+            st.markdown("""
+                <div class="info-card">
+                    Sovereign credit health reflects the US government's fiscal position.
+                    Rising debt/GDP and deficit spending are structural headwinds for
+                    long-term bond yields and the dollar. The critical threshold is
+                    when interest payments as a percentage of revenue become unsustainable —
+                    historically above 20% triggers bond market vigilante activity.
+                </div>
+            """, unsafe_allow_html=True)
+
+            c1, c2 = st.columns(2)
+            with c1:
+                credit_card('debt_gdp',
+                    'Total federal debt as a percentage of GDP.',
+                    'US debt/GDP has risen from 35% in 2007 to 122%+ today. Above 130% historically associated with currency crises in smaller economies — the US reserve currency status provides buffer but is not unlimited.',
+                    'WARN >110% | ALERT >130%')
+                credit_chart('debt_gdp', 'Federal Debt % GDP')
+
+            with c2:
+                credit_card('deficit_gdp',
+                    'Annual federal budget deficit as a percentage of GDP. Negative = deficit.',
+                    'Deficit above 5% of GDP during non-recession periods is historically unusual and inflationary. Running deficits this large during low unemployment is highly unusual.',
+                    'Monitor trend — sustained deficits above 5% GDP are unsustainable')
+                credit_chart('deficit_gdp', 'Federal Deficit % GDP')
+
+            if ai_settings.get('ai_features', {}).get('enabled', False):
+                dbt = credit_data.get('debt_gdp', {})
+                dfc = credit_data.get('deficit_gdp', {})
+                _sov_prefix = load_settings().get('ai_prompts', {}).get('sovereign_credit',
+                    DEFAULT_SETTINGS['ai_prompts']['sovereign_credit'])
+                prompt = f"""{_sov_prefix}
+    Focus on trajectory, sustainability and key risks over the next 12 months.
+    Note what bond markets are likely pricing in given these readings.
+
+    Federal debt/GDP: {dbt.get('current','n/a')}% (qoq change: {dbt.get('roc','n/a')})
+    Federal deficit/GDP: {dfc.get('current','n/a')}% (qoq: {dfc.get('roc','n/a')})"""
+                render_ai_assessment(prompt, ai_settings, 'sovereign_credit_assessment')
+
+            st.divider()
+
+            # ══════════════════════════════════════════════════════════════════════
+            # SECTION 4 — PRIVATE EQUITY & BDC
+            # ══════════════════════════════════════════════════════════════════════
+            st.subheader("🏦 Private Equity & BDC")
+            st.markdown("""
+                <div class="info-card">
+                    Private equity firms and Business Development Companies (BDCs) are
+                    sensitive leading indicators of credit market health. BDCs lend
+                    directly to middle-market companies — their stock performance and
+                    dividend sustainability reflect the health of PE-backed credit.
+                    PE firm stock prices reflect deal flow, exit activity and credit
+                    availability. Deterioration here often leads public market stress
+                    by 2-4 months.
+                </div>
+            """, unsafe_allow_html=True)
+
+            pe_rows = []
+            for ticker, d in pe_data.items():
+                if ticker == 'BKLN':
+                    continue
+                pe_rows.append({
+                    'Ticker'  : ticker,
+                    'Name'    : d['name'],
+                    'Price'   : f"${d['price']:.2f}" if d.get('price') is not None else 'n/a',
+                    '1M %'    : f"{d['ret_1m']:+.1f}%" if d.get('ret_1m') is not None else 'n/a',
+                    '3M %'    : f"{d['ret_3m']:+.1f}%" if d.get('ret_3m') is not None else 'n/a',
+                    '12M %'   : f"{d['ret_12m']:+.1f}%" if d.get('ret_12m') is not None else 'n/a',
+                })
+
+            if pe_rows:
+                df_pe = pd.DataFrame(pe_rows)
+
+                def colour_ret(val):
+                    try:
+                        v = float(str(val).replace('%','').replace('+',''))
+                        if v > 0: return 'color: #2dc653'
+                        if v < 0: return 'color: #e63946'
+                    except: pass
+                    return ''
+
+                st.dataframe(
+                    df_pe.style.map(colour_ret, subset=['1M %','3M %','12M %']),
+                    width='stretch', hide_index=True
+                )
+
+            if ai_settings.get('ai_features', {}).get('enabled', False):
+                pe_summary = ', '.join([
+                    f"{t}: 1m {d['ret_1m']:+.1f}% 3m {d['ret_3m']:+.1f}%"
+                    for t, d in pe_data.items() if d.get('ret_1m')
+                ])
+                prompt = f"""Analyse the private equity and BDC sector performance in 3 sentences.
+    Focus on what the collective performance signals about credit availability,
+    deal flow and middle-market corporate health.
+
+    PE and BDC returns: {pe_summary}"""
+                render_ai_assessment(prompt, ai_settings, 'pe_assessment')
+
+            st.divider()
+
+            # ── Date-specific report download ─────────────────────────────────────
+            rpt_file = os.path.join(credit_dir, f"{sel_date}_consumer_credit_report.txt")
+            if os.path.exists(rpt_file):
+                with open(rpt_file, 'r', encoding='utf-8') as f:
+                    rpt_txt = f.read()
+                st.download_button(
+                    label     = f"⬇ Download {sel_date} Report",
+                    data      = rpt_txt,
+                    file_name = f"{sel_date}_consumer_credit_report.txt",
+                    mime      = 'text/plain'
+                )
+
+    # ══════════════════════════════════════════════════════════════════════════
+    # AU TAB — RBA / ASX debt market health
+    # ══════════════════════════════════════════════════════════════════════════
+    with _tab_au:
+        au_files = sorted(glob.glob(os.path.join(MACRO, 'results', 'consumer_credit',
+                                                 '*_au_credit.json')), reverse=True)
+        _au_run_col1, _au_run_col2 = st.columns([3, 1])
+        with _au_run_col2:
+            st.markdown("<br>", unsafe_allow_html=True)
+            if st.button("🔄 Run AU Debt Data", key='au_debt_refresh'):
+                run_script(os.path.join(MACRO, 'au_credit.py'), MACRO)
+                st.rerun()
+
+        if not au_files:
+            st.warning("No AU debt data found — run the AU script first")
+        else:
+            with _au_run_col1:
+                au_dates    = [os.path.basename(f)[:8] for f in au_files][:30]
+                au_sel_date = st.selectbox("Report date", au_dates, index=0,
+                                           key='au_debt_date')
+            with open(os.path.join(MACRO, 'results', 'consumer_credit',
+                                   f"{au_sel_date}_au_credit.json")) as f:
+                au_snap = json.load(f)
+
+            au_data    = au_snap.get('credit_data', {})
+            au_market  = au_snap.get('credit_market', {})
+            au_alerts  = au_snap.get('alerts', [])
+
+            st.markdown("""
+                <div class="info-card">
+                    Australian debt market health from RBA statistical tables and ASX credit
+                    ETFs. Australia has no free arrears series, so household stress is read
+                    through <b>leverage</b> (debt-to-income among the highest in the developed
+                    world) and <b>credit growth</b> (investor housing credit accelerating late
+                    in the cycle is the classic AU warning). Corporate spreads are computed
+                    from RBA non-financial corporate bond yields vs same-tenor AGS.
+                </div>
+            """, unsafe_allow_html=True)
+
+            if au_alerts:
+                st.markdown("**⚠ Active Alerts**")
+                for alert in au_alerts:
+                    colour = '#e63946' if alert['type'] == 'ALERT' else '#f77f00'
+                    st.markdown(f"""
+                        <div class="macro-card" style="border-left:3px solid {colour}">
+                            <span style="color:{colour};font-weight:bold">{alert['type']}</span>
+                            &nbsp; {alert['message']}
+                        </div>
+                    """, unsafe_allow_html=True)
+                st.divider()
+
+            def au_card(key, description, context, thresholds_text, suffix='%'):
+                if key not in au_data:
+                    return
+                d       = au_data[key]
+                val     = d['current']
+                roc     = d.get('roc', 0) or 0
+                roc_3m  = d.get('roc_3m', 0) or 0
+                level   = d.get('alert_level', 'OK')
+                arrow   = '▲' if roc > 0 else '▼' if roc < 0 else '→'
+                colours = {'ALERT': '#e63946', 'WARN': '#f77f00', 'OK': '#2dc653'}
+                colour  = colours.get(level, '#888')
+                icon    = '⚠' if level == 'ALERT' else '!' if level == 'WARN' else '✓'
+                st.markdown(f"""
+                    <div class="macro-card" style="border-left:4px solid {colour}">
+                        <div style="display:flex;justify-content:space-between;align-items:center">
+                            <div>
+                                <div class="macro-label">{d['label']}</div>
+                                <div style="font-size:22px;font-weight:bold;color:{colour}">
+                                    {val:.2f}{suffix}
+                                </div>
+                                <div style="font-size:11px;color:#888">
+                                    {arrow} {roc:+.3f} chg &nbsp;|&nbsp; 3-period: {roc_3m:+.3f}
+                                </div>
+                            </div>
+                            <div style="text-align:right">
+                                <div style="color:{colour};font-size:18px">{icon} {level}</div>
+                            </div>
+                        </div>
+                    </div>
+                """, unsafe_allow_html=True)
+                with st.expander("ℹ What this means"):
+                    st.markdown(f"""
+                        <div style="font-size:12px;color:#aaa;line-height:1.7">
+                            <b style="color:#ccc">What it measures:</b> {description}<br><br>
+                            <b style="color:#ccc">Current context:</b> {context}<br><br>
+                            <b style="color:#ccc">Thresholds:</b> {thresholds_text}
+                        </div>
+                    """, unsafe_allow_html=True)
+
+            def au_chart(key, title):
+                if key not in au_data:
+                    return
+                history = au_data[key].get('history', {})
+                if not history:
+                    return
+                fig = go.Figure()
+                fig.add_trace(go.Scatter(
+                    x=list(history.keys()), y=list(history.values()),
+                    mode='lines+markers',
+                    line=dict(color='#00b4d8', width=2), marker=dict(size=5),
+                    name=title,
+                    hovertemplate="%{x}: %{y:.2f}<extra></extra>"))
+                fig.update_layout(
+                    title=title, height=260,
+                    margin=dict(l=10, r=10, t=40, b=10),
+                    paper_bgcolor='rgba(0,0,0,0)', plot_bgcolor='rgba(0,0,0,0)',
+                    font=dict(color='#ccc'),
+                    xaxis=dict(gridcolor='#2d3250'),
+                    yaxis=dict(gridcolor='#2d3250'), showlegend=False)
+                st.plotly_chart(fig, width="stretch", key=f'au_chart_{key}')
+
+            # ── Section 1: Household leverage
+            st.subheader("🏠 Household Leverage")
+            a1, a2 = st.columns(2)
+            with a1:
+                au_card('au_hh_debt_income',
+                    'Total household debt as a percentage of annualised disposable income (RBA E2, quarterly).',
+                    'Australia runs among the highest household leverage in the developed world (~180%). Rising leverage with rising rates compresses spending capacity.',
+                    'WARN >185% | ALERT >200%')
+                au_chart('au_hh_debt_income', 'Household Debt to Income %')
+            with a2:
+                au_card('au_housing_debt_income',
+                    'Housing debt only as a percentage of disposable income.',
+                    'The mortgage share of household leverage — what RBA rate hikes squeeze directly.',
+                    'WARN >135% | ALERT >150%')
+                au_chart('au_housing_debt_income', 'Housing Debt to Income %')
+            au_card('au_hh_debt_assets',
+                'Household debt as a percentage of total household assets.',
+                'A balance-sheet solvency read — stays low while house prices rise, spikes when asset values fall against fixed debt.',
+                'WARN >20% | ALERT >24%')
+            au_chart('au_hh_debt_assets', 'Household Debt to Assets %')
+            st.divider()
+
+            # ── Section 1B: Mortgage arrears (APRA)
+            st.subheader("🏦 Mortgage Arrears (APRA)")
+            st.markdown("""
+                <div class="info-card">
+                    From APRA's quarterly ADI property exposures statistics — the source
+                    behind Cotality/CoreLogic arrears headlines. Total arrears =
+                    30-89 days past due + non-performing (90+ or impaired). The
+                    <b>new NPL flow</b> is the share of the mortgage book newly turning
+                    non-performing each quarter — the AU cousin of the NY Fed
+                    flow-into-delinquency series on the US tab.
+                </div>
+            """, unsafe_allow_html=True)
+            m1_, m2_ = st.columns(2)
+            with m1_:
+                au_card('au_mortgage_arrears',
+                    'Total mortgage arrears: 30-89 days past due plus non-performing loans, as % of credit outstanding (all ADIs).',
+                    'COVID peak ~1.9%. Sub-1.5% is healthy. This is the headline number Cotality quotes each quarter.',
+                    'WARN >1.8% | ALERT >2.3%')
+                au_chart('au_mortgage_arrears', 'Total Mortgage Arrears % (30+dpd)')
+                au_card('au_mortgage_arrears_3089',
+                    'Early-stage arrears only — 30-89 days past due as % of credit outstanding.',
+                    'The leading edge — borrowers newly missing payments. Rises here show up in non-performing 1-2 quarters later.',
+                    'WARN >0.85% | ALERT >1.1%')
+                au_chart('au_mortgage_arrears_3089', 'Early Arrears 30-89dpd %')
+            with m2_:
+                au_card('au_mortgage_npl',
+                    'Non-performing mortgages (90+ days past due or impaired) as % of credit outstanding.',
+                    'The stock of serious stress. Slow to build and slow to clear — direction matters more than level.',
+                    'WARN >1.2% | ALERT >1.6%')
+                au_chart('au_mortgage_npl', 'Non-Performing Mortgages %')
+                au_card('au_new_npl_flow',
+                    'NEW non-performing loans during the quarter as % of the mortgage book.',
+                    'The flow measure — how fast fresh stress is arriving, regardless of how fast old NPLs cure. Turns before the NPL stock.',
+                    'WARN >0.30% | ALERT >0.45%')
+                au_chart('au_new_npl_flow', 'New NPL Flow % of Book')
+            st.divider()
+
+            # ── Section 2: Credit growth
+            st.subheader("📈 Credit Growth (12-month ended)")
+            b1_, b2_ = st.columns(2)
+            with b1_:
+                au_card('au_housing_credit',
+                    'Total housing credit growth, 12-month ended (RBA D1, monthly).',
+                    'Sustained growth above ~8% historically precedes APRA macroprudential intervention. Contraction is deleveraging.',
+                    'WARN >8% | ALERT >10%')
+                au_chart('au_housing_credit', 'Housing Credit Growth 12m %')
+                au_card('au_personal_credit',
+                    'Personal (non-housing) credit growth, 12-month ended.',
+                    'Structurally declining for a decade — a sharp acceleration means households are borrowing to fund consumption (stress), not confidence.',
+                    'Watch direction changes')
+                au_chart('au_personal_credit', 'Personal Credit Growth 12m %')
+            with b2_:
+                au_card('au_investor_credit',
+                    'Investor housing credit growth, 12-month ended.',
+                    'The classic AU late-cycle signal — investor credit accelerating above 10% preceded both the 2015 and 2017 APRA crackdowns.',
+                    'WARN >8% | ALERT >10%')
+                au_chart('au_investor_credit', 'Investor Housing Credit Growth 12m %')
+                au_card('au_business_credit',
+                    'Business credit growth, 12-month ended.',
+                    'Healthy expansion runs 4-8%. Collapse toward zero signals firms pulling back investment before the labour market turns.',
+                    'WARN >10% | ALERT >13%')
+                au_chart('au_business_credit', 'Business Credit Growth 12m %')
+            st.divider()
+
+            # ── Section 3: Corporate credit
+            st.subheader("🏢 Corporate Credit")
+            c1_, c2_ = st.columns(2)
+            with c1_:
+                au_card('au_bbb_spread',
+                    'Non-financial corporate BBB-rated 5-year yield minus 5-year AGS (RBA F3 vs F2).',
+                    'The AU equivalent of a HY-adjacent spread — BBB is the lowest broadly-issued rating tier here. Normal ~1.0-2.0%.',
+                    'WARN >2.5% | ALERT >3.5%')
+                au_chart('au_bbb_spread', 'BBB Corporate Spread (5y vs AGS)')
+            with c2_:
+                au_card('au_a_spread',
+                    'Non-financial corporate A-rated 5-year yield minus 5-year AGS.',
+                    'When A-rated spreads widen alongside BBB the stress is systemic, not idiosyncratic.',
+                    'WARN >1.8% | ALERT >2.5%')
+                au_chart('au_a_spread', 'A-rated Corporate Spread (5y vs AGS)')
+            st.divider()
+
+            # ── Section 4: Rates, curve, sovereign
+            st.subheader("📉 Rates & Sovereign")
+            r1, r2, r3, r4, r5 = st.columns(5)
+            for _col, _key, _lbl in [(r1, 'au_cash_rate', 'RBA Cash Rate'),
+                                      (r2, 'au_02y', '2Y AGS'),
+                                      (r3, 'au_05y', '5Y AGS'),
+                                      (r4, 'au_10y', '10Y AGS'),
+                                      (r5, 'au_yield_curve', '10Y − Cash')]:
+                if _key in au_data:
+                    _d = au_data[_key]
+                    _delta = f"{_d.get('roc') or 0:+.2f}" if _d.get('roc') is not None else None
+                    _col.metric(_lbl, f"{_d['current']:.2f}%", delta=_delta)
+            _curve_d = au_data.get('au_yield_curve', {})
+            if _curve_d.get('alert_level') == 'WARN':
+                st.warning("AU yield curve (10Y minus cash rate) is inverted — "
+                           "historically a growth warning, though less reliable than the US curve.")
+            au_card('au_debt_gdp',
+                'Australian general government gross debt as % of GDP (IMF via FRED, annual).',
+                'Low by developed-world standards (~50% vs US ~123%) — the sovereign is not the risk in Australia; the household balance sheet is.',
+                'WARN >55% | ALERT >65%')
+            au_chart('au_debt_gdp', 'AU Government Debt % GDP')
+            st.divider()
+
+            # ── Section 5: Credit market ETFs
+            st.subheader("📊 Credit Market (Daily)")
+            if au_market:
+                _au_rows = []
+                for tkr, d in au_market.items():
+                    _au_rows.append({
+                        'Ticker': tkr, 'Name': d.get('name', ''),
+                        'Price': d.get('price'),
+                        '1w %': d.get('ret_1w'), '1m %': d.get('ret_1m'),
+                        '3m %': d.get('ret_3m'), '12m %': d.get('ret_12m'),
+                    })
+                st.dataframe(pd.DataFrame(_au_rows), width="stretch", hide_index=True)
+                st.caption("Falling credit ETF prices with a rising AU VIX = spread widening "
+                           "in real time between monthly RBA prints. HBRD (hybrids) is the "
+                           "closest AU proxy for high-yield risk appetite.")
+
+            # ── AI assessment
+            _au_ai = load_settings()
+            if _au_ai.get('ai_features', {}).get('enabled', False):
+                import importlib as _au_il
+                if MACRO not in sys.path:
+                    sys.path.insert(0, MACRO)
+                _au_il.invalidate_caches()
+                from ai_assessment import render_ai_assessment
+
+                def _au_line(key, name):
+                    d = au_data.get(key, {})
+                    if not d:
+                        return f"{name}: n/a"
+                    return (f"{name}: {d.get('current','n/a')} "
+                            f"(chg: {d.get('roc','n/a')}, level: {d.get('alert_level','OK')})")
+
+                _au_pfx = load_settings().get('ai_prompts', {}).get('au_credit',
+                    DEFAULT_SETTINGS['ai_prompts']['au_credit'])
+                _au_prompt = f"""{_au_pfx}
+
+Write a structured, in-depth assessment using these exact section headers:
+
+**HOUSEHOLD STRESS** — Read the leverage ratios against the cash rate and the arrears
+data together. Distinguish STOCK (debt-to-income, non-performing %) from FLOW (30-89dpd
+early arrears, new NPL flow). Is fresh stress arriving faster than old stress is curing?
+Note that early arrears (30-89dpd) lead non-performing by 1-2 quarters — say what the
+early-vs-serious gap implies. Quantify: at ~180% debt-to-income, how sensitive is the
+household sector to the 4.35% cash rate?
+
+**CYCLE POSITION** — Interpret credit growth composition. Investor housing credit
+acceleration is the classic AU late-cycle / speculative signal (it preceded the 2015 and
+2017 APRA macroprudential crackdowns). Compare investor vs owner-occupier vs business
+growth — what does the mix say about where we are in the cycle and whether APRA
+intervention risk is rising?
+
+**CORPORATE & RATES** — BBB and A-rated spreads vs AGS, the yield curve, and what the
+rate environment implies for refinancing and the household squeeze ahead.
+
+**SIGNAL SUMMARY** — The 2-3 metrics most worth watching next quarter and the specific
+levels that would flip the read from benign to concerning. Be explicit about thresholds.
+
+Be direct and quantitative — cite the actual numbers and their quarter-on-quarter changes.
+Flag any metric already at WARN or ALERT. Aim for 350-450 words.
+
+Household leverage:
+{_au_line('au_hh_debt_income', 'Household debt to income %')}
+{_au_line('au_housing_debt_income', 'Housing debt to income %')}
+{_au_line('au_hh_debt_assets', 'Household debt to assets %')}
+
+Mortgage arrears (APRA):
+{_au_line('au_mortgage_arrears', 'Total arrears % (30+dpd)')}
+{_au_line('au_mortgage_arrears_3089', 'Early arrears 30-89dpd %')}
+{_au_line('au_mortgage_npl', 'Non-performing %')}
+{_au_line('au_new_npl_flow', 'New NPL flow % of book')}
+
+Credit growth (12m ended):
+{_au_line('au_housing_credit', 'Housing credit')}
+{_au_line('au_investor_credit', 'Investor housing credit')}
+{_au_line('au_personal_credit', 'Personal credit')}
+{_au_line('au_business_credit', 'Business credit')}
+
+Corporate & rates:
+{_au_line('au_bbb_spread', 'BBB 5y spread vs AGS')}
+{_au_line('au_a_spread', 'A-rated 5y spread vs AGS')}
+{_au_line('au_cash_rate', 'RBA cash rate %')}
+{_au_line('au_10y', 'AU 10y yield %')}
+{_au_line('au_yield_curve', '10y minus cash %')}
+{_au_line('au_debt_gdp', 'Govt debt % GDP')}"""
+                render_ai_assessment(_au_prompt, _au_ai, 'au_credit_assessment',
+                                     max_tokens=2200)
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # AU MARKET PAGE
