@@ -1,0 +1,4 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+73,0,ISRG,Intuitive Surgical,Health Care,Industrial Specialties,large,345.42,0.0,-0.1573,-0.2115,-0.2268,STRONG_UP,-36.19,-33.07,-24.09,-41.74,48.19,47.52,4.2036,HIGH,EARLY,403.4035,416.967,486.5607,0,-33.54,WEAK,11.9214
+83,0,SNPS,Synopsys,Technology,Computer Software,large,384.28,15.91,-0.0996,-0.117,-0.2326,STRONG_UP,-24.38,-35.03,-31.76,-41.04,47.79,42.64,2.6057,HIGH,EARLY,441.424,471.4868,454.1686,0,-39.2593,WEAK,10.6921
+90,0,NFLX,"Netflix, Inc.",Consumer Discretionary,Consumer Electronics,large,68.95,0.0,-0.0647,-0.1306,-0.2692,STRONG_UP,-21.69,-44.09,8.87,-45.42,44.98,37.06,3.2285,HIGH,EARLY,73.881,80.5618,93.7382,0,-53.5145,WEAK,9.0624

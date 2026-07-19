@@ -1,0 +1,8 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+37,388,RYAM,RAYONIER ADVANCED MATERIALS INC,Materials,,small,8.23,100.0,0.1641,-0.0036,-0.079,STRONG_UP,-3.63,87.9,,-40.0,50.6,55.18,,LOW,-,7.7115,8.386,8.1246,1,80.6038,LEADER,26.0805
+76,512,FCX,Freeport-McMoRan,Materials,Copper,large,58.38,83.33,-0.0332,-0.0666,-0.0516,FLAT,-2.18,30.58,,-24.31,56.22,56.65,,LOW,-,61.627,63.5681,55.7652,1,30.3446,LEADER,17.2296
+82,708,DOW,Dow Inc.,Materials,Commodity Chemicals,large,29.92,50.0,-0.0239,0.0163,-0.0361,FLAT,9.46,10.9,,-34.81,46.59,42.23,,LOW,-,29.136,32.963,29.66,1,12.0275,CONTENDER,16.5051
+114,837,CRH,CRH plc,Materials,Construction Materials,large,102.92,33.33,-0.0,0.0364,0.0141,FLAT,-15.42,9.98,,-24.46,46.59,34.25,,LOW,EARLY,107.1825,106.6702,114.3692,0,13.5786,WEAK,11.8549
+116,1111,WS,WORTHINGTON STEEL INC,Materials,,small,35.33,66.67,0.082,-0.0127,0.1651,FLAT,-8.04,13.41,,-42.0,51.41,50.99,,LOW,-,35.132,38.5872,36.1163,0,13.5247,LAGGARD,11.7055
+131,947,MLM,Martin Marietta Materials,Materials,Construction Materials,large,562.59,16.67,-0.0209,0.0475,0.04,FLAT,-11.99,0.42,,-24.69,53.01,32.31,,LOW,EARLY,589.621,579.0591,614.0618,0,0.6815,WEAK,9.3397
+149,1251,FUL,HB FULLER,Materials,,mid,56.96,0.0,0.021,-0.0346,0.022,FLAT,-9.6,-3.08,,-26.97,49.4,35.91,,LOW,EARLY,59.073,60.2024,59.9723,0,-4.232,WEAK,6.5037

@@ -262,6 +262,25 @@ def save_settings(settings):
     with open(SETTINGS_FILE, 'w') as f:
         json.dump(settings, f, indent=2)
 
+MODELS_FILE = os.path.join(BASE, 'models.json')
+
+def load_models():
+    """Load model registry from models.json."""
+    if os.path.exists(MODELS_FILE):
+        try:
+            with open(MODELS_FILE, 'r') as f:
+                return json.load(f)
+        except:
+            pass
+    return {'ollama': [], 'openai': [], 'lmstudio': []}
+
+def get_model_options(provider):
+    """Return (ids, display_labels) for a provider from models.json."""
+    models = load_models().get(provider, [])
+    ids = [m['id'] for m in models]
+    labels = [f"{m['name']} ({m.get('params', m['id'])})" if m.get('params') else m['name'] for m in models]
+    return ids, labels, models
+
 # ── Horizontal top menu ───────────────────────────────────────────────────────
 settings    = load_settings()
 page_config = settings['pages']
@@ -8122,9 +8141,10 @@ elif page == "DeMark Signals":
 # ═══════════════════════════════════════════════════════════════════════════════
 elif page == "Settings":
     st.title("⚙️ Settings")
-    _stab_ai, _stab_fa, _stab_rank, _stab_act, _stab_gen = st.tabs([
+    _stab_ai, _stab_fa, _stab_models, _stab_rank, _stab_act, _stab_gen = st.tabs([
         "🤖 AI",
         "📊 Fundamental Analysis",
+        "🧠 Models",
         "🎛️ Rank",
         "📋 Screeners",
         "🔧 General",
@@ -8189,17 +8209,49 @@ elif page == "Settings":
                 st.markdown("#### 🟢 ChatGPT API")
                 _openai_key   = st.text_input("OpenAI API Key", value=_ai_feat.get('openai_api_key', ''),
                                                type="password", help="sk-...")
-                _openai_model = st.selectbox("OpenAI Model",
-                                              options=['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo'],
-                                              index=['gpt-4o', 'gpt-4o-mini', 'gpt-4-turbo', 'gpt-3.5-turbo'].index(
-                                                  _ai_feat.get('openai_model', 'gpt-4o')))
+                _oi_ids, _oi_labels, _oi_models = get_model_options('openai')
+                _oi_cur = _ai_feat.get('openai_model', 'gpt-4o')
+                if _oi_ids:
+                    _oi_options = _oi_ids + ['__custom__']
+                    _oi_display = _oi_labels + ['✏️ Custom model...']
+                    _oi_idx = _oi_options.index(_oi_cur) if _oi_cur in _oi_options else len(_oi_options) - 1
+                    _openai_model = st.selectbox("OpenAI Model", options=_oi_options, index=_oi_idx,
+                                                  format_func=lambda x: _oi_display[_oi_options.index(x)],
+                                                  key='openai_model_sel')
+                    if _openai_model == '__custom__':
+                        _openai_model = st.text_input("Custom model name", value=_oi_cur if _oi_cur not in _oi_ids else '',
+                                                       key='openai_model_custom')
+                    else:
+                        _sel_oi = next((m for m in _oi_models if m['id'] == _openai_model), None)
+                        if _sel_oi and _sel_oi.get('notes'):
+                            st.caption(f"ℹ️ {_sel_oi['notes']}")
+                else:
+                    _openai_model = st.text_input("OpenAI Model", value=_oi_cur)
 
                 st.divider()
                 st.markdown("#### 🦙 Ollama (Local)")
                 _ollama_url   = st.text_input("Ollama URL", value=_ai_feat.get('ollama_url', 'http://localhost:11434'),
                                                help="URL where Ollama is running")
-                _ollama_model = st.text_input("Ollama Model", value=_ai_feat.get('ollama_model', 'llama3.1:8b'),
-                                               help="e.g. llama3.1:8b, mistral, gemma2")
+                _ol_ids, _ol_labels, _ol_models = get_model_options('ollama')
+                _ol_cur = _ai_feat.get('ollama_model', 'llama3.1:8b')
+                if _ol_ids:
+                    _ol_options = _ol_ids + ['__custom__']
+                    _ol_display = _ol_labels + ['✏️ Custom model...']
+                    _ol_idx = _ol_options.index(_ol_cur) if _ol_cur in _ol_options else len(_ol_options) - 1
+                    _ol_sel = st.selectbox("Ollama Model", options=_ol_options, index=_ol_idx,
+                                            format_func=lambda x: _ol_display[_ol_options.index(x)],
+                                            key='ollama_model_sel')
+                    if _ol_sel == '__custom__':
+                        _ollama_model = st.text_input("Custom model name", value=_ol_cur if _ol_cur not in _ol_ids else '',
+                                                       key='ollama_model_custom', help="e.g. deepseek-r1:8b")
+                    else:
+                        _ollama_model = _ol_sel
+                        _sel_info = next((m for m in _ol_models if m['id'] == _ol_sel), None)
+                        if _sel_info and _sel_info.get('notes'):
+                            st.caption(f"ℹ️ {_sel_info['notes']}")
+                else:
+                    _ollama_model = st.text_input("Ollama Model", value=_ol_cur,
+                                                   help="Add models to models.json for a dropdown")
 
                 st.markdown("")
                 if st.button("💾 Save General Settings", type="primary", key='ai_save_general'):
@@ -8278,23 +8330,70 @@ elif page == "Settings":
                 st.markdown("#### 🟢 Ollama")
                 _fa_ollama_url = st.text_input("Ollama URL", value=_fa_feat.get('ollama_url', 'http://localhost:11434'),
                                                 key='fa_ollama_url')
-                _fa_model = st.text_input("Model", value=_fa_feat.get('model', 'llama3.1:8b'),
-                                           help="Model name as shown by 'ollama list'", key='fa_model_ollama')
+                _fa_ol_ids, _fa_ol_labels, _fa_ol_models = get_model_options('ollama')
+                _fa_ol_cur = _fa_feat.get('model', 'llama3.1:8b')
+                if _fa_ol_ids:
+                    _fa_ol_opts = _fa_ol_ids + ['__custom__']
+                    _fa_ol_disp = _fa_ol_labels + ['✏️ Custom model...']
+                    _fa_ol_idx = _fa_ol_opts.index(_fa_ol_cur) if _fa_ol_cur in _fa_ol_opts else len(_fa_ol_opts) - 1
+                    _fa_ol_sel = st.selectbox("Model", options=_fa_ol_opts, index=_fa_ol_idx,
+                                               format_func=lambda x: _fa_ol_disp[_fa_ol_opts.index(x)],
+                                               key='fa_model_ollama')
+                    if _fa_ol_sel == '__custom__':
+                        _fa_model = st.text_input("Custom model name", value=_fa_ol_cur if _fa_ol_cur not in _fa_ol_ids else '',
+                                                    key='fa_model_ollama_custom')
+                    else:
+                        _fa_model = _fa_ol_sel
+                        _fa_sel_info = next((m for m in _fa_ol_models if m['id'] == _fa_ol_sel), None)
+                        if _fa_sel_info and _fa_sel_info.get('notes'):
+                            st.caption(f"ℹ️ {_fa_sel_info['notes']}")
+                else:
+                    _fa_model = st.text_input("Model", value=_fa_ol_cur,
+                                               help="Add models to models.json for a dropdown", key='fa_model_ollama')
             elif _fa_provider == 'openai':
                 st.markdown("#### 🟣 OpenAI (ChatGPT)")
                 _fa_openai_url = st.text_input("API base URL", value=_fa_feat.get('openai_url', 'https://api.openai.com'),
                                                help="Change only for OpenAI-compatible proxies", key='fa_openai_url')
                 _fa_openai_key = st.text_input("API key", value=_fa_feat.get('openai_api_key', ''),
                                                type="password", key='fa_openai_key')
-                _fa_model = st.text_input("Model", value=_fa_feat.get('model') if str(_fa_feat.get('model', '')).startswith('gpt') else 'gpt-4o-mini',
-                                           help="e.g. gpt-4o-mini, gpt-4o", key='fa_model_openai')
+                _fa_oi_ids, _fa_oi_labels, _fa_oi_models = get_model_options('openai')
+                _fa_oi_cur = _fa_feat.get('model') if str(_fa_feat.get('model', '')).startswith('gpt') else 'gpt-4o-mini'
+                if _fa_oi_ids:
+                    _fa_oi_opts = _fa_oi_ids + ['__custom__']
+                    _fa_oi_disp = _fa_oi_labels + ['✏️ Custom model...']
+                    _fa_oi_idx = _fa_oi_opts.index(_fa_oi_cur) if _fa_oi_cur in _fa_oi_opts else len(_fa_oi_opts) - 1
+                    _fa_oi_sel = st.selectbox("Model", options=_fa_oi_opts, index=_fa_oi_idx,
+                                               format_func=lambda x: _fa_oi_disp[_fa_oi_opts.index(x)],
+                                               key='fa_model_openai')
+                    if _fa_oi_sel == '__custom__':
+                        _fa_model = st.text_input("Custom model name", value=_fa_oi_cur if _fa_oi_cur not in _fa_oi_ids else '',
+                                                    key='fa_model_openai_custom')
+                    else:
+                        _fa_model = _fa_oi_sel
+                else:
+                    _fa_model = st.text_input("Model", value=_fa_oi_cur, key='fa_model_openai')
                 st.caption("⚠️ Hosted API — your financial data and RAG excerpts are sent to OpenAI. The key is stored in plain text in dashboard_settings.json.")
             else:
                 st.markdown("#### 🔵 LM Studio")
                 _fa_lmstudio_url = st.text_input("LM Studio URL", value=_fa_feat.get('lmstudio_url', 'http://localhost:1234'),
                                                    key='fa_lmstudio_url')
-                _fa_model = st.text_input("Model", value=_fa_feat.get('model', 'llama3.1:8b'),
-                                           help="Model identifier loaded in LM Studio", key='fa_model_lmstudio')
+                _fa_lm_ids, _fa_lm_labels, _fa_lm_models = get_model_options('lmstudio')
+                _fa_lm_cur = _fa_feat.get('model', 'llama3.1:8b')
+                if _fa_lm_ids:
+                    _fa_lm_opts = _fa_lm_ids + ['__custom__']
+                    _fa_lm_disp = _fa_lm_labels + ['✏️ Custom model...']
+                    _fa_lm_idx = _fa_lm_opts.index(_fa_lm_cur) if _fa_lm_cur in _fa_lm_opts else len(_fa_lm_opts) - 1
+                    _fa_lm_sel = st.selectbox("Model", options=_fa_lm_opts, index=_fa_lm_idx,
+                                               format_func=lambda x: _fa_lm_disp[_fa_lm_opts.index(x)],
+                                               key='fa_model_lmstudio')
+                    if _fa_lm_sel == '__custom__':
+                        _fa_model = st.text_input("Custom model name", value=_fa_lm_cur if _fa_lm_cur not in _fa_lm_ids else '',
+                                                    key='fa_model_lmstudio_custom')
+                    else:
+                        _fa_model = _fa_lm_sel
+                else:
+                    _fa_model = st.text_input("Model", value=_fa_lm_cur,
+                                               help="Model identifier loaded in LM Studio", key='fa_model_lmstudio')
 
             st.divider()
             st.markdown("#### RAG Vector Store")
@@ -8332,6 +8431,67 @@ elif page == "Settings":
                 s['fa_features'] = _new_fa
                 save_settings(s)
                 st.success(f"Saved — using {_fa_provider} with model {_fa_model}")
+
+    with _stab_models:
+            st.title("🧠 Model Registry")
+            st.caption("Manage available LLM models. These populate the dropdowns across AI and FA settings.")
+            st.markdown(f"Config file: `models.json`")
+
+            _mr_models = load_models()
+
+            for _mr_provider in ['ollama', 'openai', 'lmstudio']:
+                _mr_label = {'ollama': '🦙 Ollama', 'openai': '🟣 OpenAI', 'lmstudio': '🔵 LM Studio'}[_mr_provider]
+                st.markdown(f"#### {_mr_label}")
+                _mr_list = _mr_models.get(_mr_provider, [])
+
+                if _mr_list:
+                    _mr_rows = []
+                    for m in _mr_list:
+                        _mr_rows.append({
+                            'Model ID': m['id'],
+                            'Name': m.get('name', m['id']),
+                            'Params': m.get('params', ''),
+                            'Notes': m.get('notes', ''),
+                        })
+                    st.dataframe(pd.DataFrame(_mr_rows), width='stretch', hide_index=True)
+                else:
+                    st.caption("No models configured")
+
+                with st.expander(f"Add {_mr_provider} model"):
+                    _mr_new_id = st.text_input("Model ID", key=f'mr_new_id_{_mr_provider}',
+                                                help="e.g. qwen3:8b, gpt-4o")
+                    _mr_new_name = st.text_input("Display Name", key=f'mr_new_name_{_mr_provider}',
+                                                  help="e.g. Qwen 3 8B")
+                    _mr_new_params = st.text_input("Parameters", key=f'mr_new_params_{_mr_provider}',
+                                                    help="e.g. 8B, 14B (optional)")
+                    _mr_new_notes = st.text_input("Notes", key=f'mr_new_notes_{_mr_provider}',
+                                                   help="e.g. Good for financial analysis (optional)")
+                    if st.button(f"➕ Add to {_mr_provider}", key=f'mr_add_{_mr_provider}'):
+                        if _mr_new_id:
+                            _mr_entry = {'id': _mr_new_id, 'name': _mr_new_name or _mr_new_id}
+                            if _mr_new_params: _mr_entry['params'] = _mr_new_params
+                            if _mr_new_notes:  _mr_entry['notes'] = _mr_new_notes
+                            _mr_models.setdefault(_mr_provider, []).append(_mr_entry)
+                            with open(MODELS_FILE, 'w') as f:
+                                json.dump(_mr_models, f, indent=2)
+                            st.success(f"Added {_mr_new_id}")
+                            st.rerun()
+                        else:
+                            st.warning("Model ID is required")
+
+                if _mr_list:
+                    with st.expander(f"Remove {_mr_provider} model"):
+                        _mr_del_opts = [m['id'] for m in _mr_list]
+                        _mr_del_sel = st.selectbox("Select model to remove", _mr_del_opts,
+                                                    key=f'mr_del_{_mr_provider}')
+                        if st.button(f"🗑 Remove", key=f'mr_remove_{_mr_provider}'):
+                            _mr_models[_mr_provider] = [m for m in _mr_list if m['id'] != _mr_del_sel]
+                            with open(MODELS_FILE, 'w') as f:
+                                json.dump(_mr_models, f, indent=2)
+                            st.success(f"Removed {_mr_del_sel}")
+                            st.rerun()
+
+                st.divider()
 
     with _stab_rank:
             st.title("🎛️ Rank Score Settings")

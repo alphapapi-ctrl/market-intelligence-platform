@@ -1,0 +1,5 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+35,0,AEP,American Electric Power,Utilities,Electric Utilities,large,135.43,100.0,-0.0002,0.0209,0.0282,STRONG_DOWN,18.6,32.64,59.59,-9.09,52.4,22.05,0.6808,LOW,-,133.7225,131.3078,123.546,1,77.5569,LEADER,19.6217
+59,0,XEL,Xcel Energy,Utilities,Power Generation,large,80.06,66.67,0.0002,-0.0046,0.0065,FLAT,10.74,20.27,57.8,-11.5,53.6,24.11,0.6318,LOW,-,79.8891,79.3438,77.9782,1,45.0608,CONTENDER,14.4564
+75,0,CEG,Constellation Energy,Utilities,Electric Utilities,large,251.38,0.0,0.0265,0.0046,-0.1004,STRONG_UP,-21.84,-21.41,17.32,-41.22,48.4,47.56,0.5498,LOW,EARLY,256.709,273.0783,314.0619,0,-21.7871,WEAK,11.726
+78,0,EXC,Exelon,Utilities,Power Generation,large,46.8,33.33,-0.0015,-0.0114,-0.0065,FLAT,9.65,11.44,42.65,-13.74,52.0,21.11,0.8992,LOW,-,46.623,45.5636,45.4549,1,28.1861,LAGGARD,11.129

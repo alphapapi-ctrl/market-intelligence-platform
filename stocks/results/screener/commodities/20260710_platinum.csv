@@ -1,0 +1,3 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+9,261,PLG,Platinum Group Metals,platinum,producer,small,1.31,100.0,-0.1019,-0.0053,-0.128,FLAT,-49.42,-21.08,,-63.22,46.4,67.18,,LOW,-,1.3935,1.5744,2.1524,0,-14.5626,LAGGARD,10.9
+11,312,IPT.AX,Impact Minerals,platinum,explorer,small,0.042,0.0,0.1019,0.0053,0.128,FLAT,-28.81,-40.0,,-61.0,28.06,56.97,,LOW,-,0.0414,0.0462,0.0555,0,-19.7016,WEAK,7.0923

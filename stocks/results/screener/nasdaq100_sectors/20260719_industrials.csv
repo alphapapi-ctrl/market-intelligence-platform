@@ -1,0 +1,12 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+18,0,CSX,CSX Corporation,Industrials,Railroads,large,50.75,100.0,0.0077,-0.042,0.0517,FLAT,40.7,49.79,50.61,-11.89,56.22,24.41,1.3923,MED,-,48.3655,46.9388,40.354,1,114.6675,LEADER,31.4508
+27,0,ODFL,Old Dominion Freight Line,Industrials,Trucking Freight/Courier Services,large,233.84,90.0,-0.0155,-0.0848,-0.0619,FLAT,31.57,44.18,21.12,-24.59,54.22,39.07,0.6728,LOW,-,222.47,220.6354,183.5141,1,61.3065,LEADER,23.0546
+45,0,FER,Ferrovial,Industrials,"Military, Government, Technical",large,63.59,80.0,-0.0213,-0.2305,-0.2459,STRONG_UP,-4.64,22.64,58.28,-17.13,50.6,26.59,0.8179,LOW,EARLY,66.8055,67.3239,66.0816,0,43.0866,LAGGARD,16.7993
+48,0,AXON,Axon Enterprise,Industrials,Ordnance & Accessories,large,510.28,10.0,-0.0868,0.0772,0.1432,STRONG_DOWN,-19.92,-32.1,65.43,-60.28,50.6,63.35,0.7458,LOW,-,529.641,467.8634,524.8122,0,-25.6418,WEAK,16.2551
+50,0,PYPL,PayPal,Industrials,Diversified Commercial Services,large,56.56,20.0,0.1724,0.215,-0.0203,FLAT,0.31,-23.75,-3.84,-49.92,47.39,46.84,1.1719,MED,-,46.177,44.6537,52.56,1,-24.0294,LAGGARD,15.941
+76,0,CTAS,Cintas,Industrials,Garments & Clothing,large,204.45,50.0,0.098,0.0761,0.0208,STRONG_UP,5.06,-6.75,9.66,-27.23,49.0,31.01,1.4271,MED,-,179.225,175.163,183.8206,1,-10.6593,CONTENDER,11.7232
+77,0,FAST,Fastenal,Industrials,Construction & Materials,large,45.49,70.0,-0.0527,-0.1421,-0.1382,FLAT,5.64,0.92,39.86,-21.9,51.81,23.28,1.4747,MED,-,46.7375,45.606,43.9927,1,2.0446,CONTENDER,11.5907
+78,0,PAYX,Paychex,Industrials,Diversified Commercial Services,large,114.39,30.0,0.0182,0.0432,0.1365,STRONG_DOWN,5.93,-17.15,-0.14,-41.01,46.59,30.95,1.274,MED,-,104.2765,99.4912,102.4328,1,-25.8125,LAGGARD,11.2388
+80,0,VRSK,Verisk Analytics,Industrials,Diversified Commercial Services,large,200.68,0.0,0.0212,0.0042,-0.0005,STRONG_UP,-9.15,-32.4,-26.42,-47.31,46.59,36.55,0.7351,LOW,-,185.4065,178.4823,200.5129,1,-41.2998,LAGGARD,10.8003
+85,0,ADP,Automatic Data Processing,Industrials,Diversified Commercial Services,large,255.27,40.0,-0.0006,0.0378,0.1596,STRONG_DOWN,-0.33,-12.81,8.43,-38.07,48.59,33.61,0.9383,LOW,-,235.33,226.0989,234.3879,1,-18.515,LAGGARD,10.5837
+94,0,HON,Honeywell,Industrials,Aerospace,large,225.02,60.0,-0.0071,-0.2171,-0.2134,FLAT,0.83,-1.11,10.67,-16.54,48.19,34.4,0.8341,LOW,-,229.3025,231.142,223.9827,1,-1.5518,CONTENDER,7.6348

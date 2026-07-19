@@ -1,0 +1,2 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+5,237,IVPAF,Ivanhoe Mines Ltd,palladium,producer,large,7.558,50.0,0.0056,-0.0646,-0.0554,FLAT,-34.79,-5.84,,-49.1,52.0,61.04,,LOW,EARLY,7.853,8.2515,9.8195,0,-4.9775,LAGGARD,18.127

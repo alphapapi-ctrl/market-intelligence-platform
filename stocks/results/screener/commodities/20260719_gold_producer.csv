@@ -1,0 +1,4 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+1,0,EQX,Equinox Gold Corp,gold,producer,large,8.62,60.0,-0.066,-0.0248,-0.1109,FLAT,-40.67,33.93,55.65,-53.95,52.61,60.01,1.1024,MED,EARLY,9.6545,11.2865,13.3053,0,29.7462,LAGGARD,29.3911
+3,0,EMAS.JK,Merdeka Gold Resources,gold,producer,large,5725.0,100.0,0.025,-0.0247,0.0444,FLAT,5.05,59.03,59.03,-42.78,43.15,76.2,0.2803,LOW,-,5978.75,6841.5,,0,33.4258,LAGGARD,23.8183
+5,0,RSG.AX,Resolute Mining,gold,producer,mid,0.895,80.0,0.0031,0.0199,-0.0444,FLAT,-32.2,40.94,,-45.43,50.0,66.21,,LOW,EARLY,0.9713,1.1178,1.2185,0,30.9205,LAGGARD,19.8692

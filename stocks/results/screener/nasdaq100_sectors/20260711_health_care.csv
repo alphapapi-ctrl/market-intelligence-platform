@@ -1,0 +1,11 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+26,0,INSM,Insmed Incorporated,Health Care,Biotechnology,large,115.61,77.78,0.039,0.2324,-0.1934,FLAT,-32.1,17.75,50.08,-56.54,54.4,69.67,0.7833,LOW,SHIFT,104.9305,109.108,151.0128,0,13.862,LAGGARD,24.8031
+37,0,AMGN,Amgen,Health Care,Biotechnology,large,363.39,100.0,-0.0062,0.0501,0.1155,STRONG_DOWN,11.68,26.77,18.86,-16.57,52.4,24.87,0.6026,LOW,-,356.4445,343.0149,333.9305,1,56.4025,LEADER,18.4856
+40,0,ALNY,Alnylam Pharmaceuticals,Health Care,Biotechnology,large,298.76,33.33,-0.0435,-0.0499,-0.0127,FLAT,-25.2,-5.14,14.46,-43.39,52.8,33.97,2.0741,HIGH,SHIFT,296.731,296.4092,363.3894,0,-7.9853,WEAK,18.0763
+42,0,GILD,Gilead Sciences,Health Care,Biotechnology,large,129.83,88.89,0.0042,0.0499,0.0127,FLAT,8.91,21.5,96.52,-21.59,50.0,27.84,0.8006,LOW,-,127.6864,129.3046,129.0085,1,38.6128,LEADER,17.7501
+54,0,REGN,Regeneron Pharmaceuticals,Health Care,Biotechnology,large,664.52,66.67,0.0251,0.0786,-0.0515,FLAT,-16.82,17.69,-37.98,-25.85,48.0,34.62,0.5823,LOW,SHIFT,631.6965,648.8519,700.2938,0,24.524,LAGGARD,15.4161
+61,0,IDXX,Idexx Laboratories,Health Care,Biotechnology,large,563.57,55.56,-0.0003,-0.0639,0.0735,FLAT,-20.89,5.66,15.54,-31.34,50.8,32.46,0.9555,LOW,SHIFT,554.1715,555.1906,625.9043,0,8.8612,LAGGARD,14.3551
+70,0,DXCM,DexCom,Health Care,Medical/Dental Instruments,large,74.96,22.22,0.0381,-0.0732,0.2434,FLAT,9.54,-10.09,-33.46,-38.75,50.8,41.6,0.6734,LOW,-,71.683,68.8792,67.1459,1,-12.3185,LAGGARD,12.5535
+81,0,VRTX,Vertex Pharmaceuticals,Health Care,Biotechnology,large,485.39,44.44,-0.0813,0.0881,0.1851,STRONG_DOWN,3.34,3.53,-1.37,-23.15,48.8,27.23,0.965,LOW,-,482.037,454.3746,446.8808,1,6.3223,LAGGARD,9.8238
+87,0,GEHC,GE HealthCare,Health Care,Medical Electronics,large,64.7,11.11,0.0003,-0.061,-0.0561,FLAT,-26.55,-13.73,-18.79,-32.47,52.0,38.28,0.5007,LOW,SHIFT,64.1828,63.2341,73.7942,0,-18.6484,WEAK,8.501
+95,0,ISRG,Intuitive Surgical,Health Care,Industrial Specialties,large,406.78,0.0,-0.058,-0.0885,-0.0375,FLAT,-30.47,-20.56,-8.28,-32.92,48.4,35.64,0.763,LOW,EARLY,410.2245,423.9592,487.995,0,-27.9211,WEAK,6.737

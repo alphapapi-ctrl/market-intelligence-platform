@@ -1,0 +1,6 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+4,0,4DX.AX,4DMedical Ltd.,Technology services,Information technology services,mid,3.2,100.0,-0.194,-0.2554,-0.2926,STRONG_UP,-33.47,1107.55,503.77,-52.94,49.6,104.57,1.7836,HIGH,EARLY,4.205,3.9022,3.5838,0,525.3356,LAGGARD,141.7628
+42,7,LYC.AX,Lynas Rare Earths Limited,Non-energy minerals,Other metals/Minerals,large,15.89,78.27,0.007,-0.0351,0.0057,FLAT,-2.4,56.86,160.49,-43.67,52.78,45.87,1.6948,HIGH,EARLY,17.558,18.1338,17.1383,0,65.4265,LAGGARD,36.1613
+153,112,GMD.AX,Genesis Minerals Limited,Non-energy minerals,Precious metals,mid,5.56,73.53,-0.0254,0.0238,0.0423,STRONG_DOWN,-26.55,43.67,158.6,-42.99,53.17,73.2,2.2646,HIGH,EARLY,5.682,5.8164,6.4266,0,31.7199,LAGGARD,22.4598
+164,59,RRL.AX,Regis Resources Limited,Non-energy minerals,Precious metals,mid,5.64,68.35,-0.0979,-0.0964,-0.0561,STRONG_DOWN,-27.75,34.89,202.1,-41.77,53.97,58.51,1.5846,HIGH,EARLY,6.414,6.3958,7.0088,0,32.1846,LAGGARD,22.0156
+387,123,WHC.AX,Whitehaven Coal Limited,Energy minerals,Coal,mid,7.43,67.71,-0.0146,-0.0895,0.1159,FLAT,-15.14,17.38,-6.11,-27.74,48.81,40.3,2.4697,HIGH,EARLY,7.6885,8.1736,8.0092,0,21.054,LAGGARD,15.8891

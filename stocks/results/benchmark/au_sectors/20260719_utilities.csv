@@ -1,0 +1,20 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+131,143,APA.AX,APA Group,Utilities,Gas distributors,large,10.29,1.264,1.0381,1.0338,1.0824,UP,20.34,32.24,,-6.84,53.57,17.61,,LOW,-,10.0571,10.0784,9.2144,1,98.0858,TREND+LEAD,22.0661
+154,466,JNS.AX,Janus Electric Holdings Limited,Utilities,Alternative power generation,small,0.29,1.7883,1.7606,2.0807,1.8359,UP,222.22,87.1,7150.0,-70.81,28.17,203.53,5.3696,HIGH,-,0.1608,0.1699,0.1402,1,12.0548,TREND+LEAD,20.5734
+578,-279,KPO.AX,Kalina Power Limited,Utilities,Alternative power generation,small,0.017,1.3541,1.1353,1.3136,1.5654,DOWN,6.25,41.67,466.67,-56.52,27.38,132.2,,LOW,-,0.0138,0.0136,0.0145,1,8.6296,TREND+LEAD,12.5733
+632,-295,IPG.AX,IPD Group Ltd,Utilities,Electric utilities,small,4.87,1.3125,0.9622,0.7827,0.9672,UP,10.96,37.32,11.87,-23.36,44.84,50.16,,LOW,-,5.374,5.749,4.6526,1,33.3625,TREND+LEAD,12.098
+953,-29,EWC.AX,Energy World Corporation Ltd,Utilities,Electric utilities,small,0.056,0.8921,0.9196,0.9869,1.533,STRONG_DOWN,30.23,-6.67,522.22,-57.35,36.51,222.81,,LOW,-,0.0579,0.0521,0.0469,1,-1.0924,TREND_ONLY,9.981
+1243,122,LPE.AX,Locality Planning Energy Holdings Limited,Utilities,Electric utilities,small,0.072,0.6256,0.9016,0.8929,0.7597,UP,-40.0,-34.55,,-52.86,21.43,68.49,,LOW,-,0.0761,0.0804,0.098,0,-10.809,WEAK,8.0877
+1290,-230,TPC.AX,TPC Consolidated Limited,Utilities,Electric utilities,small,3.45,0.3856,1.0017,1.0193,0.896,DOWN,-40.32,-59.66,-66.9,-64.92,15.08,48.03,,LOW,-,3.465,3.5194,4.8704,0,-18.7314,WEAK,7.7849
+1304,153,GNE.AX,Genesis Energy Limited,Utilities,Electric utilities,mid,2.17,1.0251,1.0158,1.0331,1.163,DOWN,8.15,7.25,24.1,-17.79,44.05,28.72,,LOW,-,2.1268,2.0972,2.0187,1,11.1163,TREND+LEAD,7.6768
+1378,-26,GHY.AX,Gold Hydrogen Ltd.,Utilities,Electric utilities,small,0.385,0.6571,0.9523,1.0045,1.054,STRONG_DOWN,0.0,-31.25,,-54.2,37.3,95.29,,LOW,-,0.3947,0.4083,0.4274,0,-12.2324,WEAK,6.8774
+1386,-23,TEE.AX,Top End Energy Limited,Utilities,Electric utilities,small,0.037,0.8224,1.0017,1.0045,1.0129,STRONG_DOWN,12.12,-13.95,-63.0,-39.58,21.03,0.0,,LOW,-,0.037,0.037,0.0368,1,,TREND_ONLY,6.8134
+1402,58,MCY.AX,Mercury NZ Ltd.,Utilities,Electric utilities,mid,5.79,1.0118,1.014,1.0221,1.1107,STRONG_DOWN,5.59,5.86,-2.52,-17.68,44.84,32.28,0.9635,LOW,-,5.569,5.6178,5.4874,1,8.1407,TREND+LEAD,6.6636
+1473,-146,LGI.AX,LGI LTD,Utilities,Alternative power generation,small,2.51,0.7479,0.9453,0.8081,0.6965,UP,-36.72,-21.75,-13.28,-44.38,34.92,48.88,,LOW,-,2.7355,3.1106,3.6803,0,-15.5378,WEAK,5.8776
+1547,-11,DEL.AX,Delorean Corporation Ltd,Utilities,Electric utilities,small,0.094,0.5445,0.9416,1.0153,0.8279,DOWN,-14.55,-43.03,118.6,-51.67,32.54,58.6,,LOW,-,0.095,0.0934,0.1109,0,-23.8943,WEAK,4.6876
+1559,-181,VPR.AX,Volt Group Ltd.,Utilities,Electric utilities,small,0.12,0.8193,1.0017,0.7777,0.8103,DOWN,-27.27,-14.29,-40.0,-33.33,25.4,55.59,,LOW,-,0.1258,0.1441,0.1496,0,-6.5274,WEAK,4.5516
+1595,46,MEZ.AX,Meridian Energy Limited,Utilities,Alternative power generation,large,4.7,0.8914,0.9954,0.9775,1.0327,DOWN,-0.6,-6.74,-18.3,-15.5,45.63,35.84,,LOW,PROGRESS,4.697,4.7506,4.7958,0,-8.5757,WEAK,3.9728
+1644,1,AGL.AX,AGL Energy Limited,Utilities,Electric utilities,mid,8.39,0.8686,1.0338,0.9822,0.905,UP,-1.6,-9.12,-9.76,-21.47,47.62,21.45,,LOW,PROGRESS,8.372,8.6228,9.0459,0,-20.251,WEAK,2.9975
+1652,19,CEN.AX,Contact Energy Limited,Utilities,Electric utilities,mid,7.46,0.8974,0.9964,0.9485,0.9725,DOWN,-5.26,-6.11,,-15.67,43.25,37.79,,LOW,EARLY,7.5402,7.7828,7.8844,0,-6.9948,WEAK,2.8891
+1709,-30,TML.AX,Timah Resources Ltd,Utilities,Electric utilities,small,0.047,1.7278,1.0017,1.0045,1.0129,DOWN,11.9,80.77,56.67,0.0,5.16,0.0,,LOW,-,0.047,0.047,0.0434,1,,TREND+LEAD,0.7872
+1725,0,RIV.AX,Rivco Australia Limited,Utilities,Water utilities,small,1.39,0.8643,0.984,0.9938,0.9846,DOWN,-4.79,-9.58,-9.58,-11.75,35.53,20.47,,LOW,-,1.4277,1.4261,,0,-16.6209,WEAK,-1.0415

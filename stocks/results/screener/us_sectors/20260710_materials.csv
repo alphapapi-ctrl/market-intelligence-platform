@@ -1,0 +1,2 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+40,824,APD,Air Products,Materials,Industrial Gases,large,295.85,50.0,-0.0584,0.052,-0.0002,FLAT,14.39,3.28,,-22.39,48.0,27.4,,LOW,-,286.5519,288.8652,270.6384,1,5.7388,CONTENDER,10.8872

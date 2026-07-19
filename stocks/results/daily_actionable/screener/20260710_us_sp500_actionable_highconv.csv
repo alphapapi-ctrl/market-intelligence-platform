@@ -1,0 +1,2 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+52,1297,KR,Kroger,Consumer Staples,Food Retail,large,59.86,0.0,0.019,-0.0903,-0.2151,STRONG_UP,2.02,-13.58,,-26.16,48.4,32.09,1.5711,HIGH,PROGRESS,59.4285,62.959,65.3216,0,-20.4799,WEAK,8.0275

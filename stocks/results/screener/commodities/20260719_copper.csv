@@ -1,0 +1,4 @@
+rank,delta_rank,ticker,name,commodity,type,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+2,0,NDA.DE,Aurubis AG,copper,producer,large,171.1,50.0,-0.0172,-0.0124,0.1038,STRONG_DOWN,16.52,83.83,,-25.55,53.39,45.5,,LOW,-,178.53,193.228,154.9901,1,98.3709,CONTENDER,28.1371
+4,0,KGL.AX,KGL Resources,copper,producer,small,0.195,100.0,0.0086,-0.284,-0.3653,STRONG_UP,-30.36,95.0,,-45.07,39.29,75.89,,LOW,-,0.2105,0.2593,0.2264,0,49.1837,LAGGARD,20.3613
+9,0,CY5.AX,Cygnus Metals,copper,producer,small,0.13,0.0,0.0086,0.2964,0.2615,FLAT,-40.91,35.42,,-58.0,37.7,97.9,,LOW,-,0.1215,0.1222,0.1471,0,13.6385,WEAK,12.9117

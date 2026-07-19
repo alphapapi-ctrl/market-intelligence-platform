@@ -1,0 +1,2 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+60,1175,TDS,TELEPHONE AND DATA SYSTEMS INC,Communication,,mid,34.71,50.0,-0.0409,-0.1166,-0.2391,STRONG_UP,-16.62,-11.71,71.3,-26.92,50.8,27.26,1.0618,MED,EARLY,37.881,40.2526,41.2647,0,-21.8189,LAGGARD,6.1734

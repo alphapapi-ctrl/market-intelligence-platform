@@ -1,0 +1,5 @@
+rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
+8,129,LASR,NLIGHT INC,Information Technology,,mid,74.71,3.0896,1.1654,1.1515,1.005,STRONG_UP,98.96,302.32,578.56,-30.92,53.6,99.54,3.1011,HIGH,-,65.4775,70.2429,51.8193,1,162.79,TREND+LEAD,51.2372
+25,344,ESPR,ESPERION THERAPEUTICS INC,Health Care,,small,3.19,1.9756,0.996,0.994,1.2347,FLAT,-16.93,157.26,35.17,-53.19,45.2,115.62,3.7985,HIGH,-,3.159,3.0704,3.0515,1,61.4778,TREND+LEAD,28.6161
+30,605,NTAP,NetApp,Information Technology,"Technology Hardware, Storage & Peripherals",large,171.73,1.2571,1.099,1.0183,1.5145,FLAT,65.48,63.7,32.02,-24.83,49.2,61.31,1.6762,HIGH,-,159.295,144.5078,116.5574,1,51.1155,TREND+LEAD,25.1921
+32,308,THFF,FIRST FINANCIAL CORPORATION CORP,Financials,,small,75.45,1.0577,0.9665,1.0217,0.9501,FLAT,26.95,37.72,113.78,-13.18,51.6,23.37,1.5599,HIGH,-,75.0358,70.4807,62.5127,1,83.2885,TREND+LEAD,24.1566

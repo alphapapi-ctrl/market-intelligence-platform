@@ -1,0 +1,48 @@
+════════════════════════════════════════════════════════════════════════════════
+  MARKET BREADTH SUMMARY — 2026-07-17
+════════════════════════════════════════════════════════════════════════════════
+  Metric                       Today       D5      D20      D63
+────────────────────────────────────────────────────────────────────────────────
+  Total                          166        0      +93    -1584
+  Leaders                         24       -4      +13     -322
+  Contenders                      10       -1        0     -193
+  Laggards                        59       +4      +36     -403
+  Weak                            73       +1      +44     -666
+  Above 20 SMA                    64       -6      +38    -1066
+  Above 50 SMA                    52       -6      +28     -631
+  Above 200 SMA                   40       -6      +16     -637
+  High Volume                      6       +4       +2     -258
+  Acc Early                        2        0       +2      -25
+  Acc Progress                     1       +1       +1      -27
+  Acc Shift                        1        0        0      -34
+  Large Total                      1        0       -3      -61
+  Large Leaders                    0        0       -1      -13
+  Mid Total                        9        0       +7     -107
+  Mid Leaders                      1       -1        0      -22
+  Small Total                    156        0      +89    -1416
+  Small Leaders                   23       -3      +14     -287
+────────────────────────────────────────────────────────────────────────────────
+  SECTOR BREADTH
+────────────────────────────────────────────────────────────────────────────────
+  Sector                      Lead    dL5   dL63   Ab20 dA20_5   Ab50 dA50_5  Ab200 dA200_5   HVol
+────────────────────────────────────────────────────────────────────────────────
+  Producer Manufacturing         1      0     -7      3     +1      2     +1      1      0      0
+  Health Technology              1      0    -21      2      0      2     +1      1      0      0
+  Non-Energy Minerals            9     -4   -142     24     -3     12     -5     13     -4      4
+  Technology Services            1      0    -22      3     -2      1     -2      1      0      0
+  Process Industries             0      0     -9      1     -1      1     -1      0      0      0
+  Electronic Technology          0      0     -8      1      0      0      0      0      0      0
+  Energy Minerals                1      0    -23      4     +1      2      0      2      0      0
+  Miscellaneous                  2     -1    -14      5     -4      7     -2      6     -1      0
+  Consumer Services              1      0     -7      4     +1      3     +1      1      0      1
+  Consumer Non-Durables          0      0     -5      1     +1      1      0      0      0      0
+  Finance                        2      0    -26      4      0      6     +1      5      0      1
+  Retail Trade                   0      0     -2      1     -1      1     -1      0      0      0
+  Industrial Services            1      0    -10      1      0      1     -1      2     -2      0
+  Commercial Services            2      0    -10      2      0      3      0      3      0      0
+  Consumer Durables              1     +1     -2      2     +1      2     +1      1     +1      0
+  Utilities                      0      0     -3      0     -1      1      0      0      0      0
+  Transportation                 1      0     -2      3     -1      4      0      3      0      0
+  Distribution Services          0      0     -5      1     +1      0      0      0      0      0
+  Health Services                1      0     -1      2     +1      3     +1      1      0      0
+════════════════════════════════════════════════════════════════════════════════

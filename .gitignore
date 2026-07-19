@@ -4,6 +4,7 @@ ea/mt5_batch_config.json
 
 # Settings with API keys
 dashboard_settings.json
+models.json
 
 # Rank/score settings
 rank_settings.json
