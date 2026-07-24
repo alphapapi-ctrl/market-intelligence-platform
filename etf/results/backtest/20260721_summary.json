@@ -1,0 +1,54 @@
+{
+  "run_date": "20260721",
+  "config": {
+    "top_n": 5,
+    "years": 3,
+    "start_capital": 100000,
+    "freq_filter": "all",
+    "hedge_enabled": false,
+    "hedge_pct": 0.1,
+    "income_mode": "reinvest",
+    "draw_threshold_pct": 0.1,
+    "bench_ticker": "JEPI",
+    "rebal_freq": "quarterly",
+    "stop_loss_pct": 0.2
+  },
+  "final_value": 127380.31,
+  "total_return": 27.38,
+  "cagr": 8.41,
+  "max_drawdown": -25.72,
+  "income_total": 83887.18,
+  "income_avg_qtr": 6990.6,
+  "spy_return": 69.16,
+  "excess_return": -41.78,
+  "bench_ticker": "JEPI",
+  "bench_return": 34.74,
+  "bench_income": 27141.68,
+  "bench_withdrawn": 0.0,
+  "excess_vs_bench": -7.36,
+  "n_quarters": 12,
+  "rebal_freq": "quarterly",
+  "stop_loss_pct": 0.2,
+  "stops_hit": 2,
+  "stop_events": [
+    {
+      "date": "2025-02-27",
+      "ticker": "TSLY",
+      "tr": -20.8
+    },
+    {
+      "date": "2025-03-10",
+      "ticker": "CONY",
+      "tr": -22.4
+    }
+  ],
+  "hedge_enabled": false,
+  "hedge_days": 0,
+  "hedge_days_pct": 0.0,
+  "hedge_pnl": 0.0,
+  "income_mode": "reinvest",
+  "interest_total": 3021.22,
+  "withdrawn_total": 0.0,
+  "withdrawn_avg_qtr": 0.0,
+  "maintain_level": null
+}

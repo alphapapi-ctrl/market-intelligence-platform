@@ -80,6 +80,7 @@ THEMES = {
 BASE    = os.path.dirname(os.path.abspath(__file__))
 MACRO   = os.path.join(BASE, 'macro')
 STOCKS  = os.path.join(BASE, 'stocks')
+ETF     = os.path.join(BASE, 'etf')
 PYTHON  = os.path.join(BASE, '.venv', 'Scripts', 'python.exe')
 
 st.set_page_config(
@@ -285,30 +286,32 @@ def get_model_options(provider):
 settings    = load_settings()
 page_config = settings['pages']
 
-ALL_PAGES = [
-    ("Macro",                    "globe"),
-    ("AU Market",                "flag"),
-    ("US Market",                "flag"),
-    ("Commodities",              "hammer"),
-    ("Debt Markets",             "credit-card"),
-    ("Seasonality",              "calendar3"),
-    ("DeMark Signals",           "graph-up"),
-    ("Relative Strength Charts", "broadcast"),
-    ("Screeners & Exports",     "file-earmark-arrow-down"),
-    ("Drawdown Analysis",        "graph-down"),
-    ("Fundamental Analysis",     "bank"),
-    ("Run Scripts",              "play-circle"),
-    ("Settings",             "gear"),
+# Nav groups: (group label, icon, [pages within group])
+# Single-page groups map straight to their page; multi-page groups show a sub-nav.
+NAV_GROUPS = [
+    ("Macro",              "globe",                   ["Macro"]),
+    ("AU Market",          "flag",                    ["AU Market"]),
+    ("US Market",          "flag",                    ["US Market"]),
+    ("Commodities",        "hammer",                  ["Commodities"]),
+    ("Debt Markets",       "credit-card",             ["Debt Markets"]),
+    ("Analysis",           "graph-up",                ["Relative Strength Charts", "Drawdown Analysis",
+                                                       "DeMark Signals", "Seasonality", "Fundamental Analysis"]),
+    ("ETF Income",         "cash-stack",              ["ETF Income"]),
+    ("Screeners & Exports","file-earmark-arrow-down", ["Screeners & Exports"]),
+    ("Settings",           "gear",                    ["Settings", "Run Scripts"]),
 ]
 
-# Filter to enabled pages — Settings always shown
-active_pages = [(name, icon) for name, icon in ALL_PAGES
-                if page_config.get(name, True) or name == 'Settings']
+# Kept for the Settings page-visibility toggles
+ALL_PAGES = [(g[0], g[1]) for g in NAV_GROUPS]
 
-page = option_menu(
+# Filter to enabled groups — Settings always shown
+active_groups = [g for g in NAV_GROUPS
+                 if page_config.get(g[0], True) or g[0] == 'Settings']
+
+nav_sel = option_menu(
     menu_title  = None,
-    options     = [p[0] for p in active_pages],
-    icons       = [p[1] for p in active_pages],
+    options     = [g[0] for g in active_groups],
+    icons       = [g[1] for g in active_groups],
     default_index = 0,
     orientation = "horizontal",
     key         = "main_nav_menu",
@@ -320,6 +323,36 @@ page = option_menu(
         "nav-link-selected": {"background-color": "#1a3a5c", "color": "white"},
     }
 )
+
+# Resolve group to page — multi-page groups get a sub-nav
+_sel_group = next((g for g in active_groups if g[0] == nav_sel), active_groups[0])
+if len(_sel_group[2]) == 1:
+    page = _sel_group[2][0]
+else:
+    _sub_icons = {
+        "Relative Strength Charts": "broadcast",
+        "Drawdown Analysis"       : "graph-down",
+        "DeMark Signals"          : "activity",
+        "Seasonality"             : "calendar3",
+        "Fundamental Analysis"    : "bank",
+        "Settings"                : "gear",
+        "Run Scripts"             : "play-circle",
+    }
+    page = option_menu(
+        menu_title  = None,
+        options     = _sel_group[2],
+        icons       = [_sub_icons.get(p, "dot") for p in _sel_group[2]],
+        default_index = 0,
+        orientation = "horizontal",
+        key         = f"sub_nav_{_sel_group[0].replace(' ', '_')}",
+        styles      = {
+            "container"        : {"padding": "0!important", "background-color": "#22303e"},
+            "icon"             : {"color": "#8fa3b0", "font-size": "12px"},
+            "nav-link"         : {"font-size": "11px", "text-align": "center", "margin": "0px",
+                                  "color": "#b0bec5", "--hover-color": "#2c3e50"},
+            "nav-link-selected": {"background-color": "#144066", "color": "white"},
+        }
+    )
 
 # ── Updated timestamp ─────────────────────────────────────────────────────────
 st.caption(f"Market Intelligence — {datetime.now().strftime('%d %b %Y %H:%M')}")
@@ -7995,6 +8028,675 @@ elif page == "Run Scripts":
                 run_scan()
 
 # ═══════════════════════════════════════════════════════════════════════════════
+# ETF INCOME PAGE
+# ═══════════════════════════════════════════════════════════════════════════════
+elif page == "ETF Income":
+    _eh1, _eh2, _eh3 = st.columns([900, 5000, 1500])
+    with _eh2:
+        st.title("💰 ETF Income")
+    with _eh3:
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("🔄 Run Scoring", key='top_etf_refresh'):
+            run_script(os.path.join(ETF, 'etf_income_data.py'), ETF)
+            st.rerun()
+
+    st.markdown("""
+        <div class="info-card">
+            Quarterly-rebalance income ETF strategy. Scores a universe of weekly and
+            monthly distribution ETFs on <b>NAV trend</b>, <b>risk-adjusted return</b>,
+            and <b>distribution quality</b> (slope + consistency). Headline yield is
+            deliberately under-weighted — a high yield with declining NAV is return of
+            capital, not income. ETFs with negative 3-month NAV change are disqualified.
+        </div>
+    """, unsafe_allow_html=True)
+
+    _etf_tabs = st.tabs(["🏆 Rankings", "📈 Backtest", "⚖️ Rebalance"])
+
+    # ── Rankings tab ──────────────────────────────────────────────────────────
+    with _etf_tabs[0]:
+        etf_results_dir = os.path.join(ETF, 'results', 'etf_income')
+        etf_files = sorted(glob.glob(os.path.join(etf_results_dir, '*_etf_income.csv')),
+                           reverse=True)
+
+        if not etf_files:
+            st.warning("No ETF income data — run the scoring script first")
+            if st.button("▶ Run ETF Income Scoring", type="primary", key='etf_first_run'):
+                run_script(os.path.join(ETF, 'etf_income_data.py'), ETF)
+                st.rerun()
+        else:
+            _etf_dates = [os.path.basename(f)[:8] for f in etf_files][:30]
+            _etf_sel = st.selectbox("Report date", _etf_dates, index=0, key='etf_date_sel')
+            _etf_file = os.path.join(etf_results_dir, f"{_etf_sel}_etf_income.csv")
+            df_etf = load_csv(_etf_file)
+
+            if df_etf is not None:
+                st.caption(f"Report date: {datetime.strptime(_etf_sel, '%Y%m%d').strftime('%d %b %Y')} — {file_age(_etf_file)}")
+
+                _fc1, _fc2, _fc3 = st.columns([2, 2, 6])
+                with _fc1:
+                    _q_only = st.checkbox("Qualified only", value=True, key='etf_q_only')
+                with _fc2:
+                    _freq_f = st.selectbox("Frequency", ['All', 'weekly', 'monthly'], key='etf_freq_f')
+
+                _dfv = df_etf.copy()
+                if _q_only:
+                    _dfv = _dfv[_dfv['qualified'] == True]
+                if _freq_f != 'All':
+                    _dfv = _dfv[_dfv['freq'] == _freq_f]
+
+                def _etf_colour(val):
+                    try:
+                        v = float(val)
+                        if v > 0: return 'color: #2dc653'
+                        if v < 0: return 'color: #e63946'
+                    except: pass
+                    return ''
+
+                _show_cols = ['rank', 'ticker', 'name', 'underlying', 'freq', 'price',
+                              'score', 'chg_3m', 'chg_12m', 'total_ret_12m', 'sharpe',
+                              'yield_ttm', 'dist_slope', 'dist_consist', 'underlying_rs']
+                _dfv = _dfv[[c for c in _show_cols if c in _dfv.columns]]
+                st.dataframe(
+                    _dfv.style.map(_etf_colour, subset=[c for c in
+                        ['chg_3m', 'chg_12m', 'total_ret_12m', 'sharpe', 'dist_slope', 'underlying_rs']
+                        if c in _dfv.columns]).format({
+                            'price': '{:.2f}', 'score': '{:.1f}', 'chg_3m': '{:+.1f}%',
+                            'chg_12m': '{:+.1f}%', 'total_ret_12m': '{:+.1f}%',
+                            'sharpe': '{:.2f}', 'yield_ttm': '{:.1f}%',
+                            'dist_slope': '{:+.2f}', 'dist_consist': '{:.2f}',
+                            'underlying_rs': '{:+.1f}',
+                        }, na_rep='—'),
+                    width='stretch', hide_index=True, height=600
+                )
+
+                st.markdown("""
+                    <div style="font-size:12px;color:#888;line-height:1.6">
+                    <b>score</b> — weighted rank composite: NAV 3m (0.20), underlying RS (0.20), Sharpe (0.15),
+                    dist slope (0.15), NAV 12m (0.10), yield (0.10), dist consistency (0.10)<br>
+                    <b>underlying_rs</b> — the underlying's blended 3m/12m return vs SPY in percentage points.
+                    Positive = outperforming. Themes (diversified, VIX-short) score neutral.<br>
+                    <b>dist_slope</b> — distribution trend as % of average payout per period. Negative = payouts shrinking.<br>
+                    <b>dist_consist</b> — 1 minus coefficient of variation. 1.0 = identical payouts, below 0.5 = erratic.<br>
+                    <b>qualified</b> — positive 3-month NAV change. A negative NAV trend means the yield is eating principal.
+                    </div>
+                """, unsafe_allow_html=True)
+
+    # ── Backtest tab ──────────────────────────────────────────────────────────
+    with _etf_tabs[1]:
+        import plotly.graph_objects as go
+
+        st.markdown("""
+            <div class="info-card">
+                Simulates the strategy historically: at each quarter start the universe
+                is scored using only data available at that date, the top-N qualified
+                ETFs are equal-weighted, and distributions accumulate as cash until
+                redeployed at the next rebalance. Benchmarked against SPY (same
+                distribution treatment). Quarters with few qualified ETFs go partially
+                to cash — that is the NAV filter going defensive.
+            </div>
+        """, unsafe_allow_html=True)
+
+        _bt_cfg_file = os.path.join(ETF, 'backtest_config.json')
+        _bt_cfg = {'top_n': 5, 'years': 3, 'start_capital': 100000, 'freq_filter': 'all'}
+        if os.path.exists(_bt_cfg_file):
+            try:
+                with open(_bt_cfg_file) as _f:
+                    _bt_cfg.update(json.load(_f))
+            except: pass
+
+        _bc1, _bc2, _bc3, _bc4, _bc5 = st.columns(5)
+        with _bc1:
+            _bt_topn = st.number_input("Top N holdings", 1, 15, int(_bt_cfg['top_n']), key='bt_topn')
+        with _bc2:
+            _bt_years = st.number_input("Years", 1, 10, int(_bt_cfg['years']), key='bt_years')
+        with _bc3:
+            _bt_cap = st.number_input("Start capital", 10000, 10000000, int(_bt_cfg['start_capital']),
+                                       step=10000, key='bt_cap')
+        with _bc4:
+            _bt_freq = st.selectbox("Universe", ['all', 'weekly', 'monthly'],
+                                     index=['all', 'weekly', 'monthly'].index(_bt_cfg.get('freq_filter', 'all')),
+                                     key='bt_freq')
+        with _bc5:
+            _bt_rfreq = st.selectbox("Rebalance", ['quarterly', 'monthly', 'semiannual'],
+                                      index=['quarterly', 'monthly', 'semiannual'].index(
+                                          _bt_cfg.get('rebal_freq', 'quarterly')),
+                                      key='bt_rfreq',
+                                      help="Monthly tested ~10pp worse over 3y — churns on 3m-NAV noise. Quarterly is the default for a reason.")
+
+        _bd1, _bd2, _bd3, _bd4, _bd6, _bd5 = st.columns([2, 2, 2, 2, 2, 3])
+        with _bd6:
+            _bt_stop = st.number_input("Stop loss %", 0, 50,
+                                        int(float(_bt_cfg.get('stop_loss_pct', 0.0)) * 100),
+                                        step=5, key='bt_stop',
+                                        help="Total-return stop from entry (price + distributions received). 0 = off. Tested: 20% = disaster brake (2 hits/3y, costless); 10-15% = whipsaw, destroys returns")
+        with _bd1:
+            _bt_mode = st.selectbox("Income mode", ['reinvest', 'draw'],
+                                     index=['reinvest', 'draw'].index(_bt_cfg.get('income_mode', 'reinvest')),
+                                     key='bt_mode',
+                                     help="Reinvest: distributions compound. Draw: prop-style — withdraw the excess above start capital + buffer at each rebalance")
+        with _bd2:
+            _bt_buffer = st.number_input("Draw buffer %", 0, 50,
+                                          int(float(_bt_cfg.get('draw_threshold_pct', 0.10)) * 100),
+                                          step=5, key='bt_buffer', disabled=_bt_mode != 'draw',
+                                          help="No withdrawals until equity exceeds start capital + this buffer; each draw leaves the buffer working")
+        with _bd3:
+            st.markdown("<br>", unsafe_allow_html=True)
+            _bt_hedge = st.checkbox("VIX hedge", value=bool(_bt_cfg.get('hedge_enabled', False)),
+                                     key='bt_hedge',
+                                     help="Hold VIXY while the VIX term structure is inverted (VIX ≥ VIX3M)")
+        with _bd4:
+            _bt_hpct = st.number_input("Hedge %", 5, 30, int(float(_bt_cfg.get('hedge_pct', 0.10)) * 100),
+                                        step=5, key='bt_hpct', disabled=not _bt_hedge)
+        with _bd5:
+            st.markdown("<br>", unsafe_allow_html=True)
+            if st.button("▶ Run Backtest", type="primary", key='bt_run'):
+                with open(_bt_cfg_file, 'w') as _f:
+                    json.dump({'top_n': int(_bt_topn), 'years': int(_bt_years),
+                               'start_capital': int(_bt_cap), 'freq_filter': _bt_freq,
+                               'hedge_enabled': bool(_bt_hedge),
+                               'hedge_pct': float(_bt_hpct) / 100,
+                               'income_mode': _bt_mode,
+                               'draw_threshold_pct': float(_bt_buffer) / 100,
+                               'rebal_freq': _bt_rfreq,
+                               'stop_loss_pct': float(_bt_stop) / 100}, _f, indent=2)
+                run_script(os.path.join(ETF, 'etf_backtest.py'), ETF)
+                st.rerun()
+
+        _bt_dir = os.path.join(ETF, 'results', 'backtest')
+        _bt_summaries = sorted(glob.glob(os.path.join(_bt_dir, '*_summary.json')), reverse=True)
+
+        if not _bt_summaries:
+            st.caption("No backtest runs yet")
+        else:
+            _bt_dates = [os.path.basename(f)[:8] for f in _bt_summaries][:20]
+            _bt_sel = st.selectbox("Run date", _bt_dates, index=0, key='bt_date_sel')
+
+            with open(os.path.join(_bt_dir, f"{_bt_sel}_summary.json")) as _f:
+                _bt_sum = json.load(_f)
+
+            _sc1, _sc2, _sc3, _sc4, _sc5 = st.columns(5)
+            _ret_col = '#2dc653' if _bt_sum['total_return'] > 0 else '#e63946'
+            _exc_col = '#2dc653' if _bt_sum['excess_return'] > 0 else '#e63946'
+            with _sc1:
+                st.markdown(f"""<div class="macro-card"><div class="macro-label">Final Value</div>
+                    <div style="font-size:20px;font-weight:bold">${_bt_sum['final_value']:,.0f}</div>
+                    <div style="font-size:11px;color:{_ret_col}">{_bt_sum['total_return']:+.1f}% total</div></div>""",
+                    unsafe_allow_html=True)
+            with _sc2:
+                st.markdown(f"""<div class="macro-card"><div class="macro-label">CAGR</div>
+                    <div style="font-size:20px;font-weight:bold;color:{_ret_col}">{_bt_sum['cagr']:+.1f}%</div>
+                    <div style="font-size:11px;color:#888">{_bt_sum['n_quarters']} quarters</div></div>""",
+                    unsafe_allow_html=True)
+            with _sc3:
+                st.markdown(f"""<div class="macro-card"><div class="macro-label">Max Drawdown</div>
+                    <div style="font-size:20px;font-weight:bold;color:#e63946">{_bt_sum['max_drawdown']:.1f}%</div>
+                    </div>""", unsafe_allow_html=True)
+            with _sc4:
+                _int_txt = f" | +${_bt_sum['interest_total']:,.0f} interest" if _bt_sum.get('interest_total') else ''
+                st.markdown(f"""<div class="macro-card"><div class="macro-label">Income Collected</div>
+                    <div style="font-size:20px;font-weight:bold;color:#00b4d8">${_bt_sum['income_total']:,.0f}</div>
+                    <div style="font-size:11px;color:#888">${_bt_sum['income_avg_qtr']:,.0f}/qtr avg{_int_txt}</div></div>""",
+                    unsafe_allow_html=True)
+            with _sc5:
+                _bench_tkr = _bt_sum.get('bench_ticker', 'JEPI')
+                _bench_ret = _bt_sum.get('bench_return')
+                _bench_exc = _bt_sum.get('excess_vs_bench')
+                if _bench_exc is not None:
+                    _bex_col = '#2dc653' if _bench_exc > 0 else '#e63946'
+                    st.markdown(f"""<div class="macro-card"><div class="macro-label">vs {_bench_tkr} passive</div>
+                        <div style="font-size:20px;font-weight:bold;color:{_bex_col}">{_bench_exc:+.1f}%</div>
+                        <div style="font-size:11px;color:#888">{_bench_tkr}: {_bench_ret:+.1f}% |
+                        SPY ref: {_bt_sum['spy_return']:+.1f}%</div></div>""",
+                        unsafe_allow_html=True)
+                else:
+                    st.markdown(f"""<div class="macro-card"><div class="macro-label">vs SPY</div>
+                        <div style="font-size:20px;font-weight:bold;color:{_exc_col}">{_bt_sum['excess_return']:+.1f}%</div>
+                        <div style="font-size:11px;color:#888">SPY: {_bt_sum['spy_return']:+.1f}%</div></div>""",
+                        unsafe_allow_html=True)
+
+            if _bt_sum.get('income_mode') == 'draw':
+                st.markdown(f"""<div class="macro-card" style="border-left:3px solid #2dc653">
+                    <div class="macro-label">Income Draw — prop-style withdrawals</div>
+                    <div style="font-size:13px;color:#ccc">
+                        Withdrawn: <span style="color:#2dc653;font-weight:bold">${_bt_sum.get('withdrawn_total', 0):,.0f}</span>
+                        (${_bt_sum.get('withdrawn_avg_qtr', 0):,.0f}/qtr avg)
+                        &nbsp;|&nbsp; Maintain level: ${_bt_sum.get('maintain_level') or 0:,.0f}
+                        &nbsp;|&nbsp; <span style="color:#888">Final value is the remaining capital base;
+                        total return and drawdown include withdrawals (a draw is not a loss)</span>
+                    </div></div>""", unsafe_allow_html=True)
+
+            if _bt_sum.get('stop_loss_pct', 0) > 0:
+                _stop_evs = _bt_sum.get('stop_events', [])
+                _ev_txt = ' &nbsp;|&nbsp; '.join(
+                    f"{e['date']} {e['ticker']} ({e['tr']:+.1f}%)" for e in _stop_evs) if _stop_evs else 'none triggered'
+                st.markdown(f"""<div class="macro-card" style="border-left:3px solid #9b5de5">
+                    <div class="macro-label">Stop Loss — {_bt_sum['stop_loss_pct']:.0%} total-return from entry</div>
+                    <div style="font-size:13px;color:#ccc">{_bt_sum.get('stops_hit', 0)} hit: {_ev_txt}</div>
+                    </div>""", unsafe_allow_html=True)
+
+            if _bt_sum.get('hedge_enabled'):
+                _hp_col = '#2dc653' if _bt_sum.get('hedge_pnl', 0) > 0 else '#e63946'
+                st.markdown(f"""<div class="macro-card" style="border-left:3px solid #f77f00">
+                    <div class="macro-label">VIX Hedge — VIXY on term-structure inversion</div>
+                    <div style="font-size:13px;color:#ccc">
+                        Hedged {_bt_sum.get('hedge_days', 0)} days ({_bt_sum.get('hedge_days_pct', 0)}% of period)
+                        &nbsp;|&nbsp; Hedge P&L: <span style="color:{_hp_col};font-weight:bold">${_bt_sum.get('hedge_pnl', 0):+,.0f}</span>
+                        &nbsp;|&nbsp; <span style="color:#888">Compare max drawdown and CAGR against an unhedged run to price the insurance</span>
+                    </div></div>""", unsafe_allow_html=True)
+
+            _eq_file = os.path.join(_bt_dir, f"{_bt_sel}_equity.csv")
+            _df_eq = load_csv(_eq_file)
+            if _df_eq is not None:
+                _fig_bt = go.Figure()
+                _fig_bt.add_trace(go.Scatter(x=_df_eq['date'], y=_df_eq['value'],
+                    mode='lines', name='Strategy', line=dict(color='#00b4d8', width=2)))
+                if 'bench' in _df_eq.columns:
+                    _fig_bt.add_trace(go.Scatter(x=_df_eq['date'], y=_df_eq['bench'],
+                        mode='lines', name=f"{_bt_sum.get('bench_ticker', 'JEPI')} passive (same rules)",
+                        line=dict(color='#f4a261', width=1.8)))
+                if 'spy' in _df_eq.columns:
+                    _fig_bt.add_trace(go.Scatter(x=_df_eq['date'], y=_df_eq['spy'],
+                        mode='lines', name='SPY (growth ref)', line=dict(color='#666', width=1, dash='dot')))
+                _fig_bt.update_layout(
+                    title='Equity Curve', height=380,
+                    plot_bgcolor=get_chart_theme()['plot_bgcolor'],
+                    paper_bgcolor=get_chart_theme()['paper_bgcolor'],
+                    font=dict(color=get_chart_theme()['font_color']),
+                    xaxis=dict(gridcolor=get_chart_theme()['gridcolor']),
+                    yaxis=dict(gridcolor=get_chart_theme()['gridcolor'], tickprefix='$'),
+                    legend=dict(orientation='h', y=1.08),
+                    margin=dict(l=60, r=20, t=50, b=30),
+                )
+                st.plotly_chart(_fig_bt, width='stretch')
+
+                # Money flows: cash sawtooth + cumulative income
+                if 'cash' in _df_eq.columns and 'income_cum' in _df_eq.columns:
+                    _fig_mf = go.Figure()
+                    _fig_mf.add_trace(go.Scatter(
+                        x=_df_eq['date'], y=_df_eq['cash'],
+                        mode='lines', name='Cash (distributions awaiting rebalance)',
+                        line=dict(color='#f77f00', width=1.5),
+                        fill='tozeroy', fillcolor='rgba(247,127,0,0.15)'))
+                    if 'hedge' in _df_eq.columns and _df_eq['hedge'].max() > 0:
+                        _fig_mf.add_trace(go.Scatter(
+                            x=_df_eq['date'], y=_df_eq['hedge'],
+                            mode='lines', name='VIXY hedge position',
+                            line=dict(color='#9b5de5', width=1.5),
+                            fill='tozeroy', fillcolor='rgba(155,93,229,0.15)'))
+                    _fig_mf.add_trace(go.Scatter(
+                        x=_df_eq['date'], y=_df_eq['income_cum'],
+                        mode='lines', name='Cumulative income collected',
+                        line=dict(color='#00b4d8', width=2), yaxis='y2'))
+                    if 'withdrawn_cum' in _df_eq.columns and _df_eq['withdrawn_cum'].max() > 0:
+                        _fig_mf.add_trace(go.Scatter(
+                            x=_df_eq['date'], y=_df_eq['withdrawn_cum'],
+                            mode='lines', name='Cumulative withdrawn (in pocket)',
+                            line=dict(color='#2dc653', width=2, dash='dash'), yaxis='y2'))
+                    _fig_mf.update_layout(
+                        title='Money Flows — distributions in, redeployed each quarter',
+                        height=320,
+                        plot_bgcolor=get_chart_theme()['plot_bgcolor'],
+                        paper_bgcolor=get_chart_theme()['paper_bgcolor'],
+                        font=dict(color=get_chart_theme()['font_color']),
+                        xaxis=dict(gridcolor=get_chart_theme()['gridcolor']),
+                        yaxis=dict(gridcolor=get_chart_theme()['gridcolor'], tickprefix='$',
+                                   title='Cash balance'),
+                        yaxis2=dict(overlaying='y', side='right', tickprefix='$',
+                                    title='Cumulative income', showgrid=False),
+                        legend=dict(orientation='h', y=1.12),
+                        margin=dict(l=60, r=60, t=50, b=30),
+                    )
+                    st.plotly_chart(_fig_mf, width='stretch')
+                    st.markdown("""
+                        <div style="font-size:12px;color:#888;line-height:1.6">
+                        The orange sawtooth is the cash account: each distribution payment adds to it
+                        through the quarter, then it drops to zero at rebalance when everything is
+                        redeployed into the new top-N. Each tooth ≈ one quarter's income. The blue line
+                        is total income collected since the start — its slope is your income run-rate.
+                        In <b>draw</b> mode the green dashed line is cash actually withdrawn (in pocket) —
+                        the gap between it and the blue line is income that stayed invested to hold the
+                        maintain level.
+                        </div>
+                    """, unsafe_allow_html=True)
+
+            _qtr_file = os.path.join(_bt_dir, f"{_bt_sel}_quarters.csv")
+            _df_qtr = load_csv(_qtr_file)
+            if _df_qtr is not None:
+                st.markdown("**Quarterly holdings**")
+                st.dataframe(_df_qtr, width='stretch', hide_index=True)
+
+    # ── Rebalance tab ─────────────────────────────────────────────────────────
+    with _etf_tabs[2]:
+        st.markdown("""
+            <div class="info-card">
+                Enter your current holdings and compare against the latest rankings.
+                <b>HOLD</b> — still qualified and ranked inside the buy zone.
+                <b>REVIEW</b> — qualified but slipped outside the top ranks.
+                <b>SELL</b> — disqualified (negative 3-month NAV trend).
+                Candidates are top-ranked qualified ETFs you don't hold.
+            </div>
+        """, unsafe_allow_html=True)
+
+        # ── Live VIX hedge signal ─────────────────────────────────────────────
+        @st.cache_data(ttl=3600, show_spinner=False)
+        def _fetch_vix_signal():
+            import yfinance as _yf
+            vix = _yf.Ticker('^VIX').history(period='6mo')['Close']
+            vix3m = _yf.Ticker('^VIX3M').history(period='6mo')['Close']
+            # normalise both to naive dates — the two indices carry different timestamps
+            vix.index = vix.index.tz_localize(None).normalize()
+            vix3m.index = vix3m.index.tz_localize(None).normalize()
+            ratio = (vix / vix3m.reindex(vix.index).ffill()).dropna()
+            # hysteresis walk: on >= 1.0, off <= 0.95
+            state = False
+            for r in ratio.values:
+                if not state and r >= 1.0: state = True
+                elif state and r <= 0.95: state = False
+            return float(ratio.iloc[-1]), state, float(vix.iloc[-1])
+
+        try:
+            _vr, _hedge_on, _vix_now = _fetch_vix_signal()
+            if _hedge_on:
+                st.markdown(f"""
+                    <div class="macro-card" style="border-left:4px solid #e63946">
+                        <div style="font-weight:bold;color:#e63946">🛡 HEDGE ON — VIX term structure inverted</div>
+                        <div style="font-size:12px;color:#aaa">VIX/VIX3M: {_vr:.3f} (≥ 1.0 = backwardation) &nbsp;|&nbsp;
+                        VIX: {_vix_now:.1f} &nbsp;|&nbsp; Strategy holds ~10% VIXY while inverted; exits below 0.95</div>
+                    </div>""", unsafe_allow_html=True)
+            else:
+                st.markdown(f"""
+                    <div class="macro-card" style="border-left:4px solid #2dc653">
+                        <div style="font-weight:bold;color:#2dc653">🛡 HEDGE OFF — VIX term structure in contango</div>
+                        <div style="font-size:12px;color:#aaa">VIX/VIX3M: {_vr:.3f} (hedge triggers at ≥ 1.0) &nbsp;|&nbsp;
+                        VIX: {_vix_now:.1f} &nbsp;|&nbsp; Long-vol ETPs decay in contango — no hedge held</div>
+                    </div>""", unsafe_allow_html=True)
+        except Exception:
+            st.caption("VIX signal unavailable")
+
+        # strategy settings (stop level, buy zone) — fresh read each render
+        import sys as _sys
+        if ETF not in _sys.path:
+            _sys.path.insert(0, ETF)
+        from etf_income_data import load_etf_settings as _load_etf_s
+        _etf_s = _load_etf_s()
+        _live_stop = float(_etf_s.get('stop_loss_pct', 0.20))
+
+        _hold_file = os.path.join(ETF, 'holdings.json')
+        _holdings = []
+        if os.path.exists(_hold_file):
+            try:
+                with open(_hold_file) as _f:
+                    _holdings = json.load(_f).get('holdings', [])
+            except: pass
+
+        # ── Ticker price check — for filling entry price on a manual add ──────
+        _tc1, _tc2, _tc3 = st.columns([2, 1, 5])
+        with _tc1:
+            _chk_ticker = st.text_input("Check ticker", key='etf_chk_ticker',
+                                         placeholder="e.g. AMDY",
+                                         label_visibility="collapsed")
+        with _tc2:
+            _chk_clicked = st.button("💲 Check Price", key='etf_chk_btn')
+        if _chk_clicked and _chk_ticker.strip():
+            _ct = _chk_ticker.strip().upper()
+            try:
+                import yfinance as _yf
+                _ch = _yf.Ticker(_ct).history(period='1mo', auto_adjust=False)
+                if _ch is None or _ch.empty:
+                    st.session_state['etf_chk_result'] = f"❌ {_ct}: no data returned"
+                else:
+                    _ch.index = _ch.index.tz_localize(None)
+                    _cp = float(_ch['Close'].iloc[-1])
+                    _pp = float(_ch['Close'].iloc[-2]) if len(_ch) > 1 else _cp
+                    _chg = (_cp / _pp - 1) * 100
+                    _pxdate = _ch.index[-1].strftime('%d %b')
+                    _dv = _ch['Dividends'][_ch['Dividends'] > 0]
+                    _dv_txt = (f" | last dist: {float(_dv.iloc[-1]):.4f} on {_dv.index[-1].strftime('%d %b')}"
+                               if len(_dv) else " | no dists last month")
+                    st.session_state['etf_chk_result'] = (
+                        f"✅ **{_ct}**: **{_cp:.2f}** ({_chg:+.2f}% vs prior close, as of {_pxdate}){_dv_txt}")
+            except Exception as _e:
+                st.session_state['etf_chk_result'] = f"❌ {_ct}: {_e}"
+        if st.session_state.get('etf_chk_result'):
+            with _tc3:
+                st.markdown(st.session_state['etf_chk_result'])
+
+        _flash = st.session_state.pop('etf_add_flash', None)
+        if _flash:
+            st.success(_flash)
+
+        _hold_cols = ['ticker', 'shares', 'entry_price', 'entry_date']
+        if _holdings:
+            _df_hold = pd.DataFrame(_holdings)
+            for _c in _hold_cols:
+                if _c not in _df_hold.columns:
+                    _df_hold[_c] = None
+            _df_hold = _df_hold[_hold_cols]
+        else:
+            _df_hold = pd.DataFrame({'ticker': [''], 'shares': [0.0],
+                                     'entry_price': [0.0], 'entry_date': ['']})
+        _edited = st.data_editor(_df_hold, num_rows='dynamic', width='stretch',
+                                  key='etf_hold_editor',
+                                  column_config={
+                                      'ticker': st.column_config.TextColumn('Ticker'),
+                                      'shares': st.column_config.NumberColumn('Shares', format='%.2f'),
+                                      'entry_price': st.column_config.NumberColumn(
+                                          'Entry Price', format='%.2f',
+                                          help='Fill price — needed for the live total-return stop'),
+                                      'entry_date': st.column_config.TextColumn(
+                                          'Entry Date', help='YYYY-MM-DD — distributions after this date count toward total return'),
+                                  })
+        if st.button("💾 Save Holdings", key='etf_save_hold'):
+            _clean = []
+            for _, r in _edited.iterrows():
+                if not str(r['ticker']).strip():
+                    continue
+                _clean.append({
+                    'ticker'     : str(r['ticker']).strip().upper(),
+                    'shares'     : float(r['shares'] or 0),
+                    'entry_price': float(r['entry_price']) if r['entry_price'] else None,
+                    'entry_date' : str(r['entry_date']).strip() or None,
+                })
+            with open(_hold_file, 'w') as _f:
+                json.dump({'holdings': _clean, 'updated': datetime.now().isoformat()}, _f, indent=2)
+            st.success(f"Saved {len(_clean)} holdings")
+
+        @st.cache_data(ttl=900, show_spinner=False)
+        def _fetch_holding_tr(ticker, entry_price, entry_date):
+            """Live total-return from entry: (price + divs received) / entry - 1."""
+            import yfinance as _yf
+            try:
+                h = _yf.Ticker(ticker).history(period='2y', auto_adjust=False)
+                if h is None or h.empty:
+                    return None
+                h.index = h.index.tz_localize(None)
+                px = float(h['Close'].iloc[-1])
+                divs_ps = 0.0
+                if entry_date:
+                    _ed = pd.Timestamp(entry_date)
+                    divs_ps = float(h['Dividends'][h.index > _ed].sum())
+                return (px + divs_ps) / float(entry_price) - 1
+            except Exception:
+                return None
+
+        # Signals vs latest rankings
+        etf_results_dir = os.path.join(ETF, 'results', 'etf_income')
+        _rank_files = sorted(glob.glob(os.path.join(etf_results_dir, '*_etf_income.csv')), reverse=True)
+        if not _rank_files:
+            st.caption("Run the scoring first to generate rebalance signals")
+        else:
+            _df_rank = load_csv(_rank_files[0])
+            _rank_date = os.path.basename(_rank_files[0])[:8]
+            st.caption(f"Signals vs rankings from {datetime.strptime(_rank_date, '%Y%m%d').strftime('%d %b %Y')}")
+
+            _held_rows = [r for _, r in _edited.iterrows() if str(r['ticker']).strip()]
+            _held = [str(r['ticker']).strip().upper() for r in _held_rows]
+            _buy_zone = int(_etf_s.get('buy_zone', 8))  # rank threshold for HOLD vs REVIEW
+
+            if _held and _df_rank is not None:
+                _sig_rows = []
+                for _hr in _held_rows:
+                    _t = str(_hr['ticker']).strip().upper()
+                    # live total-return from entry vs the stop
+                    _tr_txt, _stop_txt = '—', '—'
+                    if _hr['entry_price'] and float(_hr['entry_price'] or 0) > 0:
+                        _tr = _fetch_holding_tr(_t, float(_hr['entry_price']),
+                                                 str(_hr['entry_date'] or '').strip() or None)
+                        if _tr is not None:
+                            _tr_txt = f"{_tr * 100:+.1f}%"
+                            if _tr <= -_live_stop:
+                                _stop_txt = '⛔ HIT'
+                            elif _tr <= -_live_stop * 0.75:
+                                _stop_txt = '⚠ NEAR'
+                            else:
+                                _stop_txt = '✓ OK'
+
+                    _row = _df_rank[_df_rank['ticker'] == _t]
+                    if _row.empty:
+                        _sig_rows.append({'Ticker': _t, 'Rank': '—', 'Score': '—',
+                                          'Qualified': '—', 'Signal': 'NOT IN UNIVERSE',
+                                          'TR from entry': _tr_txt, 'Stop': _stop_txt})
+                        continue
+                    _r = _row.iloc[0]
+                    _qual = bool(_r['qualified'])
+                    if not _qual:
+                        _sig = 'SELL'
+                    elif int(_r['rank']) <= _buy_zone:
+                        _sig = 'HOLD'
+                    else:
+                        _sig = 'REVIEW'
+                    _sig_rows.append({'Ticker': _t, 'Rank': int(_r['rank']),
+                                      'Score': f"{_r['score']:.1f}",
+                                      'Qualified': '✓' if _qual else '✗', 'Signal': _sig,
+                                      'TR from entry': _tr_txt, 'Stop': _stop_txt})
+
+                def _sig_colour(val):
+                    if val == 'HOLD': return 'color: #2dc653'
+                    if val == 'REVIEW': return 'color: #f77f00'
+                    if val in ('SELL', 'NOT IN UNIVERSE'): return 'color: #e63946'
+                    return ''
+
+                def _stop_colour(val):
+                    if '✓' in str(val): return 'color: #2dc653'
+                    if '⚠' in str(val): return 'color: #f77f00'
+                    if '⛔' in str(val): return 'color: #e63946'
+                    return ''
+
+                st.markdown(f"**Your holdings** &nbsp; <span style='font-size:12px;color:#888'>"
+                            f"stop: -{_live_stop:.0%} total-return from entry (price + distributions received)</span>",
+                            unsafe_allow_html=True)
+                st.dataframe(pd.DataFrame(_sig_rows).style
+                             .map(_sig_colour, subset=['Signal'])
+                             .map(_stop_colour, subset=['Stop']),
+                             width='stretch', hide_index=True)
+
+            if _df_rank is not None:
+                _cands = _df_rank[(_df_rank['qualified'] == True) &
+                                  (~_df_rank['ticker'].isin(_held))].head(_buy_zone)
+                if not _cands.empty:
+                    st.markdown("**Top candidates not held**")
+                    _cand_cols = [c for c in ['rank', 'ticker', 'name', 'freq', 'score',
+                                              'chg_3m', 'yield_ttm', 'dist_slope'] if c in _cands.columns]
+                    st.dataframe(_cands[_cand_cols], width='stretch', hide_index=True)
+
+                    if st.button(f"➕ Add all {len(_cands)} candidates to holdings",
+                                 key='etf_add_cands',
+                                 help="Adds each with the scan price as entry price and today as entry date — "
+                                      "update to your actual fill prices and share counts after buying"):
+                        _cur_hold = []
+                        if os.path.exists(_hold_file):
+                            try:
+                                with open(_hold_file) as _f:
+                                    _cur_hold = json.load(_f).get('holdings', [])
+                            except: pass
+                        _have = {str(h.get('ticker', '')).upper() for h in _cur_hold}
+                        _added = []
+                        for _, _c in _cands.iterrows():
+                            _ct = str(_c['ticker']).upper()
+                            if _ct in _have:
+                                continue
+                            _cur_hold.append({
+                                'ticker'     : _ct,
+                                'shares'     : 0.0,
+                                'entry_price': float(_c['price']) if 'price' in _cands.columns
+                                               and pd.notna(_c.get('price')) else None,
+                                'entry_date' : datetime.now().strftime('%Y-%m-%d'),
+                            })
+                            _added.append(_ct)
+                        with open(_hold_file, 'w') as _f:
+                            json.dump({'holdings': _cur_hold,
+                                       'updated': datetime.now().isoformat()}, _f, indent=2)
+                        if 'etf_hold_editor' in st.session_state:
+                            del st.session_state['etf_hold_editor']
+                        st.session_state['etf_add_flash'] = (
+                            f"Added {', '.join(_added) if _added else 'nothing new'} — "
+                            "now edit shares and entry prices to your actual fills, then Save Holdings")
+                        st.rerun()
+
+                # ── Position size calculator (AUD account) ────────────────────
+                st.divider()
+                with st.expander("🧮 Position Size Calculator — AUD account", expanded=False):
+                    @st.cache_data(ttl=1800, show_spinner=False)
+                    def _fetch_audusd():
+                        import yfinance as _yf
+                        try:
+                            _h = _yf.Ticker('AUDUSD=X').history(period='5d')
+                            return float(_h['Close'].iloc[-1]) if _h is not None and not _h.empty else None
+                        except Exception:
+                            return None
+
+                    _fx_live = _fetch_audusd()
+                    _pc1, _pc2, _pc3 = st.columns(3)
+                    with _pc1:
+                        _aud_bal = st.number_input("Account balance (AUD)", 0.0, 100000000.0,
+                                                    100000.0, step=1000.0, key='etf_calc_aud')
+                    with _pc2:
+                        _fx = st.number_input("AUD/USD rate", 0.30, 1.50,
+                                               round(_fx_live, 4) if _fx_live else 0.6500,
+                                               step=0.0010, format="%.4f", key='etf_calc_fx',
+                                               help="Live rate prefilled — override with your broker's rate to include their FX spread")
+                    _usd_bal = _aud_bal * _fx
+                    with _pc3:
+                        st.markdown(f"""<div class="macro-card"><div class="macro-label">USD equivalent</div>
+                            <div style="font-size:20px;font-weight:bold;color:#00b4d8">${_usd_bal:,.0f}</div>
+                            <div style="font-size:11px;color:#888">at {_fx:.4f}</div></div>""",
+                            unsafe_allow_html=True)
+
+                    _qual_tickers = list(_df_rank[_df_rank['qualified'] == True]['ticker'])
+                    _default_buy = _qual_tickers[:_buy_zone]
+                    _buy_sel = st.multiselect("Buy list", options=list(_df_rank['ticker']),
+                                               default=_default_buy, key='etf_calc_buylist',
+                                               help="Defaults to the qualified funds inside the buy zone — adjust to your actual buy list")
+
+                    if _buy_sel:
+                        _alloc = _usd_bal / len(_buy_sel)
+                        _calc_rows, _spend = [], 0.0
+                        for _t in _buy_sel:
+                            _prow = _df_rank[_df_rank['ticker'] == _t]
+                            _p = float(_prow.iloc[0]['price']) if not _prow.empty and pd.notna(_prow.iloc[0].get('price')) else None
+                            if not _p:
+                                _calc_rows.append({'Ticker': _t, 'Price (USD)': 'n/a', 'Shares': '—',
+                                                   'Cost (USD)': '—', 'Cost (AUD)': '—'})
+                                continue
+                            _sh = int(_alloc // _p)
+                            _cost = _sh * _p
+                            _spend += _cost
+                            _calc_rows.append({
+                                'Ticker'    : _t,
+                                'Price (USD)': f"{_p:.2f}",
+                                'Shares'    : _sh,
+                                'Cost (USD)': f"${_cost:,.2f}",
+                                'Cost (AUD)': f"${_cost / _fx:,.2f}" if _fx else '—',
+                            })
+                        st.dataframe(pd.DataFrame(_calc_rows), width='stretch', hide_index=True)
+                        _left = _usd_bal - _spend
+                        st.caption(f"Per position: \\${_alloc:,.0f} USD &nbsp;|&nbsp; "
+                                   f"Total spend: \\${_spend:,.2f} USD &nbsp;|&nbsp; "
+                                   f"Leftover cash: \\${_left:,.2f} USD (≈A\\${_left / _fx:,.2f}) &nbsp;|&nbsp; "
+                                   f"Whole shares, floored — prices from the {datetime.strptime(_rank_date, '%Y%m%d').strftime('%d %b')} scan, "
+                                   f"actual fills will differ slightly")
+
+# ═══════════════════════════════════════════════════════════════════════════════
 # DEMARK SIGNALS PAGE
 # ═══════════════════════════════════════════════════════════════════════════════
 elif page == "DeMark Signals":
@@ -8141,10 +8843,11 @@ elif page == "DeMark Signals":
 # ═══════════════════════════════════════════════════════════════════════════════
 elif page == "Settings":
     st.title("⚙️ Settings")
-    _stab_ai, _stab_fa, _stab_models, _stab_rank, _stab_act, _stab_gen = st.tabs([
+    _stab_ai, _stab_fa, _stab_models, _stab_etf, _stab_rank, _stab_act, _stab_gen = st.tabs([
         "🤖 AI",
         "📊 Fundamental Analysis",
         "🧠 Models",
+        "💰 ETF Income",
         "🎛️ Rank",
         "📋 Screeners",
         "🔧 General",
@@ -8492,6 +9195,118 @@ elif page == "Settings":
                             st.rerun()
 
                 st.divider()
+
+    with _stab_etf:
+            st.title("💰 ETF Income Strategy Settings")
+            st.caption("The full filtering pipeline, in the order it runs — with the levers that control each layer. "
+                       "Saved to etf/etf_settings.json; the scorer and backtester read it on their next run.")
+
+            import sys as _sys
+            if ETF not in _sys.path:
+                _sys.path.insert(0, ETF)
+            import importlib as _il
+            _il.invalidate_caches()
+            from etf_income_data import (FULL_UNIVERSE as _ETF_FULL, DEFAULT_WEIGHTS as _ETF_DEFW,
+                                          load_etf_settings as _etf_load_s)
+            _es = _etf_load_s()
+
+            # ── Pipeline explainer ────────────────────────────────────────────
+            st.markdown("""
+                <div class="info-card">
+                <b style="color:#ccc">How a fund gets from universe to portfolio — every gate in order:</b><br><br>
+                <b>1. Universe</b> — ~32 weekly/monthly option-income ETFs (YieldMax, Defiance, Roundhill,
+                   Global X, JPMorgan, NEOS, Amplify, Simplify), minus the blocklist below.<br>
+                <b>2. Data</b> — 12 months of price history + every distribution, fetched live from yfinance.
+                   Funds with under ~3 months of trading history are skipped (too young to judge).<br>
+                <b>3. Metrics</b> — each fund gets: 3m &amp; 12m NAV change, 90-day Sharpe, trailing yield,
+                   distribution slope (payouts growing or shrinking), distribution consistency,
+                   and the underlying's relative strength vs SPY.<br>
+                <b>4. Score</b> — each metric is ranked across the universe (percentile), then blended with
+                   the weights below. Rank-based, so one extreme value can't dominate.<br>
+                <b>5. Qualifier</b> — hard gate, runs after scoring: negative 3-month NAV change = disqualified,
+                   no matter how high the score. A high yield on a shrinking NAV is your own capital coming back.<br>
+                <b>6. Selection</b> — backtest holds the top-N qualified; the Rebalance tab flags your holdings
+                   HOLD (rank inside the buy zone), REVIEW (qualified but slipped), or SELL (disqualified).<br>
+                <b>7. In-trade protection</b> — the live stop cuts a holding whose <i>total return</i> from entry
+                   (price + distributions received) breaches the stop level. Total-return basis matters:
+                   these funds mechanically bleed price via distributions, so a raw price stop would
+                   false-trigger on healthy funds.<br>
+                <b>8. Optional VIX hedge</b> — the Rebalance tab banner watches the VIX term structure;
+                   backtests can hold VIXY while it's inverted.
+                </div>
+            """, unsafe_allow_html=True)
+
+            st.divider()
+
+            # ── Score weights ─────────────────────────────────────────────────
+            st.markdown("#### Score Weights")
+            st.caption("Percentile rank of each metric × weight, summed × 100. Weights should total 1.0. "
+                       "Yield is deliberately low — chasing headline yield is how NAV-decay funds trap people.")
+            _w_labels = {
+                'nav_3m'       : ('NAV 3m',           'Recent price trend — also the qualifier metric'),
+                'nav_12m'      : ('NAV 12m',          'Longer price trend'),
+                'sharpe'       : ('Sharpe 90d',       'Risk-adjusted recent return'),
+                'yield_ttm'    : ('Yield TTM',        'Trailing yield — kept low on purpose'),
+                'dist_slope'   : ('Dist slope',       'Are payouts growing or shrinking?'),
+                'dist_consist' : ('Dist consistency', 'Payout stability (1 − CV)'),
+                'underlying_rs': ('Underlying RS',    "Underlying's 3m/12m blend vs SPY"),
+            }
+            _new_w = {}
+            _wc = st.columns(4)
+            for _i, (_wk, (_wl, _wh)) in enumerate(_w_labels.items()):
+                with _wc[_i % 4]:
+                    _new_w[_wk] = st.number_input(
+                        _wl, 0.0, 0.6, float(_es['weights'].get(_wk, _ETF_DEFW[_wk])),
+                        step=0.05, key=f'etfw_{_wk}', help=_wh)
+            _w_sum = sum(_new_w.values())
+            if abs(_w_sum - 1.0) > 0.001:
+                st.warning(f"Weights sum to {_w_sum:.2f} — should be 1.00")
+
+            st.divider()
+
+            # ── Qualifier / selection / stop ──────────────────────────────────
+            st.markdown("#### Gates & Protection")
+            _gc1, _gc2, _gc3 = st.columns(3)
+            with _gc1:
+                st.markdown("""<div class="macro-card"><div class="macro-label">Qualifier (fixed)</div>
+                    <div style="font-size:14px;color:#ccc">3-month NAV change &gt; 0</div>
+                    <div style="font-size:11px;color:#888">Strict by design — benched the whole universe
+                    through the 2022 bear, which beat holding it. Not configurable from here.</div>
+                    </div>""", unsafe_allow_html=True)
+            with _gc2:
+                _new_buyzone = st.number_input("Buy zone (rank ≤)", 3, 20, int(_es.get('buy_zone', 8)),
+                                                key='etf_buyzone',
+                                                help="Holdings ranked inside this = HOLD, outside = REVIEW on the Rebalance tab")
+            with _gc3:
+                _new_stop = st.number_input("Live stop loss %", 5, 50,
+                                             int(float(_es.get('stop_loss_pct', 0.20)) * 100),
+                                             step=5, key='etf_live_stop',
+                                             help="Total-return from entry. Tested: 20% fires only on genuine collapses; 10-15% whipsaws on normal volatility")
+
+            st.divider()
+
+            # ── Blocklist ─────────────────────────────────────────────────────
+            st.markdown("#### Blocklist")
+            st.caption("Hard-excluded from scoring, backtests and candidates regardless of score.")
+            _block_sel = st.multiselect(
+                "Excluded funds",
+                options=sorted(_ETF_FULL.keys()),
+                default=[t for t in _es.get('excluded', []) if t in _ETF_FULL],
+                key='etf_blocklist',
+                format_func=lambda t: f"{t} — {_ETF_FULL[t][0]}")
+
+            st.divider()
+            if st.button("💾 Save ETF Strategy Settings", type="primary", key='etf_save_settings'):
+                _out = {
+                    'weights'      : {k: round(v, 3) for k, v in _new_w.items()},
+                    'excluded'     : _block_sel,
+                    'stop_loss_pct': float(_new_stop) / 100,
+                    'buy_zone'     : int(_new_buyzone),
+                }
+                with open(os.path.join(ETF, 'etf_settings.json'), 'w') as _f:
+                    json.dump(_out, _f, indent=2)
+                st.success("Saved — next scoring run and backtest will use these settings. "
+                           "Note: changing weights makes past backtest results non-comparable.")
 
     with _stab_rank:
             st.title("🎛️ Rank Score Settings")

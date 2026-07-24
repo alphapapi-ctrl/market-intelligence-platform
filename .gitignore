@@ -6,6 +6,11 @@ ea/mt5_batch_config.json
 dashboard_settings.json
 models.json
 
+# ETF income tool — personal holdings and run config
+etf/holdings.json
+etf/backtest_config.json
+etf/etf_settings.json
+
 # Rank/score settings
 rank_settings.json
 drawdown_settings.json
