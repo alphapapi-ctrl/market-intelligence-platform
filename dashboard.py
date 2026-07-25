@@ -1745,19 +1745,70 @@ Currently <b>{_hgx_curr:,.0f}</b>. Signal resets <b>{_reset_date}</b> (18 months
         nfp   = macro.get('nfp', '')
         sent  = macro.get('consumer_sent', None)
 
-        def indicator_row(label, value, signal_text, good=True):
-            colour = '#2dc653' if good else '#e63946'
-            icon   = '✓' if good else '⚠'
+        @st.cache_data(ttl=3600, show_spinner=False)
+        def _fetch_econ_series():
+            """Latest FRED observations + dates for the regime table."""
+            try:
+                import pandas_datareader.data as _web
+                from datetime import datetime as _edt
+                out = {}
+                for key, sid in (('unemp', 'UNRATE'), ('nfp', 'PAYEMS'), ('sent', 'UMCSENT')):
+                    try:
+                        s = _web.DataReader(sid, 'fred', _edt(2023, 1, 1), _edt.today()).dropna().iloc[:, 0]
+                        out[key] = {
+                            'last'  : float(s.iloc[-1]),
+                            'prev'  : float(s.iloc[-2]) if len(s) > 1 else None,
+                            'trough': float(s.tail(12).min()),
+                            'chg'   : float(s.iloc[-1] - s.iloc[-2]) if len(s) > 1 else None,
+                            'date'  : s.index[-1].strftime('%b %Y'),
+                        }
+                    except Exception:
+                        pass
+                return out
+            except Exception:
+                return {}
+        _econ = _fetch_econ_series()
+
+        def indicator_row(label, value, signal_text, good=True, neutral=False):
+            colour = '#f77f00' if neutral else '#2dc653' if good else '#e63946'
+            icon   = '→' if neutral else '✓' if good else '⚠'
             _ec_rows.append({'Indicator': label, 'Value': str(value), 'Signal': f"{icon} {signal_text}", '_colour': colour})
         _ec_rows = []
 
-        if unemp: indicator_row("Unemployment", f"{unemp}%",
-            macro.get('unemp_label',''), good=unemp < 4.5)
-        if pmi:   indicator_row("PMI Mfg", f"{pmi}",
+        # Unemployment — rising is the warning, not the level
+        _ue = _econ.get('unemp', {})
+        _ue_val  = _ue.get('last', unemp)
+        _ue_date = f" ({_ue['date']})" if _ue.get('date') else ''
+        if _ue_val:
+            _ue_rising = ((_ue.get('chg') is not None and _ue['chg'] > 0) or
+                          (_ue.get('trough') is not None and _ue_val >= _ue['trough'] + 0.3))
+            if _ue_rising:
+                _ue_from_trough = (f" (+{_ue_val - _ue['trough']:.1f}pp from trough {_ue['trough']:.1f}%)"
+                                   if _ue.get('trough') is not None and _ue_val > _ue['trough'] else '')
+                _ue_sig = f"RISING{_ue_from_trough} — labour market softening"
+            else:
+                _ue_sig = macro.get('unemp_label', '') or 'Stable'
+            indicator_row("Unemployment", f"{_ue_val}%{_ue_date}", _ue_sig, good=not _ue_rising)
+
+        if pmi:   indicator_row("PMI Mfg", f"{pmi} (manual entry)",
             macro.get('pmi_label',''), good=pmi >= 50)
-        if nfp:   indicator_row("Non-Farm Payrolls", nfp, "", good=True)
-        if sent:  indicator_row("Consumer Sentiment", f"{sent}",
-            macro.get('sent_label',''), good=sent > 70)
+
+        # NFP — show monthly change (the headline number) + date
+        _nf = _econ.get('nfp', {})
+        if _nf.get('last'):
+            _nf_chg  = _nf.get('chg')
+            _nf_val  = f"{_nf['last']:,.0f}K ({_nf['date']})"
+            _nf_sig  = (f"{_nf_chg:+,.0f}K MoM" if _nf_chg is not None else '')
+            indicator_row("Non-Farm Payrolls", _nf_val, _nf_sig,
+                          good=(_nf_chg or 0) > 0, neutral=_nf_chg is None)
+        elif nfp:
+            indicator_row("Non-Farm Payrolls", nfp, "", good=True)
+
+        _se = _econ.get('sent', {})
+        _se_val  = _se.get('last', sent)
+        _se_date = f" ({_se['date']})" if _se.get('date') else ''
+        if _se_val: indicator_row("Consumer Sentiment", f"{_se_val}{_se_date}",
+            macro.get('sent_label',''), good=_se_val > 70)
 
         # Copper/Gold ratio
         cu_gold = macro.get('cu_gold_ratio')
@@ -4801,7 +4852,103 @@ elif page == "AU Market":
             run_script(os.path.join(STOCKS, 'au_total_market_screener.py'), STOCKS)
             st.rerun()
 
-    tab1, tab2, tab3, tab4 = st.tabs(["Breadth", "Zweig Thrust", "Benchmark", "Screener"])
+    tab1, tab2, tab3, tab4, tab5 = st.tabs(["Breadth", "Zweig Thrust", "Benchmark", "Screener",
+                                            "Substantial Holders"])
+
+    with tab5:
+        st.subheader("Substantial Holder Notices (ASIC 603 / 604 / 605)")
+        _sh1, _sh2 = st.columns([10000, 1800])
+        with _sh1:
+            st.markdown("""
+                <div class="info-card">
+                    Substantial holder filings from ASX announcements — the institutional footprint.
+                    <b>603 Becoming</b> — a holder crossed above 5%: accumulation signal.
+                    <b>604 Change</b> — an existing substantial holder moved ≥1%: adding or reducing
+                    (open the PDF to see direction).
+                    <b>605 Ceasing</b> — dropped below 5%: distribution signal.
+                    Clusters of 603/604s in a name with rising relative strength are smart-money
+                    confirmation; 605s into strength are worth respecting. Run daily to build the
+                    history — each run captures today + the previous trading day.
+                </div>
+            """, unsafe_allow_html=True)
+        with _sh2:
+            st.markdown("<br>", unsafe_allow_html=True)
+            if st.button("🔄 Fetch Notices", key='run_sub_holders'):
+                run_script(os.path.join(STOCKS, 'asx_substantial_holders.py'), STOCKS)
+                st.rerun()
+
+        _sh_hist_file = os.path.join(STOCKS, 'results', 'substantial_holders',
+                                     'substantial_holders_history.csv')
+        _df_sh = load_csv(_sh_hist_file)
+        if _df_sh is None or _df_sh.empty:
+            st.info("No notices yet — click Fetch Notices to pull today's filings")
+        else:
+            st.caption(f"{len(_df_sh)} notices on record — {file_age(_sh_hist_file)}")
+
+            # join AU benchmark rank for context
+            _bm_file = os.path.join(STOCKS, 'results', 'benchmark', 'au_total_market',
+                                    'au_total_market_latest.csv')
+            _df_bm = load_csv(_bm_file)
+            if _df_bm is not None and 'ticker' in _df_bm.columns:
+                _bm = _df_bm[['ticker', 'rank', 'name', 'sector', 'cap_band']].copy()
+                _bm['ticker'] = _bm['ticker'].str.replace('.AX', '', regex=False)
+                _df_sh = _df_sh.merge(_bm, on='ticker', how='left')
+
+            _fc1, _fc2, _fc3 = st.columns([2, 2, 3])
+            with _fc1:
+                _sh_action = st.multiselect("Form type",
+                                             ['BECOMING', 'CHANGE', 'CEASING'],
+                                             default=['BECOMING', 'CHANGE', 'CEASING'],
+                                             key='sh_action_filter',
+                                             format_func=lambda a: {'BECOMING': '603 Becoming',
+                                                                    'CHANGE': '604 Change',
+                                                                    'CEASING': '605 Ceasing'}[a])
+            with _fc2:
+                _sh_days = st.selectbox("Window", [7, 14, 30, 90, 365], index=2,
+                                         key='sh_days_filter',
+                                         format_func=lambda d: f"Last {d} days")
+            with _fc3:
+                _sh_tick = st.text_input("Ticker filter", key='sh_ticker_filter',
+                                          placeholder="e.g. BHP (blank = all)")
+
+            _dfv = _df_sh[_df_sh['action'].isin(_sh_action)].copy()
+            _cutoff = (datetime.now() - timedelta(days=int(_sh_days))).strftime('%Y-%m-%d')
+            _dfv = _dfv[_dfv['date'] >= _cutoff]
+            if _sh_tick.strip():
+                _dfv = _dfv[_dfv['ticker'].str.contains(_sh_tick.strip().upper(), na=False)]
+
+            _show = pd.DataFrame({
+                'Date'    : _dfv['date'],
+                'Ticker'  : _dfv['ticker'],
+                'Form'    : _dfv['form'],
+                'Action'  : _dfv['action'],
+                'Company' : _dfv['name'] if 'name' in _dfv.columns else '',
+                'Sector'  : _dfv['sector'] if 'sector' in _dfv.columns else '',
+                'RS Rank' : _dfv['rank'] if 'rank' in _dfv.columns else None,
+                'Notice'  : _dfv['pdf_url'],
+            })
+
+            def _sh_colour(val):
+                if val == 'BECOMING': return 'color: #2dc653'
+                if val == 'CEASING': return 'color: #e63946'
+                if val == 'CHANGE': return 'color: #f77f00'
+                return ''
+
+            st.dataframe(
+                _show.style.map(_sh_colour, subset=['Action']),
+                width='stretch', hide_index=True, height=520,
+                column_config={
+                    'Notice': st.column_config.LinkColumn('Notice', display_text='📄 PDF'),
+                    'RS Rank': st.column_config.NumberColumn('RS Rank', format='%d',
+                                                             help='Rank in the latest AU benchmark — low rank + accumulation = confirmation'),
+                })
+
+            # repeat filers: names with multiple notices in the window
+            _rep = _dfv.groupby('ticker').size()
+            _rep = _rep[_rep >= 2].sort_values(ascending=False)
+            if len(_rep):
+                st.markdown("**Repeat activity in window** — " +
+                            ', '.join(f"{t} ({n})" for t, n in _rep.items()))
 
     with tab1:
         st.subheader("AU Market Breadth")
@@ -7827,7 +7974,8 @@ elif page == "Fundamental Analysis":
         if _fa_go and _fa_ticker.strip():
             _ticker = _fa_ticker.strip().upper()
             from fa_assessment import render_fa_assessment
-            render_fa_assessment(_ticker, _fa_settings)
+            _fa_custom_prompt = load_settings().get('ai_prompts', {}).get('fa_system') or None
+            render_fa_assessment(_ticker, _fa_settings, system_prompt=_fa_custom_prompt)
         elif _fa_go:
             st.warning("Enter a ticker symbol")
 
@@ -7893,7 +8041,8 @@ elif page == "Fundamental Analysis":
                 st.warning("Capped to the first 6 tickers to keep the comparison focused.")
                 _cmp_tickers = _cmp_tickers[:6]
             from fa_assessment import render_fa_comparison
-            _cmp_text = render_fa_comparison(_cmp_tickers, _fa_settings)
+            _cmp_custom_prompt = load_settings().get('ai_prompts', {}).get('fa_comparison') or None
+            _cmp_text = render_fa_comparison(_cmp_tickers, _fa_settings, system_prompt=_cmp_custom_prompt)
             if _cmp_text:
                 st.session_state['fa_cmp_last'] = (_cmp_tickers, _cmp_text)
         elif 'fa_cmp_last' in st.session_state:
@@ -8878,6 +9027,8 @@ elif page == "Settings":
                 "📅 Sea Sectors",
                 "📅 Sea Stocks",
                 "📅 Sea Presidential",
+                "🏦 Fundamental Analysis",
+                "⚖️ FA Comparison",
             ])
 
             # ── General tab ───────────────────────────────────────────────────────────
@@ -8983,17 +9134,39 @@ elif page == "Settings":
                 ('sea_sectors',       'Seasonality — Sectors',  '📅 Sea Sectors',     _ai_tabs[7]),
                 ('sea_stocks',        'Seasonality — Stocks',   '📅 Sea Stocks',      _ai_tabs[8]),
                 ('sea_presidential',  'Seasonality — Presidential Cycle', '📅 Sea Presidential', _ai_tabs[9]),
+                ('fa_system',         'Fundamental Analysis — System Prompt', '🏦 Fundamental Analysis', _ai_tabs[10]),
+                ('fa_comparison',     'FA Value Comparison — System Prompt', '⚖️ FA Comparison', _ai_tabs[11]),
             ]
+
+            def _get_default_prompt(pk):
+                if pk in ('fa_system', 'fa_comparison'):
+                    # defaults live in the FA module — imported lazily so the
+                    # dashboard doesn't pay the chromadb import at startup
+                    import sys as _sys
+                    _util = os.path.join(BASE, 'utilities')
+                    if _util not in _sys.path:
+                        _sys.path.insert(0, _util)
+                    from fa_assessment import SYSTEM_PROMPT as _FA_SP, COMPARISON_SYSTEM_PROMPT as _FA_CP
+                    return _FA_SP if pk == 'fa_system' else _FA_CP
+                return DEFAULT_SETTINGS.get('ai_prompts', {}).get(pk, '')
 
             for _pk, _plabel, _ptab_label, _ptab in _prompt_defs:
                 with _ptab:
                     st.markdown(f"#### {_plabel} Prompt")
-                    st.caption("Edit the system instruction sent to the AI. The live market data is appended automatically.")
-                    _default_prompt = DEFAULT_SETTINGS.get('ai_prompts', {}).get(_pk, '')
+                    if _pk == 'fa_system':
+                        st.caption("The full Burry/Buffett system prompt for the Fundamental Analysis page. "
+                                   "RAG excerpts, financial data and market conditions are appended automatically at runtime.")
+                    elif _pk == 'fa_comparison':
+                        st.caption("The system prompt for the FA Value Comparison tab — the multi-stock head-to-head. "
+                                   "The candidates' financial data is appended automatically at runtime.")
+                    else:
+                        st.caption("Edit the system instruction sent to the AI. The live market data is appended automatically.")
+                    _default_prompt = _get_default_prompt(_pk)
                     _current_prompt = _ai_prmp.get(_pk, _default_prompt)
                     _new_prompt = st.text_area(
                         "Prompt", value=_current_prompt,
-                        height=200, key=f"ai_prompt_{_pk}",
+                        height=500 if _pk == 'fa_system' else 320 if _pk == 'fa_comparison' else 200,
+                        key=f"ai_prompt_{_pk}",
                         label_visibility="collapsed"
                     )
                     _pc1, _pc2 = st.columns([1, 4])

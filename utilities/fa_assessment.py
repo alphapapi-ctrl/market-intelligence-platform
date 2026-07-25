@@ -523,7 +523,7 @@ def _resolve_llm(settings):
 
 def get_fa_assessment(ticker, financial_data, llm_url='http://localhost:11434',
                       llm_provider='ollama', model='llama3.1:8b', max_tokens=2000,
-                      macro=None, api_key=None):
+                      macro=None, api_key=None, system_prompt=None):
     """
     Get fundamental analysis assessment from local LLM with RAG context.
 
@@ -569,7 +569,7 @@ def get_fa_assessment(ticker, financial_data, llm_url='http://localhost:11434',
     )
     user_prompt = '\n\n'.join(parts)
 
-    return _call_llm(SYSTEM_PROMPT, user_prompt, llm_url, llm_provider,
+    return _call_llm(system_prompt or SYSTEM_PROMPT, user_prompt, llm_url, llm_provider,
                      model, max_tokens=max_tokens, api_key=api_key)
 
 
@@ -680,8 +680,11 @@ def fetch_basic_financials(ticker):
         return None, f"Error fetching data for {ticker}: {str(e)}"
 
 
-def render_fa_assessment(ticker, settings):
-    """Render the FA assessment widget in Streamlit."""
+def render_fa_assessment(ticker, settings, system_prompt=None):
+    """Render the FA assessment widget in Streamlit.
+
+    system_prompt: optional override for SYSTEM_PROMPT (user-edited via AI Settings).
+    """
     import streamlit as st
 
     provider, llm_url, model, api_key = _resolve_llm(settings)
@@ -745,6 +748,7 @@ def render_fa_assessment(ticker, settings):
             model=model,
             macro=macro,
             api_key=api_key,
+            system_prompt=system_prompt,
         )
 
     if error:
@@ -913,7 +917,7 @@ Be direct and specific. Use actual numbers. No generic disclaimers. 350-500 word
 
 def get_fa_comparison(financials_map, llm_url='http://localhost:11434',
                       llm_provider='ollama', model='llama3.1:8b', max_tokens=1500,
-                      api_key=None):
+                      api_key=None, system_prompt=None):
     """
     Compare a small group of tickers (2-6) in one LLM call.
     financials_map: {ticker: financials_dict}
@@ -933,11 +937,11 @@ def get_fa_comparison(financials_map, llm_url='http://localhost:11434',
         f"heavily as the decider between otherwise similar setups."
     )
 
-    return _call_llm(COMPARISON_SYSTEM_PROMPT, user_prompt, llm_url,
+    return _call_llm(system_prompt or COMPARISON_SYSTEM_PROMPT, user_prompt, llm_url,
                      llm_provider, model, max_tokens=max_tokens, api_key=api_key)
 
 
-def render_fa_comparison(tickers, settings):
+def render_fa_comparison(tickers, settings, system_prompt=None):
     """Render the value comparison widget in Streamlit for a list of tickers."""
     import streamlit as st
     import pandas as pd
@@ -991,6 +995,7 @@ def render_fa_comparison(tickers, settings):
             llm_provider=provider,
             model=model,
             api_key=api_key,
+            system_prompt=system_prompt,
         )
 
     if error:
