@@ -29,3 +29,4 @@ __pycache__/
 
 # RAG reference documents (local only — paid/personal content)
 docs/fa_reference/
+sentiment/cache/

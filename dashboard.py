@@ -98,11 +98,20 @@ STATUS_COLOURS = {
     'INACTIVE' : '',
 }
 
-st.markdown("""
+# Theme-aware UI text: silver-grey in dark mode, near-black in light mode.
+# Fixes primaryColor (#1a3a5c) text being unreadable on the dark background
+# (active tab labels, slider thumb values) and hardcoded dark table headers.
+_UI_TEXT = '#d5d9de' if _get_theme_mode() == 'dark' else '#111111'
+
+st.markdown(f"""
     <style>
-    thead tr th { color: #1a1a2e !important; font-weight: 600 !important; }
-    [data-testid="stDataFrame"] th { color: #1a1a2e !important; font-weight: 600 !important; }
-    .info-card {
+    thead tr th {{ color: {_UI_TEXT} !important; font-weight: 600 !important; }}
+    [data-testid="stDataFrame"] th {{ color: {_UI_TEXT} !important; font-weight: 600 !important; }}
+    .stTabs [data-baseweb="tab"] p {{ color: {_UI_TEXT} !important; }}
+    .stTabs [data-baseweb="tab"][aria-selected="true"] p {{ font-weight: 700 !important; }}
+    [data-testid="stSliderThumbValue"] {{ color: {_UI_TEXT} !important; }}
+    [data-testid="stSliderThumbValue"] p {{ color: {_UI_TEXT} !important; }}
+    .info-card {{
         background: rgba(128,128,128,0.08);
         border: 1px solid rgba(128,128,128,0.25);
         border-radius: 8px;
@@ -111,17 +120,17 @@ st.markdown("""
         font-size: 13px;
         color: inherit;
         line-height: 1.7;
-    }
-    .macro-card {
+    }}
+    .macro-card {{
         background: rgba(128,128,128,0.08);
         border: 1px solid rgba(128,128,128,0.25);
         border-radius: 8px;
         padding: 10px 12px;
         margin-bottom: 8px;
-    }
-    .macro-label  { color: #888; font-size: 10px; }
-    .macro-value  { font-size: 15px; font-weight: bold; }
-    .macro-signal { font-size: 10px; }
+    }}
+    .macro-label  {{ color: #888; font-size: 10px; }}
+    .macro-value  {{ font-size: 15px; font-weight: bold; }}
+    .macro-signal {{ font-size: 10px; }}
     </style>
 """, unsafe_allow_html=True)
 
@@ -142,6 +151,7 @@ DEFAULT_SETTINGS = {
         'Screeners & Exports': True,
         'DeMark Signals'      : True,
         'Fundamental Analysis': True,
+        'Sentiment'           : True,
         'Run Scripts'         : True,
         'Settings'            : True,
     },
@@ -275,9 +285,38 @@ def load_models():
             pass
     return {'ollama': [], 'openai': [], 'lmstudio': []}
 
-def get_model_options(provider):
-    """Return (ids, display_labels) for a provider from models.json."""
-    models = load_models().get(provider, [])
+@st.cache_data(ttl=60, show_spinner=False)
+def _list_ollama_models(url):
+    """Query a running Ollama instance for installed models (like `ollama list`).
+    Returns a models.json-style list, or None if Ollama is unreachable."""
+    import requests as _requests
+    try:
+        r = _requests.get(f"{url.rstrip('/')}/api/tags", timeout=3)
+        r.raise_for_status()
+        out = []
+        for m in r.json().get('models', []):
+            caps = m.get('capabilities', [])
+            if caps and 'completion' not in caps:
+                continue  # skip embedding-only models
+            out.append({
+                'id'    : m['name'],
+                'name'  : m['name'],
+                'params': m.get('details', {}).get('parameter_size', ''),
+                'notes' : 'installed',
+            })
+        return sorted(out, key=lambda m: m['id'])
+    except Exception:
+        return None
+
+def get_model_options(provider, ollama_url=None):
+    """Return (ids, display_labels, models) for a provider.
+    For ollama the list comes live from the running instance (`ollama list`);
+    models.json is only the fallback when Ollama is unreachable."""
+    models = None
+    if provider == 'ollama':
+        models = _list_ollama_models(ollama_url or 'http://localhost:11434')
+    if models is None:
+        models = load_models().get(provider, [])
     ids = [m['id'] for m in models]
     labels = [f"{m['name']} ({m.get('params', m['id'])})" if m.get('params') else m['name'] for m in models]
     return ids, labels, models
@@ -296,9 +335,11 @@ NAV_GROUPS = [
     ("Debt Markets",       "credit-card",             ["Debt Markets"]),
     ("Analysis",           "graph-up",                ["Relative Strength Charts", "Drawdown Analysis",
                                                        "DeMark Signals", "Seasonality", "Fundamental Analysis"]),
+    ("Sentiment",          "speedometer2",            ["Sentiment"]),
     ("ETF Income",         "cash-stack",              ["ETF Income"]),
     ("Screeners & Exports","file-earmark-arrow-down", ["Screeners & Exports"]),
-    ("Settings",           "gear",                    ["Settings", "Run Scripts"]),
+    ("Run Scripts",        "play-circle",             ["Run Scripts"]),
+    ("Settings",           "gear",                    ["Settings"]),
 ]
 
 # Kept for the Settings page-visibility toggles
@@ -2474,10 +2515,10 @@ elif page == "Seasonality":
                         v = float(val)
                         if v > 0:
                             intensity = min(int(abs(v) / 9 * 180), 200)
-                            return f"background-color: rgba(45,198,83,{intensity/255:.2f}); color: #0a3d1a"
+                            return f"background-color: rgba(45,198,83,{intensity/255:.2f}); color: {_UI_TEXT}"
                         elif v < 0:
                             intensity = min(int(abs(v) / 9 * 180), 200)
-                            return f"background-color: rgba(230,57,70,{intensity/255:.2f}); color: #3d0a0a"
+                            return f"background-color: rgba(230,57,70,{intensity/255:.2f}); color: {_UI_TEXT}"
                     except: pass
                     return ""
 
@@ -2520,10 +2561,10 @@ elif page == "Seasonality":
                         n = float(str(v).replace("%","").replace("+",""))
                         if n > 0:
                             intensity = min(n / 9, 1.0)
-                            return f"background-color:rgba(45,198,83,{intensity*0.7:.2f});color:#0a3d1a"
+                            return f"background-color:rgba(45,198,83,{intensity*0.7:.2f});color:{_UI_TEXT}"
                         elif n < 0:
                             intensity = min(abs(n) / 9, 1.0)
-                            return f"background-color:rgba(230,57,70,{intensity*0.7:.2f});color:#3d0a0a"
+                            return f"background-color:rgba(230,57,70,{intensity*0.7:.2f});color:{_UI_TEXT}"
                     except: pass
                     return ""
 
@@ -3101,10 +3142,10 @@ elif page == "Seasonality":
                             v = float(val)
                             if v > 0:
                                 intensity = min(int(abs(v)/9*180), 200)
-                                return f"background-color:rgba(45,198,83,{intensity/255:.2f});color:#0a3d1a"
+                                return f"background-color:rgba(45,198,83,{intensity/255:.2f});color:{_UI_TEXT}"
                             elif v < 0:
                                 intensity = min(int(abs(v)/9*180), 200)
-                                return f"background-color:rgba(230,57,70,{intensity/255:.2f});color:#3d0a0a"
+                                return f"background-color:rgba(230,57,70,{intensity/255:.2f});color:{_UI_TEXT}"
                         except: pass
                         return ""
                     _df_stk_disp = _df_stk_heat.copy()
@@ -3156,10 +3197,10 @@ elif page == "Seasonality":
                             n = float(str(v).replace("%","").replace("+",""))
                             if n > 0:
                                 intensity = min(n/9, 1.0)
-                                return f"background-color:rgba(45,198,83,{intensity*0.7:.2f});color:#0a3d1a"
+                                return f"background-color:rgba(45,198,83,{intensity*0.7:.2f});color:{_UI_TEXT}"
                             elif n < 0:
                                 intensity = min(abs(n)/9, 1.0)
-                                return f"background-color:rgba(230,57,70,{intensity*0.7:.2f});color:#3d0a0a"
+                                return f"background-color:rgba(230,57,70,{intensity*0.7:.2f});color:{_UI_TEXT}"
                         except: pass
                         return ""
                     _stk_num_cols = [c for c in _df_stk_summ.columns if c != "Year"]
@@ -3323,17 +3364,17 @@ elif page == "Seasonality":
                             try:
                                 n = float(str(val).replace('%','').replace('+',''))
                                 if '3yr Corr' in col:
-                                    if n >= 0.7:   return 'background-color:rgba(45,198,83,0.6);color:#0a3d1a;font-weight:bold'
-                                    elif n >= 0.3:  return 'background-color:rgba(247,127,0,0.5);color:#3d2000;font-weight:bold'
-                                    elif n >= 0:    return 'background-color:rgba(247,127,0,0.2);color:#3d2000'
-                                    else:           return 'background-color:rgba(230,57,70,0.5);color:#3d0a0a;font-weight:bold'
+                                    if n >= 0.7:   return f'background-color:rgba(45,198,83,0.6);color:{_UI_TEXT};font-weight:bold'
+                                    elif n >= 0.3:  return f'background-color:rgba(247,127,0,0.5);color:{_UI_TEXT};font-weight:bold'
+                                    elif n >= 0:    return f'background-color:rgba(247,127,0,0.2);color:{_UI_TEXT}'
+                                    else:           return f'background-color:rgba(230,57,70,0.5);color:{_UI_TEXT};font-weight:bold'
                                 else:
                                     if n > 0:
                                         intensity = min(n / 9, 1.0)
-                                        return f'background-color:rgba(45,198,83,{intensity*0.7:.2f});color:#0a3d1a'
+                                        return f'background-color:rgba(45,198,83,{intensity*0.7:.2f});color:{_UI_TEXT}'
                                     elif n < 0:
                                         intensity = min(abs(n) / 9, 1.0)
-                                        return f'background-color:rgba(230,57,70,{intensity*0.7:.2f});color:#3d0a0a'
+                                        return f'background-color:rgba(230,57,70,{intensity*0.7:.2f});color:{_UI_TEXT}'
                             except: pass
                             return ''
 
@@ -3578,10 +3619,10 @@ elif page == "Seasonality":
                         v = float(val)
                         if v > 0:
                             intensity = min(int(abs(v)/9*180), 200)
-                            return f"background-color:rgba(45,198,83,{intensity/255:.2f});color:#0a3d1a"
+                            return f"background-color:rgba(45,198,83,{intensity/255:.2f});color:{_UI_TEXT}"
                         elif v < 0:
                             intensity = min(int(abs(v)/9*180), 200)
-                            return f"background-color:rgba(230,57,70,{intensity/255:.2f});color:#3d0a0a"
+                            return f"background-color:rgba(230,57,70,{intensity/255:.2f});color:{_UI_TEXT}"
                     except: pass
                     return ""
 
@@ -3643,10 +3684,10 @@ elif page == "Seasonality":
                         n = float(str(v).replace("%","").replace("+",""))
                         if n > 0:
                             intensity = min(n/9, 1.0)
-                            return f"background-color:rgba(45,198,83,{intensity*0.7:.2f});color:#0a3d1a"
+                            return f"background-color:rgba(45,198,83,{intensity*0.7:.2f});color:{_UI_TEXT}"
                         elif n < 0:
                             intensity = min(abs(n)/9, 1.0)
-                            return f"background-color:rgba(230,57,70,{intensity*0.7:.2f});color:#3d0a0a"
+                            return f"background-color:rgba(230,57,70,{intensity*0.7:.2f});color:{_UI_TEXT}"
                     except: pass
                     return ""
                 _pc_num_cols = [c for c in _df_pc_summ.columns if c not in ("President","Party")]
@@ -3734,10 +3775,10 @@ elif page == "Seasonality":
                     n = float(str(v).replace("%","").replace("+",""))
                     if n > 0:
                         intensity = min(n / 9, 1.0)
-                        return f"background-color:rgba(45,198,83,{intensity*0.7:.2f});color:#0a3d1a;font-weight:bold"
+                        return f"background-color:rgba(45,198,83,{intensity*0.7:.2f});color:{_UI_TEXT};font-weight:bold"
                     elif n < 0:
                         intensity = min(abs(n) / 9, 1.0)
-                        return f"background-color:rgba(230,57,70,{intensity*0.7:.2f});color:#3d0a0a;font-weight:bold"
+                        return f"background-color:rgba(230,57,70,{intensity*0.7:.2f});color:{_UI_TEXT};font-weight:bold"
                 except: pass
                 return ""
 
@@ -8051,6 +8092,313 @@ elif page == "Fundamental Analysis":
                 st.markdown(_last_text)
 
 
+elif page == "Sentiment":
+    import sys as _sys
+    _sent_dir = os.path.join(BASE, 'sentiment')
+    if _sent_dir not in _sys.path:
+        _sys.path.insert(0, _sent_dir)
+    import plotly.graph_objects as go
+    from plotly.subplots import make_subplots
+    from sentiment_data import (
+        fetch_aaii, fetch_naaim, fetch_index_weekly, fetch_cot, import_aaii_file,
+        INDEX_SYMBOLS, COT_MARKETS,
+    )
+
+    st.title("🧭 Sentiment")
+    st.caption("Weekly AAII survey, NAAIM manager exposure and CFTC COT positioning against the market.")
+
+    SENT_BULL_COLOR = "#2e9e4f"
+    SENT_BEAR_COLOR = "#d94848"
+    SENT_SPREAD_POS = "#555555"
+    SENT_SPREAD_NEG = "#c9486e"
+    SENT_NAAIM_COLOR = "#d99b2e"
+    SENT_BAR_W_MS = 6 * 24 * 3600 * 1000  # chunky weekly histogram bars
+
+    sc_a, sc_b, sc_c = st.columns([1.4, 1, 3])
+    with sc_a:
+        sent_index_name = st.selectbox("Price panel", list(INDEX_SYMBOLS.keys()),
+                                       index=0, key="sent_price_panel")
+    with sc_b:
+        sent_window = st.selectbox("Window", ["2y", "5y", "10y", "20y", "Max"],
+                                   index=1, key="sent_window")
+    with sc_c:
+        st.write("")
+        sent_force = st.button("🔄 Refresh data", key="sent_refresh")
+
+    try:
+        with st.spinner("Loading sentiment and price data..."):
+            aaii = fetch_aaii(force=sent_force)
+            sent_px = fetch_index_weekly(INDEX_SYMBOLS[sent_index_name], force=sent_force)
+    except Exception as e:
+        st.error(f"Could not load data automatically: {e}")
+        st.markdown(
+            "Download the survey file manually from "
+            "[aaii.com/sentimentsurvey](https://www.aaii.com/sentimentsurvey/sent_results) "
+            "(`sentiment.xls`) and import it below."
+        )
+        sent_up = st.file_uploader("Import sentiment.xls", type=["xls"], key="sent_upload")
+        if sent_up is not None:
+            aaii = import_aaii_file(sent_up)
+            st.success(f"Imported {len(aaii)} weekly readings.")
+            sent_px = fetch_index_weekly(INDEX_SYMBOLS[sent_index_name])
+        else:
+            st.stop()
+
+    naaim = None
+    naaim_err = None
+    try:
+        naaim = fetch_naaim(force=sent_force)
+    except Exception as e:
+        naaim_err = str(e)
+
+    # MAs over full history so they are valid at the left edge of the window
+    sent_px = sent_px.sort_values("date").reset_index(drop=True)
+    sent_px["ma40"] = sent_px["close"].rolling(40).mean()
+    sent_px["ma150"] = sent_px["close"].rolling(150).mean()
+
+    sent_end = max(sent_px["date"].max(), aaii["date"].max())
+    if sent_window == "Max":
+        sent_start = aaii["date"].min()
+    else:
+        sent_start = sent_end - timedelta(days=int(sent_window[:-1]) * 365)
+
+    sent_px_w = sent_px[sent_px["date"] >= sent_start]
+    aaii_w = aaii[aaii["date"] >= sent_start]
+    naaim_w = naaim[naaim["date"] >= sent_start] if naaim is not None else None
+
+    if aaii_w.empty or sent_px_w.empty:
+        st.warning("No data in the selected window.")
+        st.stop()
+
+    # Full-history averages for the dashed reference lines
+    bull_avg = aaii["bullish"].mean()
+    bear_avg = aaii["bearish"].mean()
+    aaii_latest = aaii.iloc[-1]
+    aaii_prev = aaii.iloc[-2] if len(aaii) > 1 else aaii_latest
+
+    sm1, sm2, sm3, sm4, sm5, sm6 = st.columns(6)
+    sm1.metric("Survey date", aaii_latest["date"].strftime("%d %b %Y"))
+    sm2.metric("Bullish", f"{aaii_latest['bullish']:.1f}%",
+               f"{aaii_latest['bullish'] - aaii_prev['bullish']:+.1f}")
+    sm3.metric("Neutral", f"{aaii_latest['neutral']:.1f}%",
+               f"{aaii_latest['neutral'] - aaii_prev['neutral']:+.1f}")
+    sm4.metric("Bearish", f"{aaii_latest['bearish']:.1f}%",
+               f"{aaii_latest['bearish'] - aaii_prev['bearish']:+.1f}", delta_color="inverse")
+    sm5.metric("Bull-Bear spread", f"{aaii_latest['spread']:+.1f}",
+               f"{aaii_latest['spread'] - aaii_prev['spread']:+.1f}")
+    if naaim is not None and len(naaim) > 1:
+        n_last, n_prev = naaim.iloc[-1], naaim.iloc[-2]
+        sm6.metric("NAAIM exposure", f"{n_last['exposure']:.0f}",
+                   f"{n_last['exposure'] - n_prev['exposure']:+.0f}")
+    else:
+        sm6.metric("NAAIM exposure", "n/a")
+
+    has_naaim = naaim_w is not None and not naaim_w.empty
+    sent_rows = 4 if has_naaim else 3
+    sent_heights = [0.42, 0.22, 0.16, 0.20] if has_naaim else [0.52, 0.28, 0.20]
+    sent_titles = [
+        f"{sent_index_name} weekly — MA(40) blue / MA(150) red",
+        f"AAII Bullish {aaii_latest['bullish']:.1f} / Bearish {aaii_latest['bearish']:.1f}",
+        f"Bull-Bear spread {aaii_latest['spread']:+.1f}",
+    ]
+    if has_naaim:
+        sent_titles.append(f"NAAIM Exposure Index {naaim.iloc[-1]['exposure']:.0f}")
+
+    sent_fig = make_subplots(
+        rows=sent_rows, cols=1, shared_xaxes=True,
+        row_heights=sent_heights, vertical_spacing=0.03,
+        subplot_titles=sent_titles,
+    )
+    sent_fig.add_trace(go.Ohlc(
+        x=sent_px_w["date"], open=sent_px_w["open"], high=sent_px_w["high"],
+        low=sent_px_w["low"], close=sent_px_w["close"], name=sent_index_name,
+        increasing_line_color="#26a69a", decreasing_line_color="#ef5350",
+        line_width=1.2, showlegend=False,
+    ), row=1, col=1)
+    sent_fig.add_trace(go.Scatter(
+        x=sent_px_w["date"], y=sent_px_w["ma40"], name="MA(40)",
+        line=dict(color="#4a6fd9", width=1.5), showlegend=False,
+    ), row=1, col=1)
+    sent_fig.add_trace(go.Scatter(
+        x=sent_px_w["date"], y=sent_px_w["ma150"], name="MA(150)",
+        line=dict(color="#c0392b", width=1.5), showlegend=False,
+    ), row=1, col=1)
+    sent_fig.add_trace(go.Bar(
+        x=aaii_w["date"], y=aaii_w["bullish"], name="Bullish %",
+        marker_color=SENT_BULL_COLOR, width=SENT_BAR_W_MS, showlegend=False,
+        hovertemplate="%{x|%d %b %Y}<br>Bullish %{y:.1f}%<extra></extra>",
+    ), row=2, col=1)
+    sent_fig.add_trace(go.Bar(
+        x=aaii_w["date"], y=-aaii_w["bearish"], name="Bearish %",
+        marker_color=SENT_BEAR_COLOR, width=SENT_BAR_W_MS, showlegend=False,
+        customdata=aaii_w["bearish"],
+        hovertemplate="%{x|%d %b %Y}<br>Bearish %{customdata:.1f}%<extra></extra>",
+    ), row=2, col=1)
+    sent_fig.add_hline(y=bull_avg, line_dash="dash", line_color="#d048d0", line_width=1,
+                       annotation_text=f"avg {bull_avg:.1f}", annotation_font_size=10,
+                       row=2, col=1)
+    sent_fig.add_hline(y=-bear_avg, line_dash="dash", line_color="#4a6fd9", line_width=1,
+                       annotation_text=f"avg -{bear_avg:.1f}", annotation_font_size=10,
+                       annotation_position="bottom right", row=2, col=1)
+    sent_spread_colors = [SENT_SPREAD_POS if v >= 0 else SENT_SPREAD_NEG
+                          for v in aaii_w["spread"]]
+    sent_fig.add_trace(go.Bar(
+        x=aaii_w["date"], y=aaii_w["spread"], name="Bull-Bear",
+        marker_color=sent_spread_colors, width=SENT_BAR_W_MS, showlegend=False,
+        hovertemplate="%{x|%d %b %Y}<br>Spread %{y:+.1f}<extra></extra>",
+    ), row=3, col=1)
+    sent_fig.add_hline(y=0, line_dash="dash", line_color="#2e9e4f", line_width=1,
+                       row=3, col=1)
+    if has_naaim:
+        sent_fig.add_trace(go.Scatter(
+            x=naaim_w["date"], y=naaim_w["q3"], name="Q3",
+            line=dict(width=0), showlegend=False, hoverinfo="skip",
+        ), row=4, col=1)
+        sent_fig.add_trace(go.Scatter(
+            x=naaim_w["date"], y=naaim_w["q1"], name="Q1-Q3",
+            line=dict(width=0), fill="tonexty",
+            fillcolor="rgba(217,155,46,0.15)", showlegend=False, hoverinfo="skip",
+        ), row=4, col=1)
+        sent_fig.add_trace(go.Scatter(
+            x=naaim_w["date"], y=naaim_w["exposure"], name="NAAIM",
+            line=dict(color=SENT_NAAIM_COLOR, width=1.5), showlegend=False,
+            hovertemplate="%{x|%d %b %Y}<br>Exposure %{y:.0f}<extra></extra>",
+        ), row=4, col=1)
+        naaim_avg = naaim["exposure"].mean()
+        sent_fig.add_hline(y=naaim_avg, line_dash="dash", line_color="#888", line_width=1,
+                           annotation_text=f"avg {naaim_avg:.0f}", annotation_font_size=10,
+                           row=4, col=1)
+        # Regime zones: 80-100 risk-on, 40-70 neutral/transition, 0-30 risk-off
+        # (must come after the row-4 traces — add_hrect no-ops on an empty subplot)
+        for _lo, _hi, _col, _lbl in [
+            (80, 100, "rgba(46,158,79,0.10)",   "Risk-on 80-100"),
+            (40, 70,  "rgba(150,150,150,0.12)", "Neutral / transition 40-70"),
+            (0, 30,   "rgba(217,72,72,0.10)",   "Risk-off 0-30"),
+        ]:
+            sent_fig.add_hrect(y0=_lo, y1=_hi, fillcolor=_col, line_width=0,
+                               annotation_text=_lbl, annotation_position="top left",
+                               annotation_font_size=10,
+                               annotation_font_color=_col.replace("0.10", "0.9").replace("0.12", "0.9"),
+                               row=4, col=1)
+
+    sent_fig.update_layout(
+        height=1000 if has_naaim else 900, barmode="overlay", bargap=0,
+        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+        margin=dict(l=10, r=10, t=30, b=10),
+        xaxis_rangeslider_visible=False, hovermode="x unified",
+    )
+    sent_fig.update_xaxes(showgrid=True, gridcolor="rgba(128,128,128,0.15)")
+    sent_fig.update_yaxes(showgrid=True, gridcolor="rgba(128,128,128,0.15)", side="right")
+    sent_fig.update_annotations(font_size=11, x=0.01, xanchor="left",
+                                selector=dict(xref="paper"))
+    st.plotly_chart(sent_fig, use_container_width=True, key="sentiment_chart")
+
+    if naaim_err:
+        st.warning(f"NAAIM Exposure Index unavailable: {naaim_err}")
+
+    sent_cap = (
+        f"AAII survey: {aaii['date'].min():%b %Y} – {aaii['date'].max():%d %b %Y} "
+        f"({len(aaii)} weeks); long-term averages bullish {bull_avg:.1f}% / "
+        f"bearish {bear_avg:.1f}%. "
+    )
+    if naaim is not None:
+        sent_cap += (f"NAAIM Exposure Index: {naaim['date'].min():%b %Y} – "
+                     f"{naaim['date'].max():%d %b %Y}; shaded band = manager Q1–Q3 range. ")
+    sent_cap += ("AAII posts Thursdays, NAAIM Wednesdays; cached data refreshes "
+                 "automatically when older than 3 days.")
+    st.caption(sent_cap)
+
+    # ── CFTC COT positioning ─────────────────────────────────
+    st.markdown("---")
+    st.markdown("### 🏛️ CFTC COT Positioning")
+
+    cot_market = st.selectbox("Market", list(COT_MARKETS.keys()), index=0,
+                              key="sent_cot_market")
+    try:
+        with st.spinner("Loading COT data..."):
+            cot = fetch_cot(COT_MARKETS[cot_market]["code"], force=sent_force)
+            cot_px = fetch_index_weekly(COT_MARKETS[cot_market]["price"], force=sent_force)
+    except Exception as e:
+        st.warning(f"COT data unavailable: {e}")
+        st.stop()
+
+    cot_w = cot[cot["date"] >= sent_start]
+    cot_px_w = cot_px[cot_px["date"] >= sent_start]
+
+    if cot_w.empty:
+        st.warning("No COT data in the selected window.")
+        st.stop()
+
+    c_last = cot.iloc[-1]
+    c_prev = cot.iloc[-2] if len(cot) > 1 else c_last
+    sk1, sk2, sk3, sk4, sk5 = st.columns(5)
+    sk1.metric("Report date (Tue)", c_last["date"].strftime("%d %b %Y"))
+    sk2.metric("Large spec net", f"{c_last['noncomm_net']:+,.0f}",
+               f"{c_last['noncomm_net'] - c_prev['noncomm_net']:+,.0f}")
+    sk3.metric("Commercial net", f"{c_last['comm_net']:+,.0f}",
+               f"{c_last['comm_net'] - c_prev['comm_net']:+,.0f}")
+    sk4.metric("Spec net % of OI", f"{c_last['noncomm_net_pct_oi']:+.1f}%",
+               f"{c_last['noncomm_net_pct_oi'] - c_prev['noncomm_net_pct_oi']:+.1f}")
+    sk5.metric("Open interest", f"{c_last['open_interest']:,.0f}",
+               f"{c_last['open_interest'] - c_prev['open_interest']:+,.0f}")
+
+    cot_fig = make_subplots(
+        rows=3, cols=1, shared_xaxes=True,
+        row_heights=[0.45, 0.32, 0.23], vertical_spacing=0.04,
+        subplot_titles=(
+            f"{cot_market} — price",
+            f"Net positions — large specs {c_last['noncomm_net']:+,.0f} / "
+            f"commercials {c_last['comm_net']:+,.0f}",
+            f"Large spec net as % of open interest {c_last['noncomm_net_pct_oi']:+.1f}%",
+        ),
+    )
+    cot_fig.add_trace(go.Ohlc(
+        x=cot_px_w["date"], open=cot_px_w["open"], high=cot_px_w["high"],
+        low=cot_px_w["low"], close=cot_px_w["close"], name="Price",
+        increasing_line_color="#26a69a", decreasing_line_color="#ef5350",
+        line_width=1.2, showlegend=False,
+    ), row=1, col=1)
+    cot_net_colors = [SENT_BULL_COLOR if v >= 0 else SENT_BEAR_COLOR
+                      for v in cot_w["noncomm_net"]]
+    cot_fig.add_trace(go.Bar(
+        x=cot_w["date"], y=cot_w["noncomm_net"], name="Large spec net",
+        marker_color=cot_net_colors, width=SENT_BAR_W_MS, showlegend=True,
+        hovertemplate="%{x|%d %b %Y}<br>Spec net %{y:+,.0f}<extra></extra>",
+    ), row=2, col=1)
+    cot_fig.add_trace(go.Scatter(
+        x=cot_w["date"], y=cot_w["comm_net"], name="Commercial net",
+        line=dict(color="#888", width=1.3), showlegend=True,
+        hovertemplate="%{x|%d %b %Y}<br>Comm net %{y:+,.0f}<extra></extra>",
+    ), row=2, col=1)
+    cot_fig.add_hline(y=0, line_dash="dash", line_color="#666", line_width=1, row=2, col=1)
+    cot_fig.add_trace(go.Scatter(
+        x=cot_w["date"], y=cot_w["noncomm_net_pct_oi"], name="Spec net % OI",
+        line=dict(color=SENT_NAAIM_COLOR, width=1.5), fill="tozeroy",
+        fillcolor="rgba(217,155,46,0.12)", showlegend=False,
+        hovertemplate="%{x|%d %b %Y}<br>%{y:+.1f}% of OI<extra></extra>",
+    ), row=3, col=1)
+    cot_fig.add_hline(y=0, line_dash="dash", line_color="#666", line_width=1, row=3, col=1)
+
+    cot_fig.update_layout(
+        height=750, bargap=0,
+        paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+        margin=dict(l=10, r=10, t=30, b=10),
+        xaxis_rangeslider_visible=False, hovermode="x unified",
+        legend=dict(orientation="h", yanchor="bottom", y=1.01, xanchor="right", x=1),
+    )
+    cot_fig.update_xaxes(showgrid=True, gridcolor="rgba(128,128,128,0.15)")
+    cot_fig.update_yaxes(showgrid=True, gridcolor="rgba(128,128,128,0.15)", side="right")
+    cot_fig.update_annotations(font_size=11, x=0.01, xanchor="left",
+                               selector=dict(xref="paper"))
+    st.plotly_chart(cot_fig, use_container_width=True, key="sent_cot_chart")
+
+    st.caption(
+        f"CFTC legacy futures-only Commitment of Traders, {cot['date'].min():%b %Y} – "
+        f"{cot['date'].max():%d %b %Y}. Large specs = non-commercials (funds); "
+        f"commercials = hedgers, typically positioned opposite. Reports are as-of "
+        f"Tuesday, published Friday ~3:30pm ET."
+    )
+
 elif page == "Run Scripts":
     st.title("🚀 Run Scripts")
     st.caption("Scripts run synchronously — page will wait until complete")
@@ -8668,6 +9016,32 @@ elif page == "ETF Income":
             except Exception:
                 return None
 
+        @st.cache_data(ttl=900, show_spinner=False)
+        def _fetch_next_dist(ticker):
+            """Estimate next distribution date from recent dividend cadence.
+            Returns (date_str, inferred_freq) or (None, None)."""
+            import yfinance as _yf
+            try:
+                h = _yf.Ticker(ticker).history(period='6mo', auto_adjust=False)
+                if h is None or h.empty:
+                    return None, None
+                h.index = h.index.tz_localize(None)
+                dv = h['Dividends'][h['Dividends'] > 0]
+                if len(dv) < 2:
+                    return None, None
+                _dates = dv.index[-8:]
+                _gaps = _dates.to_series().diff().dropna().dt.days
+                _gap = int(_gaps.median())
+                _freq = ('weekly' if _gap <= 10 else
+                         'monthly' if _gap <= 45 else 'quarterly')
+                _nxt = _dates[-1] + pd.Timedelta(days=_gap)
+                _today = pd.Timestamp.now().normalize()
+                while _nxt < _today:
+                    _nxt += pd.Timedelta(days=_gap)
+                return _nxt.strftime('%d %b'), _freq
+            except Exception:
+                return None, None
+
         # Signals vs latest rankings
         etf_results_dir = os.path.join(ETF, 'results', 'etf_income')
         _rank_files = sorted(glob.glob(os.path.join(etf_results_dir, '*_etf_income.csv')), reverse=True)
@@ -8700,13 +9074,20 @@ elif page == "ETF Income":
                             else:
                                 _stop_txt = '✓ OK'
 
+                    # distribution cadence + estimated next payment
+                    _nxt_date, _inf_freq = _fetch_next_dist(_t)
+                    _nxt_txt = _nxt_date or '—'
+
                     _row = _df_rank[_df_rank['ticker'] == _t]
                     if _row.empty:
-                        _sig_rows.append({'Ticker': _t, 'Rank': '—', 'Score': '—',
+                        _sig_rows.append({'Ticker': _t, 'Freq': _inf_freq or '—',
+                                          'Next Pay (est)': _nxt_txt,
+                                          'Rank': '—', 'Score': '—',
                                           'Qualified': '—', 'Signal': 'NOT IN UNIVERSE',
                                           'TR from entry': _tr_txt, 'Stop': _stop_txt})
                         continue
                     _r = _row.iloc[0]
+                    _freq = str(_r['freq']) if 'freq' in _row.columns and pd.notna(_r.get('freq')) else (_inf_freq or '—')
                     _qual = bool(_r['qualified'])
                     if not _qual:
                         _sig = 'SELL'
@@ -8714,7 +9095,9 @@ elif page == "ETF Income":
                         _sig = 'HOLD'
                     else:
                         _sig = 'REVIEW'
-                    _sig_rows.append({'Ticker': _t, 'Rank': int(_r['rank']),
+                    _sig_rows.append({'Ticker': _t, 'Freq': _freq,
+                                      'Next Pay (est)': _nxt_txt,
+                                      'Rank': int(_r['rank']),
                                       'Score': f"{_r['score']:.1f}",
                                       'Qualified': '✓' if _qual else '✗', 'Signal': _sig,
                                       'TR from entry': _tr_txt, 'Stop': _stop_txt})
@@ -8732,7 +9115,8 @@ elif page == "ETF Income":
                     return ''
 
                 st.markdown(f"**Your holdings** &nbsp; <span style='font-size:12px;color:#888'>"
-                            f"stop: -{_live_stop:.0%} total-return from entry (price + distributions received)</span>",
+                            f"stop: -{_live_stop:.0%} total-return from entry (price + distributions received) "
+                            f"&nbsp;|&nbsp; next pay estimated from recent distribution cadence (ex-date)</span>",
                             unsafe_allow_html=True)
                 st.dataframe(pd.DataFrame(_sig_rows).style
                              .map(_sig_colour, subset=['Signal'])
@@ -9086,7 +9470,7 @@ elif page == "Settings":
                 st.markdown("#### 🦙 Ollama (Local)")
                 _ollama_url   = st.text_input("Ollama URL", value=_ai_feat.get('ollama_url', 'http://localhost:11434'),
                                                help="URL where Ollama is running")
-                _ol_ids, _ol_labels, _ol_models = get_model_options('ollama')
+                _ol_ids, _ol_labels, _ol_models = get_model_options('ollama', _ollama_url)
                 _ol_cur = _ai_feat.get('ollama_model', 'llama3.1:8b')
                 if _ol_ids:
                     _ol_options = _ol_ids + ['__custom__']
@@ -9206,7 +9590,7 @@ elif page == "Settings":
                 st.markdown("#### 🟢 Ollama")
                 _fa_ollama_url = st.text_input("Ollama URL", value=_fa_feat.get('ollama_url', 'http://localhost:11434'),
                                                 key='fa_ollama_url')
-                _fa_ol_ids, _fa_ol_labels, _fa_ol_models = get_model_options('ollama')
+                _fa_ol_ids, _fa_ol_labels, _fa_ol_models = get_model_options('ollama', _fa_ollama_url)
                 _fa_ol_cur = _fa_feat.get('model', 'llama3.1:8b')
                 if _fa_ol_ids:
                     _fa_ol_opts = _fa_ol_ids + ['__custom__']

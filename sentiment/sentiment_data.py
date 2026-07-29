@@ -1,0 +1,281 @@
+"""
+data/sentiment.py
+AAII Investor Sentiment Survey + SPX weekly price data.
+
+AAII publishes the weekly survey results (bullish / neutral / bearish %)
+as an Excel file. SPX weekly OHLC comes from the Yahoo Finance chart API.
+Both are cached locally in data/cache and refreshed when stale.
+"""
+
+from pathlib import Path
+from datetime import datetime, timedelta
+
+import pandas as pd
+import requests
+
+CACHE_DIR = Path(__file__).parent / "cache"
+
+AAII_URL = "https://www.aaii.com/files/surveys/sentiment.xls"
+AAII_XLS_CACHE = CACHE_DIR / "aaii_sentiment.xls"
+AAII_PARQUET = CACHE_DIR / "aaii_sentiment.parquet"
+
+NAAIM_PAGE_URL = "https://naaim.org/programs/naaim-exposure-index/"
+NAAIM_XLSX_CACHE = CACHE_DIR / "naaim_exposure.xlsx"
+NAAIM_PARQUET = CACHE_DIR / "naaim_exposure.parquet"
+
+YAHOO_CHART_URL = "https://query1.finance.yahoo.com/v8/finance/chart/{symbol}"
+
+# Symbols selectable for the price panel on the Sentiment page
+INDEX_SYMBOLS = {
+    "S&P 500": "^GSPC",
+    "Nasdaq Composite": "^IXIC",
+    "Gold (futures)": "GC=F",
+    "Silver (futures)": "SI=F",
+}
+
+# CFTC legacy futures-only COT report (Socrata API, no key required).
+# Contract market codes are stable even though market names changed over time.
+COT_API_URL = "https://publicreporting.cftc.gov/resource/6dca-aqww.json"
+COT_MARKETS = {
+    "E-mini S&P 500": {"code": "13874A", "price": "^GSPC"},
+    "E-mini Nasdaq-100": {"code": "209742", "price": "^IXIC"},
+    "Gold (COMEX)": {"code": "088691", "price": "GC=F"},
+    "Silver (COMEX)": {"code": "084691", "price": "SI=F"},
+}
+
+# AAII serves 403 to bare clients — needs normal browser headers
+_HEADERS = {
+    "User-Agent": ("Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+                   "AppleWebKit/537.36 (KHTML, like Gecko) "
+                   "Chrome/126.0.0.0 Safari/537.36"),
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "en-US,en;q=0.9",
+    "Referer": "https://www.aaii.com/sentimentsurvey",
+}
+
+# Survey results post Thursdays — refresh anything older than 3 days
+MAX_CACHE_AGE_DAYS = 3
+
+
+def _is_fresh(path: Path) -> bool:
+    if not path.exists():
+        return False
+    age = datetime.now() - datetime.fromtimestamp(path.stat().st_mtime)
+    return age < timedelta(days=MAX_CACHE_AGE_DAYS)
+
+
+# ══════════════════════════════════════════════════════════════
+# AAII sentiment
+# ══════════════════════════════════════════════════════════════
+
+def parse_aaii_xls(source) -> pd.DataFrame:
+    """
+    Parse the AAII sentiment.xls (SENTIMENT sheet) into a DataFrame with
+    columns: date, bullish, neutral, bearish, spread (all pct points).
+
+    `source` is a path or file-like object. The sheet has 4 header rows,
+    dates as Excel serials in col 0, fractions in cols 1-3, and footer
+    rows ("Count '21" etc.) that are skipped because col 0 is not a number.
+    """
+    import xlrd
+
+    if hasattr(source, "read"):
+        wb = xlrd.open_workbook(file_contents=source.read())
+    else:
+        wb = xlrd.open_workbook(source)
+    sh = wb.sheet_by_name("SENTIMENT")
+
+    rows = []
+    for i in range(4, sh.nrows):
+        cells = sh.row(i)
+        if cells[0].ctype not in (xlrd.XL_CELL_DATE, xlrd.XL_CELL_NUMBER):
+            continue
+        if any(cells[c].ctype != xlrd.XL_CELL_NUMBER for c in (1, 2, 3)):
+            continue  # early weeks with no survey values
+        dt = xlrd.xldate_as_datetime(cells[0].value, wb.datemode)
+        rows.append({
+            "date": dt.date(),
+            "bullish": cells[1].value * 100.0,
+            "neutral": cells[2].value * 100.0,
+            "bearish": cells[3].value * 100.0,
+        })
+
+    df = pd.DataFrame(rows)
+    df["date"] = pd.to_datetime(df["date"])
+    df["spread"] = df["bullish"] - df["bearish"]
+    return df.sort_values("date").reset_index(drop=True)
+
+
+def fetch_aaii(force: bool = False) -> pd.DataFrame:
+    """Download (or reuse cached) AAII sentiment data."""
+    if not force and _is_fresh(AAII_PARQUET):
+        return pd.read_parquet(AAII_PARQUET)
+
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    try:
+        resp = requests.get(AAII_URL, headers=_HEADERS, timeout=30)
+        resp.raise_for_status()
+        if b"<html" in resp.content[:200].lower():
+            raise RuntimeError("AAII returned an HTML page instead of the xls")
+        AAII_XLS_CACHE.write_bytes(resp.content)
+    except Exception:
+        # Download blocked/offline — fall back to whatever we have
+        if AAII_PARQUET.exists():
+            return pd.read_parquet(AAII_PARQUET)
+        if not AAII_XLS_CACHE.exists():
+            raise
+    df = parse_aaii_xls(AAII_XLS_CACHE)
+    df.to_parquet(AAII_PARQUET, index=False)
+    return df
+
+
+def import_aaii_file(uploaded) -> pd.DataFrame:
+    """Import a manually downloaded sentiment.xls (file-like) and cache it."""
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    df = parse_aaii_xls(uploaded)
+    df.to_parquet(AAII_PARQUET, index=False)
+    return df
+
+
+# ══════════════════════════════════════════════════════════════
+# NAAIM Exposure Index
+# ══════════════════════════════════════════════════════════════
+
+def fetch_naaim(force: bool = False) -> pd.DataFrame:
+    """
+    NAAIM Exposure Index (weekly since 2006). The data file is a dated
+    xlsx linked from the program page, so scrape the current link first.
+    Columns: date, exposure, q1, median, q3.
+    """
+    import re
+
+    if not force and _is_fresh(NAAIM_PARQUET):
+        return pd.read_parquet(NAAIM_PARQUET)
+
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    try:
+        page = requests.get(NAAIM_PAGE_URL, headers=_HEADERS, timeout=30)
+        page.raise_for_status()
+        m = re.search(r'href="(https://naaim\.org/wp-content/uploads/[^"]*USE_Data[^"]*\.xlsx)"',
+                      page.text)
+        if not m:
+            raise RuntimeError("Could not find USE_Data xlsx link on the NAAIM page")
+        resp = requests.get(m.group(1), headers=_HEADERS, timeout=30)
+        resp.raise_for_status()
+        NAAIM_XLSX_CACHE.write_bytes(resp.content)
+    except Exception:
+        if NAAIM_PARQUET.exists():
+            return pd.read_parquet(NAAIM_PARQUET)
+        if not NAAIM_XLSX_CACHE.exists():
+            raise
+
+    raw = pd.read_excel(NAAIM_XLSX_CACHE, sheet_name=0)
+    df = pd.DataFrame({
+        "date": pd.to_datetime(raw["Date"]),
+        "exposure": raw["NAAIM Number"],
+        "q1": raw["Quart 1 (25% at/below)"],
+        "median": raw["Quart 2 (median)"],
+        "q3": raw["Quart 3 (25% at/above)"],
+    }).dropna(subset=["date", "exposure"])
+    # file has duplicate rows and is newest-first
+    df = (df.drop_duplicates(subset="date", keep="first")
+            .sort_values("date").reset_index(drop=True))
+    df.to_parquet(NAAIM_PARQUET, index=False)
+    return df
+
+
+# ══════════════════════════════════════════════════════════════
+# Index prices (weekly, Yahoo chart API)
+# ══════════════════════════════════════════════════════════════
+
+def fetch_index_weekly(symbol: str = "^GSPC", force: bool = False) -> pd.DataFrame:
+    """
+    Weekly OHLC (full available history) for a Yahoo symbol.
+    Columns: date, open, high, low, close.
+    """
+    safe = "".join(c if c.isalnum() else "_" for c in symbol)
+    parquet = CACHE_DIR / f"index_{safe}_weekly.parquet"
+    if not force and _is_fresh(parquet):
+        return pd.read_parquet(parquet)
+
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    try:
+        # range=max silently downgrades granularity — use explicit epoch bounds
+        resp = requests.get(YAHOO_CHART_URL.format(symbol=requests.utils.quote(symbol)),
+                            params={"period1": "441763200", "period2": "9999999999",
+                                    "interval": "1wk"},
+                            headers={"User-Agent": _HEADERS["User-Agent"]}, timeout=30)
+        resp.raise_for_status()
+        result = resp.json()["chart"]["result"][0]
+    except Exception:
+        if parquet.exists():
+            return pd.read_parquet(parquet)
+        raise
+
+    quote = result["indicators"]["quote"][0]
+    df = pd.DataFrame({
+        "date": pd.to_datetime(result["timestamp"], unit="s").normalize(),
+        "open": quote["open"], "high": quote["high"],
+        "low": quote["low"], "close": quote["close"],
+    }).dropna(subset=["close"]).reset_index(drop=True)
+    df.to_parquet(parquet, index=False)
+    return df
+
+
+def fetch_spx_weekly(force: bool = False) -> pd.DataFrame:
+    return fetch_index_weekly("^GSPC", force=force)
+
+
+# ══════════════════════════════════════════════════════════════
+# CFTC COT positioning
+# ══════════════════════════════════════════════════════════════
+
+def fetch_cot(code: str, force: bool = False) -> pd.DataFrame:
+    """
+    Weekly legacy futures-only COT data for one contract market code.
+    Columns: date, open_interest, noncomm_long, noncomm_short, noncomm_net,
+    comm_long, comm_short, comm_net, noncomm_net_pct_oi.
+    Reports are as-of Tuesday, published Friday afternoon.
+    """
+    parquet = CACHE_DIR / f"cot_{code}.parquet"
+    if not force and _is_fresh(parquet):
+        return pd.read_parquet(parquet)
+
+    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    try:
+        resp = requests.get(COT_API_URL, params={
+            "cftc_contract_market_code": code,
+            "$select": ("report_date_as_yyyy_mm_dd,open_interest_all,"
+                        "noncomm_positions_long_all,noncomm_positions_short_all,"
+                        "comm_positions_long_all,comm_positions_short_all"),
+            "$order": "report_date_as_yyyy_mm_dd",
+            "$limit": "10000",
+        }, timeout=30)
+        resp.raise_for_status()
+        rows = resp.json()
+        if not rows:
+            raise RuntimeError(f"CFTC API returned no rows for code {code}")
+    except Exception:
+        if parquet.exists():
+            return pd.read_parquet(parquet)
+        raise
+
+    df = pd.DataFrame(rows).rename(columns={
+        "report_date_as_yyyy_mm_dd": "date",
+        "open_interest_all": "open_interest",
+        "noncomm_positions_long_all": "noncomm_long",
+        "noncomm_positions_short_all": "noncomm_short",
+        "comm_positions_long_all": "comm_long",
+        "comm_positions_short_all": "comm_short",
+    })
+    df["date"] = pd.to_datetime(df["date"])
+    for c in ("open_interest", "noncomm_long", "noncomm_short", "comm_long", "comm_short"):
+        df[c] = pd.to_numeric(df[c], errors="coerce")
+    df = (df.dropna()
+            .drop_duplicates(subset="date", keep="last")
+            .sort_values("date").reset_index(drop=True))
+    df["noncomm_net"] = df["noncomm_long"] - df["noncomm_short"]
+    df["comm_net"] = df["comm_long"] - df["comm_short"]
+    df["noncomm_net_pct_oi"] = 100.0 * df["noncomm_net"] / df["open_interest"]
+    df.to_parquet(parquet, index=False)
+    return df
