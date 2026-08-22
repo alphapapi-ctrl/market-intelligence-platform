@@ -1,3 +1,0 @@
-rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-2,11,KCN.AX,Kingsgate Consolidated Limited,Gold,mid,3.92,88.89,-0.0589,-0.2,0.0209,FLAT,-41.57,65.36,,-49.38,53.17,85.42,0.9138,LOW,EARLY,4.8955,5.4984,5.2844,0,40.682,LAGGARD,22.9692
-3,37,FFM.AX,FireFly Metals Ltd,Gold,mid,1.655,77.78,0.0057,-0.0243,0.1077,FLAT,-20.05,41.45,,-37.28,48.41,72.14,,LOW,EARLY,1.7795,1.9137,1.8686,0,27.8173,LAGGARD,17.0577

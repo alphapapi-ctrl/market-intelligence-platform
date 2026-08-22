@@ -1,3 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-7,0,GOOGL,Alphabet Inc. (Class A),Communication Services,Interactive Media & Services,large,343.71,100.0,-0.0148,-0.0077,0.1572,STRONG_DOWN,9.48,98.62,,-20.37,53.6,36.9,,LOW,-,363.3736,369.106,313.0075,1,143.2574,LEADER,35.757
-51,0,PSKY,Paramount Skydance Corporation,Communication Services,Movies & Entertainment,large,9.43,0.0,0.0148,0.0077,-0.1572,STRONG_UP,-29.61,-22.19,,-55.05,44.4,44.85,,LOW,EARLY,10.2663,10.5472,12.773,0,-21.9669,WEAK,16.6337

@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,commodity,type,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-6,0,0666.HK,REPT Bettero Energy Co,lithium,producer,large,10.18,50.0,-0.0911,-0.2515,-0.3958,STRONG_UP,-23.34,-15.45,,-45.99,43.62,55.32,0.9893,LOW,EARLY,12.611,14.0668,14.3197,0,-12.1812,LAGGARD,16.5007

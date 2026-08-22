@@ -1,9 +1,0 @@
-rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-80,36,OKLO,Oklo Inc.,uranium,producer,large,68.7,0.7886,1.1409,1.0087,1.1241,FLAT,-22.08,27.46,536.7,-73.83,49.2,99.06,1.5516,HIGH,SHIFT,68.274,61.759,85.9167,0,13.6377,WEAK,36.1475
-174,14,1818.HK,Zhaojin Mining,gold,producer,large,23.3,0.6489,0.97,0.8297,0.938,FLAT,-19.99,16.23,62.07,-47.35,49.39,57.76,1.6167,HIGH,EARLY,26.489,29.33,29.9692,0,13.8757,WEAK,24.5013
-182,-10,AMMN.JK,"ticker
-AMMN.JK    Amman Mineral Internasional
-AMMN.JK    Amman Mineral Internasional
-Name: name, dtype: object",copper,producer,large,3110.0,0.2074,0.9497,0.5377,0.4489,STRONG_UP,-54.43,-54.93,-75.42,-67.05,44.77,79.21,3.7504,HIGH,EARLY,4024.5,4758.0,6707.875,0,-31.0454,WEAK,24.0228
-218,12,NNE,Nano Nuclear Energy,uranium,producer,mid,29.07,0.5155,1.21,1.2581,1.1597,FLAT,-2.42,-16.68,429.51,-66.45,47.2,100.91,2.3613,HIGH,SHIFT,25.4407,23.6484,31.7403,0,-7.8024,WEAK,20.6578
-236,16,STK.AX,Strickland Metals,gold,explorer,mid,0.105,0.4509,0.994,0.6277,0.5734,STRONG_UP,-40.0,-19.23,-4.55,-59.18,35.18,84.66,3.0802,HIGH,EARLY,0.1343,0.1744,0.1839,0,-7.9912,WEAK,19.1737

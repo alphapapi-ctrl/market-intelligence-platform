@@ -1,6 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-2,49,SKYT,SKYWATER TECHNOLOGY INC,Information Technology,,small,33.39,100.0,-0.0398,-0.0758,0.0789,FLAT,19.0,225.76,,-42.64,49.2,45.12,,LOW,-,35.306,35.3414,26.7257,1,246.1702,LEADER,55.9414
-13,606,NTAP,NetApp,Information Technology,"Technology Hardware, Storage & Peripherals",large,171.73,75.0,0.1328,0.053,0.735,FLAT,65.48,63.7,,-24.83,49.2,61.31,,LOW,-,159.295,144.5078,116.5574,1,51.1155,LEADER,21.0617
-24,655,MCHP,Microchip Technology,Information Technology,Semiconductors,large,88.26,50.0,0.0616,-0.0608,0.1854,FLAT,20.67,20.74,,-34.41,48.4,56.93,,LOW,-,91.775,93.4233,73.5585,1,17.6353,CONTENDER,17.4222
-28,605,GPGI,GPGI INC CLASS A,Information Technology,,mid,14.97,25.0,-0.1212,0.2939,-0.2964,FLAT,-23.83,2.85,,-55.68,50.0,79.14,,LOW,SHIFT,14.67,13.7094,18.6245,0,1.8031,WEAK,15.8184
-44,1053,MSI,Motorola Solutions,Information Technology,Communications Equipment,large,417.21,0.0,-0.0219,0.0078,-0.2643,FLAT,11.15,1.0,,-25.45,51.6,31.09,,LOW,-,408.8541,410.0024,416.8977,1,1.6677,LAGGARD,9.9302

@@ -1,3 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-4,0,MU,Micron Technology,Technology,Semiconductors,large,766.58,95.45,0.1578,0.4839,0.6475,STRONG_DOWN,202.89,692.75,527.61,-30.28,57.6,77.34,1.6353,HIGH,-,558.876,463.6368,297.1427,1,515.9366,LEADER,132.6109
-6,0,INTC,Intel,Technology,Semiconductors,large,120.61,90.91,0.075,0.7279,1.2762,STRONG_DOWN,213.68,434.62,297.82,-24.17,52.4,86.77,1.5313,HIGH,-,90.419,65.2926,43.3705,1,262.4643,LEADER,72.8657

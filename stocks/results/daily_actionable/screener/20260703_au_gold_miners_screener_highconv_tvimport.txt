@@ -1,1 +1,0 @@
-NEM.AX,OBM.AX,PNR.AX

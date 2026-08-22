@@ -1,7 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-52,541,SPB,SPECTRUM BRANDS HOLDINGS INC,Consumer Staples,,small,88.69,100.0,0.0507,0.0602,-0.0226,FLAT,41.45,63.69,,-15.76,52.61,38.31,,LOW,-,85.1645,81.851,69.5922,1,87.4638,LEADER,21.9831
-88,707,EL,Estée Lauder Companies (The),Consumer Staples,Personal Care Products,large,82.13,20.0,0.0156,-0.087,0.0287,FLAT,-28.49,-3.14,,-43.62,49.8,43.31,,LOW,EARLY,82.3995,83.6566,92.115,0,-3.6159,WEAK,15.3992
-100,700,CCEP,Coca-Cola Europacific Partners,Consumer Staples,Soft Drinks,large,105.18,80.0,-0.0198,0.0421,0.0226,FLAT,19.12,10.63,50.69,-18.22,55.42,24.67,0.9293,LOW,-,103.144,97.5268,93.5484,1,23.8856,LEADER,13.7357
-103,660,SYY,Sysco,Consumer Staples,Food Distributors,large,81.69,60.0,-0.0333,-0.0421,0.0249,FLAT,4.64,6.72,,-23.98,48.59,21.23,,LOW,-,81.9804,77.8132,77.3763,1,15.3739,CONTENDER,13.3916
-146,1226,DOLE,DOLE PLC,Consumer Staples,,small,14.42,40.0,0.0204,-0.0574,-0.1197,STRONG_UP,-1.88,6.27,,-15.88,50.6,25.71,0.5316,LOW,-,14.063,14.1676,14.3805,1,12.3358,LAGGARD,7.1768
-154,1269,CAG,Conagra Brands,Consumer Staples,Packaged Foods & Meats,mid,14.28,0.0,-0.0156,0.0442,-0.0907,FLAT,-14.05,-17.25,,-35.58,46.99,33.12,,LOW,SHIFT,13.857,13.6354,15.8456,0,-24.4714,WEAK,5.1126

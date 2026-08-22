@@ -1,4 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-77,0,TEAM,Atlassian,Technology,Computer Software,large,74.68,0.2869,0.9324,0.8536,0.8782,FLAT,-54.01,-62.38,,-74.13,44.4,94.76,,LOW,EARLY,92.768,85.2641,118.0407,0,-29.2273,WEAK,21.6009
-94,0,ZS,Zscaler,Technology,EDP Services,large,123.8,0.3008,1.0241,0.9971,0.701,STRONG_UP,-46.01,-60.55,,-64.89,48.8,90.84,,LOW,EARLY,130.6835,141.0588,208.6112,0,-32.5303,WEAK,18.6262
-107,0,SHOP,Shopify,Technology,Computer Software,large,111.62,0.7527,1.0591,1.0661,0.7747,FLAT,-34.16,-1.28,,-46.71,50.0,62.84,,LOW,EARLY,112.2805,113.6352,136.9041,0,-1.0204,WEAK,17.0773

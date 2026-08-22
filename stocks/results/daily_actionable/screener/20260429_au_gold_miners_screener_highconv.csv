@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-89,22,ATM.AX,Aneka Tambang (Persero) Tbk,Gold,large,0.96,22.88,0.0091,-0.0977,0.0249,FLAT,-8.57,6.86,-3.39,-26.41,20.55,17.22,2.7367,HIGH,EARLY,0.9855,0.9931,1.0091,0,8.1856,WEAK,13.6308

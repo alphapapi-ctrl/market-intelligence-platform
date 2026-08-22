@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-14,0,RSG.AX,Resolute Mining Limited,Gold,mid,1.135,80.92,-0.0565,-0.0368,0.0165,STRONG_DOWN,3.18,99.12,110.19,-31.25,51.59,67.11,1.6242,HIGH,EARLY,1.2676,1.3207,1.1903,0,76.1995,LAGGARD,28.7603

@@ -1,7 +1,0 @@
-rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-212,0,WPM,"ticker
-WPM    Wheaton Precious Metals
-WPM    Wheaton Precious Metals
-WPM    Wheaton Precious Metals
-WPM    Wheaton Precious Metals
-Name: name, dtype: object",palladium,royalties_financial_services,large,115.73,1.2836,0.9766,0.993,1.0134,STRONG_DOWN,-1.22,28.19,114.86,-34.92,55.2,50.99,0.942,LOW,EARLY,116.839,125.8462,123.7689,0,30.5147,WEAK,18.6621

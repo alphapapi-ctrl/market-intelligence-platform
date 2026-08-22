@@ -1,195 +1,148 @@
-import subprocess
+"""CLI twin of the dashboard's Run Scripts page.
+
+    python launcher.py            # interactive menu
+    python launcher.py A          # run one entry non-interactively (any key below)
+    python launcher.py A M        # several in order
+
+Stocks data collection goes through marketdb (one price fetch, every study);
+macro / credit / ETF / sentiment scripts are unchanged.
+"""
 import os
+import subprocess
 import sys
 from datetime import datetime
 
 # ── Project paths ─────────────────────────────────────────────────────────────
-BASE    = os.path.dirname(os.path.abspath(__file__))
-MACRO   = os.path.join(BASE, 'macro')
-STOCKS  = os.path.join(BASE, 'stocks')
-
+BASE   = os.path.dirname(os.path.abspath(__file__))
+MACRO  = os.path.join(BASE, 'macro')
+STOCKS = os.path.join(BASE, 'stocks')
+ETF    = os.path.join(BASE, 'etf')
 PYTHON = os.path.join(BASE, '.venv', 'Scripts', 'python.exe')
 
-# ── Script registry ───────────────────────────────────────────────────────────
+
+def _mdb(*args):
+    """A marketdb.run_daily invocation (cwd = BASE)."""
+    return {'python': PYTHON, 'cwd': BASE, 'argv': ['-m', 'marketdb.run_daily', *args]}
+
+
+def _script(cwd, script):
+    return {'python': PYTHON, 'cwd': cwd, 'argv': [script]}
+
+
+# ── Registry ──────────────────────────────────────────────────────────────────
 SCRIPTS = {
-    # ── Macro ─────────────────────────────────────────────────────────────────
-    '1'  : {'label': 'Macro Report',                    'python': PYTHON,  'cwd': MACRO,   'script': 'macro_report.py'},
+    # ── Daily ─────────────────────────────────────────────────────────────────
+    '1':  {'label': 'Macro Report',                                   **_script(MACRO, 'macro_report.py')},
+    '2':  {'label': 'marketdb — update prices + ALL studies',         **_mdb()},
+    '3':  {'label': 'marketdb — update prices only',                  **_mdb('--studies')},
+    '4':  {'label': 'marketdb — re-run ALL studies (no fetch)',       **_mdb('--skip-fetch')},
 
-    # ── AU Market ─────────────────────────────────────────────────────────────
-    '2'  : {'label': 'AU Total Market Screener',        'python': PYTHON, 'cwd': STOCKS,  'script': 'au_total_market_screener.py'},
-    '3'  : {'label': 'AU Total Market Benchmark',       'python': PYTHON, 'cwd': STOCKS,  'script': 'au_total_market_benchmark.py'},
-    '4'  : {'label': 'AU Total Market Breadth',         'python': PYTHON, 'cwd': STOCKS,  'script': 'au_total_market_breadth.py'},
+    # ── Per market (fetch + studies for those universes) ──────────────────────
+    '5':  {'label': 'AU Total Market (screener, benchmark, breadth)', **_mdb('--universe', 'au_total_market')},
+    '6':  {'label': 'US Total Market (screener, benchmark, breadth)', **_mdb('--universe', 'us_total_market')},
+    '7':  {'label': 'Nasdaq 100',                                     **_mdb('--universe', 'nasdaq100')},
+    '8':  {'label': 'All Major Commodities',                          **_mdb('--universe', 'all_major_commodities')},
+    '9':  {'label': 'Uranium',                                        **_mdb('--universe', 'uranium')},
+    '10': {'label': 'AU Gold Miners',                                 **_mdb('--universe', 'au_gold_miners')},
+    '11': {'label': 'Breadth only — all universes',                   **_mdb('--studies', 'breadth')},
+    '12': {'label': 'RRG — all four studies',                         **_mdb('--studies', 'rrg')},
 
-    # ── US Market ─────────────────────────────────────────────────────────────
-    '5'  : {'label': 'US Total Market Screener',        'python': PYTHON, 'cwd': STOCKS,  'script': 'us_total_market_screener.py'},
-    '6'  : {'label': 'US Total Market Benchmark',       'python': PYTHON, 'cwd': STOCKS,  'script': 'us_total_market_benchmark.py'},
-    '7'  : {'label': 'US Total Market Breadth',         'python': PYTHON, 'cwd': STOCKS,  'script': 'us_total_market_breadth.py'},
+    # ── Other stocks tools ────────────────────────────────────────────────────
+    '13': {'label': 'DeMark Scan — US ≥ $1B',   'python': PYTHON, 'cwd': BASE,   'argv': ['-m', 'marketdb.demark']},
+    '14': {'label': 'ASX substantial holders',  **_script(STOCKS, 'asx_substantial_holders.py')},
+    '15': {'label': 'Drawdown Analysis (see --help for periods)', 'python': PYTHON, 'cwd': BASE,
+           'argv': ['-m', 'marketdb.drawdown', '--help']},
 
-    # ── Commodities ───────────────────────────────────────────────────────────
-    '8'  : {'label': 'All Commodities Screener',        'python': PYTHON, 'cwd': STOCKS,  'script': 'all_major_commodities_screener.py'},
-    '9'  : {'label': 'All Commodities Benchmark',       'python': PYTHON, 'cwd': STOCKS,  'script': 'all_major_commodities_benchmark.py'},
-    '10' : {'label': 'All Commodities Breadth',         'python': PYTHON, 'cwd': STOCKS,  'script': 'all_major_commodities_breadth.py'},
-
-    # ── Uranium ───────────────────────────────────────────────────────────────
-    '11' : {'label': 'Uranium Benchmark',               'python': PYTHON, 'cwd': STOCKS,  'script': 'uranium_benchmark.py'},
-    '12' : {'label': 'Uranium Screener',                'python': PYTHON, 'cwd': STOCKS,  'script': 'uranium_screener.py'},
-
-    # ── AU Gold Miners ────────────────────────────────────────────────────────
-    '13' : {'label': 'AU Gold Miners Benchmark',        'python': PYTHON, 'cwd': STOCKS,  'script': 'au_gold_miners_benchmark.py'},
-    '14' : {'label': 'AU Gold Miners Screener',         'python': PYTHON, 'cwd': STOCKS,  'script': 'au_gold_miners_screener.py'},
-
-    # ── Drawdown Analysis ─────────────────────────────────────────────────────
-    '15' : {'label': 'Drawdown Analysis',               'python': PYTHON, 'cwd': STOCKS,  'script': 'drawdown_analysis.py'},
-
-    # ── RRG Graphs        ───────────────────────────────────────────────────── 
-    '16' : {'label': 'RRG AU Data',   'python': PYTHON, 'cwd': STOCKS, 'script': 'rrg_au_data.py'},
-    '17' : {'label': 'RRG US Data',   'python': PYTHON, 'cwd': STOCKS, 'script': 'rrg_us_data.py'},
-
-    # ── DeMark Scans      ─────────────────────────────────────────────────────
-    '18' : {'label': 'DeMark Scan — US Market', 'python': PYTHON, 'cwd': STOCKS, 'script': 'demark_scan.py'},
-
-    # ── Comsumer Credit      ──────────────────────────────────────────────────
-    '19' : {'label': 'Consumer Credit Report', 'python': PYTHON, 'cwd': MACRO, 'script': 'consumer_credit.py'},
+    # ── Macro / credit / ETF ──────────────────────────────────────────────────
+    '16': {'label': 'Consumer Credit Report',   **_script(MACRO, 'consumer_credit.py')},
+    '17': {'label': 'AU Credit Report',         **_script(MACRO, 'au_credit.py')},
+    '18': {'label': 'ETF Income scoring',       **_script(ETF, 'etf_income_data.py')},
 
     # ── Batch runs ────────────────────────────────────────────────────────────
-    'A'  : {'label': 'ALL — Full daily run',            'batch': ['1','2','3','4','5','6','7','8','9','10','11','12','13','14']},
-    'B'  : {'label': 'AU — AU market only',             'batch': ['1','2','3','4']},
-    'C'  : {'label': 'US — US market only',             'batch': ['1','5','6','7']},
-    'D'  : {'label': 'COMM — Commodities only',         'batch': ['8','9','10','11','12','13','14']},
-    'E'  : {'label': 'MACRO + BREADTH — Morning run',   'batch': ['1','4','7','10']},
-    'F'  : {'label': 'AU — All AU market scripts',  'batch': ['2','3','4','13','14','16']},
-    'G'  : {'label': 'US — All US market scripts',  'batch': ['5','6','7','11','12','17']},
-    'H' : {'label': 'Weekly — Update ALL Market Caps'},
-
-    # ── Utilities ─────────────────────────────────────────────────────────────
-    'U1' : {'label': 'Fetch Market Caps — AU',          'python': PYTHON, 'cwd': os.path.join(BASE, 'utilities'), 'script': 'fetch_market_caps_au.py'},
-    'U2' : {'label': 'Fetch Market Caps — US',          'python': PYTHON, 'cwd': os.path.join(BASE, 'utilities'), 'script': 'fetch_market_caps_us.py'},
-    'U3' : {'label': 'Fetch Market Caps — Commodities', 'python': PYTHON, 'cwd': os.path.join(BASE, 'utilities'), 'script': 'fetch_market_caps_commodities.py'},
-    'U4' : {'label': 'Fetch Market Caps — Uranium',     'python': PYTHON, 'cwd': os.path.join(BASE, 'utilities'), 'script': 'fetch_market_caps_uranium.py'},
-    'U5' : {'label': 'Fetch Market Caps — AU Gold',     'python': PYTHON, 'cwd': os.path.join(BASE, 'utilities'), 'script': 'fetch_market_caps_au_gold.py'},
-     
+    'A': {'label': 'ALL — Full daily run (macro + marketdb)',          'batch': ['1', '2']},
+    'B': {'label': 'AU — AU market only',                              'batch': ['5', '10']},
+    'C': {'label': 'US — US market only',                              'batch': ['6', '7', '9']},
+    'D': {'label': 'COMM — Commodities only',                          'batch': ['8', '9', '10']},
+    'E': {'label': 'MACRO + BREADTH — Morning run',                    'batch': ['1', '11']},
+    'M': {'label': 'MONTHLY — refresh universe (new listings, delistings, sectors, caps, indices)',
+          **_mdb('--refresh-universe', '--skip-fetch', '--studies')},
+    'R': {'label': 'MAINTENANCE — re-pull full price history (slow)', **_mdb('--full', '--studies')},
+    'S': {'label': 'SETUP — bootstrap a fresh machine (one-off, ~15 min)', 'python': PYTHON, 'cwd': BASE,
+          'argv': ['-m', 'marketdb.bootstrap']},
 }
 
-# ── Run a single script ───────────────────────────────────────────────────────
+MENU_SECTIONS = [
+    ('DAILY',            ['1', '2', '3', '4']),
+    ('PER MARKET',       ['5', '6', '7', '8', '9', '10', '11', '12']),
+    ('OTHER STOCK TOOLS', ['13', '14', '15']),
+    ('MACRO / CREDIT / ETF', ['16', '17', '18']),
+]
+BATCH_KEYS = ['A', 'B', 'C', 'D', 'E', 'M', 'R', 'S']
+
+
+# ── Runner ────────────────────────────────────────────────────────────────────
 def run_script(key):
-    s       = SCRIPTS[key]
-    label   = s['label']
-    python  = s['python']
-    cwd     = s['cwd']
-    script  = os.path.join(cwd, s['script'])
-    start   = datetime.now()
-
-    print(f"\n{'─'*60}")
-    print(f"  Running: {label}")
-    print(f"  Script:  {script}")
-    print(f"  Started: {start.strftime('%H:%M:%S')}")
-    print(f"{'─'*60}")
-
+    s = SCRIPTS[key]
+    print(f"\n{'═' * 60}")
+    print(f"  {s['label']}")
+    print(f"  {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
+    print(f"{'═' * 60}")
     env = os.environ.copy()
     env['PYTHONIOENCODING'] = 'utf-8'
-
-    result = subprocess.run(
-        [python, script],
-        cwd=cwd,
-        env=env,
-        text=True,
-        encoding='utf-8',
-        errors='replace'
-    )
-
-    elapsed = (datetime.now() - start).seconds
-    mins    = elapsed // 60
-    secs    = elapsed % 60
-
-    if result.returncode == 0:
-        print(f"  ✓ Completed in {mins}m {secs}s")
-    else:
-        print(f"  ✗ Failed after {mins}m {secs}s (return code {result.returncode})")
-
+    result = subprocess.run([s['python'], *s['argv']], cwd=s['cwd'], env=env)
+    status = 'OK' if result.returncode == 0 else f'FAILED (exit {result.returncode})'
+    print(f"\n  → {status}")
     return result.returncode == 0
 
-# ── Run a batch ───────────────────────────────────────────────────────────────
+
 def run_batch(key):
-    batch     = SCRIPTS[key]['batch']
-    label     = SCRIPTS[key]['label']
-    start     = datetime.now()
-    results   = {}
+    keys = SCRIPTS[key]['batch']
+    print(f"\n  Running batch: {SCRIPTS[key]['label']} ({len(keys)} steps)")
+    ok = 0
+    for k in keys:
+        if run_script(k):
+            ok += 1
+    print(f"\n  Batch complete — {ok}/{len(keys)} succeeded")
 
-    print(f"\n{'═'*60}")
-    print(f"  BATCH: {label}")
-    print(f"  Scripts: {len(batch)}")
-    print(f"  Started: {start.strftime('%H:%M:%S')}")
-    print(f"{'═'*60}")
 
-    for k in batch:
-        success      = run_script(k)
-        results[k]   = success
-
-    elapsed = (datetime.now() - start).seconds
-    mins    = elapsed // 60
-    secs    = elapsed % 60
-
-    print(f"\n{'═'*60}")
-    print(f"  BATCH COMPLETE — {mins}m {secs}s")
-    print(f"{'═'*60}")
-    for k, success in results.items():
-        status = '✓' if success else '✗'
-        print(f"  {status} {SCRIPTS[k]['label']}")
-    print(f"{'═'*60}")
-
-# ── Menu ──────────────────────────────────────────────────────────────────────
 def show_menu():
-    print(f"\n{'═'*60}")
-    print(f"  PROJECT LAUNCHER — {datetime.now().strftime('%d %b %Y %H:%M')}")
-    print(f"{'═'*60}")
-    print("")
-    print("  INDIVIDUAL SCRIPTS")
-    print(f"  {'─'*56}")
-
-    sections = [
-        ('MACRO',         ['1']),
-        ('AU MARKET',     ['2','3','4']),
-        ('US MARKET',     ['5','6','7']),
-        ('COMMODITIES',   ['8','9','10']),
-        ('URANIUM',       ['11','12']),
-        ('AU GOLD',       ['13','14']),
-        ('DRAWDOWN',      ['15']),
-        ('UTILITIES',     ['U1','U2','U3','U4','U5']),
-        ('DEMARK',        ['18']),
-        ('CONSUMER CREDIT', ['19']),
-    ]
-
-    for section, keys in sections:
+    print(f"\n{'═' * 60}")
+    print("  MARKET INTELLIGENCE — SCRIPT LAUNCHER")
+    print(f"{'═' * 60}")
+    for section, keys in MENU_SECTIONS:
         print(f"\n  {section}")
         for k in keys:
             print(f"    {k:>3}. {SCRIPTS[k]['label']}")
-
-    print(f"\n  {'─'*56}")
+    print(f"\n  {'─' * 56}")
     print("  BATCH RUNS")
-    print(f"  {'─'*56}")
-    for k in ['A','B','C','D','E','F','G','H']:
+    print(f"  {'─' * 56}")
+    for k in BATCH_KEYS:
         print(f"    {k:>3}. {SCRIPTS[k]['label']}")
-
-    print(f"\n  {'─'*56}")
+    print(f"\n  {'─' * 56}")
     print("    Q. Quit")
-    print(f"{'═'*60}")
+    print(f"{'═' * 60}")
 
-# ── Main ──────────────────────────────────────────────────────────────────────
+
+def dispatch(choice):
+    choice = choice.strip().upper()
+    if choice not in SCRIPTS:
+        print(f"\n  Invalid choice: {choice}")
+        return
+    if 'batch' in SCRIPTS[choice]:
+        run_batch(choice)
+    else:
+        run_script(choice)
+
+
 if __name__ == "__main__":
+    if len(sys.argv) > 1:                       # non-interactive: python launcher.py A M
+        for c in sys.argv[1:]:
+            dispatch(c)
+        sys.exit(0)
     while True:
         show_menu()
         choice = input("\n  Enter choice: ").strip().upper()
-
         if choice == 'Q':
             print("\n  Goodbye.\n")
             break
-        elif choice == 'H':
-            for key in ['U1','U2','U3','U4','U5']:
-                run_script(key)
-        elif choice in SCRIPTS:
-            if 'batch' in SCRIPTS[choice]:
-                run_batch(choice)
-            else:
-                run_script(choice)
-        else:
-            print(f"\n  Invalid choice: {choice}")
+        dispatch(choice)

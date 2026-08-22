@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,commodity,type,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-7,0,NFG.V,New Found Gold Corp,gold,explorer,mid,2.15,0.0,0.0315,0.0123,-0.0455,STRONG_UP,-49.65,6.97,,-56.9,49.2,61.84,,LOW,EARLY,2.3515,2.6404,3.2329,0,5.5415,WEAK,17.2783

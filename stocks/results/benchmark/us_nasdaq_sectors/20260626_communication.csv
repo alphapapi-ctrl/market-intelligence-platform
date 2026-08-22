@@ -1,4 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-24,0,TDAY,USA TODAY INC,Communication,,small,7.94,1.7248,1.0407,1.0337,0.9552,STRONG_UP,48.69,126.21,,-20.32,49.2,38.4,,LOW,-,7.8865,7.58,5.9225,1,161.7076,TREND+LEAD,36.3621
-158,0,WLY,JOHN WILEY AND SONS INC CLASS A,Communication,,mid,45.56,0.7987,1.0076,1.1086,0.9629,FLAT,48.9,4.75,,-34.42,49.6,26.61,,LOW,-,44.1505,42.2944,36.3132,1,8.859,TREND_ONLY,12.2515
-227,0,YELP,YELP INC,Communication,,small,22.92,0.5113,1.0346,0.9951,0.7419,STRONG_UP,-24.73,-32.94,,-43.9,50.0,47.51,,LOW,-,23.0665,24.8298,27.4681,0,-34.6698,WEAK,2.8928

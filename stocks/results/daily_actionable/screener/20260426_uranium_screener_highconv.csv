@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-3,0,OKLO,OKLO INC,Uranium,large,71.0,93.33,0.0658,0.2511,-0.0227,FLAT,-43.06,189.91,454.25,-73.83,50.6,97.24,2.2386,HIGH,SHIFT,57.133,59.7386,86.0568,0,98.8242,LAGGARD,57.672

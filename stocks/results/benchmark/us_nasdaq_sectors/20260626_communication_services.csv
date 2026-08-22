@@ -1,8 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-2,0,WBD,Warner Bros. Discovery,Communication Services,Broadcasting,large,26.98,1.845,1.0636,1.0121,0.7985,STRONG_UP,-7.44,141.97,,-21.31,47.2,13.5,,LOW,-,26.785,26.9982,25.4529,1,496.38,TREND+LEAD,100.6559
-26,0,GOOGL,Alphabet Inc. (Class A),Communication Services,Interactive Media & Services,large,343.71,1.5144,0.9646,0.9005,0.9808,FLAT,9.48,98.62,,-20.37,53.6,36.9,,LOW,-,363.3736,369.106,313.0075,1,143.2574,TREND+LEAD,35.757
-90,0,TTD,Trade Desk (The),Communication Services,Advertising,large,17.33,0.1943,0.967,0.7916,0.6387,STRONG_UP,-53.71,-74.52,,-80.69,46.0,56.69,,LOW,EARLY,19.562,21.428,33.0256,0,-60.4696,WEAK,19.2096
-112,0,LYV,Live Nation Entertainment,Communication Services,Movies & Entertainment,large,175.11,0.907,1.0561,1.0704,0.935,FLAT,21.52,18.96,,-27.84,49.2,32.36,,LOW,-,168.591,164.1304,153.8081,1,28.8276,TREND_ONLY,16.6224
-166,0,FOXA,Fox Corporation (Class A),Communication Services,Broadcasting,large,48.86,0.6635,0.9662,0.7597,0.6676,STRONG_UP,-33.39,-12.97,,-35.58,55.2,47.07,,LOW,EARLY,60.218,62.6516,63.3681,0,-15.2158,WEAK,11.42
-168,0,TTWO,Take-Two Interactive,Communication Services,Interactive Home Entertainment,large,238.72,0.7605,1.0304,1.1125,0.9822,FLAT,-4.22,-0.25,,-27.68,49.2,34.08,,LOW,-,223.3665,222.9584,230.8239,1,-0.368,TREND_ONLY,11.2404
-197,0,META,Meta Platforms,Communication Services,Interactive Media & Services,large,542.87,0.5719,0.9713,0.8708,0.7951,STRONG_UP,-18.21,-24.99,6.51,-33.3,49.2,44.17,0.9367,LOW,EARLY,587.2123,614.8398,649.9292,0,-27.8344,WEAK,8.2306

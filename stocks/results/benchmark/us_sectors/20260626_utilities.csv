@@ -1,4 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-19,636,FE,FirstEnergy,Utilities,Electric Utilities,large,48.01,1.0312,1.0511,1.0462,0.8495,STRONG_UP,9.7,25.12,,-14.71,58.8,18.34,,LOW,-,46.515,46.6187,46.2847,1,80.5374,TREND+LEAD,23.112
-26,920,NEE,NextEra Energy,Utilities,Multi-Utilities,large,87.7,1.0476,1.0281,1.0274,0.8492,STRONG_UP,11.47,27.12,,-14.53,54.0,26.59,,LOW,-,85.6707,89.6101,85.0763,1,55.0677,TREND+LEAD,18.4266
-37,883,ATO,Atmos Energy,Utilities,Gas Utilities,large,173.67,0.9569,1.0382,1.0045,0.8355,STRONG_UP,4.54,16.11,,-12.58,57.6,16.85,,LOW,PROGRESS,169.6725,177.0521,173.7002,0,55.057,WEAK,15.9154

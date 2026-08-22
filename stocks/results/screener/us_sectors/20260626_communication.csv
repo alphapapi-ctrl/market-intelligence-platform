@@ -1,4 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-3,0,GSAT,GLOBALSTAR VOTING INC,Communication,,mid,79.95,100.0,-0.0291,-0.1404,0.1781,FLAT,25.41,241.52,,-26.53,55.2,48.54,,LOW,-,81.302,81.6082,62.7346,1,274.6589,LEADER,60.668
-78,0,SHEN,SHENANDOAH TELECOMMUNICATIONS,Communication,,small,15.03,50.0,0.0694,-0.1807,-0.2963,STRONG_UP,32.66,8.18,,-36.32,52.8,39.32,,LOW,-,15.5685,15.9052,13.4851,1,10.9903,CONTENDER,11.2705
-83,0,TRIP,TRIPADVISOR INC,Communication,,small,12.8,0.0,-0.0402,0.3212,0.1182,FLAT,-8.57,-0.85,,-51.72,47.6,47.35,,LOW,-,12.15,11.2218,13.1516,0,-0.8565,WEAK,9.1308

@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-19,0,INSM,Insmed Incorporated,Health Care,Biotechnology,large,94.17,100.0,-0.1327,-0.0727,-0.235,FLAT,-53.84,33.23,57.21,-55.46,53.2,70.35,1.6335,HIGH,EARLY,106.918,129.4694,155.0994,0,25.1324,LAGGARD,32.863

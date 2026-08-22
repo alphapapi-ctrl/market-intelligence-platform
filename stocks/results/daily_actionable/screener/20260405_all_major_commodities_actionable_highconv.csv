@@ -1,4 +1,0 @@
-rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-131,20,MARI.TO,Marimaca Copper,copper,producer,mid,8.76,0.8078,1.0292,0.966,0.7272,STRONG_UP,-24.22,97.74,133.6,-37.79,49.19,50.58,1.7187,HIGH,PROGRESS,8.682,10.097,10.3391,0,95.0566,WEAK,35.4543
-252,21,IVPAF,Ivanhoe Mines Ltd,palladium,producer,large,7.5,0.6932,0.8981,0.8499,0.7469,STRONG_UP,-28.23,-3.82,-39.47,-46.08,51.21,66.59,1.7289,HIGH,EARLY,8.638,10.7199,9.8015,0,-2.9389,WEAK,21.2751
-263,-16,IVN.TO,Ivanhoe Mines Class A,copper,producer,large,10.44,0.3825,0.8739,0.8202,0.5975,STRONG_UP,-28.4,-6.37,-38.08,-44.5,51.21,64.59,1.6871,HIGH,EARLY,11.8675,14.6598,13.5199,0,-5.0486,WEAK,20.1046

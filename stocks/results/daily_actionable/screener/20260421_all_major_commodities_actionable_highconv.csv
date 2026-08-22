@@ -1,5 +1,0 @@
-rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-101,27,MARI.TO,Marimaca Copper,copper,producer,mid,9.0,0.826,0.9944,0.891,0.7286,STRONG_UP,-19.93,101.79,145.9,-37.79,48.4,49.11,2.3664,HIGH,PROGRESS,8.532,9.4116,10.4681,0,100.3221,WEAK,36.6219
-148,58,NFG.V,New Found Gold Corp,gold,explorer,mid,3.14,0.967,1.0855,0.9761,0.7501,STRONG_UP,-7.92,86.9,-36.18,-51.05,51.2,76.97,2.3977,HIGH,PROGRESS,2.7055,3.1954,3.1463,0,57.8086,WEAK,31.61
-243,38,WA1.AX,WA1 Resources,copper,producer,mid,14.54,0.5276,1.0261,0.8931,0.7589,STRONG_UP,-29.59,28.9,-14.47,-41.26,53.78,61.71,1.8681,HIGH,PROGRESS,14.2755,15.077,17.1326,0,25.1868,WEAK,20.9756
-280,-4,LCID,LUCID GROUP INC,lithium,producer,mid,6.75,0.1221,0.7456,0.5423,0.586,FLAT,-65.61,-70.91,-71.64,-78.43,41.6,78.92,3.5487,HIGH,EARLY,9.0595,9.7032,15.8684,0,-37.3753,WEAK,17.805

@@ -1,3 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-21,491,TEAM,Atlassian,Technology,Computer Software,large,74.68,0.3101,0.9181,0.8547,0.9605,FLAT,-54.01,-62.38,,-74.13,44.4,94.76,0.8607,LOW,EARLY,92.768,85.2641,118.0407,0,-29.2273,WEAK,21.6009
-51,1006,PDD,PDD Holdings,Technology,EDP Services,large,73.3,0.5712,0.9369,0.8627,0.6383,STRONG_UP,-34.59,-30.69,,-46.93,48.4,39.69,,LOW,EARLY,81.837,91.7596,109.6175,0,-37.4195,WEAK,11.3844

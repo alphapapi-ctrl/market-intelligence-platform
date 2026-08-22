@@ -1,9 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-110,0,MRVL,Marvell Technology,Technology,Semiconductors,large,186.8,100.0,-0.0433,0.1113,1.2594,STRONG_DOWN,137.71,211.6,156.38,-26.36,54.0,70.58,1.1739,MED,-,168.372,133.301,94.6518,1,161.8958,LEADER,46.3096
-180,74,ASML,ASML Holding,Technology,Industrial Machinery,large,1550.13,85.71,-0.0881,-0.089,-0.0778,FLAT,54.93,111.93,70.44,-17.85,56.8,50.47,1.0082,MED,-,1483.2711,1424.3457,1164.6819,1,125.9674,LEADER,36.0634
-216,51,ARM,Arm Holdings,Technology,Semiconductors,large,256.73,71.43,0.0967,0.23,0.9523,STRONG_DOWN,88.72,96.8,123.69,-41.47,52.8,87.05,2.1337,HIGH,-,216.378,174.6593,145.41,1,58.7159,CONTENDER,33.1925
-480,-59,TEAM,Atlassian,Technology,Computer Software,large,86.23,14.29,0.0395,0.089,0.0429,FLAT,-42.03,-58.78,-51.57,-74.13,45.6,91.58,0.5043,LOW,SHIFT,82.3938,74.2375,127.4355,0,-29.2656,WEAK,21.425
-529,-40,MSTR,MicroStrategy,Technology,Computer Software,large,165.81,0.0,-0.1796,-0.2407,0.1732,FLAT,-19.82,-58.82,0.16,-76.53,44.4,69.57,0.5208,LOW,-,176.2005,153.8624,214.7033,0,-37.5421,WEAK,20.5311
-553,-151,ZS,Zscaler,Technology,EDP Services,large,174.45,42.86,0.1081,0.1467,-0.0429,FLAT,-40.48,-29.86,-1.43,-64.89,50.8,68.24,0.7953,LOW,SHIFT,147.8895,143.3948,225.1685,0,-22.2294,WEAK,20.0303
-815,-272,TRI,Thomson Reuters,Technology,Computer Software,large,85.36,28.57,0.0531,-0.2317,-0.0931,FLAT,-35.63,-54.9,-48.47,-61.95,43.2,56.84,0.5338,LOW,EARLY,89.2376,89.8128,124.5227,0,-41.7261,WEAK,15.0467
-1163,-22,PDD,PDD Holdings,Technology,EDP Services,large,98.15,57.14,-0.0395,-0.1841,-0.1996,STRONG_UP,-17.92,-15.53,-32.52,-31.25,50.4,33.46,0.7641,LOW,PROGRESS,98.0985,99.8782,113.9396,0,-23.3978,LAGGARD,9.3646

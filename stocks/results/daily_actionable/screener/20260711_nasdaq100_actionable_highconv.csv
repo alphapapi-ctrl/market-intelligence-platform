@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-40,0,ALNY,Alnylam Pharmaceuticals,Health Care,Biotechnology,large,298.76,33.33,-0.0435,-0.0499,-0.0127,FLAT,-25.2,-5.14,14.46,-43.39,52.8,33.97,2.0741,HIGH,SHIFT,296.731,296.4092,363.3894,0,-7.9853,WEAK,18.0763

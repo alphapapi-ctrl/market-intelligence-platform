@@ -1,5 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-19,428,ODC,OIL DRI CORPORATION OF AMERICA,Consumer Staples,,small,94.04,1.147,1.0079,1.2093,1.215,STRONG_DOWN,80.13,59.26,,-32.73,54.0,47.13,,LOW,-,86.187,78.817,63.9428,1,67.9021,TREND+LEAD,19.7131
-21,704,DLTR,Dollar Tree,Consumer Staples,Consumer Staples Merchandise Retail,large,113.93,0.8164,1.0158,1.1515,0.8387,FLAT,-10.22,13.35,,-38.53,48.8,53.8,,LOW,-,108.998,101.679,109.3815,1,12.111,TREND_ONLY,17.438
-47,1205,STZ,Constellation Brands,Consumer Staples,Distillers & Vintners,large,141.51,0.641,0.9615,0.9076,0.7448,STRONG_UP,4.8,-10.99,,-26.51,44.8,33.08,,LOW,EARLY,141.882,148.439,144.4482,0,-14.8865,WEAK,8.1277
-48,1234,CLX,Clorox,Consumer Staples,Household Products,large,90.6,0.5576,0.9501,0.9209,0.6906,STRONG_UP,-6.67,-22.58,,-31.52,49.6,39.36,,LOW,EARLY,94.4315,94.8247,106.0492,0,-28.4556,WEAK,7.4903

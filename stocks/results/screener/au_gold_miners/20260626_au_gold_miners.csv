@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-1,86,TMX.AX,Terrain Minerals Limited,Gold,small,0.003,50.0,-0.1429,-0.25,-0.4,STRONG_UP,-25.0,50.0,,-57.14,21.74,155.64,,LOW,-,0.0038,0.0041,0.0045,0,6.9841,LAGGARD,13.718

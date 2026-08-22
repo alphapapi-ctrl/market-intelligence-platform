@@ -1,6 +1,0 @@
-rank,delta_rank,ticker,name,commodity,type,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-2,0,AUGO,"ticker
-AUGO    Aura Minerals
-AUGO    Aura Minerals
-Name: name, dtype: object",copper,producer,large,61.13,100.0,0.1121,0.1019,0.3837,FLAT,19.8,159.73,,-50.65,57.38,81.99,,LOW,-,63.9665,76.2482,59.3062,1,111.7841,LEADER,42.1466
-9,0,MMA.V,Midnight Sun Mining,copper,producer,small,0.68,0.0,-0.1121,-0.1019,-0.3837,FLAT,-53.1,28.3,,-64.74,44.4,91.7,,LOW,-,0.816,1.0197,1.2573,0,13.7034,WEAK,14.1713

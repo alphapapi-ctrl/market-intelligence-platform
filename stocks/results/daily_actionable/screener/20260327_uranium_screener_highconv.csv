@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-33,6,VAU.AX,Vault Minerals Limited,Gold,mid,3.99,47.06,0.0284,-0.1006,-0.1946,STRONG_UP,-4.98,39.87,70.52,-41.81,50.0,58.07,1.7365,HIGH,EARLY,4.7977,5.2968,4.3011,0,34.3262,WEAK,23.6598

@@ -1,5 +1,0 @@
-rank,delta_rank,ticker,name,commodity,type,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-153,2,MARI.TO,Marimaca Copper,copper,producer,mid,8.71,32.5,0.0079,-0.0222,-0.2585,STRONG_UP,-23.73,65.9,146.05,-37.79,48.4,50.72,1.562,HIGH,EARLY,8.7295,10.1572,10.3229,0,62.8902,WEAK,28.3939
-197,-1,HMY,Harmony Gold Mining,gold,producer,large,16.16,1.9,0.0145,-0.0748,-0.2763,STRONG_UP,-12.36,7.67,96.32,-48.85,50.8,74.73,1.6372,HIGH,PROGRESS,15.711,19.3188,17.621,0,5.2166,WEAK,23.826
-257,3,IVN.TO,Ivanhoe Mines Class A,copper,producer,large,10.51,2.5,-0.1372,-0.1528,-0.3727,STRONG_UP,-27.72,-19.46,-35.32,-44.13,51.2,64.94,3.2118,HIGH,EARLY,12.027,14.779,13.5212,0,-15.3455,WEAK,17.1238
-258,41,IVPAF,Ivanhoe Mines Ltd,palladium,producer,large,7.58,0.0,-0.1775,-0.1462,-0.2581,FLAT,-27.39,-16.98,-36.78,-45.51,51.2,66.61,4.0632,HIGH,EARLY,8.7616,10.8075,9.8034,0,-13.0494,WEAK,17.092

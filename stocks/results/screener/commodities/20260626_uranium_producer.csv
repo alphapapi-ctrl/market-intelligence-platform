@@ -1,4 +1,0 @@
-rank,delta_rank,ticker,name,commodity,type,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-1,0,CXU.AX,Cauldron Energy,uranium,producer,small,0.092,100.0,-0.1335,1.0261,3.1206,STRONG_DOWN,338.1,1050.0,,-44.44,37.55,201.33,1.0148,MED,-,0.0714,0.0612,0.0341,1,195.8352,LEADER,54.6305
-8,0,LI.V,American Lithium Ord Shs,uranium,producer,small,0.455,50.0,0.0815,-0.5715,-1.5412,STRONG_UP,-35.0,30.0,,-61.54,40.0,60.9,,LOW,-,0.5162,0.5633,0.6649,0,19.7044,LAGGARD,16.892
-10,0,GLO.TO,Global Atomic Corp,uranium,producer,small,0.65,0.0,0.0521,-0.4546,-1.5794,STRONG_UP,-9.72,-4.41,,-41.77,41.2,75.32,,LOW,-,0.6965,0.7412,0.7122,0,-2.4132,WEAK,7.8891

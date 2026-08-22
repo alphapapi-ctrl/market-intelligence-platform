@@ -1,3 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-12,5,ARM,Arm Holdings,Technology,Semiconductors,large,408.85,81.82,0.2299,0.8303,2.0917,STRONG_DOWN,201.6,224.34,221.63,-41.47,54.0,98.21,2.1456,HIGH,-,258.825,204.0177,152.1781,1,123.353,LEADER,48.7656
-16,4,DDOG,Datadog,Technology,Computer Software,large,277.49,75.0,0.1978,0.8688,1.2154,STRONG_DOWN,73.42,135.68,153.79,-48.62,48.4,82.05,2.0307,HIGH,-,205.776,156.0492,144.6201,1,80.0357,LEADER,41.78

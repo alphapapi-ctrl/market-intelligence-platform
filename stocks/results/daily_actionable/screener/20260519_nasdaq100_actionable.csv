@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-35,4,AEP,American Electric Power,Utilities,Electric Utilities,large,127.68,100.0,-0.0098,0.0173,0.0718,STRONG_DOWN,6.86,26.93,47.61,-8.14,52.0,20.09,1.5131,HIGH,-,131.9017,131.472,119.4034,1,69.6929,LEADER,21.8045

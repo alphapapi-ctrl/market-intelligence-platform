@@ -1,8 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-19,300,MNST,Monster Beverage,Consumer Staples,Soft Drinks & Non-alcoholic Beverages,large,96.55,1.2531,0.976,1.0478,1.0692,STRONG_DOWN,26.79,63.17,93.68,-17.7,58.4,32.64,1.0376,MED,-,94.6785,88.6824,78.2183,1,113.0318,TREND+LEAD,31.5231
-66,418,SPB,SPECTRUM BRANDS HOLDINGS INC,Consumer Staples,,small,84.08,1.1529,0.9761,0.9945,0.8897,FLAT,36.42,50.12,9.1,-15.76,52.0,37.74,0.6611,LOW,-,84.132,81.2736,68.5457,1,69.0582,TREND+LEAD,17.7157
-68,527,DLTR,Dollar Tree,Consumer Staples,Consumer Staples Merchandise Retail,large,120.92,0.8569,0.9617,1.0549,0.9944,FLAT,-8.09,11.58,,-38.53,48.0,54.56,0.4119,LOW,-,117.3535,106.1922,110.7588,1,10.1883,TREND_ONLY,17.0784
-126,945,PEP,PepsiCo,Consumer Staples,Soft Drinks & Non-alcoholic Beverages,large,137.86,0.8004,0.9431,0.9447,0.7386,FLAT,1.52,4.22,,-19.87,46.0,23.36,,LOW,EARLY,142.117,146.4054,148.9683,0,8.3149,WEAK,9.0791
-138,0,CALM,CAL MAINE FOODS INC,Consumer Staples,,mid,85.35,0.6847,1.0043,1.0748,0.9309,FLAT,11.15,-10.85,53.2,-37.0,50.4,26.95,0.9528,LOW,-,80.497,78.0889,82.2002,1,-20.2827,TREND_ONLY,7.6537
-159,0,DOLE,DOLE PLC,Consumer Staples,,small,14.02,0.777,0.9866,0.987,0.7643,FLAT,0.25,1.18,17.63,-15.88,51.2,26.0,0.5223,LOW,-,14.0379,14.2477,14.3468,0,2.3294,WEAK,3.7428
-166,1342,JJSF,J AND J SNACK FOODS CORP,Consumer Staples,,small,75.5,0.5122,0.9812,0.9698,0.787,STRONG_UP,-14.68,-33.3,-52.12,-39.7,51.2,35.02,0.7009,LOW,-,75.4292,75.8209,83.6471,0,-48.6828,WEAK,-0.376

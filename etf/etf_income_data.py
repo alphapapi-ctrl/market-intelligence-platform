@@ -24,6 +24,7 @@ import numpy as np
 import pandas as pd
 import yfinance as yf
 from datetime import datetime, timedelta
+import etf_prices as _px
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 RESULTS_DIR = os.path.join(BASE, 'results', 'etf_income')
@@ -233,15 +234,18 @@ def fetch_underlying_rs(underlyings):
             proxies[u] = t
 
     try:
-        spy_close = yf.Ticker('SPY').history(period='1y', auto_adjust=True)['Close']
+        _px.prefetch(['SPY'] + list(proxies.values()))
+        spy_close = _px.adj_close('SPY', 1)
+        if spy_close is None:
+            raise ValueError('no SPY data')
     except Exception:
         return {u: None for u in underlyings}
 
     rs = {}
     for label, ticker in proxies.items():
         try:
-            und_close = yf.Ticker(ticker).history(period='1y', auto_adjust=True)['Close']
-            rs[label] = underlying_rs_from_series(und_close, spy_close)
+            und_close = _px.adj_close(ticker, 1)
+            rs[label] = underlying_rs_from_series(und_close, spy_close) if und_close is not None else None
         except Exception:
             rs[label] = None
     for u in underlyings:
@@ -253,13 +257,13 @@ def fetch_underlying_rs(underlyings):
 def fetch_etf_data(ticker):
     """Fetch 12m price history and distributions for one ETF."""
     try:
-        t = yf.Ticker(ticker)
-        hist = t.history(period='1y', auto_adjust=False)
+        hist = _px.history(ticker, 1)
         if hist is None or len(hist) < 63:
             return None
 
         close = hist['Close'].dropna()
-        divs = t.dividends
+        divs = hist['Dividends']
+        divs = divs[divs > 0]
         # limit to last 12 months
         if divs is not None and len(divs) > 0:
             cutoff = pd.Timestamp.now(tz=divs.index.tz) - pd.Timedelta(days=365)
@@ -310,8 +314,8 @@ def score_universe(data):
 
 
 def run():
-    os.makedirs(RESULTS_DIR, exist_ok=True)
     today = datetime.today().strftime('%Y%m%d')
+    _px.prefetch(list(UNIVERSE.keys()))
 
     # underlying RS vs SPY (one fetch per unique underlying)
     uniq_und = sorted({u for _, u, _ in UNIVERSE.values()})
@@ -347,9 +351,9 @@ def run():
             'dist_slope', 'dist_consist', 'underlying_rs', 'n_dists']
     out = df[cols].reset_index().rename(columns={'index': 'ticker'})
 
-    csv_file = os.path.join(RESULTS_DIR, f"{today}_etf_income.csv")
-    out.to_csv(csv_file, index=False)
-    print(f"\nSaved: {csv_file}")
+    from marketdb import results as _mr
+    _mr.save_frame(f"etf_income/{today}", out)
+    print(f"\nSaved: marketdb frame etf_income/{today}")
 
     q = out[out['qualified'] == True]
     print(f"\nQualified (positive 3m NAV): {len(q)} of {len(out)}")

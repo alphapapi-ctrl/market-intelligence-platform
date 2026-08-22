@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-73,-3,CSGP,CoStar Group,Real Estate,Real Estate,large,34.23,50.0,0.0169,0.0357,-0.2106,FLAT,-49.61,-58.15,-55.38,-67.11,49.2,36.42,0.8456,LOW,PROGRESS,33.2375,35.5396,58.5922,0,-78.5537,LAGGARD,11.1534

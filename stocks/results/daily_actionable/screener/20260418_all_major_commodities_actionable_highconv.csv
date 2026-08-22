@@ -1,5 +1,0 @@
-rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-8,0,OKLO,Oklo Inc.,uranium,producer,large,66.81,1.2569,1.157,1.0556,0.6852,STRONG_UP,-58.79,227.66,427.31,-73.83,51.0,89.72,2.4542,HIGH,SHIFT,53.216,59.6062,85.646,0,129.4103,WEAK,64.7182
-181,2,SMR,Nuscale Power Corp,uranium,producer,mid,12.65,0.3557,1.2335,0.9117,0.6102,STRONG_UP,-73.45,-7.26,158.69,-82.86,48.19,94.29,2.399,HIGH,SHIFT,10.6175,12.3096,26.9829,0,-3.7095,WEAK,28.1259
-276,5,LCID,LUCID GROUP INC,lithium,producer,mid,7.3,0.1315,0.7596,0.5853,0.6037,FLAT,-64.44,-68.53,-70.08,-76.68,41.77,77.65,3.4113,HIGH,EARLY,9.225,9.7588,15.9372,0,-36.8665,WEAK,17.3517
-297,6,CYL.AX,Catalyst Metals,gold,producer,mid,6.43,0.492,0.9606,0.7977,0.6924,STRONG_UP,-22.53,-3.74,708.8,-41.6,47.6,83.05,1.5533,HIGH,PROGRESS,6.383,7.089,7.0948,0,-2.145,WEAK,14.8632

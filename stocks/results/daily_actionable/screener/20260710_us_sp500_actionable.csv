@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-1,22,DNTH,DIANTHUS THERAPEUTICS INC,Health Care,,mid,100.03,100.0,0.0593,0.0197,0.0677,FLAT,162.61,385.35,249.27,-20.2,53.6,54.34,2.5969,HIGH,-,88.912,87.424,61.3246,1,380.0993,LEADER,95.873

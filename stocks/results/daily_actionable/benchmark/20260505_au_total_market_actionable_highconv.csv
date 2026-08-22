@@ -1,6 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-389,-6,COH.AX,Cochlear Limited,Health technology,Medical specialties,mid,100.26,0.3446,1.0802,0.5735,0.3844,UP,-64.64,-62.03,-67.94,-71.26,47.83,93.63,1.6478,HIGH,EARLY,137.7545,161.8622,247.8409,0,-31.6896,WEAK,17.3473
-1294,87,RMD.AX,ResMed Inc. CHESS Depositary Interests on a ratio of 10 CDIs per ord.sh,Health technology,Medical specialties,large,28.96,0.7118,0.9455,0.8865,0.8072,UP,-26.51,-21.58,-10.14,-36.15,52.96,28.33,1.6791,HIGH,EARLY,31.2945,32.9642,37.9777,0,-40.3489,WEAK,8.0668
-1371,-48,MCY.AX,Mercury NZ Ltd.,Utilities,Electric utilities,mid,5.42,0.9695,0.9856,1.0357,1.024,DOWN,-3.92,6.81,2.98,-17.68,45.06,42.86,6.6602,HIGH,SHIFT,5.3902,5.3403,5.497,0,7.1545,WEAK,7.384
-1542,9,A2M.AX,a2 Milk Company Limited,Consumer non-durables,Food: meat/fish/dairy,mid,6.55,0.7041,0.9015,0.6878,0.7776,DOWN,-30.68,-22.44,10.95,-33.68,50.59,44.54,5.56,HIGH,EARLY,7.7595,8.7893,8.7908,0,-25.4855,WEAK,5.4154
-1730,-25,EDV.AX,Endeavour Group Ltd,Retail trade,Specialty stores,mid,3.29,0.7506,0.9695,1.0137,0.9311,DOWN,-7.56,-17.31,-31.4,-21.64,43.08,24.92,3.3163,HIGH,EARLY,3.32,3.5196,3.6156,0,-29.9248,WEAK,0.4055

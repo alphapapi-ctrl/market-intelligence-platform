@@ -1,3 +1,0 @@
-rank,delta_rank,ticker,name,commodity,type,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-1,47,NEXA,Nexa Resources S.A.,copper,producer,mid,13.46,100.0,0.1111,0.0568,0.4635,FLAT,38.76,168.13,,-37.31,53.6,87.45,,LOW,-,13.1855,14.0594,10.4839,1,103.049,LEADER,32.4102
-7,242,CNL.TO,Collective Mining,copper,producer,mid,18.09,0.0,-0.1111,-0.0568,-0.4635,FLAT,-9.55,32.14,,-40.76,52.8,70.27,0.6402,LOW,EARLY,18.92,21.094,20.7604,0,24.1498,WEAK,15.4931

@@ -1,7 +1,0 @@
-rank,delta_rank,ticker,name,commodity,type,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-51,-37,AGMR.TO,Silver Mountain Resources,silver,explorer,small,3.77,96.67,-0.0577,-0.0655,0.0982,FLAT,9.59,471.21,3041.67,-43.49,50.6,120.54,0.6824,LOW,-,3.8875,4.2973,3.0212,1,197.8043,LEADER,48.2248
-77,-19,NEWP,New Pacific Metals,silver,explorer,mid,4.44,90.0,0.0073,0.0896,0.3211,STRONG_DOWN,61.45,322.86,123.12,-41.19,51.41,101.1,0.6851,LOW,-,4.035,4.1734,2.858,1,164.1749,LEADER,43.9178
-222,41,ASL.AX,Andean Silver,silver,explorer,small,2.13,36.67,0.0729,0.2061,-0.0294,FLAT,1.43,155.09,180.26,-38.99,48.78,100.98,1.176,MED,-,1.9373,2.0427,1.8213,1,74.9186,LAGGARD,24.6233
-270,13,SVL.AX,Silver Mines Ord Shs,silver,explorer,small,0.185,23.33,0.0461,0.0593,-0.0384,FLAT,-11.9,122.89,-5.13,-46.43,39.6,92.51,0.662,LOW,-,0.177,0.2085,0.1787,1,52.6052,LAGGARD,19.0451
-301,-16,AAG.V,Aftermath Silver,silver,explorer,small,0.75,13.33,-0.0975,-0.1451,-0.1635,STRONG_UP,-15.73,68.54,123.88,-51.15,41.37,111.02,0.7908,LOW,-,0.791,0.9368,0.884,0,25.5402,WEAK,15.1132
-306,-15,KTN.V,Kootenay Silver,silver,explorer,small,1.42,6.67,-0.0654,-0.1253,-0.2444,STRONG_UP,-22.83,51.06,23.48,-49.02,46.59,93.4,0.5248,LOW,-,1.487,1.7494,1.6513,0,25.4718,WEAK,14.5817

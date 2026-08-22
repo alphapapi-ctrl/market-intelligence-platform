@@ -1,3 +1,0 @@
-rank,delta_rank,ticker,name,commodity,type,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-10,0,YCA.L,Yellow Cake PLC,uranium,producer,mid,517.5,100.0,-0.0162,-0.0574,0.1463,FLAT,-22.7,5.87,-4.08,-28.32,46.61,28.26,0.9531,LOW,EARLY,533.7,553.15,582.04,0,9.6841,LAGGARD,11.6302
-12,0,AEE.AX,Aura Energy Ltd.,uranium,producer,small,0.105,0.0,0.0162,0.0574,-0.1463,FLAT,-46.15,-38.24,-19.23,-63.33,39.29,75.28,1.5431,HIGH,-,0.102,0.1127,0.1573,0,-19.9557,WEAK,9.2563

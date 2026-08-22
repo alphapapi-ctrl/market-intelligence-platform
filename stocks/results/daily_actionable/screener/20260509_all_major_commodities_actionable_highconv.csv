@@ -1,7 +1,0 @@
-rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-95,79,AIS.AX,Aeris Resources,copper,producer,mid,0.415,1.0205,0.9487,1.0338,0.8109,FLAT,2.47,130.56,69.39,-46.67,43.08,68.33,2.2066,HIGH,PROGRESS,0.3815,0.4175,0.4396,0,82.3113,WEAK,35.6579
-102,73,29M.AX,29Metals,copper,producer,mid,0.26,0.8853,1.0079,0.6477,0.619,STRONG_UP,-40.23,100.0,-40.91,-66.41,49.01,95.3,1.7768,HIGH,PROGRESS,0.2545,0.3241,0.4052,0,51.4271,WEAK,35.3084
-257,35,AMMN.JK,"ticker
-AMMN.JK    Amman Mineral Internasional
-AMMN.JK    Amman Mineral Internasional
-Name: name, dtype: object",copper,producer,large,4210.0,0.2561,0.7583,0.7645,0.6098,FLAT,-41.53,-42.13,-57.15,-52.16,45.57,82.76,2.3191,HIGH,EARLY,5251.25,5650.7,6993.3,0,-23.1983,WEAK,18.1627

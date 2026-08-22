@@ -1,5 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-18,0,INSM,Insmed Incorporated,Health Care,Biotechnology,large,101.35,100.0,-0.2761,-0.2921,-0.211,FLAT,-45.42,49.59,290.26,-52.06,54.22,65.12,3.4185,HIGH,EARLY,137.213,144.14,155.8354,0,41.2929,LAGGARD,35.0055
-43,0,AXON,Axon Enterprise,Industrials,Ordnance & Accessories,large,403.54,10.0,0.0197,0.1719,-0.0273,FLAT,-31.27,-41.78,32.99,-60.28,52.61,69.03,1.5461,HIGH,PROGRESS,397.2165,446.2542,592.5349,0,-31.84,WEAK,19.5833
-72,0,GEHC,GE HealthCare,Health Care,Medical Electronics,large,63.47,22.22,0.0456,-0.0794,-0.0857,STRONG_UP,-14.35,-14.2,-23.64,-32.47,51.41,40.81,1.9367,HIGH,EARLY,67.765,70.8427,76.0309,0,-17.8926,WEAK,11.8923
-81,0,MELI,Mercado Libre,Consumer Discretionary,Catalog/Specialty Distribution,large,1632.52,6.25,-0.1007,-0.0961,-0.2187,FLAT,-23.3,-34.82,-3.63,-38.8,49.4,45.81,4.2742,HIGH,EARLY,1823.3905,1757.223,2077.9898,0,-37.5481,WEAK,8.7891

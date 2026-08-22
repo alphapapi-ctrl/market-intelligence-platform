@@ -1,3 +1,0 @@
-rank,delta_rank,ticker,name,commodity,type,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-8,0,OR,Osisko Gold royalties_financial_services,gold,royalties_financial_services,large,28.3,0.0,0.01,-0.0199,0.046,FLAT,-30.46,1.98,,-41.02,56.63,46.76,,LOW,EARLY,30.7008,33.9246,37.0482,0,2.4002,WEAK,15.266
-11,0,VROY.V,Vizsla royalties_financial_services,gold,royalties_financial_services,small,3.09,20.0,-0.0332,0.089,0.4106,STRONG_DOWN,-34.26,5.82,,-52.48,49.4,67.07,,LOW,-,3.481,3.4962,3.7346,0,4.2881,WEAK,9.6938

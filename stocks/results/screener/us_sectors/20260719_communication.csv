@@ -1,4 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-5,77,SCHL,SCHOLASTIC CORP,Communication,,small,46.96,100.0,-0.0058,-0.0924,0.1499,FLAT,37.25,124.53,,-12.02,56.63,32.85,0.8396,LOW,-,45.364,42.9408,35.1381,1,214.6831,LEADER,44.4645
-36,385,ZD,ZIFF DAVIS INC,Communication,,small,53.98,50.0,0.0374,0.0868,0.0727,FLAT,42.24,77.98,,-33.79,49.4,37.21,,LOW,-,51.0725,46.8434,39.7475,1,103.5204,CONTENDER,26.7912
-158,1282,YELP,YELP INC,Communication,,small,26.22,0.0,-0.0316,0.0056,-0.2225,FLAT,-10.08,-24.81,,-43.9,50.6,52.53,,LOW,-,25.118,24.094,27.0437,0,-23.895,WEAK,3.517

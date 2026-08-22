@@ -1,3 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-24,-5,INSM,Insmed Incorporated,Health Care,Biotechnology,large,91.88,33.33,-0.108,-0.2052,-0.2527,STRONG_UP,-52.68,-6.23,48.5,-56.54,52.8,72.34,1.7147,HIGH,EARLY,105.4695,127.3154,154.7316,0,-4.5441,WEAK,25.7146
-41,15,PEP,PepsiCo,Consumer Staples,Soft Drinks,large,144.32,80.0,-0.0286,-0.1002,-0.2667,STRONG_UP,1.73,15.5,-5.8,-16.25,47.2,20.02,1.6457,HIGH,EARLY,144.6285,150.1784,147.3988,0,36.5425,LAGGARD,18.6367

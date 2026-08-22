@@ -1,5 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-20,592,GRMN,Garmin,Consumer Discretionary,Consumer Electronics,large,244.51,66.67,0.0677,-0.0207,-0.0365,STRONG_UP,17.02,14.1,,-27.97,55.2,26.09,,LOW,-,237.8043,237.5258,227.2479,1,29.8409,CONTENDER,18.5382
-32,798,SONO,SONOS INC,Consumer Discretionary,,small,14.08,100.0,0.0828,-0.1378,0.1211,FLAT,-15.44,26.96,,-33.72,49.2,40.8,,LOW,-,14.1895,14.7774,15.678,0,32.5121,LAGGARD,14.2616
-58,1220,BKNG,Booking Holdings,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",large,175.52,33.33,-0.0677,0.0378,0.0352,FLAT,-19.24,-22.81,11.49,-32.89,50.4,37.8,0.5922,LOW,SHIFT,175.0025,168.4644,187.5913,0,-30.4158,WEAK,6.887
-66,1386,PZZA,PAPA JOHNS INTERNATIONAL INC,Consumer Discretionary,,small,33.61,0.0,-0.0804,0.0207,-0.0352,FLAT,-8.07,-26.59,,-43.11,48.4,48.55,,LOW,-,34.771,33.844,37.3149,0,-26.5097,WEAK,2.8779

@@ -1,6 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-34,-1,ZS,Zscaler,Technology,EDP Services,large,126.41,6.82,-0.3084,-0.2015,-0.5061,FLAT,-54.91,-50.16,-23.0,-64.89,50.4,90.53,8.5296,HIGH,EARLY,154.1765,144.4252,222.923,0,-27.9272,WEAK,22.3413
-47,-3,INTU,Intuit,Technology,Computer Software,large,307.73,0.0,-0.2315,-0.3619,-0.4788,STRONG_UP,-52.66,-58.88,-47.96,-62.05,46.8,63.22,1.6584,HIGH,EARLY,376.4745,396.4825,552.1467,0,-43.5868,WEAK,18.5186
-62,9,PDD,PDD Holdings,Technology,EDP Services,large,86.61,22.73,-0.1506,-0.2403,-0.4396,STRONG_UP,-23.68,-11.51,-42.15,-37.3,50.4,39.48,5.2259,HIGH,EARLY,97.2985,99.1684,113.5424,0,-14.6988,WEAK,14.7321
-67,7,REGN,Regeneron Pharmaceuticals,Health Care,Biotechnology,large,627.74,55.56,-0.028,-0.1194,-0.0769,FLAT,-17.34,6.65,-34.96,-22.51,48.4,34.23,2.4149,HIGH,EARLY,682.8241,723.6933,692.2168,0,9.3962,LAGGARD,13.7555
-97,0,ISRG,Intuitive Surgical,Health Care,Industrial Specialties,large,418.55,0.0,-0.062,-0.0816,-0.0668,FLAT,-26.37,-24.23,4.37,-29.4,47.2,32.02,1.5356,HIGH,EARLY,441.2615,456.1886,495.5495,0,-35.7199,WEAK,4.9402

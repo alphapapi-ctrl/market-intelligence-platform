@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-15,277,LUMN,LUMEN TECHNOLOGIES INC,Communication,,mid,8.09,1.3742,0.9546,0.829,0.9525,FLAT,3.19,90.8,,-47.34,50.4,70.61,,LOW,-,9.308,9.072,7.9645,1,64.8126,TREND+LEAD,27.0286

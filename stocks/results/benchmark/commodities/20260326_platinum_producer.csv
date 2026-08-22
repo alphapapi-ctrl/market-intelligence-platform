@@ -1,3 +1,0 @@
-rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-272,-20,ZIM.AX,Zimplats Holdings,platinum,producer,mid,17.52,0.7048,1.0996,0.9618,0.9152,STRONG_UP,-4.78,27.79,2.22,-37.4,47.62,63.13,0.4004,LOW,EARLY,18.8085,20.6606,18.4817,0,20.9624,WEAK,15.2999
-283,-11,PLG,Platinum Group Metals,platinum,producer,small,1.71,0.7545,1.0112,0.7354,0.6989,STRONG_UP,-18.57,36.8,51.33,-53.74,47.6,95.6,0.4239,LOW,-,2.1395,2.4658,2.1397,0,18.323,WEAK,14.4322

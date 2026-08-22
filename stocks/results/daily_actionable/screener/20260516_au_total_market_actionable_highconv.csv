@@ -1,5 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-1021,276,REG.AX,Regis Healthcare Ltd.,Health services,Medical/Nursing services,mid,6.19,50.0,0.0001,0.1216,0.119,FLAT,-15.91,-18.0,55.65,-37.13,47.04,50.33,3.4815,HIGH,EARLY,6.362,6.3019,6.9645,0,-16.823,LAGGARD,10.0901
-1245,-157,REA.AX,REA Group Ltd,Commercial services,Advertising/Marketing services,large,162.01,28.3,-0.0876,-0.0449,0.0711,STRONG_DOWN,-18.45,-33.83,,-41.87,45.45,36.37,1.681,HIGH,EARLY,171.762,165.9902,195.732,0,-42.2747,WEAK,8.4461
-1490,13,AMC.AX,Amcor PLC Shs Chess Depository Interests,Process industries,Containers/Packaging,large,53.55,31.37,-0.0258,-0.0361,-0.1998,STRONG_UP,-15.57,-21.76,-23.13,-27.97,47.83,27.83,2.246,HIGH,EARLY,54.6285,56.6222,61.6401,0,-37.3954,WEAK,5.7503
-1636,47,PMV.AX,Premier Investments Limited,Retail trade,Apparel/Footwear retail,mid,11.27,24.24,-0.0486,-0.0545,0.0306,FLAT,-33.88,-46.03,-59.88,-49.1,42.69,32.49,1.9243,HIGH,EARLY,12.2765,12.484,15.8094,0,-60.4838,WEAK,3.1469

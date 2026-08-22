@@ -1,6 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-8,201,WELL,Welltower,Real Estate,Health Care REITs,large,232.12,100.0,0.0173,0.1344,0.0901,FLAT,25.9,54.33,,-12.61,59.2,28.3,,LOW,-,221.732,215.6558,197.6454,1,113.647,LEADER,28.4244
-10,0,DRH,DIAMONDROCK HOSPITALITY,Real Estate,,small,11.85,75.0,0.0149,-0.005,0.1456,FLAT,34.07,51.16,,-11.92,50.8,24.26,,LOW,-,11.9812,11.2295,9.4827,1,107.1261,LEADER,24.3197
-15,480,CTRE,CARETRUST REIT INC,Real Estate,,mid,40.86,50.0,0.0111,0.1061,-0.0332,FLAT,11.95,38.7,,-14.28,55.6,28.07,,LOW,-,38.9627,39.4154,37.0842,1,76.657,CONTENDER,19.6436
-67,1265,JBGS,JBG SMITH PROPERTIES,Real Estate,,small,14.4,0.0,-0.0489,-0.1012,-0.0569,FLAT,-13.86,-18.24,-1.22,-40.82,46.8,34.05,0.6514,LOW,-,14.611,14.6902,16.4704,0,-25.0646,WEAK,2.7415
-69,1417,VICI,Vici Properties,Real Estate,Hotel & Resort REITs,large,25.93,25.0,-0.026,-0.1164,-0.1481,STRONG_UP,-2.78,-17.9,,-18.63,46.0,21.78,,LOW,EARLY,26.88,27.4376,27.9676,0,-37.8149,WEAK,1.1497

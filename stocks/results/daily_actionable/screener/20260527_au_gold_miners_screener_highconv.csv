@@ -1,3 +1,0 @@
-rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-59,15,SMI.AX,Santana Minerals Limited,Gold,mid,0.53,23.68,-0.1026,-0.0921,-0.195,FLAT,-36.53,0.0,39.47,-54.7,47.43,59.25,1.5277,HIGH,EARLY,0.602,0.665,0.8027,0,0.0,WEAK,18.5437
-61,9,STK.AX,Strickland Metals Limited,Gold,mid,0.105,13.16,0.0193,-0.3469,-0.3374,FLAT,-40.0,-19.23,-4.55,-59.18,35.18,84.66,3.0802,HIGH,EARLY,0.1343,0.1744,0.1839,0,-7.9912,WEAK,17.8132

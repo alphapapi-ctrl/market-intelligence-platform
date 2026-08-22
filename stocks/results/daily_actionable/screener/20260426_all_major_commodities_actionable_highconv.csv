@@ -1,3 +1,0 @@
-rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-19,-6,OKLO,Oklo Inc.,uranium,producer,large,71.0,1.2532,1.0561,1.1571,0.8567,FLAT,-43.06,189.91,454.25,-73.83,50.6,97.24,2.2386,HIGH,SHIFT,57.133,59.7386,86.0568,0,98.8242,WEAK,56.7187
-252,19,LCID,LUCID GROUP INC,lithium,producer,mid,6.25,0.1073,0.9158,0.5296,0.5221,STRONG_UP,-66.49,-75.3,-74.59,-80.03,40.16,72.24,1.6402,HIGH,EARLY,8.3235,9.3756,15.5586,0,-41.8592,WEAK,18.4113

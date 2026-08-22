@@ -1,3 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-30,827,HTO,H2O AMERICA,Utilities,,mid,61.46,100.0,0.0159,0.0431,0.0965,STRONG_DOWN,23.62,23.31,,-13.14,54.0,24.46,,LOW,-,59.182,57.8912,52.8729,1,51.4585,LEADER,15.1802
-41,795,EXC,Exelon,Utilities,Electric Utilities,large,46.38,0.0,-0.0159,-0.0431,-0.0965,STRONG_UP,8.81,9.11,,-13.74,51.6,21.14,,LOW,-,46.5635,45.779,45.8072,1,22.2423,LAGGARD,10.3472

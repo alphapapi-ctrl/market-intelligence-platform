@@ -1,1 +1,0 @@
-TCG.AX,STK.AX,CYL.AX

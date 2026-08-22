@@ -1,8 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-237,0,NXT,NEXTPOWER INC CLASS A,Industrials,,large,103.1,1.3584,1.0587,0.8676,0.8634,STRONG_UP,4.51,67.56,115.42,-36.27,52.61,79.19,2.3735,HIGH,EARLY,112.622,123.9644,107.9817,0,44.884,WEAK,28.9093
-583,0,SOUN,SOUNDHOUND AI INC CLASS A,Information Technology,,mid,6.27,0.4345,0.9888,0.9348,0.7239,STRONG_UP,-42.58,-46.41,27.18,-72.43,41.37,71.86,1.5156,HIGH,EARLY,6.574,7.4952,10.1136,0,-26.7185,WEAK,19.3747
-1020,0,DPZ,Domino's,Consumer Discretionary,Restaurants,large,322.18,0.5759,1.0642,1.0635,0.8128,STRONG_UP,-20.36,-28.96,-17.53,-40.58,44.18,37.18,1.6499,HIGH,SHIFT,303.597,308.6916,372.8823,0,-34.4082,WEAK,11.744
-1046,0,MSI,Motorola Solutions,Information Technology,Communications Equipment,large,413.31,0.805,1.0119,1.0704,0.875,FLAT,5.38,-0.7,8.18,-25.45,51.41,31.18,1.6126,HIGH,SHIFT,411.0475,407.6554,415.6488,0,-1.1503,WEAK,11.5074
-1099,0,SNPS,Synopsys,Information Technology,Application Software,large,384.28,0.5267,0.9066,0.8636,0.7973,STRONG_UP,-24.38,-35.03,-31.76,-41.04,47.79,42.64,2.6057,HIGH,EARLY,441.424,471.4868,454.1686,0,-39.2593,WEAK,10.8921
-1216,0,EXE,Expand Energy,Energy,Oil & Gas Exploration & Production,large,88.13,0.7418,1.0356,1.0457,0.8632,FLAT,-10.42,-8.5,15.11,-28.4,46.18,24.18,1.6383,HIGH,EARLY,88.615,91.5254,102.4464,0,-16.2344,WEAK,9.395
-1338,0,YUM,Yum! Brands,Consumer Discretionary,Restaurants,large,147.92,0.84,0.9364,0.9963,0.8518,FLAT,-7.28,3.61,21.11,-12.41,49.8,24.64,1.8136,HIGH,EARLY,157.8215,154.0198,152.9907,0,7.2983,WEAK,7.6297

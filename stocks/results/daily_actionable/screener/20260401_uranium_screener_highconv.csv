@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-20,5,GMD.AX,Genesis Minerals Limited,Gold,large,5.89,56.21,-0.036,-0.088,-0.0876,FLAT,-0.67,57.07,204.39,-36.46,53.17,67.34,1.5959,HIGH,EARLY,6.2085,6.904,5.8922,0,45.0584,LAGGARD,28.0278

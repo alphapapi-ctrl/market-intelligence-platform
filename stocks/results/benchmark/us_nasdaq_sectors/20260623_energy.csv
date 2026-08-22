@@ -1,4 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-6,90,TTI,TETRA TECHNOLOGIES INC,Energy,,small,10.34,2.1839,1.0243,0.9702,1.0088,FLAT,15.79,203.23,,-37.66,56.0,47.73,,LOW,-,10.221,9.857,8.7373,1,238.438,TREND+LEAD,52.7333
-9,125,GPRE,GREEN PLAINS INC,Energy,,small,15.06,1.9473,1.0533,0.9667,0.7815,STRONG_UP,54.3,170.38,-4.56,-21.17,54.4,50.27,,LOW,-,15.2425,15.9938,12.7675,1,184.3746,TREND+LEAD,40.801
-16,346,BKR,Baker Hughes,Energy,Oil & Gas Equipment & Services,large,59.15,1.1455,0.9531,0.8696,0.7565,STRONG_UP,33.96,59.06,,-16.86,56.8,35.55,,LOW,-,63.235,64.131,54.9231,1,94.3573,TREND+LEAD,26.4777

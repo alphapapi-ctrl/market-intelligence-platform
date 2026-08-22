@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-1,11,GOOGL,Alphabet Inc. (Class A),Technology,Computer Software,large,358.89,50.0,-0.0028,-0.0147,0.1275,FLAT,11.61,102.63,89.17,-20.37,53.6,34.69,0.7867,LOW,-,357.8445,372.4695,318.0532,1,158.5772,CONTENDER,38.079

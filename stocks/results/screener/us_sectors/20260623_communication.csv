@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-57,740,WLY,JOHN WILEY AND SONS INC CLASS A,Communication,,mid,44.99,50.0,0.0383,0.0745,0.2283,STRONG_DOWN,47.51,6.51,,-34.42,49.6,26.01,,LOW,-,43.7965,41.9542,36.2239,1,12.4055,CONTENDER,12.4462

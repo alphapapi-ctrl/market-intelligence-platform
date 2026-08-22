@@ -1,0 +1,50 @@
+{
+  "_comment": "Manual adjustments the monthly universe refresh must respect. exclude: tickers to keep inactive. include: tickers to force in. groups: extra flags (commodity/index/theme). remove_groups: flags to drop.",
+  "exclude": [],
+  "include": [],
+  "groups": [
+    {
+      "ticker": "BHP.AX",
+      "group_type": "commodity",
+      "group_key": "copper",
+      "attr": "producer",
+      "priority": 0
+    },
+    {
+      "ticker": "BHP.AX",
+      "group_type": "commodity",
+      "group_key": "silver",
+      "attr": "producer",
+      "priority": 9
+    },
+    {
+      "ticker": "FMG.AX",
+      "group_type": "commodity",
+      "group_key": "iron_ore",
+      "attr": "producer",
+      "priority": 0
+    },
+    {
+      "ticker": "BHP.AX",
+      "group_type": "commodity",
+      "group_key": "iron_ore",
+      "attr": "producer",
+      "priority": 9
+    },
+    {
+      "ticker": "RIO.AX",
+      "group_type": "commodity",
+      "group_key": "iron_ore",
+      "attr": "producer",
+      "priority": 9
+    },
+    {
+      "ticker": "MIN.AX",
+      "group_type": "commodity",
+      "group_key": "iron_ore",
+      "attr": "producer",
+      "priority": 9
+    }
+  ],
+  "remove_groups": []
+}

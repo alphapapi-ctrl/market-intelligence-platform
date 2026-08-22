@@ -1,5 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-7,0,LRCX,Lam Research,Technology,Industrial Machinery,large,351.41,86.36,-0.1007,0.1006,0.3874,STRONG_DOWN,105.68,257.61,230.16,-20.01,59.6,74.59,1.7441,HIGH,-,369.2609,320.9159,222.4917,1,205.8397,LEADER,57.7781
-9,0,AMAT,Applied Materials,Technology,Semiconductors,large,603.04,81.82,-0.0656,0.2817,0.5102,STRONG_DOWN,135.24,217.96,152.03,-21.37,59.2,73.19,1.7149,HIGH,-,585.4245,489.9698,338.7531,1,176.2982,LEADER,51.5987
-11,0,KLAC,KLA Corporation,Technology,Electronic Components,large,235.55,79.55,-0.0803,0.1859,0.3324,STRONG_DOWN,94.36,156.41,180.4,-22.41,59.6,79.58,2.0057,HIGH,-,243.7745,208.7227,151.7039,1,117.1377,LEADER,38.7246
-21,0,AEP,American Electric Power,Utilities,Electric Utilities,large,138.51,100.0,0.002,0.0295,0.0718,STRONG_DOWN,21.95,37.59,69.33,-9.09,52.8,21.64,1.9269,HIGH,-,131.7875,131.0789,122.7663,1,91.7059,LEADER,27.1211

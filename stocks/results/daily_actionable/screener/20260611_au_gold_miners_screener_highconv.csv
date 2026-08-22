@@ -1,5 +1,0 @@
-rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-33,36,GMD.AX,Genesis Minerals Limited,Gold,large,4.88,36.84,-0.082,-0.103,-0.0324,FLAT,-20.91,8.93,168.87,-42.04,51.38,67.03,1.5723,HIGH,EARLY,5.9095,6.13,6.3758,0,6.844,WEAK,20.8682
-36,-8,ATM.AX,Aneka Tambang (Persero) Tbk,Gold,large,0.99,50.0,0.0428,0.1671,0.245,STRONG_DOWN,4.76,26.13,-2.16,-26.41,21.74,15.22,12.4534,HIGH,EARLY,1.018,0.995,0.9931,0,37.3249,LAGGARD,20.186
-65,7,PNR.AX,Pantoro Gold Limited,Gold,mid,2.4,13.16,-0.1222,-0.1517,-0.1298,FLAT,-49.69,-31.62,56.86,-63.36,50.99,71.21,1.6337,HIGH,EARLY,3.026,3.3514,4.6431,0,-22.6443,WEAK,16.0883
-76,-12,BC8.AX,Black Cat Syndicate Limited,Gold,mid,0.915,38.16,-0.1237,-0.1045,-0.0462,STRONG_DOWN,-9.85,10.24,210.17,-42.45,49.41,83.03,2.3596,HIGH,EARLY,1.1172,1.1471,1.2032,0,6.0943,WEAK,15.1273

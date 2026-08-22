@@ -1,5 +1,0 @@
-rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-34,-1,GMD.AX,Genesis Minerals Limited,Gold,large,5.32,37.5,0.038,-0.0452,0.0347,FLAT,-16.22,9.69,198.88,-42.99,50.99,70.66,1.6636,HIGH,EARLY,5.76,6.1032,6.3822,0,6.9931,WEAK,21.3326
-62,3,PNR.AX,Pantoro Gold Limited,Gold,mid,2.52,16.45,-0.0012,-0.1015,-0.091,FLAT,-46.5,-30.0,76.47,-64.89,50.99,73.72,1.7317,HIGH,EARLY,2.934,3.3178,4.622,0,-20.7501,WEAK,17.0895
-65,4,CMM.AX,Capricorn Metals Ltd,Gold,mid,12.02,44.74,-0.0137,-0.0058,0.1992,STRONG_DOWN,-9.99,18.11,168.24,-41.12,54.15,66.89,2.1468,HIGH,EARLY,13.1815,12.6178,13.1093,0,14.6597,WEAK,16.8043
-73,3,BC8.AX,Black Cat Syndicate Limited,Gold,mid,0.955,36.18,-0.1068,-0.0547,-0.01,STRONG_DOWN,-8.17,7.91,260.38,-45.28,49.01,85.7,1.5301,HIGH,EARLY,1.0892,1.1448,1.2034,0,4.5233,WEAK,15.6574

@@ -1,5 +1,9 @@
 from datetime import datetime
 from config import FRED_API_KEY
+import os as _os, sys as _sys
+_MARKETDB_BASE = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+if _MARKETDB_BASE not in _sys.path:
+    _sys.path.insert(0, _MARKETDB_BASE)   # marketdb lives one level up
 
 # ── Current Date ──────────────────────────────────────────────────────────────
 TODAY = datetime.today()
@@ -235,12 +239,9 @@ def print_cycle_report():
 
 # ── Save report ───────────────────────────────────────────────────────────────
 def save_report(output):
-    import os
-    os.makedirs('results', exist_ok=True)
-    filename = f"results/{TODAY.strftime('%Y%m%d')}_cycle_tracker.txt"
-    with open(filename, 'w', encoding='utf-8') as f:
-        f.write(output)
-    print(f"Report saved to {filename}")
+    from marketdb import results as _mr
+    _mr.save_report('cycle_tracker', TODAY.strftime('%Y-%m-%d'), text=output)
+    print(f"Report saved to marketdb (cycle_tracker {TODAY.strftime('%Y-%m-%d')})")
 
 # ── Main ──────────────────────────────────────────────────────────────────────
 if __name__ == "__main__":

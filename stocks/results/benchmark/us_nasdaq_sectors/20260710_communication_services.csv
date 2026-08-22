@@ -1,6 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-2,12,EA,Electronic Arts,Communication Services,Interactive Home Entertainment,large,206.56,1.0526,0.9931,0.9981,0.8628,FLAT,1.2,37.06,44.66,-7.14,54.0,4.14,0.9035,LOW,-,204.2335,202.5717,201.1987,1,483.4051,TREND+LEAD,92.0027
-100,1011,OMC,Omnicom Group,Communication Services,Advertising,large,80.83,0.8793,1.0143,1.0568,0.9205,FLAT,6.35,14.5,-4.69,-17.85,50.0,30.34,0.6501,LOW,-,75.757,74.7779,75.1241,1,23.8949,TREND_ONLY,12.1293
-112,961,TKO,TKO Group Holdings,Communication Services,Movies & Entertainment,large,188.18,0.8489,0.9549,0.9041,0.8088,STRONG_UP,-6.52,10.54,74.65,-18.28,51.6,34.38,0.9072,LOW,EARLY,200.7749,195.5167,196.4472,0,15.8119,WEAK,10.8293
-115,1009,META,Meta Platforms,Communication Services,Interactive Media & Services,large,631.48,0.669,1.0688,1.0578,0.8487,STRONG_UP,-2.48,-12.88,,-33.3,50.0,43.14,,LOW,SHIFT,579.6155,600.1151,642.1429,0,-14.9316,WEAK,10.6039
-117,1056,VZ,Verizon,Communication Services,Integrated Telecommunication Services,large,42.24,0.8107,0.9792,0.9027,0.7571,STRONG_UP,8.69,5.57,15.26,-17.05,48.0,26.48,1.0371,MED,EARLY,44.8865,46.3076,43.6877,0,10.0878,WEAK,10.3398

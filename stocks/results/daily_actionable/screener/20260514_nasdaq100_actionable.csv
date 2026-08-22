@@ -1,3 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-20,5,CSCO,Cisco,Telecommunications,Computer Communications Equipment,large,101.87,100.0,0.1549,0.3556,0.5727,STRONG_DOWN,43.59,70.04,119.29,-13.57,56.0,37.11,1.7678,HIGH,-,91.539,84.2817,75.5192,1,105.6855,LEADER,32.3458
-29,4,AEP,American Electric Power,Utilities,Electric Utilities,large,127.95,100.0,-0.0154,0.0263,0.0225,FLAT,5.84,33.89,50.86,-8.14,52.4,20.83,4.1311,HIGH,-,132.7604,131.7347,119.1228,1,85.2532,LEADER,26.3628

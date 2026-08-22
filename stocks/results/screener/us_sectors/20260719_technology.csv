@@ -1,3 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-75,489,ZS,Zscaler,Technology,EDP Services,large,149.94,0.0,0.0622,0.1519,0.3104,STRONG_DOWN,-28.8,-48.02,,-64.89,50.2,89.05,,LOW,SHIFT,139.9635,143.6308,197.9424,0,-27.0675,WEAK,17.4172
-92,658,PDD,PDD Holdings,Technology,EDP Services,large,84.14,100.0,-0.0622,-0.1519,-0.3104,STRONG_UP,-21.7,-24.65,,-46.93,48.19,43.18,,LOW,PROGRESS,81.23,86.6446,106.1473,0,-27.5059,LAGGARD,14.9887

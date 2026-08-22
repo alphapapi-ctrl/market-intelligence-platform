@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-58,-3,LIN,Linde plc,Basic Materials,Major Chemicals,large,512.15,50.0,-0.0218,0.0141,0.0525,STRONG_DOWN,22.06,13.86,18.74,-19.18,51.6,19.55,2.2426,HIGH,-,509.4905,504.659,464.5984,1,36.583,CONTENDER,17.666

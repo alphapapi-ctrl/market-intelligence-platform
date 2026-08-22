@@ -6,8 +6,9 @@ Fundamental analysis assessment using local LLM (Ollama/LM Studio) with RAG cont
 
 import os
 import requests
-import chromadb
-from chromadb.utils import embedding_functions
+# chromadb is imported lazily inside get_rag_context() — it is only needed for
+# RAG retrieval, and a missing install must not stop the prompts/LLM calls in
+# this module from being importable.
 
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CHROMA_DIR = os.path.join(BASE, 'data', 'fa_chromadb')
@@ -393,6 +394,13 @@ def get_rag_context(query, n_results=5):
     """Retrieve relevant chunks from the FA reference documents."""
     if not os.path.exists(CHROMA_DIR):
         return None, "Vector store not built — run: python utilities/fa_rag_setup.py"
+
+    try:
+        import chromadb
+        from chromadb.utils import embedding_functions
+    except ImportError:
+        return None, ("chromadb not installed — RAG context skipped. "
+                      "Install with: pip install chromadb sentence-transformers")
 
     try:
         ef = embedding_functions.DefaultEmbeddingFunction()

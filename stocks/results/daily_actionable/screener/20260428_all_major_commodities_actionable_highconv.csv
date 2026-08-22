@@ -1,3 +1,0 @@
-rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-12,7,OKLO,Oklo Inc.,uranium,producer,large,75.93,1.3074,1.1494,1.2432,0.9085,FLAT,-44.19,210.04,426.56,-73.83,50.8,97.5,1.6522,HIGH,SHIFT,58.418,59.9788,86.1592,0,109.4388,WEAK,59.1447
-218,49,WA1.AX,WA1 Resources,copper,producer,mid,15.96,0.6168,1.0505,1.0086,0.9884,STRONG_UP,-20.24,32.67,-10.08,-41.26,54.15,62.31,1.7996,HIGH,SHIFT,14.691,14.9978,17.11,0,28.3901,WEAK,21.701

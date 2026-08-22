@@ -470,6 +470,190 @@ def run_script(script_path, cwd):
         st.error(f"✗ Failed\n{result.stderr[-500:]}")
     return result.returncode == 0
 
+
+# ── marketdb: SQLite data layer (replaces the CSV result trees under stocks/results) ──
+import sys as _sys
+if BASE not in _sys.path:
+    _sys.path.insert(0, BASE)
+from marketdb import db as mdb, results as MR, universe as MU, prices as MP
+
+
+def marketdb_ready():
+    """Show a setup banner (with a Run-bootstrap button) when the store has no data. Returns
+    True when the store is usable."""
+    try:
+        if not mdb.is_empty():
+            return True
+    except Exception as e:
+        st.error(f"marketdb unavailable: {e}")
+        return False
+    st.warning("**marketdb has no data yet** — the database is not in git and is built once per machine. "
+               "Run `python -m marketdb.bootstrap` from a terminal (≈15 min: universe, 3 years of prices, "
+               "all studies), or copy `data/market.db` from a machine that already has it, then reload.")
+    if st.button("▶ Run bootstrap now (≈15 min, page will wait)", key=f"bootstrap_{page}"):
+        env = os.environ.copy()
+        env['PYTHONIOENCODING'] = 'utf-8'
+        with st.spinner("Bootstrapping marketdb — seeding universe, back-filling prices, running studies…"):
+            result = subprocess.run([PYTHON, '-m', 'marketdb.bootstrap'], cwd=BASE, env=env,
+                                    capture_output=True, text=True, encoding='utf-8', errors='replace')
+        if result.returncode == 0:
+            st.success("✓ Bootstrap complete — reloading")
+            st.rerun()
+        else:
+            st.error("✗ Bootstrap failed: " + (result.stderr or result.stdout)[-2000:])
+    return False
+
+
+def run_marketdb(*args, label=None, module='marketdb.run_daily'):
+    """Run `python -m <module> <args>` (default marketdb.run_daily) from BASE — same UX as run_script()."""
+    if not marketdb_ready():
+        return False
+    env = os.environ.copy()
+    env['PYTHONIOENCODING'] = 'utf-8'
+    with st.spinner(label or f"Running {module} {' '.join(args)}..."):
+        result = subprocess.run([PYTHON, '-m', module, *args], cwd=BASE, env=env,
+                                capture_output=True, text=True, encoding='utf-8', errors='replace')
+    if result.returncode == 0:
+        st.success("✓ Completed successfully")
+        with st.expander("Run log"):
+            st.code(result.stdout[-8000:])
+    else:
+        st.error(f"✗ Failed\n{(result.stderr or result.stdout)[-1500:]}")
+    return result.returncode == 0
+
+
+def db_age(kind, universe=None):
+    """'3h 12m ago' for the latest successful marketdb run of a study (or 'fetch')."""
+    try:
+        sql = "SELECT MAX(finished) FROM runs WHERE kind=? AND status IN ('ok','partial')"
+        params = [kind]
+        if universe:
+            sql += " AND universe=?"
+            params.append(universe)
+        ts = mdb.scalar(sql, params)
+        if not ts:
+            return "not run yet"
+        diff = datetime.now() - datetime.strptime(ts, '%Y-%m-%d %H:%M:%S')
+        hours = int(diff.total_seconds() // 3600)
+        mins = int((diff.total_seconds() % 3600) // 60)
+        return f"{hours}h {mins}m ago" if hours else f"{mins}m ago"
+    except Exception:
+        return "unknown"
+
+
+def db_universe_members(universe, con=None):
+    """Member frame for a universe key (ticker, name, sector, industry, cap_band, benchmark...)."""
+    try:
+        return MU.members(universe, con)
+    except Exception as e:
+        st.error(f"marketdb: {e}")
+        return None
+
+
+UNIVERSE_LABELS = {k: v['name'] for k, v in MU.config()['universes'].items()}
+
+
+def store_close(ticker, start, max_lag_days=400):
+    """Adjusted-close Series from the price store if it holds history back to ~`start`
+    (deep-history tickers such as ^GSPC, ^AORD, sector ETFs); otherwise None so the
+    caller falls back to yfinance. Naive DatetimeIndex."""
+    try:
+        first = mdb.scalar("SELECT first_date FROM fetch_log WHERE ticker=? AND status='ok'", (ticker,))
+        if not first:
+            return None
+        if (pd.Timestamp(first) - pd.Timestamp(start)).days > max_lag_days:
+            return None
+        m = MP.get_prices([ticker], start, None)
+        c = m[ticker].dropna() if ticker in m.columns else None
+        return c if c is not None and len(c) else None
+    except Exception:
+        return None
+
+
+@st.cache_data(ttl=3600)
+def _pres_cycle_stats():
+    try:
+        import yfinance as _yf
+        import numpy as _np2
+        from datetime import datetime as _dt
+        _spx = store_close('^GSPC', '1927-01-01')
+        if _spx is None:
+            _spx = _yf.download('^GSPC', start='1927-01-01', auto_adjust=True, progress=False)['Close'].squeeze().dropna()
+            _spx.index = pd.to_datetime(_spx.index).tz_localize(None)
+        if len(_spx) < 1000:
+            return {}          # partial/empty download — show nothing rather than zeros
+        _PRESIDENTS = [
+            ("Hoover",1929,1933,"R"),("Roosevelt",1933,1945,"D"),("Truman",1945,1953,"D"),
+            ("Eisenhower",1953,1961,"R"),("Kennedy",1961,1963,"D"),("Johnson",1963,1969,"D"),
+            ("Nixon",1969,1974,"R"),("Ford",1974,1977,"R"),("Carter",1977,1981,"D"),
+            ("Reagan",1981,1989,"R"),("Bush Sr",1989,1993,"R"),("Clinton",1993,2001,"D"),
+            ("Bush Jr",2001,2009,"R"),("Obama",2009,2017,"D"),("Trump",2017,2021,"R"),
+            ("Biden",2021,2025,"D"),("Trump",2025,2029,"R"),
+        ]
+        _now   = _dt.now()
+        _curr  = next(((n,s,e,p) for n,s,e,p in _PRESIDENTS if s<=_now.year<e), None)
+        if not _curr: return {}
+        _nm,_s,_e,_p = _curr
+        _yit  = _now.year - _s + 1
+        _ytdd = _spx[_spx.index.year==_now.year]
+        _ytdr = round((_ytdd.iloc[-1]/_ytdd.iloc[0]-1)*100,2) if len(_ytdd)>1 else 0
+        _yrets,_ydds,_mrets = [],[],[]
+        for _hn,_hs,_he,_hp in _PRESIDENTS[:-1]:
+            _hy = _hs+(_yit-1)
+            if _hy>=_he: continue
+            _yd = _spx[_spx.index.year==_hy]
+            if len(_yd)<20: continue
+            _yrets.append(round((_yd.iloc[-1]/_yd.iloc[0]-1)*100,2))
+            _ydds.append(round(float(((_yd-_yd.expanding().max())/_yd.expanding().max()*100).min()),2))
+            _md = _yd[_yd.index.month==_now.month]
+            if len(_md)>=2: _mrets.append(round((_md.iloc[-1]/_md.iloc[0]-1)*100,2))
+        _n = len(_yrets)
+        return {
+            'president':_nm,'party':_p,'term_start':_s,'yr_in_term':_yit,'ytd_ret':_ytdr,
+            'hist_avg':round(_np2.mean(_yrets),2) if _yrets else 0,
+            'hist_med':round(_np2.median(_yrets),2) if _yrets else 0,
+            'hist_pos':round(sum(r>0 for r in _yrets)/_n*100,1) if _n else 0,
+            'avg_dd':round(_np2.mean(_ydds),2) if _ydds else 0,
+            'worst_dd':round(min(_ydds),2) if _ydds else 0,
+            'n_dds':len([d for d in _ydds if d<-10]),
+            'mo_avg':round(_np2.mean(_mrets),2) if _mrets else 0,
+            'mo_pos':round(sum(r>0 for r in _mrets)/len(_mrets)*100,1) if _mrets else 0,
+            'curr_mo':_now.strftime('%B'),'n_yrs':_n,
+        }
+    except: return {}
+
+
+def db_memo(key, ttl_hours, fn):
+    """Persistent memo for slow external lookups (FRED etc.): reuse the stored result while it is
+    younger than ttl_hours, otherwise call fn() and store it. Survives Streamlit restarts, unlike
+    st.cache_data. Empty / all-None results are returned but never stored, so failures retry."""
+    try:
+        row = mdb.connect().execute("SELECT payload, created FROM reports WHERE kind='memo' AND date=?", (key,)).fetchone()
+        if row and row[0] and (datetime.now() - datetime.strptime(row[1], '%Y-%m-%d %H:%M:%S')) < timedelta(hours=ttl_hours):
+            return json.loads(row[0])
+    except Exception:
+        pass
+    val = fn()
+    empty = val is None or val == {} or (isinstance(val, (tuple, list)) and all(v is None for v in val))
+    if not empty:
+        try:
+            MR.save_report('memo', key, payload=val)
+        except Exception:
+            pass
+    return val
+
+
+def store_ohlc(ticker, start):
+    """Unadjusted OHLC frame from the store when its history reaches back to `start`."""
+    try:
+        first = mdb.scalar("SELECT first_date FROM fetch_log WHERE ticker=? AND status='ok'", (ticker,))
+        if not first or (pd.Timestamp(first) - pd.Timestamp(start)).days > 400:
+            return None
+        df = MP.get_ohlc(ticker, start, None)
+        return df[['Open', 'High', 'Low', 'Close']].dropna() if df is not None and len(df) else None
+    except Exception:
+        return None
+
 def colour_regime(val):
     colours = {
         'TREND+LEAD' : 'background-color: #1a472a; color: white',
@@ -490,12 +674,39 @@ def colour_delta(val):
         pass
     return ''
 
+DIVERGENCE_COLOURS = {
+    # RSI divergence (pivot based)          OBV vs price (21-bar direction)
+    'BULL'     : 'color: #00cc44; font-weight: 600',   'BULL_DIV' : 'color: #00cc44; font-weight: 600',
+    'HID_BULL' : 'color: #00cc44',                     'ACCUM'    : 'color: #00cc44',
+    'CONV_UP'  : 'color: #7fbf7f',
+    'BEAR'     : 'color: #ff4444; font-weight: 600',   'BEAR_DIV' : 'color: #ff4444; font-weight: 600',
+    'HID_BEAR' : 'color: #ff4444',                     'DISTRIB'  : 'color: #ff4444',
+    'CONV_DOWN': 'color: #c97a7a',
+}
+
+def colour_divergence(val):
+    return DIVERGENCE_COLOURS.get(str(val), 'color: #777777')
+
+DIVERGENCE_COLUMN_CONFIG = {
+    'rsi_div': st.column_config.TextColumn('rsi_div', help=(
+        "RSI(14) divergence at the last two RSI pivots (5 bars each side, newer pivot confirmed "
+        "within 20 bars). BULL: price lower low, RSI higher low. BEAR: price higher high, RSI lower high. "
+        "HID_BULL / HID_BEAR: hidden (trend-continuation) divergence. Void once price closes through the pivot.")),
+    'obv_div': st.column_config.TextColumn('obv_div', help=(
+        "Price direction vs On-Balance-Volume direction over the last 21 bars (least-squares slopes). "
+        "CONV_UP / CONV_DOWN: volume confirms the move. BEAR_DIV: price up, OBV down. "
+        "BULL_DIV: price down, OBV up. ACCUM / DISTRIB: price flat (<2%) while OBV rises / falls.")),
+}
+
 def style_df(df, regime_col=None, delta_col=None):
     styler = df.style
     if regime_col and regime_col in df.columns:
         styler = styler.map(colour_regime, subset=[regime_col])
     if delta_col and delta_col in df.columns:
         styler = styler.map(colour_delta, subset=[delta_col])
+    div_cols = [c for c in ('rsi_div', 'obv_div') if c in df.columns]
+    if div_cols:
+        styler = styler.map(colour_divergence, subset=div_cols)
     return styler
 
 #── Drawdown Tool helpers  ─────────────────────────────────────────────────────
@@ -707,6 +918,217 @@ def style_breadth(df, pct_cols=None, delta_cols=None):
             styler = styler.map(colour_ab_pct, subset=[col])
 
     return styler
+
+# ── Breadth overview chart ────────────────────────────────────────────────────
+SECTOR_LINE_COLOURS = [
+    '#4da3ff', '#ffd166', '#2dc653', '#e63946', '#c77dff', '#00d4c8',
+    '#ff8c42', '#a0d911', '#ff5cad', '#7aa2ff', '#f4a261', '#5ce1e6',
+    '#b5179e', '#95d5b2', '#ffb703', '#9d4edd', '#48cae4', '#e07a5f',
+    '#8ac926', '#ef476f',
+]
+
+@st.cache_data(ttl=1800, show_spinner=False)
+def _fetch_index_ohlc(ticker, start):
+    """OHLC for a reference index — price store first, yfinance fallback (cached 30 min)."""
+    _st = store_ohlc(ticker, start)
+    if _st is not None:
+        return _st
+    try:
+        import yfinance as _yf
+        df = _yf.download(ticker, start=start, auto_adjust=True, progress=False)
+        if df is None or len(df) == 0:
+            return None
+        if isinstance(df.columns, pd.MultiIndex):
+            df.columns = df.columns.get_level_values(0)
+        return df[['Open', 'High', 'Low', 'Close']].dropna()
+    except Exception:
+        return None
+
+
+def render_breadth_chart(history, prefix='sec', index_ticker='^AORD',
+                         index_label='XAO — All Ordinaries', key='au'):
+    """Stacked breadth panels — market %>MA, reference index, per-sector %>20/50/200 MA."""
+    import plotly.graph_objects as go
+    from plotly.subplots import make_subplots
+
+    if history is None or len(history) == 0:
+        return
+
+    df = history.copy()
+    df['date'] = pd.to_datetime(df['date'], errors='coerce')
+    df = df.dropna(subset=['date']).sort_values('date')
+    if len(df) == 0:
+        return
+
+    # Drop rows left behind by a partial data fetch — a run that only saw a
+    # fraction of the universe plots as a breadth collapse that never happened.
+    if 'total' in df.columns:
+        _tot = pd.to_numeric(df['total'], errors='coerce')
+        _med = _tot.median()
+        if _med and _med > 0:
+            df = df[_tot >= _med * 0.5]
+
+    # Sector keys that carry all three SMA participation columns
+    sec_keys = []
+    for c in df.columns:
+        if c.startswith(f'{prefix}_') and c.endswith('_total'):
+            k = c[len(prefix) + 1:-len('_total')]
+            if k in ('nan', 'index', 'miscellaneous'):
+                continue
+            if all(f'{prefix}_{k}_{s}' in df.columns for s in ('above20', 'above50', 'above200')):
+                sec_keys.append(k)
+    if not sec_keys:
+        return
+
+    def _size(k):
+        try:
+            return float(pd.to_numeric(df[f'{prefix}_{k}_total'], errors='coerce').ffill().iloc[-1])
+        except Exception:
+            return 0.0
+    sec_keys.sort(key=_size, reverse=True)
+
+    labels   = {k: k.replace('_', ' ').replace('-', ' ').title() for k in sec_keys}
+    defaults = [labels[k] for k in sec_keys[:12]]
+
+    _c1, _c2, _c3 = st.columns([900, 10000, 900])
+    with _c2:
+        ctl1, ctl2 = st.columns([1, 4])
+        with ctl1:
+            rng = st.selectbox('Range', ['3M', '6M', '1Y', 'All'], index=0,
+                               key=f'{key}_brchart_range')
+        with ctl2:
+            picked = st.multiselect('Sectors', [labels[k] for k in sec_keys],
+                                    default=defaults, key=f'{key}_brchart_secs')
+
+    sel_keys = [k for k in sec_keys if labels[k] in picked]
+
+    days = {'3M': 92, '6M': 183, '1Y': 365}.get(rng)
+    if days:
+        df = df[df['date'] >= df['date'].max() - pd.Timedelta(days=days)]
+    if len(df) < 2:
+        with _c2:
+            st.info("Not enough breadth history for the selected range")
+        return
+
+    start_str = (df['date'].min() - pd.Timedelta(days=5)).strftime('%Y-%m-%d')
+    idx = _fetch_index_ohlc(index_ticker, start_str)
+
+    def pct_series(above_col, total_col):
+        num = pd.to_numeric(df[above_col], errors='coerce')
+        den = pd.to_numeric(df[total_col], errors='coerce')
+        return (num / den.where(den > 0) * 100).round(1)
+
+    fig = make_subplots(
+        rows=5, cols=1, shared_xaxes=True, vertical_spacing=0.025,
+        row_heights=[0.16, 0.28, 0.1867, 0.1867, 0.1867],
+        subplot_titles=('% of Stocks > MA — whole market', index_label,
+                        'Sector Stocks > 20MA', 'Sector Stocks > 50MA',
+                        'Sector Stocks > 200MA'),
+    )
+
+    x = df['date']
+
+    # Row 1 — market-wide participation
+    for col, name, colour in (('above_20', '20MA', '#4da3ff'),
+                              ('above_50', '50MA', '#2dc653'),
+                              ('above_200', '200MA', '#e63946')):
+        if col in df.columns:
+            fig.add_trace(go.Scatter(
+                x=x, y=pct_series(col, 'total'), mode='lines', name=name,
+                legendgroup='market', line=dict(color=colour, width=1.6),
+            ), row=1, col=1)
+    for lvl in (20, 40, 60, 80):
+        fig.add_hline(y=lvl, line_dash='dot', line_width=1,
+                      line_color='rgba(255,255,255,0.18)', row=1, col=1)
+
+    # Row 2 — reference index
+    if idx is not None and len(idx) > 0:
+        fig.add_trace(go.Candlestick(
+            x=idx.index, open=idx['Open'], high=idx['High'],
+            low=idx['Low'], close=idx['Close'], name=index_ticker,
+            increasing_line_color='#2dc653', decreasing_line_color='#e63946',
+            showlegend=False,
+        ), row=2, col=1)
+    else:
+        fig.add_annotation(text=f"{index_ticker} price unavailable",
+                           xref='x domain', yref='y2 domain', x=0.5, y=0.5,
+                           showarrow=False, font=dict(color='#888'), row=2, col=1)
+
+    # Rows 3-5 — per-sector participation
+    colour_of = {k: SECTOR_LINE_COLOURS[i % len(SECTOR_LINE_COLOURS)]
+                 for i, k in enumerate(sel_keys)}
+
+    def sector_hover(suffix):
+        """Hover rows for each date, ranked high-to-low so they match the line order."""
+        vals = pd.DataFrame(
+            {k: pct_series(f'{prefix}_{k}_{suffix}', f'{prefix}_{k}_total') for k in sel_keys}
+        )
+        out = []
+        for _, r in vals.iterrows():
+            items = sorted([(k, v) for k, v in r.items() if pd.notna(v)],
+                           key=lambda kv: kv[1], reverse=True)
+            out.append('<br>'.join(
+                f'<span style="color:{colour_of[k]}">▬</span> {labels[k]} <b>{v:.1f}%</b>'
+                for k, v in items
+            ))
+        return out
+
+    for row, suffix in ((3, 'above20'), (4, 'above50'), (5, 'above200')):
+        for k in sel_keys:
+            fig.add_trace(go.Scatter(
+                x=x, y=pct_series(f'{prefix}_{k}_{suffix}', f'{prefix}_{k}_total'),
+                mode='lines', name=labels[k], legendgroup=labels[k],
+                showlegend=(row == 3), line=dict(color=colour_of[k], width=1.3),
+                hoverinfo='skip',
+            ), row=row, col=1)
+        # Invisible anchor carries the ranked hover box for the whole panel
+        if sel_keys:
+            fig.add_trace(go.Scatter(
+                x=x, y=[50] * len(df), mode='lines', name='',
+                line=dict(color='rgba(0,0,0,0)', width=0), showlegend=False,
+                hovertext=sector_hover(suffix), hovertemplate='%{hovertext}<extra></extra>',
+            ), row=row, col=1)
+        for lvl, dash_colour in ((20, 'rgba(230,57,70,0.35)'),
+                                 (50, 'rgba(255,255,255,0.18)'),
+                                 (70, 'rgba(45,198,83,0.35)')):
+            fig.add_hline(y=lvl, line_dash='dot', line_width=1,
+                          line_color=dash_colour, row=row, col=1)
+
+    theme = get_chart_theme()
+    _light = _get_theme_mode() == 'light'
+    fig.update_layout(
+        height        = 1250,
+        hovermode     = 'x unified',
+        plot_bgcolor  = theme['plot_bgcolor'],
+        paper_bgcolor = theme['paper_bgcolor'],
+        font          = dict(color=theme['font_color'], size=11),
+        hoverlabel    = dict(align='left',
+                             bgcolor='rgba(255,255,255,0.95)' if _light else 'rgba(18,18,28,0.92)',
+                             bordercolor='rgba(0,0,0,0.2)' if _light else 'rgba(255,255,255,0.2)',
+                             font=dict(size=11, color='#1a1a1a' if _light else '#eaeaea')),
+        legend        = dict(font=dict(size=10), groupclick='togglegroup',
+                             yanchor='top', y=1, xanchor='left', x=1.005),
+        margin        = dict(l=50, r=170, t=40, b=30),
+    )
+    fig.update_xaxes(gridcolor=theme['gridcolor'], showspikes=True,
+                     spikemode='across', spikethickness=1,
+                     spikecolor='rgba(255,255,255,0.35)', spikedash='dot',
+                     rangebreaks=[dict(bounds=['sat', 'mon'])])
+    fig.update_xaxes(rangeslider_visible=False, row=2, col=1)
+    fig.update_yaxes(gridcolor=theme['gridcolor'])
+    for row in (1, 3, 4, 5):
+        fig.update_yaxes(range=[0, 100], ticksuffix='%', row=row, col=1)
+    for ann in fig.layout.annotations:
+        ann.font.size = 12
+
+    with _c2:
+        st.plotly_chart(fig, width='stretch', key=f'{key}_brchart')
+        st.caption(
+            f"Sector lines = % of that sector's stocks above the 20/50/200 SMA. "
+            f"Index panel: {index_ticker} daily candles. Click a sector in the legend "
+            f"to toggle it across all three panels."
+        )
+
 
 # ── Zweig Breadth Thrust ──────────────────────────────────────────────────────
 
@@ -1142,7 +1564,10 @@ def _fetch_custom_rrg(bm, tickers, tail, smooth):
     except: return None
 
 @st.cache_data(ttl=3600)
-def _fetch_stk(ticker, _v=2):
+def _fetch_stk(ticker, _v=3):
+    _st = store_close(ticker, "1990-01-01")
+    if _st is not None:
+        return _st
     import yfinance as _yf
     df = _yf.download(ticker, start="1990-01-01", auto_adjust=True, progress=False)
     if df is None or df.empty: return None
@@ -1157,7 +1582,10 @@ def _fetch_stk(ticker, _v=2):
     return c
 
 @st.cache_data(ttl=1800, show_spinner=False)
-def _fetch_sea(ticker, _v=4):
+def _fetch_sea(ticker, _v=5):
+    _st = store_close(ticker, "1928-01-01", max_lag_days=365 * 80)
+    if _st is not None:
+        return _st
     import yfinance as _yf
     try:
         _tk = _yf.Ticker(ticker)
@@ -1197,25 +1625,23 @@ if page == "Macro":
     """, unsafe_allow_html=True)
 
     # ── Parse macro report txt ────────────────────────────────────────────────
-    report_file = latest_file(os.path.join(MACRO, 'results', '*_macro_report.txt'))
+    _macro_txt, _macro_payload, _macro_date = MR.load_report('macro_report')
+    report_file = _macro_date          # 'YYYY-MM-DD' of the latest stored report (None if none)
 
     def parse_macro_report(path):
-        """Extract key values from macro report txt"""
-        if not path or not os.path.exists(path):
+        """Extract key values from the latest macro report (text in marketdb reports)"""
+        if not path or not _macro_txt:
             return {}
-        with open(path, 'r', encoding='utf-8') as f:
-            text = f.read()
+        text = _macro_txt
 
         import re
         d = {}
 
-        # ── Load companion JSON snapshot for richer data ─────────────────────
-        # The report.txt is text-formatted; the JSON snapshot has full numeric data
-        snap_path = os.path.join(MACRO, 'results', 'macro_snapshot_prev.json')
-        if os.path.exists(snap_path):
+        # ── Load companion snapshot for richer data ─────────────────────────
+        # The report is text-formatted; the snapshot has full numeric data
+        _, _snap, _ = MR.load_report('macro_snapshot', 'latest')
+        if _snap:
             try:
-                with open(snap_path, 'r') as _sf:
-                    _snap = json.load(_sf)
                 # Merge useful numeric fields directly
                 for _k in ('margin_chg_1m', 'margin_chg_3m', 'margin_peak', 'margin_from_peak',
                            'margin_acceleration', 'cu_gold_ratio', 'cu_gold_chg_5d',
@@ -1479,8 +1905,9 @@ if page == "Macro":
     st.subheader("⚠ Regime, Alerts & Indicators")
 
     if report_file:
-        report_date = os.path.basename(report_file)[:8]
-        st.caption(f"From macro report: {report_date} — last updated {file_age(report_file)}")
+        report_date = report_file.replace('-', '')
+        _mc = MR.report_created('macro_report', report_file)
+        st.caption(f"From macro report: {report_date} — saved {_mc or 'n/a'}")
 
     # VIX Regime banner
     regime     = macro.get('regime', 'UNKNOWN')
@@ -1513,7 +1940,11 @@ if page == "Macro":
         import pandas as _pd_hgx
         # Use Ticker object to avoid MultiIndex issues with newer yfinance
         @st.cache_data(ttl=3600)
-        def _fetch_hgx(): return yf.Ticker('^HGX').history(period='5y')
+        def _fetch_hgx():
+            _st = store_close('^HGX', (datetime.today() - timedelta(days=5 * 365)).strftime('%Y-%m-%d'))
+            if _st is not None:
+                return _st.to_frame('Close')
+            return yf.Ticker('^HGX').history(period='5y')
         _hgx_hist = _fetch_hgx()
         if _hgx_hist.empty:
             raise ValueError("No HGX data returned")
@@ -1600,7 +2031,7 @@ Currently <b>{_hgx_curr:,.0f}</b>. Signal resets <b>{_reset_date}</b> (18 months
             _next_release=_next_qtr_end+_td(days=30)
             return _last_val,_last_date.strftime('%d %b %Y'),_next_release.strftime('%d %b %Y')
         except: return None,None,None
-    _gdp_val,_gdp_date,_gdp_next=_fetch_gdp_fred()
+    _gdp_val,_gdp_date,_gdp_next=db_memo('fred_gdp', 12, _fetch_gdp_fred)
     if _gdp_val is None: _gdp_val=macro.get('gdp_growth'); _gdp_date=None; _gdp_next=None
     if _gdp_val is not None:
         _gdp_dir='↑ Expanding' if _gdp_val>0 else '↓ Contracting'
@@ -1624,7 +2055,7 @@ Currently <b>{_hgx_curr:,.0f}</b>. Signal resets <b>{_reset_date}</b> (18 months
             _next_mo=(_df.index[-1].replace(day=1)+_td(days=45)).replace(day=15)
             return _mom,_yoy,_last_date,_next_mo.strftime('%d %b %Y'),_last
         except: return None,None,None,None,None
-    _cpi_mom,_cpi_yoy,_cpi_date,_cpi_next,_cpi_idx=_fetch_cpi_fred()
+    _cpi_mom,_cpi_yoy,_cpi_date,_cpi_next,_cpi_idx=db_memo('fred_cpi', 12, _fetch_cpi_fred)
     if _cpi_mom is not None:
         _inflation_up=_cpi_mom>0
         _cpi_str=f"CPI {_cpi_yoy:+.1f}% YoY | {_cpi_mom:+.2f}% MoM ({'↑ Rising' if _cpi_mom>0 else '↓ Falling'}) — {_cpi_date} | next ~{_cpi_next}"
@@ -1685,7 +2116,7 @@ Currently <b>{_hgx_curr:,.0f}</b>. Signal resets <b>{_reset_date}</b> (18 months
             return _sigs
         except: return {}
 
-    _rec_sigs=_fetch_recession_signals()
+    _rec_sigs=db_memo('fred_recession_signals', 12, _fetch_recession_signals)
 
     # Yield curve ratio
     _us10y=macro.get('us10y',0); _us2y=macro.get('us2y',0)
@@ -1808,7 +2239,7 @@ Currently <b>{_hgx_curr:,.0f}</b>. Signal resets <b>{_reset_date}</b> (18 months
                 return out
             except Exception:
                 return {}
-        _econ = _fetch_econ_series()
+        _econ = db_memo('fred_econ_series', 6, _fetch_econ_series)
 
         def indicator_row(label, value, signal_text, good=True, neutral=False):
             colour = '#f77f00' if neutral else '#2dc653' if good else '#e63946'
@@ -2056,7 +2487,7 @@ Currently <b>{_hgx_curr:,.0f}</b>. Signal resets <b>{_reset_date}</b> (18 months
 
     with _cyc1:
         _CYCLE_INFO = {
-            'FULL RECESSION'    : ('Healthcare, Utilities, Finance',     'Value / Size / Yield',      'PMI < 45',  'Defensive'),
+            'RECESSION'         : ('Healthcare, Utilities, Finance',     'Value / Size / Yield',      'PMI < 45',  'Defensive'),
             'EARLY RECOVERY'    : ('Finance, Technology, Cyclicals',     'Value / Size / Yield',      'PMI 45-50', 'Defensive > Growth'),
             'EARLY EXPANSION'   : ('Technology, Industrials, Materials', 'Momentum / Size / Value',   'PMI > 50',  'Growth'),
             'MID EXPANSION'     : ('Basic Materials, Energy, Staples',   'Momentum / Size / Value',   'PMI > 55',  'Cyclical'),
@@ -2066,10 +2497,11 @@ Currently <b>{_hgx_curr:,.0f}</b>. Signal resets <b>{_reset_date}</b> (18 months
         }
         _BIZ_COLOURS = {
             'EARLY EXPANSION':'#2dc653','MID EXPANSION':'#80b918','LATE EXPANSION':'#f77f00',
-            'LATE CYCLE':'#e63946','EARLY CONTRACTION':'#c1121f','FULL RECESSION':'#9b0000',
+            'LATE CYCLE':'#e63946','EARLY CONTRACTION':'#c1121f','RECESSION':'#9b0000',
             'EARLY RECOVERY':'#2dc653',
         }
-        _PHASE_ORDER = ['FULL RECESSION','EARLY RECOVERY','EARLY EXPANSION',
+        # vocabulary = macro/cycle_classifier.classify_us_business_cycle (phase names are matched by substring)
+        _PHASE_ORDER = ['RECESSION','EARLY RECOVERY','EARLY EXPANSION',
                         'MID EXPANSION','LATE EXPANSION','LATE CYCLE','EARLY CONTRACTION']
         biz        = macro.get('biz_cycle', '')
         score      = macro.get('biz_score', 0)
@@ -2116,55 +2548,11 @@ Currently <b>{_hgx_curr:,.0f}</b>. Signal resets <b>{_reset_date}</b> (18 months
             st.info("Run macro report to populate business cycle data.")
 
     with _cyc2:
-        @st.cache_data(ttl=3600)
-        def _pres_cycle_stats():
-            try:
-                import yfinance as _yf
-                import numpy as _np2
-                from datetime import datetime as _dt
-                _spx = _yf.download('^GSPC', start='1927-01-01', auto_adjust=True, progress=False)['Close'].squeeze().dropna()
-                _spx.index = pd.to_datetime(_spx.index).tz_localize(None)
-                _PRESIDENTS = [
-                    ("Hoover",1929,1933,"R"),("Roosevelt",1933,1945,"D"),("Truman",1945,1953,"D"),
-                    ("Eisenhower",1953,1961,"R"),("Kennedy",1961,1963,"D"),("Johnson",1963,1969,"D"),
-                    ("Nixon",1969,1974,"R"),("Ford",1974,1977,"R"),("Carter",1977,1981,"D"),
-                    ("Reagan",1981,1989,"R"),("Bush Sr",1989,1993,"R"),("Clinton",1993,2001,"D"),
-                    ("Bush Jr",2001,2009,"R"),("Obama",2009,2017,"D"),("Trump",2017,2021,"R"),
-                    ("Biden",2021,2025,"D"),("Trump",2025,2029,"R"),
-                ]
-                _now   = _dt.now()
-                _curr  = next(((n,s,e,p) for n,s,e,p in _PRESIDENTS if s<=_now.year<e), None)
-                if not _curr: return {}
-                _nm,_s,_e,_p = _curr
-                _yit  = _now.year - _s + 1
-                _ytdd = _spx[_spx.index.year==_now.year]
-                _ytdr = round((_ytdd.iloc[-1]/_ytdd.iloc[0]-1)*100,2) if len(_ytdd)>1 else 0
-                _yrets,_ydds,_mrets = [],[],[]
-                for _hn,_hs,_he,_hp in _PRESIDENTS[:-1]:
-                    _hy = _hs+(_yit-1)
-                    if _hy>=_he: continue
-                    _yd = _spx[_spx.index.year==_hy]
-                    if len(_yd)<20: continue
-                    _yrets.append(round((_yd.iloc[-1]/_yd.iloc[0]-1)*100,2))
-                    _ydds.append(round(float(((_yd-_yd.expanding().max())/_yd.expanding().max()*100).min()),2))
-                    _md = _yd[_yd.index.month==_now.month]
-                    if len(_md)>=2: _mrets.append(round((_md.iloc[-1]/_md.iloc[0]-1)*100,2))
-                _n = len(_yrets)
-                return {
-                    'president':_nm,'party':_p,'term_start':_s,'yr_in_term':_yit,'ytd_ret':_ytdr,
-                    'hist_avg':round(_np2.mean(_yrets),2) if _yrets else 0,
-                    'hist_med':round(_np2.median(_yrets),2) if _yrets else 0,
-                    'hist_pos':round(sum(r>0 for r in _yrets)/_n*100,1) if _n else 0,
-                    'avg_dd':round(_np2.mean(_ydds),2) if _ydds else 0,
-                    'worst_dd':round(min(_ydds),2) if _ydds else 0,
-                    'n_dds':len([d for d in _ydds if d<-10]),
-                    'mo_avg':round(_np2.mean(_mrets),2) if _mrets else 0,
-                    'mo_pos':round(sum(r>0 for r in _mrets)/len(_mrets)*100,1) if _mrets else 0,
-                    'curr_mo':_now.strftime('%B'),'n_yrs':_n,
-                }
-            except: return {}
 
         _ps = _pres_cycle_stats()
+        if not _ps:
+            _pres_cycle_stats.clear()      # don't keep a failed fetch for the cache TTL
+            st.caption("Presidential-cycle stats unavailable (index history not loaded) — reload to retry")
         if _ps:
             _pc_col  = '#4C8BF5' if _ps.get('party')=='D' else '#E8534A'
             _ytd     = _ps.get('ytd_ret', 0)
@@ -2834,25 +3222,14 @@ elif page == "Seasonality":
         # ── Watchlist + ticker picker ─────────────────────────────────────────
         _st_c1, _st_c2, _st_c3 = st.columns([3, 3, 3])
 
-        _wl_files       = sorted(glob.glob(os.path.join(STOCKS, 'watchlist', '*.csv')))
-        _wl_basenames   = [os.path.basename(w) for w in _wl_files]
-        _wl_display_names = [_wl_display(b) for b in _wl_basenames]
-        _wl_disp_sel    = _st_c1.selectbox("Watchlist", _wl_display_names, key="stk_wl")
-        _wl_idx         = _wl_display_names.index(_wl_disp_sel) if _wl_disp_sel in _wl_display_names else 0
-        _wl_sel         = _wl_basenames[_wl_idx] if _wl_basenames else None
-        _wl_path        = os.path.join(STOCKS, 'watchlist', _wl_sel) if _wl_sel else None
+        _wl_keys  = list(UNIVERSE_LABELS.keys())
+        _wl_sel   = _st_c1.selectbox("Universe", _wl_keys, format_func=lambda k: UNIVERSE_LABELS[k], key="stk_wl")
+        _wl_df    = db_universe_members(_wl_sel) if _wl_sel else None
+        _wl_path  = None   # legacy name — sector/industry now come from _wl_df
 
         _wl_tickers = []
-        if _wl_path and os.path.exists(_wl_path):
-            try:
-                _wl_df = pd.read_csv(_wl_path)
-                # Build display: "TICKER — Name" if name column exists
-                if 'name' in _wl_df.columns and 'ticker' in _wl_df.columns:
-                    _wl_tickers = [f"{r['ticker']} — {r['name']}" for _, r in _wl_df.iterrows()
-                                   if r.get('benchmark') != 'benchmark']
-                elif 'ticker' in _wl_df.columns:
-                    _wl_tickers = _wl_df['ticker'].tolist()
-            except: pass
+        if _wl_df is not None and len(_wl_df):
+            _wl_tickers = [f"{t} — {n}" for t, n in zip(_wl_df['ticker'], _wl_df['name'].fillna(''))]
 
         _stk_sel  = _st_c2.selectbox("Stock", _wl_tickers, key="stk_pick") if _wl_tickers else None
         _stk_ticker = _stk_sel.split(' — ')[0].strip() if _stk_sel else None
@@ -2883,25 +3260,18 @@ elif page == "Seasonality":
         elif _cmp_mode == "Auto sector" and _stk_ticker:
             # Try to get sector from watchlist
             _stk_sector = None
-            if _wl_path and os.path.exists(_wl_path):
-                try:
-                    _wl_df2 = pd.read_csv(_wl_path)
-                    _t_clean = _stk_ticker
-                    _match = _wl_df2[_wl_df2['ticker'] == _t_clean]
-                    if not _match.empty and 'sector' in _wl_df2.columns:
-                        _stk_sector = _match.iloc[0]['sector']
-                except: pass
+            if _wl_df is not None:
+                _match = _wl_df[_wl_df['ticker'] == _stk_ticker]
+                if not _match.empty:
+                    _stk_sector = _match.iloc[0]['sector']
 
             _sec_map = _SECTOR_MAP_AU if _is_au else _SECTOR_MAP_US
             # Get industry too for fuzzy matching
             _stk_industry = None
-            if _wl_path and os.path.exists(_wl_path):
-                try:
-                    _wl_df3 = pd.read_csv(_wl_path)
-                    _match3 = _wl_df3[_wl_df3['ticker'] == _stk_ticker]
-                    if not _match3.empty and 'industry' in _wl_df3.columns:
-                        _stk_industry = _match3.iloc[0]['industry']
-                except: pass
+            if _wl_df is not None:
+                _match3 = _wl_df[_wl_df['ticker'] == _stk_ticker]
+                if not _match3.empty:
+                    _stk_industry = _match3.iloc[0]['industry'] or None
             _resolved = _resolve_sector(_stk_sector, _stk_industry, _sec_map)
             if _resolved:
                 _cmp_label, _cmp_ticker = _resolved
@@ -2915,7 +3285,7 @@ elif page == "Seasonality":
                 _cmp_label  = _sec_pick
 
         if not _stk_ticker:
-            st.info("Select a watchlist and stock to view seasonality.")
+            st.info("Select a universe and stock to view seasonality.")
         else:
             _stk_data = _fetch_stk(_stk_ticker)
             if _cmp_is_self_avg:
@@ -3478,6 +3848,9 @@ elif page == "Seasonality":
 
         @st.cache_data(ttl=3600)
         def _fetch_spx():
+            _st = store_close("^GSPC", "1927-01-01")
+            if _st is not None:
+                return _st
             import yfinance as _yf
             df = _yf.download("^GSPC", start="1927-01-01", auto_adjust=True, progress=False)
             if df.empty: return None
@@ -3808,9 +4181,8 @@ elif page == "Debt Markets":
             st.rerun()
     with _dh4:
         st.markdown("<br>", unsafe_allow_html=True)
-        _debt_file = os.path.join(MACRO, 'results', 'consumer_credit_report.txt')
-        if os.path.exists(_debt_file):
-            with open(_debt_file) as _f: _debt_txt = _f.read()
+        _debt_txt, _, _ = MR.load_report('consumer_credit')
+        if _debt_txt:
             st.download_button("⬇ Download Report", _debt_txt,
                                file_name="debt_markets_report.txt", key='top_debt_dl')
     st.markdown("""
@@ -3830,9 +4202,7 @@ elif page == "Debt Markets":
 
     with _tab_us:
         # ── Load latest snapshot ──────────────────────────────────────────────────
-        credit_dir   = os.path.join(MACRO, 'results', 'consumer_credit')
-        json_files   = sorted(glob.glob(os.path.join(credit_dir, '*_consumer_credit.json')),
-                              reverse=True)
+        json_files   = MR.report_dates('consumer_credit')
 
         if not json_files:
             st.warning("No consumer credit data found — run the script first")
@@ -3841,12 +4211,11 @@ elif page == "Debt Markets":
                 st.rerun()
         else:
             # Date selector
-            dates      = [os.path.basename(f)[:8] for f in json_files][:30]
+            dates      = [d.replace('-', '') for d in json_files][:30]
             sel_date   = st.selectbox("Report date", dates, index=0)
-            json_file  = os.path.join(credit_dir, f"{sel_date}_consumer_credit.json")
-
-            with open(json_file, 'r') as f:
-                snap = json.load(f)
+            _cc_iso    = f"{sel_date[:4]}-{sel_date[4:6]}-{sel_date[6:]}"
+            _cc_txt, snap, _ = MR.load_report('consumer_credit', _cc_iso)
+            snap = snap or {}
 
             credit_data    = snap.get('credit_data', {})
             pe_data        = snap.get('pe_data', {})
@@ -4534,10 +4903,8 @@ elif page == "Debt Markets":
             st.divider()
 
             # ── Date-specific report download ─────────────────────────────────────
-            rpt_file = os.path.join(credit_dir, f"{sel_date}_consumer_credit_report.txt")
-            if os.path.exists(rpt_file):
-                with open(rpt_file, 'r', encoding='utf-8') as f:
-                    rpt_txt = f.read()
+            rpt_txt = _cc_txt
+            if rpt_txt:
                 st.download_button(
                     label     = f"⬇ Download {sel_date} Report",
                     data      = rpt_txt,
@@ -4549,8 +4916,7 @@ elif page == "Debt Markets":
     # AU TAB — RBA / ASX debt market health
     # ══════════════════════════════════════════════════════════════════════════
     with _tab_au:
-        au_files = sorted(glob.glob(os.path.join(MACRO, 'results', 'consumer_credit',
-                                                 '*_au_credit.json')), reverse=True)
+        au_files = MR.report_dates('au_credit')
         _au_run_col1, _au_run_col2 = st.columns([3, 1])
         with _au_run_col2:
             st.markdown("<br>", unsafe_allow_html=True)
@@ -4562,12 +4928,11 @@ elif page == "Debt Markets":
             st.warning("No AU debt data found — run the AU script first")
         else:
             with _au_run_col1:
-                au_dates    = [os.path.basename(f)[:8] for f in au_files][:30]
+                au_dates    = [d.replace('-', '') for d in au_files][:30]
                 au_sel_date = st.selectbox("Report date", au_dates, index=0,
                                            key='au_debt_date')
-            with open(os.path.join(MACRO, 'results', 'consumer_credit',
-                                   f"{au_sel_date}_au_credit.json")) as f:
-                au_snap = json.load(f)
+            _, au_snap, _ = MR.load_report('au_credit', f"{au_sel_date[:4]}-{au_sel_date[4:6]}-{au_sel_date[6:]}")
+            au_snap = au_snap or {}
 
             au_data    = au_snap.get('credit_data', {})
             au_market  = au_snap.get('credit_market', {})
@@ -4874,24 +5239,17 @@ Corporate & rates:
 # AU MARKET PAGE
 # ═══════════════════════════════════════════════════════════════════════════════
 elif page == "AU Market":
-    _ph1, _ph2, _ph3, _ph4, _ph5, _ph6 = st.columns([900, 3500, 1200, 1400, 1400, 900])
+    marketdb_ready()
+    _ph1, _ph2, _ph3, _ph4 = st.columns([900, 5200, 1800, 900])
     with _ph2:
         st.title("AU Total Market")
     with _ph3:
         st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("🌐 Run Breadth", key='top_run_br_au'):
-            run_script(os.path.join(STOCKS, 'au_total_market_breadth.py'), STOCKS)
+        if st.button("🔄 Update AU Market", key='upd_au', help="One incremental price update, then screener, benchmark and breadth for every universe on this page"):
+            run_marketdb('--universe', 'au_total_market')
             st.rerun()
     with _ph4:
         st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("🔄 Run Benchmark", key='top_run_bm_au'):
-            run_script(os.path.join(STOCKS, 'au_total_market_benchmark.py'), STOCKS)
-            st.rerun()
-    with _ph5:
-        st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("🔍 Run Screener", key='top_run_sc_au'):
-            run_script(os.path.join(STOCKS, 'au_total_market_screener.py'), STOCKS)
-            st.rerun()
 
     tab1, tab2, tab3, tab4, tab5 = st.tabs(["Breadth", "Zweig Thrust", "Benchmark", "Screener",
                                             "Substantial Holders"])
@@ -4918,20 +5276,16 @@ elif page == "AU Market":
                 run_script(os.path.join(STOCKS, 'asx_substantial_holders.py'), STOCKS)
                 st.rerun()
 
-        _sh_hist_file = os.path.join(STOCKS, 'results', 'substantial_holders',
-                                     'substantial_holders_history.csv')
-        _df_sh = load_csv(_sh_hist_file)
+        _df_sh = MR.holder_notices()
         if _df_sh is None or _df_sh.empty:
             st.info("No notices yet — click Fetch Notices to pull today's filings")
         else:
-            st.caption(f"{len(_df_sh)} notices on record — {file_age(_sh_hist_file)}")
+            st.caption(f"{len(_df_sh)} notices on record — latest {_df_sh['date'].max()}")
 
             # join AU benchmark rank for context
-            _bm_file = os.path.join(STOCKS, 'results', 'benchmark', 'au_total_market',
-                                    'au_total_market_latest.csv')
-            _df_bm = load_csv(_bm_file)
+            _df_bm = MR.latest('benchmark', 'au_total_market')
             if _df_bm is not None and 'ticker' in _df_bm.columns:
-                _bm = _df_bm[['ticker', 'rank', 'name', 'sector', 'cap_band']].copy()
+                _bm = _df_bm.reset_index()[['ticker', 'rank', 'name', 'sector', 'cap_band']].copy()
                 _bm['ticker'] = _bm['ticker'].str.replace('.AX', '', regex=False)
                 _df_sh = _df_sh.merge(_bm, on='ticker', how='left')
 
@@ -5005,14 +5359,13 @@ elif page == "AU Market":
                 </div>
             """, unsafe_allow_html=True)
 
-        history_file = os.path.join(STOCKS, 'results', 'breadth', 'au_total_market', 'au_total_market_breadth_history.csv')
-        history = load_csv(history_file)
+        history = MR.breadth_history('au_total_market')
 
         if history is not None:
             today_str = str(history.iloc[-1]['date'])
             _dc1, _dc2, _dc3 = st.columns([900, 10000, 900])
             with _dc2:
-                st.caption(f"Latest: {today_str} — {file_age(history_file)}")
+                st.caption(f"Latest: {today_str} — {db_age('breadth', 'au_total_market')}")
 
         # ── AI Assessment ─────────────────────────────────────────────────
         ai_settings = load_settings()
@@ -5069,6 +5422,11 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
             _aic1, _aic2, _aic3 = st.columns([900, 10000, 900])
             with _aic2:
                 render_ai_assessment(prompt, ai_settings, 'au_breadth_summary')
+
+        if history is not None:
+            # ── Sector breadth chart (XAO reference) ──────────────────────
+            render_breadth_chart(history, prefix='sec', index_ticker='^AORD',
+                                 index_label='XAO — All Ordinaries', key='au')
 
             _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
             with _lbc2:
@@ -5147,8 +5505,7 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
 
     with tab2:
         st.subheader("Zweig Breadth Thrust")
-        history_file = os.path.join(STOCKS, 'results', 'breadth', 'au_total_market', 'au_total_market_breadth_history.csv')
-        zweig_history = load_csv(history_file)
+        zweig_history = MR.breadth_history('au_total_market')
         if zweig_history is not None:
             render_zweig_section(zweig_history, 'sec', 'AU Market', show_sector=True)
         else:
@@ -5165,10 +5522,9 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                 <b style="color:#ccc">Score</b> combines 12M return, persistence, drawdown, MQS, RS trend and regime bonus.
             </div>
         """, unsafe_allow_html=True)
-        bm_file = os.path.join(STOCKS, 'results', 'benchmark', 'au_total_market', 'au_total_market_latest_formatted.csv')
-        df = load_csv(bm_file, index_col='rank')
+        df = MR.formatted('benchmark', 'au_total_market')
         if df is not None:
-            st.caption(f"Last updated: {file_age(bm_file)} — {len(df)} stocks")
+            st.caption(f"Last updated: {db_age('benchmark', 'au_total_market')} — {len(df)} stocks")
             # ── AI Rotation Assessment ────────────────────────────────────────
             ai_settings = load_settings()
             if ai_settings.get('ai_features', {}).get('enabled', False):
@@ -5183,7 +5539,7 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                     render_ai_assessment(ai_prompt, ai_settings, 'au_bm_rotation')
             cols = ['delta_rank','ticker','name','sector','cap_band','close',
                     'rs_ratio','rs_trend','ret_6m','ret_12m','max_dd',
-                    'vol_label','acc_watch','regime_label','score_final']
+                    'vol_label','acc_watch','rsi_div','obv_div','regime_label','score_final']
             cols = [c for c in cols if c in df.columns]
 
             # Format numeric columns
@@ -5202,6 +5558,10 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                     ['EARLY','PROGRESS','SHIFT','-'],
                     default=[],
                     key='au_bm_acc')
+            _fv1, _fv2, _fv3 = st.columns(3)
+            vol_filter = _fv1.multiselect("Filter volume", ['HIGH', 'MED', 'LOW'], default=[], key='au_bm_vol')
+            cap_filter = _fv2.multiselect("Filter cap band", ['large', 'mid', 'small', 'ETF'], default=[], key='au_bm_cap')
+            rsi_filter = _fv3.multiselect("Filter rsi_div", ['BULL', 'HID_BULL', 'BEAR', 'HID_BEAR', '-'], default=[], key='au_bm_rsi')
 
             if regime_filter:
                 df = df[df['regime_label'].isin(regime_filter)]
@@ -5209,14 +5569,17 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                 df = df[df['sector'].isin(sector_filter)]
             if acc_filter:
                 df = df[df['acc_watch'].isin(acc_filter)]
+            if vol_filter:
+                df = df[df['vol_label'].isin(vol_filter)]
+            if cap_filter:
+                df = df[df['cap_band'].isin(cap_filter)]
+            if rsi_filter and 'rsi_div' in df.columns:
+                df = df[df['rsi_div'].isin(rsi_filter)]
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                         width='stretch', height=600)
+                         width='stretch', height=600, column_config=DIVERGENCE_COLUMN_CONFIG)
         else:
             st.warning("No benchmark results found")
-        if st.button("🔄 Run AU Benchmark", key='au_bm'):
-            run_script(os.path.join(STOCKS, 'au_total_market_benchmark.py'), STOCKS)
-            st.rerun()
 
     with tab4:
         st.subheader("Sector Peer Screener")
@@ -5228,13 +5591,12 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                 Use this alongside the Benchmark tab — a stock ranking highly on both is leading its sector AND the broader market.
             </div>
         """, unsafe_allow_html=True)
-        sc_file = os.path.join(STOCKS, 'results', 'screener', 'au_total_market', 'au_total_market_latest_formatted.csv')
-        df = load_csv(sc_file, index_col='rank')
+        df = MR.formatted('screener', 'au_total_market')
         if df is not None:
-            st.caption(f"Last updated: {file_age(sc_file)} — {len(df)} stocks")
+            st.caption(f"Last updated: {db_age('screener', 'au_total_market')} — {len(df)} stocks")
             cols = ['delta_rank','ticker','name','sector','cap_band','close',
                     'peer_rs_score','rs_trend','ret_6m','ret_12m','max_dd',
-                    'vol_label','acc_watch','regime_label','score_final']
+                    'vol_label','acc_watch','rsi_div','obv_div','regime_label','score_final']
             cols = [c for c in cols if c in df.columns]
 
             # Format numeric columns
@@ -5254,6 +5616,10 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                     ['EARLY','PROGRESS','SHIFT','-'],
                     default=[],
                     key='au_sc_acc')
+            _fv1, _fv2, _fv3 = st.columns(3)
+            vol_filter = _fv1.multiselect("Filter volume", ['HIGH', 'MED', 'LOW'], default=[], key='au_sc_vol')
+            cap_filter = _fv2.multiselect("Filter cap band", ['large', 'mid', 'small', 'ETF'], default=[], key='au_sc_cap')
+            rsi_filter = _fv3.multiselect("Filter rsi_div", ['BULL', 'HID_BULL', 'BEAR', 'HID_BEAR', '-'], default=[], key='au_sc_rsi')
 
             if regime_filter:
                 df = df[df['regime_label'].isin(regime_filter)]
@@ -5261,37 +5627,33 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                 df = df[df['sector'].isin(sector_filter)]
             if acc_filter:
                 df = df[df['acc_watch'].isin(acc_filter)]
+            if vol_filter:
+                df = df[df['vol_label'].isin(vol_filter)]
+            if cap_filter:
+                df = df[df['cap_band'].isin(cap_filter)]
+            if rsi_filter and 'rsi_div' in df.columns:
+                df = df[df['rsi_div'].isin(rsi_filter)]
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                         width='stretch', height=600)
+                         width='stretch', height=600, column_config=DIVERGENCE_COLUMN_CONFIG)
         else:
             st.warning("No screener results found")
-        if st.button("🔄 Run AU Screener", key='au_sc'):
-            run_script(os.path.join(STOCKS, 'au_total_market_screener.py'), STOCKS)
-            st.rerun()
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # US MARKET PAGE
 # ═══════════════════════════════════════════════════════════════════════════════
 elif page == "US Market":
-    _ph1, _ph2, _ph3, _ph4, _ph5, _ph6 = st.columns([900, 3500, 1200, 1400, 1400, 900])
+    marketdb_ready()
+    _ph1, _ph2, _ph3, _ph4 = st.columns([900, 5200, 1800, 900])
     with _ph2:
         st.title("US Total Market")
     with _ph3:
         st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("🌐 Run Breadth", key='top_run_br_us'):
-            run_script(os.path.join(STOCKS, 'us_total_market_breadth.py'), STOCKS)
+        if st.button("🔄 Update US Market", key='upd_us', help="One incremental price update, then screener, benchmark and breadth for every universe on this page"):
+            run_marketdb('--universe', 'us_total_market', 'nasdaq100')
             st.rerun()
     with _ph4:
         st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("🔄 Run Benchmark", key='top_run_bm_us'):
-            run_script(os.path.join(STOCKS, 'us_total_market_benchmark.py'), STOCKS)
-            st.rerun()
-    with _ph5:
-        st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("🔍 Run Screener", key='top_run_sc_us'):
-            run_script(os.path.join(STOCKS, 'us_total_market_screener.py'), STOCKS)
-            st.rerun()
 
     tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["Breadth", "Zweig Thrust", "S&P 500 Benchmark", "S&P 500 Screener", "Nasdaq 100 Screener", "Nasdaq Benchmark"])
 
@@ -5310,14 +5672,14 @@ elif page == "US Market":
                 </div>
             """, unsafe_allow_html=True)
 
-        history_file = os.path.join(STOCKS, 'results', 'breadth', 'us_total_market', 'us_total_market_breadth_history.csv')
-        history = load_csv(history_file)
+        history = MR.breadth_history('us_total_market')
+        history_file = ('breadth', 'us_total_market')
 
         if history is not None:
             today_str = str(history.iloc[-1]['date'])
             _dc1, _dc2, _dc3 = st.columns([900, 10000, 900])
             with _dc2:
-                st.caption(f"Latest: {today_str} — {file_age(history_file)}")
+                st.caption(f"Latest: {today_str} — {db_age(*history_file)}")
 
         # ── AI Assessment ─────────────────────────────────────────────────
         ai_settings = load_settings()
@@ -5398,6 +5760,11 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
             _aic1, _aic2, _aic3 = st.columns([900, 10000, 900])
             with _aic2:
                 render_ai_assessment(prompt, ai_settings, 'us_breadth_summary')
+
+        if history is not None:   # tables render regardless of the AI-assessment setting
+            # ── Sector breadth chart (S&P 500 reference) ──────────────────
+            render_breadth_chart(history, prefix='sec', index_ticker='^GSPC',
+                                 index_label='SPX — S&P 500', key='us')
 
             overall_metrics = [
                 ('Total',         'total'),
@@ -5536,8 +5903,8 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
 
     with tab2:
         st.subheader("Zweig Breadth Thrust")
-        history_file = os.path.join(STOCKS, 'results', 'breadth', 'us_total_market', 'us_total_market_breadth_history.csv')
-        history = load_csv(history_file)
+        history = MR.breadth_history('us_total_market')
+        history_file = ('breadth', 'us_total_market')
         if history is not None:
             render_zweig_section(history, 'sp_sec', 'US Market', show_sector=True)
         else:
@@ -5553,10 +5920,10 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                 Filter by sector to identify which industries are producing the most leaders relative to the broader market.
             </div>
         """, unsafe_allow_html=True)
-        bm_file = os.path.join(STOCKS, 'results', 'benchmark', 'us_sp500', 'us_sp500_latest_formatted.csv')
-        df = load_csv(bm_file, index_col='rank')
+        df = MR.formatted('benchmark', 'us_total_market')
+        bm_file = ('benchmark', 'us_total_market')  # marketdb key (was a CSV path)
         if df is not None:
-            st.caption(f"Last updated: {file_age(bm_file)} — {len(df)} stocks")
+            st.caption(f"Last updated: {db_age(*bm_file)} — {len(df)} stocks")
             # ── AI Rotation Assessment ────────────────────────────────────────
             ai_settings = load_settings()
             if ai_settings.get('ai_features', {}).get('enabled', False):
@@ -5571,7 +5938,7 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                     render_ai_assessment(ai_prompt, ai_settings, 'us_bm_rotation')
             cols = ['delta_rank','ticker','name','sector','cap_band','close',
                     'rs_ratio','rs_trend','ret_6m','ret_12m','max_dd',
-                    'vol_label','acc_watch','regime_label','score_final']
+                    'vol_label','acc_watch','rsi_div','obv_div','regime_label','score_final']
             cols = [c for c in cols if c in df.columns]
 
             # Format numeric columns
@@ -5591,6 +5958,10 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                     ['EARLY','PROGRESS','SHIFT','-'],
                     default=[],
                     key='us_bm_acc')
+            _fv1, _fv2, _fv3 = st.columns(3)
+            vol_filter = _fv1.multiselect("Filter volume", ['HIGH', 'MED', 'LOW'], default=[], key='us_bm_vol')
+            cap_filter = _fv2.multiselect("Filter cap band", ['large', 'mid', 'small', 'ETF'], default=[], key='us_bm_cap')
+            rsi_filter = _fv3.multiselect("Filter rsi_div", ['BULL', 'HID_BULL', 'BEAR', 'HID_BEAR', '-'], default=[], key='us_bm_rsi')
 
             if regime_filter:
                 df = df[df['regime_label'].isin(regime_filter)]
@@ -5598,14 +5969,17 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                 df = df[df['sector'].isin(sector_filter)]
             if acc_filter:
                 df = df[df['acc_watch'].isin(acc_filter)]
+            if vol_filter:
+                df = df[df['vol_label'].isin(vol_filter)]
+            if cap_filter:
+                df = df[df['cap_band'].isin(cap_filter)]
+            if rsi_filter and 'rsi_div' in df.columns:
+                df = df[df['rsi_div'].isin(rsi_filter)]
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                         width='stretch', height=600)
+                         width='stretch', height=600, column_config=DIVERGENCE_COLUMN_CONFIG)
         else:
             st.warning("No benchmark results found")
-        if st.button("🔄 Run US Benchmark", key='us_bm'):
-            run_script(os.path.join(STOCKS, 'us_total_market_benchmark.py'), STOCKS)
-            st.rerun()
 
     with tab4:
         st.subheader("S&P 500 Sector Peer Screener")
@@ -5616,13 +5990,13 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                 Cross-reference with the RRG Charts page to confirm sector-level momentum before drilling into individual names.
             </div>
         """, unsafe_allow_html=True)
-        sc_file = os.path.join(STOCKS, 'results', 'screener', 'us_sp500', 'us_sp500_latest_formatted.csv')
-        df = load_csv(sc_file, index_col='rank')
+        df = MR.formatted('screener', 'us_total_market')
+        sc_file = ('screener', 'us_total_market')  # marketdb key (was a CSV path)
         if df is not None:
-            st.caption(f"Last updated: {file_age(sc_file)} — {len(df)} stocks")
+            st.caption(f"Last updated: {db_age(*sc_file)} — {len(df)} stocks")
             cols = ['delta_rank','ticker','name','sector','cap_band','close',
                     'peer_rs_score','rs_trend','ret_6m','ret_12m','max_dd',
-                    'vol_label','acc_watch','regime_label','score_final']
+                    'vol_label','acc_watch','rsi_div','obv_div','regime_label','score_final']
             cols = [c for c in cols if c in df.columns]
 
             col1, col2, col3 = st.columns(3)
@@ -5640,6 +6014,10 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                     ['EARLY','PROGRESS','SHIFT','-'],
                     default=[],
                     key='us_sc_acc')
+            _fv1, _fv2, _fv3 = st.columns(3)
+            vol_filter = _fv1.multiselect("Filter volume", ['HIGH', 'MED', 'LOW'], default=[], key='us_sc_vol')
+            cap_filter = _fv2.multiselect("Filter cap band", ['large', 'mid', 'small', 'ETF'], default=[], key='us_sc_cap')
+            rsi_filter = _fv3.multiselect("Filter rsi_div", ['BULL', 'HID_BULL', 'BEAR', 'HID_BEAR', '-'], default=[], key='us_sc_rsi')
 
             if regime_filter:
                 df = df[df['regime_label'].isin(regime_filter)]
@@ -5647,14 +6025,17 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                 df = df[df['sector'].isin(sector_filter)]
             if acc_filter:
                 df = df[df['acc_watch'].isin(acc_filter)]
+            if vol_filter:
+                df = df[df['vol_label'].isin(vol_filter)]
+            if cap_filter:
+                df = df[df['cap_band'].isin(cap_filter)]
+            if rsi_filter and 'rsi_div' in df.columns:
+                df = df[df['rsi_div'].isin(rsi_filter)]
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                         width='stretch', height=600)
+                         width='stretch', height=600, column_config=DIVERGENCE_COLUMN_CONFIG)
         else:
             st.warning("No screener results found — run S&P 500 screener first")
-        if st.button("🔄 Run S&P 500 Screener", key='us_sc'):
-            run_script(os.path.join(STOCKS, 'us_total_market_screener.py'), STOCKS)
-            st.rerun()
 
     with tab5:
         st.subheader("Nasdaq 100 Screener")
@@ -5664,13 +6045,13 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                 Peer RS scores reflect competition against the highest-quality tech-heavy names — a score above 75 is particularly meaningful here.
             </div>
         """, unsafe_allow_html=True)
-        ndx_sc_file = os.path.join(STOCKS, 'results', 'screener', 'nasdaq100', 'nasdaq100_latest_formatted.csv')
-        df = load_csv(ndx_sc_file, index_col='rank')
+        df = MR.formatted('screener', 'nasdaq100')
+        ndx_sc_file = ('screener', 'nasdaq100')  # marketdb key (was a CSV path)
         if df is not None:
-            st.caption(f"Last updated: {file_age(ndx_sc_file)} — {len(df)} stocks")
+            st.caption(f"Last updated: {db_age(*ndx_sc_file)} — {len(df)} stocks")
             cols = ['delta_rank','ticker','name','sector','cap_band','close',
                     'peer_rs_score','rs_trend','ret_6m','ret_12m','max_dd',
-                    'vol_label','acc_watch','regime_label','score_final']
+                    'vol_label','acc_watch','rsi_div','obv_div','regime_label','score_final']
             cols = [c for c in cols if c in df.columns]
 
             col1, col2, col3 = st.columns(3)
@@ -5688,6 +6069,10 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                     ['EARLY','PROGRESS','SHIFT','-'],
                     default=[],
                     key='ndx_sc_acc')
+            _fv1, _fv2, _fv3 = st.columns(3)
+            vol_filter = _fv1.multiselect("Filter volume", ['HIGH', 'MED', 'LOW'], default=[], key='ndx_sc_vol')
+            cap_filter = _fv2.multiselect("Filter cap band", ['large', 'mid', 'small', 'ETF'], default=[], key='ndx_sc_cap')
+            rsi_filter = _fv3.multiselect("Filter rsi_div", ['BULL', 'HID_BULL', 'BEAR', 'HID_BEAR', '-'], default=[], key='ndx_sc_rsi')
 
             if regime_filter:
                 df = df[df['regime_label'].isin(regime_filter)]
@@ -5695,14 +6080,17 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                 df = df[df['sector'].isin(sector_filter)]
             if acc_filter:
                 df = df[df['acc_watch'].isin(acc_filter)]
+            if vol_filter:
+                df = df[df['vol_label'].isin(vol_filter)]
+            if cap_filter:
+                df = df[df['cap_band'].isin(cap_filter)]
+            if rsi_filter and 'rsi_div' in df.columns:
+                df = df[df['rsi_div'].isin(rsi_filter)]
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                         width='stretch', height=600)
+                         width='stretch', height=600, column_config=DIVERGENCE_COLUMN_CONFIG)
         else:
             st.warning("No Nasdaq 100 screener results found — run Nasdaq 100 screener first")
-        if st.button("🔄 Run Nasdaq 100 Screener", key='ndx_sc'):
-            run_script(os.path.join(STOCKS, 'nasdaq100_screener.py'), STOCKS)
-            st.rerun()
 
     with tab6:
         st.subheader("Nasdaq Benchmark (All US Stocks vs ^NDX)")
@@ -5713,13 +6101,13 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                 <b style="color:#ccc">TREND+LEAD</b> = above 200 SMA and outperforming ^NDX over 12 months.
             </div>
         """, unsafe_allow_html=True)
-        ndx_bm_file = os.path.join(STOCKS, 'results', 'benchmark', 'us_nasdaq', 'us_nasdaq_benchmark_latest_formatted.csv')
-        df = load_csv(ndx_bm_file, index_col='rank')
+        df = MR.formatted('benchmark', 'nasdaq100')
+        ndx_bm_file = ('benchmark', 'nasdaq100')  # marketdb key (was a CSV path)
         if df is not None:
-            st.caption(f"Last updated: {file_age(ndx_bm_file)} — {len(df)} stocks")
+            st.caption(f"Last updated: {db_age(*ndx_bm_file)} — {len(df)} stocks")
             cols = ['delta_rank','ticker','name','sector','cap_band','close',
                     'rs_ratio','rs_trend','ret_6m','ret_12m','max_dd',
-                    'vol_label','acc_watch','regime_label','score_final']
+                    'vol_label','acc_watch','rsi_div','obv_div','regime_label','score_final']
             cols = [c for c in cols if c in df.columns]
 
             col1, col2, col3 = st.columns(3)
@@ -5737,6 +6125,10 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                     ['EARLY','PROGRESS','SHIFT','-'],
                     default=[],
                     key='ndx_bm_acc')
+            _fv1, _fv2, _fv3 = st.columns(3)
+            vol_filter = _fv1.multiselect("Filter volume", ['HIGH', 'MED', 'LOW'], default=[], key='ndx_bm_vol')
+            cap_filter = _fv2.multiselect("Filter cap band", ['large', 'mid', 'small', 'ETF'], default=[], key='ndx_bm_cap')
+            rsi_filter = _fv3.multiselect("Filter rsi_div", ['BULL', 'HID_BULL', 'BEAR', 'HID_BEAR', '-'], default=[], key='ndx_bm_rsi')
 
             if regime_filter:
                 df = df[df['regime_label'].isin(regime_filter)]
@@ -5744,39 +6136,35 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                 df = df[df['sector'].isin(sector_filter)]
             if acc_filter:
                 df = df[df['acc_watch'].isin(acc_filter)]
+            if vol_filter:
+                df = df[df['vol_label'].isin(vol_filter)]
+            if cap_filter:
+                df = df[df['cap_band'].isin(cap_filter)]
+            if rsi_filter and 'rsi_div' in df.columns:
+                df = df[df['rsi_div'].isin(rsi_filter)]
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                         width='stretch', height=600)
+                         width='stretch', height=600, column_config=DIVERGENCE_COLUMN_CONFIG)
         else:
             st.warning("No Nasdaq benchmark results found — run Nasdaq benchmark first")
-        if st.button("🔄 Run Nasdaq Benchmark", key='ndx_bm'):
-            run_script(os.path.join(STOCKS, 'us_nasdaq_benchmark.py'), STOCKS)
-            st.rerun()
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # COMMODITIES PAGE
 # ═══════════════════════════════════════════════════════════════════════════════
 elif page == "Commodities":
-    _ph1, _ph2, _ph3, _ph4, _ph5, _ph6 = st.columns([900, 3500, 1200, 1400, 1400, 900])
+    marketdb_ready()
+    _ph1, _ph2, _ph3, _ph4 = st.columns([900, 5200, 1800, 900])
     with _ph2:
         st.title("⛏ All Major Commodities")
     with _ph3:
         st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("🌐 Run Breadth", key='top_run_br_comm'):
-            run_script(os.path.join(STOCKS, 'all_major_commodities_breadth.py'), STOCKS)
+        if st.button("🔄 Update Commodities", key='upd_comm', help="One incremental price update, then screener, benchmark and breadth for every universe on this page"):
+            run_marketdb('--universe', 'all_major_commodities', 'uranium', 'au_gold_miners')
             st.rerun()
     with _ph4:
         st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("🔄 Run Benchmark", key='top_run_bm_comm'):
-            run_script(os.path.join(STOCKS, 'all_major_commodities_benchmark.py'), STOCKS)
-            st.rerun()
-    with _ph5:
-        st.markdown("<br>", unsafe_allow_html=True)
-        if st.button("🔍 Run Screener", key='top_run_sc_comm'):
-            run_script(os.path.join(STOCKS, 'all_major_commodities_screener.py'), STOCKS)
-            st.rerun()
 
-    _main_tabs = st.tabs(["⛏ Commodities", "☢ Uranium", "🥇 AU Gold Miners"])
+    _main_tabs = st.tabs(["⛏ All Commodities", "🪙 Metals", "⚡ Energy", "🪨 Exposures"])
 
     with _main_tabs[0]:
         tab1, tab2, tab3 = st.tabs(["Breadth", "Benchmark", "Screener"])
@@ -5787,7 +6175,7 @@ elif page == "Commodities":
         with _hc2:
             st.markdown("""
                 <div class="info-card">
-                    Breadth analysis across 390 tickers covering gold, silver, copper, uranium, lithium, platinum and palladium.
+                    Breadth analysis across every AU/US stock carrying a commodity exposure — gold, silver, copper, platinum, palladium (Metals) and uranium, lithium, oil &amp; gas (Energy). Each stock is counted under its <b style="color:#ccc">primary</b> exposure (Settings → Commodity Exposures).
                     <b style="color:#ccc">By Commodity</b> shows leader counts and SMA participation per metal — useful for identifying which commodity groups are leading.
                     <b style="color:#ccc">Junior vs Senior Rotation</b> shows large/mid/small cap breakdown within each commodity — junior miners leading seniors is a classic early cycle signal.
                     <b style="color:#ccc">By Type</b> shows producers vs explorers vs ETFs — explorer breadth expanding signals speculative risk appetite returning.
@@ -5795,14 +6183,18 @@ elif page == "Commodities":
                 </div>
             """, unsafe_allow_html=True)
 
-        history_file = os.path.join(STOCKS, 'results', 'breadth', 'all_major_commodities', 'all_major_commodities_breadth_history.csv')
-        history = load_csv(history_file)
+        history = MR.breadth_history('all_major_commodities')
+        history_file = ('breadth', 'all_major_commodities')
 
         if history is not None:
             today_str = str(history.iloc[-1]['date'])
             _dc1, _dc2, _dc3 = st.columns([900, 10000, 900])
             with _dc2:
-                st.caption(f"Latest: {today_str} — {file_age(history_file)}")
+                st.caption(f"Latest: {today_str} — {db_age(*history_file)}")
+
+            # ── Commodity breadth chart (GSCI reference) ──────────────────
+            render_breadth_chart(history, prefix='comm', index_ticker='^SPGSCI',
+                                 index_label='GSCI — S&P GSCI Commodity Index', key='comm')
 
             _lbc1, _lbc2, _lbc3 = st.columns([900, 10000, 900])
             with _lbc2:
@@ -5932,10 +6324,10 @@ elif page == "Commodities":
                 A stock ranked highly here is outperforming not just its peers but the overall commodity ETF — the strongest names in the strongest commodities.
             </div>
         """, unsafe_allow_html=True)
-        bm_file = os.path.join(STOCKS, 'results', 'benchmark', 'all_major_commodities', 'all_major_commodities_latest_formatted.csv')
-        df = load_csv(bm_file, index_col='rank')
+        df = MR.formatted('benchmark', 'all_major_commodities')
+        bm_file = ('benchmark', 'all_major_commodities')  # marketdb key (was a CSV path)
         if df is not None:
-            st.caption(f"Last updated: {file_age(bm_file)} — {len(df)} stocks")
+            st.caption(f"Last updated: {db_age(*bm_file)} — {len(df)} stocks")
             # ── AI Rotation Assessment ────────────────────────────────────────
             ai_settings = load_settings()
             if ai_settings.get('ai_features', {}).get('enabled', False):
@@ -5950,7 +6342,7 @@ elif page == "Commodities":
                     render_ai_assessment(ai_prompt, ai_settings, 'comm_bm_rotation')
             cols = ['delta_rank','ticker','name','commodity','type','cap_band','close',
                     'rs_ratio','rs_trend','ret_6m','ret_12m','max_dd',
-                    'vol_label','acc_watch','regime_label','score_final']
+                    'vol_label','acc_watch','rsi_div','obv_div','regime_label','score_final']
             cols = [c for c in cols if c in df.columns]
 
             # Format numeric columns
@@ -5974,6 +6366,10 @@ elif page == "Commodities":
                     ['EARLY','PROGRESS','SHIFT','-'],
                     default=[],
                     key='comm_bm_acc')
+            _fv1, _fv2, _fv3 = st.columns(3)
+            vol_filter = _fv1.multiselect("Filter volume", ['HIGH', 'MED', 'LOW'], default=[], key='comm_bm_vol')
+            cap_filter = _fv2.multiselect("Filter cap band", ['large', 'mid', 'small', 'ETF'], default=[], key='comm_bm_cap')
+            rsi_filter = _fv3.multiselect("Filter rsi_div", ['BULL', 'HID_BULL', 'BEAR', 'HID_BEAR', '-'], default=[], key='comm_bm_rsi')
 
             if regime_filter:
                 df = df[df['regime_label'].isin(regime_filter)]
@@ -5983,14 +6379,17 @@ elif page == "Commodities":
                 df = df[df['type'].isin(type_filter)]
             if acc_filter:
                 df = df[df['acc_watch'].isin(acc_filter)]
+            if vol_filter:
+                df = df[df['vol_label'].isin(vol_filter)]
+            if cap_filter:
+                df = df[df['cap_band'].isin(cap_filter)]
+            if rsi_filter and 'rsi_div' in df.columns:
+                df = df[df['rsi_div'].isin(rsi_filter)]
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                         width='stretch', height=600)
+                         width='stretch', height=600, column_config=DIVERGENCE_COLUMN_CONFIG)
         else:
             st.warning("No benchmark results found")
-        if st.button("🔄 Run Commodities Benchmark", key='comm_bm'):
-            run_script(os.path.join(STOCKS, 'all_major_commodities_benchmark.py'), STOCKS)
-            st.rerun()
 
     with tab3:
         st.subheader("Peer Screener")
@@ -6002,13 +6401,13 @@ elif page == "Commodities":
             </div>
         """, unsafe_allow_html=True)
 
-        sc_file = os.path.join(STOCKS, 'results', 'screener', 'all_major_commodities', 'all_major_commodities_latest_formatted.csv')
-        df = load_csv(sc_file, index_col='rank')
+        df = MR.formatted('screener', 'all_major_commodities')
+        sc_file = ('screener', 'all_major_commodities')  # marketdb key (was a CSV path)
         if df is not None:
-            st.caption(f"Last updated: {file_age(sc_file)} — {len(df)} stocks")
+            st.caption(f"Last updated: {db_age(*sc_file)} — {len(df)} stocks")
             cols = ['delta_rank','ticker','name','commodity','type','cap_band','close',
                     'peer_rs_score','rs_trend','ret_6m','ret_12m','max_dd',
-                    'vol_label','acc_watch','regime_label','score_final']
+                    'vol_label','acc_watch','rsi_div','obv_div','regime_label','score_final']
             cols = [c for c in cols if c in df.columns]
 
             # Format numeric columns
@@ -6032,6 +6431,10 @@ elif page == "Commodities":
                     ['EARLY','PROGRESS','SHIFT','-'],
                     default=[],
                     key='comm_sc_acc')
+            _fv1, _fv2, _fv3 = st.columns(3)
+            vol_filter = _fv1.multiselect("Filter volume", ['HIGH', 'MED', 'LOW'], default=[], key='comm_sc_vol')
+            cap_filter = _fv2.multiselect("Filter cap band", ['large', 'mid', 'small', 'ETF'], default=[], key='comm_sc_cap')
+            rsi_filter = _fv3.multiselect("Filter rsi_div", ['BULL', 'HID_BULL', 'BEAR', 'HID_BEAR', '-'], default=[], key='comm_sc_rsi')
 
             if regime_filter:
                 df = df[df['regime_label'].isin(regime_filter)]
@@ -6041,247 +6444,381 @@ elif page == "Commodities":
                 df = df[df['type'].isin(type_filter)]
             if acc_filter:
                 df = df[df['acc_watch'].isin(acc_filter)]
+            if vol_filter:
+                df = df[df['vol_label'].isin(vol_filter)]
+            if cap_filter:
+                df = df[df['cap_band'].isin(cap_filter)]
+            if rsi_filter and 'rsi_div' in df.columns:
+                df = df[df['rsi_div'].isin(rsi_filter)]
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                         width='stretch', height=600)
+                         width='stretch', height=600, column_config=DIVERGENCE_COLUMN_CONFIG)
         else:
             st.warning("No screener results found")
-        if st.button("🔄 Run Commodities Screener", key='comm_sc'):
-            run_script(os.path.join(STOCKS, 'all_major_commodities_screener.py'), STOCKS)
-            st.rerun()
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # URANIUM PAGE
 # ═══════════════════════════════════════════════════════════════════════════════
+    # ═══════════════════════════════════════════════════════════════════════════════
+    # METALS / ENERGY GROUP TABS — filtered views of the all_major_commodities studies
+    # ═══════════════════════════════════════════════════════════════════════════════
+    _COMM_LABELS = MU.commodity_labels()
+    _COMM_GROUPS = MU.commodity_groups()
+
+    def _comm_region(t):
+        return 'AU' if str(t).upper().endswith('.AX') else 'US'
+
+    def _render_commodity_group(gkey, gcfg):
+        _comms = gcfg['commodities']
+        _lab = lambda k: _COMM_LABELS.get(k, k.title())
+        st.title(f"{'🪙' if gkey == 'metals' else '⚡'} {gcfg['name']}")
+        st.markdown(f"""
+            <div class="info-card">
+                {gcfg['name']} names from the all-commodities universe — {', '.join(_lab(c) for c in _comms)}.
+                Every stock has one <b style="color:#ccc">primary</b> exposure (its peer group for RS) and may carry
+                more: assign them under <b style="color:#ccc">Settings → 🪨 Commodity Exposures</b> (e.g. BHP: copper,
+                uranium, silver). Tick <b style="color:#ccc">include secondary exposures</b> to pull in stocks whose
+                primary is elsewhere but which carry one of these commodities.
+            </div>
+        """, unsafe_allow_html=True)
+
+        # ── Filters ───────────────────────────────────────────────────────────
+        _f1, _f2, _f3, _f4, _f5 = st.columns([1.2, 2.2, 1.6, 1.6, 1.4])
+        _sel_region = _f1.multiselect("Country", ['AU', 'US'], default=['AU', 'US'], key=f'{gkey}_region')
+        _sel_comm = _f2.multiselect("Commodity", _comms, default=_comms, format_func=_lab, key=f'{gkey}_comm')
+        _sel_type = _f3.multiselect("Type", MU.config().get('commodity_types', []), default=[], key=f'{gkey}_type',
+                                    help="Empty = all types")
+        _sel_cap = _f4.multiselect("Cap band", ['large', 'mid', 'small'], default=[], key=f'{gkey}_cap',
+                                   help="Empty = all bands")
+        _incl_secondary = _f5.toggle("Include secondary exposures", value=False, key=f'{gkey}_secondary')
+
+        # tickers carrying any selected commodity as a secondary exposure
+        _secondary = set()
+        if _incl_secondary and _sel_comm:
+            _q = ",".join("?" * len(_sel_comm))
+            _secondary = set(mdb.read_df(
+                f"SELECT DISTINCT ticker FROM security_groups WHERE group_type='commodity' AND group_key IN ({_q})",
+                tuple(_sel_comm))['ticker'])
+
+        def _apply(df):
+            if df is None:
+                return None
+            m = df['commodity'].isin(_sel_comm)
+            if _secondary:
+                m = m | df['ticker'].isin(_secondary)
+            df = df[m]
+            if _sel_region:
+                df = df[df['ticker'].map(_comm_region).isin(_sel_region)]
+            if _sel_type and 'type' in df.columns:
+                df = df[df['type'].isin(_sel_type)]
+            if _sel_cap:
+                df = df[df['cap_band'].isin(_sel_cap)]
+            return df
+
+        _t_breadth, _t_bm, _t_sc = st.tabs(["Breadth", "Benchmark", "Screener"])
+
+        # ── Breadth by commodity (subset of the commodity breadth history) ────
+        with _t_breadth:
+            _h = MR.breadth_history('all_major_commodities')
+            if _h is None:
+                st.warning("No breadth history found")
+            else:
+                _today = _h.iloc[-1]
+                _ts = str(_today['date'])
+                _d5, _d63 = get_past_row(_h, _ts, 7), get_past_row(_h, _ts, 91)
+                st.caption(f"Latest: {_ts} — {db_age('breadth', 'all_major_commodities')}")
+
+                def _dl(key, past):
+                    try:
+                        v = int(_today[key]) - int(past[key])
+                        return f"+{v}" if v > 0 else str(v)
+                    except Exception:
+                        return 'n/a'
+                _rows = []
+                for ck in _sel_comm:
+                    if f'comm_{ck}_total' not in _h.columns:
+                        continue
+                    _tot = int(_today[f'comm_{ck}_total'])
+                    _pct = lambda m: f"{round(int(_today[f'comm_{ck}_{m}']) / _tot * 100, 1)}%" if _tot else '0%'
+                    _rows.append({'Commodity': _lab(ck), 'Total': _tot, 'Leaders': int(_today[f'comm_{ck}_leaders']),
+                                  'dL5': _dl(f'comm_{ck}_leaders', _d5) if _d5 is not None else 'n/a',
+                                  'dL63': _dl(f'comm_{ck}_leaders', _d63) if _d63 is not None else 'n/a',
+                                  'Ab20%': _pct('above20'), 'Ab50%': _pct('above50'), 'Ab200%': _pct('above200'),
+                                  'HVol': int(_today[f'comm_{ck}_high_vol']), 'AccEarly': int(_today[f'comm_{ck}_acc_early'])})
+                if _rows:
+                    st.dataframe(style_breadth(pd.DataFrame(_rows), delta_cols=['dL5', 'dL63']),
+                                 width='stretch', hide_index=True, height=min(60 + 38 * len(_rows), 400))
+                # junior vs senior within each commodity
+                _cap_rows = []
+                for ck in _sel_comm:
+                    for band in ('large', 'mid', 'small'):
+                        if f'comm_{ck}_{band}_total' in _h.columns:
+                            _cap_rows.append({'Commodity': _lab(ck), 'Band': band,
+                                              'Total': int(_today[f'comm_{ck}_{band}_total']),
+                                              'Leaders': int(_today[f'comm_{ck}_{band}_leaders']),
+                                              'Ab200': int(_today[f'comm_{ck}_{band}_above200']),
+                                              'dL5': _dl(f'comm_{ck}_{band}_leaders', _d5) if _d5 is not None else 'n/a',
+                                              'dL63': _dl(f'comm_{ck}_{band}_leaders', _d63) if _d63 is not None else 'n/a'})
+                if _cap_rows:
+                    st.markdown("**Junior vs Senior (cap band within commodity)**")
+                    st.dataframe(style_breadth(pd.DataFrame(_cap_rows), delta_cols=['dL5', 'dL63']),
+                                 width='stretch', hide_index=True, height=min(60 + 38 * len(_cap_rows), 520))
+                _chart_keys = [c for c in _sel_comm if f'comm_{c}_above20' in _h.columns]
+                if _chart_keys:
+                    _hsub = _h[['date'] + [c for c in _h.columns if any(c.startswith(f'comm_{k}_') for k in _chart_keys)]
+                               + [c for c in ('total',) if c in _h.columns]]
+                    render_breadth_chart(_hsub, prefix='comm', index_ticker='^SPGSCI',
+                                         index_label='GSCI — S&P GSCI Commodity Index', key=f'comm_{gkey}')
+
+        # ── Benchmark / Screener tables ───────────────────────────────────────
+        for _tab, _study, _rs_col, _regimes, _def_regimes in (
+                (_t_bm, 'benchmark', 'rs_ratio', ['TREND+LEAD', 'TREND_ONLY', 'WEAK'], ['TREND+LEAD', 'TREND_ONLY']),
+                (_t_sc, 'screener', 'peer_rs_score', ['LEADER', 'CONTENDER', 'LAGGARD', 'WEAK'], ['LEADER', 'CONTENDER'])):
+            with _tab:
+                _df = _apply(MR.formatted(_study, 'all_major_commodities'))
+                if _df is None:
+                    st.warning(f"No {_study} results found")
+                    continue
+                st.caption(f"Last updated: {db_age(_study, 'all_major_commodities')} — {len(_df)} stocks after filters"
+                           + (" (benchmark = each stock's own commodity ETF)" if _study == 'benchmark' else
+                              " (peer RS within each stock's primary commodity)"))
+                _c1, _c2, _c3, _c4 = st.columns(4)
+                _rf = _c1.multiselect("Filter regime", _regimes, default=_def_regimes, key=f'{gkey}_{_study}_regime')
+                _af = _c2.multiselect("Filter acc_watch", ['EARLY', 'PROGRESS', 'SHIFT', '-'], default=[],
+                                      key=f'{gkey}_{_study}_acc')
+                _vf = _c3.multiselect("Filter volume", ['HIGH', 'MED', 'LOW'], default=[], key=f'{gkey}_{_study}_vol')
+                _xf = _c4.multiselect("Filter rsi_div", ['BULL', 'HID_BULL', 'BEAR', 'HID_BEAR', '-'], default=[], key=f'{gkey}_{_study}_rsi')
+                if _rf:
+                    _df = _df[_df['regime_label'].isin(_rf)]
+                if _af:
+                    _df = _df[_df['acc_watch'].isin(_af)]
+                if _vf:
+                    _df = _df[_df['vol_label'].isin(_vf)]
+                if _xf and 'rsi_div' in _df.columns:
+                    _df = _df[_df['rsi_div'].isin(_xf)]
+                _cols = ['delta_rank', 'ticker', 'name', 'commodity', 'type', 'cap_band', 'close', _rs_col, 'rs_trend',
+                         'ret_6m', 'ret_12m', 'max_dd', 'vol_label', 'acc_watch', 'rsi_div', 'obv_div',
+                         'regime_label', 'score_final']
+                _cols = [c for c in _cols if c in _df.columns]
+                st.dataframe(style_df(format_screener_df(_df, _cols), 'regime_label', 'delta_rank'),
+                             width='stretch', height=600, column_config=DIVERGENCE_COLUMN_CONFIG)
+
     with _main_tabs[1]:
-        _ph1, _ph2, _ph3, _ph4, _ph5 = st.columns([900, 4000, 1000, 2000, 900])
-        with _ph2:
-            st.title("☢ Uranium")
-        with _ph4:
-            st.markdown("<br>", unsafe_allow_html=True)
-            if st.button("🔄 Run Benchmark", key='top_run_bm_ura'):
-                run_script(os.path.join(STOCKS, 'uranium_benchmark.py'), STOCKS)
-                st.rerun()
-        with _ph5:
-            st.markdown("<br>", unsafe_allow_html=True)
-            if st.button("🔍 Run Screener", key='top_run_sc_ura'):
-                run_script(os.path.join(STOCKS, 'uranium_screener.py'), STOCKS)
-                st.rerun()
-
-        tab1, tab2 = st.tabs(["Benchmark", "Screener"])
-
-        with tab1:
-            st.subheader("Benchmark vs URA")
-            st.markdown("""
-                <div class="info-card">
-                    Ranks 47 uranium stocks versus <b style="color:#ccc">URA</b> (Global X Uranium ETF).
-                    Universe includes uranium miners, explorers, nuclear construction and nuclear power companies.
-                    RS Ratio &gt; 1.0 means outperforming the uranium ETF — identifies names capturing more upside than the sector average.
-                </div>
-            """, unsafe_allow_html=True)
-
-            bm_file = os.path.join(STOCKS, 'results', 'benchmark', 'uranium', 'uranium_latest_formatted.csv')
-            df = load_csv(bm_file, index_col='rank')
-            if df is not None:
-                st.caption(f"Last updated: {file_age(bm_file)} — {len(df)} stocks")
-                cols = ['delta_rank','ticker','name','sector','cap_band','close',
-                        'rs_ratio','rs_trend','ret_6m','ret_12m','max_dd',
-                        'vol_label','acc_watch','regime_label','score_final']
-                cols = [c for c in cols if c in df.columns]
-
-                # Format numeric columns
-            
-                col1, col2 = st.columns(2)
-                with col1:
-                    regime_filter = st.multiselect("Filter regime",
-                        ['TREND+LEAD','TREND_ONLY','WEAK'],
-                        default=['TREND+LEAD','TREND_ONLY'],
-                        key='ura_bm_regime')
-                with col2:
-                    acc_filter = st.multiselect("Filter acc_watch",
-                        ['EARLY','PROGRESS','SHIFT','-'],
-                        default=[],
-                        key='ura_bm_acc')
-
-                if regime_filter:
-                    df = df[df['regime_label'].isin(regime_filter)]
-                if acc_filter:
-                    df = df[df['acc_watch'].isin(acc_filter)]
-
-                st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                             width='stretch', height=600)
-            else:
-                st.warning("No benchmark results found")
-            if st.button("🔄 Run Uranium Benchmark", key='ura_bm'):
-                run_script(os.path.join(STOCKS, 'uranium_benchmark.py'), STOCKS)
-                st.rerun()
-
-        with tab2:
-            st.subheader("Peer Screener")
-            st.markdown("""
-                <div class="info-card">
-                    Ranks uranium stocks by relative strength versus <b style="color:#ccc">uranium peers</b>.
-                    With only 47 stocks the peer group is tight — a Peer RS Score of 80+ puts a stock in the top 20% of the uranium universe.
-                    Cross-reference with the Benchmark tab — leaders on both are the highest quality uranium names.
-                </div>
-            """, unsafe_allow_html=True)
-
-            sc_file = os.path.join(STOCKS, 'results', 'screener', 'uranium', 'uranium_latest_formatted.csv')
-            df = load_csv(sc_file, index_col='rank')
-            if df is not None:
-                st.caption(f"Last updated: {file_age(sc_file)} — {len(df)} stocks")
-                cols = ['delta_rank','ticker','name','sector','cap_band','close',
-                        'peer_rs_score','rs_trend','ret_6m','ret_12m','max_dd',
-                        'vol_label','acc_watch','regime_label','score_final']
-                cols = [c for c in cols if c in df.columns]
-
-                # Format numeric columns
-            
-                col1, col2 = st.columns(2)
-                with col1:
-                    regime_filter = st.multiselect("Filter regime",
-                        ['LEADER','CONTENDER','LAGGARD','WEAK'],
-                        default=['LEADER','CONTENDER'],
-                        key='ura_sc_regime')
-                with col2:
-                    acc_filter = st.multiselect("Filter acc_watch",
-                        ['EARLY','PROGRESS','SHIFT','-'],
-                        default=[],
-                        key='ura_sc_acc')
-
-                if regime_filter:
-                    df = df[df['regime_label'].isin(regime_filter)]
-                if acc_filter:
-                    df = df[df['acc_watch'].isin(acc_filter)]
-
-                st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                             width='stretch', height=600)
-            else:
-                st.warning("No screener results found")
-            if st.button("🔄 Run Uranium Screener", key='ura_sc'):
-                run_script(os.path.join(STOCKS, 'uranium_screener.py'), STOCKS)
-                st.rerun()
-
-    # ═══════════════════════════════════════════════════════════════════════════════
-    # AU GOLD MINERS PAGE
-    # ═══════════════════════════════════════════════════════════════════════════════
+        _render_commodity_group('metals', _COMM_GROUPS.get('metals', {'name': 'Metals', 'commodities': []}))
 
     with _main_tabs[2]:
-        _ph1, _ph2, _ph3, _ph4, _ph5 = st.columns([900, 4000, 1000, 2000, 900])
-        with _ph2:
-            st.title("🥇 AU Gold Miners")
-        with _ph4:
-            st.markdown("<br>", unsafe_allow_html=True)
-            if st.button("🔄 Run Benchmark", key='top_run_bm_augm'):
-                run_script(os.path.join(STOCKS, 'au_gold_miners_benchmark.py'), STOCKS)
-                st.rerun()
-        with _ph5:
-            st.markdown("<br>", unsafe_allow_html=True)
-            if st.button("🔍 Run Screener", key='top_run_sc_augm'):
-                run_script(os.path.join(STOCKS, 'au_gold_miners_screener.py'), STOCKS)
-                st.rerun()
-
-        tab1, tab2 = st.tabs(["Benchmark", "Screener"])
-
-        with tab1:
-            st.subheader("Benchmark vs GDX")
-            st.markdown("""
-                <div class="info-card">
-                    Ranks 154 ASX gold mining stocks versus <b style="color:#ccc">GDX</b> (VanEck Gold Miners ETF).
-                    GDX is a global benchmark — ASX stocks ranked highly here are outperforming not just local peers but the best gold miners globally.
-                    Includes producers, developers, explorers and royalty companies.
-                </div>
-            """, unsafe_allow_html=True)
-            bm_file = os.path.join(STOCKS, 'results', 'benchmark', 'au_gold_miners', 'au_gold_miners_latest_formatted.csv')
-            df = load_csv(bm_file, index_col='rank')
-            if df is not None:
-                st.caption(f"Last updated: {file_age(bm_file)} — {len(df)} stocks")
-                cols = ['delta_rank','ticker','name','sector','cap_band','close',
-                        'rs_ratio','rs_trend','ret_6m','ret_12m','max_dd',
-                        'vol_label','acc_watch','regime_label','score_final']
-                cols = [c for c in cols if c in df.columns]
-
-                # Format numeric columns
-            
-                col1, col2 = st.columns(2)
-                with col1:
-                    regime_filter = st.multiselect("Filter regime",
-                        ['TREND+LEAD','TREND_ONLY','WEAK'],
-                        default=['TREND+LEAD','TREND_ONLY'],
-                        key='gold_bm_regime')
-                with col2:
-                    acc_filter = st.multiselect("Filter acc_watch",
-                        ['EARLY','PROGRESS','SHIFT','-'],
-                        default=[],
-                        key='gold_bm_acc')
-
-                if regime_filter:
-                    df = df[df['regime_label'].isin(regime_filter)]
-                if acc_filter:
-                    df = df[df['acc_watch'].isin(acc_filter)]
-
-                st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                             width='stretch', height=600)
-            else:
-                st.warning("No benchmark results found")
-            if st.button("🔄 Run AU Gold Benchmark", key='gold_bm'):
-                run_script(os.path.join(STOCKS, 'au_gold_miners_benchmark.py'), STOCKS)
-                st.rerun()
-
-        with tab2:
-            st.subheader("Peer Screener")
-            st.markdown("""
-                <div class="info-card">
-                    Ranks ASX gold stocks by relative strength versus <b style="color:#ccc">ASX gold mining peers</b>.
-                    With 154 stocks the peer group is broad enough to be meaningful — a Peer RS Score above 85 puts a stock in the top 15% of ASX gold miners.
-                    Use alongside the Benchmark tab and the Commodities page gold filter for a complete picture of gold stock leadership.
-                </div>
-            """, unsafe_allow_html=True)
-            sc_file = os.path.join(STOCKS, 'results', 'screener', 'au_gold_miners', 'au_gold_miners_latest_formatted.csv')
-            df = load_csv(sc_file, index_col='rank')
-            if df is not None:
-                st.caption(f"Last updated: {file_age(sc_file)} — {len(df)} stocks")
-                cols = ['delta_rank','ticker','name','sector','cap_band','close',
-                        'peer_rs_score','rs_trend','ret_6m','ret_12m','max_dd',
-                        'vol_label','acc_watch','regime_label','score_final']
-                cols = [c for c in cols if c in df.columns]
-
-                # Format numeric columns
-            
-                col1, col2 = st.columns(2)
-                with col1:
-                    regime_filter = st.multiselect("Filter regime",
-                        ['LEADER','CONTENDER','LAGGARD','WEAK'],
-                        default=['LEADER','CONTENDER'],
-                        key='gold_sc_regime')
-                with col2:
-                    acc_filter = st.multiselect("Filter acc_watch",
-                        ['EARLY','PROGRESS','SHIFT','-'],
-                        default=[],
-                        key='gold_sc_acc')
-
-                if regime_filter:
-                    df = df[df['regime_label'].isin(regime_filter)]
-                if acc_filter:
-                    df = df[df['acc_watch'].isin(acc_filter)]
-
-                st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
-                             width='stretch', height=600)
-            else:
-                st.warning("No screener results found")
-            if st.button("🔄 Run AU Gold Screener", key='gold_sc'):
-                run_script(os.path.join(STOCKS, 'au_gold_miners_screener.py'), STOCKS)
-                st.rerun()
+        _render_commodity_group('energy', _COMM_GROUPS.get('energy', {'name': 'Energy', 'commodities': []}))
 
     # ═══════════════════════════════════════════════════════════════════════════════
-    # RRG PAGE
+    # EXPOSURES TAB — which commodities each stock carries, and which one is primary
     # ═══════════════════════════════════════════════════════════════════════════════
+    with _main_tabs[3]:
+        st.title("🪨 Commodity Exposures")
+        st.markdown("""
+            <div class="info-card">
+                A stock can carry any number of commodity exposures (BHP: copper, iron ore, uranium, silver …).
+                The <b style="color:#ccc">primary</b> exposure is its peer group for Peer RS and the commodity it is
+                listed under; the others make it appear in the Metals / Energy tabs when
+                "include secondary exposures" is ticked. Saved to the database <i>and</i> to
+                <code>stocks/universe_overrides.json</code>, so the monthly universe refresh keeps them.
+            </div>
+        """, unsafe_allow_html=True)
+        _ce_labels = MU.commodity_labels()
+        _ce_types = MU.config().get('commodity_types', ['producer', 'explorer', 'royalty', 'ETF'])
+        _ce_c1, _ce_c2 = st.columns([2, 3])
+        _ce_q = _ce_c1.text_input("Find a stock (ticker or name)", placeholder="BHP, Pilbara, CCJ …", key='ce_search')
+        _ce_sel = None
+        if _ce_q.strip():
+            _ce_hits = MU.search_securities(_ce_q)
+            if _ce_hits is None or len(_ce_hits) == 0:
+                _ce_c2.info("No match in the AU/US universe")
+            else:
+                _ce_opts = [f"{r.ticker} — {r.name} ({r.region}, {r.sector or '—'}{'' if r.active else ', inactive'})"
+                            for r in _ce_hits.itertuples()]
+                _ce_pick = _ce_c2.selectbox("Match", _ce_opts, key='ce_pick')
+                _ce_sel = _ce_pick.split(' — ')[0]
+        if _ce_sel:
+            _ce_cur = MU.exposures(_ce_sel)
+            _cur_keys = _ce_cur['commodity'].tolist() if _ce_cur is not None and len(_ce_cur) else []
+            _cur_prim = next((r.commodity for r in _ce_cur.itertuples() if int(r.priority) == 0), None) if _cur_keys else None
+            _cur_types = dict(zip(_ce_cur['commodity'], _ce_cur['type'])) if _cur_keys else {}
+            st.markdown(f"**{_ce_sel}** — "
+                        + (", ".join(f"{_ce_labels.get(k, k)}{' ★' if k == _cur_prim or (not _cur_prim and i == 0) else ''}"
+                                     for i, k in enumerate(_cur_keys)) if _cur_keys else "no commodity exposures yet"))
+            _e1, _e2, _e3, _e4 = st.columns([3, 1.6, 1.4, 1.2])
+            _new_keys = _e1.multiselect("Commodities", list(_ce_labels.keys()), default=_cur_keys,
+                                        format_func=lambda k: _ce_labels[k], key=f'ce_multi_{_ce_sel}')
+            _prim_opts = _new_keys or []
+            _prim_default = _cur_prim if _cur_prim in _prim_opts else (_prim_opts[0] if _prim_opts else None)
+            _new_prim = _e2.selectbox("Primary", _prim_opts, index=_prim_opts.index(_prim_default) if _prim_default else 0,
+                                      format_func=lambda k: _ce_labels[k], key=f'ce_prim_{_ce_sel}') if _prim_opts else None
+            _type_default = _cur_types.get(_new_prim) or 'producer'
+            _new_type = _e3.selectbox("Type", _ce_types, index=_ce_types.index(_type_default) if _type_default in _ce_types else 0,
+                                      key=f'ce_type_{_ce_sel}', help="Applied to the exposures you add; existing ones keep theirs")
+            _e4.markdown("<br>", unsafe_allow_html=True)
+            if _e4.button("💾 Save", type="primary", key=f'ce_save_{_ce_sel}'):
+                for k in [k for k in _cur_keys if k not in _new_keys]:
+                    MU.remove_exposure(_ce_sel, k)
+                for k in _new_keys:
+                    MU.set_exposure(_ce_sel, k, _cur_types.get(k) or _new_type, primary=(k == _new_prim))
+                st.success(f"{_ce_sel}: " + (", ".join(f"{_ce_labels[k]}{' ★' if k == _new_prim else ''}" for k in _new_keys)
+                                             if _new_keys else "all exposures removed"))
+                st.rerun()
+            st.caption("Membership updates immediately; rankings pick the change up on the next Update Commodities run.")
+
+        st.divider()
+        with st.expander("➕ Add a new commodity (iron ore, nickel, coal, rare earths …)", expanded=False):
+            st.caption("Registers the commodity in `marketdb/universe_config.json`. Then tag stocks with it above, "
+                       "or give it Yahoo industries / name keywords and it is auto-flagged on every universe refresh. "
+                       "Without an ETF the group's default benchmark is used (Metals → XME, Energy → XLE, Other → PICK).")
+            _nc1, _nc2, _nc3 = st.columns([1.5, 1.5, 1.5])
+            _nc_label = _nc1.text_input("Name", placeholder="Iron Ore", key='nc_label')
+            _nc_key = _nc2.text_input("Key (slug)", value="", placeholder="iron_ore", key='nc_key',
+                                      help="Lower-case identifier used in the database; defaults to the name")
+            _nc_groups = MU.commodity_groups()
+            _nc_group = _nc3.selectbox("Group", list(_nc_groups.keys()) + ['(new group…)'],
+                                       format_func=lambda g: _nc_groups[g]['name'] if g in _nc_groups else g, key='nc_group')
+            if _nc_group == '(new group…)':
+                _nc_group = st.text_input("New group key", placeholder="bulks", key='nc_newgroup').strip().lower()
+            _nc4, _nc5 = st.columns([1.5, 3])
+            _nc_bench = _nc4.text_input("Benchmark ETF (optional)", placeholder="e.g. PICK, XME, SLX", key='nc_bench')
+            _nc_inds = _nc5.multiselect("Yahoo industries that auto-flag this commodity (optional)",
+                                        MU.yahoo_industries(), key='nc_inds')
+            _nc_kws = st.text_input("Name keywords for auto-flagging (comma separated, mining names only — optional)",
+                                    placeholder="nickel, iron ore", key='nc_kws')
+            if st.button("➕ Create commodity", type="primary", key='nc_create'):
+                _k = (_nc_key or _nc_label).strip()
+                if not _k:
+                    st.error("Give the commodity a name")
+                elif not _nc_group:
+                    st.error("Choose or name a group")
+                else:
+                    try:
+                        MU.add_commodity(_k, _nc_label or _k, _nc_group, benchmark=_nc_bench or None,
+                                         industries=_nc_inds, keywords=[w for w in _nc_kws.split(',') if w.strip()])
+                        if _nc_bench.strip():
+                            from marketdb import fetch as MF
+                            with mdb.session() as _con:
+                                _ok = MF.ensure_securities([_nc_bench.strip().upper()], _con, role='benchmark')
+                                if _ok:
+                                    MF.update_prices(_ok, _con, log=lambda m: None)
+                        st.success(f"Commodity '{_k}' created in group '{_nc_group}'. Tag stocks with it above, or run auto-flags.")
+                        st.rerun()
+                    except Exception as _e:
+                        st.error(f"Could not create commodity: {_e}")
+            if st.button("⚙ Apply auto-flags now (industries / keywords, no network)", key='nc_autoflag'):
+                from marketdb import refresh_universe as MRU
+                with mdb.session() as _con:
+                    _n = MRU.apply_commodity_flags(_con, log=lambda m: None)
+                    MRU.apply_overrides(_con, log=lambda m: None)
+                st.success(f"Auto-flag pass done ({_n} candidate flags checked). Run Update Commodities to re-rank.")
+
+        st.divider()
+        # ── Secondary exposures from Yahoo business summaries ─────────────────
+        from marketdb import summary_scan as MSS
+        with st.expander("🔎 Secondary exposures from business summaries", expanded=True):
+            st.caption("Reads each flagged stock's Yahoo business summary (stored in the database, refreshed every "
+                       f"{MSS.cfg()['max_age_days']} days) and lists commodities it mentions that the stock is not yet "
+                       "flagged with — a gold miner with a lithium project, a silver-copper producer, PGM by-products. "
+                       "Tick the ones that are real and apply them as **secondary** exposures (the primary never changes). "
+                       "Keywords live in `universe_config.json` → `summary_scan`.")
+            _ss1, _ss2, _ss3 = st.columns([2, 2, 3])
+            _ss_src = ", ".join(_ce_labels.get(k, k) for k in MSS.cfg()['source_commodities'])
+            if _ss1.button(f"🔎 Scan {_ss_src} stocks", key='ss_scan',
+                           help="First run downloads the summaries (~6 min for ~650 stocks); later runs are instant"):
+                run_marketdb(module='marketdb.summary_scan', label="Fetching summaries and scanning…")
+                st.rerun()
+            if _ss2.button("🔎 Scan every commodity stock", key='ss_scan_all',
+                           help="All commodity-flagged AU/US stocks (~1,300) — first run ~12 min"):
+                run_marketdb('--all', module='marketdb.summary_scan', label="Fetching summaries and scanning…")
+                st.rerun()
+            _ss_cands, _ss_date = MSS.latest_candidates()
+            if _ss_cands is None:
+                _ss3.info("No scan yet")
+            else:
+                _have = mdb.read_df("SELECT ticker, group_key FROM security_groups WHERE group_type='commodity'")
+                _have_set = set(zip(_have['ticker'], _have['group_key']))
+                _rej = {(g['ticker'], g['group_key']) for g in (MU.load_overrides() or {}).get('remove_groups', [])
+                        if g.get('group_type') == 'commodity'}
+                if len(_ss_cands):
+                    _ss_open = _ss_cands[[(t, c) not in _have_set and (t, c) not in _rej
+                                          for t, c in zip(_ss_cands['ticker'], _ss_cands['commodity'])]].copy()
+                else:
+                    _ss_open = _ss_cands
+                _ss3.markdown(f"Last scan **{_ss_date}** — {len(_ss_cands)} candidates, **{len(_ss_open)} awaiting review**")
+                if len(_ss_open):
+                    _ss_f1, _ss_f2, _ss_f3 = st.columns([2, 1.5, 2.5])
+                    _ss_comm_f = _ss_f1.multiselect("Commodity", sorted(_ss_open['commodity'].unique()),
+                                                    format_func=lambda k: _ce_labels.get(k, k), key='ss_comm_f')
+                    _ss_cap_f = _ss_f2.multiselect("Cap band", ['large', 'mid', 'small', 'ETF'], key='ss_cap_f')
+                    _ss_min = _ss_f3.slider("Minimum mentions", 1, int(max(1, _ss_open['hits'].max())), 1, key='ss_min')
+                    _ss_view = _ss_open[_ss_open['hits'] >= _ss_min]
+                    if _ss_comm_f:
+                        _ss_view = _ss_view[_ss_view['commodity'].isin(_ss_comm_f)]
+                    if _ss_cap_f and 'cap_band' in _ss_view.columns:
+                        _ss_view = _ss_view[_ss_view['cap_band'].isin(_ss_cap_f)]
+                    _ss_view = _ss_view.assign(apply=True,
+                                               commodity_label=_ss_view['commodity'].map(lambda k: _ce_labels.get(k, k)),
+                                               primary_label=_ss_view['primary'].map(lambda k: _ce_labels.get(k, k)))
+                    _ss_edit = st.data_editor(
+                        _ss_view[[c for c in ['apply', 'ticker', 'name', 'cap_band', 'primary_label', 'commodity_label',
+                                               'primary_type', 'hits', 'snippet'] if c in _ss_view.columns]],
+                        hide_index=True, width='stretch', height=min(60 + 36 * len(_ss_view), 520),
+                        disabled=['ticker', 'name', 'cap_band', 'primary_label', 'commodity_label', 'primary_type', 'hits', 'snippet'],
+                        column_config={'apply': st.column_config.CheckboxColumn('apply', width='small'),
+                                       'primary_label': st.column_config.TextColumn('primary'),
+                                       'commodity_label': st.column_config.TextColumn('secondary'),
+                                       'primary_type': st.column_config.TextColumn('type'),
+                                       'snippet': st.column_config.TextColumn('summary excerpt', width='large')},
+                        key=f'ss_editor_{_ss_date}')
+                    _ss_ticked = _ss_view.loc[_ss_edit['apply'].values]
+                    _ss_unticked = _ss_view.loc[~_ss_edit['apply'].values]
+                    _ss_b1, _ss_b2, _ss_b3 = st.columns([2, 2.5, 3])
+                    if _ss_b1.button(f"✅ Apply {len(_ss_ticked)} ticked as secondary", type="primary", key='ss_apply',
+                                     disabled=len(_ss_ticked) == 0):
+                        with mdb.session() as _con:
+                            _n = MSS.apply(_ss_ticked, _con, log=lambda m: None)
+                        st.success(f"{_n} secondary exposures added (source = summary). Run Update Commodities to re-rank.")
+                        st.rerun()
+                    if _ss_b2.button(f"✖ Reject {len(_ss_unticked)} unticked (won't reappear)", key='ss_reject',
+                                     disabled=len(_ss_unticked) == 0):
+                        for _r in _ss_unticked.itertuples():
+                            MU.remove_exposure(_r.ticker, _r.commodity)
+                        st.success(f"{len(_ss_unticked)} candidates rejected — recorded in universe_overrides.json")
+                        st.rerun()
+                    _ss_b3.caption("Rejections are stored as `remove_groups` overrides; un-reject by editing that file.")
+
+        st.divider()
+        _ce_manual = mdb.read_df("""SELECT g.ticker, s.name, g.group_key AS commodity, g.attr AS type, g.source, g.priority, g.updated
+                                    FROM security_groups g LEFT JOIN securities s ON s.ticker=g.ticker
+                                    WHERE g.group_type='commodity' AND g.source IN ('manual', 'summary')
+                                    ORDER BY g.ticker, g.priority""")
+        _n_man = int((_ce_manual['source'] == 'manual').sum()) if len(_ce_manual) else 0
+        _n_sum = int((_ce_manual['source'] == 'summary').sum()) if len(_ce_manual) else 0
+        st.markdown(f"**Exposures on record — {_n_man} manual, {_n_sum} from business summaries**")
+        if len(_ce_manual):
+            _ce_manual['commodity'] = _ce_manual['commodity'].map(lambda k: _ce_labels.get(k, k))
+            _ce_manual['primary'] = _ce_manual['priority'].map(lambda p: '★' if int(p) == 0 else '')
+            st.dataframe(_ce_manual.drop(columns=['priority']), width='stretch', hide_index=True,
+                         height=min(60 + 38 * len(_ce_manual), 400))
+        _ce_groups = MU.commodity_groups()
+        st.caption("Groups: " + " · ".join(f"**{g['name']}** = {', '.join(_ce_labels.get(c, c) for c in g['commodities'])}"
+                                          for g in _ce_groups.values() if g.get('commodities'))
+                   + "  (edit in `marketdb/universe_config.json`)")
 
 elif page == "Relative Strength Charts":
+    marketdb_ready()
     import plotly.graph_objects as go
 
-    st.title("📡 Relative Rotation Graph")
-    st.caption("RS-Ratio vs RS-Momentum — tails show last 63 trading days")
+    _rh1, _rh2 = st.columns([5200, 1800])
+    with _rh1:
+        st.title("📡 Relative Rotation Graph")
+        st.caption("RS-Ratio vs RS-Momentum — tails show last 63 trading days")
+    with _rh2:
+        st.markdown("<br>", unsafe_allow_html=True)
+        if st.button("🔄 Update RRG data", key='upd_rrg', help="Incremental price update, then all four RRG studies"):
+            run_marketdb('--studies', 'rrg')
+            st.rerun()
 
     tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
         "🇦🇺 AU vs XJO", "🇺🇸 US vs SPY/RSP", "📈 Dow 30 vs DJI",
@@ -6289,15 +6826,15 @@ elif page == "Relative Strength Charts":
         "⚙️ Custom RRG"
     ])
 
-    def build_rrg(history_file, title):
-        history = load_csv(history_file)
+    def build_rrg(rrg_study, title):
+        history = MR.rrg_history(rrg_study)
         if history is None or len(history) == 0:
             st.warning(f"No RRG data found — run data collection script first")
             return
 
         history['date'] = pd.to_datetime(history['date'])
         latest_date     = history['date'].max()
-        st.caption(f"Latest: {latest_date.strftime('%d %b %Y')} — {file_age(history_file)}")
+        st.caption(f"Latest: {latest_date.strftime('%d %b %Y')} — {db_age('rrg', rrg_study)}")
 
         # Controls
         col1, col2, col3, col4 = st.columns(4)
@@ -6646,38 +7183,21 @@ elif page == "Relative Strength Charts":
             )
 
     with tab1:
-        build_rrg(
-            os.path.join(STOCKS, 'results', 'rrg', 'au_rrg_history.csv'),
-            'AU Sectors & ETFs vs XJO'
-        )
-        if st.button("🔄 Update AU RRG Data", key='rrg_au'):
-            run_script(os.path.join(STOCKS, 'rrg_au_data.py'), STOCKS)
-            st.rerun()
+        build_rrg('au', 'AU Sectors & ETFs vs XJO')
 
     with tab2:
         _spy_rsp = st.toggle("Use RSP (equal-weight) benchmark", value=False, key='rrg_us_rsp',
                              help="SPY = cap-weighted S&P 500 | RSP = equal-weight S&P 500")
         if _spy_rsp:
-            _us_hist_file = os.path.join(STOCKS, 'results', 'rrg', 'us_rrg_rsp_history.csv')
-            _us_title     = 'US Sectors & ETFs vs RSP (Equal Weight)'
-            _us_script    = 'rrg_us_rsp_data.py'
+            _us_study = 'us_rsp'
+            _us_title = 'US Sectors & ETFs vs RSP (Equal Weight)'
         else:
-            _us_hist_file = os.path.join(STOCKS, 'results', 'rrg', 'us_rrg_history.csv')
-            _us_title     = 'US Sectors & ETFs vs SPY'
-            _us_script    = 'rrg_us_data.py'
-        build_rrg(_us_hist_file, _us_title)
-        if st.button("🔄 Update US RRG Data", key='rrg_us'):
-            run_script(os.path.join(STOCKS, _us_script), STOCKS)
-            st.rerun()
+            _us_study = 'us'
+            _us_title = 'US Sectors & ETFs vs SPY'
+        build_rrg(_us_study, _us_title)
 
     with tab3:
-        build_rrg(
-            os.path.join(STOCKS, 'results', 'rrg', 'dow_rrg_history.csv'),
-            'Dow 30 vs DJI'
-        )
-        if st.button("🔄 Update Dow RRG Data", key='rrg_dow'):
-            run_script(os.path.join(STOCKS, 'rrg_dow_data.py'), STOCKS)
-            st.rerun()
+        build_rrg('dow', 'Dow 30 vs DJI')
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # BREADTH RRG PAGE
@@ -6807,15 +7327,15 @@ elif page == "Relative Strength Charts":
         st.plotly_chart(fig, width='stretch')
 
     with tab4:
-        au_hist_file = os.path.join(STOCKS, 'results', 'breadth', 'au_total_market', 'au_total_market_breadth_history.csv')
-        au_hist = load_csv(au_hist_file)
+        au_hist = MR.breadth_history('au_total_market')
+        au_hist_file = ('breadth', 'au_total_market')
         if au_hist is not None:
             sec_cols = [c for c in au_hist.columns if c.startswith('sec_') and c.endswith('_total')
                         and not c.startswith('sp_') and not c.startswith('rus_')]
             sec_keys = [c.replace('sec_','').replace('_total','') for c in sec_cols
                         if c not in ('nan', 'index')]
 
-            st.caption(f"Latest: {au_hist.iloc[-1]['date']} — {file_age(au_hist_file)}")
+            st.caption(f"Latest: {au_hist.iloc[-1]['date']} — {db_age(*au_hist_file)}")
 
             _bc1, _bc2, _bc3 = st.columns(3)
             sma_choice    = _bc1.radio("SMA Level", ["Above 20", "Above 50", "Above 200"],
@@ -6833,14 +7353,14 @@ elif page == "Relative Strength Charts":
     # ── US ─────────────────────────────────────────────────────────────────────
 
     with tab5:
-        us_hist_file = os.path.join(STOCKS, 'results', 'breadth', 'us_total_market', 'us_total_market_breadth_history.csv')
-        us_hist = load_csv(us_hist_file)
+        us_hist = MR.breadth_history('us_total_market')
+        us_hist_file = ('breadth', 'us_total_market')
         if us_hist is not None:
             sp_cols = [c for c in us_hist.columns if c.startswith('sp_sec_') and c.endswith('_total')]
             sp_keys = [c.replace('sp_sec_','').replace('_total','') for c in sp_cols
                        if c not in ('nan', 'index')]
 
-            st.caption(f"Latest: {us_hist.iloc[-1]['date']} — {file_age(us_hist_file)}")
+            st.caption(f"Latest: {us_hist.iloc[-1]['date']} — {db_age(*us_hist_file)}")
 
             sma_choice = st.radio("SMA Level", ["Above 20", "Above 50", "Above 200"],
                                    horizontal=True, key='brrg_us_sma')
@@ -6858,14 +7378,14 @@ elif page == "Relative Strength Charts":
     # ── Commodities ────────────────────────────────────────────────────────────
 
     with tab6:
-        comm_hist_file = os.path.join(STOCKS, 'results', 'breadth', 'all_major_commodities', 'all_major_commodities_breadth_history.csv')
-        comm_hist = load_csv(comm_hist_file)
+        comm_hist = MR.breadth_history('all_major_commodities')
+        comm_hist_file = ('breadth', 'all_major_commodities')
         if comm_hist is not None:
             comm_cols = [c for c in comm_hist.columns if c.startswith('comm_') and c.endswith('_total')
                          and c.count('_') == 2]
             comm_keys = [c.replace('comm_','').replace('_total','') for c in comm_cols]
 
-            st.caption(f"Latest: {comm_hist.iloc[-1]['date']} — {file_age(comm_hist_file)}")
+            st.caption(f"Latest: {comm_hist.iloc[-1]['date']} — {db_age(*comm_hist_file)}")
 
             sma_choice = st.radio("SMA Level", ["Above 20", "Above 50", "Above 200"],
                                    horizontal=True, key='brrg_comm_sma')
@@ -6904,16 +7424,16 @@ elif page == "Relative Strength Charts":
 
         _custom_tickers = []
         if _ug_source == "Watchlist":
-            _wl_files_rrg = sorted(glob.glob(os.path.join(STOCKS,'watchlist','*.csv')))
-            _wl_names_rrg = [os.path.basename(w) for w in _wl_files_rrg]
-            _wl_disp_rrg  = [b.replace('.csv','').replace('_',' ').title() for b in _wl_names_rrg]
-            _wl_sel_rrg   = st.selectbox("Watchlist", _wl_disp_rrg, key="custom_rrg_wl")
-            _wl_idx_rrg   = _wl_disp_rrg.index(_wl_sel_rrg)
-            _wl_path_rrg  = _wl_files_rrg[_wl_idx_rrg] if _wl_files_rrg else None
+            _wl_keys_rrg  = list(UNIVERSE_LABELS.keys())
+            _wl_sel_rrg   = st.selectbox("Universe", _wl_keys_rrg, format_func=lambda k: UNIVERSE_LABELS[k],
+                                         key="custom_rrg_wl")
 
-            if _wl_path_rrg and os.path.exists(_wl_path_rrg):
+            if _wl_sel_rrg:
                 try:
-                    _wl_df_rrg = pd.read_csv(_wl_path_rrg)
+                    _wl_df_rrg = db_universe_members(_wl_sel_rrg)
+                    _bm_rrg = MR.latest('benchmark', _wl_sel_rrg)
+                    if _bm_rrg is not None:
+                        _wl_df_rrg = _wl_df_rrg.merge(_bm_rrg[['ticker', 'regime_label']], on='ticker', how='left')
                     # Filters
                     _fc1, _fc2, _fc3 = st.columns(3)
                     _sect_opts = sorted(_wl_df_rrg['sector'].dropna().unique().tolist()) if 'sector' in _wl_df_rrg.columns else []
@@ -6944,12 +7464,9 @@ elif page == "Relative Strength Charts":
                 st.caption(f"{len(_custom_tickers)} tickers entered")
 
         elif _ug_source in ("AU Sectors", "US Sectors"):
-            _rrg_hist_file = os.path.join(STOCKS, 'results', 'rrg',
-                                           'au_rrg_history.csv' if _ug_source == "AU Sectors"
-                                           else 'us_rrg_history.csv')
-            if os.path.exists(_rrg_hist_file):
-                _rrg_h2 = load_csv(_rrg_hist_file)
-                if _rrg_h2 is not None:
+            _rrg_h2 = MR.rrg_history('au' if _ug_source == "AU Sectors" else 'us')
+            if _rrg_h2 is not None:
+                if True:
                     _sect_opts2 = sorted(_rrg_h2['name'].dropna().unique().tolist()) if 'name' in _rrg_h2.columns else                                   sorted(_rrg_h2['ticker'].dropna().unique().tolist())
                     _f_sect2 = st.multiselect("Filter by sector/instrument", _sect_opts2, key="custom_rrg_sect2")
                     if _f_sect2:
@@ -6974,10 +7491,7 @@ elif page == "Relative Strength Charts":
 
             if _ug_source in ("AU Sectors", "US Sectors"):
                 # Use pre-computed history files
-                _rrg_hist_file = os.path.join(STOCKS, 'results', 'rrg',
-                                               'au_rrg_history.csv' if _ug_source == "AU Sectors"
-                                               else 'us_rrg_history.csv')
-                _rrg_h = load_csv(_rrg_hist_file)
+                _rrg_h = MR.rrg_history('au' if _ug_source == "AU Sectors" else 'us')
                 if _rrg_h is not None:
                     _rrg_h['date'] = pd.to_datetime(_rrg_h['date'])
                     _rrg_h  = _rrg_h[_rrg_h['ticker'].isin(_custom_tickers)].sort_values('date')
@@ -7069,9 +7583,8 @@ elif page == "Relative Strength Charts":
 
 
 elif page == "Drawdown Analysis":
-    import sys
-    sys.path.insert(0, STOCKS)
-    from drawdown_analysis import calculate_period, save_period
+    marketdb_ready()
+    from marketdb import drawdown as MDD
 
     st.title("📉 Drawdown Analysis")
 
@@ -7155,23 +7668,21 @@ elif page == "Drawdown Analysis":
 
     col1, col2 = st.columns(2)
     with col1:
-        watchlists     = sorted(glob.glob(os.path.join(STOCKS, 'watchlist', '*.csv')))
-        wl_names       = [os.path.basename(w) for w in watchlists]
-        wl_selected    = st.selectbox("Watchlist", wl_names)
-        watchlist_path = os.path.join(STOCKS, 'watchlist', wl_selected)
+        wl_selected = st.selectbox("Universe", list(UNIVERSE_LABELS.keys()),
+                                   format_func=lambda k: UNIVERSE_LABELS[k], key='dd_universe')
 
     with col2:
-        study_name = st.text_input("Study name", value=wl_selected.replace('.csv',''))
+        study_name = st.text_input("Study name", value=wl_selected)
 
-    # Load watchlist preview for filter options
-    wl_preview = load_csv(watchlist_path)
+    # Universe members for filter options
+    wl_preview = db_universe_members(wl_selected)
     filter_col = None
     filter_val = None
 
     if wl_preview is not None:
         col3, col4 = st.columns(2)
         with col3:
-            if 'sector' in wl_preview.columns:
+            if wl_preview['commodity'].isna().all():
                 sectors     = sorted(wl_preview['sector'].dropna().unique().tolist())
                 sector_opts = ['All sectors'] + sectors
                 sel_sector  = st.selectbox("Filter by sector", sector_opts)
@@ -7179,7 +7690,7 @@ elif page == "Drawdown Analysis":
                     filter_col = 'sector'
                     filter_val = sel_sector
         with col4:
-            if 'commodity' in wl_preview.columns:
+            if wl_preview['commodity'].notna().any():
                 commodities   = sorted(wl_preview['commodity'].dropna().unique().tolist())
                 comm_opts     = ['All commodities'] + commodities
                 sel_commodity = st.selectbox("Filter by commodity", comm_opts)
@@ -7212,57 +7723,28 @@ elif page == "Drawdown Analysis":
 
     # ── Run analysis ──────────────────────────────────────────────────────────
     if st.button("▶ Run Drawdown Analysis", type="primary"):
-        from data_fetch.benchmark.data_fetch_generic import load_watchlist, fetch_prices, fetch_volumes
-
-        earliest        = min(p['date'] for p in periods)
-        fetch_start_200 = (datetime.today() - timedelta(days=400)).strftime('%Y-%m-%d')
-        end_date        = datetime.today().strftime('%Y-%m-%d')
-
-        with st.spinner("Loading watchlist and fetching prices..."):
-            os.chdir(STOCKS)
-            watchlist = load_watchlist(watchlist_path)
-
-            # Apply sector/commodity filter
-            if filter_col and filter_val:
-                bench_rows  = watchlist[watchlist['benchmark'] == 'benchmark']
-                filter_rows = watchlist[watchlist[filter_col] == filter_val]
-                watchlist   = pd.concat([bench_rows, filter_rows]).drop_duplicates()
-                st.info(f"Filtered to {filter_col}: {filter_val} — {len(filter_rows)} stocks")
-
-            prices  = fetch_prices(watchlist, fetch_start_200, end_date)
-            volumes = fetch_volumes(watchlist, fetch_start_200, end_date)
-
-        # Determine sector/commodity benchmark override
         bench_override = None
         if filter_col and filter_val:
-            from drawdown_analysis import get_sector_benchmark
-            bench_override = get_sector_benchmark(filter_col, filter_val)
+            _region = wl_preview['region'].mode().iloc[0] if 'region' in wl_preview.columns and len(wl_preview) else None
+            bench_override = MDD.sector_benchmark(filter_col, filter_val, _region)
             if bench_override:
                 st.info(f"Using sector benchmark: {bench_override} for {filter_val}")
             else:
-                st.info(f"No sector ETF mapping found for {filter_val} — using watchlist benchmark")
-
-        # Build results folder
-        period_labels = '_'.join([p['label'] for p in periods])
-        results_dir   = os.path.join(STOCKS, 'results', 'drawdown_analysis',
-                                     f"{study_name}_{period_labels}") + os.sep
-        os.makedirs(results_dir, exist_ok=True)
+                st.info(f"No sector ETF mapping found for {filter_val} — using universe benchmark")
 
         all_periods_data = []
-        for p in periods:
-            with st.spinner(f"Analysing period: {p['label']} from {p['date']}..."):
-                result = calculate_period(
-                    prices, volumes, watchlist,
-                    p['date'], p['label'],
-                    bench_override=bench_override,
-                    weights=_dd_weights
-                )
-                if result is None:
-                    st.warning(f"Insufficient data for period {p['label']} from {p['date']}")
-                    continue
-                df, bench_ret, bench_dd = result
-                save_period(df, bench_ret, bench_dd, results_dir, study_name, p['label'], p['date'])
-                all_periods_data.append((df, bench_ret, bench_dd, p['label'], p['date']))
+        with st.spinner("Running drawdown analysis from the price store..."):
+            try:
+                with mdb.session() as _con:
+                    all_periods_data = MDD.run_study(
+                        wl_selected, periods, _con, study_name=study_name,
+                        filter_col=filter_col, filter_val=filter_val,
+                        weights=_dd_weights, bench_override=bench_override, log=lambda m: None)
+            except Exception as _e:
+                st.error(f"Drawdown analysis failed: {_e}")
+        for _p in periods:
+            if not any(x[3] == _p['label'] for x in all_periods_data):
+                st.warning(f"Insufficient data for period {_p['label']} from {_p['date']}")
 
         st.session_state['drawdown_results'] = all_periods_data
         st.session_state['drawdown_study']   = study_name
@@ -7361,9 +7843,9 @@ elif page == "Drawdown Analysis":
     st.divider()
     st.subheader("Previous Studies")
 
-    study_dirs  = glob.glob(os.path.join(STOCKS, 'results', 'drawdown_analysis', '*'))
-    study_dirs  = [d for d in study_dirs if os.path.isdir(d)]
-    study_names = [os.path.basename(d) for d in study_dirs]
+    _studies    = MDD.list_studies()
+    study_names = _studies['study'].tolist() if _studies is not None and len(_studies) else []
+    study_dirs  = study_names   # legacy name — studies now live in the DB
 
     # ── Download ──────────────────────────────────────────────────────────────
     if study_dirs:
@@ -7375,36 +7857,22 @@ elif page == "Drawdown Analysis":
         with dl_col2:
             st.markdown("<br>", unsafe_allow_html=True)
             if dl_selected != '-- select --':
-                dl_dir       = os.path.join(STOCKS, 'results', 'drawdown_analysis', dl_selected)
-                dl_csv_files = glob.glob(os.path.join(dl_dir, '*_drawdown.csv'))
-                if dl_csv_files:
-                    import io, zipfile
-                    zip_buffer = io.BytesIO()
-                    with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED) as zf:
-                        for f in dl_csv_files:
-                            zf.write(f, os.path.basename(f))
-                        summary = glob.glob(os.path.join(dl_dir, '*_drawdown_summary.txt'))
-                        if summary:
-                            zf.write(summary[-1], os.path.basename(summary[-1]))
-                    zip_buffer.seek(0)
-                    st.download_button(
-                        label     = "⬇ Download Study",
-                        data      = zip_buffer,
-                        file_name = f"{dl_selected}.zip",
-                        mime      = 'application/zip',
-                        key       = 'dl_study_btn'
-                    )
+                st.download_button(
+                    label     = "⬇ Download Study",
+                    data      = MDD.study_zip(dl_selected),
+                    file_name = f"{dl_selected}.zip",
+                    mime      = 'application/zip',
+                    key       = 'dl_study_btn'
+                )
 
     # ── View previous study ───────────────────────────────────────────────────
     if study_dirs:
         selected = st.selectbox("Load previous study", ['-- select --'] + study_names)
         if selected != '-- select --':
-            study_dir = os.path.join(STOCKS, 'results', 'drawdown_analysis', selected)
-            csv_files = glob.glob(os.path.join(study_dir, '*_drawdown.csv'))
-            for f in sorted(csv_files):
-                label = os.path.basename(f).replace('.csv','')
+            for df, _bench_ret, _bench_dd, _lbl, _start in MDD.load_study(selected):
+                label = f"{selected}_{_lbl}_{str(_start).replace('-', '')}_drawdown"
                 with st.expander(label, expanded=True):
-                    df = load_csv(f, index_col='rank')
+                    st.caption(f"Benchmark return: {_bench_ret:+.2f}%   Benchmark max DD: {_bench_dd:.2f}%")
                     if df is not None:
                         cols_show = ['ticker','name','ret_period','bench_ret',
                                      'rs_vs_bench','max_dd_period','dd_vs_bench',
@@ -7440,30 +7908,29 @@ elif page == "Drawdown Analysis":
 # ACTIONABLE & TRADINGVIEW EXPORTS PAGE
 # ═══════════════════════════════════════════════════════════════════════════════
 elif page == "Screeners & Exports":
+    marketdb_ready()
     st.title("📋 Screeners & TradingView Exports")
-    st.caption("Filtered actionable stocks grouped by market. Run scripts to generate files.")
+    st.caption("Filtered actionable stocks grouped by market — from the marketdb study results.")
 
-    _act_screener_dir  = os.path.join(STOCKS, 'results', 'daily_actionable', 'screener')
-    _act_benchmark_dir = os.path.join(STOCKS, 'results', 'daily_actionable', 'benchmark')
-    actionable_dir = _act_screener_dir  # default for screener lookups
+    _all_runs = MR.study_dates_all()
+    _run_dates = sorted(set(mdb.read_df("SELECT DISTINCT run_date FROM study_results")['run_date']), reverse=True) \
+        if _all_runs is not None and len(_all_runs) else []
 
-    _all_csv = (sorted(glob.glob(os.path.join(_act_screener_dir,  '*.csv')), reverse=True) +
-                sorted(glob.glob(os.path.join(_act_benchmark_dir, '*.csv')), reverse=True))
-    _all_txt = (sorted(glob.glob(os.path.join(_act_screener_dir,  '*.txt')), reverse=True) +
-                sorted(glob.glob(os.path.join(_act_benchmark_dir, '*.txt')), reverse=True))
-
-    if not _all_csv:
-        st.info("No actionable files found — run scripts first")
+    if not _run_dates:
+        st.info("No study results found — run the daily update first")
     else:
-        from collections import defaultdict
-        by_date = defaultdict(dict)
-        for f in _all_csv + _all_txt:
-            n = os.path.basename(f); date = n[:8]
-            by_date[date][n[9:]] = f
-
-        dates    = sorted(by_date.keys(), reverse=True)
+        dates    = _run_dates
         sel_date = st.selectbox("Select date", dates, key="act_date")
-        day_files = by_date[sel_date]
+        _pf1, _pf2, _pf3, _pf4, _pf5 = st.columns(5)
+        _pf_regime = _pf1.multiselect("Filter regime", ['LEADER', 'CONTENDER', 'LAGGARD', 'WEAK', 'TREND+LEAD', 'TREND_ONLY'],
+                                      default=[], key='act_pf_regime')
+        _pf_vol = _pf2.multiselect("Filter volume", ['HIGH', 'MED', 'LOW'], default=[], key='act_pf_vol')
+        _pf_cap = _pf3.multiselect("Filter cap band", ['large', 'mid', 'small', 'ETF'], default=[], key='act_pf_cap')
+        _pf_acc = _pf4.multiselect("Filter acc_watch", ['TRENDING', 'REACCUM', 'CONSOLIDATE', 'SHIFT', 'PROGRESS', 'EARLY', '-'],
+                                   default=[], key='act_pf_acc')
+        _pf_rsi = _pf5.multiselect("Filter rsi_div", ['BULL', 'HID_BULL', 'BEAR', 'HID_BEAR', '-'], default=[], key='act_pf_rsi')
+        st.caption("Page filters apply to every section below and to the TradingView / CSV exports. "
+                   "Empty = use each market's saved Screener settings (Settings → 📋 Screeners).")
 
         # Load settings for display
         _as_file = os.path.join(BASE, 'actionable_settings.json')
@@ -7493,12 +7960,12 @@ elif page == "Screeners & Exports":
             parts.append(f"Min score: **{_s.get('min_score',0.0)}**")
             return "Filters — " + " | ".join(parts)
 
-        def _show_section(label, csv_stem, tv_stem, is_hc, cfg_key, subdir="screener"):
-            _dir     = _act_benchmark_dir if subdir == "benchmark" else _act_screener_dir
-            csv_path = os.path.join(_dir, f"{sel_date}_{csv_stem}")
-            tv_path  = os.path.join(_dir, f"{sel_date}_{tv_stem}")
-            has_csv  = os.path.exists(csv_path)
-            has_tv   = os.path.exists(tv_path)
+        def _show_section(label, study, universe, is_hc, cfg_key):
+            _df_src  = MR.actionable(study, universe, run_date=sel_date, high_conv=is_hc)
+            has_csv  = _df_src is not None
+            has_tv   = has_csv
+            csv_stem = f"{universe}_{study}_{'highconv' if is_hc else 'actionable'}.csv"
+            tv_stem  = csv_stem.replace('.csv', '_tvimport.txt')
             hc_badge = " 🔥" if is_hc else ""
             st.markdown(f"**{label}{hc_badge}**")
             # Always show settings caption if config exists
@@ -7507,27 +7974,21 @@ elif page == "Screeners & Exports":
                 st.caption(_cap)
             elif not _act_cfg:
                 st.caption("⚙️ No filter settings saved — configure in Actionable Settings page")
-            if not has_csv and not has_tv:
-                st.caption(f"No file found: {sel_date}_{csv_stem}")
+            if not has_csv:
+                st.caption(f"No {study} results for {universe} on {sel_date}")
                 return
             _c1, _c2 = st.columns([4, 1])
-            with _c2:
-                if has_tv:
-                    _tv = open(tv_path).read().strip()
-                    st.metric("Tickers", len(_tv.split(',')) if _tv else 0)
-                    st.download_button("⬇ TradingView", _tv, file_name=tv_stem,
-                                       mime='text/plain', key=f"tv_{cfg_key}_{label}_{sel_date}")
-                if has_csv:
-                    st.download_button("⬇ CSV", open(csv_path, encoding='utf-8').read(),
-                                       file_name=csv_stem, mime='text/csv',
-                                       key=f"csv_{cfg_key}_{label}_{sel_date}")
+            _df = _df_src
             with _c1:
                 if has_csv:
-                    _df = load_csv(csv_path, index_col='rank')
+                    _df = _df_src
                     if _df is not None and len(_df) > 0:
                         # Apply all filters from actionable settings
-                        _sma_cfg = _act_cfg.get(_cfg_key, {})
-                        _s_filt  = {**_AS_DISPLAY_DEFAULTS.get(_cfg_key,{}), **_act_cfg.get(_cfg_key,{})}
+                        _sma_cfg = _act_cfg.get(cfg_key, {})
+                        _s_filt  = {**_AS_DISPLAY_DEFAULTS.get(cfg_key,{}), **_act_cfg.get(cfg_key,{})}
+                        if _pf_regime: _s_filt['regimes'] = _pf_regime
+                        if _pf_vol:    _s_filt['vol'] = _pf_vol
+                        if _pf_cap:    _s_filt['cap_bands'] = _pf_cap
 
                         # Regime filter
                         _reg_filter = _s_filt.get('regimes', [])
@@ -7543,6 +8004,10 @@ elif page == "Screeners & Exports":
                         _cap_filter = _s_filt.get('cap_bands', [])
                         if _cap_filter and 'cap_band' in _df.columns:
                             _df = _df[_df['cap_band'].isin(_cap_filter)]
+
+                        # RSI divergence filter (page-level only — not part of the saved settings)
+                        if _pf_rsi and 'rsi_div' in _df.columns:
+                            _df = _df[_df['rsi_div'].isin(_pf_rsi)]
 
                         # Min score filter
                         _min_score = _s_filt.get('min_score', 0.0)
@@ -7582,7 +8047,7 @@ elif page == "Screeners & Exports":
 
                             _df = _df.copy()
                             _df['acc_watch'] = _df.apply(_derive_acc, axis=1)
-                            _acc_filter = _sma_cfg.get('acc_watch', [])
+                            _acc_filter = _pf_acc or _sma_cfg.get('acc_watch', [])
                             if _acc_filter:
                                 _df = _df[_df['acc_watch'].isin(_acc_filter)]
                         if _sma_cfg.get('sma_early') or _sma_cfg.get('sma_progress') or _sma_cfg.get('sma_shift'):
@@ -7609,7 +8074,8 @@ elif page == "Screeners & Exports":
                             if all(c in _df.columns for c in ['close','sma20','sma50','sma200']):
                                 _df = _df[_df.apply(_sma_pass, axis=1)].copy()
                         _bc = ['ticker','name','cap_band','close','vol_label','acc_watch','regime_label','score_final']
-                        _ec = ['sector','commodity','type','rs_ratio','peer_rs_score','ret_6m','ret_12m','max_dd','rs_trend','delta_rank']
+                        _ec = ['sector','commodity','type','rs_ratio','peer_rs_score','ret_6m','ret_12m','max_dd','rs_trend',
+                               'rsi_div','obv_div','delta_rank']
                         _sc = [c for c in _bc+_ec if c in _df.columns]
                         _df_fmt = _df[_sc].copy()
                         # Format columns
@@ -7625,46 +8091,56 @@ elif page == "Screeners & Exports":
                             _df_fmt['close'] = pd.to_numeric(_df_fmt['close'], errors='coerce').apply(
                                 lambda x: f"{x:.3f}" if pd.notna(x) else "")
                         st.dataframe(style_df(_df_fmt,'regime_label','delta_rank'),
-                                     width='stretch', height=min(len(_df)*35+40,350))
+                                     width='stretch', height=min(len(_df)*35+40,350),
+                                     column_config=DIVERGENCE_COLUMN_CONFIG)
                     else:
                         st.caption("No results")
+            with _c2:
+                # exports = exactly the rows shown after all filters
+                _tv = MR.tv_import(_df)
+                st.metric("Tickers", len(_df))
+                st.download_button("⬇ TradingView", _tv, file_name=tv_stem,
+                                   mime='text/plain', key=f"tv_{cfg_key}_{label}_{sel_date}")
+                st.download_button("⬇ CSV", _df.to_csv(),
+                                   file_name=csv_stem, mime='text/csv',
+                                   key=f"csv_{cfg_key}_{label}_{sel_date}")
             st.markdown("---")
-        # Group definitions — stems verified from actual directory listing
+        # Group definitions — (label, study, universe, high_conviction)
         _GROUPS = [
             ("🇦🇺 AU Market", "au_market", [
-                ("Benchmark",       "au_total_market_actionable.csv",                  "au_total_market_actionable_tvimport.txt",                  False, "benchmark"),
-                ("Screener",        "au_total_market_actionable.csv",                  "au_total_market_actionable_tvimport.txt",                  False, "screener"),
-                ("High Conviction", "au_total_market_actionable_highconv.csv",         "au_total_market_actionable_highconv_tvimport.txt",          True,  "screener"),
+                ("Benchmark",       "benchmark", "au_total_market", False),
+                ("Screener",        "screener",  "au_total_market", False),
+                ("High Conviction", "screener",  "au_total_market", True),
             ]),
             ("🇺🇸 US Market", "us_market", [
-                ("S&P 500 Benchmark",     "us_benchmark_actionable.csv",                       "us_benchmark_actionable_tvimport.txt",                       False, "screener"),
-                ("S&P 500 Screener",      "us_sp500_actionable.csv",                           "us_sp500_actionable_tvimport.txt",                           False, "screener"),
-                ("S&P 500 High Conv",     "us_sp500_actionable_highconv.csv",                  "us_sp500_actionable_highconv_tvimport.txt",                  True,  "screener"),
-                ("Nasdaq 100 Screener",   "nasdaq100_actionable.csv",                          "nasdaq100_actionable_tvimport.txt",                          False, "screener"),
-                ("Nasdaq Benchmark",      "us_nasdaq_benchmark_actionable.csv",                "us_nasdaq_benchmark_actionable_tvimport.txt",                False, "screener"),
+                ("S&P 500 Benchmark",   "benchmark", "us_total_market", False),
+                ("S&P 500 Screener",    "screener",  "us_total_market", False),
+                ("S&P 500 High Conv",   "screener",  "us_total_market", True),
+                ("Nasdaq 100 Screener", "screener",  "nasdaq100",       False),
+                ("Nasdaq Benchmark",    "benchmark", "nasdaq100",       False),
             ]),
             ("⛏ Commodities", "commodities", [
-                ("Benchmark",       "commodities_actionable.csv",                      "commodities_actionable_tvimport.txt",                      False, "screener"),
-                ("Screener",        "commodities_screener_actionable.csv",             "commodities_screener_actionable_tvimport.txt",             False, "screener"),
-                ("High Conviction", "all_major_commodities_actionable_highconv.csv",   "all_major_commodities_actionable_highconv_tvimport.txt",    True,  "screener"),
+                ("Benchmark",       "benchmark", "all_major_commodities", False),
+                ("Screener",        "screener",  "all_major_commodities", False),
+                ("High Conviction", "screener",  "all_major_commodities", True),
             ]),
             ("☢ Uranium", "uranium", [
-                ("Benchmark",       "uranium_actionable.csv",                          "uranium_actionable_tvimport.txt",                          False, "screener"),
-                ("Screener",        "uranium_screener_actionable.csv",                 "uranium_screener_actionable_tvimport.txt",                 False, "screener"),
-                ("High Conviction", "uranium_screener_highconv.csv",                   "uranium_screener_highconv_tvimport.txt",                    True,  "screener"),
+                ("Benchmark",       "benchmark", "uranium", False),
+                ("Screener",        "screener",  "uranium", False),
+                ("High Conviction", "screener",  "uranium", True),
             ]),
             ("🥇 AU Gold", "au_gold", [
-                ("Benchmark",       "au_gold_miners_actionable.csv",                   "au_gold_miners_actionable_tvimport.txt",                   False, "screener"),
-                ("Screener",        "au_gold_miners_actionable.csv",                   "au_gold_miners_actionable_tvimport.txt",                   False, "screener"),
-                ("High Conviction", "au_gold_miners_screener_highconv.csv",            "au_gold_miners_screener_highconv_tvimport.txt",             True,  "screener"),
+                ("Benchmark",       "benchmark", "au_gold_miners", False),
+                ("Screener",        "screener",  "au_gold_miners", False),
+                ("High Conviction", "screener",  "au_gold_miners", True),
             ]),
         ]
 
         _grp_tabs = st.tabs([g[0] for g in _GROUPS] + ["🔍 Burry Value Screen"])
         for _gtab, (_glabel, _cfg_key, _studies) in zip(_grp_tabs, _GROUPS):
             with _gtab:
-                for _slabel, _csv_stem, _tv_stem, _is_hc, _subdir in _studies:
-                    _show_section(_slabel, _csv_stem, _tv_stem, _is_hc, _cfg_key, _subdir)
+                for _slabel, _study, _uni, _is_hc in _studies:
+                    _show_section(_slabel, _study, _uni, _is_hc, _cfg_key)
 
         # ── Burry Value Screen tab ────────────────────────────────────────────
         with _grp_tabs[-1]:
@@ -7723,22 +8199,19 @@ elif page == "Screeners & Exports":
 
             # scan source — all available screener and benchmark universes
             _BURRY_SOURCES = {
-                'AU Total Market (Screener)'  : os.path.join(STOCKS, 'results', 'screener', 'au_total_market', 'au_total_market_latest_formatted.csv'),
-                'US S&P 500 (Screener)'       : os.path.join(STOCKS, 'results', 'screener', 'us_sp500', 'us_sp500_latest_formatted.csv'),
-                'NASDAQ 100 (Screener)'       : os.path.join(STOCKS, 'results', 'screener', 'nasdaq100', 'nasdaq100_latest_formatted.csv'),
-                'US Total Market (Screener)'  : os.path.join(STOCKS, 'results', 'screener', 'us_total_market', 'us_total_market_latest_formatted.csv'),
-                'Commodities (Screener)'      : os.path.join(STOCKS, 'results', 'screener', 'all_major_commodities', 'all_major_commodities_latest_formatted.csv'),
-                'Uranium (Screener)'          : os.path.join(STOCKS, 'results', 'screener', 'uranium', 'uranium_latest_formatted.csv'),
-                'AU Gold Miners (Screener)'   : os.path.join(STOCKS, 'results', 'screener', 'au_gold_miners', 'au_gold_miners_latest_formatted.csv'),
-                'AU Total Market (Benchmark)' : os.path.join(STOCKS, 'results', 'benchmark', 'au_total_market', 'au_total_market_latest_formatted.csv'),
-                'US Benchmark'                : os.path.join(STOCKS, 'results', 'benchmark', 'us_benchmark', 'us_benchmark_latest_formatted.csv'),
-                'NASDAQ Benchmark'            : os.path.join(STOCKS, 'results', 'benchmark', 'us_nasdaq_benchmark', 'us_nasdaq_benchmark_latest_formatted.csv'),
-                'Commodities Benchmark'       : os.path.join(STOCKS, 'results', 'benchmark', 'commodities', 'commodities_latest_formatted.csv'),
+                'AU Total Market (Screener)'  : ('screener',  'au_total_market'),
+                'US Total Market (Screener)'  : ('screener',  'us_total_market'),
+                'NASDAQ 100 (Screener)'       : ('screener',  'nasdaq100'),
+                'Commodities (Screener)'      : ('screener',  'all_major_commodities'),
+                'Uranium (Screener)'          : ('screener',  'uranium'),
+                'AU Gold Miners (Screener)'   : ('screener',  'au_gold_miners'),
+                'AU Total Market (Benchmark)' : ('benchmark', 'au_total_market'),
+                'US Benchmark'                : ('benchmark', 'us_total_market'),
+                'NASDAQ Benchmark'            : ('benchmark', 'nasdaq100'),
+                'Commodities Benchmark'       : ('benchmark', 'all_major_commodities'),
             }
-            _BURRY_SOURCES = {k: v for k, v in _BURRY_SOURCES.items() if os.path.exists(v)}
-
-            _burry_dir = os.path.join(STOCKS, 'results', 'daily_actionable', 'burry_screen')
-            os.makedirs(_burry_dir, exist_ok=True)
+            _burry_src_avail = {k: v for k, v in _BURRY_SOURCES.items() if MR.run_dates(*v)}
+            _BURRY_PREFIX = 'burry/'          # frames: burry/<YYYYMMDD>_burry_<source>
 
             def _format_burry_df(df):
                 """Format raw Burry screen dataframe for display."""
@@ -7770,16 +8243,15 @@ elif page == "Screeners & Exports":
                                   (f"{x:.1f}%" if pd.notna(x) else ''))
                 return fmt
 
-            if not _BURRY_SOURCES:
-                st.info("No screener data found — run scan scripts first to populate the stock universe.")
+            if not _burry_src_avail:
+                st.info("No screener data found — run the daily update first to populate the stock universe.")
             else:
-                _burry_source = st.selectbox("Stock Universe", list(_BURRY_SOURCES.keys()), key='burry_universe')
+                _burry_source = st.selectbox("Stock Universe", list(_burry_src_avail.keys()), key='burry_universe')
 
                 if st.button("🔍 Run Burry Screen", type="primary", key='burry_run'):
-                    _src_path = _BURRY_SOURCES[_burry_source]
-                    _src_df = load_csv(_src_path)
+                    _src_df = MR.latest(*_burry_src_avail[_burry_source])
                     if _src_df is None or len(_src_df) == 0:
-                        st.error("No tickers in source file")
+                        st.error("No tickers in source results")
                     else:
                         _tickers = _src_df['ticker'].dropna().unique().tolist()
                         _progress = st.progress(0, text="Screening...")
@@ -7864,15 +8336,10 @@ elif page == "Screeners & Exports":
                             _date_str = datetime.now().strftime('%Y%m%d')
                             _csv_name = f"{_date_str}_burry_{_src_tag}.csv"
                             _tv_name  = f"{_date_str}_burry_{_src_tag}_tvimport.txt"
-                            _csv_path = os.path.join(_burry_dir, _csv_name)
-                            _tv_path  = os.path.join(_burry_dir, _tv_name)
+                            MR.save_frame(_BURRY_PREFIX + _csv_name[:-4], _rdf)
+                            _tv_tickers = MR.tv_import(_rdf)
 
-                            _rdf.to_csv(_csv_path, index=False)
-                            _tv_tickers = ','.join(_rdf['ticker'].tolist())
-                            with open(_tv_path, 'w') as _f:
-                                _f.write(_tv_tickers)
-
-                            st.success(f"Found {len(_rdf)} stocks — saved to `{_csv_name}`")
+                            st.success(f"Found {len(_rdf)} stocks — saved as `{_csv_name[:-4]}`")
                             st.dataframe(_format_burry_df(_rdf), width='stretch',
                                          height=min(len(_rdf)*35+40, 500))
 
@@ -7887,35 +8354,28 @@ elif page == "Screeners & Exports":
             # ── Past runs ─────────────────────────────────────────────────────
             st.markdown("---")
             st.markdown("##### Past Runs")
-            _past_csvs = sorted(glob.glob(os.path.join(_burry_dir, '*_burry_*.csv')), reverse=True)
-            _past_csvs = [f for f in _past_csvs if '_tvimport' not in f]
+            _past_runs = MR.list_frames(_BURRY_PREFIX)
+            _past_labels = [n[len(_BURRY_PREFIX):] for n in _past_runs['name']] if len(_past_runs) else []
 
-            if not _past_csvs:
+            if not _past_labels:
                 st.caption("No saved runs yet — run a screen above to get started.")
             else:
-                _past_labels = [os.path.basename(f).replace('.csv', '') for f in _past_csvs]
                 _sel_past = st.selectbox("Select run", _past_labels, key='burry_past_sel')
-                _sel_idx  = _past_labels.index(_sel_past)
-                _sel_csv  = _past_csvs[_sel_idx]
-                _sel_tv   = _sel_csv.replace('.csv', '_tvimport.txt')
-
-                _past_df = load_csv(_sel_csv)
+                _past_df = MR.load_frame(_BURRY_PREFIX + _sel_past)
                 if _past_df is not None and len(_past_df) > 0:
                     st.caption(f"{len(_past_df)} stocks")
                     st.dataframe(_format_burry_df(_past_df), width='stretch',
                                  height=min(len(_past_df)*35+40, 500))
 
                     _pdl1, _pdl2, _ = st.columns([1, 1, 3])
-                    if os.path.exists(_sel_tv):
-                        _tv_data = open(_sel_tv).read().strip()
-                        _pdl1.download_button("⬇ TradingView", _tv_data,
-                                               file_name=os.path.basename(_sel_tv),
-                                               mime='text/plain', key='burry_past_tv')
-                    _pdl2.download_button("⬇ CSV", open(_sel_csv, encoding='utf-8').read(),
-                                           file_name=os.path.basename(_sel_csv),
+                    _pdl1.download_button("⬇ TradingView", MR.tv_import(_past_df),
+                                           file_name=f"{_sel_past}_tvimport.txt",
+                                           mime='text/plain', key='burry_past_tv')
+                    _pdl2.download_button("⬇ CSV", _past_df.to_csv(index=False),
+                                           file_name=f"{_sel_past}.csv",
                                            mime='text/csv', key='burry_past_csv')
                 else:
-                    st.caption("Empty results file")
+                    st.caption("Empty results")
 
 
 elif page == "Fundamental Analysis":
@@ -7928,24 +8388,22 @@ elif page == "Fundamental Analysis":
     _fa_tab_single, _fa_tab_compare = st.tabs(["🔎 Single Ticker", "⚖️ Value Comparison"])
 
     # ── Scan selector — actionable runs (folder → specific run) ─────────────
-    _RAW_SCREENERS = {
-        'AU Total Market (Screener)'  : os.path.join(STOCKS, 'results', 'screener', 'au_total_market', 'au_total_market_latest_formatted.csv'),
-        'US S&P 500 (Screener)'       : os.path.join(STOCKS, 'results', 'screener', 'us_sp500', 'us_sp500_latest_formatted.csv'),
-        'NASDAQ 100 (Screener)'       : os.path.join(STOCKS, 'results', 'screener', 'nasdaq100', 'nasdaq100_latest_formatted.csv'),
-        'US Total Market (Screener)'  : os.path.join(STOCKS, 'results', 'screener', 'us_total_market', 'us_total_market_latest_formatted.csv'),
-        'Commodities (Screener)'      : os.path.join(STOCKS, 'results', 'screener', 'all_major_commodities', 'all_major_commodities_latest_formatted.csv'),
-        'Uranium (Screener)'          : os.path.join(STOCKS, 'results', 'screener', 'uranium', 'uranium_latest_formatted.csv'),
-        'AU Gold Miners (Screener)'   : os.path.join(STOCKS, 'results', 'screener', 'au_gold_miners', 'au_gold_miners_latest_formatted.csv'),
-        'AU Total Market (Benchmark)' : os.path.join(STOCKS, 'results', 'benchmark', 'au_total_market', 'au_total_market_latest_formatted.csv'),
-    }
+    _RAW_SCREENERS = {f"{UNIVERSE_LABELS[u]} ({st_.title()})": (st_, u)
+                      for (st_, u) in [('screener', 'au_total_market'), ('screener', 'us_total_market'),
+                                       ('screener', 'nasdaq100'), ('screener', 'all_major_commodities'),
+                                       ('screener', 'uranium'), ('screener', 'au_gold_miners'),
+                                       ('benchmark', 'au_total_market'), ('benchmark', 'us_total_market'),
+                                       ('benchmark', 'nasdaq100')]
+                      if MR.run_dates(st_, u)}
 
-    _ACT_DIR = os.path.join(STOCKS, 'results', 'daily_actionable')
-    _act_folders = []
-    if os.path.isdir(_ACT_DIR):
-        for _d in sorted(os.listdir(_ACT_DIR)):
-            _dp = os.path.join(_ACT_DIR, _d)
-            if os.path.isdir(_dp) and glob.glob(os.path.join(_dp, '*.csv')):
-                _act_folders.append(_d)
+    # Scan "folders" are now result kinds in the DB; the Burry screen keeps its on-disk folder
+    _ACT_KINDS = {'Actionable — screener': ('screener', False),
+                  'Actionable — benchmark': ('benchmark', False),
+                  'High conviction — screener': ('screener', True)}
+    _act_folders = list(_ACT_KINDS.keys())
+    _burry_runs_fa = MR.list_frames('burry/')
+    if len(_burry_runs_fa):
+        _act_folders.append('burry_screen')
 
     _RAW_LABEL = 'Raw screeners (latest)'
     _folder_options = _act_folders + [_RAW_LABEL]
@@ -7959,21 +8417,39 @@ elif page == "Fundamental Analysis":
         with _fa_col1:
             _sel_folder = st.selectbox("Scan folder", _folder_options, key='fa_folder_select')
         with _fa_col2:
+            _scan_df = None
+            _scan_label = ''
             if _sel_folder == _RAW_LABEL:
                 _sel_scan = st.selectbox("Scan", list(_RAW_SCREENERS.keys()), key='fa_scan_select')
-                _scan_path = _RAW_SCREENERS.get(_sel_scan, '')
-            else:
-                _run_files = sorted(
-                    glob.glob(os.path.join(_ACT_DIR, _sel_folder, '*.csv')),
-                    key=os.path.basename, reverse=True)
-                def _run_label(p):
-                    b = os.path.basename(p)[:-4]  # strip .csv
+                if _sel_scan:
+                    _scan_df = MR.latest(*_RAW_SCREENERS[_sel_scan])
+                    _scan_df = _scan_df.reset_index() if _scan_df is not None else None
+                    _scan_label = _sel_scan
+            elif _sel_folder in _ACT_KINDS:
+                _kind_study, _kind_hc = _ACT_KINDS[_sel_folder]
+                _runs_df = mdb.read_df("SELECT universe, run_date FROM study_results WHERE study=? "
+                                       "GROUP BY 1,2 ORDER BY run_date DESC, universe", (_kind_study,))
+                _run_opts = [f"{r.run_date} · {UNIVERSE_LABELS.get(r.universe, r.universe)}|{r.universe}"
+                             for r in _runs_df.itertuples()]
+                _sel_run = st.selectbox("Run", _run_opts, format_func=lambda x: x.split('|')[0],
+                                        key=f'fa_run_select_{_sel_folder}')
+                if _sel_run:
+                    _rd, _uni = _sel_run.split(' · ')[0], _sel_run.split('|')[1]
+                    _scan_df = MR.actionable(_kind_study, _uni, run_date=_rd, high_conv=_kind_hc)
+                    _scan_df = _scan_df.reset_index() if _scan_df is not None else None
+                    _scan_label = _sel_run.split('|')[0]
+            else:  # burry_screen runs stored in marketdb frames
+                _run_files = _burry_runs_fa['name'].tolist()
+                def _run_label(n):
+                    b = n.split('/', 1)[1]
                     if len(b) > 9 and b[:8].isdigit() and b[8] == '_':
                         return f"{b[:4]}-{b[4:6]}-{b[6:8]} · {b[9:]}"
                     return b
                 _sel_run = st.selectbox("Run", _run_files, format_func=_run_label,
                                         key=f'fa_run_select_{_sel_folder}')
-                _scan_path = _sel_run or ''
+                if _sel_run:
+                    _scan_df = MR.load_frame(_sel_run)
+                    _scan_label = _run_label(_sel_run)
         with _fa_col3:
             st.markdown("<br>", unsafe_allow_html=True)
             _prov_badges = {'ollama': '🟢 Ollama', 'lmstudio': '🔵 LM Studio',
@@ -7982,8 +8458,7 @@ elif page == "Fundamental Analysis":
             st.caption(_fa_provider_label)
 
         # ── Load and display scan data ───────────────────────────────────────
-        if os.path.exists(_scan_path):
-            _scan_df = pd.read_csv(_scan_path)
+        if _scan_df is not None and len(_scan_df):
             _display_cols = [c for c in ['rank', 'ticker', 'name', 'sector', 'cap_band', 'close',
                                           'regime_label', 'score_final', 'rel_vol', 'vol_label',
                                           'ret_12m', 'max_dd', 'rs_trend'] if c in _scan_df.columns]
@@ -7996,10 +8471,10 @@ elif page == "Fundamental Analysis":
                 height=350,
                 hide_index=True,
             )
-            st.caption(f"{len(_scan_df)} stocks — {_scan_path.split(os.sep)[-1]}")
+            st.caption(f"{len(_scan_df)} stocks — {_scan_label}")
         else:
             _scan_df = None
-            st.info(f"No scan data found at expected path — run the relevant screener first.")
+            st.info("No scan data found — run the daily update first.")
 
         st.divider()
 
@@ -8029,10 +8504,9 @@ elif page == "Fundamental Analysis":
         _cmp_sources = []
         if _scan_df is not None and 'ticker' in _scan_df.columns:
             _cmp_sources.append("Current scan (Single Ticker tab)")
-        _WL_DIR = os.path.join(STOCKS, 'watchlist')
-        _wl_files = sorted(glob.glob(os.path.join(_WL_DIR, '*.csv'))) if os.path.isdir(_WL_DIR) else []
+        _wl_files = list(UNIVERSE_LABELS.keys())
         if _wl_files:
-            _cmp_sources.append("Watchlist file")
+            _cmp_sources.append("Universe")
         _cmp_sources.append("Manual entry only")
 
         _cmp_src = st.radio("Pick candidates from", _cmp_sources, horizontal=True,
@@ -8050,16 +8524,13 @@ elif page == "Fundamental Analysis":
                 "Candidates", list(_pool_labels.keys()),
                 format_func=lambda t: _pool_labels.get(t, t),
                 max_selections=6, key='fa_cmp_scan_pick')
-        elif _cmp_src == "Watchlist file":
-            _sel_wl = st.selectbox("Watchlist", _wl_files,
-                                   format_func=lambda p: os.path.basename(p)[:-4],
+        elif _cmp_src == "Universe":
+            _sel_wl = st.selectbox("Universe", _wl_files,
+                                   format_func=lambda k: UNIVERSE_LABELS[k],
                                    key='fa_cmp_wl_select')
             try:
-                _wl_df = pd.read_csv(_sel_wl)
-                _tkr_col = next((c for c in _wl_df.columns
-                                 if c.lower() in ('ticker', 'symbol', 'code')),
-                                _wl_df.columns[0])
-                _wl_tickers = _wl_df[_tkr_col].dropna().astype(str).str.strip().tolist()
+                _wl_df = db_universe_members(_sel_wl)
+                _wl_tickers = _wl_df['ticker'].dropna().astype(str).str.strip().tolist()
             except Exception:
                 _wl_tickers = []
             _cmp_pool = st.multiselect("Candidates", _wl_tickers,
@@ -8400,12 +8871,43 @@ elif page == "Sentiment":
     )
 
 elif page == "Run Scripts":
+    marketdb_ready()
     st.title("🚀 Run Scripts")
     st.caption("Scripts run synchronously — page will wait until complete")
+
+    # ── Data layer status ────────────────────────────────────────────────────
+    try:
+        _last_fetch = mdb.scalar("SELECT MAX(finished) FROM runs WHERE kind='fetch' AND status IN ('ok','partial')")
+        _last_px    = MP.last_date()
+        _last_ref   = mdb.get_meta('last_universe_refresh')
+        _n_sec      = mdb.scalar("SELECT COUNT(*) FROM securities WHERE active=1")
+        _stale_n    = mdb.scalar("SELECT COUNT(*) FROM fetch_log WHERE consecutive_failures >= 3")
+        _s1, _s2, _s3, _s4, _s5 = st.columns(5)
+        _s1.metric("Active securities", f"{_n_sec:,}" if _n_sec else "0")
+        _s2.metric("Latest price bar", _last_px or "—")
+        _s3.metric("Last price fetch", db_age('fetch'))
+        _s4.metric("Universe refreshed", (str(_last_ref)[:10] if _last_ref else "never (migration only)"))
+        _s5.metric("DB size", f"{mdb.db_size_mb()} MB")
+        if _stale_n:
+            st.caption(f"⚠ {_stale_n} tickers have failed 3+ consecutive fetches — see the monthly refresh / "
+                       f"`data/migration_dropped_tickers.csv`")
+    except Exception as _e:
+        st.warning(f"marketdb status unavailable: {_e}")
 
     col1, col2 = st.columns(2)
 
     with col1:
+        st.subheader("Daily — all markets")
+        st.caption("One price update for every universe (incremental, ~1–3 min), then every screener, "
+                   "benchmark, breadth and RRG study.")
+        if st.button("🔄 Run ALL — Full daily run", type="primary"):
+            run_script(os.path.join(MACRO, 'macro_report.py'), MACRO)
+            run_marketdb()
+        if st.button("📥 Update prices only"):
+            run_marketdb('--universe', *UNIVERSE_LABELS.keys(), '--studies')
+        if st.button("📊 Re-run studies only (no fetch)"):
+            run_marketdb('--skip-fetch')
+
         st.subheader("Macro")
         if st.button("Run Macro Report"):
             run_script(os.path.join(MACRO, 'macro_report.py'), MACRO)
@@ -8413,116 +8915,49 @@ elif page == "Run Scripts":
         st.subheader("Debt Markets")
         if st.button("Run Debt Markets Report"):
             run_script(os.path.join(MACRO, 'consumer_credit.py'), MACRO)
+        if st.button("Run AU Credit Report"):
+            run_script(os.path.join(MACRO, 'au_credit.py'), MACRO)
 
-        st.subheader("AU Market")
-        if st.button("Run AU Screener"):
-            run_script(os.path.join(STOCKS, 'au_total_market_screener.py'), STOCKS)
-        if st.button("Run AU Benchmark"):
-            run_script(os.path.join(STOCKS, 'au_total_market_benchmark.py'), STOCKS)
-        if st.button("Run AU Breadth"):
-            run_script(os.path.join(STOCKS, 'au_total_market_breadth.py'), STOCKS)
-
-        st.subheader("US Market")
-        if st.button("Run S&P 500 Screener"):
-            run_script(os.path.join(STOCKS, 'us_total_market_screener.py'), STOCKS)
-        if st.button("Run S&P 500 Benchmark"):
-            run_script(os.path.join(STOCKS, 'us_total_market_benchmark.py'), STOCKS)
-        if st.button("Run US Breadth"):
-            run_script(os.path.join(STOCKS, 'us_total_market_breadth.py'), STOCKS)
-        if st.button("Run Nasdaq 100 Screener"):
-            run_script(os.path.join(STOCKS, 'nasdaq100_screener.py'), STOCKS)
-        if st.button("Run Nasdaq Benchmark"):
-            run_script(os.path.join(STOCKS, 'us_nasdaq_benchmark.py'), STOCKS)
+        st.subheader("Per market")
+        if st.button("🇦🇺 Run ALL AU Market", type="secondary"):
+            run_marketdb('--universe', 'au_total_market', 'au_gold_miners')
+        if st.button("🇺🇸 Run ALL US Market", type="secondary"):
+            run_marketdb('--universe', 'us_total_market', 'nasdaq100', 'uranium')
+        if st.button("⛏ Run ALL Commodities", type="secondary"):
+            run_marketdb('--universe', 'all_major_commodities', 'uranium', 'au_gold_miners')
 
     with col2:
-        st.subheader("Commodities")
-        if st.button("Run Commodities Screener"):
-            run_script(os.path.join(STOCKS, 'all_major_commodities_screener.py'), STOCKS)
-        if st.button("Run Commodities Benchmark"):
-            run_script(os.path.join(STOCKS, 'all_major_commodities_benchmark.py'), STOCKS)
-        if st.button("Run Commodities Breadth"):
-            run_script(os.path.join(STOCKS, 'all_major_commodities_breadth.py'), STOCKS)
-
-        st.subheader("Uranium")
-        if st.button("Run Uranium Benchmark"):
-            run_script(os.path.join(STOCKS, 'uranium_benchmark.py'), STOCKS)
-        if st.button("Run Uranium Screener"):
-            run_script(os.path.join(STOCKS, 'uranium_screener.py'), STOCKS)
-
-        st.subheader("AU Gold Miners")
-        if st.button("Run AU Gold Benchmark"):
-            run_script(os.path.join(STOCKS, 'au_gold_miners_benchmark.py'), STOCKS)
-        if st.button("Run AU Gold Screener"):
-            run_script(os.path.join(STOCKS, 'au_gold_miners_screener.py'), STOCKS)
-
-        st.subheader("Batch Runs")
-        if st.button("🔄 Run ALL — Full daily run", type="primary"):
-            for script in [
-                ('macro_report.py', MACRO),
-                ('au_total_market_screener.py', STOCKS),
-                ('au_total_market_benchmark.py', STOCKS),
-                ('au_total_market_breadth.py', STOCKS),
-                ('us_total_market_screener.py', STOCKS),
-                ('us_total_market_benchmark.py', STOCKS),
-                ('us_total_market_breadth.py', STOCKS),
-                ('nasdaq100_screener.py', STOCKS),
-                ('us_nasdaq_benchmark.py', STOCKS),
-                ('all_major_commodities_screener.py', STOCKS),
-                ('all_major_commodities_benchmark.py', STOCKS),
-                ('all_major_commodities_breadth.py', STOCKS),
-                ('uranium_benchmark.py', STOCKS),
-                ('uranium_screener.py', STOCKS),
-                ('au_gold_miners_benchmark.py', STOCKS),
-                ('au_gold_miners_screener.py', STOCKS),
-            ]:
-                run_script(os.path.join(script[1], script[0]), script[1])
-
-        if st.button("🇦🇺 Run ALL AU Market", type="secondary"):
-            for script in [
-                ('au_total_market_screener.py',   STOCKS),
-                ('au_total_market_benchmark.py',  STOCKS),
-                ('au_total_market_breadth.py',    STOCKS),
-                ('au_gold_miners_benchmark.py',   STOCKS),
-                ('au_gold_miners_screener.py',    STOCKS),
-                ('rrg_au_data.py',                STOCKS),
-            ]:
-                run_script(os.path.join(script[1], script[0]), script[1])
-
-        if st.button("🇺🇸 Run ALL US Market", type="secondary"):
-            for script in [
-                ('us_total_market_screener.py',   STOCKS),
-                ('us_total_market_benchmark.py',  STOCKS),
-                ('us_total_market_breadth.py',    STOCKS),
-                ('nasdaq100_screener.py',         STOCKS),
-                ('us_nasdaq_benchmark.py',        STOCKS),
-                ('uranium_benchmark.py',          STOCKS),
-                ('uranium_screener.py',           STOCKS),
-                ('rrg_us_data.py',                STOCKS),
-                ('rrg_us_rsp_data.py',            STOCKS),
-                ('rrg_dow_data.py',               STOCKS),
-            ]:
-                run_script(os.path.join(script[1], script[0]), script[1])
-
-        st.subheader("Utilities — Market Cap Update")
-        st.caption("Run monthly to keep cap bands current")
-        if st.button("Fetch Market Caps — AU"):
-            run_script(os.path.join(BASE, 'utilities', 'fetch_market_caps_au.py'), os.path.join(BASE, 'utilities'))
-        if st.button("Fetch Market Caps — US"):
-            run_script(os.path.join(BASE, 'utilities', 'fetch_market_caps_us.py'), os.path.join(BASE, 'utilities'))
-        if st.button("Fetch Market Caps — Commodities"):
-            run_script(os.path.join(BASE, 'utilities', 'fetch_market_caps_commodities.py'), os.path.join(BASE, 'utilities'))
-        if st.button("Fetch Market Caps — Uranium"):
-            run_script(os.path.join(BASE, 'utilities', 'fetch_market_caps_uranium.py'), os.path.join(BASE, 'utilities'))
-        if st.button("Fetch Market Caps — AU Gold"):
-            run_script(os.path.join(BASE, 'utilities', 'fetch_market_caps_au_gold.py'), os.path.join(BASE, 'utilities'))
-        if st.button("Fetch Market Caps — Nasdaq 100"):
-            run_script(os.path.join(BASE, 'utilities', 'fetch_market_caps_nasdaq100.py'), os.path.join(BASE, 'utilities'))
-        if st.button("📈 Run DeMark Scan"):
-            import sys
-            sys.path.insert(0, STOCKS)
-            from demark_scan import run_scan
+        st.subheader("Single studies")
+        _ru1, _ru2 = st.columns(2)
+        _run_uni = _ru1.selectbox("Universe", list(UNIVERSE_LABELS.keys()),
+                                  format_func=lambda k: UNIVERSE_LABELS[k], key='run_single_uni')
+        _run_study = _ru2.selectbox("Study", ['screener', 'benchmark', 'breadth'], key='run_single_study')
+        if st.button("▶ Run study"):
+            run_marketdb('--universe', _run_uni, '--studies', _run_study)
+        if st.button("📈 Update RRG data (all four)"):
+            run_marketdb('--studies', 'rrg')
+        if st.button("📈 Run DeMark Scan (US ≥ $1B)"):
+            from marketdb import demark as MDM
             with st.spinner("Running DeMark scan..."):
-                run_scan()
+                _dm_df, _ = MDM.run_scan(None, 'us_total_market', log=lambda m: None)
+            st.success(f"✓ DeMark scan complete — {0 if _dm_df is None else len(_dm_df)} stocks")
+        if st.button("📰 Fetch ASX substantial-holder notices"):
+            run_script(os.path.join(STOCKS, 'asx_substantial_holders.py'), STOCKS)
+
+        st.subheader("Monthly — universe refresh")
+        st.caption("Rebuilds the AU/US universe from Yahoo (new listings, delistings, sector/industry, "
+                   "market caps, index membership, commodity flags). Also runs automatically from the "
+                   "daily run when more than 31 days old.")
+        if st.button("🌐 Refresh universe now"):
+            run_marketdb('--refresh-universe', '--skip-fetch', '--studies')
+        if st.button("🌐 Refresh universe + full daily run"):
+            run_marketdb('--refresh-universe')
+
+        st.subheader("Maintenance")
+        if st.button("♻ Re-pull full price history (slow)"):
+            run_marketdb('--full', '--studies')
+        if st.button("🔁 Retry stale tickers"):
+            run_marketdb('--retry-stale', '--studies')
 
 # ═══════════════════════════════════════════════════════════════════════════════
 # ETF INCOME PAGE
@@ -8551,9 +8986,7 @@ elif page == "ETF Income":
 
     # ── Rankings tab ──────────────────────────────────────────────────────────
     with _etf_tabs[0]:
-        etf_results_dir = os.path.join(ETF, 'results', 'etf_income')
-        etf_files = sorted(glob.glob(os.path.join(etf_results_dir, '*_etf_income.csv')),
-                           reverse=True)
+        etf_files = MR.list_frames('etf_income/')['name'].tolist()
 
         if not etf_files:
             st.warning("No ETF income data — run the scoring script first")
@@ -8561,13 +8994,12 @@ elif page == "ETF Income":
                 run_script(os.path.join(ETF, 'etf_income_data.py'), ETF)
                 st.rerun()
         else:
-            _etf_dates = [os.path.basename(f)[:8] for f in etf_files][:30]
+            _etf_dates = [n.split('/', 1)[1] for n in etf_files][:30]
             _etf_sel = st.selectbox("Report date", _etf_dates, index=0, key='etf_date_sel')
-            _etf_file = os.path.join(etf_results_dir, f"{_etf_sel}_etf_income.csv")
-            df_etf = load_csv(_etf_file)
+            df_etf = MR.load_frame(f"etf_income/{_etf_sel}")
 
             if df_etf is not None:
-                st.caption(f"Report date: {datetime.strptime(_etf_sel, '%Y%m%d').strftime('%d %b %Y')} — {file_age(_etf_file)}")
+                st.caption(f"Report date: {datetime.strptime(_etf_sel, '%Y%m%d').strftime('%d %b %Y')} — saved {MR.frame_updated(f'etf_income/{_etf_sel}') or ''}")
 
                 _fc1, _fc2, _fc3 = st.columns([2, 2, 6])
                 with _fc1:
@@ -8699,17 +9131,16 @@ elif page == "ETF Income":
                 run_script(os.path.join(ETF, 'etf_backtest.py'), ETF)
                 st.rerun()
 
-        _bt_dir = os.path.join(ETF, 'results', 'backtest')
-        _bt_summaries = sorted(glob.glob(os.path.join(_bt_dir, '*_summary.json')), reverse=True)
+        _bt_summaries = MR.report_dates('etf_backtest')
 
         if not _bt_summaries:
             st.caption("No backtest runs yet")
         else:
-            _bt_dates = [os.path.basename(f)[:8] for f in _bt_summaries][:20]
+            _bt_dates = [d.replace('-', '') for d in _bt_summaries][:20]
             _bt_sel = st.selectbox("Run date", _bt_dates, index=0, key='bt_date_sel')
 
-            with open(os.path.join(_bt_dir, f"{_bt_sel}_summary.json")) as _f:
-                _bt_sum = json.load(_f)
+            _, _bt_sum, _ = MR.load_report('etf_backtest', f"{_bt_sel[:4]}-{_bt_sel[4:6]}-{_bt_sel[6:]}")
+            _bt_sum = _bt_sum or {}
 
             _sc1, _sc2, _sc3, _sc4, _sc5 = st.columns(5)
             _ret_col = '#2dc653' if _bt_sum['total_return'] > 0 else '#e63946'
@@ -8781,8 +9212,7 @@ elif page == "ETF Income":
                         &nbsp;|&nbsp; <span style="color:#888">Compare max drawdown and CAGR against an unhedged run to price the insurance</span>
                     </div></div>""", unsafe_allow_html=True)
 
-            _eq_file = os.path.join(_bt_dir, f"{_bt_sel}_equity.csv")
-            _df_eq = load_csv(_eq_file)
+            _df_eq = MR.load_frame(f"etf_backtest/{_bt_sel}/equity")
             if _df_eq is not None:
                 _fig_bt = go.Figure()
                 _fig_bt.add_trace(go.Scatter(x=_df_eq['date'], y=_df_eq['value'],
@@ -8856,8 +9286,7 @@ elif page == "ETF Income":
                         </div>
                     """, unsafe_allow_html=True)
 
-            _qtr_file = os.path.join(_bt_dir, f"{_bt_sel}_quarters.csv")
-            _df_qtr = load_csv(_qtr_file)
+            _df_qtr = MR.load_frame(f"etf_backtest/{_bt_sel}/quarters")
             if _df_qtr is not None:
                 st.markdown("**Quarterly holdings**")
                 st.dataframe(_df_qtr, width='stretch', hide_index=True)
@@ -9043,13 +9472,12 @@ elif page == "ETF Income":
                 return None, None
 
         # Signals vs latest rankings
-        etf_results_dir = os.path.join(ETF, 'results', 'etf_income')
-        _rank_files = sorted(glob.glob(os.path.join(etf_results_dir, '*_etf_income.csv')), reverse=True)
+        _rank_files = MR.list_frames('etf_income/')['name'].tolist()
         if not _rank_files:
             st.caption("Run the scoring first to generate rebalance signals")
         else:
-            _df_rank = load_csv(_rank_files[0])
-            _rank_date = os.path.basename(_rank_files[0])[:8]
+            _df_rank = MR.load_frame(_rank_files[0])
+            _rank_date = _rank_files[0].split('/', 1)[1]
             st.caption(f"Signals vs rankings from {datetime.strptime(_rank_date, '%Y%m%d').strftime('%d %b %Y')}")
 
             _held_rows = [r for _, r in _edited.iterrows() if str(r['ticker']).strip()]
@@ -9233,6 +9661,7 @@ elif page == "ETF Income":
 # DEMARK SIGNALS PAGE
 # ═══════════════════════════════════════════════════════════════════════════════
 elif page == "DeMark Signals":
+    marketdb_ready()
     st.title("📈 DeMark Signal Scanner")
     st.markdown("""
         <div class="info-card">
@@ -9244,7 +9673,7 @@ elif page == "DeMark Signals":
         </div>
     """, unsafe_allow_html=True)
 
-    demark_dir = os.path.join(STOCKS, 'results', 'demark')
+    from marketdb import demark as MDM
 
     # ── Controls ──────────────────────────────────────────────────────────────
     col1, col2, col3, col4 = st.columns(4)
@@ -9265,33 +9694,29 @@ elif page == "DeMark Signals":
         run_btn = st.button("▶ Run DeMark Scan", type="primary")
 
     if run_btn:
-        with st.spinner("Fetching prices and scanning signals — this may take 5-10 minutes..."):
-            import sys
-            sys.path.insert(0, STOCKS)
-            from demark_scan import run_scan
+        with st.spinner("Scanning signals from the price store..."):
             cap_min_val = int(cap_min * 1e9) if cap_min > 0 else 0
             cap_max_val = int(cap_max * 1e9) if cap_max_enabled and cap_max else None
-            df_scan, report = run_scan(
+            df_scan, report = MDM.run_scan(
+                None, 'us_total_market',
                 market_cap_min = cap_min_val,
                 market_cap_max = cap_max_val,
-                end_date       = scan_date.strftime('%Y-%m-%d')
+                end_date       = scan_date.strftime('%Y-%m-%d'),
+                log            = lambda m: None,
             )
         if df_scan is not None:
             st.success(f"✓ Scan complete — {len(df_scan)} stocks analysed")
             st.rerun()
 
     # ── Date selector ─────────────────────────────────────────────────────────
-    report_files = sorted(glob.glob(os.path.join(demark_dir, '*_demark.csv')), reverse=True)
+    report_dates = MR.demark_dates()
 
-    if not report_files:
+    if not report_dates:
         st.info("No scan results found — run the scanner above")
     else:
-        dates     = [os.path.basename(f)[:8] for f in report_files][:10]
+        dates     = report_dates[:10]
         sel_date  = st.selectbox("Select scan date", dates)
-        csv_file  = os.path.join(demark_dir, f"{sel_date}_demark.csv")
-        txt_file  = os.path.join(demark_dir, f"{sel_date}_demark_report.txt")
-
-        df = load_csv(csv_file)
+        df, report_txt_db = MR.demark_latest(run_date=sel_date)
 
         if df is not None and len(df) > 0:
             # Apply market cap filter to display
@@ -9319,7 +9744,7 @@ elif page == "DeMark Signals":
 
             # Text report
             with st.expander("📄 Text Report", expanded=False):
-                report_txt = load_txt(txt_file)
+                report_txt = report_txt_db
                 if report_txt:
                     st.code(report_txt, language=None)
 
@@ -9526,12 +9951,18 @@ elif page == "Settings":
                 if pk in ('fa_system', 'fa_comparison'):
                     # defaults live in the FA module — imported lazily so the
                     # dashboard doesn't pay the chromadb import at startup
-                    import sys as _sys
-                    _util = os.path.join(BASE, 'utilities')
-                    if _util not in _sys.path:
-                        _sys.path.insert(0, _util)
-                    from fa_assessment import SYSTEM_PROMPT as _FA_SP, COMPARISON_SYSTEM_PROMPT as _FA_CP
-                    return _FA_SP if pk == 'fa_system' else _FA_CP
+                    try:
+                        import sys as _sys
+                        _util = os.path.join(BASE, 'utilities')
+                        if _util not in _sys.path:
+                            _sys.path.insert(0, _util)
+                        from fa_assessment import SYSTEM_PROMPT as _FA_SP, COMPARISON_SYSTEM_PROMPT as _FA_CP
+                        return _FA_SP if pk == 'fa_system' else _FA_CP
+                    except Exception as _e:
+                        # A broken FA install must not take down the whole
+                        # Settings page — fall back to the saved prompt.
+                        st.warning(f"Could not load FA default prompt: {_e}")
+                        return ''
                 return DEFAULT_SETTINGS.get('ai_prompts', {}).get(pk, '')
 
             for _pk, _plabel, _ptab_label, _ptab in _prompt_defs:
@@ -10016,7 +10447,7 @@ elif page == "Settings":
                     _save_active(tab_key, new_s)
                 if b2.button("🔄 Save & Run", key=f"run_{tab_key}"):
                     _save_active(tab_key, new_s)
-                    run_script(os.path.join(STOCKS, script), STOCKS)
+                    run_marketdb('--universe', *script, '--studies', 'benchmark', '--skip-fetch')
                     st.success("Done")
                 return new_s
 
@@ -10098,10 +10529,10 @@ elif page == "Settings":
                     _save_active(tab_key, new_s)
                 if b2.button("🔄 Save & Run Screener", key=f"run_sc_{tab_key}"):
                     _save_active(tab_key, new_s)
-                    run_script(os.path.join(STOCKS, sc_script), STOCKS)
+                    run_marketdb('--universe', *sc_script, '--studies', 'screener', '--skip-fetch')
                     st.success("Screener done")
                 if b3.button("📊 Run Benchmark", key=f"run_bm_{tab_key}"):
-                    run_script(os.path.join(STOCKS, bm_script), STOCKS)
+                    run_marketdb('--universe', *bm_script, '--studies', 'benchmark', '--skip-fetch')
                     st.success("Benchmark done")
                 return new_s
 
@@ -10110,12 +10541,13 @@ elif page == "Settings":
                 "🇦🇺 AU Benchmark", "🇺🇸 US Benchmark", "🪨 Comm Benchmark",
                 "🔍 AU Screener",   "🔍 US Screener",   "🔍 Comm Screener",
             ])
-            with _rs_tabs[0]: _bm_score_widgets('au_benchmark',   'au_total_market_benchmark.py',       BM_DEFAULTS)
-            with _rs_tabs[1]: _bm_score_widgets('us_benchmark',   'us_total_market_benchmark.py',       BM_DEFAULTS)
-            with _rs_tabs[2]: _bm_score_widgets('comm_benchmark', 'all_major_commodities_benchmark.py', BM_DEFAULTS)
-            with _rs_tabs[3]: _sc_score_widgets('au_screener',   'au_total_market_benchmark.py',   'au_total_market_screener.py',       SC_DEFAULTS)
-            with _rs_tabs[4]: _sc_score_widgets('us_screener',   'us_total_market_benchmark.py',   'us_total_market_screener.py',       SC_DEFAULTS)
-            with _rs_tabs[5]: _sc_score_widgets('comm_screener', 'all_major_commodities_benchmark.py', 'all_major_commodities_screener.py', SC_DEFAULTS)
+            _AU_U, _US_U, _COMM_U = ['au_total_market'], ['us_total_market', 'nasdaq100'], ['all_major_commodities', 'uranium', 'au_gold_miners']
+            with _rs_tabs[0]: _bm_score_widgets('au_benchmark',   _AU_U,   BM_DEFAULTS)
+            with _rs_tabs[1]: _bm_score_widgets('us_benchmark',   _US_U,   BM_DEFAULTS)
+            with _rs_tabs[2]: _bm_score_widgets('comm_benchmark', _COMM_U, BM_DEFAULTS)
+            with _rs_tabs[3]: _sc_score_widgets('au_screener',   _AU_U,   _AU_U,   SC_DEFAULTS)
+            with _rs_tabs[4]: _sc_score_widgets('us_screener',   _US_U,   _US_U,   SC_DEFAULTS)
+            with _rs_tabs[5]: _sc_score_widgets('comm_screener', _COMM_U, _COMM_U, SC_DEFAULTS)
 
     with _stab_act:
             st.title("⚙️ Screener Settings")

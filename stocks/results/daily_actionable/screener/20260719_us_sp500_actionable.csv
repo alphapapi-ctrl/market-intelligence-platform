@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-1,40,FIX,Comfort Systems USA,Industrials,Construction & Engineering,large,1674.0601,100.0,-0.0302,-0.1125,0.0391,FLAT,53.58,207.88,,-18.99,56.63,56.88,2.5292,HIGH,-,1830.138,1868.7359,1353.0822,1,206.9704,LEADER,58.7267

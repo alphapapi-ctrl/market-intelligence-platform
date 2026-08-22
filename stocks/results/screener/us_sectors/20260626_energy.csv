@@ -1,4 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-30,-6,SDRL,SEADRILL LTD,Energy,,mid,38.38,100.0,-0.0107,-0.1418,-0.0975,FLAT,17.05,49.11,,-31.2,51.2,36.22,,LOW,EARLY,43.3155,46.9728,38.8534,0,69.4161,LAGGARD,23.3565
-41,0,FLNG,FLEX LNG LTD,Energy,,small,29.96,50.0,0.0066,0.1192,0.1609,STRONG_DOWN,29.55,42.84,,-8.78,52.4,25.1,,LOW,-,30.146,30.7314,26.5468,1,89.4281,CONTENDER,18.7533
-71,0,HLX,HELIX ENERGY SOLUTIONS GROUP INC,Energy,,small,8.74,0.0,0.0041,0.0227,-0.0633,FLAT,38.51,38.07,,-18.77,49.6,37.69,,LOW,-,9.3055,9.6678,8.0884,1,50.1036,LAGGARD,12.9807

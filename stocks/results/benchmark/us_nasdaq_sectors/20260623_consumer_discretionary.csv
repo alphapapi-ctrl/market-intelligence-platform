@@ -1,5 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-13,369,KSS,KOHLS CORP,Consumer Discretionary,,small,17.6,1.6136,1.0299,1.3511,1.0752,FLAT,-20.98,124.04,,-51.84,50.0,72.7,,LOW,-,15.7102,14.495,16.4677,1,85.3097,TREND+LEAD,27.3835
-18,461,GOLF,ACUSHNET HOLDINGS CORP,Consumer Discretionary,,mid,107.09,1.0753,1.1083,1.1757,0.9258,FLAT,31.41,49.3,,-17.93,52.4,36.49,,LOW,-,93.7688,93.2551,87.9404,1,70.794,TREND+LEAD,20.0331
-33,1005,NCLH,Norwegian Cruise Line Holdings,Consumer Discretionary,"Hotels, Resorts & Cruise Lines",mid,20.04,0.776,1.0015,1.1771,0.7939,FLAT,-7.35,7.74,,-45.1,45.6,58.27,,LOW,SHIFT,18.758,18.2746,20.9881,0,6.0586,WEAK,13.7058
-51,1410,GPI,GROUP AUTOMOTIVE INC,Consumer Discretionary,,mid,315.25,0.5093,0.9741,0.9544,0.7812,STRONG_UP,-21.44,-29.28,5.88,-38.91,46.4,35.84,,LOW,EARLY,318.7783,329.8974,372.7202,0,-37.9124,WEAK,4.8936

@@ -1,4 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-9,4,AMAT,Applied Materials,Technology,Semiconductors,large,436.62,81.82,0.003,-0.0169,-0.0088,FLAT,96.22,166.07,107.56,-21.37,57.6,50.09,1.8566,HIGH,-,411.401,380.8054,280.8132,1,190.9646,LEADER,55.6793
-15,5,CSCO,Cisco,Telecommunications,Computer Communications Equipment,large,118.21,100.0,0.2269,0.5349,0.7526,STRONG_DOWN,54.42,90.08,157.68,-13.57,56.4,37.15,1.6871,HIGH,-,94.6885,85.7563,76.018,1,136.7615,LEADER,39.2751
-39,-10,AEP,American Electric Power,Utilities,Electric Utilities,large,125.15,100.0,-0.0092,0.0205,0.0572,STRONG_DOWN,4.59,25.3,44.77,-8.14,52.0,19.67,2.5717,HIGH,-,132.1336,131.5368,119.3134,1,66.8942,LEADER,21.1817

@@ -1,3 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-33,616,LYV,Live Nation Entertainment,Communication Services,Movies & Entertainment,large,175.11,0.9804,1.0399,1.0717,1.0226,FLAT,21.52,18.96,93.88,-27.84,49.2,32.36,0.8498,LOW,-,168.591,164.1304,153.8081,1,28.8276,TREND_ONLY,16.6224
-64,1261,NWS,News Corp (Class B),Communication Services,Publishing,large,28.34,0.6924,1.0024,0.9481,0.9014,STRONG_UP,-5.19,-15.98,,-26.84,52.0,23.69,,LOW,EARLY,29.7715,30.0338,29.5212,0,-35.0813,WEAK,4.6582

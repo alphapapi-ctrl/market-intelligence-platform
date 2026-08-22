@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-475,-2,SPY,SPDR S&P500 ETF,index,index,large,655.24,50.0,0.0157,-0.041,-0.0365,FLAT,-1.42,17.4,29.36,-12.05,55.2,14.23,1.0946,MED,EARLY,659.2732,675.5196,658.7385,0,67.5002,LAGGARD,19.9416

@@ -1,3 +1,0 @@
-rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-225,-2,IVPAF,Ivanhoe Mines Ltd,palladium,producer,large,8.31,0.6723,1.0961,0.9374,0.9265,STRONG_UP,-26.13,-4.37,-39.65,-46.64,51.61,67.7,1.6381,HIGH,PROGRESS,8.1554,10.2142,9.8106,0,-3.3336,WEAK,21.4367
-266,26,LCID,LUCID GROUP INC,lithium,producer,mid,9.24,0.1628,0.9643,0.8211,0.7178,STRONG_UP,-55.96,-63.48,-61.98,-72.59,42.17,75.96,1.5012,HIGH,EARLY,9.6475,9.9634,16.2001,0,-35.2406,WEAK,17.4863

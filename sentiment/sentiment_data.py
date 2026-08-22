@@ -1,3 +1,4 @@
+import io
 """
 data/sentiment.py
 AAII Investor Sentiment Survey + SPX weekly price data.
@@ -64,6 +65,43 @@ def _is_fresh(path: Path) -> bool:
     return age < timedelta(days=MAX_CACHE_AGE_DAYS)
 
 
+# ── marketdb-backed cache (frames table) ────────────────────────────────────
+import os as _os, sys as _sys
+_BASE = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+if _BASE not in _sys.path:
+    _sys.path.insert(0, _BASE)
+try:
+    from marketdb import results as _mr
+    _STORE = True
+except Exception as _e:  # pragma: no cover
+    print(f"marketdb unavailable ({_e}); sentiment caches will not persist")
+    _STORE = False
+
+
+def _cache_get(name: str, force: bool):
+    """-> (df or None, fresh: bool). Fresh means updated within MAX_CACHE_AGE_DAYS."""
+    if not _STORE:
+        return None, False
+    try:
+        df = _mr.load_frame("sentiment/" + name)
+        if df is None:
+            return None, False
+        upd = _mr.frame_updated("sentiment/" + name)
+        fresh = bool(upd) and (datetime.now() - datetime.strptime(upd, "%Y-%m-%d %H:%M:%S")) < timedelta(days=MAX_CACHE_AGE_DAYS)
+        return df, (fresh and not force)
+    except Exception:
+        return None, False
+
+
+def _cache_put(name: str, df: pd.DataFrame) -> pd.DataFrame:
+    if _STORE:
+        try:
+            _mr.save_frame("sentiment/" + name, df)
+        except Exception as e:
+            print(f"sentiment cache write failed ({name}): {e}")
+    return df
+
+
 # ══════════════════════════════════════════════════════════════
 # AAII sentiment
 # ══════════════════════════════════════════════════════════════
@@ -108,33 +146,26 @@ def parse_aaii_xls(source) -> pd.DataFrame:
 
 def fetch_aaii(force: bool = False) -> pd.DataFrame:
     """Download (or reuse cached) AAII sentiment data."""
-    if not force and _is_fresh(AAII_PARQUET):
-        return pd.read_parquet(AAII_PARQUET)
-
-    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    cached, fresh = _cache_get("aaii", force)
+    if fresh:
+        return cached
     try:
         resp = requests.get(AAII_URL, headers=_HEADERS, timeout=30)
         resp.raise_for_status()
         if b"<html" in resp.content[:200].lower():
             raise RuntimeError("AAII returned an HTML page instead of the xls")
-        AAII_XLS_CACHE.write_bytes(resp.content)
+        df = parse_aaii_xls(io.BytesIO(resp.content))
     except Exception:
         # Download blocked/offline — fall back to whatever we have
-        if AAII_PARQUET.exists():
-            return pd.read_parquet(AAII_PARQUET)
-        if not AAII_XLS_CACHE.exists():
-            raise
-    df = parse_aaii_xls(AAII_XLS_CACHE)
-    df.to_parquet(AAII_PARQUET, index=False)
-    return df
+        if cached is not None:
+            return cached
+        raise
+    return _cache_put("aaii", df)
 
 
 def import_aaii_file(uploaded) -> pd.DataFrame:
     """Import a manually downloaded sentiment.xls (file-like) and cache it."""
-    CACHE_DIR.mkdir(parents=True, exist_ok=True)
-    df = parse_aaii_xls(uploaded)
-    df.to_parquet(AAII_PARQUET, index=False)
-    return df
+    return _cache_put("aaii", parse_aaii_xls(uploaded))
 
 
 # ══════════════════════════════════════════════════════════════
@@ -149,10 +180,9 @@ def fetch_naaim(force: bool = False) -> pd.DataFrame:
     """
     import re
 
-    if not force and _is_fresh(NAAIM_PARQUET):
-        return pd.read_parquet(NAAIM_PARQUET)
-
-    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    cached, fresh = _cache_get("naaim", force)
+    if fresh:
+        return cached
     try:
         page = requests.get(NAAIM_PAGE_URL, headers=_HEADERS, timeout=30)
         page.raise_for_status()
@@ -162,14 +192,12 @@ def fetch_naaim(force: bool = False) -> pd.DataFrame:
             raise RuntimeError("Could not find USE_Data xlsx link on the NAAIM page")
         resp = requests.get(m.group(1), headers=_HEADERS, timeout=30)
         resp.raise_for_status()
-        NAAIM_XLSX_CACHE.write_bytes(resp.content)
+        raw = pd.read_excel(io.BytesIO(resp.content), sheet_name=0)
     except Exception:
-        if NAAIM_PARQUET.exists():
-            return pd.read_parquet(NAAIM_PARQUET)
-        if not NAAIM_XLSX_CACHE.exists():
-            raise
+        if cached is not None:
+            return cached
+        raise
 
-    raw = pd.read_excel(NAAIM_XLSX_CACHE, sheet_name=0)
     df = pd.DataFrame({
         "date": pd.to_datetime(raw["Date"]),
         "exposure": raw["NAAIM Number"],
@@ -180,8 +208,7 @@ def fetch_naaim(force: bool = False) -> pd.DataFrame:
     # file has duplicate rows and is newest-first
     df = (df.drop_duplicates(subset="date", keep="first")
             .sort_values("date").reset_index(drop=True))
-    df.to_parquet(NAAIM_PARQUET, index=False)
-    return df
+    return _cache_put("naaim", df)
 
 
 # ══════════════════════════════════════════════════════════════
@@ -194,11 +221,9 @@ def fetch_index_weekly(symbol: str = "^GSPC", force: bool = False) -> pd.DataFra
     Columns: date, open, high, low, close.
     """
     safe = "".join(c if c.isalnum() else "_" for c in symbol)
-    parquet = CACHE_DIR / f"index_{safe}_weekly.parquet"
-    if not force and _is_fresh(parquet):
-        return pd.read_parquet(parquet)
-
-    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    cached, fresh = _cache_get(f"index_{safe}_weekly", force)
+    if fresh:
+        return cached
     try:
         # range=max silently downgrades granularity — use explicit epoch bounds
         resp = requests.get(YAHOO_CHART_URL.format(symbol=requests.utils.quote(symbol)),
@@ -208,8 +233,8 @@ def fetch_index_weekly(symbol: str = "^GSPC", force: bool = False) -> pd.DataFra
         resp.raise_for_status()
         result = resp.json()["chart"]["result"][0]
     except Exception:
-        if parquet.exists():
-            return pd.read_parquet(parquet)
+        if cached is not None:
+            return cached
         raise
 
     quote = result["indicators"]["quote"][0]
@@ -218,8 +243,7 @@ def fetch_index_weekly(symbol: str = "^GSPC", force: bool = False) -> pd.DataFra
         "open": quote["open"], "high": quote["high"],
         "low": quote["low"], "close": quote["close"],
     }).dropna(subset=["close"]).reset_index(drop=True)
-    df.to_parquet(parquet, index=False)
-    return df
+    return _cache_put(f"index_{safe}_weekly", df)
 
 
 def fetch_spx_weekly(force: bool = False) -> pd.DataFrame:
@@ -237,11 +261,9 @@ def fetch_cot(code: str, force: bool = False) -> pd.DataFrame:
     comm_long, comm_short, comm_net, noncomm_net_pct_oi.
     Reports are as-of Tuesday, published Friday afternoon.
     """
-    parquet = CACHE_DIR / f"cot_{code}.parquet"
-    if not force and _is_fresh(parquet):
-        return pd.read_parquet(parquet)
-
-    CACHE_DIR.mkdir(parents=True, exist_ok=True)
+    cached, fresh = _cache_get(f"cot_{code}", force)
+    if fresh:
+        return cached
     try:
         resp = requests.get(COT_API_URL, params={
             "cftc_contract_market_code": code,
@@ -256,8 +278,8 @@ def fetch_cot(code: str, force: bool = False) -> pd.DataFrame:
         if not rows:
             raise RuntimeError(f"CFTC API returned no rows for code {code}")
     except Exception:
-        if parquet.exists():
-            return pd.read_parquet(parquet)
+        if cached is not None:
+            return cached
         raise
 
     df = pd.DataFrame(rows).rename(columns={
@@ -277,5 +299,4 @@ def fetch_cot(code: str, force: bool = False) -> pd.DataFrame:
     df["noncomm_net"] = df["noncomm_long"] - df["noncomm_short"]
     df["comm_net"] = df["comm_long"] - df["comm_short"]
     df["noncomm_net_pct_oi"] = 100.0 * df["noncomm_net"] / df["open_interest"]
-    df.to_parquet(parquet, index=False)
-    return df
+    return _cache_put(f"cot_{code}", df)

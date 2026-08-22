@@ -1,6 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-16,571,CHEF,CHEFS WAREHOUSE INC,Consumer Staples,,mid,97.06,100.0,0.0055,0.1803,0.5352,STRONG_DOWN,61.55,53.16,,-20.49,55.2,45.49,,LOW,-,94.1765,84.6582,67.7255,1,64.512,LEADER,19.6327
-22,587,TGT,Target Corporation,Consumer Staples,Consumer Staples Merchandise Retail,large,132.27,75.0,0.0066,0.0513,0.109,STRONG_DOWN,30.1,31.81,,-20.27,53.2,35.01,,LOW,-,132.467,127.9419,108.7646,1,48.339,LEADER,17.9415
-29,802,WMT,Walmart,Consumer Staples,Consumer Staples Merchandise Retail,large,112.21,50.0,-0.0121,-0.0967,-0.1998,STRONG_UP,-0.06,19.28,62.35,-18.91,52.0,27.18,0.9367,LOW,EARLY,116.119,121.5264,116.8506,0,36.8843,LAGGARD,15.7842
-52,1297,KR,Kroger,Consumer Staples,Food Retail,large,59.86,0.0,0.019,-0.0903,-0.2151,STRONG_UP,2.02,-13.58,,-26.16,48.4,32.09,1.5711,HIGH,PROGRESS,59.4285,62.959,65.3216,0,-20.4799,WEAK,8.0275
-56,1144,CL,Colgate-Palmolive,Consumer Staples,Household Products,large,91.01,25.0,-0.0587,0.0391,0.0908,STRONG_DOWN,19.52,2.97,,-16.97,50.0,25.07,,LOW,-,91.482,89.392,84.3802,1,5.9209,LAGGARD,7.1856

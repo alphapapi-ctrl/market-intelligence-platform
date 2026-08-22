@@ -58,17 +58,19 @@ def load_config():
     return cfg
 
 
+import etf_prices as _px
+
+
 def fetch_history(tickers, years):
-    """Fetch unadjusted close + dividends per ticker. One extra year for the
-    12m scoring lookback at the first rebalance."""
-    period = f"{years + 1}y"
+    """Unadjusted close + dividends per ticker from the marketdb store. One extra
+    year for the 12m scoring lookback at the first rebalance."""
+    _px.prefetch(list(tickers))
     data = {}
     for t in tickers:
         try:
-            hist = yf.Ticker(t).history(period=period, auto_adjust=False)
+            hist = _px.history(t, years + 1)
             if hist is None or hist.empty:
                 continue
-            hist.index = hist.index.tz_localize(None)
             data[t] = hist[['Close', 'Dividends']].dropna(subset=['Close'])
         except Exception as e:
             print(f"  {t}: fetch error — {e}")
@@ -77,16 +79,15 @@ def fetch_history(tickers, years):
 
 def fetch_adj(tickers, years):
     """Adjusted close only — used for underlying RS so total-return comparison
-    matches the live scorer (which fetches auto_adjust=True)."""
-    period = f"{years + 1}y"
+    matches the live scorer."""
+    _px.prefetch(list(tickers))
     data = {}
     for t in tickers:
         try:
-            hist = yf.Ticker(t).history(period=period, auto_adjust=True)
-            if hist is None or hist.empty:
+            s = _px.adj_close(t, years + 1)
+            if s is None or s.empty:
                 continue
-            hist.index = hist.index.tz_localize(None)
-            data[t] = hist[['Close']].dropna()
+            data[t] = s.to_frame('Close')
         except Exception as e:
             print(f"  {t}: fetch error — {e}")
     return data
@@ -541,10 +542,11 @@ def run_backtest():
         'maintain_level': round(maintain_level, 2) if income_mode == 'draw' else None,
     }
 
-    eq.to_csv(os.path.join(RESULTS_DIR, f"{today}_equity.csv"), index=False)
-    pd.DataFrame(quarter_rows).to_csv(os.path.join(RESULTS_DIR, f"{today}_quarters.csv"), index=False)
-    with open(os.path.join(RESULTS_DIR, f"{today}_summary.json"), 'w') as f:
-        json.dump(summary, f, indent=2)
+    from marketdb import results as _mr
+    _mr.save_frame(f"etf_backtest/{today}/equity", eq)
+    _mr.save_frame(f"etf_backtest/{today}/quarters", pd.DataFrame(quarter_rows))
+    _mr.save_report('etf_backtest', f"{today[:4]}-{today[4:6]}-{today[6:]}", payload=summary)
+    print(f"Saved: marketdb etf_backtest/{today}")
 
     print(f"\n{'═' * 50}")
     if income_mode == 'draw':

@@ -71,11 +71,15 @@ def classify_us_business_cycle(data):
     if healthcare_lead:     scores['EARLY CONTRACTION'] += 1
     if xly_xlp < -5:        scores['EARLY CONTRACTION'] += 2
 
-    # Recession signals
-    if healthcare_lead:     scores['RECESSION']         += 2
-    if xlu_spx > 5:         scores['RECESSION']         += 2
-    if xlp_spx > 5:         scores['RECESSION']         += 2
-    if not energy_lead:     scores['RECESSION']         += 1
+    # Recession signals — only callable when there is an actual defensive bid (utilities or
+    # staples outperforming SPX over 63d); healthcare leading on its own is not a recession signal.
+    # (2026-08-23: dropped the 'not energy_lead' point, which handed RECESSION a free +1 in every
+    # non-energy regime and let it win 3-2 ties with no defensives bid at all.)
+    defensive_present = xlu_spx > 0 or xlp_spx > 0
+    if defensive_present:
+        if healthcare_lead:     scores['RECESSION']     += 2
+        if xlu_spx > 5:         scores['RECESSION']     += 2
+        if xlp_spx > 5:         scores['RECESSION']     += 2
 
     # Early Recovery signals
     if fin_lead and not energy_lead:  scores['EARLY RECOVERY'] += 2

@@ -1,3 +1,0 @@
-rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-45,23,STK.AX,Strickland Metals Limited,Gold,mid,0.145,53.59,-0.1402,-0.2927,-0.096,FLAT,-23.68,52.63,45.0,-40.82,36.76,87.37,2.3903,HIGH,EARLY,0.199,0.2063,0.1858,0,22.1442,LAGGARD,20.1572
-89,19,ATM.AX,Aneka Tambang (Persero) Tbk,Gold,large,0.96,25.49,0.0323,-0.0352,0.0156,FLAT,-4.0,6.86,-3.39,-26.41,20.55,16.17,12.6957,HIGH,EARLY,0.9785,0.9893,1.0062,0,8.7172,WEAK,13.8052

@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-39,616,POR,PORTLAND GENERAL ELECTRIC,Utilities,,mid,50.19,50.0,-0.0054,0.0125,-0.0138,FLAT,4.77,28.04,,-12.8,54.0,20.96,,LOW,-,50.0905,50.206,48.435,1,72.2293,CONTENDER,18.3942

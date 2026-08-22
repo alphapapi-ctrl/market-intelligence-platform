@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,commodity,type,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-3,149,LAC.TO,LITHIUM AMERICAS CORP,lithium,producer,mid,5.06,50.0,-0.0664,-0.1246,-0.1012,FLAT,-32.44,30.41,,-64.14,46.0,74.06,,LOW,EARLY,5.7245,6.5684,7.0905,0,18.8897,LAGGARD,22.1414

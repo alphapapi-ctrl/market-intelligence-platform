@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-3,0,UEC,URANIUM ENERGY CORP,Uranium,large,11.91,93.48,-0.1162,-0.0089,-0.0843,FLAT,6.15,129.48,58.17,-40.86,50.0,75.08,1.6722,HIGH,EARLY,14.7005,14.0988,13.6865,0,86.2279,LAGGARD,40.1248

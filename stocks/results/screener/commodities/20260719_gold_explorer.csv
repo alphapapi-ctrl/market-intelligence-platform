@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,commodity,type,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-7,0,CNL,Collective Mining,gold,explorer,mid,12.11,40.0,-0.0031,0.0546,-0.0701,FLAT,-21.26,20.74,327.01,-43.53,52.21,70.97,0.626,LOW,EARLY,12.7155,14.5972,14.9871,0,15.256,WEAK,15.3137

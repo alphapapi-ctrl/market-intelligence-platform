@@ -1,0 +1,440 @@
+{
+  "_comment": "Universe definitions for marketdb. A universe is a filter over securities + security_groups. Edit here, not in code.",
+  "cap_bands": {
+    "AU": {
+      "large": 10000000000,
+      "mid": 2000000000
+    },
+    "US": {
+      "large": 10000000000,
+      "mid": 2000000000
+    },
+    "commodity": {
+      "large": 5000000000,
+      "mid": 500000000
+    }
+  },
+  "refresh": {
+    "auto_monthly_refresh": true,
+    "max_age_days": 31,
+    "au_exchanges": [
+      "ASX"
+    ],
+    "us_exchanges": [
+      "NMS",
+      "NYQ",
+      "NGM",
+      "NCM",
+      "ASE",
+      "PCX"
+    ],
+    "au_min_market_cap": 0,
+    "us_min_market_cap": 500000000,
+    "us_require_usd_financials": true,
+    "keep_existing_below_floor": true,
+    "delist_after_consecutive_failures": 10
+  },
+  "summary_scan": {
+    "_comment": "summary_scan.py: stocks flagged with source_commodities get their Yahoo longBusinessSummary stored (re-fetched after max_age_days) and scanned for these keywords (word-bounded, case-insensitive, company name removed first); hits become candidate secondary exposures.",
+    "source_commodities": ["gold", "silver", "platinum", "palladium"],
+    "max_age_days": 180,
+    "threads": 4,
+    "keywords": {
+      "gold": ["gold"],
+      "silver": ["silver"],
+      "copper": ["copper"],
+      "nickel": ["nickel"],
+      "platinum": ["platinum", "pgm", "pgms", "platinum group"],
+      "palladium": ["palladium"],
+      "lithium": ["lithium", "spodumene"],
+      "uranium": ["uranium"],
+      "iron_ore": ["iron ore"],
+      "oil_gas": ["oil and gas", "petroleum", "natural gas", "crude oil"]
+    }
+  },
+  "divergence": {
+    "_comment": "RSI divergence: pivots on the RSI line (pivot_left/right bars each side), price compared at the pivot bars; newer pivot confirmed within max_age_bars. OBV: least-squares price vs OBV direction over obv_window bars; flat thresholds in % of price and in average-volume days.",
+    "rsi_period": 14,
+    "pivot_left": 5,
+    "pivot_right": 5,
+    "pivot_min_gap": 5,
+    "pivot_max_gap": 60,
+    "max_age_bars": 20,
+    "obv_window": 21,
+    "obv_price_flat_pct": 2.0,
+    "obv_flat_avg_days": 3.0
+  },
+  "fetch": {
+    "chunk_size": 150,
+    "pause_between_chunks_sec": 1.5,
+    "incremental_overlap_days": 10,
+    "initial_backfill_days": 1100,
+    "adjustment_tolerance": 0.001,
+    "retries": 3,
+    "min_coverage": 0.8,
+    "deep_history": {
+      "_comment": "tickers back-filled from these dates instead of initial_backfill_days (seasonality, presidential cycle, sentiment overlays)",
+      "^GSPC": "1927-01-01",
+      "^DJI": "1927-01-01",
+      "^IXIC": "1971-01-01",
+      "^RUT": "1987-01-01",
+      "^VIX": "1990-01-01",
+      "^AORD": "1980-01-01",
+      "^AXJO": "1992-01-01",
+      "^HGX": "2000-01-01",
+      "GC=F": "2000-01-01",
+      "SI=F": "2000-01-01",
+      "HG=F": "2000-01-01",
+      "CL=F": "2000-01-01",
+      "^AXEJ": "2000-01-01",
+      "^AXFJ": "2000-01-01",
+      "^AXIJ": "2000-01-01",
+      "^AXTJ": "2000-01-01",
+      "^AXUJ": "2000-01-01",
+      "^AXMJ": "2000-01-01",
+      "^AXDJ": "2000-01-01",
+      "^AXHJ": "2000-01-01",
+      "^AXSJ": "2000-01-01",
+      "^AXNJ": "2000-01-01",
+      "^AXPJ": "2000-01-01",
+      "XLK": "1998-01-01",
+      "XLF": "1998-01-01",
+      "XLE": "1998-01-01",
+      "XLV": "1998-01-01",
+      "XLI": "1998-01-01",
+      "XLB": "1998-01-01",
+      "XLU": "1998-01-01",
+      "XLP": "1998-01-01",
+      "XLY": "1998-01-01",
+      "XLC": "2018-01-01",
+      "XLRE": "2015-01-01",
+      "SPY": "1993-01-01"
+    }
+  },
+  "commodity_benchmarks": {
+    "gold": "GDX",
+    "silver": "SIL",
+    "copper": "COPX",
+    "uranium": "URA",
+    "lithium": "LIT",
+    "platinum": "ETPMPT.AX",
+    "palladium": "ETPMPD.AX",
+    "oil_gas": "XLE"
+  },
+  "industry_to_commodity": {
+    "Gold": [
+      "gold",
+      "producer"
+    ],
+    "Silver": [
+      "silver",
+      "producer"
+    ],
+    "Copper": [
+      "copper",
+      "producer"
+    ],
+    "Uranium": [
+      "uranium",
+      "producer"
+    ],
+    "Oil & Gas E&P": [
+      "oil_gas",
+      "producer"
+    ],
+    "Oil & Gas Integrated": [
+      "oil_gas",
+      "producer"
+    ],
+    "Oil & Gas Drilling": [
+      "oil_gas",
+      "services"
+    ],
+    "Oil & Gas Equipment & Services": [
+      "oil_gas",
+      "services"
+    ],
+    "Oil & Gas Midstream": [
+      "oil_gas",
+      "midstream"
+    ],
+    "Oil & Gas Refining & Marketing": [
+      "oil_gas",
+      "refining"
+    ]
+  },
+  "name_keyword_to_commodity": {
+    "lithium": "lithium",
+    "platinum": "platinum",
+    "palladium": "palladium",
+    "uranium": "uranium",
+    "copper": "copper",
+    "silver": "silver",
+    "gold": "gold",
+    "iron ore": "iron_ore",
+    "nickel": "nickel"
+  },
+  "universes": {
+    "au_total_market": {
+      "name": "AU Total Market",
+      "region": "AU",
+      "filter": {
+        "region": "AU",
+        "quote_type": [
+          "EQUITY"
+        ]
+      },
+      "peer_key": "sector",
+      "benchmark": "VAS.AX",
+      "cap_scheme": "AU",
+      "rank_keys": {
+        "screener": "au_screener",
+        "benchmark": "au_benchmark"
+      },
+      "studies": [
+        "screener",
+        "benchmark",
+        "breadth"
+      ],
+      "breadth_groups": [
+        "cap",
+        "sector",
+        "industry"
+      ],
+      "tv_prefix": "ASX"
+    },
+    "us_total_market": {
+      "name": "US Total Market",
+      "region": "US",
+      "filter": {
+        "region": "US",
+        "quote_type": [
+          "EQUITY"
+        ]
+      },
+      "peer_key": "sector",
+      "benchmark": "SPY",
+      "cap_scheme": "US",
+      "rank_keys": {
+        "screener": "us_screener",
+        "benchmark": "us_benchmark"
+      },
+      "studies": [
+        "screener",
+        "benchmark",
+        "breadth"
+      ],
+      "breadth_groups": [
+        "cap",
+        "sector",
+        "industry"
+      ],
+      "breadth_layers": {
+        "sp": {
+          "index_any": [
+            "SP500",
+            "NDX100"
+          ]
+        },
+        "rus": {
+          "not_index_any": [
+            "SP500",
+            "NDX100"
+          ]
+        }
+      },
+      "legacy_result_names": {
+        "screener": "us_sp500",
+        "benchmark": "us_sp500",
+        "breadth": "us_total_market"
+      }
+    },
+    "nasdaq100": {
+      "name": "Nasdaq 100",
+      "region": "US",
+      "filter": {
+        "region": "US",
+        "index_any": [
+          "NDX100"
+        ]
+      },
+      "peer_key": "sector",
+      "benchmark": "^NDX",
+      "cap_scheme": "US",
+      "rank_keys": {
+        "screener": "us_screener",
+        "benchmark": "us_benchmark"
+      },
+      "studies": [
+        "screener",
+        "benchmark"
+      ],
+      "legacy_result_names": {
+        "screener": "nasdaq100",
+        "benchmark": "us_nasdaq_benchmark"
+      }
+    },
+    "all_major_commodities": {
+      "name": "All Major Commodities",
+      "region": "AU/US",
+      "filter": {
+        "region": [
+          "AU",
+          "US"
+        ],
+        "commodity_any": [
+          "gold",
+          "silver",
+          "copper",
+          "platinum",
+          "palladium",
+          "uranium",
+          "lithium",
+          "oil_gas",
+          "iron_ore",
+          "nickel"
+        ],
+        "quote_type": [
+          "EQUITY"
+        ]
+      },
+      "peer_key": "commodity",
+      "benchmark": "per_commodity",
+      "cap_scheme": "commodity",
+      "rank_keys": {
+        "screener": "comm_screener",
+        "benchmark": "comm_benchmark"
+      },
+      "studies": [
+        "screener",
+        "benchmark",
+        "breadth"
+      ],
+      "breadth_groups": [
+        "cap",
+        "commodity",
+        "type"
+      ]
+    },
+    "uranium": {
+      "name": "Uranium",
+      "region": "AU/US",
+      "filter": {
+        "region": [
+          "AU",
+          "US"
+        ],
+        "commodity_any": [
+          "uranium"
+        ],
+        "quote_type": [
+          "EQUITY"
+        ]
+      },
+      "peer_key": "commodity",
+      "benchmark": "URA",
+      "cap_scheme": "commodity",
+      "rank_keys": {
+        "screener": "comm_screener",
+        "benchmark": "comm_benchmark"
+      },
+      "studies": [
+        "screener",
+        "benchmark"
+      ]
+    },
+    "au_gold_miners": {
+      "name": "AU Gold Miners",
+      "region": "AU",
+      "filter": {
+        "region": "AU",
+        "commodity_any": [
+          "gold"
+        ],
+        "quote_type": [
+          "EQUITY"
+        ]
+      },
+      "peer_key": "commodity",
+      "benchmark": "GDX",
+      "cap_scheme": "commodity",
+      "rank_keys": {
+        "screener": "comm_screener",
+        "benchmark": "comm_benchmark"
+      },
+      "studies": [
+        "screener",
+        "benchmark"
+      ],
+      "tv_prefix": "ASX"
+    }
+  },
+  "rrg": {
+    "au": {
+      "benchmark": "^AXJO",
+      "theme": "rrg_au"
+    },
+    "us": {
+      "benchmark": "SPY",
+      "theme": "rrg_us"
+    },
+    "us_rsp": {
+      "benchmark": "RSP",
+      "theme": "rrg_us"
+    },
+    "dow": {
+      "benchmark": "^DJI",
+      "theme": "rrg_dow"
+    }
+  },
+  "commodity_groups": {
+    "metals": {
+      "name": "Metals",
+      "commodities": [
+        "gold",
+        "silver",
+        "copper",
+        "platinum",
+        "palladium",
+        "iron_ore",
+        "nickel"
+      ],
+      "benchmark": "XME"
+    },
+    "energy": {
+      "name": "Energy",
+      "commodities": [
+        "uranium",
+        "lithium",
+        "oil_gas"
+      ],
+      "benchmark": "XLE"
+    },
+    "other": {
+      "name": "Other",
+      "commodities": [],
+      "benchmark": "PICK"
+    }
+  },
+  "commodity_labels": {
+    "gold": "Gold",
+    "silver": "Silver",
+    "copper": "Copper",
+    "platinum": "Platinum",
+    "palladium": "Palladium",
+    "uranium": "Uranium",
+    "lithium": "Lithium",
+    "oil_gas": "Oil & Gas",
+    "iron_ore": "Iron Ore",
+    "nickel": "Nickel"
+  },
+  "commodity_types": [
+    "producer",
+    "explorer",
+    "royalty",
+    "services",
+    "midstream",
+    "refining",
+    "ETF"
+  ]
+}

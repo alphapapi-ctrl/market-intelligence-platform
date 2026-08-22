@@ -1,6 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-44,3,CHTR,Charter Communications,Telecommunications,Cable & Other Pay Television Services,large,142.5,0.0,-0.0204,-0.401,-0.2872,FLAT,-29.4,-66.35,-48.15,-66.86,47.2,66.86,1.5282,HIGH,EARLY,165.684,199.139,224.8605,0,-46.8407,WEAK,18.7907
-47,9,TRI,Thomson Reuters,Technology,Computer Software,large,87.35,2.27,0.0831,-0.1638,-0.1497,FLAT,-34.55,-54.06,-46.71,-61.95,43.2,56.66,1.6783,HIGH,EARLY,89.5419,90.148,125.0842,0,-41.2186,WEAK,17.9272
-68,0,REGN,Regeneron Pharmaceuticals,Health Care,Biotechnology,large,630.3,55.56,-0.1194,-0.123,-0.0619,FLAT,-10.29,2.93,-35.73,-22.39,48.4,33.89,1.9061,HIGH,EARLY,710.945,736.7266,691.2999,0,4.1858,LAGGARD,12.5401
-72,0,CTSH,Cognizant,Technology,EDP Services,large,50.88,13.64,0.1329,-0.2333,-0.4029,STRONG_UP,-27.32,-35.85,-24.19,-46.71,49.2,39.49,1.5079,HIGH,EARLY,51.4676,56.8784,68.6661,0,-44.6653,WEAK,11.9596
-73,4,DXCM,DexCom,Health Care,Medical/Dental Instruments,large,66.95,0.0,0.1526,0.1091,0.0592,STRONG_UP,14.46,-23.35,-48.77,-38.75,48.8,36.9,2.3561,HIGH,SHIFT,60.94,63.1362,68.0172,0,-30.8743,WEAK,11.2417

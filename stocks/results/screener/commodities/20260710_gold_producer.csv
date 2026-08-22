@@ -1,4 +1,0 @@
-rank,delta_rank,ticker,name,commodity,type,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-2,160,PZG,Paramount Gold Nevada Ord Shs,gold,producer,small,1.19,100.0,0.0601,-0.0332,-0.0733,STRONG_UP,4.39,64.59,,-59.55,45.6,61.72,,LOW,-,1.1745,1.2976,1.4666,0,47.7219,LAGGARD,22.6519
-4,200,EMR.AX,Emerald Resources,gold,producer,mid,5.31,66.67,-0.0417,0.0285,0.1088,STRONG_DOWN,-15.71,43.9,,-42.87,54.15,58.57,,LOW,EARLY,5.7365,5.8098,5.8668,0,40.5893,LAGGARD,19.8264
-10,303,CTGO,Contango ORE,gold,producer,small,16.77,0.0,0.0417,0.0355,0.0115,STRONG_UP,-39.2,-16.02,,-55.2,51.6,73.95,,LOW,-,16.1775,19.4542,23.6072,0,-11.1811,WEAK,8.7801

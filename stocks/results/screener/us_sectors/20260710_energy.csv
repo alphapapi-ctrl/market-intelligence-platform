@@ -1,5 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-5,94,FET,FORUM ENERGY TECHNOLOGIES INC,Energy,,small,48.59,100.0,0.0776,-0.1026,-0.043,FLAT,27.03,134.85,,-27.87,56.0,44.32,,LOW,-,49.965,53.5126,45.0976,1,170.3852,LEADER,39.3754
-31,932,KMI,Kinder Morgan,Energy,Oil & Gas Storage & Transportation,large,32.4,66.67,0.054,0.0375,0.1803,FLAT,22.28,21.42,,-10.08,52.8,22.31,,LOW,-,32.081,32.2,29.7365,1,50.7,CONTENDER,14.9572
-54,1220,CRK,COMSTOCK RESOURCES INC,Energy,,mid,13.69,0.0,-0.078,0.0841,-0.0913,FLAT,-38.0,-38.19,,-53.71,48.4,52.49,,LOW,EARLY,13.782,14.325,19.3835,0,-35.2181,WEAK,8.0105
-61,1148,DEC,DIVERSIFIED ENERGY COMPANY,Energy,,small,13.68,33.33,-0.054,-0.0375,0.043,STRONG_DOWN,5.83,2.33,,-30.22,52.8,41.12,,LOW,-,13.4415,14.5053,13.9153,0,2.9961,WEAK,5.7124

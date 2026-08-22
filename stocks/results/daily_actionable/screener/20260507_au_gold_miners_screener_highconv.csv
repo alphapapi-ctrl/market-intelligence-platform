@@ -1,3 +1,0 @@
-rank,delta_rank,ticker,name,sector,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-27,9,VAU.AX,Vault Minerals Limited,Gold,mid,4.45,54.61,-0.0089,0.0503,-0.0187,FLAT,-2.23,46.14,57.76,-41.81,50.2,57.89,3.8556,HIGH,EARLY,4.6525,4.7085,4.5626,0,40.0103,LAGGARD,24.5562
-37,-2,RRL.AX,Regis Resources Limited,Gold,mid,6.51,50.66,-0.0592,-0.0477,-0.0201,STRONG_DOWN,5.24,42.75,215.81,-39.58,53.36,60.2,2.7054,HIGH,EARLY,7.2975,7.4517,6.586,0,37.8949,LAGGARD,22.1879

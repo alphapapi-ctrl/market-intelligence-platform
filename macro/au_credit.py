@@ -30,6 +30,10 @@ import requests
 import pandas as pd
 import numpy as np
 from datetime import datetime
+import os as _os, sys as _sys
+_MARKETDB_BASE = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+if _MARKETDB_BASE not in _sys.path:
+    _sys.path.insert(0, _MARKETDB_BASE)   # marketdb lives one level up
 
 try:
     from config import FRED_API_KEY
@@ -450,10 +454,10 @@ def run_au_credit():
         'alerts'       : alerts,
     }
 
-    json_file = os.path.join(RESULTS_DIR, f"{today}_au_credit.json")
-    with open(json_file, 'w') as f:
-        json.dump(snapshot, f, indent=2, default=str)
-    print(f"Saved: {json_file}")
+    from marketdb import results as _mr
+    _iso = f"{today[:4]}-{today[4:6]}-{today[6:]}"
+    _mr.save_report('au_credit', _iso, payload=snapshot)
+    print(f"Saved: marketdb au_credit {_iso}")
     return snapshot
 
 

@@ -1,8 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-296,411,MSB.AX,Mesoblast Limited,Health technology,Biotechnology,mid,2.06,69.09,0.0564,0.048,0.0401,STRONG_UP,-25.63,23.35,88.99,-36.48,46.25,46.03,1.7877,HIGH,PROGRESS,2.0385,2.089,2.3734,0,23.4649,LAGGARD,20.4322
-340,453,OBM.AX,Ora Banda Mining Ltd.,Non-energy minerals,Precious metals,mid,1.29,56.88,0.1543,0.0247,0.0871,FLAT,0.0,38.71,263.38,-39.1,50.2,95.2,1.5906,HIGH,EARLY,1.2935,1.3532,1.2984,0,20.412,LAGGARD,19.3675
-882,45,HUB.AX,HUB24 Limited,Technology services,Packaged software,mid,78.73,59.18,-0.0183,-0.0174,0.044,STRONG_DOWN,-18.85,-1.8,76.51,-35.43,52.57,46.29,1.9452,HIGH,EARLY,82.836,83.8288,94.1993,0,-2.0473,LAGGARD,12.0138
-1206,176,REG.AX,Regis Healthcare Ltd.,Health services,Medical/Nursing services,mid,6.16,38.89,0.0222,-0.012,0.0638,FLAT,-15.29,-17.33,50.58,-37.13,47.04,49.64,1.5394,HIGH,EARLY,6.2645,6.2564,6.7442,0,-16.42,WEAK,9.3873
-1272,237,FBU.AX,Fletcher Building Limited,Non-energy minerals,Construction materials,mid,2.68,29.36,0.0137,0.152,0.0574,FLAT,-15.46,-7.9,0.0,-32.74,43.08,30.95,1.814,HIGH,SHIFT,2.6045,2.477,2.8447,0,-11.0014,WEAK,8.9189
-1334,43,PMV.AX,Premier Investments Limited,Retail trade,Apparel/Footwear retail,mid,14.17,36.36,-0.004,0.1444,0.1552,STRONG_DOWN,0.07,-23.66,-49.49,-49.1,46.25,32.43,1.5698,HIGH,SHIFT,12.966,12.573,14.8506,0,-33.7477,WEAK,8.3331
-1663,-51,CLW.AX,Charter Hall Long WALE REIT,Finance,Real estate investment trusts,mid,3.7,32.47,-0.0122,0.0567,0.0805,STRONG_DOWN,-5.46,-8.1,23.3,-25.05,43.48,19.0,1.5607,HIGH,SHIFT,3.5395,3.5112,3.8266,0,-18.5279,WEAK,3.6974

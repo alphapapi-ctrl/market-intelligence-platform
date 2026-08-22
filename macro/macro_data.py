@@ -36,16 +36,57 @@ def change_fred(series_id):
         return None
     return round(float(data.iloc[-1] - data.iloc[-2]), 4)
 
-# ── Fetch yfinance data ───────────────────────────────────────────────────────
-def get_price(ticker):
-    try:
-        df = yf.download(ticker, start=START_3M, auto_adjust=True, progress=False)
-        if df.empty:
-            return None
-        return df['Close']
-    except Exception as e:
-        print(f"yfinance error {ticker}: {e}")
+# ── Price data: marketdb store first, yfinance fallback ──────────────────────
+# Every macro ticker is registered in the store under role 'macro' and refreshed by the
+# daily marketdb run, so a macro report normally makes no Yahoo calls at all. Anything
+# missing (new ticker, store not yet built) falls back to a single yfinance download.
+import sys as _sys
+_BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _BASE not in _sys.path:
+    _sys.path.insert(0, _BASE)
+try:
+    from marketdb import prices as _mp, fetch as _mf, db as _mdb
+    _STORE = True
+except Exception as _e:  # marketdb unavailable -> pure yfinance behaviour
+    print(f"marketdb unavailable ({_e}); using yfinance directly")
+    _STORE = False
+
+_PRICE_CACHE = {}
+
+
+def _store_close(ticker, start):
+    """Adjusted-close Series from the store, refreshed from Yahoo if it is missing or stale."""
+    if not _STORE:
         return None
+    try:
+        s = _mp.get_prices([ticker], start, None)[ticker].dropna()
+        stale_cut = (datetime.today() - timedelta(days=5)).strftime('%Y-%m-%d')
+        if s.empty or s.index[-1].strftime('%Y-%m-%d') < stale_cut:
+            with _mdb.session() as con:
+                _mf.ensure_securities([ticker], con, role='macro')
+                _mf.update_prices([ticker], con, log=lambda m: None)
+            s = _mp.get_prices([ticker], start, None)[ticker].dropna()
+        return s if not s.empty else None
+    except Exception as e:
+        print(f"marketdb read error {ticker}: {e}")
+        return None
+
+
+def get_price(ticker, start=None):
+    start = start or START_3M
+    key = (ticker, start)
+    if key in _PRICE_CACHE:
+        return _PRICE_CACHE[key]
+    data = _store_close(ticker, start)
+    if data is None:
+        try:
+            df = yf.download(ticker, start=start, auto_adjust=True, progress=False)
+            data = None if df.empty else df['Close']
+        except Exception as e:
+            print(f"yfinance error {ticker}: {e}")
+            data = None
+    _PRICE_CACHE[key] = data
+    return data
 
 def latest_price(ticker):
     data = get_price(ticker)
@@ -70,13 +111,22 @@ def price_change_pct(ticker, periods=5):
 
 # ── Snapshot and alerts ───────────────────────────────────────────────────────
 def save_snapshot(data):
-    os.makedirs('results', exist_ok=True)
+    """Rolling 'previous run' snapshot -> marketdb reports(kind='macro_snapshot', date='latest'),
+    plus a dated copy for history."""
     snapshot = {k: v for k, v in data.items() if v is not None}
-    with open(SNAPSHOT_FILE, 'w') as f:
-        json.dump(snapshot, f)
+    from marketdb import results as _mr
+    _mr.save_report('macro_snapshot', 'latest', payload=snapshot)
+    _mr.save_report('macro_snapshot', datetime.today().strftime('%Y-%m-%d'), payload=snapshot)
 
 def load_snapshot():
-    if os.path.exists(SNAPSHOT_FILE):
+    try:
+        from marketdb import results as _mr
+        _, payload, _ = _mr.load_report('macro_snapshot', 'latest')
+        if payload:
+            return payload
+    except Exception as e:
+        print(f"marketdb snapshot read error: {e}")
+    if os.path.exists(SNAPSHOT_FILE):          # legacy file, first run after migration
         with open(SNAPSHOT_FILE) as f:
             return json.load(f)
     return {}
@@ -210,8 +260,8 @@ def collect_macro_data():
     spx_cycle   = get_price('^GSPC')
 
     if spx_cycle is not None:
-        spx_full = yf.download('^GSPC', start=CYCLE_START, auto_adjust=True, progress=False)['Close']
-        if not spx_full.empty:
+        spx_full = get_price('^GSPC', start=CYCLE_START)
+        if spx_full is not None and not spx_full.empty:
             spx_val_start = float(spx_full.iloc[0].iloc[0] if isinstance(spx_full.iloc[0], pd.Series) else spx_full.iloc[0])
             spx_val_now   = float(spx_full.iloc[-1].iloc[0] if isinstance(spx_full.iloc[-1], pd.Series) else spx_full.iloc[-1])
 
@@ -431,15 +481,15 @@ def collect_macro_data():
 
     # ── A/D line divergence from breadth history ──────────────────────────────
     print("  A/D line divergence...")
-    breadth_file = os.path.join(
-        os.path.dirname(os.path.abspath(__file__)),
-        '..', 'stocks', 'results', 'breadth', 'us_total_market',
-        'us_total_market_breadth_history.csv'
-    )
-    breadth_file = os.path.normpath(breadth_file)
-    if os.path.exists(breadth_file):
+    try:
+        from marketdb import results as _mr
+        bh_all = _mr.breadth_history('us_total_market')
+    except Exception as e:
+        print(f"  breadth read error: {e}")
+        bh_all = None
+    if bh_all is not None and len(bh_all):
         try:
-            bh = pd.read_csv(breadth_file).tail(63)
+            bh = bh_all.tail(63).copy()
             if len(bh) >= 22 and 'leader' in bh.columns and 'laggard' in bh.columns and 'weak' in bh.columns:
                 bh['ad_daily'] = bh['leader'].astype(int) - bh['laggard'].astype(int) - bh['weak'].astype(int)
                 bh['ad_line']  = bh['ad_daily'].cumsum()

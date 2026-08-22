@@ -12,6 +12,10 @@ except ImportError:
     from macro.config import FRED_API_KEY, ANTHROPIC_API_KEY
 
 from fredapi import Fred
+import os as _os, sys as _sys
+_MARKETDB_BASE = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
+if _MARKETDB_BASE not in _sys.path:
+    _sys.path.insert(0, _MARKETDB_BASE)   # marketdb lives one level up
 
 RESULTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'results', 'consumer_credit')
 
@@ -333,18 +337,12 @@ def run_consumer_credit():
         'hhdc_quarter' : hhdc_quarter,
     }
 
-    # Save JSON snapshot
-    json_file = os.path.join(RESULTS_DIR, f"{today}_consumer_credit.json")
-    with open(json_file, 'w') as f:
-        json.dump(snapshot, f, indent=2, default=str)
-    print(f"Saved: {json_file}")
-
-    # Save alerts to shared macro alerts file
-    alerts_file = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                               'results', 'credit_alerts.json')
-    with open(alerts_file, 'w') as f:
-        json.dump({'date': today, 'alerts': alerts}, f, indent=2)
-    print(f"Alerts saved: {alerts_file}")
+    # Save snapshot + shared alerts to marketdb
+    from marketdb import results as _mr
+    _iso = f"{today[:4]}-{today[4:6]}-{today[6:]}"
+    _mr.save_report('consumer_credit', _iso, payload=snapshot)
+    _mr.save_report('credit_alerts', 'latest', payload={'date': today, 'alerts': alerts})
+    print(f"Saved: marketdb consumer_credit {_iso}")
 
     # Build text report
     report_lines = [
@@ -403,11 +401,9 @@ def run_consumer_credit():
 
     report_lines += ['', '═' * 70]
     report   = '\n'.join(report_lines)
-    rpt_file = os.path.join(RESULTS_DIR, f"{today}_consumer_credit_report.txt")
-    with open(rpt_file, 'w', encoding='utf-8') as f:
-        f.write(report)
+    _mr.save_report('consumer_credit', _iso, text=report, payload=snapshot)
     print(report)
-    print(f"Report: {rpt_file}")
+    print(f"Report: marketdb consumer_credit {_iso}")
 
     return snapshot
 

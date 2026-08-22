@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-70,0,SLI.V,STANDARD LITHIUM LTD,lithium,producer,mid,5.12,1.1226,0.9739,1.0072,0.6066,FLAT,-4.66,157.29,194.25,-43.01,54.4,84.38,1.5688,HIGH,PROGRESS,4.9895,5.4006,5.328,0,101.403,WEAK,38.8924

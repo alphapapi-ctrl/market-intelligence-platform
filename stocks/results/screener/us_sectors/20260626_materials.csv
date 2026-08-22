@@ -1,6 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-4,0,HL,HECLA MINING,Materials,,large,15.15,100.0,-0.0391,-0.0403,0.0006,FLAT,-25.34,152.81,,-55.81,53.2,68.18,,LOW,EARLY,15.9415,17.3709,17.8592,0,119.2396,LAGGARD,44.3837
-31,0,AMR,ALPHA METALLURGICAL RESOURCE INC,Materials,,mid,168.18,75.0,-0.088,-0.1261,-0.1534,STRONG_UP,-19.43,68.57,,-34.85,51.2,61.16,,LOW,EARLY,194.3455,190.936,186.3158,0,57.4013,LAGGARD,22.6994
-43,0,KWR,QUAKER HOUGHTON CORP,Materials,,mid,156.59,25.0,0.0984,0.1976,0.4165,STRONG_DOWN,9.81,37.18,,-36.46,48.4,37.68,,LOW,-,145.6475,142.1116,139.7525,1,47.7537,LAGGARD,18.5593
-57,0,LXU,LSB INDUSTRIES INC,Materials,,small,10.69,50.0,-0.0539,-0.1326,-0.299,STRONG_UP,25.32,39.92,,-36.67,50.4,55.25,,LOW,-,12.002,13.351,10.9356,0,36.417,LAGGARD,15.553
-88,0,AVY,Avery Dennison,Materials,Paper & Plastic Packaging Products & Materials,large,164.61,0.0,0.0931,0.1663,0.1528,FLAT,-8.13,-4.33,,-21.62,48.0,25.06,1.0054,MED,SHIFT,158.128,160.4753,170.6564,0,-8.2907,WEAK,6.9525

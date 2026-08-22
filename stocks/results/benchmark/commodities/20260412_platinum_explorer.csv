@@ -1,3 +1,0 @@
-rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-269,-20,POD.AX,Podium Minerals,platinum,explorer,small,0.048,0.9226,1.015,0.8279,0.6407,STRONG_UP,-49.47,77.78,-7.69,-60.0,36.55,101.88,0.2857,LOW,-,0.0485,0.0589,0.0624,0,27.9032,WEAK,17.3315
-325,-1,IPT.AX,Impact Minerals,platinum,explorer,small,0.049,0.5086,0.8634,0.8049,0.9533,FLAT,-24.62,-2.0,-67.57,-51.0,26.1,76.4,0.2862,LOW,-,0.0576,0.0602,0.0663,0,-0.6832,WEAK,9.2847

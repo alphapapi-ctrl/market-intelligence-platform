@@ -1,4 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-33,3,ZS,Zscaler,Technology,EDP Services,large,184.6,15.91,-0.006,0.2629,-0.0514,FLAT,-32.88,-28.25,12.45,-64.89,50.4,64.74,2.8943,HIGH,SHIFT,154.6595,144.9708,223.6395,0,-21.9964,WEAK,23.9425
-44,3,INTU,Intuit,Technology,Computer Software,large,304.35,0.0,-0.2999,-0.3405,-0.4362,STRONG_UP,-53.88,-59.2,-48.53,-62.05,46.8,64.5,2.369,HIGH,EARLY,381.107,399.3462,554.3279,0,-42.9518,WEAK,18.6569
-88,1,ORLY,O'Reilly Automotive,Consumer Discretionary,Auto & Home Supply Stores,large,89.87,31.25,-0.0299,-0.0268,-0.0245,STRONG_DOWN,-10.51,-0.98,40.79,-19.03,52.0,28.24,1.5803,HIGH,EARLY,92.576,92.0576,96.7797,0,-1.803,WEAK,7.5817

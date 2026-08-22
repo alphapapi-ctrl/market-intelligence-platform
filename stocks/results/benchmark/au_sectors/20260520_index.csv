@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-1251,110,VAS.AX,Vanguard Australian Shares ETF,index,index,ETF,106.96,1.0,1.0,1.0,1.0,FLAT,1.02,6.5,16.67,-8.56,50.0,15.27,2.4326,HIGH,-,108.0415,107.8013,108.0008,0,21.2969,WEAK,8.0887

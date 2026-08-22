@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,commodity,type,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-127,-25,29M.AX,29Metals,copper,producer,mid,0.305,0.8607,1.2209,0.7744,0.6655,STRONG_UP,-34.41,96.77,-38.38,-66.41,49.41,98.22,1.8656,HIGH,PROGRESS,0.245,0.3193,0.4048,0,48.6827,WEAK,34.6948

@@ -2,7 +2,7 @@
 stocks/asx_substantial_holders.py
 =================================
 Scrapes substantial holder notices (ASIC forms 603/604/605) from the ASX
-daily announcements pages and accumulates them into a history CSV.
+daily announcements pages and accumulates them in marketdb (asx_holder_notices).
 
 Forms:
     603 — Becoming a substantial holder      (accumulation signal)
@@ -24,8 +24,6 @@ import pandas as pd
 from datetime import datetime
 
 BASE = os.path.dirname(os.path.abspath(__file__))
-RESULTS_DIR = os.path.join(BASE, 'results', 'substantial_holders')
-HISTORY_FILE = os.path.join(RESULTS_DIR, 'substantial_holders_history.csv')
 
 HEADERS = {'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) '
                          'AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36'}
@@ -96,8 +94,10 @@ def parse_notices(html):
 
 
 def run():
-    os.makedirs(RESULTS_DIR, exist_ok=True)
-    today = datetime.today().strftime('%Y%m%d')
+    """Scrape today's + previous day's notices and upsert them into marketdb (asx_holder_notices)."""
+    import sys
+    sys.path.insert(0, os.path.dirname(BASE))
+    from marketdb import db, results as R
 
     all_rows = []
     for url in URLS:
@@ -110,38 +110,21 @@ def run():
 
     if not all_rows:
         print("No notices found — page structure may have changed or no filings today")
+        return None
 
     df_new = pd.DataFrame(all_rows)
+    df_new['ann_id'] = df_new['ann_id'].astype(str)
+    df_new = df_new.drop_duplicates(subset='ann_id')
+    with db.session() as con:
+        before = db.scalar("SELECT COUNT(*) FROM asx_holder_notices", con=con) or 0
+        R.save_holder_notices(df_new, con)
+        after = db.scalar("SELECT COUNT(*) FROM asx_holder_notices", con=con) or 0
+    print(f"History: {after} notices total in marketdb ({after - before} new)")
 
-    # merge into history, dedupe on announcement id
-    if os.path.exists(HISTORY_FILE):
-        hist = pd.read_csv(HISTORY_FILE, dtype={'ann_id': str})
-        combined = pd.concat([hist, df_new], ignore_index=True)
-    else:
-        combined = df_new
-
-    if not combined.empty:
-        combined['ann_id'] = combined['ann_id'].astype(str)
-        combined = (combined.drop_duplicates(subset='ann_id', keep='first')
-                            .sort_values(['date', 'time'], ascending=False))
-        combined.to_csv(HISTORY_FILE, index=False)
-
-    # dated snapshot of what's new this run
-    if not df_new.empty:
-        snap_file = os.path.join(RESULTS_DIR, f"{today}_substantial_holders.csv")
-        df_new.drop_duplicates(subset='ann_id').to_csv(snap_file, index=False)
-        print(f"Saved: {snap_file}")
-
-    n_hist = len(combined) if not combined.empty else 0
-    print(f"History: {n_hist} notices total -> {HISTORY_FILE}")
-
-    # summary by action
-    if not df_new.empty:
-        print("\nThis run:")
-        for action, grp in df_new.drop_duplicates(subset='ann_id').groupby('action'):
-            print(f"  {action:<8} ({grp.iloc[0]['form']}): {', '.join(sorted(grp['ticker'].unique()))}")
-
-    return combined
+    print("\nThis run:")
+    for action, grp in df_new.groupby('action'):
+        print(f"  {action:<8} ({grp.iloc[0]['form']}): {', '.join(sorted(grp['ticker'].unique()))}")
+    return df_new
 
 
 if __name__ == '__main__':

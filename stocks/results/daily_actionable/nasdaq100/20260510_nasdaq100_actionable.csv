@@ -1,5 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,peer_rs_score,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-4,0,MU,Micron Technology,Technology,Semiconductors,large,746.81,95.45,0.2559,0.5822,0.6988,STRONG_DOWN,213.61,711.14,520.3,-30.28,57.83,76.81,1.5207,HIGH,-,525.3915,448.8925,290.4465,1,535.4122,LEADER,136.9789
-6,0,INTC,Intel,Technology,Semiconductors,large,124.92,90.91,0.2646,0.8092,1.2371,STRONG_DOWN,235.45,463.21,321.15,-24.17,52.61,86.56,2.0712,HIGH,-,84.366,62.1138,42.3369,1,281.5328,LEADER,77.1889
-28,0,MNST,Monster Beverage,Consumer Staples,Soft Drinks,large,86.29,100.0,0.1447,0.1006,0.0755,STRONG_UP,30.13,40.63,55.59,-17.7,56.22,37.15,2.6793,HIGH,-,76.854,76.0022,72.4022,1,61.485,LEADER,26.5119
-33,0,GILD,Gilead Sciences,Health Care,Biotechnology,large,131.33,88.89,-0.0102,-0.0018,-0.018,FLAT,7.74,29.86,112.07,-17.54,52.21,25.72,1.5878,HIGH,-,133.887,138.7251,126.3012,1,60.6165,LEADER,24.8145

@@ -1,3 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-29,732,CHEF,CHEFS WAREHOUSE INC,Consumer Staples,,mid,94.36,1.2332,1.0059,1.252,1.3676,STRONG_DOWN,47.55,49.64,,-20.49,55.6,47.32,,LOW,-,86.3685,79.101,66.3642,1,58.3204,TREND+LEAD,17.6091
-63,1451,GIS,General Mills,Consumer Staples,Packaged Foods & Meats,large,35.4,0.6121,1.0772,1.0724,0.8757,STRONG_UP,-21.73,-25.73,,-36.85,46.8,22.9,,LOW,SHIFT,33.7175,34.13,41.7177,0,-52.5893,WEAK,5.0285

@@ -1,2 +1,0 @@
-rank,delta_rank,ticker,name,sector,industry,cap_band,close,rs_ratio,rs_5,rs_21,rs_63,rs_trend,ret_6m,ret_12m,ret_24m,max_dd,persist_frac,vol_63,rel_vol,vol_label,acc_watch,sma20,sma50,sma200,pass_trend,mqs,regime_label,score_final
-44,1123,GPN,Global Payments,Financials,Transaction & Payment Processing Services,large,65.09,0.6221,0.9708,0.8708,0.7329,STRONG_UP,-20.17,-13.63,-31.34,-29.95,46.0,39.33,0.5743,LOW,EARLY,68.7713,69.1136,75.1475,0,-15.9392,WEAK,9.1779

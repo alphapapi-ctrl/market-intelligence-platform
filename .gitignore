@@ -30,3 +30,12 @@ __pycache__/
 # RAG reference documents (local only — paid/personal content)
 docs/fa_reference/
 sentiment/cache/
+
+# Personal AI context files
+AI.md
+**/AI.md
+
+# marketdb — SQLite price/results store (rebuild with: python -m marketdb.migrate_csv + run_daily --full)
+data/market.db
+data/market.db-wal
+data/market.db-shm
