@@ -34,6 +34,7 @@ python -m marketdb.run_daily                  # daily: update prices, run every 
 python -m marketdb.run_daily --universe au_total_market --studies screener
 python -m marketdb.refresh_universe           # monthly: new listings, delistings, sectors, caps, indices
 python -m marketdb.refresh_universe --dry-run # preview the monthly changes
+python -m marketdb.run_daily --repair-splits   # one-off: back-adjust splits Yahoo left unadjusted (runs after every fetch anyway)
 ```
 
 The daily run performs the monthly refresh automatically when the universe is more than 31 days

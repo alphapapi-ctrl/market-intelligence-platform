@@ -125,7 +125,25 @@ Drives incremental fetching and delisting detection.
 4. **Adjustment drift detection.** The 10-day overlap is compared with stored `adj_close`; a
    >0.1 % mismatch means a dividend/split happened → that ticker's full history is re-fetched.
    This is what makes incremental fetching safe with adjusted prices.
-5. **Coverage guards** (ported from the breadth scripts): a run records fetched/expected; each
+   **Split repair (2026-08-23).** Yahoo sometimes files a split but leaves the earlier bars at the
+   old scale — every ASX consolidation in the store (MPP.AX 1-for-40: 4c history against a $1
+   share, "+2226 % in 6 months") and US splits for a few days after the event (MNST, WLFC) — and
+   its feed around a split can carry stray bars already on the new scale. After every fetch
+   `fetch.find_unadjusted_splits` looks, for each split on file (≥ 1.5×), for the bar near the
+   split date that moves ~1/split against the previous bar, takes medians either side as the old
+   and new levels, and classifies each bar in a ±7-bar window by the level it sits on. A ticker
+   that is still unadjusted is first **re-fetched in full** (Yahoo may have caught up — that also
+   replaces half-adjusted bars), then whatever Yahoo still serves raw is **back-adjusted
+   arithmetically** (open/high/low/close/adj_close × factor, volume ÷ factor) for all bars before
+   the window plus the old-scale bars inside it; lone stray bars at level × factor^±1 next to a
+   split are fixed individually. `find_price_islands` separately scales back short blocks (≤ 10
+   bars) that start with a ≥ 1.8× jump and end with its exact inverse, when the ratio is a clean
+   2/3/4/5/10…, the jump is ≥ 8× the stock's typical daily move and price ≥ $0.10 — this is what
+   fixes MNST-style glitches without touching tick-flipping penny stocks, where 0.001 → 0.002 →
+   0.001 is a real move. Both are idempotent (once fixed nothing is detected) and run inside
+   `update_prices` on the tickers fetched; `run_daily --repair-splits` runs them store-wide. First
+   pass on 2026-08-23: 20 tickers back-adjusted, MNST island fixed. Not fixable: stale prints on
+   illiquid names (MPP.AX's flat 0.043 through its trading halt is what Yahoo recorded). (ported from the breadth scripts): a run records fetched/expected; each
    study refuses to write if its universe coverage is below 80 %, and breadth drops any day whose
    `total` is below 90 % of the trailing-60-day median.
 6. **Delisting.** 10 consecutive empty fetches → `fetch_log.status='stale'`; the monthly refresh

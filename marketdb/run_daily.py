@@ -141,6 +141,8 @@ def main(argv=None) -> int:
     ap.add_argument("--refresh-universe", action="store_true")
     ap.add_argument("--no-refresh-check", action="store_true")
     ap.add_argument("--rebuild-breadth", action="store_true", help="recompute the full breadth history from the price store")
+    ap.add_argument("--repair-splits", action="store_true",
+                    help="scan the whole store for splits Yahoo left unadjusted and back-adjust them (then exit)")
     args = ap.parse_args(argv)
 
     t0 = time.time()
@@ -154,6 +156,19 @@ def main(argv=None) -> int:
         if db.is_empty(con):
             _log("ERROR: " + db.BOOTSTRAP_HINT)
             return 2
+        if args.repair_splits:
+            isl = fetch.repair_price_islands(con, None, log=_log)
+            _log(f"island repair: {len(isl)} ticker(s) had stray price blocks scaled back")
+            found = fetch._dedupe_splits(fetch.find_unadjusted_splits(con))
+            tick = sorted({f["ticker"] for f in found})
+            _log(f"split repair: {len(tick)} ticker(s) with an unadjusted split on file: {', '.join(tick)}")
+            if tick:
+                # full re-fetch first (Yahoo may have adjusted since); update_prices then back-adjusts
+                # whatever Yahoo still serves raw
+                summ = fetch.update_prices(tick, con, full=True, force=True, log=_log)
+                _log(f"split repair: {len(summ.split_repaired)} ticker(s) back-adjusted arithmetically — "
+                     "re-run the studies to re-score them")
+            return 0
         if not args.no_refresh_check:
             maybe_refresh_universe(con, force=args.refresh_universe)
         if not args.skip_fetch:
