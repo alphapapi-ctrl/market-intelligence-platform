@@ -110,9 +110,12 @@ def run_universe(con, key: str, studies: list[str], end: str | None, min_cov: fl
                 out["breadth"] = n
             db.finish_run(run_id, "ok", con)
         except Exception as e:  # noqa: BLE001
-            db.finish_run(run_id, "error", con, notes=f"{type(e).__name__}: {e}")
             _log(f"   {study} FAILED: {type(e).__name__}: {e}")
             traceback.print_exc()
+            try:
+                db.finish_run(run_id, "error", con, notes=f"{type(e).__name__}: {e}")
+            except Exception as e2:  # noqa: BLE001 — e.g. the store is still locked; don't mask the real error
+                _log(f"   (could not record the failed run: {e2})")
     return out
 
 
@@ -152,7 +155,12 @@ def main(argv=None) -> int:
     min_cov = float(U.config()["fetch"]["min_coverage"])
     _log(f"marketdb daily run — {db.now_iso()} — db {db.DB_PATH} ({db.db_size_mb()} MB)")
 
-    with db.session() as con:
+    with db.RunLock() as lock, db.session() as con:
+        if not lock:
+            _log(f"ERROR: another marketdb run is already writing the store ({lock.holder or 'unknown process'}).\n"
+                 "       Wait for it to finish — two runs at once (an Update button plus the scheduled task / "
+                 "launcher, or two buttons) end in 'database is locked'.")
+            return 3
         if db.is_empty(con):
             _log("ERROR: " + db.BOOTSTRAP_HINT)
             return 2

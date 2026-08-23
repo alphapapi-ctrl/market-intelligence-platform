@@ -203,6 +203,14 @@ existing databases.
 
 ## Daily run (`marketdb/run_daily.py`)
 
+SQLite allows one writer. `run_daily` takes an exclusive OS file lock (`data/marketdb_run.lock`,
+`db.RunLock`, released automatically if the process dies) so a second run — an Update button
+while the scheduled task or `launcher.py A` is running, or two buttons — exits 3 with "another
+marketdb run is already writing the store (pid …, started …)" instead of failing minutes later
+with `database is locked`. Connections wait up to 300 s for a lock (a full breadth rebuild can
+hold the write lock for a couple of minutes). The dashboard's own reads are short sessions and
+never block a run.
+
 ```
 python -m marketdb.run_daily                # fetch + every study
 python -m marketdb.run_daily --universe au_total_market --skip-fetch

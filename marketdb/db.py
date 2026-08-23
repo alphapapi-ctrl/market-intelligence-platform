@@ -55,7 +55,7 @@ def connect(path: Path | str | None = None) -> sqlite3.Connection:
     """
     p = Path(path) if path else DB_PATH
     p.parent.mkdir(parents=True, exist_ok=True)
-    con = sqlite3.connect(str(p), timeout=60, detect_types=0)
+    con = sqlite3.connect(str(p), timeout=300, detect_types=0)   # a full breadth rebuild can hold the write lock for minutes
     con.execute("PRAGMA foreign_keys = ON")
     con.execute("PRAGMA synchronous = NORMAL")
     con.execute("PRAGMA temp_store = MEMORY")
@@ -169,6 +169,69 @@ def finish_run(run_id: int, status: str, con: sqlite3.Connection,
     con.execute("UPDATE runs SET finished=?, status=?, n_fetched=?, notes=? WHERE run_id=?",
                 (now_iso(), status, n_fetched, notes, run_id))
     con.commit()
+
+
+LOCK_PATH = DATA_DIR / "marketdb_run.lock"
+
+
+class RunLock:
+    """Exclusive OS file lock so two daily runs (button + scheduled task, two buttons) never write
+    the store at the same time — the second one gets a clear message instead of
+    'database is locked'. Released automatically if the holder dies.
+
+        with db.RunLock() as held:
+            if not held: ...   # another run is in progress; held.holder says which
+    """
+
+    def __init__(self, path: Path | None = None):
+        self.path = Path(path) if path else LOCK_PATH
+        self.fh = None
+        self.holder = ""
+
+    def __enter__(self):
+        self.path.parent.mkdir(parents=True, exist_ok=True)
+        self.fh = open(self.path, "a+")
+        try:
+            if os.name == "nt":
+                import msvcrt
+                self.fh.seek(0)
+                msvcrt.locking(self.fh.fileno(), msvcrt.LK_NBLCK, 1)
+            else:
+                import fcntl
+                fcntl.flock(self.fh.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+        except OSError:
+            try:
+                self.fh.seek(1)                      # byte 0 is the locked byte; Windows will not let us read it
+                self.holder = self.fh.read().strip()
+            except OSError:
+                self.holder = ""
+            self.fh.close()
+            self.fh = None
+            return self
+        self.fh.seek(0)
+        self.fh.truncate()
+        self.fh.write(f" pid {os.getpid()} started {now_iso()}")   # leading byte = the locked byte
+        self.fh.flush()
+        return self
+
+    @property
+    def held(self) -> bool:
+        return self.fh is not None
+
+    def __bool__(self) -> bool:
+        return self.held
+
+    def __exit__(self, *exc):
+        if self.fh is not None:
+            try:
+                if os.name == "nt":
+                    import msvcrt
+                    self.fh.seek(0)
+                    msvcrt.locking(self.fh.fileno(), msvcrt.LK_UNLCK, 1)
+            except OSError:
+                pass
+            self.fh.close()
+            self.fh = None
 
 
 BOOTSTRAP_HINT = ("marketdb has no data yet. One-off setup (about 15 min):  python -m marketdb.bootstrap  "
