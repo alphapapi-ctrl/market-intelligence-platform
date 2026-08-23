@@ -23,6 +23,30 @@ RESULT_COLS = ["ticker", "name", "sector", "industry", "commodity", "type", "cap
                "rsi_14", "rsi_div", "obv_div", "regime_label", "score_final"]
 
 
+# Divergence bonuses (added to the score before the volume multiplier, both modes).
+# Regular RSI divergence and OBV divergence = +/-1.0 (same scale as the rs_trend bonus);
+# hidden / confirming / flat-price signals = +/-0.5. Override per universe in rank_settings.json.
+DIVERGENCE_DEFAULTS = {
+    "rsi_div_bull": 1.0, "rsi_div_hid_bull": 0.5, "rsi_div_bear": -1.0, "rsi_div_hid_bear": -0.5,
+    "obv_conv_up": 0.5, "obv_bull_div": 1.0, "obv_accum": 0.5,
+    "obv_conv_down": -0.5, "obv_bear_div": -1.0, "obv_distrib": -0.5,
+}
+_RSI_KEY = {"BULL": "rsi_div_bull", "HID_BULL": "rsi_div_hid_bull", "BEAR": "rsi_div_bear", "HID_BEAR": "rsi_div_hid_bear"}
+_OBV_KEY = {"CONV_UP": "obv_conv_up", "BULL_DIV": "obv_bull_div", "ACCUM": "obv_accum",
+            "CONV_DOWN": "obv_conv_down", "BEAR_DIV": "obv_bear_div", "DISTRIB": "obv_distrib"}
+
+
+def divergence_bonus(row, rs: dict) -> float:
+    b = 0.0
+    k = _RSI_KEY.get(row.get("rsi_div"))
+    if k:
+        b += float(rs.get(k, DIVERGENCE_DEFAULTS[k]))
+    k = _OBV_KEY.get(row.get("obv_div"))
+    if k:
+        b += float(rs.get(k, DIVERGENCE_DEFAULTS[k]))
+    return b
+
+
 def load_rank_settings(key: str) -> dict:
     try:
         return json.loads(RANK_SETTINGS.read_text(encoding="utf-8")).get(key, {}) or {}
@@ -76,6 +100,7 @@ def _score(row, rs: dict, mode: str) -> float | None:
     else:
         base += (rs.get("trend_bonus", 1.0) if row["pass_trend"] == 1 else 0)
         base += (rs.get("lead_bonus", 1.0) if (row["rs_ratio"] or 0) > 1.0 else 0)
+    base += divergence_bonus(row, rs)
     score = round(base * vol_mult[row["vol_label"]], 4)
     return None if not np.isfinite(score) else score
 

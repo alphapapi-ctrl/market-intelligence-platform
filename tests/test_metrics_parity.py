@@ -14,6 +14,11 @@ BASE = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(BASE))
 from marketdb import db, universe as U, prices as P, studies as S
 
+# The legacy scripts have no RSI/OBV divergence term (added 2026-08-23); zero those bonuses
+# so score_final still compares like-for-like.
+_orig_load = S.load_rank_settings
+S.load_rank_settings = lambda key: {**_orig_load(key), **{k: 0.0 for k in S.DIVERGENCE_DEFAULTS}}
+
 LEGACY_DIR = BASE / "stocks" / "legacy" if (BASE / "stocks" / "legacy").exists() else BASE / "stocks"
 
 

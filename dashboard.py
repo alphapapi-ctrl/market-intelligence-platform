@@ -178,6 +178,9 @@ DEFAULT_SETTINGS = {
             'dd_weight_large': 0.4, 'dd_weight_mid': 0.3, 'dd_weight_small': 0.2, 'dd_weight_etf': 0.3,
             'vol_high': 1.1, 'vol_med': 1.0, 'vol_low': 0.9,
             'rs_trend_strong_up': 1.0, 'rs_trend_up': 0.5, 'rs_trend_flat': 0.0, 'rs_trend_down': -0.5, 'rs_trend_strong_down': -1.0,
+            'rsi_div_bull': 1.0, 'rsi_div_hid_bull': 0.5, 'rsi_div_bear': -1.0, 'rsi_div_hid_bear': -0.5,
+            'obv_conv_up': 0.5, 'obv_bull_div': 1.0, 'obv_accum': 0.5,
+            'obv_conv_down': -0.5, 'obv_bear_div': -1.0, 'obv_distrib': -0.5,
         },
         'us_benchmark'  : {},
         'comm_benchmark': {},
@@ -236,6 +239,9 @@ BM_DEFAULTS = {
     'vol_high': 1.1, 'vol_med': 1.0, 'vol_low': 0.9,
     'rs_trend_strong_up': 1.0, 'rs_trend_up': 0.5, 'rs_trend_flat': 0.0,
     'rs_trend_down': -0.5, 'rs_trend_strong_down': -1.0,
+    'rsi_div_bull': 1.0, 'rsi_div_hid_bull': 0.5, 'rsi_div_bear': -1.0, 'rsi_div_hid_bear': -0.5,
+    'obv_conv_up': 0.5, 'obv_bull_div': 1.0, 'obv_accum': 0.5,
+    'obv_conv_down': -0.5, 'obv_bear_div': -1.0, 'obv_distrib': -0.5,
 }
 SC_DEFAULTS = {
     'ret_12m_weight': 0.4, 'persist_weight': 0.01, 'mqs_weight': 0.2, 'peer_rs_weight': 0.02,
@@ -245,6 +251,9 @@ SC_DEFAULTS = {
     'rs_trend_down': -0.5, 'rs_trend_strong_down': -1.0,
     'regime_bonus_leader': 1.0, 'regime_bonus_contender': 0.5,
     'regime_bonus_laggard': 0.0, 'regime_bonus_weak': -0.5,
+    'rsi_div_bull': 1.0, 'rsi_div_hid_bull': 0.5, 'rsi_div_bear': -1.0, 'rsi_div_hid_bear': -0.5,
+    'obv_conv_up': 0.5, 'obv_bull_div': 1.0, 'obv_accum': 0.5,
+    'obv_conv_down': -0.5, 'obv_bear_div': -1.0, 'obv_distrib': -0.5,
     'min_market_cap': 2000000000, 'min_vol_avg': 500000,
     'regime_filter': ['LEADER', 'CONTENDER'],
 }
@@ -10384,6 +10393,29 @@ elif page == "Settings":
                     st.rerun()
                 return cur
 
+            def _div_score_widgets(tab_key, cur, _rk):
+                """RSI / OBV divergence bonus inputs (shared by benchmark and screener). Returns the dict to merge."""
+                st.markdown("#### RSI Divergence Bonus")
+                st.caption("Regular divergence = reversal signal, hidden = trend continuation. Added once per stock "
+                           "before the volume multiplier; 0 disables.")
+                c1, c2, c3, c4 = st.columns(4)
+                out = {}
+                out['rsi_div_bull']     = c1.number_input("BULL — std 1.0",      -2.0, 2.0, float(cur.get('rsi_div_bull', 1.0)),      0.05, key=f"rdb_{tab_key}_{_rk}", help="Price lower low, RSI higher low")
+                out['rsi_div_hid_bull'] = c2.number_input("HID_BULL — std 0.5",  -2.0, 2.0, float(cur.get('rsi_div_hid_bull', 0.5)),  0.05, key=f"rdhb_{tab_key}_{_rk}", help="Price higher low, RSI lower low (uptrend pullback)")
+                out['rsi_div_bear']     = c3.number_input("BEAR — std -1.0",     -2.0, 2.0, float(cur.get('rsi_div_bear', -1.0)),     0.05, key=f"rdr_{tab_key}_{_rk}", help="Price higher high, RSI lower high")
+                out['rsi_div_hid_bear'] = c4.number_input("HID_BEAR — std -0.5", -2.0, 2.0, float(cur.get('rsi_div_hid_bear', -0.5)), 0.05, key=f"rdhr_{tab_key}_{_rk}", help="Price lower high, RSI higher high (downtrend bounce)")
+                st.markdown("#### OBV vs Price Bonus")
+                st.caption("21-bar direction of price vs On-Balance Volume: CONV = volume confirms the move, "
+                           "BULL_DIV / BEAR_DIV = price and volume disagree, ACCUM / DISTRIB = flat price with OBV moving.")
+                c1, c2, c3, c4, c5, c6 = st.columns(6)
+                out['obv_conv_up']   = c1.number_input("CONV_UP — std 0.5",    -2.0, 2.0, float(cur.get('obv_conv_up', 0.5)),    0.05, key=f"ocu_{tab_key}_{_rk}")
+                out['obv_bull_div']  = c2.number_input("BULL_DIV — std 1.0",   -2.0, 2.0, float(cur.get('obv_bull_div', 1.0)),   0.05, key=f"obd_{tab_key}_{_rk}", help="Price down, OBV up — accumulation")
+                out['obv_accum']     = c3.number_input("ACCUM — std 0.5",      -2.0, 2.0, float(cur.get('obv_accum', 0.5)),      0.05, key=f"oac_{tab_key}_{_rk}")
+                out['obv_conv_down'] = c4.number_input("CONV_DOWN — std -0.5", -2.0, 2.0, float(cur.get('obv_conv_down', -0.5)), 0.05, key=f"ocd_{tab_key}_{_rk}")
+                out['obv_bear_div']  = c5.number_input("BEAR_DIV — std -1.0",  -2.0, 2.0, float(cur.get('obv_bear_div', -1.0)),  0.05, key=f"obr_{tab_key}_{_rk}", help="Price up, OBV down — distribution")
+                out['obv_distrib']   = c6.number_input("DISTRIB — std -0.5",   -2.0, 2.0, float(cur.get('obv_distrib', -0.5)),   0.05, key=f"odi_{tab_key}_{_rk}")
+                return out
+
             def _bm_score_widgets(tab_key, script, defaults):
                 cur = _active_settings(tab_key, defaults)
                 # Apply any loaded profile from session state
@@ -10405,7 +10437,7 @@ elif page == "Settings":
                     f" + (dd × -{cur['dd_weight_large']}..{cur['dd_weight_small']} [penalty])"
                     f" + (mqs × {cur['mqs_weight']} [{_w_tag(cur['mqs_weight'])}])"
                     f" + trend_bonus({cur['trend_bonus']}) + lead_bonus({cur['lead_bonus']})"
-                    f" + rs_trend_bonus  →  × vol_multiplier",
+                    f" + rs_trend_bonus + rsi_div_bonus + obv_bonus  →  × vol_multiplier",
                     language="python")
                 st.markdown("#### Return & Quality")
                 c1,c2,c3 = st.columns(3)
@@ -10434,6 +10466,7 @@ elif page == "Settings":
                 v_vh = c1.number_input("High vol — std 1.1 (+10%%)", 0.0, 3.0, float(cur['vol_high']), 0.05, key=f"vh_{tab_key}_{_rk}", help="Multiplies final score. 1.1 = 10%% boost for high volume days.")
                 v_vm = c2.number_input("Med vol — std 1.0 (neutral)", 0.0, 3.0, float(cur['vol_med']),  0.05, key=f"vm_{tab_key}_{_rk}")
                 v_vl = c3.number_input("Low vol — std 0.9 (-10%%)",  0.0, 3.0, float(cur['vol_low']),  0.05, key=f"vl_{tab_key}_{_rk}")
+                v_div = _div_score_widgets(tab_key, cur, _rk)
                 new_s = {
                     'ret_12m_weight': v_ret, 'persist_weight': v_per, 'mqs_weight': v_mqs,
                     'trend_bonus': v_tb, 'lead_bonus': v_lb,
@@ -10441,6 +10474,7 @@ elif page == "Settings":
                     'vol_high': v_vh, 'vol_med': v_vm, 'vol_low': v_vl,
                     'rs_trend_strong_up': v_rsu, 'rs_trend_up': v_ru, 'rs_trend_flat': v_rf,
                     'rs_trend_down': v_rd, 'rs_trend_strong_down': v_rsd,
+                    **v_div,
                 }
                 b1,b2 = st.columns([2,1])
                 if b1.button("💾 Save as Active", type="primary", key=f"save_{tab_key}"):
@@ -10472,7 +10506,7 @@ elif page == "Settings":
                     f" + (dd × -w_dd [penalty])"
                     f" + (mqs × {cur['mqs_weight']} [{_w_tag(cur['mqs_weight'])}])"
                     f" + (peer_rs × {cur['peer_rs_weight']} [{_w_tag(cur['peer_rs_weight'])}])"
-                    f" + rs_trend_bonus + regime_bonus  →  × vol_multiplier",
+                    f" + rs_trend_bonus + regime_bonus + rsi_div_bonus + obv_bonus  →  × vol_multiplier",
                     language="python")
                 c1,c2,c3,c4 = st.columns(4)
                 v_ret  = c1.number_input("12m Return — std 0.4",    -2.0, 2.0, float(cur['ret_12m_weight']),  0.05, key=f"ret_{tab_key}_{_rk}", help="Primary return signal. 0.4 standard.")
@@ -10503,6 +10537,7 @@ elif page == "Settings":
                 v_vh = c1.number_input("High — std 1.1", 0.0, 3.0, float(cur['vol_high']), 0.05, key=f"vh_{tab_key}_{_rk}")
                 v_vm = c2.number_input("Med — std 1.0",  0.0, 3.0, float(cur['vol_med']),  0.05, key=f"vm_{tab_key}_{_rk}")
                 v_vl = c3.number_input("Low — std 0.9",  0.0, 3.0, float(cur['vol_low']),  0.05, key=f"vl_{tab_key}_{_rk}")
+                v_div = _div_score_widgets(tab_key, cur, _rk)
                 st.divider()
                 st.markdown("#### Filter Parameters")
                 fc1, fc2 = st.columns(2)
@@ -10523,6 +10558,7 @@ elif page == "Settings":
                     'regime_bonus_leader': v_rl, 'regime_bonus_contender': v_rc,
                     'regime_bonus_laggard': v_rlag, 'regime_bonus_weak': v_rw,
                     'min_market_cap': v_cap, 'min_vol_avg': v_vol, 'regime_filter': v_reg,
+                    **v_div,
                 }
                 b1,b2,b3 = st.columns([2,2,1])
                 if b1.button("💾 Save as Active", type="primary", key=f"save_{tab_key}"):

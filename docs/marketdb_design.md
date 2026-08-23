@@ -171,7 +171,11 @@ once price has closed through that pivot — BULL / BEAR regular, HID_BULL / HID
 CONV_UP / CONV_DOWN when volume confirms, BEAR_DIV (price up, OBV down), BULL_DIV (price down,
 OBV up), ACCUM / DISTRIB when price is flat (< 2 %) and OBV is not (≥ 3 average-volume days).
 Thresholds live in `universe_config.json` → `divergence` and are passed into `ticker_metrics`.
-Neither column feeds `score_final` or the actionable flags; they are display/filter columns.
+Both labels feed `score_final` as additive bonuses (`studies.divergence_bonus`, applied in screener
+and benchmark mode before the volume multiplier): regular RSI divergence and OBV divergence ±1.0,
+hidden / confirming / flat-price signals ±0.5 — the same scale as the `rs_trend` bonus. Weights are
+`studies.DIVERGENCE_DEFAULTS`, overridable per universe in `rank_settings.json` and edited on the
+Settings → Rank page; the parity test zeroes them. They do not affect the actionable flags.
 Schema: `study_results.rsi_14 REAL, rsi_div TEXT, obv_div TEXT`, added by `db._migrate()` on
 existing databases.
 - TradingView export exchanges come from `securities.exchange` (NASDAQ/NYSE/AMEX/ASX) instead
