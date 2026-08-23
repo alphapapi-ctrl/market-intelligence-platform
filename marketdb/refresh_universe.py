@@ -310,7 +310,8 @@ def apply_indices(con: sqlite3.Connection, dry: bool, log=print) -> dict:
         if dry:
             continue
         con.execute("DELETE FROM security_groups WHERE group_type='index' AND group_key=?", (key,))
-        con.executemany("INSERT OR REPLACE INTO security_groups VALUES (?,?,?,?,?,?)",
+        con.executemany("""INSERT OR REPLACE INTO security_groups (ticker, group_type, group_key, attr, source, updated)
+                           VALUES (?,?,?,?,?,?)""",
                         [(s, "index", key, None, "refresh", today) for s in in_db])
         con.commit()
     if not dry and report.get("SP500") and report.get("NDX100"):
