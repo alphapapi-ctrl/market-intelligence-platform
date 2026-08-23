@@ -193,9 +193,14 @@ def update_prices(tickers: list[str], con: sqlite3.Connection, *, full: bool = F
     full_start = (today - timedelta(days=backfill)).strftime("%Y-%m-%d")
 
     log_df = db.read_df("SELECT ticker, last_date, first_date, consecutive_failures FROM fetch_log", con=con)
-    last = dict(zip(log_df["ticker"], log_df["last_date"]))
-    first = dict(zip(log_df["ticker"], log_df["first_date"]))
-    fails = dict(zip(log_df["ticker"], log_df["consecutive_failures"]))
+
+    def _date_or_none(v):
+        # NULL comes back as None or NaN depending on the column's other values; both mean "never fetched"
+        return v if isinstance(v, str) and v else None
+
+    last = {t: _date_or_none(v) for t, v in zip(log_df["ticker"], log_df["last_date"])}
+    first = {t: _date_or_none(v) for t, v in zip(log_df["ticker"], log_df["first_date"])}
+    fails = {t: int(v) if pd.notna(v) else 0 for t, v in zip(log_df["ticker"], log_df["consecutive_failures"])}
     deep = {k: v for k, v in cfg.get("deep_history", {}).items() if not k.startswith("_")}
     as_of = end_dt - timedelta(days=1)                       # the end date itself
     back = {0: 3, 6: 2}.get(as_of.weekday(), 1)              # Mon -> Fri, Sun -> Fri, else yesterday
