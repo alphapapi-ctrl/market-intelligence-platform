@@ -36,9 +36,10 @@ if _MARKETDB_BASE not in _sys.path:
     _sys.path.insert(0, _MARKETDB_BASE)   # marketdb lives one level up
 
 try:
-    from config import FRED_API_KEY
+    from _config_check import fred_api_key
 except ImportError:
-    from macro.config import FRED_API_KEY
+    from macro._config_check import fred_api_key
+FRED_API_KEY = fred_api_key()
 
 RESULTS_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                            'results', 'consumer_credit')

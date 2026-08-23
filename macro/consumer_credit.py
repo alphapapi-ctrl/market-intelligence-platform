@@ -7,9 +7,11 @@ from datetime import datetime, timedelta
 
 # ── Config ────────────────────────────────────────────────────────────────────
 try:
-    from config import FRED_API_KEY, ANTHROPIC_API_KEY
+    from _config_check import fred_api_key, optional_key
 except ImportError:
-    from macro.config import FRED_API_KEY, ANTHROPIC_API_KEY
+    from macro._config_check import fred_api_key, optional_key
+FRED_API_KEY = fred_api_key()
+ANTHROPIC_API_KEY = optional_key("ANTHROPIC_API_KEY")
 
 from fredapi import Fred
 import os as _os, sys as _sys

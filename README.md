@@ -55,9 +55,12 @@ python -m marketdb.bootstrap
 
 ≈ 15 minutes: seeds the universe from the tracked `stocks/watchlist/*.csv`, runs the Yahoo
 universe refresh, back-fills three years of prices for ~5,000 symbols, rebuilds the breadth
-history from those prices, then runs every screener/benchmark/RRG and a DeMark scan. From then
-on only `run_daily` is needed. Alternatively copy `data/market.db` from another machine and go
-straight to `run_daily`.
+history from those prices, runs every screener/benchmark/RRG and a DeMark scan, and — if
+`macro/config.py` is in place — the macro and credit reports too (otherwise it prints the
+setup steps and the Macro / Debt Markets pages show the same notice until you run
+`python launcher.py 1 16 17`). From then on `python launcher.py A` (macro report + market
+data) or `python -m marketdb.run_daily` (market data only) is all that is needed.
+Alternatively copy `data/market.db` from another machine and go straight to the daily run.
 
 Pulling this change onto an existing checkout of the old layout needs the same one-off
 bootstrap; the old `stocks/results/` CSV trees are no longer read or written.
@@ -78,9 +81,11 @@ source .venv/bin/activate     # Mac
 3. Install dependencies:
 pip install -r requirements.txt
 
-4. Set up FRED API key:
+4. Set up the FRED API key (the Macro and Debt Markets pages need it):
    - Copy `macro/config_template.py` to `macro/config.py`
-   - Add your FRED API key (free at fred.stlouisfed.org)
+   - Add your FRED API key (free at fred.stlouisfed.org/docs/api/api_key.html)
+   - `config.py` is gitignored, so repeat this on every machine. Without it those pages show a
+     notice explaining exactly this, and the macro scripts exit with the same instructions.
 
 ## Launch
 streamlit run dashboard.py

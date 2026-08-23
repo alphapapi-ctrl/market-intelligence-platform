@@ -1,5 +1,9 @@
 from datetime import datetime
-from config import FRED_API_KEY
+try:
+    from _config_check import fred_api_key
+except ImportError:
+    from macro._config_check import fred_api_key
+FRED_API_KEY = fred_api_key()
 import os as _os, sys as _sys
 _MARKETDB_BASE = _os.path.dirname(_os.path.dirname(_os.path.abspath(__file__)))
 if _MARKETDB_BASE not in _sys.path:

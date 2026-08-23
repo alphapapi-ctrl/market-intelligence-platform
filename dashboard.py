@@ -480,6 +480,25 @@ def run_script(script_path, cwd):
     return result.returncode == 0
 
 
+def macro_setup_notice(what, launcher_keys, button=None):
+    """Explainer shown where a macro/credit report has not been generated yet (fresh clone):
+    names the gitignored config file if it is missing, then the button / launcher command."""
+    try:
+        from macro._config_check import config_problem
+        problem = config_problem()
+    except Exception:
+        problem = None
+    parts = [f"**No {what} stored yet.**"]
+    if problem:
+        parts.append(f"⚠ {problem}. Copy `macro/config_template.py` to `macro/config.py` and put a FRED API key in it "
+                     "(free at fred.stlouisfed.org/docs/api/api_key.html). The file is gitignored, so it has to be "
+                     "created on each machine.")
+    how = f"click **{button}**" if button else "run it"
+    parts.append(f"To generate it, {how} (or from the repo folder: `python launcher.py {launcher_keys}`). "
+                 "`python launcher.py A` is the full daily run — macro report + market data — for a scheduled task.")
+    st.info("\n\n".join(parts))
+
+
 # ── marketdb: SQLite data layer (replaces the CSV result trees under stocks/results) ──
 import sys as _sys
 if BASE not in _sys.path:
@@ -1636,6 +1655,8 @@ if page == "Macro":
     # ── Parse macro report txt ────────────────────────────────────────────────
     _macro_txt, _macro_payload, _macro_date = MR.load_report('macro_report')
     report_file = _macro_date          # 'YYYY-MM-DD' of the latest stored report (None if none)
+    if not report_file:
+        macro_setup_notice("macro report (regime, alerts, cycle positioning)", "1", button="📊 Run Macro Report")
 
     def parse_macro_report(path):
         """Extract key values from the latest macro report (text in marketdb reports)"""
@@ -2554,7 +2575,7 @@ Currently <b>{_hgx_curr:,.0f}</b>. Signal resets <b>{_reset_date}</b> (18 months
                 unsafe_allow_html=True
             )
         else:
-            st.info("Run macro report to populate business cycle data.")
+            st.info("Business-cycle phase comes from the macro report — see the notice at the top of the page.")
 
     with _cyc2:
 
@@ -4214,7 +4235,7 @@ elif page == "Debt Markets":
         json_files   = MR.report_dates('consumer_credit')
 
         if not json_files:
-            st.warning("No consumer credit data found — run the script first")
+            macro_setup_notice("consumer credit report", "16", button="▶ Run Debt Markets Report")
             if st.button("▶ Run Debt Markets Report", type="primary"):
                 run_script(os.path.join(MACRO, 'consumer_credit.py'), MACRO)
                 st.rerun()
@@ -4934,7 +4955,7 @@ elif page == "Debt Markets":
                 st.rerun()
 
         if not au_files:
-            st.warning("No AU debt data found — run the AU script first")
+            macro_setup_notice("AU debt-markets report", "17", button="🔄 Run AU Debt Data")
         else:
             with _au_run_col1:
                 au_dates    = [d.replace('-', '') for d in au_files][:30]

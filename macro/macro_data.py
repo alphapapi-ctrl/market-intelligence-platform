@@ -5,7 +5,11 @@ import json
 import os
 from fredapi import Fred
 from datetime import datetime, timedelta
-from config import FRED_API_KEY
+try:
+    from _config_check import fred_api_key          # cwd = macro/
+except ImportError:
+    from macro._config_check import fred_api_key    # imported from the repo root
+FRED_API_KEY = fred_api_key()                       # exits with setup steps if config.py is missing
 
 fred     = Fred(api_key=FRED_API_KEY)
 TODAY    = datetime.today()
