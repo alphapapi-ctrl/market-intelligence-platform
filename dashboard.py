@@ -410,11 +410,14 @@ st.caption(f"Market Intelligence — {datetime.now().strftime('%d %b %Y %H:%M')}
 # ── Helpers ───────────────────────────────────────────────────────────────────
 def format_screener_df(df, cols):
     formatted = df[cols].copy()
-    for col in ['close','rs_ratio']:
-        if col in formatted.columns:
-            formatted[col] = pd.to_numeric(
-                formatted[col].astype(str).str.replace(',',''), errors='coerce'
-            ).round(2)
+    if 'close' in formatted.columns:
+        formatted['close'] = pd.to_numeric(
+            formatted['close'].astype(str).str.replace(',',''), errors='coerce'
+        ).round(3)
+    if 'rs_ratio' in formatted.columns:
+        formatted['rs_ratio'] = pd.to_numeric(
+            formatted['rs_ratio'].astype(str).str.replace(',',''), errors='coerce'
+        ).round(2)
     for col in ['peer_rs_score']:
         if col in formatted.columns:
             formatted[col] = pd.to_numeric(formatted[col], errors='coerce').round(0).astype('Int64')
@@ -716,6 +719,9 @@ def colour_divergence(val):
     return DIVERGENCE_COLOURS.get(str(val), 'color: #777777')
 
 DIVERGENCE_COLUMN_CONFIG = {
+    # explicit format needed: with a Styler, unformatted number columns display
+    # pandas' 6-decimal default instead of the underlying rounded value
+    'close': st.column_config.NumberColumn('close', format='%.3f'),
     'rsi_div': st.column_config.TextColumn('rsi_div', help=(
         "RSI(14) divergence at the last two RSI pivots (5 bars each side, newer pivot confirmed "
         "within 20 bars). BULL: price lower low, RSI higher low. BEAR: price higher high, RSI lower high. "
@@ -5588,10 +5594,12 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                     ['EARLY','PROGRESS','SHIFT','-'],
                     default=[],
                     key='au_bm_acc')
-            _fv1, _fv2, _fv3 = st.columns(3)
+            _n_all = len(df)
+            _fv1, _fv2, _fv3, _fv4 = st.columns(4)
             vol_filter = _fv1.multiselect("Filter volume", ['HIGH', 'MED', 'LOW'], default=[], key='au_bm_vol')
             cap_filter = _fv2.multiselect("Filter cap band", ['large', 'mid', 'small', 'ETF'], default=[], key='au_bm_cap')
             rsi_filter = _fv3.multiselect("Filter rsi_div", ['BULL', 'HID_BULL', 'BEAR', 'HID_BEAR', '-'], default=[], key='au_bm_rsi')
+            obv_filter = _fv4.multiselect("Filter obv_div", ['BULL_DIV', 'CONV_UP', 'ACCUM', 'BEAR_DIV', 'CONV_DOWN', 'DISTRIB', '-'], default=[], key='au_bm_obv')
 
             if regime_filter:
                 df = df[df['regime_label'].isin(regime_filter)]
@@ -5605,6 +5613,9 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                 df = df[df['cap_band'].isin(cap_filter)]
             if rsi_filter and 'rsi_div' in df.columns:
                 df = df[df['rsi_div'].isin(rsi_filter)]
+            if obv_filter and 'obv_div' in df.columns:
+                df = df[df['obv_div'].isin(obv_filter)]
+            st.caption(f"{len(df)} of {_n_all} stocks after filters")
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
                          width='stretch', height=600, column_config=DIVERGENCE_COLUMN_CONFIG)
@@ -5646,10 +5657,12 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                     ['EARLY','PROGRESS','SHIFT','-'],
                     default=[],
                     key='au_sc_acc')
-            _fv1, _fv2, _fv3 = st.columns(3)
+            _n_all = len(df)
+            _fv1, _fv2, _fv3, _fv4 = st.columns(4)
             vol_filter = _fv1.multiselect("Filter volume", ['HIGH', 'MED', 'LOW'], default=[], key='au_sc_vol')
             cap_filter = _fv2.multiselect("Filter cap band", ['large', 'mid', 'small', 'ETF'], default=[], key='au_sc_cap')
             rsi_filter = _fv3.multiselect("Filter rsi_div", ['BULL', 'HID_BULL', 'BEAR', 'HID_BEAR', '-'], default=[], key='au_sc_rsi')
+            obv_filter = _fv4.multiselect("Filter obv_div", ['BULL_DIV', 'CONV_UP', 'ACCUM', 'BEAR_DIV', 'CONV_DOWN', 'DISTRIB', '-'], default=[], key='au_sc_obv')
 
             if regime_filter:
                 df = df[df['regime_label'].isin(regime_filter)]
@@ -5663,6 +5676,9 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                 df = df[df['cap_band'].isin(cap_filter)]
             if rsi_filter and 'rsi_div' in df.columns:
                 df = df[df['rsi_div'].isin(rsi_filter)]
+            if obv_filter and 'obv_div' in df.columns:
+                df = df[df['obv_div'].isin(obv_filter)]
+            st.caption(f"{len(df)} of {_n_all} stocks after filters")
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
                          width='stretch', height=600, column_config=DIVERGENCE_COLUMN_CONFIG)
@@ -5988,10 +6004,12 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                     ['EARLY','PROGRESS','SHIFT','-'],
                     default=[],
                     key='us_bm_acc')
-            _fv1, _fv2, _fv3 = st.columns(3)
+            _n_all = len(df)
+            _fv1, _fv2, _fv3, _fv4 = st.columns(4)
             vol_filter = _fv1.multiselect("Filter volume", ['HIGH', 'MED', 'LOW'], default=[], key='us_bm_vol')
             cap_filter = _fv2.multiselect("Filter cap band", ['large', 'mid', 'small', 'ETF'], default=[], key='us_bm_cap')
             rsi_filter = _fv3.multiselect("Filter rsi_div", ['BULL', 'HID_BULL', 'BEAR', 'HID_BEAR', '-'], default=[], key='us_bm_rsi')
+            obv_filter = _fv4.multiselect("Filter obv_div", ['BULL_DIV', 'CONV_UP', 'ACCUM', 'BEAR_DIV', 'CONV_DOWN', 'DISTRIB', '-'], default=[], key='us_bm_obv')
 
             if regime_filter:
                 df = df[df['regime_label'].isin(regime_filter)]
@@ -6005,6 +6023,9 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                 df = df[df['cap_band'].isin(cap_filter)]
             if rsi_filter and 'rsi_div' in df.columns:
                 df = df[df['rsi_div'].isin(rsi_filter)]
+            if obv_filter and 'obv_div' in df.columns:
+                df = df[df['obv_div'].isin(obv_filter)]
+            st.caption(f"{len(df)} of {_n_all} stocks after filters")
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
                          width='stretch', height=600, column_config=DIVERGENCE_COLUMN_CONFIG)
@@ -6044,10 +6065,12 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                     ['EARLY','PROGRESS','SHIFT','-'],
                     default=[],
                     key='us_sc_acc')
-            _fv1, _fv2, _fv3 = st.columns(3)
+            _n_all = len(df)
+            _fv1, _fv2, _fv3, _fv4 = st.columns(4)
             vol_filter = _fv1.multiselect("Filter volume", ['HIGH', 'MED', 'LOW'], default=[], key='us_sc_vol')
             cap_filter = _fv2.multiselect("Filter cap band", ['large', 'mid', 'small', 'ETF'], default=[], key='us_sc_cap')
             rsi_filter = _fv3.multiselect("Filter rsi_div", ['BULL', 'HID_BULL', 'BEAR', 'HID_BEAR', '-'], default=[], key='us_sc_rsi')
+            obv_filter = _fv4.multiselect("Filter obv_div", ['BULL_DIV', 'CONV_UP', 'ACCUM', 'BEAR_DIV', 'CONV_DOWN', 'DISTRIB', '-'], default=[], key='us_sc_obv')
 
             if regime_filter:
                 df = df[df['regime_label'].isin(regime_filter)]
@@ -6061,6 +6084,9 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                 df = df[df['cap_band'].isin(cap_filter)]
             if rsi_filter and 'rsi_div' in df.columns:
                 df = df[df['rsi_div'].isin(rsi_filter)]
+            if obv_filter and 'obv_div' in df.columns:
+                df = df[df['obv_div'].isin(obv_filter)]
+            st.caption(f"{len(df)} of {_n_all} stocks after filters")
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
                          width='stretch', height=600, column_config=DIVERGENCE_COLUMN_CONFIG)
@@ -6099,10 +6125,12 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                     ['EARLY','PROGRESS','SHIFT','-'],
                     default=[],
                     key='ndx_sc_acc')
-            _fv1, _fv2, _fv3 = st.columns(3)
+            _n_all = len(df)
+            _fv1, _fv2, _fv3, _fv4 = st.columns(4)
             vol_filter = _fv1.multiselect("Filter volume", ['HIGH', 'MED', 'LOW'], default=[], key='ndx_sc_vol')
             cap_filter = _fv2.multiselect("Filter cap band", ['large', 'mid', 'small', 'ETF'], default=[], key='ndx_sc_cap')
             rsi_filter = _fv3.multiselect("Filter rsi_div", ['BULL', 'HID_BULL', 'BEAR', 'HID_BEAR', '-'], default=[], key='ndx_sc_rsi')
+            obv_filter = _fv4.multiselect("Filter obv_div", ['BULL_DIV', 'CONV_UP', 'ACCUM', 'BEAR_DIV', 'CONV_DOWN', 'DISTRIB', '-'], default=[], key='ndx_sc_obv')
 
             if regime_filter:
                 df = df[df['regime_label'].isin(regime_filter)]
@@ -6116,6 +6144,9 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                 df = df[df['cap_band'].isin(cap_filter)]
             if rsi_filter and 'rsi_div' in df.columns:
                 df = df[df['rsi_div'].isin(rsi_filter)]
+            if obv_filter and 'obv_div' in df.columns:
+                df = df[df['obv_div'].isin(obv_filter)]
+            st.caption(f"{len(df)} of {_n_all} stocks after filters")
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
                          width='stretch', height=600, column_config=DIVERGENCE_COLUMN_CONFIG)
@@ -6155,10 +6186,12 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                     ['EARLY','PROGRESS','SHIFT','-'],
                     default=[],
                     key='ndx_bm_acc')
-            _fv1, _fv2, _fv3 = st.columns(3)
+            _n_all = len(df)
+            _fv1, _fv2, _fv3, _fv4 = st.columns(4)
             vol_filter = _fv1.multiselect("Filter volume", ['HIGH', 'MED', 'LOW'], default=[], key='ndx_bm_vol')
             cap_filter = _fv2.multiselect("Filter cap band", ['large', 'mid', 'small', 'ETF'], default=[], key='ndx_bm_cap')
             rsi_filter = _fv3.multiselect("Filter rsi_div", ['BULL', 'HID_BULL', 'BEAR', 'HID_BEAR', '-'], default=[], key='ndx_bm_rsi')
+            obv_filter = _fv4.multiselect("Filter obv_div", ['BULL_DIV', 'CONV_UP', 'ACCUM', 'BEAR_DIV', 'CONV_DOWN', 'DISTRIB', '-'], default=[], key='ndx_bm_obv')
 
             if regime_filter:
                 df = df[df['regime_label'].isin(regime_filter)]
@@ -6172,6 +6205,9 @@ Cap band leaders — Large: {large_l} | Mid: {mid_l} | Small: {small_l}
                 df = df[df['cap_band'].isin(cap_filter)]
             if rsi_filter and 'rsi_div' in df.columns:
                 df = df[df['rsi_div'].isin(rsi_filter)]
+            if obv_filter and 'obv_div' in df.columns:
+                df = df[df['obv_div'].isin(obv_filter)]
+            st.caption(f"{len(df)} of {_n_all} stocks after filters")
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
                          width='stretch', height=600, column_config=DIVERGENCE_COLUMN_CONFIG)
@@ -6396,10 +6432,12 @@ elif page == "Commodities":
                     ['EARLY','PROGRESS','SHIFT','-'],
                     default=[],
                     key='comm_bm_acc')
-            _fv1, _fv2, _fv3 = st.columns(3)
+            _n_all = len(df)
+            _fv1, _fv2, _fv3, _fv4 = st.columns(4)
             vol_filter = _fv1.multiselect("Filter volume", ['HIGH', 'MED', 'LOW'], default=[], key='comm_bm_vol')
             cap_filter = _fv2.multiselect("Filter cap band", ['large', 'mid', 'small', 'ETF'], default=[], key='comm_bm_cap')
             rsi_filter = _fv3.multiselect("Filter rsi_div", ['BULL', 'HID_BULL', 'BEAR', 'HID_BEAR', '-'], default=[], key='comm_bm_rsi')
+            obv_filter = _fv4.multiselect("Filter obv_div", ['BULL_DIV', 'CONV_UP', 'ACCUM', 'BEAR_DIV', 'CONV_DOWN', 'DISTRIB', '-'], default=[], key='comm_bm_obv')
 
             if regime_filter:
                 df = df[df['regime_label'].isin(regime_filter)]
@@ -6415,6 +6453,9 @@ elif page == "Commodities":
                 df = df[df['cap_band'].isin(cap_filter)]
             if rsi_filter and 'rsi_div' in df.columns:
                 df = df[df['rsi_div'].isin(rsi_filter)]
+            if obv_filter and 'obv_div' in df.columns:
+                df = df[df['obv_div'].isin(obv_filter)]
+            st.caption(f"{len(df)} of {_n_all} stocks after filters")
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
                          width='stretch', height=600, column_config=DIVERGENCE_COLUMN_CONFIG)
@@ -6461,10 +6502,12 @@ elif page == "Commodities":
                     ['EARLY','PROGRESS','SHIFT','-'],
                     default=[],
                     key='comm_sc_acc')
-            _fv1, _fv2, _fv3 = st.columns(3)
+            _n_all = len(df)
+            _fv1, _fv2, _fv3, _fv4 = st.columns(4)
             vol_filter = _fv1.multiselect("Filter volume", ['HIGH', 'MED', 'LOW'], default=[], key='comm_sc_vol')
             cap_filter = _fv2.multiselect("Filter cap band", ['large', 'mid', 'small', 'ETF'], default=[], key='comm_sc_cap')
             rsi_filter = _fv3.multiselect("Filter rsi_div", ['BULL', 'HID_BULL', 'BEAR', 'HID_BEAR', '-'], default=[], key='comm_sc_rsi')
+            obv_filter = _fv4.multiselect("Filter obv_div", ['BULL_DIV', 'CONV_UP', 'ACCUM', 'BEAR_DIV', 'CONV_DOWN', 'DISTRIB', '-'], default=[], key='comm_sc_obv')
 
             if regime_filter:
                 df = df[df['regime_label'].isin(regime_filter)]
@@ -6480,6 +6523,9 @@ elif page == "Commodities":
                 df = df[df['cap_band'].isin(cap_filter)]
             if rsi_filter and 'rsi_div' in df.columns:
                 df = df[df['rsi_div'].isin(rsi_filter)]
+            if obv_filter and 'obv_div' in df.columns:
+                df = df[df['obv_div'].isin(obv_filter)]
+            st.caption(f"{len(df)} of {_n_all} stocks after filters")
 
             st.dataframe(style_df(format_screener_df(df, cols), 'regime_label', 'delta_rank'),
                          width='stretch', height=600, column_config=DIVERGENCE_COLUMN_CONFIG)
@@ -6612,12 +6658,14 @@ elif page == "Commodities":
                 st.caption(f"Last updated: {db_age(_study, 'all_major_commodities')} — {len(_df)} stocks after filters"
                            + (" (benchmark = each stock's own commodity ETF)" if _study == 'benchmark' else
                               " (peer RS within each stock's primary commodity)"))
-                _c1, _c2, _c3, _c4 = st.columns(4)
+                _n_all = len(_df)
+                _c1, _c2, _c3, _c4, _c5 = st.columns(5)
                 _rf = _c1.multiselect("Filter regime", _regimes, default=_def_regimes, key=f'{gkey}_{_study}_regime')
                 _af = _c2.multiselect("Filter acc_watch", ['EARLY', 'PROGRESS', 'SHIFT', '-'], default=[],
                                       key=f'{gkey}_{_study}_acc')
                 _vf = _c3.multiselect("Filter volume", ['HIGH', 'MED', 'LOW'], default=[], key=f'{gkey}_{_study}_vol')
                 _xf = _c4.multiselect("Filter rsi_div", ['BULL', 'HID_BULL', 'BEAR', 'HID_BEAR', '-'], default=[], key=f'{gkey}_{_study}_rsi')
+                _of = _c5.multiselect("Filter obv_div", ['BULL_DIV', 'CONV_UP', 'ACCUM', 'BEAR_DIV', 'CONV_DOWN', 'DISTRIB', '-'], default=[], key=f'{gkey}_{_study}_obv')
                 if _rf:
                     _df = _df[_df['regime_label'].isin(_rf)]
                 if _af:
@@ -6626,6 +6674,9 @@ elif page == "Commodities":
                     _df = _df[_df['vol_label'].isin(_vf)]
                 if _xf and 'rsi_div' in _df.columns:
                     _df = _df[_df['rsi_div'].isin(_xf)]
+                if _of and 'obv_div' in _df.columns:
+                    _df = _df[_df['obv_div'].isin(_of)]
+                st.caption(f"{len(_df)} of {_n_all} stocks after filters")
                 _cols = ['delta_rank', 'ticker', 'name', 'commodity', 'type', 'cap_band', 'close', _rs_col, 'rs_trend',
                          'ret_6m', 'ret_12m', 'max_dd', 'vol_label', 'acc_watch', 'rsi_div', 'obv_div',
                          'regime_label', 'score_final']
@@ -7951,7 +8002,7 @@ elif page == "Screeners & Exports":
     else:
         dates    = _run_dates
         sel_date = st.selectbox("Select date", dates, key="act_date")
-        _pf1, _pf2, _pf3, _pf4, _pf5 = st.columns(5)
+        _pf1, _pf2, _pf3, _pf4, _pf5, _pf6 = st.columns(6)
         _pf_regime = _pf1.multiselect("Filter regime", ['LEADER', 'CONTENDER', 'LAGGARD', 'WEAK', 'TREND+LEAD', 'TREND_ONLY'],
                                       default=[], key='act_pf_regime')
         _pf_vol = _pf2.multiselect("Filter volume", ['HIGH', 'MED', 'LOW'], default=[], key='act_pf_vol')
@@ -7959,6 +8010,7 @@ elif page == "Screeners & Exports":
         _pf_acc = _pf4.multiselect("Filter acc_watch", ['TRENDING', 'REACCUM', 'CONSOLIDATE', 'SHIFT', 'PROGRESS', 'EARLY', '-'],
                                    default=[], key='act_pf_acc')
         _pf_rsi = _pf5.multiselect("Filter rsi_div", ['BULL', 'HID_BULL', 'BEAR', 'HID_BEAR', '-'], default=[], key='act_pf_rsi')
+        _pf_obv = _pf6.multiselect("Filter obv_div", ['BULL_DIV', 'CONV_UP', 'ACCUM', 'BEAR_DIV', 'CONV_DOWN', 'DISTRIB', '-'], default=[], key='act_pf_obv')
         st.caption("Page filters apply to every section below and to the TradingView / CSV exports. "
                    "Empty = use each market's saved Screener settings (Settings → 📋 Screeners).")
 
@@ -8035,9 +8087,11 @@ elif page == "Screeners & Exports":
                         if _cap_filter and 'cap_band' in _df.columns:
                             _df = _df[_df['cap_band'].isin(_cap_filter)]
 
-                        # RSI divergence filter (page-level only — not part of the saved settings)
+                        # RSI / OBV divergence filters (page-level only — not part of the saved settings)
                         if _pf_rsi and 'rsi_div' in _df.columns:
                             _df = _df[_df['rsi_div'].isin(_pf_rsi)]
+                        if _pf_obv and 'obv_div' in _df.columns:
+                            _df = _df[_df['obv_div'].isin(_pf_obv)]
 
                         # Min score filter
                         _min_score = _s_filt.get('min_score', 0.0)
@@ -8118,8 +8172,7 @@ elif page == "Screeners & Exports":
                                 _df_fmt[_col] = pd.to_numeric(_df_fmt[_col], errors='coerce').apply(
                                     lambda x: f"{x:.0f}" if pd.notna(x) else "")
                         if 'close' in _df_fmt.columns:
-                            _df_fmt['close'] = pd.to_numeric(_df_fmt['close'], errors='coerce').apply(
-                                lambda x: f"{x:.3f}" if pd.notna(x) else "")
+                            _df_fmt['close'] = pd.to_numeric(_df_fmt['close'], errors='coerce').round(3)
                         st.dataframe(style_df(_df_fmt,'regime_label','delta_rank'),
                                      width='stretch', height=min(len(_df)*35+40,350),
                                      column_config=DIVERGENCE_COLUMN_CONFIG)
