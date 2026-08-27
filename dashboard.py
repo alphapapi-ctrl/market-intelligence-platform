@@ -8642,8 +8642,9 @@ elif page == "Sentiment":
     import plotly.graph_objects as go
     from plotly.subplots import make_subplots
     from sentiment_data import (
-        fetch_aaii, fetch_naaim, fetch_index_weekly, fetch_cot, import_aaii_file,
-        INDEX_SYMBOLS, COT_MARKETS,
+        fetch_aaii, fetch_naaim, fetch_index_weekly, fetch_index_daily, fetch_cot,
+        fetch_crypto_etf_flows, import_aaii_file,
+        INDEX_SYMBOLS, COT_MARKETS, CRYPTO_FLOW_ASSETS,
     )
 
     st.title("🧭 Sentiment")
@@ -8849,6 +8850,133 @@ elif page == "Sentiment":
     sent_cap += ("AAII posts Thursdays, NAAIM Wednesdays; cached data refreshes "
                  "automatically when older than 3 days.")
     st.caption(sent_cap)
+
+    # ── Spot crypto ETF flows (Farside) ──────────────────────
+    st.markdown("---")
+    st.markdown("### ₿ Crypto ETF Flows")
+
+    cf_asset = st.selectbox("Asset", list(CRYPTO_FLOW_ASSETS.keys()), index=0,
+                            key="sent_cf_asset")
+    cf = None
+    try:
+        with st.spinner("Loading crypto ETF flow data..."):
+            cf = fetch_crypto_etf_flows(cf_asset, force=sent_force)
+            cf_px = fetch_index_daily(CRYPTO_FLOW_ASSETS[cf_asset]["price"],
+                                      force=sent_force)
+    except Exception as e:
+        st.warning(f"Crypto ETF flow data unavailable: {e}")
+        cf = None
+
+    if cf is not None:
+        # Rolling stats over FULL history so percentiles don't shift with the window
+        cf["flow_5d"] = cf["total"].rolling(5).sum()
+        cf["flow_21d"] = cf["total"].rolling(21).sum()
+        cf["pct_21d"] = cf["flow_21d"].rank(pct=True) * 100
+        cf_p10 = cf["flow_21d"].quantile(0.10)
+        cf_p90 = cf["flow_21d"].quantile(0.90)
+
+        cf_last = cf.iloc[-1]
+        # Consecutive same-direction flow days
+        cf_sign = (cf["total"] > 0).astype(int) - (cf["total"] < 0).astype(int)
+        cf_streak = 0
+        _dir = cf_sign.iloc[-1]
+        if _dir != 0:
+            for _v in cf_sign.iloc[::-1]:
+                if _v != _dir:
+                    break
+                cf_streak += 1
+        if pd.notna(cf_last["pct_21d"]) and cf_last["pct_21d"] <= 10:
+            cf_zone, cf_zone_col = "CAPITULATION", "#d94848"
+        elif pd.notna(cf_last["pct_21d"]) and cf_last["pct_21d"] >= 90:
+            cf_zone, cf_zone_col = "EUPHORIA", "#2e9e4f"
+        else:
+            cf_zone, cf_zone_col = "—", "#888"
+
+        cm1, cm2, cm3, cm4, cm5, cm6 = st.columns(6)
+        cm1.metric("Flow date", cf_last["date"].strftime("%d %b %Y"))
+        cm2.metric("Daily net", f"{cf_last['total']:+,.0f}M")
+        cm3.metric("5-day sum", f"{cf_last['flow_5d']:+,.0f}M")
+        cm4.metric("21-day sum", f"{cf_last['flow_21d']:+,.0f}M")
+        cm5.metric("21d flow percentile", f"{cf_last['pct_21d']:.0f}%"
+                   if pd.notna(cf_last["pct_21d"]) else "n/a",
+                   help="Rank of the current 21-day flow sum against the full "
+                        "history. ≤10 = capitulation zone, ≥90 = euphoria zone.")
+        cm6.metric("Flow streak", f"{cf_streak}d "
+                   f"{'in' if _dir > 0 else 'out' if _dir < 0 else ''}flow"
+                   if _dir != 0 else "flat")
+        if cf_zone != "—":
+            st.markdown(f"<span style='color:{cf_zone_col};font-weight:bold'>"
+                        f"⚠ 21-day flows in the {cf_zone} decile</span>",
+                        unsafe_allow_html=True)
+
+        cf_w = cf[cf["date"] >= sent_start]
+        cf_px_w = cf_px[cf_px["date"] >= max(sent_start, cf["date"].min())]
+
+        cf_fig = make_subplots(
+            rows=3, cols=1, shared_xaxes=True,
+            row_heights=[0.45, 0.28, 0.27], vertical_spacing=0.04,
+            subplot_titles=(
+                f"{CRYPTO_FLOW_ASSETS[cf_asset]['price']} daily close",
+                f"Daily net flow {cf_last['total']:+,.0f}M USD",
+                f"21-day rolling flow {cf_last['flow_21d']:+,.0f}M — "
+                f"percentile {cf_last['pct_21d']:.0f}%"
+                if pd.notna(cf_last["pct_21d"]) else "21-day rolling flow",
+            ),
+        )
+        cf_fig.add_trace(go.Scatter(
+            x=cf_px_w["date"], y=cf_px_w["close"], name="Close",
+            line=dict(color="#4a6fd9", width=1.4), showlegend=False,
+            hovertemplate="%{x|%d %b %Y}<br>%{y:,.0f}<extra></extra>",
+        ), row=1, col=1)
+        cf_bar_colors = [SENT_BULL_COLOR if v >= 0 else SENT_BEAR_COLOR
+                         for v in cf_w["total"]]
+        cf_fig.add_trace(go.Bar(
+            x=cf_w["date"], y=cf_w["total"], name="Daily net flow",
+            marker_color=cf_bar_colors, width=20 * 3600 * 1000, showlegend=False,
+            hovertemplate="%{x|%d %b %Y}<br>%{y:+,.1f}M<extra></extra>",
+        ), row=2, col=1)
+        cf_fig.add_hline(y=0, line_dash="dash", line_color="#666", line_width=1,
+                         row=2, col=1)
+        cf_fig.add_trace(go.Scatter(
+            x=cf_w["date"], y=cf_w["flow_21d"], name="21d flow",
+            line=dict(color=SENT_NAAIM_COLOR, width=1.5), fill="tozeroy",
+            fillcolor="rgba(217,155,46,0.12)", showlegend=False,
+            customdata=cf_w["pct_21d"],
+            hovertemplate="%{x|%d %b %Y}<br>21d %{y:+,.0f}M "
+                          "(pct %{customdata:.0f})<extra></extra>",
+        ), row=3, col=1)
+        cf_fig.add_hline(y=cf_p10, line_dash="dash", line_color="#d94848", line_width=1,
+                         annotation_text=f"capitulation decile {cf_p10:+,.0f}M",
+                         annotation_font_size=10, annotation_position="bottom left",
+                         row=3, col=1)
+        cf_fig.add_hline(y=cf_p90, line_dash="dash", line_color="#2e9e4f", line_width=1,
+                         annotation_text=f"euphoria decile {cf_p90:+,.0f}M",
+                         annotation_font_size=10, row=3, col=1)
+        cf_fig.add_hline(y=0, line_dash="dot", line_color="#666", line_width=1,
+                         row=3, col=1)
+
+        cf_fig.update_layout(
+            height=800, bargap=0,
+            paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
+            margin=dict(l=10, r=10, t=30, b=10),
+            xaxis_rangeslider_visible=False, hovermode="x unified",
+        )
+        cf_fig.update_xaxes(showgrid=True, gridcolor="rgba(128,128,128,0.15)")
+        cf_fig.update_yaxes(showgrid=True, gridcolor="rgba(128,128,128,0.15)",
+                            side="right")
+        cf_fig.update_annotations(font_size=11, x=0.01, xanchor="left",
+                                  selector=dict(xref="paper"))
+        st.plotly_chart(cf_fig, use_container_width=True, key="sent_cf_chart")
+
+        st.caption(
+            f"US spot {cf_asset} ETF net flows (all funds), USD millions — Farside "
+            f"Investors, {cf['date'].min():%b %Y} – {cf['date'].max():%d %b %Y} "
+            f"({len(cf)} trading days), updated next morning UK time. Cumulative "
+            f"net: {cf['total'].sum():+,.0f}M. Flow extremes are contrarian at the "
+            f"bottom (outflow capitulation near local lows) and confirming in "
+            f"trends; price lower low + 21d-flow higher low = accumulation into "
+            f"weakness."
+        )
 
     # ── CFTC COT positioning ─────────────────────────────────
     st.markdown("---")

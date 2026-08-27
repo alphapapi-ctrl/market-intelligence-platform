@@ -34,6 +34,16 @@ INDEX_SYMBOLS = {
     "Silver (futures)": "SI=F",
 }
 
+# Farside Investors spot crypto ETF flow tables (daily, USD millions,
+# per fund + total, updated the next morning). Same 403-to-bare-clients
+# behaviour as AAII — needs the browser headers.
+CRYPTO_FLOW_ASSETS = {
+    "Bitcoin":  {"key": "btc", "url": "https://farside.co.uk/bitcoin-etf-flow-all-data/",
+                 "price": "BTC-USD"},
+    "Ethereum": {"key": "eth", "url": "https://farside.co.uk/ethereum-etf-flow-all-data/",
+                 "price": "ETH-USD"},
+}
+
 # CFTC legacy futures-only COT report (Socrata API, no key required).
 # Contract market codes are stable even though market names changed over time.
 COT_API_URL = "https://publicreporting.cftc.gov/resource/6dca-aqww.json"
@@ -248,6 +258,101 @@ def fetch_index_weekly(symbol: str = "^GSPC", force: bool = False) -> pd.DataFra
 
 def fetch_spx_weekly(force: bool = False) -> pd.DataFrame:
     return fetch_index_weekly("^GSPC", force=force)
+
+
+def fetch_index_daily(symbol: str, force: bool = False) -> pd.DataFrame:
+    """
+    Daily OHLC since mid-2023 for a Yahoo symbol (runway for the crypto
+    ETF flow panel — spot ETFs launched Jan 2024).
+    Columns: date, open, high, low, close.
+    """
+    safe = "".join(c if c.isalnum() else "_" for c in symbol)
+    cached, fresh = _cache_get(f"index_{safe}_daily", force)
+    if fresh:
+        return cached
+    try:
+        resp = requests.get(YAHOO_CHART_URL.format(symbol=requests.utils.quote(symbol)),
+                            params={"period1": "1688169600", "period2": "9999999999",
+                                    "interval": "1d"},
+                            headers={"User-Agent": _HEADERS["User-Agent"]}, timeout=30)
+        resp.raise_for_status()
+        result = resp.json()["chart"]["result"][0]
+    except Exception:
+        if cached is not None:
+            return cached
+        raise
+
+    quote = result["indicators"]["quote"][0]
+    df = pd.DataFrame({
+        "date": pd.to_datetime(result["timestamp"], unit="s").normalize(),
+        "open": quote["open"], "high": quote["high"],
+        "low": quote["low"], "close": quote["close"],
+    }).dropna(subset=["close"]).reset_index(drop=True)
+    return _cache_put(f"index_{safe}_daily", df)
+
+
+# ══════════════════════════════════════════════════════════════
+# Spot crypto ETF flows (Farside Investors)
+# ══════════════════════════════════════════════════════════════
+
+def _farside_num(v) -> float:
+    """Farside cells: '1,234.5', '(93.5)' for outflows, footnote marks
+    like '9199.3*', '-' / '' for no data."""
+    s = str(v).strip().replace(",", "").rstrip("*†‡")
+    if s in ("", "-", "nan", "None"):
+        return float("nan")
+    if s.startswith("(") and s.endswith(")"):
+        return -float(s[1:-1])
+    return float(s)
+
+
+def fetch_crypto_etf_flows(asset: str = "Bitcoin", force: bool = False) -> pd.DataFrame:
+    """
+    Daily net flows for the US spot crypto ETF complex, USD millions.
+    Columns: date, one column per fund ticker (IBIT, FBTC, GBTC, ...), total.
+    Footer rows (Total / Average / Maximum / Minimum) and the ETH 'Seed'
+    row are dropped because their first cell is not a date.
+    """
+    cfg = CRYPTO_FLOW_ASSETS[asset]
+    cached, fresh = _cache_get(f"crypto_flows_{cfg['key']}", force)
+    if fresh:
+        return cached
+    try:
+        resp = requests.get(cfg["url"], headers=_HEADERS, timeout=30)
+        resp.raise_for_status()
+        tables = pd.read_html(io.StringIO(resp.text))
+        raw = max(tables, key=len)
+        if len(raw) < 50:
+            raise RuntimeError(f"Farside {asset} table too small ({len(raw)} rows)")
+    except Exception:
+        if cached is not None:
+            return cached
+        raise
+
+    # Columns are a MultiIndex of (mostly Unnamed, ticker, fee[, staking fee]);
+    # first column is the date, last is the total.
+    def _fund_name(col):
+        for part in (col if isinstance(col, tuple) else (col,)):
+            p = str(part).strip()
+            if (p and not p.startswith("Unnamed") and not p.endswith("%")
+                    and p not in ("Fee", "Staking fee", "Total")):
+                return p.lower()
+        return None
+
+    cols = list(raw.columns)
+    out = pd.DataFrame({"date": pd.to_datetime(raw[cols[0]], format="%d %b %Y",
+                                               errors="coerce")})
+    for col in cols[1:-1]:
+        name = _fund_name(col)
+        if name:
+            out[name] = raw[col].map(_farside_num)
+    out["total"] = raw[cols[-1]].map(_farside_num)
+    out = (out.dropna(subset=["date", "total"])
+              .drop_duplicates(subset="date", keep="last")
+              .sort_values("date").reset_index(drop=True))
+    if out.empty:
+        raise RuntimeError(f"Farside {asset} table parsed to no rows")
+    return _cache_put(f"crypto_flows_{cfg['key']}", out)
 
 
 # ══════════════════════════════════════════════════════════════
