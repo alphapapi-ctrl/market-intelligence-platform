@@ -282,6 +282,33 @@ def save_settings(settings):
     with open(SETTINGS_FILE, 'w') as f:
         json.dump(settings, f, indent=2)
 
+# actionable_settings.json is gitignored (each machine keeps its own tuning) —
+# created here with defaults on first run so a fresh clone works
+ACTIONABLE_SETTINGS_FILE = os.path.join(BASE, 'actionable_settings.json')
+ACTIONABLE_DEFAULTS = {
+    'au_market'  : {'min_score': 0.0, 'regimes': ['LEADER', 'CONTENDER', 'TREND+LEAD'],
+                    'vol': ['HIGH', 'MED'], 'acc_watch': [],
+                    'cap_bands': ['large', 'mid', 'small']},
+    'us_market'  : {'min_score': 0.0, 'regimes': ['LEADER', 'CONTENDER', 'TREND+LEAD'],
+                    'vol': ['HIGH', 'MED'], 'acc_watch': [],
+                    'cap_bands': ['large', 'mid', 'small']},
+    'commodities': {'min_score': 0.0, 'regimes': ['LEADER', 'CONTENDER'],
+                    'vol': ['HIGH', 'MED'], 'acc_watch': [],
+                    'cap_bands': ['large', 'mid', 'small', 'ETF']},
+}
+
+def load_actionable_settings():
+    """Read actionable_settings.json, writing the defaults on first run."""
+    try:
+        if os.path.exists(ACTIONABLE_SETTINGS_FILE):
+            with open(ACTIONABLE_SETTINGS_FILE, 'r') as f:
+                return json.load(f)
+        with open(ACTIONABLE_SETTINGS_FILE, 'w') as f:
+            json.dump(ACTIONABLE_DEFAULTS, f, indent=2)
+    except Exception:
+        pass
+    return {k: dict(v) for k, v in ACTIONABLE_DEFAULTS.items()}
+
 MODELS_FILE = os.path.join(BASE, 'models.json')
 
 def load_models():
@@ -8014,20 +8041,11 @@ elif page == "Screeners & Exports":
         st.caption("Page filters apply to every section below and to the TradingView / CSV exports. "
                    "Empty = use each market's saved Screener settings (Settings → 📋 Screeners).")
 
-        # Load settings for display
-        _as_file = os.path.join(BASE, 'actionable_settings.json')
-        _act_cfg = {}
-        if os.path.exists(_as_file):
-            try: _act_cfg = json.load(open(_as_file))
-            except: pass
+        # Load settings for display (creates the file with defaults on first run)
+        _act_cfg = load_actionable_settings()
 
-        _AS_DISPLAY_DEFAULTS = {
-            'au_market'  : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':[],'cap_bands':['large','mid','small']},
-            'us_market'  : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':[],'cap_bands':['large','mid','small']},
-            'commodities': {'min_score':0.0,'regimes':['LEADER','CONTENDER'],'vol':['HIGH','MED'],'acc_watch':[],'cap_bands':['large','mid','small','ETF']},
-        }
         def _settings_caption(cfg_key):
-            _s = {**_AS_DISPLAY_DEFAULTS.get(cfg_key,{}), **_act_cfg.get(cfg_key,{})}
+            _s = {**ACTIONABLE_DEFAULTS.get(cfg_key,{}), **_act_cfg.get(cfg_key,{})}
             parts = []
             if _s.get('regimes'):   parts.append(f"Regimes: **{', '.join(_s['regimes'])}**")
             if _s.get('vol'):       parts.append(f"Vol: **{', '.join(_s['vol'])}**")
@@ -8065,7 +8083,7 @@ elif page == "Screeners & Exports":
                     if _df is not None and len(_df) > 0:
                         # Apply all filters from actionable settings
                         _sma_cfg = _act_cfg.get(cfg_key, {})
-                        _s_filt  = {**_AS_DISPLAY_DEFAULTS.get(cfg_key,{}), **_act_cfg.get(cfg_key,{})}
+                        _s_filt  = {**ACTIONABLE_DEFAULTS.get(cfg_key,{}), **_act_cfg.get(cfg_key,{})}
                         if _pf_regime: _s_filt['regimes'] = _pf_regime
                         if _pf_vol:    _s_filt['vol'] = _pf_vol
                         if _pf_cap:    _s_filt['cap_bands'] = _pf_cap
@@ -10778,19 +10796,11 @@ elif page == "Settings":
     with _stab_act:
             st.title("⚙️ Screener Settings")
             st.caption("Configure filters for actionable export files. Saved to actionable_settings.json.")
-            _as_file = os.path.join(BASE, 'actionable_settings.json')
-            _AS_DEFAULTS = {
-                'au_market'  : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
-                'us_market'  : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
-                'commodities': {'min_score':0.0,'regimes':['LEADER','CONTENDER'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small','ETF']},
-            }
             def _load_as():
-                if os.path.exists(_as_file):
-                    try: return {k:{**_AS_DEFAULTS[k],**json.load(open(_as_file)).get(k,{})} for k in _AS_DEFAULTS}
-                    except: pass
-                return {k:dict(v) for k,v in _AS_DEFAULTS.items()}
+                _cfg = load_actionable_settings()
+                return {k: {**dict(v), **_cfg.get(k, {})} for k, v in ACTIONABLE_DEFAULTS.items()}
             def _save_as(s):
-                with open(_as_file,'w') as _f: json.dump(s,_f,indent=2)
+                with open(ACTIONABLE_SETTINGS_FILE,'w') as _f: json.dump(s,_f,indent=2)
                 st.success("Saved to actionable_settings.json")
             _as=_load_as()
             _as_tabs=st.tabs(["🇦🇺 AU Market","🇺🇸 US Market","⛏ Commodities","🔍 Burry Screen"])

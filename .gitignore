@@ -15,6 +15,9 @@ etf/etf_settings.json
 rank_settings.json
 drawdown_settings.json
 
+# Per-machine screener filter tuning — dashboard recreates it with defaults
+actionable_settings.json
+
 # Profile folders (optional — commit or ignore based on preference)
 rank_profiles/
 
