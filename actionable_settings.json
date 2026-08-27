@@ -344,41 +344,5 @@
       ],
       "sma200": []
     }
-  },
-  "uranium": {
-    "min_score": 0.0,
-    "regimes": [
-      "LEADER",
-      "CONTENDER",
-      "TREND+LEAD"
-    ],
-    "vol": [
-      "HIGH",
-      "MED"
-    ],
-    "acc_watch": false,
-    "cap_bands": [
-      "large",
-      "mid",
-      "small"
-    ]
-  },
-  "au_gold": {
-    "min_score": 0.0,
-    "regimes": [
-      "LEADER",
-      "CONTENDER",
-      "TREND+LEAD"
-    ],
-    "vol": [
-      "HIGH",
-      "MED"
-    ],
-    "acc_watch": false,
-    "cap_bands": [
-      "large",
-      "mid",
-      "small"
-    ]
   }
 }

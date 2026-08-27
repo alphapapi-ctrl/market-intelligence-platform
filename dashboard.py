@@ -8025,8 +8025,6 @@ elif page == "Screeners & Exports":
             'au_market'  : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':[],'cap_bands':['large','mid','small']},
             'us_market'  : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':[],'cap_bands':['large','mid','small']},
             'commodities': {'min_score':0.0,'regimes':['LEADER','CONTENDER'],'vol':['HIGH','MED'],'acc_watch':[],'cap_bands':['large','mid','small','ETF']},
-            'uranium'    : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':[],'cap_bands':['large','mid','small']},
-            'au_gold'    : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':[],'cap_bands':['large','mid','small']},
         }
         def _settings_caption(cfg_key):
             _s = {**_AS_DISPLAY_DEFAULTS.get(cfg_key,{}), **_act_cfg.get(cfg_key,{})}
@@ -8206,16 +8204,6 @@ elif page == "Screeners & Exports":
                 ("Benchmark",       "benchmark", "all_major_commodities", False),
                 ("Screener",        "screener",  "all_major_commodities", False),
                 ("High Conviction", "screener",  "all_major_commodities", True),
-            ]),
-            ("☢ Uranium", "uranium", [
-                ("Benchmark",       "benchmark", "uranium", False),
-                ("Screener",        "screener",  "uranium", False),
-                ("High Conviction", "screener",  "uranium", True),
-            ]),
-            ("🥇 AU Gold", "au_gold", [
-                ("Benchmark",       "benchmark", "au_gold_miners", False),
-                ("Screener",        "screener",  "au_gold_miners", False),
-                ("High Conviction", "screener",  "au_gold_miners", True),
             ]),
         ]
 
@@ -10667,8 +10655,6 @@ elif page == "Settings":
                 'au_market'  : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
                 'us_market'  : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
                 'commodities': {'min_score':0.0,'regimes':['LEADER','CONTENDER'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small','ETF']},
-                'uranium'    : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
-                'au_gold'    : {'min_score':0.0,'regimes':['LEADER','CONTENDER','TREND+LEAD'],'vol':['HIGH','MED'],'acc_watch':False,'cap_bands':['large','mid','small']},
             }
             def _load_as():
                 if os.path.exists(_as_file):
@@ -10679,7 +10665,7 @@ elif page == "Settings":
                 with open(_as_file,'w') as _f: json.dump(s,_f,indent=2)
                 st.success("Saved to actionable_settings.json")
             _as=_load_as()
-            _as_tabs=st.tabs(["🇦🇺 AU Market","🇺🇸 US Market","⛏ Commodities","☢ Uranium","🥇 AU Gold","🔍 Burry Screen"])
+            _as_tabs=st.tabs(["🇦🇺 AU Market","🇺🇸 US Market","⛏ Commodities","🔍 Burry Screen"])
             _SMA_OPTS = ['Above 20', 'Below 20', 'Above 50', 'Below 50', 'Above 200', 'Below 200']
             _SMA_DEFAULTS = {
                 'EARLY'   : ['Below 20', 'Below 50', 'Below 200'],
@@ -10687,7 +10673,7 @@ elif page == "Settings":
                 'SHIFT'   : ['Above 20', 'Above 50', 'Below 200'],
             }
 
-            for _k,_t in zip(['au_market','us_market','commodities','uranium','au_gold'],_as_tabs):
+            for _k,_t in zip(['au_market','us_market','commodities'],_as_tabs):
                 with _t:
                     _s=_as[_k]
                     st.markdown("#### Filter Parameters")
@@ -10776,7 +10762,7 @@ elif page == "Settings":
                         _save_as(_as)
 
             # ── Burry Screen settings tab ─────────────────────────────────────
-            with _as_tabs[5]:
+            with _as_tabs[-1]:
                 st.markdown("#### Burry Value Screen Defaults")
                 st.caption("Default filter values for the Burry screen. You can also adjust filters inline on the Screeners page.")
                 _bs = load_settings().get('burry_screener', DEFAULT_SETTINGS['burry_screener'])
