@@ -9513,10 +9513,13 @@ elif page == "ETF Income":
         st.markdown("""
             <div class="info-card">
                 Enter your current holdings and compare against the latest rankings.
-                <b>HOLD</b> — still qualified and ranked inside the buy zone.
-                <b>REVIEW</b> — qualified but slipped outside the top ranks.
+                Signals are based on position within the <b>qualified</b> list — the same
+                way the backtest picks its top-N — so disqualified funds higher up the
+                score table don't consume buy-zone slots.
+                <b>HOLD</b> — qualified and inside the top-N qualified (buy zone).
+                <b>REVIEW</b> — qualified but slipped outside the top-N qualified.
                 <b>SELL</b> — disqualified (negative 3-month NAV trend).
-                Candidates are top-ranked qualified ETFs you don't hold.
+                Candidates are buy-zone funds you don't hold.
             </div>
         """, unsafe_allow_html=True)
 
@@ -9704,7 +9707,16 @@ elif page == "ETF Income":
 
             _held_rows = [r for _, r in _edited.iterrows() if str(r['ticker']).strip()]
             _held = [str(r['ticker']).strip().upper() for r in _held_rows]
-            _buy_zone = int(_etf_s.get('buy_zone', 8))  # rank threshold for HOLD vs REVIEW
+            _buy_zone = int(_etf_s.get('buy_zone', 8))  # top-N qualified = buy zone
+
+            # Rank within the qualified list — matches the backtest's top-N pick
+            # (absolute rank counts disqualified funds, so it can't be compared
+            # against the buy zone without skewing HOLD/REVIEW)
+            _qual_rank = {}
+            if _df_rank is not None:
+                _qual_df = _df_rank[_df_rank['qualified'] == True].sort_values('rank')
+                _qual_rank = {str(t).upper(): i + 1
+                              for i, t in enumerate(_qual_df['ticker'])}
 
             if _held and _df_rank is not None:
                 _sig_rows = []
@@ -9732,22 +9744,24 @@ elif page == "ETF Income":
                     if _row.empty:
                         _sig_rows.append({'Ticker': _t, 'Freq': _inf_freq or '—',
                                           'Next Pay (est)': _nxt_txt,
-                                          'Rank': '—', 'Score': '—',
+                                          'Rank': '—', 'Qual Rank': '—', 'Score': '—',
                                           'Qualified': '—', 'Signal': 'NOT IN UNIVERSE',
                                           'TR from entry': _tr_txt, 'Stop': _stop_txt})
                         continue
                     _r = _row.iloc[0]
                     _freq = str(_r['freq']) if 'freq' in _row.columns and pd.notna(_r.get('freq')) else (_inf_freq or '—')
                     _qual = bool(_r['qualified'])
+                    _qr = _qual_rank.get(_t)
                     if not _qual:
                         _sig = 'SELL'
-                    elif int(_r['rank']) <= _buy_zone:
+                    elif _qr is not None and _qr <= _buy_zone:
                         _sig = 'HOLD'
                     else:
                         _sig = 'REVIEW'
                     _sig_rows.append({'Ticker': _t, 'Freq': _freq,
                                       'Next Pay (est)': _nxt_txt,
                                       'Rank': int(_r['rank']),
+                                      'Qual Rank': _qr if _qr is not None else '—',
                                       'Score': f"{_r['score']:.1f}",
                                       'Qualified': '✓' if _qual else '✗', 'Signal': _sig,
                                       'TR from entry': _tr_txt, 'Stop': _stop_txt})
@@ -9774,11 +9788,16 @@ elif page == "ETF Income":
                              width='stretch', hide_index=True)
 
             if _df_rank is not None:
-                _cands = _df_rank[(_df_rank['qualified'] == True) &
-                                  (~_df_rank['ticker'].isin(_held))].head(_buy_zone)
+                # buy zone = top-N qualified overall; candidates are the ones not held.
+                # (Filtering held first would pull lower-ranked funds into the list —
+                # funds the strategy itself wouldn't own.)
+                _zone = _df_rank[_df_rank['qualified'] == True].sort_values('rank').head(_buy_zone)
+                _cands = _zone[~_zone['ticker'].isin(_held)].copy()
                 if not _cands.empty:
-                    st.markdown("**Top candidates not held**")
-                    _cand_cols = [c for c in ['rank', 'ticker', 'name', 'freq', 'score',
+                    _cands.insert(0, 'qual_rank',
+                                  [_qual_rank.get(str(t).upper()) for t in _cands['ticker']])
+                    st.markdown("**Buy-zone candidates not held**")
+                    _cand_cols = [c for c in ['qual_rank', 'rank', 'ticker', 'name', 'freq', 'score',
                                               'chg_3m', 'yield_ttm', 'dist_slope'] if c in _cands.columns]
                     st.dataframe(_cands[_cand_cols], width='stretch', hide_index=True)
 
@@ -10436,7 +10455,8 @@ elif page == "Settings":
                 <b>5. Qualifier</b> — hard gate, runs after scoring: negative 3-month NAV change = disqualified,
                    no matter how high the score. A high yield on a shrinking NAV is your own capital coming back.<br>
                 <b>6. Selection</b> — backtest holds the top-N qualified; the Rebalance tab flags your holdings
-                   HOLD (rank inside the buy zone), REVIEW (qualified but slipped), or SELL (disqualified).<br>
+                   HOLD (inside the top-N qualified — the buy zone), REVIEW (qualified but slipped below it),
+                   or SELL (disqualified).<br>
                 <b>7. In-trade protection</b> — the live stop cuts a holding whose <i>total return</i> from entry
                    (price + distributions received) breaches the stop level. Total-return basis matters:
                    these funds mechanically bleed price via distributions, so a raw price stop would
@@ -10484,9 +10504,10 @@ elif page == "Settings":
                     through the 2022 bear, which beat holding it. Not configurable from here.</div>
                     </div>""", unsafe_allow_html=True)
             with _gc2:
-                _new_buyzone = st.number_input("Buy zone (rank ≤)", 3, 20, int(_es.get('buy_zone', 8)),
+                _new_buyzone = st.number_input("Buy zone (top-N qualified)", 3, 20, int(_es.get('buy_zone', 8)),
                                                 key='etf_buyzone',
-                                                help="Holdings ranked inside this = HOLD, outside = REVIEW on the Rebalance tab")
+                                                help="Counted within the qualified list, like the backtest's top-N. "
+                                                     "Holdings inside = HOLD, qualified but outside = REVIEW on the Rebalance tab")
             with _gc3:
                 _new_stop = st.number_input("Live stop loss %", 5, 50,
                                              int(float(_es.get('stop_loss_pct', 0.20)) * 100),
