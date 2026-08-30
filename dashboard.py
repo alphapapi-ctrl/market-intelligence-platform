@@ -9647,18 +9647,23 @@ elif page == "ETF Income":
         @st.cache_data(ttl=900, show_spinner=False)
         def _fetch_holding_tr(ticker, entry_price, entry_date):
             """Live total-return from entry: (price + divs received) / entry - 1."""
+            import math as _math
             import yfinance as _yf
             try:
                 h = _yf.Ticker(ticker).history(period='2y', auto_adjust=False)
                 if h is None or h.empty:
                     return None
                 h.index = h.index.tz_localize(None)
-                px = float(h['Close'].iloc[-1])
+                _closes = h['Close'].dropna()          # Yahoo can return a trailing NaN row (pre-open placeholder)
+                if _closes.empty:
+                    return None
+                px = float(_closes.iloc[-1])
                 divs_ps = 0.0
                 if entry_date:
                     _ed = pd.Timestamp(entry_date)
-                    divs_ps = float(h['Dividends'][h.index > _ed].sum())
-                return (px + divs_ps) / float(entry_price) - 1
+                    divs_ps = float(h['Dividends'][h.index > _ed].fillna(0).sum())
+                _tr = (px + divs_ps) / float(entry_price) - 1
+                return _tr if _math.isfinite(_tr) else None
             except Exception:
                 return None
 
