@@ -10,6 +10,8 @@ Steps
   2. Upsert `securities`; new symbols get first_seen; symbols Yahoo no longer lists AND whose
      prices have stopped are marked inactive (delisted_at). Names/sector/industry/market cap
      refresh every run. Overrides in stocks/universe_overrides.json are applied last.
+  2b. Any active equity still without a sector is asked for directly (yf.Ticker.info);
+     rows Yahoo reports as a fund are retyped so they leave the equity universes.
   3. Commodity flags from Yahoo industry + name keywords (add-only; legacy/manual flags kept).
   4. Index memberships from isolated providers (S&P 500, Nasdaq-100, ASX 20/50/200; DJIA from
      the RRG Dow list). A provider failure keeps the previous membership.
@@ -181,6 +183,80 @@ def apply_securities(found: pd.DataFrame, region: str, con: sqlite3.Connection, 
     return {"new": new["ticker"].tolist(), "delisted": delist}
 
 
+# ── 2b. Sector backfill ───────────────────────────────────────────────────────
+SECTOR_SLEEP = 0.15          # polite pause between per-ticker info calls
+SECTOR_COMMIT_EVERY = 25
+
+
+def backfill_sectors(con: sqlite3.Connection, region: str | None = None, limit: int | None = None,
+                     dry: bool = False, log=print) -> dict:
+    """Fill sector/industry from Yahoo for active equities the screener sweep missed.
+
+    pull_region() only tags what the industry-by-industry screener returns, so a rejected
+    industry query or a paging failure leaves real equities (ADI, HD, MU ...) with a NULL
+    sector. Those then depend on LEGACY_TO_YAHOO_SECTOR, or land in an "Unknown" breadth
+    bucket when no legacy label exists. This asks Yahoo directly for exactly those rows.
+
+    Yahoo's quoteType is trusted here too: anything that comes back as a fund is retyped so
+    it stops satisfying the EQUITY filter on the research universes.
+    """
+    import yfinance as yf
+
+    q = ["SELECT ticker FROM securities WHERE active=1 AND quote_type='EQUITY'",
+         "AND (sector IS NULL OR sector = '')"]
+    params: list = []
+    if region:
+        q.append("AND region=?")
+        params.append(region)
+    q.append("ORDER BY market_cap IS NULL, market_cap DESC")
+    if limit:
+        q.append(f"LIMIT {int(limit)}")
+    tickers = db.read_df(" ".join(q), tuple(params), con=con)["ticker"].tolist()
+    label = region or "all"
+    if not tickers:
+        log(f"  sectors {label}: nothing missing")
+        return {"checked": 0, "filled": 0, "retyped": 0, "no_data": 0, "failed": 0}
+
+    log(f"  sectors {label}: {len(tickers)} active equities with no sector — asking Yahoo per ticker")
+    out = {"checked": len(tickers), "filled": 0, "retyped": 0, "no_data": 0, "failed": 0}
+    for i, t in enumerate(tickers, 1):
+        try:
+            info = yf.Ticker(t).get_info() or {}
+        except Exception as e:  # noqa: BLE001
+            out["failed"] += 1
+            log(f"    {t}: info failed ({type(e).__name__}: {str(e)[:60]})")
+            time.sleep(SECTOR_SLEEP)
+            continue
+
+        qt = (info.get("quoteType") or "").upper()
+        sector = info.get("sector")
+        industry = info.get("industry")
+
+        if qt and qt != "EQUITY":
+            out["retyped"] += 1
+            if not dry:
+                con.execute("UPDATE securities SET quote_type=? WHERE ticker=?", (qt, t))
+            log(f"    {t}: Yahoo says {qt}, not EQUITY — retyped")
+        elif sector:
+            out["filled"] += 1
+            if not dry:
+                con.execute("UPDATE securities SET sector=?, industry=COALESCE(?, industry) WHERE ticker=?",
+                            (sector, (industry or "").replace("\u2014", " - ") or None, t))
+        else:
+            out["no_data"] += 1
+
+        if not dry and i % SECTOR_COMMIT_EVERY == 0:
+            con.commit()
+            log(f"    {label}: {i}/{len(tickers)} checked, {out['filled']} filled")
+        time.sleep(SECTOR_SLEEP)
+
+    if not dry:
+        con.commit()
+    log(f"  sectors {label}: {out['filled']} filled, {out['retyped']} retyped, "
+        f"{out['no_data']} Yahoo has no sector for, {out['failed']} failed")
+    return out
+
+
 def apply_overrides(con: sqlite3.Connection, log=print) -> None:
     ov = U.load_overrides()
     today = db.today_str()
@@ -334,11 +410,18 @@ def snapshot(con: sqlite3.Connection, log=print) -> None:
     con.commit()
 
 
-def refresh(con: sqlite3.Connection, *, dry: bool = False, indices_only: bool = False, log=print) -> dict:
+def refresh(con: sqlite3.Connection, *, dry: bool = False, indices_only: bool = False,
+            sectors_only: bool = False, skip_sectors: bool = False, log=print) -> dict:
     t0 = time.time()
     run_id = db.start_run("refresh", None, con)
     summary = {}
     try:
+        if sectors_only:
+            for region in ("AU", "US"):
+                summary[f"sectors_{region}"] = backfill_sectors(con, region, dry=dry, log=log)
+            db.finish_run(run_id, "ok", con, notes=f"sectors-only {time.time() - t0:.0f}s")
+            log(f"sector backfill done in {time.time() - t0:.0f}s")
+            return summary
         if not indices_only:
             for region in ("AU", "US"):
                 log(f"── {region}: pulling Yahoo screener")
@@ -348,6 +431,9 @@ def refresh(con: sqlite3.Connection, *, dry: bool = False, indices_only: bool = 
                     continue
                 summary[region] = apply_securities(found, region, con, dry, log)
             if not dry:
+                if not skip_sectors:
+                    for region in ("AU", "US"):
+                        summary[f"sectors_{region}"] = backfill_sectors(con, region, log=log)
                 apply_overrides(con, log)
                 apply_commodity_flags(con, log)
         log("── index memberships")
@@ -368,9 +454,14 @@ def main(argv=None):
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--indices-only", action="store_true")
+    ap.add_argument("--sectors-only", action="store_true",
+                    help="only fill sector/industry for active equities Yahoo's screener missed")
+    ap.add_argument("--skip-sectors", action="store_true",
+                    help="skip the per-ticker sector backfill during a full refresh")
     a = ap.parse_args(argv)
     with db.session() as con:
-        s = refresh(con, dry=a.dry_run, indices_only=a.indices_only)
+        s = refresh(con, dry=a.dry_run, indices_only=a.indices_only,
+                    sectors_only=a.sectors_only, skip_sectors=a.skip_sectors)
         for reg in ("AU", "US"):
             if reg in s:
                 print(f"{reg}: new {len(s[reg]['new'])} {s[reg]['new'][:15]}{'...' if len(s[reg]['new']) > 15 else ''}")

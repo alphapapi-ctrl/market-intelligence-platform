@@ -159,8 +159,14 @@ def ensure_securities(tickers: list[str], con: sqlite3.Connection, role: str | N
         allowed.append(t)
         exists = db.scalar("SELECT 1 FROM securities WHERE ticker=?", (t,), con=con)
         if not exists:
+            # Never default to EQUITY: helper tickers registered here (ETF income
+            # holdings, custom benchmarks, macro series) would otherwise pass the
+            # EQUITY filter on the research universes and surface in breadth as an
+            # "Unknown" sector. refresh_universe sets the real type for anything
+            # Yahoo's screener knows about.
             qt = "INDEX" if t.startswith("^") else "FUTURE" if t.endswith("=F") else \
-                 "CURRENCY" if (t.endswith("=X") or t == "DX-Y.NYB") else "EQUITY"
+                 "CURRENCY" if (t.endswith("=X") or t == "DX-Y.NYB") else \
+                 "ETF" if role == "etf_income" else "UNKNOWN"
             con.execute("""INSERT INTO securities (ticker, name, region, quote_type, active, first_seen, source)
                            VALUES (?,?,?,?,1,?,'manual')""", (t, (names or {}).get(t, t), reg, qt, today))
         if role:
