@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 import glob
 from streamlit_option_menu import option_menu
 import json
+from copy import deepcopy as _deepcopy
 
 # ── Theme helpers ─────────────────────────────────────────────────────────────
 import re as _re
@@ -258,25 +259,28 @@ SC_DEFAULTS = {
     'regime_filter': ['LEADER', 'CONTENDER'],
 }
 def load_settings():
-    if os.path.exists(SETTINGS_FILE):
-        try:
-            with open(SETTINGS_FILE, 'r') as f:
-                saved = json.load(f)
-                merged = DEFAULT_SETTINGS.copy()
-                merged['pages'].update(saved.get('pages', {}))
-                merged['ai_features'].update(saved.get('ai_features', {}))
-                if 'fa_features' not in merged:
-                    merged['fa_features'] = DEFAULT_SETTINGS.get('fa_features', {}).copy()
-                merged['fa_features'].update(saved.get('fa_features', {}))
-                if 'burry_screener' not in merged:
-                    merged['burry_screener'] = DEFAULT_SETTINGS.get('burry_screener', {}).copy()
-                merged['burry_screener'].update(saved.get('burry_screener', {}))
-                if 'theme' in saved:
-                    merged['theme'] = saved['theme']
-                return merged
-        except:
-            pass
-    return DEFAULT_SETTINGS.copy()
+    """DEFAULT_SETTINGS overlaid with dashboard_settings.json.
+
+    Every saved key is merged, not just the ones named here: listing them individually
+    silently dropped whole sections (ai_prompts, rank_settings), so edited AI prompts
+    saved fine and then read back as the defaults. Dicts merge key-by-key so a settings
+    file written before a new default existed still picks that default up; anything else
+    (scalars, lists such as regime_filter) is replaced wholesale.
+    """
+    merged = _deepcopy(DEFAULT_SETTINGS)
+    if not os.path.exists(SETTINGS_FILE):
+        return merged
+    try:
+        with open(SETTINGS_FILE, 'r') as f:
+            saved = json.load(f)
+    except Exception:
+        return merged
+    for key, val in saved.items():
+        if isinstance(val, dict) and isinstance(merged.get(key), dict):
+            merged[key].update(val)
+        else:
+            merged[key] = val
+    return merged
 
 def save_settings(settings):
     with open(SETTINGS_FILE, 'w') as f:
