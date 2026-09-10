@@ -8720,6 +8720,9 @@ elif page == "Sentiment":
     sent_px = sent_px.sort_values("date").reset_index(drop=True)
     sent_px["ma40"] = sent_px["close"].rolling(40).mean()
     sent_px["ma150"] = sent_px["close"].rolling(150).mean()
+    if naaim is not None:
+        naaim = naaim.sort_values("date").copy()
+        naaim["ma4"] = naaim["exposure"].rolling(4).mean()
 
     sent_end = max(sent_px["date"].max(), aaii["date"].max())
     if sent_window == "Max":
@@ -8753,8 +8756,9 @@ elif page == "Sentiment":
                f"{aaii_latest['spread'] - aaii_prev['spread']:+.1f}")
     if naaim is not None and len(naaim) > 1:
         n_last, n_prev = naaim.iloc[-1], naaim.iloc[-2]
-        sm6.metric("NAAIM exposure", f"{n_last['exposure']:.0f}",
+        sm6.metric("NAAIM exposure (delayed)", f"{n_last['exposure']:.0f}",
                    f"{n_last['exposure'] - n_prev['exposure']:+.0f}")
+        sm6.caption(f"As of {n_last['date']:%d %b %Y} · public data delayed 3 months")
     else:
         sm6.metric("NAAIM exposure", "n/a")
 
@@ -8767,7 +8771,7 @@ elif page == "Sentiment":
         f"Bull-Bear spread {aaii_latest['spread']:+.1f}",
     ]
     if has_naaim:
-        sent_titles.append(f"NAAIM Exposure Index {naaim.iloc[-1]['exposure']:.0f}")
+        sent_titles.append(f"NAAIM Exposure Index {naaim.iloc[-1]['exposure']:.0f} — public data delayed 3 months")
 
     sent_fig = make_subplots(
         rows=sent_rows, cols=1, shared_xaxes=True,
@@ -8830,6 +8834,11 @@ elif page == "Sentiment":
             hovertemplate="%{x|%d %b %Y}<br>Exposure %{y:.0f}<extra></extra>",
         ), row=4, col=1)
         naaim_avg = naaim["exposure"].mean()
+        sent_fig.add_trace(go.Scatter(
+            x=naaim_w["date"], y=naaim_w["ma4"], name="NAAIM 4-week average",
+            line=dict(color="#5b9bd5", width=2), showlegend=False,
+            hovertemplate="%{x|%d %b %Y}<br>4-week average %{y:.1f}<extra></extra>",
+        ), row=4, col=1)
         sent_fig.add_hline(y=naaim_avg, line_dash="dash", line_color="#888", line_width=1,
                            annotation_text=f"avg {naaim_avg:.0f}", annotation_font_size=10,
                            row=4, col=1)
@@ -8868,8 +8877,10 @@ elif page == "Sentiment":
     )
     if naaim is not None:
         sent_cap += (f"NAAIM Exposure Index: {naaim['date'].min():%b %Y} – "
-                     f"{naaim['date'].max():%d %b %Y}; shaded band = manager Q1–Q3 range. ")
-    sent_cap += ("AAII posts Thursdays, NAAIM Wednesdays; cached data refreshes "
+                     f"{naaim['date'].max():%d %b %Y}; public data is delayed three months "
+                     "for longer-term positioning trends; blue line = 4-week average; "
+                     "shaded band = manager Q1–Q3 range. ")
+    sent_cap += ("AAII posts Thursdays; cached data refreshes "
                  "automatically when older than 3 days.")
     st.caption(sent_cap)
 

@@ -21,6 +21,7 @@ AAII_XLS_CACHE = CACHE_DIR / "aaii_sentiment.xls"
 AAII_PARQUET = CACHE_DIR / "aaii_sentiment.parquet"
 
 NAAIM_PAGE_URL = "https://naaim.org/programs/naaim-exposure-index/"
+NAAIM_TABLE_URL = "https://index.naaim.org/embeddable/table"
 NAAIM_XLSX_CACHE = CACHE_DIR / "naaim_exposure.xlsx"
 NAAIM_PARQUET = CACHE_DIR / "naaim_exposure.parquet"
 
@@ -184,40 +185,35 @@ def import_aaii_file(uploaded) -> pd.DataFrame:
 
 def fetch_naaim(force: bool = False) -> pd.DataFrame:
     """
-    NAAIM Exposure Index (weekly since 2006). The data file is a dated
-    xlsx linked from the program page, so scrape the current link first.
+    NAAIM Exposure Index from the public table (delayed three months).
+    Preserve cached history outside the public table's rolling window.
     Columns: date, exposure, q1, median, q3.
     """
-    import re
-
     cached, fresh = _cache_get("naaim", force)
     if fresh:
         return cached
     try:
-        page = requests.get(NAAIM_PAGE_URL, headers=_HEADERS, timeout=30)
-        page.raise_for_status()
-        m = re.search(r'href="(https://naaim\.org/wp-content/uploads/[^"]*USE_Data[^"]*\.xlsx)"',
-                      page.text)
-        if not m:
-            raise RuntimeError("Could not find USE_Data xlsx link on the NAAIM page")
-        resp = requests.get(m.group(1), headers=_HEADERS, timeout=30)
+        resp = requests.get(NAAIM_TABLE_URL, headers=_HEADERS, timeout=30)
         resp.raise_for_status()
-        raw = pd.read_excel(io.BytesIO(resp.content), sheet_name=0)
+        raw = pd.read_html(io.StringIO(resp.text), match="NAAIM Number", flavor="lxml")[0]
+        df = pd.DataFrame({
+            "date": pd.to_datetime(raw["Date"], format="%m/%d/%Y", errors="coerce"),
+            "exposure": pd.to_numeric(raw["NAAIM Number"], errors="coerce"),
+            "q1": pd.to_numeric(raw["Quarter 1"], errors="coerce"),
+            "median": pd.to_numeric(raw["Quarter 2"], errors="coerce"),
+            "q3": pd.to_numeric(raw["Quarter 3"], errors="coerce"),
+        }).dropna(subset=["date", "exposure"])
+        if df.empty:
+            raise RuntimeError("NAAIM public table contains no valid exposure observations")
+        if cached is not None:
+            df = pd.concat([df, cached], ignore_index=True)
+        df = (df.drop_duplicates(subset="date", keep="first")
+                .sort_values("date").reset_index(drop=True))
     except Exception:
         if cached is not None:
             return cached
         raise
 
-    df = pd.DataFrame({
-        "date": pd.to_datetime(raw["Date"]),
-        "exposure": raw["NAAIM Number"],
-        "q1": raw["Quart 1 (25% at/below)"],
-        "median": raw["Quart 2 (median)"],
-        "q3": raw["Quart 3 (25% at/above)"],
-    }).dropna(subset=["date", "exposure"])
-    # file has duplicate rows and is newest-first
-    df = (df.drop_duplicates(subset="date", keep="first")
-            .sort_values("date").reset_index(drop=True))
     return _cache_put("naaim", df)
 
 
