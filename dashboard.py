@@ -8657,6 +8657,9 @@ elif page == "Fundamental Analysis":
 
 
 elif page == "Sentiment":
+    from sentiment.debug import SentimentDebug
+    _sent_debug = SentimentDebug()
+    _sent_debug.log("ENTER sentiment page")
     import sys as _sys
     _sent_dir = os.path.join(BASE, 'sentiment')
     if _sent_dir not in _sys.path:
