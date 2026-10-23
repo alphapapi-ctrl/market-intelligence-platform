@@ -8690,10 +8690,11 @@ elif page == "Sentiment":
         st.write("")
         sent_force = st.button("🔄 Refresh data", key="sent_refresh")
 
+    _sent_debug.log(f"Selections: symbol={INDEX_SYMBOLS[sent_index_name]} window={sent_window} force={sent_force}")
     try:
         with st.spinner("Loading sentiment and price data..."):
-            aaii = fetch_aaii(force=sent_force)
-            sent_px = fetch_index_weekly(INDEX_SYMBOLS[sent_index_name], force=sent_force)
+            aaii = _sent_debug.call("fetch_aaii", fetch_aaii, force=sent_force)
+            sent_px = _sent_debug.call("fetch_index_weekly", fetch_index_weekly, INDEX_SYMBOLS[sent_index_name], force=sent_force)
     except Exception as e:
         st.error(f"Could not load data automatically: {e}")
         st.markdown(
@@ -8703,19 +8704,20 @@ elif page == "Sentiment":
         )
         sent_up = st.file_uploader("Import sentiment.xls", type=["xls"], key="sent_upload")
         if sent_up is not None:
-            aaii = import_aaii_file(sent_up)
+            aaii = _sent_debug.call("import_aaii_file", import_aaii_file, sent_up)
             st.success(f"Imported {len(aaii)} weekly readings.")
-            sent_px = fetch_index_weekly(INDEX_SYMBOLS[sent_index_name])
+            sent_px = _sent_debug.call("fetch_index_weekly", fetch_index_weekly, INDEX_SYMBOLS[sent_index_name])
         else:
             st.stop()
 
     naaim = None
     naaim_err = None
     try:
-        naaim = fetch_naaim(force=sent_force)
+        naaim = _sent_debug.call("fetch_naaim", fetch_naaim, force=sent_force)
     except Exception as e:
         naaim_err = str(e)
 
+    _sent_debug.log("Preparing moving averages and date windows")
     # MAs over full history so they are valid at the left edge of the window
     sent_px = sent_px.sort_values("date").reset_index(drop=True)
     sent_px["ma40"] = sent_px["close"].rolling(40).mean()
@@ -8773,72 +8775,87 @@ elif page == "Sentiment":
     if has_naaim:
         sent_titles.append(f"NAAIM Exposure Index {naaim.iloc[-1]['exposure']:.0f} — public data delayed 3 months")
 
+    _sent_debug.log("Building sent_fig")
     sent_fig = make_subplots(
         rows=sent_rows, cols=1, shared_xaxes=True,
         row_heights=sent_heights, vertical_spacing=0.03,
         subplot_titles=sent_titles,
     )
+    _sent_debug.log("Chart step: sent_fig.add_trace")
     sent_fig.add_trace(go.Ohlc(
         x=sent_px_w["date"], open=sent_px_w["open"], high=sent_px_w["high"],
         low=sent_px_w["low"], close=sent_px_w["close"], name=sent_index_name,
         increasing_line_color="#26a69a", decreasing_line_color="#ef5350",
         line_width=1.2, showlegend=False,
     ), row=1, col=1)
+    _sent_debug.log("Chart step: sent_fig.add_trace")
     sent_fig.add_trace(go.Scatter(
         x=sent_px_w["date"], y=sent_px_w["ma40"], name="MA(40)",
         line=dict(color="#4a6fd9", width=1.5), showlegend=False,
     ), row=1, col=1)
+    _sent_debug.log("Chart step: sent_fig.add_trace")
     sent_fig.add_trace(go.Scatter(
         x=sent_px_w["date"], y=sent_px_w["ma150"], name="MA(150)",
         line=dict(color="#c0392b", width=1.5), showlegend=False,
     ), row=1, col=1)
+    _sent_debug.log("Chart step: sent_fig.add_trace")
     sent_fig.add_trace(go.Bar(
         x=aaii_w["date"], y=aaii_w["bullish"], name="Bullish %",
         marker_color=SENT_BULL_COLOR, width=SENT_BAR_W_MS, showlegend=False,
         hovertemplate="%{x|%d %b %Y}<br>Bullish %{y:.1f}%<extra></extra>",
     ), row=2, col=1)
+    _sent_debug.log("Chart step: sent_fig.add_trace")
     sent_fig.add_trace(go.Bar(
         x=aaii_w["date"], y=-aaii_w["bearish"], name="Bearish %",
         marker_color=SENT_BEAR_COLOR, width=SENT_BAR_W_MS, showlegend=False,
         customdata=aaii_w["bearish"],
         hovertemplate="%{x|%d %b %Y}<br>Bearish %{customdata:.1f}%<extra></extra>",
     ), row=2, col=1)
+    _sent_debug.log("Chart step: sent_fig.add_hline")
     sent_fig.add_hline(y=bull_avg, line_dash="dash", line_color="#d048d0", line_width=1,
                        annotation_text=f"avg {bull_avg:.1f}", annotation_font_size=10,
                        row=2, col=1)
+    _sent_debug.log("Chart step: sent_fig.add_hline")
     sent_fig.add_hline(y=-bear_avg, line_dash="dash", line_color="#4a6fd9", line_width=1,
                        annotation_text=f"avg -{bear_avg:.1f}", annotation_font_size=10,
                        annotation_position="bottom right", row=2, col=1)
     sent_spread_colors = [SENT_SPREAD_POS if v >= 0 else SENT_SPREAD_NEG
                           for v in aaii_w["spread"]]
+    _sent_debug.log("Chart step: sent_fig.add_trace")
     sent_fig.add_trace(go.Bar(
         x=aaii_w["date"], y=aaii_w["spread"], name="Bull-Bear",
         marker_color=sent_spread_colors, width=SENT_BAR_W_MS, showlegend=False,
         hovertemplate="%{x|%d %b %Y}<br>Spread %{y:+.1f}<extra></extra>",
     ), row=3, col=1)
+    _sent_debug.log("Chart step: sent_fig.add_hline")
     sent_fig.add_hline(y=0, line_dash="dash", line_color="#2e9e4f", line_width=1,
                        row=3, col=1)
     if has_naaim:
+        _sent_debug.log("Chart step: sent_fig.add_trace")
         sent_fig.add_trace(go.Scatter(
             x=naaim_w["date"], y=naaim_w["q3"], name="Q3",
             line=dict(width=0), showlegend=False, hoverinfo="skip",
         ), row=4, col=1)
+        _sent_debug.log("Chart step: sent_fig.add_trace")
         sent_fig.add_trace(go.Scatter(
             x=naaim_w["date"], y=naaim_w["q1"], name="Q1-Q3",
             line=dict(width=0), fill="tonexty",
             fillcolor="rgba(217,155,46,0.15)", showlegend=False, hoverinfo="skip",
         ), row=4, col=1)
+        _sent_debug.log("Chart step: sent_fig.add_trace")
         sent_fig.add_trace(go.Scatter(
             x=naaim_w["date"], y=naaim_w["exposure"], name="NAAIM",
             line=dict(color=SENT_NAAIM_COLOR, width=1.5), showlegend=False,
             hovertemplate="%{x|%d %b %Y}<br>Exposure %{y:.0f}<extra></extra>",
         ), row=4, col=1)
         naaim_avg = naaim["exposure"].mean()
+        _sent_debug.log("Chart step: sent_fig.add_trace")
         sent_fig.add_trace(go.Scatter(
             x=naaim_w["date"], y=naaim_w["ma4"], name="NAAIM 4-week average",
             line=dict(color="#5b9bd5", width=2), showlegend=False,
             hovertemplate="%{x|%d %b %Y}<br>4-week average %{y:.1f}<extra></extra>",
         ), row=4, col=1)
+        _sent_debug.log("Chart step: sent_fig.add_hline")
         sent_fig.add_hline(y=naaim_avg, line_dash="dash", line_color="#888", line_width=1,
                            annotation_text=f"avg {naaim_avg:.0f}", annotation_font_size=10,
                            row=4, col=1)
@@ -8849,23 +8866,28 @@ elif page == "Sentiment":
             (40, 70,  "rgba(150,150,150,0.12)", "Neutral / transition 40-70"),
             (0, 30,   "rgba(217,72,72,0.10)",   "Risk-off 0-30"),
         ]:
+            _sent_debug.log("Chart step: sent_fig.add_hrect")
             sent_fig.add_hrect(y0=_lo, y1=_hi, fillcolor=_col, line_width=0,
                                annotation_text=_lbl, annotation_position="top left",
                                annotation_font_size=10,
                                annotation_font_color=_col.replace("0.10", "0.9").replace("0.12", "0.9"),
                                row=4, col=1)
 
+    _sent_debug.log("Chart step: sent_fig.update_layout")
     sent_fig.update_layout(
         height=1000 if has_naaim else 900, barmode="overlay", bargap=0,
         paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
         margin=dict(l=10, r=10, t=30, b=10),
         xaxis_rangeslider_visible=False, hovermode="x unified",
     )
+    _sent_debug.log("Chart step: sent_fig.update_xaxes")
     sent_fig.update_xaxes(showgrid=True, gridcolor="rgba(128,128,128,0.15)")
+    _sent_debug.log("Chart step: sent_fig.update_yaxes")
     sent_fig.update_yaxes(showgrid=True, gridcolor="rgba(128,128,128,0.15)", side="right")
+    _sent_debug.log("Chart step: sent_fig.update_annotations")
     sent_fig.update_annotations(font_size=11, x=0.01, xanchor="left",
                                 selector=dict(xref="paper"))
-    st.plotly_chart(sent_fig, use_container_width=True, key="sentiment_chart")
+    _sent_debug.call("Render sent_fig", st.plotly_chart, sent_fig, use_container_width=True, key="sentiment_chart")
 
     if naaim_err:
         st.warning(f"NAAIM Exposure Index unavailable: {naaim_err}")
@@ -8890,11 +8912,12 @@ elif page == "Sentiment":
 
     cf_asset = st.selectbox("Asset", list(CRYPTO_FLOW_ASSETS.keys()), index=0,
                             key="sent_cf_asset")
+    _sent_debug.log(f"Crypto asset: {cf_asset}")
     cf = None
     try:
         with st.spinner("Loading crypto ETF flow data..."):
-            cf = fetch_crypto_etf_flows(cf_asset, force=sent_force)
-            cf_px = fetch_index_daily(CRYPTO_FLOW_ASSETS[cf_asset]["price"],
+            cf = _sent_debug.call("fetch_crypto_etf_flows", fetch_crypto_etf_flows, cf_asset, force=sent_force)
+            cf_px = _sent_debug.call("fetch_index_daily", fetch_index_daily, CRYPTO_FLOW_ASSETS[cf_asset]["price"],
                                       force=sent_force)
     except Exception as e:
         st.warning(f"Crypto ETF flow data unavailable: {e}")
@@ -8945,6 +8968,7 @@ elif page == "Sentiment":
         cf_w = cf[cf["date"] >= sent_start]
         cf_px_w = cf_px[cf_px["date"] >= max(sent_start, cf["date"].min())]
 
+        _sent_debug.log("Building cf_fig")
         cf_fig = make_subplots(
             rows=3, cols=1, shared_xaxes=True,
             row_heights=[0.45, 0.28, 0.27], vertical_spacing=0.04,
@@ -8956,6 +8980,7 @@ elif page == "Sentiment":
                 if pd.notna(cf_last["pct_21d"]) else "21-day rolling flow",
             ),
         )
+        _sent_debug.log("Chart step: cf_fig.add_trace")
         cf_fig.add_trace(go.Scatter(
             x=cf_px_w["date"], y=cf_px_w["close"], name="Close",
             line=dict(color="#4a6fd9", width=1.4), showlegend=False,
@@ -8963,13 +8988,16 @@ elif page == "Sentiment":
         ), row=1, col=1)
         cf_bar_colors = [SENT_BULL_COLOR if v >= 0 else SENT_BEAR_COLOR
                          for v in cf_w["total"]]
+        _sent_debug.log("Chart step: cf_fig.add_trace")
         cf_fig.add_trace(go.Bar(
             x=cf_w["date"], y=cf_w["total"], name="Daily net flow",
             marker_color=cf_bar_colors, width=20 * 3600 * 1000, showlegend=False,
             hovertemplate="%{x|%d %b %Y}<br>%{y:+,.1f}M<extra></extra>",
         ), row=2, col=1)
+        _sent_debug.log("Chart step: cf_fig.add_hline")
         cf_fig.add_hline(y=0, line_dash="dash", line_color="#666", line_width=1,
                          row=2, col=1)
+        _sent_debug.log("Chart step: cf_fig.add_trace")
         cf_fig.add_trace(go.Scatter(
             x=cf_w["date"], y=cf_w["flow_21d"], name="21d flow",
             line=dict(color=SENT_NAAIM_COLOR, width=1.5), fill="tozeroy",
@@ -8978,28 +9006,35 @@ elif page == "Sentiment":
             hovertemplate="%{x|%d %b %Y}<br>21d %{y:+,.0f}M "
                           "(pct %{customdata:.0f})<extra></extra>",
         ), row=3, col=1)
+        _sent_debug.log("Chart step: cf_fig.add_hline")
         cf_fig.add_hline(y=cf_p10, line_dash="dash", line_color="#d94848", line_width=1,
                          annotation_text=f"capitulation decile {cf_p10:+,.0f}M",
                          annotation_font_size=10, annotation_position="bottom left",
                          row=3, col=1)
+        _sent_debug.log("Chart step: cf_fig.add_hline")
         cf_fig.add_hline(y=cf_p90, line_dash="dash", line_color="#2e9e4f", line_width=1,
                          annotation_text=f"euphoria decile {cf_p90:+,.0f}M",
                          annotation_font_size=10, row=3, col=1)
+        _sent_debug.log("Chart step: cf_fig.add_hline")
         cf_fig.add_hline(y=0, line_dash="dot", line_color="#666", line_width=1,
                          row=3, col=1)
 
+        _sent_debug.log("Chart step: cf_fig.update_layout")
         cf_fig.update_layout(
             height=800, bargap=0,
             paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
             margin=dict(l=10, r=10, t=30, b=10),
             xaxis_rangeslider_visible=False, hovermode="x unified",
         )
+        _sent_debug.log("Chart step: cf_fig.update_xaxes")
         cf_fig.update_xaxes(showgrid=True, gridcolor="rgba(128,128,128,0.15)")
+        _sent_debug.log("Chart step: cf_fig.update_yaxes")
         cf_fig.update_yaxes(showgrid=True, gridcolor="rgba(128,128,128,0.15)",
                             side="right")
+        _sent_debug.log("Chart step: cf_fig.update_annotations")
         cf_fig.update_annotations(font_size=11, x=0.01, xanchor="left",
                                   selector=dict(xref="paper"))
-        st.plotly_chart(cf_fig, use_container_width=True, key="sent_cf_chart")
+        _sent_debug.call("Render cf_fig", st.plotly_chart, cf_fig, use_container_width=True, key="sent_cf_chart")
 
         st.caption(
             f"US spot {cf_asset} ETF net flows (all funds), USD millions — Farside "
@@ -9017,10 +9052,11 @@ elif page == "Sentiment":
 
     cot_market = st.selectbox("Market", list(COT_MARKETS.keys()), index=0,
                               key="sent_cot_market")
+    _sent_debug.log(f"COT market: {cot_market} code={COT_MARKETS[cot_market]['code']} price={COT_MARKETS[cot_market]['price']}")
     try:
         with st.spinner("Loading COT data..."):
-            cot = fetch_cot(COT_MARKETS[cot_market]["code"], force=sent_force)
-            cot_px = fetch_index_weekly(COT_MARKETS[cot_market]["price"], force=sent_force)
+            cot = _sent_debug.call("fetch_cot", fetch_cot, COT_MARKETS[cot_market]["code"], force=sent_force)
+            cot_px = _sent_debug.call("fetch_index_weekly", fetch_index_weekly, COT_MARKETS[cot_market]["price"], force=sent_force)
     except Exception as e:
         st.warning(f"COT data unavailable: {e}")
         st.stop()
@@ -9045,6 +9081,7 @@ elif page == "Sentiment":
     sk5.metric("Open interest", f"{c_last['open_interest']:,.0f}",
                f"{c_last['open_interest'] - c_prev['open_interest']:+,.0f}")
 
+    _sent_debug.log("Building cot_fig")
     cot_fig = make_subplots(
         rows=3, cols=1, shared_xaxes=True,
         row_heights=[0.45, 0.32, 0.23], vertical_spacing=0.04,
@@ -9055,6 +9092,7 @@ elif page == "Sentiment":
             f"Large spec net as % of open interest {c_last['noncomm_net_pct_oi']:+.1f}%",
         ),
     )
+    _sent_debug.log("Chart step: cot_fig.add_trace")
     cot_fig.add_trace(go.Ohlc(
         x=cot_px_w["date"], open=cot_px_w["open"], high=cot_px_w["high"],
         low=cot_px_w["low"], close=cot_px_w["close"], name="Price",
@@ -9063,25 +9101,31 @@ elif page == "Sentiment":
     ), row=1, col=1)
     cot_net_colors = [SENT_BULL_COLOR if v >= 0 else SENT_BEAR_COLOR
                       for v in cot_w["noncomm_net"]]
+    _sent_debug.log("Chart step: cot_fig.add_trace")
     cot_fig.add_trace(go.Bar(
         x=cot_w["date"], y=cot_w["noncomm_net"], name="Large spec net",
         marker_color=cot_net_colors, width=SENT_BAR_W_MS, showlegend=True,
         hovertemplate="%{x|%d %b %Y}<br>Spec net %{y:+,.0f}<extra></extra>",
     ), row=2, col=1)
+    _sent_debug.log("Chart step: cot_fig.add_trace")
     cot_fig.add_trace(go.Scatter(
         x=cot_w["date"], y=cot_w["comm_net"], name="Commercial net",
         line=dict(color="#888", width=1.3), showlegend=True,
         hovertemplate="%{x|%d %b %Y}<br>Comm net %{y:+,.0f}<extra></extra>",
     ), row=2, col=1)
+    _sent_debug.log("Chart step: cot_fig.add_hline")
     cot_fig.add_hline(y=0, line_dash="dash", line_color="#666", line_width=1, row=2, col=1)
+    _sent_debug.log("Chart step: cot_fig.add_trace")
     cot_fig.add_trace(go.Scatter(
         x=cot_w["date"], y=cot_w["noncomm_net_pct_oi"], name="Spec net % OI",
         line=dict(color=SENT_NAAIM_COLOR, width=1.5), fill="tozeroy",
         fillcolor="rgba(217,155,46,0.12)", showlegend=False,
         hovertemplate="%{x|%d %b %Y}<br>%{y:+.1f}% of OI<extra></extra>",
     ), row=3, col=1)
+    _sent_debug.log("Chart step: cot_fig.add_hline")
     cot_fig.add_hline(y=0, line_dash="dash", line_color="#666", line_width=1, row=3, col=1)
 
+    _sent_debug.log("Chart step: cot_fig.update_layout")
     cot_fig.update_layout(
         height=750, bargap=0,
         paper_bgcolor="rgba(0,0,0,0)", plot_bgcolor="rgba(0,0,0,0)",
@@ -9089,11 +9133,14 @@ elif page == "Sentiment":
         xaxis_rangeslider_visible=False, hovermode="x unified",
         legend=dict(orientation="h", yanchor="bottom", y=1.01, xanchor="right", x=1),
     )
+    _sent_debug.log("Chart step: cot_fig.update_xaxes")
     cot_fig.update_xaxes(showgrid=True, gridcolor="rgba(128,128,128,0.15)")
+    _sent_debug.log("Chart step: cot_fig.update_yaxes")
     cot_fig.update_yaxes(showgrid=True, gridcolor="rgba(128,128,128,0.15)", side="right")
+    _sent_debug.log("Chart step: cot_fig.update_annotations")
     cot_fig.update_annotations(font_size=11, x=0.01, xanchor="left",
                                selector=dict(xref="paper"))
-    st.plotly_chart(cot_fig, use_container_width=True, key="sent_cot_chart")
+    _sent_debug.call("Render cot_fig", st.plotly_chart, cot_fig, use_container_width=True, key="sent_cot_chart")
 
     st.caption(
         f"CFTC legacy futures-only Commitment of Traders, {cot['date'].min():%b %Y} – "
@@ -9101,6 +9148,7 @@ elif page == "Sentiment":
         f"commercials = hedgers, typically positioned opposite. Reports are as-of "
         f"Tuesday, published Friday ~3:30pm ET."
     )
+    _sent_debug.log("COMPLETE sentiment page")
 
 elif page == "Run Scripts":
     marketdb_ready()
