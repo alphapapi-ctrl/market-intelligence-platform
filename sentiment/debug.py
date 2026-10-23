@@ -5,7 +5,7 @@ import uuid
 import pandas as pd
 
 # Set to False to silence all sentiment diagnostics.
-SENTIMENT_DEBUG = True
+SENTIMENT_DEBUG = False
 
 
 class SentimentDebug:
