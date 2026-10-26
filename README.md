@@ -90,6 +90,14 @@ pip install -r requirements.txt
 ## Launch
 streamlit run dashboard.py
 
+## MCP / AI access
+
+The optional Market Intelligence MCP reads stored data/reports and runs updates,
+report generation and studies as tracked background jobs. It can run alongside
+Trading Journal MCP on the same remote Windows machine, using its own port
+(`8766`) and login task. See [MCP setup and tool guide](docs/mcp_setup.md), or open
+**Settings → MCP / AI Access** for status and setup controls.
+
 ## Full Documentation
 See `Market_Intelligence_Platform_Guide_v1.4.docx` in "docs" folder for complete installation, usage and technical reference.
 

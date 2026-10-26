@@ -10108,7 +10108,7 @@ elif page == "DeMark Signals":
 # ═══════════════════════════════════════════════════════════════════════════════
 elif page == "Settings":
     st.title("⚙️ Settings")
-    _stab_ai, _stab_fa, _stab_models, _stab_etf, _stab_rank, _stab_act, _stab_gen = st.tabs([
+    _stab_ai, _stab_fa, _stab_models, _stab_etf, _stab_rank, _stab_act, _stab_gen, _stab_mcp = st.tabs([
         "🤖 AI",
         "📊 Fundamental Analysis",
         "🧠 Models",
@@ -10116,7 +10116,12 @@ elif page == "Settings":
         "🎛️ Rank",
         "📋 Screeners",
         "🔧 General",
+        "MCP / AI Access",
     ])
+
+    with _stab_mcp:
+        from market_mcp.settings_ui import show as show_mcp_settings
+        show_mcp_settings()
 
     with _stab_ai:
             st.title("🤖 AI Settings")

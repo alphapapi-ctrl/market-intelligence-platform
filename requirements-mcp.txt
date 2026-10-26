@@ -1,0 +1,2 @@
+# Optional MCP server; matches the existing remote Trading Journal deployment.
+mcp==2.3.0
