@@ -2757,8 +2757,12 @@ elif page == "Seasonality":
         else:
             _min_yr = int(_sea_data.index.year.min())
             _max_yr = int(_sea_data.index.year.max())
-            _yr_range = _sc3.slider("Year range", _min_yr, _max_yr,
-                                     (_max_yr - 30, _max_yr), key="sea_yr")
+            if _min_yr == _max_yr:
+                _yr_range = (_min_yr, _max_yr)
+                _sc3.caption(f"Year range: {_min_yr} (only available year)")
+            else:
+                _yr_range = _sc3.slider("Year range", _min_yr, _max_yr,
+                                         (max(_min_yr, _max_yr - 30), _max_yr), key="sea_yr")
 
             # All years in range
             _all_yrs_in_range = [y for y in range(_yr_range[0], _yr_range[1] + 1)
@@ -3370,9 +3374,13 @@ elif page == "Seasonality":
                 _s_max = int(_stk_data.index.year.max())
 
                 _ss1, _ss2, _ss3, _ss4 = st.columns([3, 2, 1, 2])
-                _s_range = _ss1.slider("Year range", _s_min, _s_max,
-                                        (_s_max - min(15, _s_max - _s_min), _s_max),
-                                        key="stk_yr")
+                if _s_min == _s_max:
+                    _s_range = (_s_min, _s_max)
+                    _ss1.caption(f"Year range: {_s_min} (only available year)")
+                else:
+                    _s_range = _ss1.slider("Year range", _s_min, _s_max,
+                                            (_s_max - min(15, _s_max - _s_min), _s_max),
+                                            key="stk_yr")
                 _s_excl  = _ss2.multiselect("Exclude years",
                                              list(range(_s_range[0], _s_range[1]+1)),
                                              default=[], key="stk_excl")
