@@ -391,12 +391,11 @@ def collect_macro_data():
 
     # Volatility
     print("  Volatility...")
-    data['vix']  = latest_price('^VIX')
-    data['vvix'] = latest_price('^VVIX')
-    if data['vix'] and data['vvix']:
-        data['vix_vvix'] = round(data['vix'] / data['vvix'], 4)
-    else:
-        data['vix_vvix'] = None
+    try:
+        from .risk_monitor import volatility_snapshot
+    except ImportError:  # direct script execution from macro/
+        from risk_monitor import volatility_snapshot
+    data.update(volatility_snapshot(get_price('^VIX'), get_price('^VVIX'), get_price('^VIX3M')))
     data['dxy'] = latest_price('DX-Y.NYB')
 
     # Ratios

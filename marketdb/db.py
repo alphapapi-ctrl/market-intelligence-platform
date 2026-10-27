@@ -115,6 +115,17 @@ def scalar(sql: str, params=(), con: sqlite3.Connection | None = None):
     return None if row is None else row[0]
 
 
+def fill_temp_tickers(con: sqlite3.Connection, tickers: list[str], table: str = "_q") -> None:
+    """Recreate a temp ticker table and fill it from a list of tickers."""
+    if not tickers:
+        con.execute(f"CREATE TEMP TABLE IF NOT EXISTS {table} (ticker TEXT PRIMARY KEY)")
+        con.execute(f"DELETE FROM {table}")
+        return
+    con.execute(f"CREATE TEMP TABLE IF NOT EXISTS {table} (ticker TEXT PRIMARY KEY)")
+    con.execute(f"DELETE FROM {table}")
+    con.executemany(f"INSERT OR IGNORE INTO {table} VALUES (?)", [(t,) for t in tickers])
+
+
 def upsert_df(df: pd.DataFrame, table: str, con: sqlite3.Connection,
               columns: list[str] | None = None, chunk: int = 5000) -> int:
     """INSERT OR REPLACE every row of df into table. Returns rows written.

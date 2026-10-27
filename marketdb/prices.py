@@ -5,18 +5,11 @@
 from __future__ import annotations
 
 import sqlite3
-
 import pandas as pd
 
 from . import db
 
 FIELDS = ("open", "high", "low", "close", "adj_close", "volume", "dividend", "split")
-
-
-def _ticker_temp(con: sqlite3.Connection, tickers: list[str]) -> None:
-    con.execute("CREATE TEMP TABLE IF NOT EXISTS _q (ticker TEXT PRIMARY KEY)")
-    con.execute("DELETE FROM _q")
-    con.executemany("INSERT OR IGNORE INTO _q VALUES (?)", [(t,) for t in tickers])
 
 
 def get_long(tickers: list[str], start: str | None, end: str | None, fields=("adj_close", "volume"),
@@ -28,7 +21,7 @@ def get_long(tickers: list[str], start: str | None, end: str | None, fields=("ad
     tickers = sorted(set(tickers))
     if not tickers:
         return pd.DataFrame(columns=["ticker", "date", *fields])
-    _ticker_temp(con, tickers)
+    db.fill_temp_tickers(con, tickers, "_q")
     cols = ", ".join(f"p.{f}" for f in fields)
     where, params = [], []
     if start:
@@ -82,7 +75,7 @@ def last_date(con: sqlite3.Connection | None = None, tickers: list[str] | None =
         with db.session() as c:
             return last_date(c, tickers)
     if tickers:
-        _ticker_temp(con, tickers)
+        db.fill_temp_tickers(con, tickers, "_q")
         return db.scalar("SELECT MAX(p.date) FROM prices p JOIN _q ON _q.ticker=p.ticker", con=con)
     return db.scalar("SELECT MAX(date) FROM prices", con=con)
 
@@ -93,10 +86,11 @@ def coverage(tickers: list[str], start: str, end: str | None = None,
     if con is None:
         with db.session() as c:
             return coverage(tickers, start, end, c)
-    _ticker_temp(con, sorted(set(tickers)))
+    tickers = sorted(set(tickers))
+    db.fill_temp_tickers(con, tickers, "_q")
     params = [start]
     sql = "SELECT COUNT(DISTINCT p.ticker) FROM prices p JOIN _q ON _q.ticker=p.ticker WHERE p.date >= ?"
     if end:
         sql += " AND p.date <= ?"; params.append(end)
     n = db.scalar(sql, params, con=con) or 0
-    return int(n), len(set(tickers))
+    return int(n), len(tickers)

@@ -130,9 +130,7 @@ def _drifted(new: pd.DataFrame, con: sqlite3.Connection, tol: float) -> list[str
         return []
     tickers = new["ticker"].unique().tolist()
     lo, hi = new["date"].min(), new["date"].max()
-    con.execute("CREATE TEMP TABLE IF NOT EXISTS _t (ticker TEXT PRIMARY KEY)")
-    con.execute("DELETE FROM _t")
-    con.executemany("INSERT INTO _t VALUES (?)", [(t,) for t in tickers])
+    db.fill_temp_tickers(con, tickers, "_t")
     old = db.read_df("""SELECT p.ticker, p.date, p.adj_close FROM prices p JOIN _t ON _t.ticker = p.ticker
                         WHERE p.date BETWEEN ? AND ?""", (lo, hi), con=con)
     if old.empty:
@@ -251,23 +249,53 @@ def update_prices(tickers: list[str], con: sqlite3.Connection, *, full: bool = F
     pulled_full: set[str] = {t for s_, grp in buckets.items() if s_ == full_start or s_ in deep_starts_pre for t in grp}
 
     def _process(chunk: list[str], start: str, allow_drift_check: bool) -> None:
-        raw = _download(chunk, start, end_s, retries)
-        summ.chunks += 1
-        if raw is None:
-            for t in chunk:
-                summ.errors[t] = "download failed"
-                _mark(t, None, "error", "download failed")
-            return
-        new = _to_long(raw, chunk)
-        got = set(new["ticker"].unique()) if not new.empty else set()
-        if allow_drift_check and not new.empty:
-            bad = _drifted(new, con, tol)
-            if bad:
-                drift_queue.extend(bad)
-                new = new[~new["ticker"].isin(bad)]
-                got -= set(bad)
-        if not new.empty:
-            summ.fetched_rows += db.upsert_df(new, "prices", con)
+        def _fetch_chunk(tickers_: list[str]) -> tuple[pd.DataFrame, bool]:
+            raw = _download(tickers_, start, end_s, retries)
+            summ.chunks += 1
+            if raw is None:
+                return pd.DataFrame(), True
+            return _to_long(raw, tickers_), False
+
+        got: set[str] = set()
+        failed: set[str] = set()
+        parts: list[pd.DataFrame] = []
+
+        new, chunk_failed = _fetch_chunk(chunk)
+        if chunk_failed:
+            failed.update(chunk)
+        else:
+            if not new.empty:
+                got.update(set(new["ticker"].unique()))
+                parts.append(new)
+
+        # When a combined call partially returns, retry per-ticker to avoid false negatives
+        # from Yahoo throttling/partial responses.
+        for t in chunk:
+            if t in got:
+                continue
+            one, one_failed = _fetch_chunk([t])
+            if one_failed:
+                failed.add(t)
+                continue
+            if one.empty:
+                continue
+            parts.append(one)
+            got.add(t)
+            failed.discard(t)
+
+        if parts:
+            new = pd.concat(parts, ignore_index=True) if len(parts) > 1 else parts[0]
+            if allow_drift_check:
+                bad = _drifted(new, con, tol)
+                if bad:
+                    drift_queue.extend(bad)
+                    new = new[~new["ticker"].isin(bad)]
+                    got -= set(bad)
+            if not new.empty:
+                summ.fetched_rows += db.upsert_df(new, "prices", con)
+        else:
+            new = pd.DataFrame()
+
         for t in chunk:
             if t in got:
                 sub = new[new["ticker"] == t]
@@ -275,6 +303,9 @@ def update_prices(tickers: list[str], con: sqlite3.Connection, *, full: bool = F
                 summ.ok += 1
             elif t in drift_queue:
                 pass
+            elif t in failed:
+                summ.errors[t] = "download failed"
+                _mark(t, None, "error", "download failed")
             else:
                 summ.empty.append(t)
                 _mark(t, None, "empty", "no rows returned")
@@ -319,9 +350,7 @@ def update_prices(tickers: list[str], con: sqlite3.Connection, *, full: bool = F
         drift_queue = sorted(set(drift_queue))
         log(f"  adjustment drift on {len(drift_queue)} tickers -> full re-fetch")
         for chunk in _chunks(drift_queue, chunk_size):
-            con.execute("CREATE TEMP TABLE IF NOT EXISTS _t (ticker TEXT PRIMARY KEY)")
-            con.execute("DELETE FROM _t")
-            con.executemany("INSERT INTO _t VALUES (?)", [(t,) for t in chunk])
+            db.fill_temp_tickers(con, chunk, "_t")
             con.execute("DELETE FROM prices WHERE ticker IN (SELECT ticker FROM _t)")
             con.execute("UPDATE fetch_log SET n_rows=0, first_date=NULL, last_date=NULL, full_refetch_at=? "
                         "WHERE ticker IN (SELECT ticker FROM _t)", (db.now_iso(),))
@@ -343,9 +372,7 @@ def update_prices(tickers: list[str], con: sqlite3.Connection, *, full: bool = F
             log(f"  unadjusted split(s) on {len(need)} ticker(s) -> full re-fetch: "
                 f"{', '.join(need[:8])}{'…' if len(need) > 8 else ''}")
             for chunk in _chunks(need, chunk_size):
-                con.execute("CREATE TEMP TABLE IF NOT EXISTS _t (ticker TEXT PRIMARY KEY)")
-                con.execute("DELETE FROM _t")
-                con.executemany("INSERT INTO _t VALUES (?)", [(t,) for t in chunk])
+                db.fill_temp_tickers(con, chunk, "_t")
                 con.execute("DELETE FROM prices WHERE ticker IN (SELECT ticker FROM _t)")
                 con.execute("UPDATE fetch_log SET n_rows=0, first_date=NULL, last_date=NULL, full_refetch_at=? "
                             "WHERE ticker IN (SELECT ticker FROM _t)", (db.now_iso(),))
@@ -391,9 +418,7 @@ def find_price_islands(con: sqlite3.Connection, tickers: list[str] | None = None
     """-> [{ticker, start, end, n, mult}] blocks whose bars must be multiplied by mult."""
     sql = "SELECT ticker, date, close FROM prices WHERE close IS NOT NULL AND close > 0"
     if tickers:
-        con.execute("CREATE TEMP TABLE IF NOT EXISTS _s (ticker TEXT PRIMARY KEY)")
-        con.execute("DELETE FROM _s")
-        con.executemany("INSERT OR IGNORE INTO _s VALUES (?)", [(t,) for t in tickers])
+        db.fill_temp_tickers(con, tickers, "_s")
         sql += " AND ticker IN (SELECT ticker FROM _s)"
     df = db.read_df(sql + " ORDER BY ticker, date", con=con)
     out = []
@@ -467,9 +492,7 @@ def find_unadjusted_splits(con: sqlite3.Connection, tickers: list[str] | None = 
     sql = "SELECT ticker, date, split FROM prices WHERE split IS NOT NULL AND split NOT IN (0, 1)"
     params: tuple = ()
     if tickers:
-        con.execute("CREATE TEMP TABLE IF NOT EXISTS _s (ticker TEXT PRIMARY KEY)")
-        con.execute("DELETE FROM _s")
-        con.executemany("INSERT OR IGNORE INTO _s VALUES (?)", [(t,) for t in tickers])
+        db.fill_temp_tickers(con, tickers, "_s")
         sql += " AND ticker IN (SELECT ticker FROM _s)"
     splits = db.read_df(sql + " ORDER BY ticker, date", params, con=con)
     out = []

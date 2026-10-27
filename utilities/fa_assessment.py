@@ -13,11 +13,21 @@ import requests
 BASE = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 CHROMA_DIR = os.path.join(BASE, 'data', 'fa_chromadb')
 
-SYSTEM_PROMPT = """You are a fundamental analyst who thinks through the lens of Michael Burry and Warren Buffett.
+SYSTEM_PROMPT = """You are a fundamental analyst who applies a disciplined,
+investment-oriented framework focused on business quality, balance-sheet strength,
+and valuation confidence.
 
-Your analytical framework draws from their actual methodology:
+IMPORTANT CONTEXT: Interpret metrics in context.
+- Region: AU and US markets can differ structurally (market microstructure,
+  financing terms, and sector concentration). Be explicit about market context.
+- Stage & sector: Early-stage mining, exploration, and small cap commodity companies
+  can show elevated cash burn and ongoing capital raising. Do not punish those
+  automatically; judge whether management is value-creating over the cycle.
+- Market cap: separate the lens for micro/small-cap vs mid/large-cap.
+- Sector intensity: resource, biotech, and high-capex sectors often deserve different
+  financial flexibility interpretation than software/consumer/industrial firms.
 
-BURRY'S FRAMEWORK:
+# ── Core value framework ───────────────────────────────────────────
 - Tragic Algebra (Omega): True SBC cost = buybacks-to-nowhere + RSU tax withholdings. Replaces GAAP SBC. Typically 1.5-2.5x reported SBC.
 - E-delta: Cumulative owners' earnings / cumulative GAAP net income. Shows what shareholders actually receive. NASDAQ 100 benchmark is 83.4%.
 - IV15: Price providing 15% CAGR over 15+ years via multi-stage DCF (3-4 stages). NOT a simple P/E ratio.
@@ -28,7 +38,7 @@ BURRY'S FRAMEWORK:
 - Tangible book value per share trending upward = "rare and a strong sign."
 - Revenue growing while stock crashes 70-80% with stable gross margins = classic value setup.
 
-BUFFETT/MUNGER FRAMEWORK:
+VALUE INVESTMENT CHECKS:
 - Durable competitive advantage (moat) — can you predict the business in 10-15 years?
 - Management quality and capital allocation discipline.
 - Circle of competence — is this business understandable?
@@ -36,7 +46,7 @@ BUFFETT/MUNGER FRAMEWORK:
 - Owner earnings = net income + depreciation - maintenance capex.
 
 YOUR TASK:
-When given a ticker, financial data, and current market conditions, provide a concise fundamental perspective as these investors would see it.
+When given a ticker, financial data, and current market conditions, provide a concise fundamental perspective a value investor would use when deciding capital allocation.
 
 Your response MUST use exactly these section headers, in this order. Every section is required — do not skip any:
 
@@ -50,31 +60,64 @@ Your response MUST use exactly these section headers, in this order. Every secti
   Compare each to the current price and state the margin of safety (or premium) as a percentage at the base case.
 **MACRO POSITIONING** — How does the rate/yield environment affect this business? Sector in or out of favour?
 **KEY RISKS** — What could permanently impair the business? Include macro risks.
-**VERDICT** — Would this interest a value investor given both fundamentals AND the current environment?
+**VERDICT** — Would this be a high-quality, margin-of-safety candidate at current conditions?
 
 Use the reference documents provided as context for calibration and methodology.
 Be direct and specific. Use actual numbers from the data provided. Reference the macro data to contextualise the stock's position. No generic disclaimers.
 Keep your response to 600-700 words. If short on space, compress other sections — VALUE PRICE TARGETS must always contain the three numeric targets."""
 
 
-# ── Value-investor guide ranges (Buffett/Burry heuristics) ──────────────────
+# ── Generic financial target ranges (for broad value-oriented screening) ──────────────────
 # key: (guide text, good threshold, bad threshold, direction)
 # direction 'low'  = lower is better (good if <= good_thr, bad if >= bad_thr)
 # direction 'high' = higher is better (good if >= good_thr, bad if <= bad_thr)
 METRIC_GUIDES = {
-    'pe_ratio':         ('<15 value · 15-25 fair · >25 rich',          15,   25,   'low'),
-    'forward_pe':       ('<15 value · 15-25 fair · >25 rich',          15,   25,   'low'),
-    'pb_ratio':         ('<1.5 classic value · >3 needs high ROE',     1.5,  3,    'low'),
-    'ps_ratio':         ('<2 value · >5 rich',                         2,    5,    'low'),
-    'gross_margin':     ('>40% moat signal · <20% commodity',          40,   20,   'high'),
-    'operating_margin': ('>15% strong · <8% weak',                     15,   8,    'high'),
-    'profit_margin':    ('>10% strong · <5% thin',                     10,   5,    'high'),
-    'roe':              ('>15% quality · <8% poor',                    15,   8,    'high'),
-    'roa':              ('>7% strong · <3% weak',                      7,    3,    'high'),
-    'debt_to_equity':   ('<50 conservative · >100 leveraged',          50,   100,  'low'),
-    'current_ratio':    ('>1.5 healthy · <1 strained',                 1.5,  1.0,  'high'),
-    'revenue_growth':   ('>5% healthy · negative = declining',         5,    0,    'high'),
-    'dividend_yield':   ('3-6% income sweet spot',                     None, None, None),
+    'pe_ratio':         ('<18 typically affordable · 18-30 neutral · >30 expensive',       18,  30,   'low'),
+    'forward_pe':       ('<18 typically affordable · 18-30 neutral · >30 expensive',       18,  30,   'low'),
+    'pb_ratio':         ('<1.5 cheap balance-sheet proxy · >4 expensive',               1.5, 4,    'low'),
+    'ps_ratio':         ('<2.5 often inexpensive · >6 expensive for quality names',      2.5, 6,    'low'),
+    'gross_margin':     ('>40% strong pricing power · <20% weak',                      40,  20,   'high'),
+    'operating_margin': ('>12% efficient operations · <7% weaker',                     12,   7,    'high'),
+    'profit_margin':    ('>10% good conversion of revenue to profit · <4% weak',       10,   4,    'high'),
+    'roe':              ('>12% attractive use of capital · <8% weak',                 12,   8,    'high'),
+    'roa':              ('>6% efficient asset returns · <2% weak',                    6,    2,    'high'),
+    'debt_to_equity':   ('<1.0 generally conservative · >2.0 higher leverage risk',      1.0, 2.0,  'low'),
+    'current_ratio':    ('>1.3 healthier liquidity buffer · <1.0 strained',            1.3, 1.0,  'high'),
+    'revenue_growth':   ('>7% healthy top-line expansion · <0% declining',            7,    0,    'high'),
+    'dividend_yield':   ('2-6% often attractive for income investors',                None, None, None),
+}
+
+
+SECTOR_MKTCAP_GUIDES = {
+    'small_cap_explorers': {
+        'debt_to_equity':   (2.5, 8.0, 'low'),
+        'current_ratio':     (1.0, 0.75, 'high'),
+        'revenue_growth':    (5.0, -10.0, 'high'),
+        'profit_margin':     (0.0, -20.0, 'high'),
+        'free_cash_flow':    (0.0, -1.0, 'high'),
+        'operating_cf_per_share': (0.0, -1.0, 'high'),
+        'guides': {
+            'debt_to_equity':   'Explorers often use leverage for growth; penalize only persistent over-leverage',
+            'current_ratio':     'Small-cap explorers may run tighter liquidity than mature firms',
+            'revenue_growth':    'Cycle-sensitive growth can fluctuate materially quarter-to-quarter',
+            'profit_margin':     'Temporary margin weakness is normal when scaling/transitioning',
+            'free_cash_flow':    'Negative FCF can be acceptable if the growth/asset story is durable',
+        },
+    },
+    'aus_small_cap_explorers': {
+        'debt_to_equity':   (2.8, 8.5, 'low'),
+        'current_ratio':     (1.0, 0.75, 'high'),
+        'revenue_growth':    (5.0, -10.0, 'high'),
+        'profit_margin':     (0.0, -20.0, 'high'),
+        'free_cash_flow':    (0.0, -1.0, 'high'),
+        'guides': {
+            'debt_to_equity':   'AU mining names often face cyclical financing conditions; judge leverage against mine life and liquidity runway',
+            'current_ratio':     'AU cyclicals may show temporary liquidity troughs during capex periods',
+            'revenue_growth':    'Early-stage exploration can remain lumpy and unprofitable while projects advance',
+            'profit_margin':     'Accept temporarily thin or negative margin if capital efficiency is improving',
+            'free_cash_flow':    'Negative FCF is common during project build stages',
+        },
+    }
 }
 
 
@@ -90,9 +133,69 @@ def _parse_metric(val):
         return None
 
 
-def _guide_verdict(key, val):
+def _parse_market_cap_for_guides(val):
+    if val is None or val == 'N/A':
+        return None
+    if isinstance(val, (int, float)):
+        return float(val)
+    if isinstance(val, str):
+        text = val.strip().replace(',', '').replace('$', '')
+        if not text:
+            return None
+        # handle short-form values used in output formatting
+        mul = 1.0
+        if text.endswith('T') and text[:-1].replace('.', '', 1).replace('-', '', 1).isdigit():
+            mul = 1e12
+            text = text[:-1]
+        elif text.endswith('B') and text[:-1].replace('.', '', 1).replace('-', '', 1).isdigit():
+            mul = 1e9
+            text = text[:-1]
+        elif text.endswith('M') and text[:-1].replace('.', '', 1).replace('-', '', 1).isdigit():
+            mul = 1e6
+            text = text[:-1]
+        try:
+            return float(text) * mul
+        except ValueError:
+            return None
+    return None
+
+
+def _detect_explorer_profile(financials):
+    """Pick a looser profile for early-stage resource/mining companies."""
+    sector = str(financials.get('sector', '')).lower()
+    industry = str(financials.get('industry', '')).lower()
+    ticker = str(financials.get('ticker', '')).lower()
+    mc = _parse_metric(financials.get('market_cap_raw')) if financials.get('market_cap_raw') is not None else _parse_market_cap_for_guides(financials.get('market_cap'))
+    is_small_cap = (mc is not None and mc < 3_000_000_000)  # < 3B as small-cap threshold
+    is_resource_sector = any(x in sector or x in industry for x in (
+        'basic materials', 'materials', 'mining', 'resources', 'energy', 'commodities'
+    ))
+    is_explorer_hint = ('explor' in industry) or ('explor' in sector) or ('miner' in industry) or ('miner' in sector)
+    if is_small_cap and (is_resource_sector or is_explorer_hint):
+        return 'aus_small_cap_explorers' if ticker.endswith('.ax') else 'small_cap_explorers'
+    return 'generic'
+
+
+def _resolve_guide_entry(key, profile):
+    base = METRIC_GUIDES.get(key)
+    if base is None:
+        return None
+    # no override for non-numeric or textual-only checks
+    if profile == 'generic':
+        return base
+    profile_cfg = SECTOR_MKTCAP_GUIDES.get(profile, {})
+    if key in profile_cfg:
+        gthr = profile_cfg[key]
+        return (profile_cfg['guides'].get(key, base[0]),) + gthr
+    return base
+
+
+def _guide_verdict(key, val, financials=None):
     """Return (guide_text, verdict_symbol) for a metric, or (None, '')."""
-    g = METRIC_GUIDES.get(key)
+    if financials is None:
+        financials = {}
+    profile = _detect_explorer_profile(financials)
+    g = _resolve_guide_entry(key, profile)
     if g is None:
         return None, ''
     text, good_thr, bad_thr, direction = g
@@ -561,7 +664,7 @@ def get_fa_assessment(ticker, financial_data, llm_url='http://localhost:11434',
     if context:
         parts.append(
             "REFERENCE EXCERPTS (background calibration only — these are excerpts "
-            "from Burry/Buffett writings and may discuss OTHER companies; do NOT "
+            "from classic value-investing literature and may discuss OTHER companies; do NOT "
             "summarise these documents and do NOT analyse the companies they mention):\n"
             f"<<<REFERENCE START>>>\n{context}\n<<<REFERENCE END>>>"
         )
@@ -569,7 +672,7 @@ def get_fa_assessment(ticker, financial_data, llm_url='http://localhost:11434',
     if macro_text:
         parts.append(f"CURRENT MARKET CONDITIONS:\n{macro_text}")
     parts.append(
-        f"TASK: Analyse {ticker} ({name}) from a Burry/Buffett fundamental "
+        f"TASK: Analyse {ticker} ({name}) from a rigorous fundamental investing "
         f"perspective, following the framework in your instructions. Your subject "
         f"is {ticker} ONLY. Use the actual numbers from the financial data above. "
         f"The reference excerpts are calibration material, not the subject of "
@@ -597,6 +700,7 @@ def fetch_basic_financials(ticker):
                 return None, f"No data found for {ticker}"
 
         financials = {
+            'ticker': stock.ticker if hasattr(stock, 'ticker') else ticker,
             'name': info.get('longName', info.get('shortName', ticker)),
             'sector': info.get('sector', 'N/A'),
             'industry': info.get('industry', 'N/A'),
@@ -637,10 +741,12 @@ def fetch_basic_financials(ticker):
 
         # Per-share figures for the intrinsic value section — computed here
         # so the LLM doesn't have to divide billions by share count.
+        financials['market_cap_raw'] = financials['market_cap']
         _fcf    = info.get('freeCashflow')
         _shares = info.get('sharesOutstanding')
         if isinstance(_fcf, (int, float)) and isinstance(_shares, (int, float)) and _shares > 0:
             financials['fcf_per_share'] = f"{_fcf / _shares:.2f}"
+            financials['free_cash_flow_raw'] = _fcf
         _ocf = info.get('operatingCashflow')
         if isinstance(_ocf, (int, float)) and isinstance(_shares, (int, float)) and _shares > 0:
             financials['operating_cf_per_share'] = f"{_ocf / _shares:.2f}"
@@ -711,7 +817,7 @@ def render_fa_assessment(ticker, settings, system_prompt=None):
     def _metric(col, label, key, prefix=''):
         val = financials.get(key, 'N/A')
         col.metric(label, f"{prefix}{val}")
-        text, verdict = _guide_verdict(key, val)
+        text, verdict = _guide_verdict(key, val, financials=financials)
         if text:
             col.caption(f"{verdict} {text}")
 
@@ -729,7 +835,7 @@ def render_fa_assessment(ticker, settings, system_prompt=None):
     with st.expander("📋 All metrics vs value guide", expanded=False):
         rows = []
         for key, val in financials.items():
-            text, verdict = _guide_verdict(key, val)
+            text, verdict = _guide_verdict(key, val, financials=financials)
             if text:
                 rows.append({'Metric': key, 'Value': val,
                              'Guide': text, 'Read': verdict or '—'})
@@ -748,7 +854,7 @@ def render_fa_assessment(ticker, settings, system_prompt=None):
             st.code(macro_text, language=None)
 
     # generate assessment
-    with st.spinner("Generating Burry/Buffett assessment..."):
+    with st.spinner("Generating value assessment..."):
         text, error = get_fa_assessment(
             ticker, financials,
             llm_url=llm_url,
@@ -769,8 +875,8 @@ def render_fa_assessment(ticker, settings, system_prompt=None):
             <div style="border-left:3px solid #e6a817;padding:12px 16px;
                         border-radius:0 8px 8px 0;margin:8px 0;
                         background:rgba(230,168,23,0.05)">
-                <div style="color:#e6a817;font-size:10px;font-weight:bold;
-                            letter-spacing:1px;margin-bottom:8px">FUNDAMENTAL ASSESSMENT — BURRY/BUFFETT LENS</div>
+            <div style="color:#e6a817;font-size:10px;font-weight:bold;
+                            letter-spacing:1px;margin-bottom:8px">FUNDAMENTAL ASSESSMENT — VALUE INVESTING LENS</div>
                 <div style="font-size:13px;line-height:1.7;white-space:pre-wrap">{html_text}</div>
             </div>
         """, unsafe_allow_html=True)
@@ -909,7 +1015,7 @@ def render_analyst_view(ticker):
 # VALUE COMPARISON — small group of tickers, one LLM call picks the winner
 # ══════════════════════════════════════════════════════════════════════════
 
-COMPARISON_SYSTEM_PROMPT = """You are a fundamental analyst who thinks through the lens of Michael Burry and Warren Buffett. You are comparing a SMALL group of candidate stocks to decide which is the best value selection. They may be similar setups (e.g. several miners) where the balance sheet and shareholder treatment are the deciders.
+COMPARISON_SYSTEM_PROMPT = """You are a fundamental analyst focused on value-oriented capital allocation decisions. You are comparing a SMALL group of candidate stocks to decide which is the best value selection. They may be similar setups (e.g. several miners) where the balance sheet and shareholder treatment are the deciders.
 
 Each metric line includes a [guide: ...] bracket showing the value-investor benchmark, with ✅ good / ➖ middling / ❌ poor already marked.
 
@@ -984,7 +1090,7 @@ def render_fa_comparison(tickers, settings, system_prompt=None):
         row = {'Metric': key}
         for tkr, fin in financials_map.items():
             val = fin.get(key, 'N/A')
-            _, verdict = _guide_verdict(key, val)
+            _, verdict = _guide_verdict(key, val, financials=fin)
             row[tkr] = f"{val} {verdict}".strip()
         guide = METRIC_GUIDES.get(key)
         row['Guide'] = guide[0] if guide else ''
@@ -996,7 +1102,7 @@ def render_fa_comparison(tickers, settings, system_prompt=None):
                  height=min(38 * len(rows) + 40, 600))
 
     # ── One LLM call to pick the winner
-    with st.spinner(f"Comparing {len(financials_map)} candidates (Burry/Buffett lens)..."):
+    with st.spinner(f"Comparing {len(financials_map)} candidates (value-investing lens)..."):
         text, error = get_fa_comparison(
             financials_map,
             llm_url=llm_url,
@@ -1017,7 +1123,7 @@ def render_fa_comparison(tickers, settings, system_prompt=None):
                         border-radius:0 8px 8px 0;margin:8px 0;
                         background:rgba(74,158,255,0.05)">
                 <div style="color:#4a9eff;font-size:10px;font-weight:bold;
-                            letter-spacing:1px;margin-bottom:8px">VALUE COMPARISON — BURRY/BUFFETT LENS</div>
+                            letter-spacing:1px;margin-bottom:8px">VALUE COMPARISON — VALUE INVESTING LENS</div>
                 <div style="font-size:13px;line-height:1.7;white-space:pre-wrap">{html_text}</div>
             </div>
         """, unsafe_allow_html=True)

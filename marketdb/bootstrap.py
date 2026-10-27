@@ -23,6 +23,7 @@ import sys
 import time
 
 from . import db
+from . import runtime
 
 
 def main(argv=None) -> int:
@@ -69,10 +70,8 @@ def main(argv=None) -> int:
 
 def run_macro_reports() -> None:
     """Macro report + consumer / AU credit reports, if macro/config.py (gitignored, FRED key) exists."""
-    import os
-    import subprocess
-    import sys as _sys
     macro_dir = db.BASE_DIR / "macro"
+    import sys as _sys
     _sys.path.insert(0, str(macro_dir))
     try:
         from _config_check import config_problem, SETUP_STEPS
@@ -83,11 +82,9 @@ def run_macro_reports() -> None:
     if problem:
         print(f"  skipped: {problem}\n" + "\n".join("  " + ln for ln in SETUP_STEPS.splitlines()[1:]))
         return
-    env = {**os.environ, "PYTHONIOENCODING": "utf-8"}
     for script, label in (("macro_report.py", "macro report"), ("consumer_credit.py", "consumer credit"),
                           ("au_credit.py", "AU credit")):
-        r = subprocess.run([_sys.executable, script], cwd=str(macro_dir), env=env,
-                           capture_output=True, text=True, encoding="utf-8", errors="replace")
+        r = runtime.run_script(str(macro_dir / script), cwd=str(macro_dir), capture_output=True)
         if r.returncode == 0:
             print(f"  {label}: ok")
         else:

@@ -9,45 +9,10 @@ if _MARKETDB_BASE not in _sys.path:
 
 TODAY = datetime.today()
 
-# ── VIX Regime ────────────────────────────────────────────────────────────────
-def get_vix_regime(vix, vvix, vix_vvix):
-    if vix is None or vvix is None or vix_vvix is None:
-        return 'UNKNOWN', 'Volatility data unavailable', []
-
-    regime  = ''
-    context = ''
-    alerts  = []
-
-    if vix < 15 and vix_vvix < 0.17:
-        regime  = 'COMPLACENCY WARNING'
-        context = 'Market priced for perfection — smart money hedging while surface calm'
-        alerts.append('⚠ VIX/VVIX below 0.17 with VIX under 15 — vol spike likely incoming')
-        alerts.append('⚠ Reduce risk exposure, tighten stops')
-
-    elif vix < 20 and vix_vvix >= 0.18:
-        regime  = 'RISK ON'
-        context = 'Low fear confirmed — volatility structure healthy'
-
-    elif vix < 20 and 0.17 <= vix_vvix < 0.18:
-        regime  = 'RISK ON — MONITOR'
-        context = 'Low fear but VIX/VVIX approaching warning threshold'
-        alerts.append('→ Watch VIX/VVIX — approaching 0.17 complacency level')
-
-    elif 20 <= vix <= 25:
-        regime  = 'CAUTIOUS'
-        context = 'Elevated volatility — selective positioning'
-
-    elif vix > 25 and vix_vvix > 0.25:
-        regime  = 'PANIC — POTENTIAL OPPORTUNITY'
-        context = 'VIX and VIX/VVIX both spiking — possible capitulation event'
-        alerts.append('→ Monitor for exhaustion signal — potential entry opportunity')
-        alerts.append('→ Check breadth for washout confirmation')
-
-    elif vix > 25:
-        regime  = 'RISK OFF'
-        context = 'Elevated fear — focus on defensives and hard assets'
-
-    return regime, context, alerts
+try:
+    from .risk_monitor import build_risk_monitor, format_risk_monitor, get_vix_regime
+except ImportError:  # direct script execution from macro/
+    from risk_monitor import build_risk_monitor, format_risk_monitor, get_vix_regime
 
 # ── Instrument Focus ──────────────────────────────────────────────────────────
 def get_focus_instruments(vix_regime):
@@ -284,7 +249,8 @@ def build_report(data):
     vvix       = data.get('vvix')
     vix_vvix   = data.get('vix_vvix')
     regime, context, vol_alerts = get_vix_regime(vix, vvix, vix_vvix)
-    instruments = get_focus_instruments(regime)
+    risk_monitor = build_risk_monitor(data)
+    instruments = get_focus_instruments(risk_monitor['regime'])
 
     lines = []
     lines.append("═"*70)
@@ -294,13 +260,19 @@ def build_report(data):
     # Volatility regime
     lines.append("")
     lines.append(f"  VIX: {fmt(vix)}   VVIX: {fmt(vvix)}   VIX/VVIX: {fmt(vix_vvix, decimals=4)}")
-    lines.append(f"  REGIME: {regime}")
+    lines.append(f"  VOLATILITY REGIME: {regime}")
     lines.append(f"  {context}")
 
     if vol_alerts:
         lines.append("")
         for a in vol_alerts:
             lines.append(f"  {a}")
+
+    lines.append("")
+    lines.append("─"*70)
+    lines.append("  MARKET RISK MONITOR — volatility, consumer cycle & confirmation")
+    lines.append("─"*70)
+    lines.extend(format_risk_monitor(risk_monitor))
 
     # Change alerts
     prev_data     = load_snapshot()
@@ -379,58 +351,33 @@ def build_report(data):
     lines.append("  CONSUMER CYCLE INDICATORS")
     lines.append("─"*70)
 
+    risk_rows = {row['key']: row for row in risk_monitor['rows']}
     xly_xlp = data.get('xly_xlp')
     if xly_xlp is not None:
         chg_5d  = data.get('xly_xlp_chg_5d')
         chg_63d = data.get('xly_xlp_chg_63d')
-        if chg_63d is not None:
-            if chg_63d < -5:
-                cons_status = '⚠ RISK OFF — defensives outperforming 3 months'
-            elif chg_63d < 0:
-                cons_status = '→ WEAKENING — disc losing ground to staples'
-            else:
-                cons_status = '✓ RISK ON — discretionary leading'
-        else:
-            cons_status = ''
+        cons_status = risk_rows['xly_xlp_chg_63d']['status']
         lines.append(f"  XLY/XLP ratio:     {fmt(xly_xlp, decimals=4)}  {fmt_chg(chg_5d)} 5d  {fmt_chg(chg_63d)} 63d  {cons_status}")
 
     rspd_rsps = data.get('rspd_rsps')
     if rspd_rsps is not None:
         chg_5d  = data.get('rspd_rsps_chg_5d')
         chg_63d = data.get('rspd_rsps_chg_63d')
-        if chg_63d is not None:
-            if chg_63d < -5:
-                eq_status = '⚠ RISK OFF — equal weight confirms defensive rotation'
-            elif chg_63d < 0:
-                eq_status = '→ WEAKENING — equal weight disc fading'
-            else:
-                eq_status = '✓ RISK ON — equal weight disc leading'
-        else:
-            eq_status = ''
+        eq_status = risk_rows['rspd_rsps_chg_63d']['status']
         lines.append(f"  RSPD/RSPS ratio:   {fmt(rspd_rsps, decimals=4)}  {fmt_chg(chg_5d)} 5d  {fmt_chg(chg_63d)} 63d  {eq_status}")
 
     risk_ratio = data.get('risk_ratio')
     if risk_ratio is not None:
         chg_5d  = data.get('risk_ratio_chg_5d')
         chg_10d = data.get('risk_ratio_chg_10d')
-        if chg_10d is not None:
-            if chg_10d < -3:
-                risk_status = '⚠ RISK OFF — defensives accelerating'
-            elif chg_10d < 0:
-                risk_status = '→ WEAKENING — defensive rotation building'
-            elif chg_10d > 3:
-                risk_status = '✓ RISK ON — growth sectors accelerating'
-            else:
-                risk_status = '→ NEUTRAL — no clear rotation'
-        else:
-            risk_status = ''
+        risk_status = risk_rows['risk_ratio_chg_10d']['status']
         lines.append(f"  Sector Groups Risk On/Off ratio: {fmt(risk_ratio, decimals=4)}  {fmt_chg(chg_5d)} 5d  {fmt_chg(chg_10d)} 10d  {risk_status}")
 
     # A/D Line divergence
     ad_div = data.get('ad_divergence')
-    ad_trend = data.get('ad_trend')
     if ad_div:
-        flag = '⚠' if 'BEARISH' in ad_div else '✓' if 'BULLISH' in ad_div else '→'
+        ad_status = risk_rows['ad_divergence']['status']
+        flag = '⚠' if ad_status == 'RISK OFF' else '✓' if ad_status == 'SUPPORTIVE' else '→'
         lines.append(f"  A/D Line:          {flag} {ad_div}")
 
     # Valuation & leverage
@@ -633,9 +580,10 @@ def build_report(data):
     return "\n".join(lines)
 
 # ── Save report ───────────────────────────────────────────────────────────────
-def save_report(output):
+def save_report(output, data=None):
     from marketdb import results as _mr
-    _mr.save_report('macro_report', TODAY.strftime('%Y-%m-%d'), text=output)
+    _mr.save_report('macro_report', TODAY.strftime('%Y-%m-%d'), text=output,
+                    payload={'risk_inputs': data} if data is not None else None)
     print(f"Report saved to marketdb (macro_report {TODAY.strftime('%Y-%m-%d')})")
 
 # ── Main ──────────────────────────────────────────────────────────────────────
@@ -643,5 +591,5 @@ if __name__ == "__main__":
     data   = collect_macro_data()
     report = build_report(data)
     print(report)
-    save_report(report)
+    save_report(report, data)
     save_snapshot(data)

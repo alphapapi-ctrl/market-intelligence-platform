@@ -1,12 +1,13 @@
 import streamlit as st
 import pandas as pd
 import os
-import subprocess
 from datetime import datetime, timedelta
 import glob
 from streamlit_option_menu import option_menu
 import json
 from copy import deepcopy as _deepcopy
+
+from marketdb.runtime import run_module as _run_module, run_script as _run_script
 
 # ── Theme helpers ─────────────────────────────────────────────────────────────
 import re as _re
@@ -82,7 +83,6 @@ BASE    = os.path.dirname(os.path.abspath(__file__))
 MACRO   = os.path.join(BASE, 'macro')
 STOCKS  = os.path.join(BASE, 'stocks')
 ETF     = os.path.join(BASE, 'etf')
-PYTHON  = os.path.join(BASE, '.venv', 'Scripts', 'python.exe')
 
 st.set_page_config(
     page_title   = "Market Intelligence",
@@ -495,18 +495,8 @@ def file_age(path):
     return "not found"
 
 def run_script(script_path, cwd):
-    env = os.environ.copy()
-    env['PYTHONIOENCODING'] = 'utf-8'
     with st.spinner(f"Running {os.path.basename(script_path)}..."):
-        result = subprocess.run(
-            [PYTHON, script_path],
-            cwd=cwd,
-            env=env,
-            capture_output=True,
-            text=True,
-            encoding='utf-8',
-            errors='replace'
-        )
+        result = _run_script(script_path, cwd=cwd, capture_output=True)
     if result.returncode == 0:
         st.success("✓ Completed successfully")
     else:
@@ -553,11 +543,8 @@ def marketdb_ready():
                "Run `python -m marketdb.bootstrap` from a terminal (≈15 min: universe, 3 years of prices, "
                "all studies), or copy `data/market.db` from a machine that already has it, then reload.")
     if st.button("▶ Run bootstrap now (≈15 min, page will wait)", key=f"bootstrap_{page}"):
-        env = os.environ.copy()
-        env['PYTHONIOENCODING'] = 'utf-8'
         with st.spinner("Bootstrapping marketdb — seeding universe, back-filling prices, running studies…"):
-            result = subprocess.run([PYTHON, '-m', 'marketdb.bootstrap'], cwd=BASE, env=env,
-                                    capture_output=True, text=True, encoding='utf-8', errors='replace')
+            result = _run_module("marketdb.bootstrap", cwd=BASE, capture_output=True)
         if result.returncode == 0:
             st.success("✓ Bootstrap complete — reloading")
             st.rerun()
@@ -570,11 +557,8 @@ def run_marketdb(*args, label=None, module='marketdb.run_daily'):
     """Run `python -m <module> <args>` (default marketdb.run_daily) from BASE — same UX as run_script()."""
     if not marketdb_ready():
         return False
-    env = os.environ.copy()
-    env['PYTHONIOENCODING'] = 'utf-8'
     with st.spinner(label or f"Running {module} {' '.join(args)}..."):
-        result = subprocess.run([PYTHON, '-m', module, *args], cwd=BASE, env=env,
-                                capture_output=True, text=True, encoding='utf-8', errors='replace')
+        result = _run_module(module, *args, cwd=BASE, capture_output=True)
     if result.returncode == 0:
         st.success("✓ Completed successfully")
         with st.expander("Run log"):
@@ -713,6 +697,74 @@ def store_ohlc(ticker, start):
             return None
         df = MP.get_ohlc(ticker, start, None)
         return df[['Open', 'High', 'Low', 'Close']].dropna() if df is not None and len(df) else None
+    except Exception:
+        return None
+
+
+def _extract_yf_close(raw):
+    """Normalize yfinance download output into a close-only DataFrame/Series."""
+    if raw is None:
+        return None
+    if isinstance(raw, pd.Series):
+        if raw.empty:
+            return None
+        out = raw.to_frame(name=raw.name or "Close")
+    elif isinstance(raw.columns, pd.MultiIndex):
+        if "Close" in raw.columns.get_level_values(0):
+            out = raw["Close"]
+        elif "Close" in raw.columns.get_level_values(1):
+            out = raw.xs("Close", axis=1, level=0)
+        else:
+            return None
+    elif isinstance(raw, pd.DataFrame):
+        if "Close" in raw.columns:
+            out = raw["Close"]
+        else:
+            out = raw
+    else:
+        return None
+
+    if isinstance(out, pd.Series):
+        out = out.to_frame(name=out.name or "Close")
+    if hasattr(out.index, "tz") and out.index.tz is not None:
+        try:
+            out.index = out.index.tz_localize(None)
+        except Exception:
+            pass
+    return out.dropna(how='all')
+
+
+def _store_close_matrix(tickers, start, max_lag_days=365, min_points=1):
+    """Adjusted-close matrix from marketdb when every requested ticker meets coverage.
+
+    Returns None when any symbol is missing or coverage is too shallow, so callers keep
+    a deterministic yfinance fallback path.
+    """
+    try:
+        _tickers = sorted({str(t).strip().upper() for t in tickers if str(t).strip()})
+        if not _tickers:
+            return None
+        _start = pd.Timestamp(start)
+        with mdb.session() as con:
+            _ph = ",".join(["?"] * len(_tickers))
+            _meta = mdb.read_df(
+                f"SELECT ticker, first_date FROM fetch_log WHERE status='ok' AND ticker IN ({_ph})",
+                _tickers,
+                con=con
+            )
+            if _meta.empty or _meta["ticker"].nunique() != len(_tickers):
+                return None
+            if any(
+                pd.Timestamp(_row["first_date"]) - _start > pd.Timedelta(days=max_lag_days)
+                for _row in _meta.to_dict(orient="records")
+            ):
+                return None
+            df = MP.get_prices(_tickers, start, None, con=con)
+        if df is None or df.empty:
+            return None
+        if any(df[t].dropna().shape[0] < min_points for t in _tickers):
+            return None
+        return df
     except Exception:
         return None
 
@@ -1616,16 +1668,19 @@ def _render_zweig_history(result):
 # ═══════════════════════════════════════════════════════════════════════════════
 @st.cache_data(ttl=1800, show_spinner="Fetching RRG price data...")
 def _fetch_custom_rrg(bm, tickers, tail, smooth):
-    import yfinance as _yf2
     _all   = list(set([bm] + list(tickers)))
     _days  = max(tail * 4, 120)
     _end   = pd.Timestamp.today()
     _start = _end - pd.Timedelta(days=_days)
+    _st = _store_close_matrix(_all, _start, max_lag_days=3650, min_points=2)
+    if _st is not None:
+        return _st
     try:
-        _raw = _yf2.download(_all, start=_start, end=_end,
-                              auto_adjust=True, progress=False)['Close']
-        if isinstance(_raw, pd.Series): _raw = _raw.to_frame()
-        return _raw.dropna(how='all')
+        import yfinance as _yf2
+        _raw = _extract_yf_close(
+            _yf2.download(_all, start=_start, end=_end, auto_adjust=True, progress=False)
+        )
+        return _raw
     except: return None
 
 @st.cache_data(ttl=3600)
@@ -1665,6 +1720,7 @@ def _fetch_sea(ticker, _v=5):
 if page == "Macro":
     import yfinance as yf
     import plotly.graph_objects as go
+    from macro.risk_monitor import build_risk_monitor, parse_risk_inputs, RISK_METHODOLOGY
 
     _mh1, _mh2, _mh3 = st.columns([900, 6000, 2000])
     with _mh2:
@@ -1706,7 +1762,9 @@ if page == "Macro":
 
         # ── Load companion snapshot for richer data ─────────────────────────
         # The report is text-formatted; the snapshot has full numeric data
-        _, _snap, _ = MR.load_report('macro_snapshot', 'latest')
+        _snap = (_macro_payload or {}).get('risk_inputs')
+        if _snap is None:
+            _, _snap, _ = MR.load_report('macro_snapshot', path)
         if _snap:
             try:
                 # Merge useful numeric fields directly
@@ -1840,6 +1898,7 @@ if page == "Macro":
         if m:
             d['ad_divergence'] = m.group(1).strip()
 
+        d.update(parse_risk_inputs(text, _snap))
         return d
 
     macro = parse_macro_report(report_file)
@@ -1891,12 +1950,19 @@ if page == "Macro":
         results = {}
         tickers = [v[0] for v in LIVE_TICKERS.values()]
         try:
-            @st.cache_data(ttl=300)
-            def _fetch_live(_t): return yf.download(list(_t), period='10d', auto_adjust=True, progress=False)
-            raw = _fetch_live(tuple(tickers))
-            closes = raw['Close']
+            _start = (datetime.today() - timedelta(days=14)).strftime('%Y-%m-%d')
+            closes = _store_close_matrix(tickers, _start, max_lag_days=365, min_points=2)
+            if closes is None:
+                @st.cache_data(ttl=300)
+                def _fetch_live(_t):
+                    return _extract_yf_close(yf.download(list(_t), period='10d', auto_adjust=True, progress=False))
+
+                closes = _fetch_live(tuple(tickers))
+            if closes is None or (isinstance(closes, pd.DataFrame) and closes.empty):
+                st.warning("Could not fetch live prices from cache or Yahoo.")
+                return {}
             for key, (ticker, label, group) in LIVE_TICKERS.items():
-                if ticker in closes.columns:
+                if closes is not None and ticker in closes.columns:
                     series = closes[ticker].dropna()
                     if len(series) >= 2:
                         price   = float(series.iloc[-1])
@@ -1972,34 +2038,47 @@ if page == "Macro":
     st.subheader("⚠ Regime, Alerts & Indicators")
 
     if report_file:
-        report_date = report_file.replace('-', '')
         _mc = MR.report_created('macro_report', report_file)
-        st.caption(f"From macro report: {report_date} — saved {_mc or 'n/a'}")
+        st.caption(f"From macro report: {report_file} — saved {_mc or 'n/a'}")
+        if (datetime.today().date() - datetime.strptime(report_file, '%Y-%m-%d').date()).days > 7:
+            st.warning("This macro report is more than a week old. Run Macro Report for a current risk reading.")
 
-    # VIX Regime banner
-    regime     = macro.get('regime', 'UNKNOWN')
-    vix_val    = macro.get('vix', 0)
-    vvix_val   = macro.get('vvix', 0)
-    vix_vvix   = macro.get('vix_vvix', 0)
-
-    regime_colours = {
-        'RISK ON'   : '#1a472a',
-        'CAUTIOUS'  : '#5a4000',
-        'RISK OFF'  : '#5a1a00',
-        'PANIC'     : '#5a0000',
-        'COMPLACENCY WARNING': '#2d4a00',
-    }
-    regime_colour = regime_colours.get(regime, '#333333')
-
+    # Broader risk consensus; the VIX reading remains visible as its own context.
+    _risk = build_risk_monitor(macro)
+    _risk_colours = {'RISK ON': '#2dc653', 'CAUTIOUS': '#f77f00',
+                     'RISK OFF': '#e63946', 'MIXED': '#f77f00',
+                     'INSUFFICIENT DATA': '#888888'}
+    _signal_colours = {'SUPPORTIVE': '#2dc653', 'CAUTION': '#f77f00',
+                       'RISK OFF': '#e63946', 'NEUTRAL': '#888888', 'UNAVAILABLE': '#888888'}
+    _risk_colour = _risk_colours[_risk['regime']]
     st.markdown(f"""
-        <div style="background:{regime_colour};border-radius:8px;padding:16px;
-                    text-align:center;margin-bottom:12px;border:1px solid rgba(255,255,255,0.15)">
-            <div style="color:white;font-size:22px;font-weight:bold">{regime}</div>
-            <div style="color:rgba(255,255,255,0.7);font-size:13px;margin-top:4px">
-                VIX: {vix_val} &nbsp;|&nbsp; VVIX: {vvix_val} &nbsp;|&nbsp; VIX/VVIX: {vix_vvix:.4f}
-            </div>
+        <div class="macro-card" style="border-left:5px solid {_risk_colour};padding:16px">
+            <div class="macro-label">MARKET RISK MONITOR</div>
+            <div style="color:{_risk_colour};font-size:22px;font-weight:bold">{_risk['regime']}</div>
+            <div style="font-size:13px;margin-top:4px">{_risk['context']}</div>
+            <div style="font-size:12px;margin-top:6px">Volatility: <b>{_risk['volatility_regime']}</b>
+                &nbsp;|&nbsp; Coverage: {_risk['available']}/{_risk['total']} groups
+                &nbsp;|&nbsp; {_risk['risk_off']} risk off · {_risk['caution']} caution · {_risk['supportive']} supportive</div>
         </div>
     """, unsafe_allow_html=True)
+    _group_cols = st.columns(5)
+    for _col, _group in zip(_group_cols, _risk['groups']):
+        _col.markdown(
+            f"**{_group['name']}**  \n"
+            f"<span style='color:{_signal_colours[_group['status']]}'>{_group['status']}</span>",
+            unsafe_allow_html=True)
+    with st.expander("Risk signals & decision rules"):
+        st.dataframe(pd.DataFrame([
+            {'Group': row['group'], 'Indicator': row['label'], 'Reading': row['value'],
+             'Signal': row['status'], 'Rule': row['detail']} for row in _risk['rows']
+        ]), width='stretch', hide_index=True)
+        st.caption(RISK_METHODOLOGY)
+        st.caption(f"Inputs available: {_risk['available_signals']}/{len(_risk['rows'])}. "
+                   "Group coverage means at least one input is available in that group.")
+        st.caption("Volatility comparisons use closes from the same session. "
+                   "Legacy reports may lack term-structure or participation inputs; run the Macro Report to refresh.")
+        st.markdown("Index definitions: [Cboe VIX](https://www.cboe.com/tradable-products/vix/) · "
+                    "[Cboe VVIX](https://www.cboe.com/us/indices/dashboard/VVIX)")
 
     # ── HGX Housing Lead Indicator ───────────────────────────────────────────────
     try:
@@ -2376,19 +2455,12 @@ Currently <b>{_hgx_curr:,.0f}</b>. Signal resets <b>{_reset_date}</b> (18 months
                              '_colour': '#2dc653' if _cpi_good else '#e63946'})
 
         # Volatility regime (VIX)
-        _vix = macro.get('vix')
-        _vvix = macro.get('vvix')
-        if _vix is not None:
-            if _vix < 15:
-                _vix_st = '✓ COMPLACENT — risk on environment'; _vix_c = '#2dc653'
-            elif _vix < 20:
-                _vix_st = '✓ NORMAL — healthy volatility'; _vix_c = '#2dc653'
-            elif _vix < 30:
-                _vix_st = '→ ELEVATED — caution warranted'; _vix_c = '#f77f00'
-            else:
-                _vix_st = '⚠ STRESSED — risk off environment'; _vix_c = '#e63946'
-            _vix_val = f"{_vix:.2f}" + (f" | VVIX {_vvix:.1f}" if _vvix is not None else "")
-            _ec_rows.append({'Indicator':'VIX/Volatility','Value':_vix_val,'Signal':_vix_st,'_colour':_vix_c})
+        _vol_values = ' | '.join(f"{row['label']} {row['value']}" for row in _risk['rows']
+                                  if row['group'] == 'Volatility')
+        _vol_status = _risk['groups'][0]['status']
+        _ec_rows.append({'Indicator': 'VIX/Volatility', 'Value': _vol_values,
+                         'Signal': f"{_risk['volatility_regime']} | {_vol_status}",
+                         '_colour': _signal_colours[_vol_status]})
 
         if _ec_rows:
             import pandas as _pd3
@@ -2398,30 +2470,19 @@ Currently <b>{_hgx_curr:,.0f}</b>. Signal resets <b>{_reset_date}</b> (18 months
             st.dataframe(_ec_df.style.apply(_ec_style,axis=1),width='stretch',hide_index=True)
 
     with col2:
-        st.markdown("**Consumer Cycle**")
-        xly = macro.get('xly_xlp', None)
-        rsp = macro.get('rspd_rsps', None)
-        sec = macro.get('sector_ratio', None)
-
-        _cc_rows = []
-        if xly:
-            lbl = macro.get('xly_xlp_label',''); good = 'RISK OFF' not in lbl; colour = '#2dc653' if good else '#e63946'
-            _cc_rows.append({'Indicator':'XLY/XLP Ratio','Value':str(xly),'Signal':lbl[:60],'_c':colour})
-        if rsp:
-            lbl = macro.get('rspd_rsps_label',''); good = 'RISK OFF' not in lbl; colour = '#2dc653' if good else '#e63946'
-            _cc_rows.append({'Indicator':'RSPD/RSPS Ratio','Value':str(rsp),'Signal':lbl[:60],'_c':colour})
-        if sec:
-            lbl = macro.get('sector_ratio_label',''); good = 'NEUTRAL' in lbl or 'RISK ON' in lbl; colour = '#2dc653' if good else '#f77f00'
-            _cc_rows.append({'Indicator':'Sector Risk On/Off','Value':str(sec),'Signal':lbl[:60],'_c':colour})
-        ad_div = macro.get('ad_divergence')
-        if ad_div:
-            good = 'BULLISH' in ad_div; colour = '#2dc653' if good else '#e63946' if 'BEARISH' in ad_div else '#f77f00'
-            _cc_rows.append({'Indicator':'A/D Divergence','Value':'','Signal':ad_div[:60],'_c':colour})
+        st.markdown("**Consumer Cycle & Risk Confirmation**")
+        _cc_rows = [
+            {'Indicator': row['label'], 'Value': row['value'],
+             'Signal': row['status'], '_c': _signal_colours[row['status']]}
+            for row in _risk['rows'] if row['group'] != 'Volatility'
+        ]
         if _cc_rows:
             import pandas as _pd4
             _cc_df = _pd4.DataFrame(_cc_rows)[['Indicator','Value','Signal']]
             def _cc_style(row): return ['','',f"color:{_cc_rows[row.name]['_c']}"]
             st.dataframe(_cc_df.style.apply(_cc_style,axis=1),width='stretch',hide_index=True)
+        st.caption("Consumer ratios share one group. Breadth and small caps share participation. "
+                   "Negative trends show caution before the risk-off threshold is reached.")
 
     with col3:
         st.markdown("**Valuation**")
@@ -3927,11 +3988,12 @@ elif page == "Seasonality":
             if _st is not None:
                 return _st
             import yfinance as _yf
-            df = _yf.download("^GSPC", start="1927-01-01", auto_adjust=True, progress=False)
-            if df.empty: return None
-            close = df["Close"].squeeze().dropna()
-            close.index = pd.to_datetime(close.index).tz_localize(None)
-            return close
+            df = _extract_yf_close(_yf.download("^GSPC", start="1927-01-01", auto_adjust=True, progress=False))
+            if df is None or df.empty: return None
+            if isinstance(df, pd.Series):
+                return df.squeeze().dropna()
+            c = df.squeeze().dropna()
+            return c if not isinstance(c, pd.DataFrame) else c.iloc[:, 0]
 
         _spx = _fetch_spx()
 
@@ -8481,7 +8543,7 @@ elif page == "Screeners & Exports":
 
 elif page == "Fundamental Analysis":
     st.title("Fundamental Analysis")
-    st.caption("Burry/Buffett lens — local LLM with RAG context from methodology documents")
+    st.caption("Value-investing lens — local LLM with RAG context from methodology documents")
 
     _fa_settings = load_settings()
     _fa_cfg = _fa_settings.get('fa_features', DEFAULT_SETTINGS.get('fa_features', {}))
@@ -10289,7 +10351,7 @@ elif page == "Settings":
                 with _ptab:
                     st.markdown(f"#### {_plabel} Prompt")
                     if _pk == 'fa_system':
-                        st.caption("The full Burry/Buffett system prompt for the Fundamental Analysis page. "
+                        st.caption("The full value-investing system prompt for the Fundamental Analysis page. "
                                    "RAG excerpts, financial data and market conditions are appended automatically at runtime.")
                     elif _pk == 'fa_comparison':
                         st.caption("The system prompt for the FA Value Comparison tab — the multi-stock head-to-head. "
@@ -10317,7 +10379,7 @@ elif page == "Settings":
 
     with _stab_fa:
             st.title("📊 Fundamental Analysis Settings")
-            st.caption("Configure the local LLM connection for Burry/Buffett fundamental analysis.")
+            st.caption("Configure the local LLM connection for value-investing fundamental analysis.")
 
             _fa_s   = load_settings()
             _fa_feat = _fa_s.get('fa_features', DEFAULT_SETTINGS.get('fa_features', {}))

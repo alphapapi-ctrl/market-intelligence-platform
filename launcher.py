@@ -8,25 +8,29 @@ Stocks data collection goes through marketdb (one price fetch, every study);
 macro / credit / ETF / sentiment scripts are unchanged.
 """
 import os
-import subprocess
 import sys
 from datetime import datetime
+
+from marketdb.runtime import run_module as _run_module, run_script as _run_script
 
 # ── Project paths ─────────────────────────────────────────────────────────────
 BASE   = os.path.dirname(os.path.abspath(__file__))
 MACRO  = os.path.join(BASE, 'macro')
 STOCKS = os.path.join(BASE, 'stocks')
 ETF    = os.path.join(BASE, 'etf')
-PYTHON = os.path.join(BASE, '.venv', 'Scripts', 'python.exe')
 
 
 def _mdb(*args):
     """A marketdb.run_daily invocation (cwd = BASE)."""
-    return {'python': PYTHON, 'cwd': BASE, 'argv': ['-m', 'marketdb.run_daily', *args]}
+    return {'kind': 'module', 'module': 'marketdb.run_daily', 'cwd': BASE, 'argv': list(args)}
 
 
 def _script(cwd, script):
-    return {'python': PYTHON, 'cwd': cwd, 'argv': [script]}
+    return {'kind': 'script', 'cwd': cwd, 'script': script}
+
+
+def _module(module, *args):
+    return {'kind': 'module', 'module': module, 'cwd': BASE, 'argv': list(args)}
 
 
 # ── Registry ──────────────────────────────────────────────────────────────────
@@ -48,10 +52,9 @@ SCRIPTS = {
     '12': {'label': 'RRG — all four studies',                         **_mdb('--studies', 'rrg')},
 
     # ── Other stocks tools ────────────────────────────────────────────────────
-    '13': {'label': 'DeMark Scan — US ≥ $1B',   'python': PYTHON, 'cwd': BASE,   'argv': ['-m', 'marketdb.demark']},
+    '13': {'label': 'DeMark Scan — US ≥ $1B',   **_module('marketdb.demark')},
     '14': {'label': 'ASX substantial holders',  **_script(STOCKS, 'asx_substantial_holders.py')},
-    '15': {'label': 'Drawdown Analysis (see --help for periods)', 'python': PYTHON, 'cwd': BASE,
-           'argv': ['-m', 'marketdb.drawdown', '--help']},
+    '15': {'label': 'Drawdown Analysis (see --help for periods)', **_module('marketdb.drawdown', '--help')},
 
     # ── Macro / credit / ETF ──────────────────────────────────────────────────
     '16': {'label': 'Consumer Credit Report',   **_script(MACRO, 'consumer_credit.py')},
@@ -67,8 +70,7 @@ SCRIPTS = {
     'M': {'label': 'MONTHLY — refresh universe (new listings, delistings, sectors, caps, indices)',
           **_mdb('--refresh-universe', '--skip-fetch', '--studies')},
     'R': {'label': 'MAINTENANCE — re-pull full price history (slow)', **_mdb('--full', '--studies')},
-    'S': {'label': 'SETUP — bootstrap a fresh machine (one-off, ~15 min)', 'python': PYTHON, 'cwd': BASE,
-          'argv': ['-m', 'marketdb.bootstrap']},
+    'S': {'label': 'SETUP — bootstrap a fresh machine (one-off, ~15 min)', **_module('marketdb.bootstrap')},
 }
 
 MENU_SECTIONS = [
@@ -87,9 +89,21 @@ def run_script(key):
     print(f"  {s['label']}")
     print(f"  {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}")
     print(f"{'═' * 60}")
-    env = os.environ.copy()
-    env['PYTHONIOENCODING'] = 'utf-8'
-    result = subprocess.run([s['python'], *s['argv']], cwd=s['cwd'], env=env)
+    if s.get('kind') == 'module':
+        module = s.get('module')
+        if not module:
+            print("\n  ✗ Malformed launcher entry (missing module).")
+            return False
+        result = _run_module(module, *(s.get('argv') or ()), cwd=s.get('cwd', BASE))
+    elif s.get('kind') == 'script':
+        script = s.get('script')
+        if not script:
+            print("\n  ✗ Malformed launcher entry (missing script).")
+            return False
+        result = _run_script(os.path.join(s.get('cwd', BASE), script), cwd=s.get('cwd', BASE))
+    else:
+        print(f"\n  ✗ Unsupported launcher entry kind: {s.get('kind')!r}")
+        return False
     status = 'OK' if result.returncode == 0 else f'FAILED (exit {result.returncode})'
     print(f"\n  → {status}")
     return result.returncode == 0
