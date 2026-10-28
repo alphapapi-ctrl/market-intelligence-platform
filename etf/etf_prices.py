@@ -52,12 +52,16 @@ def history(ticker: str, years: float = 1) -> pd.DataFrame | None:
     if STORE:
         try:
             _ensure_fresh([ticker])
-            long = _prices.get_long([ticker], _start(years), None, ("close", "dividend"))
+            long = _prices.get_long([ticker], _start(years), None, ("close", "dividend", "split"))
             if len(long):
-                df = long.set_index(pd.to_datetime(long["date"]))[["close", "dividend"]]
+                df = long.set_index(pd.to_datetime(long["date"]))[["close", "dividend", "split"]]
                 df.index.name = "Date"
-                df = df.rename(columns={"close": "Close", "dividend": "Dividends"})
+                df = df.rename(columns={"close": "Close", "dividend": "Dividends", "split": "Stock Splits"})
                 df["Dividends"] = df["Dividends"].fillna(0.0)
+                df.attrs['provenance'] = {'source': 'marketdb.prices.close and dividend',
+                    'price_basis': 'stored close, not dividend-adjusted total-return close',
+                    'corporate_actions': 'split events retained; upstream fetch/repair can rescale historical close; basis not independently verified',
+                    'currency': 'instrument quote currency; no FX conversion'}
                 return df.dropna(subset=["Close"])
         except Exception as e:
             print(f"  {ticker}: store read error — {e}; falling back to yfinance")
@@ -66,7 +70,11 @@ def history(ticker: str, years: float = 1) -> pd.DataFrame | None:
     if hist is None or hist.empty:
         return None
     hist.index = hist.index.tz_localize(None)
-    return hist[["Close", "Dividends"]].dropna(subset=["Close"])
+    result = hist[["Close", "Dividends", "Stock Splits"]].dropna(subset=["Close"])
+    result.attrs['provenance'] = {'source': 'yfinance history(auto_adjust=False)',
+        'price_basis': 'Yahoo market close, not true fund NAV', 'corporate_actions': 'Yahoo-reported split/dividend basis, not independently verified',
+        'currency': 'instrument quote currency; no FX conversion'}
+    return result
 
 
 def adj_close(ticker: str, years: float = 1) -> pd.Series | None:

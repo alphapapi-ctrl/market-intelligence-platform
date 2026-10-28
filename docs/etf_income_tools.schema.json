@@ -1,0 +1,460 @@
+{
+  "etf_income_config": {
+    "description": "Read only Income settings/capabilities with source hashes and defaults. Monthly risk review is user context; the saved backtest cadence is not an adopted live rebalance policy. No credentials or settings writes.",
+    "inputSchema": {
+      "properties": {},
+      "title": "etf_income_configArguments",
+      "type": "object"
+    }
+  },
+  "read_etf_income_results": {
+    "description": "Read complete latest/dated Income rankings with rule evidence, captured config and price-vs-NAV limits. Legacy frames remain readable even if no etf_income report exists. No refresh/re-scoring or holdings inference.",
+    "inputSchema": {
+      "properties": {
+        "run_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Run Id"
+        },
+        "ranking_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ranking Date"
+        },
+        "limit": {
+          "default": 50,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "offset": {
+          "default": 0,
+          "title": "Offset",
+          "type": "integer"
+        }
+      },
+      "title": "read_etf_income_resultsArguments",
+      "type": "object"
+    }
+  },
+  "preview_etf_income_review": {
+    "description": "Read-only Income review preview; never saves holdings/settings/journal data or fetches prices. portfolio_id is explicit Income identity. Holdings use exact ticker/shares/entry_price/entry_date/quote_currency; null reads unverified app holdings. Separate monthly review from undecided full rebalance. Unknown NAV, stale data and unreconciled splits stay not_assessed.",
+    "inputSchema": {
+      "$defs": {
+        "AllocationInput": {
+          "additionalProperties": false,
+          "properties": {
+            "tickers": {
+              "items": {
+                "type": "string"
+              },
+              "title": "Tickers",
+              "type": "array"
+            },
+            "budget_aud": {
+              "maximum": 100000000,
+              "minimum": 0,
+              "title": "Budget Aud",
+              "type": "number"
+            },
+            "usd_per_aud": {
+              "maximum": 1.5,
+              "minimum": 0.3,
+              "title": "Usd Per Aud",
+              "type": "number"
+            },
+            "fx_source": {
+              "title": "Fx Source",
+              "type": "string"
+            },
+            "fx_observed_at": {
+              "title": "Fx Observed At",
+              "type": "string"
+            }
+          },
+          "required": [
+            "tickers",
+            "budget_aud",
+            "usd_per_aud",
+            "fx_source",
+            "fx_observed_at"
+          ],
+          "title": "AllocationInput",
+          "type": "object"
+        },
+        "HoldingInput": {
+          "additionalProperties": false,
+          "properties": {
+            "ticker": {
+              "title": "Ticker",
+              "type": "string"
+            },
+            "shares": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shares"
+            },
+            "entry_price": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Entry Price"
+            },
+            "entry_date": {
+              "anyOf": [
+                {
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Entry Date"
+            },
+            "quote_currency": {
+              "anyOf": [
+                {
+                  "pattern": "^[A-Z]{3}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Quote Currency"
+            }
+          },
+          "required": [
+            "ticker"
+          ],
+          "title": "HoldingInput",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "portfolio_id": {
+          "title": "Portfolio Id",
+          "type": "string"
+        },
+        "holdings": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/HoldingInput"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Holdings"
+        },
+        "run_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Run Id"
+        },
+        "ranking_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ranking Date"
+        },
+        "as_of": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "As Of"
+        },
+        "allocation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AllocationInput"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        },
+        "limit": {
+          "default": 25,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "offset": {
+          "default": 0,
+          "title": "Offset",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "portfolio_id"
+      ],
+      "title": "preview_etf_income_reviewArguments",
+      "type": "object"
+    }
+  },
+  "read_etf_income_review": {
+    "description": "Read a previously saved immutable Income review with captured settings/source versions and paged holdings. Review IDs are listed by list_reports(kind='etf_income_review'); raw JSON export uses read_report(section='payload', report_date=review_id).",
+    "inputSchema": {
+      "properties": {
+        "review_id": {
+          "title": "Review Id",
+          "type": "string"
+        },
+        "limit": {
+          "default": 25,
+          "title": "Limit",
+          "type": "integer"
+        },
+        "offset": {
+          "default": 0,
+          "title": "Offset",
+          "type": "integer"
+        }
+      },
+      "required": [
+        "review_id"
+      ],
+      "title": "read_etf_income_reviewArguments",
+      "type": "object"
+    }
+  },
+  "start_etf_income_review": {
+    "description": "Explicitly save an immutable ETF Income review through the existing job queue. Uses stored inputs only; does not score/fetch, execute trades or write holdings/settings/journal data. Same inputs/request_id retry the same job; changed inputs require a new request_id. Read the review_id in get_job.outcome, then read_etf_income_review or export via read_report.",
+    "inputSchema": {
+      "$defs": {
+        "AllocationInput": {
+          "additionalProperties": false,
+          "properties": {
+            "tickers": {
+              "items": {
+                "type": "string"
+              },
+              "title": "Tickers",
+              "type": "array"
+            },
+            "budget_aud": {
+              "maximum": 100000000,
+              "minimum": 0,
+              "title": "Budget Aud",
+              "type": "number"
+            },
+            "usd_per_aud": {
+              "maximum": 1.5,
+              "minimum": 0.3,
+              "title": "Usd Per Aud",
+              "type": "number"
+            },
+            "fx_source": {
+              "title": "Fx Source",
+              "type": "string"
+            },
+            "fx_observed_at": {
+              "title": "Fx Observed At",
+              "type": "string"
+            }
+          },
+          "required": [
+            "tickers",
+            "budget_aud",
+            "usd_per_aud",
+            "fx_source",
+            "fx_observed_at"
+          ],
+          "title": "AllocationInput",
+          "type": "object"
+        },
+        "HoldingInput": {
+          "additionalProperties": false,
+          "properties": {
+            "ticker": {
+              "title": "Ticker",
+              "type": "string"
+            },
+            "shares": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Shares"
+            },
+            "entry_price": {
+              "anyOf": [
+                {
+                  "minimum": 0,
+                  "type": "number"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Entry Price"
+            },
+            "entry_date": {
+              "anyOf": [
+                {
+                  "pattern": "^\\d{4}-\\d{2}-\\d{2}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Entry Date"
+            },
+            "quote_currency": {
+              "anyOf": [
+                {
+                  "pattern": "^[A-Z]{3}$",
+                  "type": "string"
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "title": "Quote Currency"
+            }
+          },
+          "required": [
+            "ticker"
+          ],
+          "title": "HoldingInput",
+          "type": "object"
+        }
+      },
+      "properties": {
+        "request_id": {
+          "title": "Request Id",
+          "type": "string"
+        },
+        "portfolio_id": {
+          "title": "Portfolio Id",
+          "type": "string"
+        },
+        "holdings": {
+          "anyOf": [
+            {
+              "items": {
+                "$ref": "#/$defs/HoldingInput"
+              },
+              "type": "array"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Holdings"
+        },
+        "run_id": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Run Id"
+        },
+        "ranking_date": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "Ranking Date"
+        },
+        "as_of": {
+          "anyOf": [
+            {
+              "type": "string"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null,
+          "title": "As Of"
+        },
+        "allocation": {
+          "anyOf": [
+            {
+              "$ref": "#/$defs/AllocationInput"
+            },
+            {
+              "type": "null"
+            }
+          ],
+          "default": null
+        }
+      },
+      "required": [
+        "request_id",
+        "portfolio_id"
+      ],
+      "title": "start_etf_income_reviewArguments",
+      "type": "object"
+    }
+  }
+}

@@ -15,6 +15,7 @@ import threading
 from uuid import uuid4
 
 from .operations import ROOT, bounds, configuration, database_path, universe_key, valid_date, connection as connection_for_audit
+from .income import HoldingInput, AllocationInput
 
 ACTIVE = ("starting", "running")
 
@@ -39,6 +40,8 @@ def store():
         con.execute("CREATE TABLE IF NOT EXISTS jobs (job_id TEXT PRIMARY KEY, request_id TEXT UNIQUE NOT NULL, "
                     "kind TEXT NOT NULL, arguments TEXT NOT NULL, status TEXT NOT NULL, pid INTEGER, "
                     "created TEXT NOT NULL, started TEXT, finished TEXT, exit_code INTEGER, message TEXT)")
+        if "outcome" not in {row[1] for row in con.execute("PRAGMA table_info(jobs)")}:
+            con.execute("ALTER TABLE jobs ADD COLUMN outcome TEXT")
         con.commit()
         yield con
         con.commit()
@@ -82,6 +85,7 @@ def reconcile(con):
 def job_value(row) -> dict:
     result = dict(row)
     result["arguments"] = json.loads(result["arguments"])
+    result["outcome"] = json.loads(result["outcome"]) if result.get("outcome") else None
     return result
 
 
@@ -148,6 +152,16 @@ def start_report(request_id: str, report: str) -> dict:
     if report not in REPORTS:
         raise ValueError(f"report must be one of {list(REPORTS)}")
     return submit("report", {"report": report}, request_id)
+
+
+def start_etf_income_review(request_id: str, portfolio_id: str, holdings: list[HoldingInput] | None = None,
+        run_id: str | None = None, ranking_date: str | None = None, as_of: str | None = None,
+        allocation: AllocationInput | None = None) -> dict:
+    """Explicitly save an immutable ETF Income review through the existing job queue. Uses stored inputs only; does not score/fetch, execute trades or write holdings/settings/journal data. Same inputs/request_id retry the same job; changed inputs require a new request_id. Read the review_id in get_job.outcome, then read_etf_income_review or export via read_report."""
+    from .income import validate_request
+    validate_request(portfolio_id, holdings, run_id, ranking_date, as_of, allocation)
+    return submit("income_review", {"portfolio_id": portfolio_id, "holdings": holdings, "run_id": run_id,
+                  "ranking_date": ranking_date, "as_of": as_of, "allocation": allocation}, request_id)
 
 
 def start_demark(request_id: str, universe: str = "us_total_market", min_cap: float = 0,

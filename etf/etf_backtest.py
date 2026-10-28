@@ -23,22 +23,22 @@ import pandas as pd
 import yfinance as yf
 from datetime import datetime
 
-from etf_income_data import (UNIVERSE, score_universe, compute_metrics,
-                             resolve_underlying, underlying_rs_from_series)
+try:
+    from .etf_income_data import (UNIVERSE, score_universe, compute_metrics,
+                                  resolve_underlying, underlying_rs_from_series)
+    from .income_config import BACKTEST_DEFAULTS, FULL_UNIVERSE, load_strategy, load_backtest
+    from . import etf_prices as _px
+except ImportError:
+    from etf_income_data import (UNIVERSE, score_universe, compute_metrics,
+                                 resolve_underlying, underlying_rs_from_series)
+    from income_config import BACKTEST_DEFAULTS, FULL_UNIVERSE, load_strategy, load_backtest
+    import etf_prices as _px
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 RESULTS_DIR = os.path.join(BASE, 'results', 'backtest')
 CONFIG_FILE = os.path.join(BASE, 'backtest_config.json')
 
-DEFAULTS = {'top_n': 5, 'years': 3, 'start_capital': 100000, 'freq_filter': 'all',
-            'hedge_enabled': False, 'hedge_pct': 0.10,
-            'income_mode': 'reinvest',      # 'reinvest' | 'draw'
-            'draw_threshold_pct': 0.10,     # buffer above start capital before drawing
-            'bench_ticker': 'JEPI',         # passive income benchmark — same rules, one fund
-            'rebal_freq': 'quarterly',      # 'monthly' | 'quarterly' | 'semiannual'
-            'stop_loss_pct': 0.0}           # total-return stop from entry, 0 = off
-                                            # (price + divs received, NOT raw price — income
-                                            #  funds mechanically bleed price via distributions)
+DEFAULTS = dict(BACKTEST_DEFAULTS)
 
 REBAL_FREQ_MAP = {'monthly': 'MS', 'quarterly': 'QS', 'semiannual': '6MS'}
 
@@ -48,17 +48,7 @@ HEDGE_OFF_RATIO = 0.95   # exit below this — hysteresis to avoid whipsaw
 
 
 def load_config():
-    cfg = DEFAULTS.copy()
-    if os.path.exists(CONFIG_FILE):
-        try:
-            with open(CONFIG_FILE) as f:
-                cfg.update(json.load(f))
-        except Exception:
-            pass
-    return cfg
-
-
-import etf_prices as _px
+    return load_backtest(CONFIG_FILE)["effective"]
 
 
 def fetch_history(tickers, years):
@@ -99,23 +89,14 @@ def compute_hedge_signal(vix_close, vix3m_close, on=HEDGE_ON_RATIO, off=HEDGE_OF
     ON when VIX/VIX3M rises to `on` (backwardation = stress),
     OFF when it falls back below `off`. Returns a bool Series by date.
     """
-    vix_close = vix_close.copy()
-    vix3m_close = vix3m_close.copy()
-    vix_close.index = vix_close.index.normalize()
-    vix3m_close.index = vix3m_close.index.normalize()
-    ratio = (vix_close / vix3m_close.reindex(vix_close.index).ffill()).dropna()
-    state = False
-    out = {}
-    for d, r in ratio.items():
-        if not state and r >= on:
-            state = True
-        elif state and r <= off:
-            state = False
-        out[d] = state
-    return pd.Series(out)
+    try:
+        from .income_rules import hedge_signal
+    except ImportError:
+        from etf.income_rules import hedge_signal
+    return hedge_signal(vix_close, vix3m_close, on, off)
 
 
-def score_at(date, history, freq_filter, und_history=None, spy=None):
+def score_at(date, history, freq_filter, und_history=None, spy=None, universe=None, weights=None):
     """Score the universe using the trailing 12m window ending at `date`.
 
     und_history: {underlying_label: close DataFrame} for point-in-time RS vs SPY.
@@ -131,7 +112,7 @@ def score_at(date, history, freq_filter, und_history=None, spy=None):
             uwin = uh['Close'][(uh.index > win_start) & (uh.index <= date)]
             und_rs[label] = underlying_rs_from_series(uwin, spy_win)
 
-    for ticker, (name, underlying, freq) in UNIVERSE.items():
+    for ticker, (name, underlying, freq) in (UNIVERSE if universe is None else universe).items():
         if freq_filter != 'all' and freq != freq_filter:
             continue
         if ticker not in history:
@@ -150,7 +131,7 @@ def score_at(date, history, freq_filter, und_history=None, spy=None):
         metrics[ticker] = m
     if not metrics:
         return pd.DataFrame()
-    return score_universe(metrics)
+    return score_universe(metrics, weights=weights)
 
 
 def build_cash_rate(cal, years):
@@ -205,7 +186,13 @@ def sim_passive(bench_hist, cal, rebal_dates, capital, income_mode, maintain_lev
 
 
 def run_backtest():
-    cfg = load_config()
+    backtest_configuration = load_backtest(CONFIG_FILE)
+    cfg = backtest_configuration['effective']
+    strategy = load_strategy()
+    if not strategy['valid_for_review']:
+        raise ValueError('Invalid ETF strategy settings')
+    universe = {ticker: details for ticker, details in FULL_UNIVERSE.items()
+                if ticker not in strategy['effective']['excluded']}
     top_n = int(cfg['top_n'])
     years = int(cfg['years'])
     capital = float(cfg['start_capital'])
@@ -222,8 +209,8 @@ def run_backtest():
 
     print(f"Backtest: top {top_n}, {years}y, ${capital:,.0f}, freq={freq_filter}, "
           f"rebalance={cfg.get('rebal_freq', 'quarterly')}")
-    print(f"Fetching {len(UNIVERSE)} ETFs + SPY...")
-    history = fetch_history(list(UNIVERSE.keys()), years)
+    print(f"Fetching {len(universe)} ETFs + SPY...")
+    history = fetch_history(list(universe.keys()), years)
     spy = fetch_history(['SPY'], years).get('SPY')
     if spy is None or not history:
         print("Insufficient data")
@@ -231,7 +218,7 @@ def run_backtest():
 
     # underlying histories for point-in-time RS (one fetch per unique proxy)
     und_map = {}   # underlying label -> proxy ticker
-    for _, underlying, _ in UNIVERSE.values():
+    for _, underlying, _ in universe.values():
         t = resolve_underlying(underlying)
         if t and underlying not in und_map:
             und_map[underlying] = t
@@ -333,7 +320,8 @@ def run_backtest():
                 cash = maintain_level
                 withdrawn_total += qtr_withdrawal
 
-            ranked = score_at(day, history, freq_filter, und_history, spy_adj)
+            ranked = score_at(day, history, freq_filter, und_history, spy_adj, universe=universe,
+                              weights=strategy['effective']['weights'])
             picks = []
             if not ranked.empty:
                 q = ranked[ranked['qualified'] == True]
@@ -542,10 +530,18 @@ def run_backtest():
         'maintain_level': round(maintain_level, 2) if income_mode == 'draw' else None,
     }
 
-    from marketdb import results as _mr
-    _mr.save_frame(f"etf_backtest/{today}/equity", eq)
-    _mr.save_frame(f"etf_backtest/{today}/quarters", pd.DataFrame(quarter_rows))
-    _mr.save_report('etf_backtest', f"{today[:4]}-{today[4:6]}-{today[6:]}", payload=summary)
+    try:
+        from .income_store import save_generation
+    except ImportError:
+        from etf.income_store import save_generation
+    artifact = save_generation('etf_backtest', {'equity': eq, 'quarters': pd.DataFrame(quarter_rows)},
+        {'strategy': strategy, 'backtest': backtest_configuration}, summary=summary,
+        sources={'per_ticker': {ticker: {'first_price_date': h.index[0].isoformat(),
+                      'last_price_date': h.index[-1].isoformat()} for ticker, h in history.items()},
+                 'corporate_action_basis': 'existing simulator; no new split/currency/cost model added',
+                 'underlying_source_ranges': {label: {'first_price_date': h.index[0].isoformat(), 'last_price_date': h.index[-1].isoformat()} for label, h in und_history.items()},
+                 'missing_tickers': sorted(set(universe) - set(history))})
+    print(f"Immutable Income backtest: {artifact['run_id']}")
     print(f"Saved: marketdb etf_backtest/{today}")
 
     print(f"\n{'═' * 50}")

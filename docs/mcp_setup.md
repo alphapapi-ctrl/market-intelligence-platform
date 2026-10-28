@@ -1,5 +1,9 @@
 # Market Intelligence MCP
 
+ETF Income's shared-rule configuration, results and review integration is
+documented in [ETF Income MCP coverage](etf_income_mcp.md), including exact input
+schemas and the upgrade/read-only deployment acceptance procedure for 1.1.0.
+
 This server follows the existing Trading Journal MCP deployment on the Windows
 machine reached as `mt5tools` (its actual hostname is `ALGOBOSS`). It is a separate
 service, with its own environment, task, settings and logs.

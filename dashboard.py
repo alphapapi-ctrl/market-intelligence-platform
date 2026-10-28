@@ -9327,11 +9327,12 @@ elif page == "ETF Income":
 
     st.markdown("""
         <div class="info-card">
-            Quarterly-rebalance income ETF strategy. Scores a universe of weekly and
-            monthly distribution ETFs on <b>NAV trend</b>, <b>risk-adjusted return</b>,
-            and <b>distribution quality</b> (slope + consistency). Headline yield is
-            deliberately under-weighted — a high yield with declining NAV is return of
-            capital, not income. ETFs with negative 3-month NAV change are disqualified.
+            Income ETF scoring and rebalance research. Scores weekly/monthly distribution
+            ETFs on <b>market-price trend</b>, <b>risk-adjusted return</b> and
+            <b>distribution quality</b>. Columns labelled NAV use market close as a proxy,
+            not verified fund NAV. The qualifier requires positive 3-month price change.
+            Monthly risk checks are separate from the still-undecided full rebalance
+            preference; the saved simulator cadence does not adopt a live schedule.
         </div>
     """, unsafe_allow_html=True)
 
@@ -9443,7 +9444,7 @@ elif page == "ETF Income":
                                       index=['quarterly', 'monthly', 'semiannual'].index(
                                           _bt_cfg.get('rebal_freq', 'quarterly')),
                                       key='bt_rfreq',
-                                      help="Monthly tested ~10pp worse over 3y — churns on 3m-NAV noise. Quarterly is the default for a reason.")
+                                      help="Simulation cadence only. Compare frequencies under the same assumptions; this does not set a live rebalance schedule.")
 
         _bd1, _bd2, _bd3, _bd4, _bd6, _bd5 = st.columns([2, 2, 2, 2, 2, 3])
         with _bd6:
@@ -9669,12 +9670,9 @@ elif page == "ETF Income":
             vix.index = vix.index.tz_localize(None).normalize()
             vix3m.index = vix3m.index.tz_localize(None).normalize()
             ratio = (vix / vix3m.reindex(vix.index).ffill()).dropna()
-            # hysteresis walk: on >= 1.0, off <= 0.95
-            state = False
-            for r in ratio.values:
-                if not state and r >= 1.0: state = True
-                elif state and r <= 0.95: state = False
-            return float(ratio.iloc[-1]), state, float(vix.iloc[-1])
+            from etf.income_rules import hedge_signal as _income_hedge_signal
+            states = _income_hedge_signal(vix, vix3m)
+            return float(ratio.iloc[-1]), bool(states.iloc[-1]), float(vix.iloc[-1])
 
         try:
             _vr, _hedge_on, _vix_now = _fetch_vix_signal()
@@ -9701,6 +9699,12 @@ elif page == "ETF Income":
             _sys.path.insert(0, ETF)
         from etf_income_data import load_etf_settings as _load_etf_s
         _etf_s = _load_etf_s()
+        from etf.income_rules import (qualified_ranks as _income_qualified_ranks,
+                                      ranking_decision as _income_ranking_decision,
+                                      stop_decision as _income_stop_decision,
+                                      holding_total_return as _income_holding_return,
+                                      allocation_preview as _income_allocation_preview,
+                                      distribution_schedule as _income_distribution_schedule)
         _live_stop = float(_etf_s.get('stop_loss_pct', 0.20))
 
         _hold_file = os.path.join(ETF, 'holdings.json')
@@ -9796,13 +9800,7 @@ elif page == "ETF Income":
                 _closes = h['Close'].dropna()          # Yahoo can return a trailing NaN row (pre-open placeholder)
                 if _closes.empty:
                     return None
-                px = float(_closes.iloc[-1])
-                divs_ps = 0.0
-                if entry_date:
-                    _ed = pd.Timestamp(entry_date)
-                    divs_ps = float(h['Dividends'][h.index > _ed].fillna(0).sum())
-                _tr = (px + divs_ps) / float(entry_price) - 1
-                return _tr if _math.isfinite(_tr) else None
+                return _income_holding_return(h, entry_price, entry_date)
             except Exception:
                 return None
 
@@ -9816,19 +9814,9 @@ elif page == "ETF Income":
                 if h is None or h.empty:
                     return None, None
                 h.index = h.index.tz_localize(None)
-                dv = h['Dividends'][h['Dividends'] > 0]
-                if len(dv) < 2:
-                    return None, None
-                _dates = dv.index[-8:]
-                _gaps = _dates.to_series().diff().dropna().dt.days
-                _gap = int(_gaps.median())
-                _freq = ('weekly' if _gap <= 10 else
-                         'monthly' if _gap <= 45 else 'quarterly')
-                _nxt = _dates[-1] + pd.Timedelta(days=_gap)
-                _today = pd.Timestamp.now().normalize()
-                while _nxt < _today:
-                    _nxt += pd.Timedelta(days=_gap)
-                return _nxt.strftime('%d %b'), _freq
+                _schedule = _income_distribution_schedule(h)
+                _next = _schedule['estimated_ex_date']
+                return (pd.Timestamp(_next).strftime('%d %b') if _next else None), _schedule['frequency']
             except Exception:
                 return None, None
 
@@ -9848,11 +9836,7 @@ elif page == "ETF Income":
             # Rank within the qualified list — matches the backtest's top-N pick
             # (absolute rank counts disqualified funds, so it can't be compared
             # against the buy zone without skewing HOLD/REVIEW)
-            _qual_rank = {}
-            if _df_rank is not None:
-                _qual_df = _df_rank[_df_rank['qualified'] == True].sort_values('rank')
-                _qual_rank = {str(t).upper(): i + 1
-                              for i, t in enumerate(_qual_df['ticker'])}
+            _qual_rank = _income_qualified_ranks(_df_rank)
 
             if _held and _df_rank is not None:
                 _sig_rows = []
@@ -9865,12 +9849,8 @@ elif page == "ETF Income":
                                                  str(_hr['entry_date'] or '').strip() or None)
                         if _tr is not None:
                             _tr_txt = f"{_tr * 100:+.1f}%"
-                            if _tr <= -_live_stop:
-                                _stop_txt = '⛔ HIT'
-                            elif _tr <= -_live_stop * 0.75:
-                                _stop_txt = '⚠ NEAR'
-                            else:
-                                _stop_txt = '✓ OK'
+                            _stop_txt = {'HIT': '⛔ HIT', 'NEAR': '⚠ NEAR', 'OK': '✓ OK'}.get(
+                                _income_stop_decision(_tr, _live_stop)['status'], '—')
 
                     # distribution cadence + estimated next payment
                     _nxt_date, _inf_freq = _fetch_next_dist(_t)
@@ -9888,12 +9868,7 @@ elif page == "ETF Income":
                     _freq = str(_r['freq']) if 'freq' in _row.columns and pd.notna(_r.get('freq')) else (_inf_freq or '—')
                     _qual = bool(_r['qualified'])
                     _qr = _qual_rank.get(_t)
-                    if not _qual:
-                        _sig = 'SELL'
-                    elif _qr is not None and _qr <= _buy_zone:
-                        _sig = 'HOLD'
-                    else:
-                        _sig = 'REVIEW'
+                    _sig = _income_ranking_decision(_r.to_dict(), _qr, _buy_zone)['signal']
                     _sig_rows.append({'Ticker': _t, 'Freq': _freq,
                                       'Next Pay (est)': _nxt_txt,
                                       'Rank': int(_r['rank']),
@@ -10007,24 +9982,19 @@ elif page == "ETF Income":
                                                help="Defaults to the qualified funds inside the buy zone — adjust to your actual buy list")
 
                     if _buy_sel:
-                        _alloc = _usd_bal / len(_buy_sel)
-                        _calc_rows, _spend = [], 0.0
-                        for _t in _buy_sel:
-                            _prow = _df_rank[_df_rank['ticker'] == _t]
-                            _p = float(_prow.iloc[0]['price']) if not _prow.empty and pd.notna(_prow.iloc[0].get('price')) else None
-                            if not _p:
-                                _calc_rows.append({'Ticker': _t, 'Price (USD)': 'n/a', 'Shares': '—',
-                                                   'Cost (USD)': '—', 'Cost (AUD)': '—'})
-                                continue
-                            _sh = int(_alloc // _p)
-                            _cost = _sh * _p
-                            _spend += _cost
+                        _allocation = _income_allocation_preview(_df_rank, _buy_sel, _aud_bal, _fx)
+                        _alloc = _allocation['per_position_usd']
+                        _spend = _allocation['spend_usd']
+                        _calc_rows = []
+                        for _calc in _allocation['rows']:
+                            _p = _calc['scan_price_usd']
+                            _cost = _calc['cost_usd']
                             _calc_rows.append({
-                                'Ticker'    : _t,
-                                'Price (USD)': f"{_p:.2f}",
-                                'Shares'    : _sh,
-                                'Cost (USD)': f"${_cost:,.2f}",
-                                'Cost (AUD)': f"${_cost / _fx:,.2f}" if _fx else '—',
+                                'Ticker': _calc['ticker'],
+                                'Price (USD)': f"{_p:.2f}" if _p else 'n/a',
+                                'Shares': _calc['hypothetical_whole_shares'] if _p else '—',
+                                'Cost (USD)': f"${_cost:,.2f}" if _cost is not None else '—',
+                                'Cost (AUD)': f"${_cost / _fx:,.2f}" if _cost is not None else '—',
                             })
                         st.dataframe(pd.DataFrame(_calc_rows), width='stretch', hide_index=True)
                         _left = _usd_bal - _spend

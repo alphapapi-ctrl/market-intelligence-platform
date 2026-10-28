@@ -192,7 +192,7 @@ class MarketMCPTests(unittest.TestCase):
                 "protocolVersion": "2025-11-25", "capabilities": {}, "clientInfo": {"name": "test", "version": "1"}}})
             self.assertEqual(initialized.status_code, 200, initialized.text)
             tools = client.post("/mcp", headers=headers, json={"jsonrpc": "2.0", "id": 2, "method": "tools/list", "params": {}}).json()["result"]["tools"]
-            self.assertEqual(len(tools), 19)
+            self.assertEqual(len(tools), 24)
             self.assertTrue(next(t for t in tools if t["name"] == "read_prices")["annotations"]["readOnlyHint"])
             self.assertFalse(next(t for t in tools if t["name"] == "start_update")["annotations"]["readOnlyHint"])
             result = client.post("/mcp", headers=headers, json={"jsonrpc": "2.0", "id": 3, "method": "tools/call", "params": {
@@ -213,7 +213,7 @@ class MarketMCPTests(unittest.TestCase):
                 async with ClientSession(reader, writer) as client:
                     await client.initialize()
                     listed = await client.list_tools()
-                    self.assertEqual(len(listed.tools), 19)
+                    self.assertEqual(len(listed.tools), 24)
                     result = await client.call_tool("read_report", {"kind": "macro_report"})
                     self.assertFalse(result.is_error)
                     self.assertEqual(json.loads(result.content[0].text)["content"], "abcdefghij")

@@ -24,82 +24,26 @@ import numpy as np
 import pandas as pd
 import yfinance as yf
 from datetime import datetime, timedelta
-import etf_prices as _px
+try:
+    from . import etf_prices as _px
+except ImportError:
+    import etf_prices as _px
 
 BASE = os.path.dirname(os.path.abspath(__file__))
 RESULTS_DIR = os.path.join(BASE, 'results', 'etf_income')
 
-# ── Universe ──────────────────────────────────────────────────────────────────
-# ticker: (name, underlying/theme, pay frequency)
-UNIVERSE = {
-    # YieldMax single-stock covered call
-    'TSLY': ('YieldMax TSLA', 'TSLA', 'weekly'),
-    'NVDY': ('YieldMax NVDA', 'NVDA', 'weekly'),
-    'CONY': ('YieldMax COIN', 'COIN', 'weekly'),
-    'MSTY': ('YieldMax MSTR', 'MSTR', 'weekly'),
-    'AMZY': ('YieldMax AMZN', 'AMZN', 'weekly'),
-    'APLY': ('YieldMax AAPL', 'AAPL', 'weekly'),
-    'GOOY': ('YieldMax GOOGL', 'GOOGL', 'weekly'),
-    'MSFO': ('YieldMax MSFT', 'MSFT', 'weekly'),
-    'AMDY': ('YieldMax AMD', 'AMD', 'weekly'),
-    'PYPY': ('YieldMax PYPL', 'PYPL', 'weekly'),
-    'MRNY': ('YieldMax MRNA', 'MRNA', 'weekly'),
-    'AIYY': ('YieldMax AI', 'AI', 'weekly'),
-    'ULTY': ('YieldMax Ultra', 'diversified', 'weekly'),
-    'YMAX': ('YieldMax Universe FoF', 'diversified', 'weekly'),
-    'YMAG': ('YieldMax Mag7 FoF', 'mag7', 'weekly'),
-    'XOMO': ('YieldMax XOM', 'XOM', 'weekly'),
-    'JPMO': ('YieldMax JPM', 'JPM', 'weekly'),
-    # Defiance index income
-    'QQQY': ('Defiance Nasdaq Income', 'QQQ', 'weekly'),
-    'IWMY': ('Defiance R2K Income', 'IWM', 'weekly'),
-    'SPYT': ('Defiance S&P Target Income', 'SPY', 'monthly'),
-    # Roundhill
-    'QDTE': ('Roundhill Nasdaq 0DTE', 'QQQ', 'weekly'),
-    'XDTE': ('Roundhill S&P 0DTE', 'SPY', 'weekly'),
-    'RDTE': ('Roundhill R2K 0DTE', 'IWM', 'weekly'),
-    # Monthly payers — index covered call / premium income
-    'JEPI': ('JPM Equity Premium Income', 'SPX', 'monthly'),
-    'JEPQ': ('JPM Nasdaq Premium Income', 'NDX', 'monthly'),
-    'QYLD': ('Global X Nasdaq Covered Call', 'NDX', 'monthly'),
-    'XYLD': ('Global X S&P Covered Call', 'SPX', 'monthly'),
-    'RYLD': ('Global X R2K Covered Call', 'RUT', 'monthly'),
-    'DIVO': ('Amplify CWP Enhanced Div', 'diversified', 'monthly'),
-    'SVOL': ('Simplify Volatility Premium', 'VIX-short', 'monthly'),
-    'SPYI': ('NEOS S&P High Income', 'SPX', 'monthly'),
-    'QQQI': ('NEOS Nasdaq High Income', 'NDX', 'monthly'),
-}
+# Definitions and effective settings are shared with the dashboard and MCP.
+try:
+    from .income_config import FULL_UNIVERSE, DEFAULT_WEIGHTS, load_strategy
+except ImportError:  # direct script / existing dashboard import
+    from income_config import FULL_UNIVERSE, DEFAULT_WEIGHTS, load_strategy
 
-# Full universe before exclusions — the Settings UI needs this to edit the blocklist
-FULL_UNIVERSE = dict(UNIVERSE)
-
-# ── Settings (etf_settings.json overrides the defaults below) ─────────────────
+UNIVERSE = dict(FULL_UNIVERSE)
 SETTINGS_FILE = os.path.join(BASE, 'etf_settings.json')
-
-DEFAULT_EXCLUDED = ['MSTY']   # extreme NAV decay on leveraged-equity underlying
+DEFAULT_EXCLUDED = ['MSTY']
 
 def load_etf_settings():
-    """Load strategy settings with defaults. Weights merge over defaults so a
-    partial settings file stays valid."""
-    s = {
-        'weights'      : dict(DEFAULT_WEIGHTS),
-        'excluded'     : list(DEFAULT_EXCLUDED),
-        'stop_loss_pct': 0.20,   # live total-return stop from entry
-        'buy_zone'     : 8,      # rank threshold for HOLD vs REVIEW signals
-    }
-    if os.path.exists(SETTINGS_FILE):
-        try:
-            with open(SETTINGS_FILE) as f:
-                saved = json.load(f)
-            s['weights'].update(saved.get('weights', {}))
-            for k in ('excluded', 'stop_loss_pct', 'buy_zone'):
-                if k in saved:
-                    s[k] = saved[k]
-        except Exception:
-            pass
-    return s
-
-# NOTE: _settings is applied below, after DEFAULT_WEIGHTS is defined.
+    return load_strategy(SETTINGS_FILE)["effective"]
 
 # ── Underlying proxies ────────────────────────────────────────────────────────
 # Maps non-ticker underlyings to a tradeable/index proxy for RS calculation.
@@ -111,17 +55,6 @@ UNDERLYING_PROXY = {
     'mag7'       : 'QQQ',
     'diversified': None,
     'VIX-short'  : None,
-}
-
-# ── Score weights (defaults — etf_settings.json overrides) ────────────────────
-DEFAULT_WEIGHTS = {
-    'nav_3m'       : 0.20,   # 3m price change rank
-    'nav_12m'      : 0.10,   # 12m price change rank
-    'sharpe'       : 0.15,   # 90d sharpe rank
-    'yield_ttm'    : 0.10,   # trailing yield rank (deliberately low — yield alone misleads)
-    'dist_slope'   : 0.15,   # distribution trend rank
-    'dist_consist' : 0.10,   # distribution consistency rank
-    'underlying_rs': 0.20,   # underlying's relative strength vs SPY
 }
 
 # Apply settings: weights, blocklist
@@ -222,11 +155,12 @@ def underlying_rs_from_series(und_close, spy_close):
     return round(0.5 * rel_3m + 0.5 * rel_12m, 2)
 
 
-def fetch_underlying_rs(underlyings):
+def fetch_underlying_rs(underlyings, metadata=None):
     """Fetch 12m history for each unique underlying proxy and compute RS vs SPY.
 
     Returns {underlying_label: rs or None}.
     """
+    metadata = {} if metadata is None else metadata
     proxies = {}
     for u in underlyings:
         t = resolve_underlying(u)
@@ -238,6 +172,7 @@ def fetch_underlying_rs(underlyings):
         spy_close = _px.adj_close('SPY', 1)
         if spy_close is None:
             raise ValueError('no SPY data')
+        metadata['SPY'] = {'first_price_date': spy_close.index[0].isoformat(), 'last_price_date': spy_close.index[-1].isoformat(), 'basis': 'adjusted close'}
     except Exception:
         return {u: None for u in underlyings}
 
@@ -246,6 +181,7 @@ def fetch_underlying_rs(underlyings):
         try:
             und_close = _px.adj_close(ticker, 1)
             rs[label] = underlying_rs_from_series(und_close, spy_close) if und_close is not None else None
+            metadata[ticker] = {'first_price_date': und_close.index[0].isoformat(), 'last_price_date': und_close.index[-1].isoformat(), 'basis': 'adjusted close'} if und_close is not None and len(und_close) else None
         except Exception:
             rs[label] = None
     for u in underlyings:
@@ -269,14 +205,23 @@ def fetch_etf_data(ticker):
             cutoff = pd.Timestamp.now(tz=divs.index.tz) - pd.Timedelta(days=365)
             divs = divs[divs.index >= cutoff]
 
-        return compute_metrics(close, divs)
+        metrics = compute_metrics(close, divs)
+        if metrics is not None:
+            metrics['source_data'] = {
+                'first_price_date': close.index[0].isoformat(), 'last_price_date': close.index[-1].isoformat(),
+                'price_bars': len(close), 'distribution_count': len(divs),
+                'basis': hist.attrs.get('provenance', {'source': 'legacy ETF price adapter; exact split adjustment not recorded'}),
+                'true_fund_nav': False,
+            }
+        return metrics
     except Exception as e:
         print(f"  {ticker}: error — {e}")
         return None
 
 
-def score_universe(data):
+def score_universe(data, weights=None):
     """Rank-based composite scoring. Higher = better."""
+    weights = WEIGHTS if weights is None else weights
     df = pd.DataFrame(data).T
     if df.empty:
         return df
@@ -296,13 +241,13 @@ def score_universe(data):
     df['r_und']     = df['underlying_rs'].rank(pct=True)
 
     df['score'] = (
-        df['r_nav3']    * WEIGHTS['nav_3m'] +
-        df['r_nav12']   * WEIGHTS['nav_12m'] +
-        df['r_sharpe']  * WEIGHTS['sharpe'] +
-        df['r_yield']   * WEIGHTS['yield_ttm'] +
-        df['r_slope']   * WEIGHTS['dist_slope'] +
-        df['r_consist'] * WEIGHTS['dist_consist'] +
-        df['r_und']     * WEIGHTS['underlying_rs']
+        df['r_nav3']    * weights['nav_3m'] +
+        df['r_nav12']   * weights['nav_12m'] +
+        df['r_sharpe']  * weights['sharpe'] +
+        df['r_yield']   * weights['yield_ttm'] +
+        df['r_slope']   * weights['dist_slope'] +
+        df['r_consist'] * weights['dist_consist'] +
+        df['r_und']     * weights['underlying_rs']
     ) * 100
 
     # disqualify: negative 3m NAV change
@@ -314,20 +259,26 @@ def score_universe(data):
 
 
 def run():
+    strategy = load_strategy(SETTINGS_FILE)
+    if not strategy['valid_for_review']:
+        raise ValueError('Invalid ETF settings: ' + '; '.join(strategy['warnings']))
+    universe = {ticker: details for ticker, details in FULL_UNIVERSE.items()
+                if ticker not in strategy['effective']['excluded']}
     today = datetime.today().strftime('%Y%m%d')
-    _px.prefetch(list(UNIVERSE.keys()))
+    _px.prefetch(list(universe.keys()))
 
     # underlying RS vs SPY (one fetch per unique underlying)
-    uniq_und = sorted({u for _, u, _ in UNIVERSE.values()})
+    uniq_und = sorted({u for _, u, _ in universe.values()})
     print(f"Fetching underlying RS for {len(uniq_und)} underlyings...")
-    und_rs = fetch_underlying_rs(uniq_und)
+    underlying_sources = {}
+    und_rs = fetch_underlying_rs(uniq_und, metadata=underlying_sources)
     for u in uniq_und:
         v = und_rs.get(u)
         print(f"  {u}: {'n/a (neutral)' if v is None else f'{v:+.1f} vs SPY'}")
 
-    print(f"\nFetching {len(UNIVERSE)} income ETFs...")
+    print(f"\nFetching {len(universe)} income ETFs...")
     data = {}
-    for ticker, (name, underlying, freq) in UNIVERSE.items():
+    for ticker, (name, underlying, freq) in universe.items():
         d = fetch_etf_data(ticker)
         if d is None:
             print(f"  {ticker}: no data — skipped")
@@ -341,18 +292,30 @@ def run():
         print(f"  {ticker}: {d['chg_3m']:+.1f}% 3m, yield {d['yield_ttm']:.1f}%, "
               f"slope {d['dist_slope']:+.2f}%/pd  [{flag}]")
 
-    df = score_universe(data)
+    df = score_universe(data, weights=strategy['effective']['weights'])
     if df.empty:
         print("No data fetched")
         return
 
     cols = ['rank', 'name', 'underlying', 'freq', 'price', 'score', 'qualified',
             'chg_3m', 'chg_12m', 'total_ret_12m', 'sharpe', 'yield_ttm',
-            'dist_slope', 'dist_consist', 'underlying_rs', 'n_dists']
+            'dist_slope', 'dist_consist', 'underlying_rs', 'n_dists',
+            'r_nav3', 'r_nav12', 'r_sharpe', 'r_yield', 'r_slope', 'r_consist', 'r_und']
     out = df[cols].reset_index().rename(columns={'index': 'ticker'})
 
-    from marketdb import results as _mr
-    _mr.save_frame(f"etf_income/{today}", out)
+    try:
+        from .income_store import save_generation
+    except ImportError:
+        from etf.income_store import save_generation
+    artifact = save_generation('etf_income', {'rankings': out}, {'strategy': strategy},
+        sources={'per_ticker': {ticker: d.get('source_data') for ticker, d in data.items()},
+                 'missing_tickers': sorted(set(universe) - set(data)),
+                 'underlying_rs_sources': underlying_sources,
+                 'underlying_rs_before_neutral_fill': und_rs,
+                 'missing_underlying_rs': [u for u in uniq_und if resolve_underlying(u) and und_rs.get(u) is None],
+                 'metric': '3-month market-price trend proxy; not verified fund NAV'})
+    out.attrs['income_run'] = artifact
+    print(f"Immutable Income run: {artifact['run_id']}")
     print(f"\nSaved: marketdb frame etf_income/{today}")
 
     q = out[out['qualified'] == True]

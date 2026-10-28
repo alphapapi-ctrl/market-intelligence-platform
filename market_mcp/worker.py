@@ -30,7 +30,15 @@ def execute(kind: str, args: dict):
     with db.RunLock() as held:
         if not held:
             raise RuntimeError(f"Another dashboard/daily process is updating the database: {held.holder}")
-        if kind == "demark":
+        if kind == "income_review":
+            from .income import build_snapshot
+            from etf.income_config import fingerprint
+            from etf.income_store import save_review
+            snapshot = build_snapshot(**args)
+            snapshot['job_id'] = os.environ.get('MARKET_MCP_JOB_ID')
+            snapshot['review_id'] = fingerprint({k: v for k, v in snapshot.items() if k != 'review_id'})
+            return {'steps': [{'step': 'income_review', 'status': 'saved', **save_review(snapshot)}]}
+        elif kind == "demark":
             from marketdb.demark import run_scan
             with db.session() as con:
                 result, report = run_scan(con, args["universe"], args["min_cap"], args["max_cap"], args["end"])
@@ -50,12 +58,29 @@ def execute(kind: str, args: dict):
             sys.path.insert(0, str(path.parent))
             sys.argv = [str(path)]
             runpy.run_path(str(path), run_name="__main__")
+            if args['report'] in ('etf_income', 'etf_backtest'):
+                import json
+                with jobs.connection_for_audit() as con:
+                    records = con.execute("SELECT payload FROM reports WHERE kind=? ORDER BY created DESC LIMIT 100",
+                                          (args['report'] + '_run',)).fetchall()
+                artifacts = [json.loads(row[0]) for row in records]
+                artifacts = [a for a in artifacts if a.get('job_id') == os.environ.get('MARKET_MCP_JOB_ID')]
+                if not artifacts:
+                    raise RuntimeError('ETF generation produced no immutable output for this job; older daily/cache data is not proof of success')
+                return {'steps': [{'step': args['report'], 'status': 'saved', 'run_id': a['run_id'],
+                    'report_kind': a['kind'] + '_run', 'frames': a['frames'],
+                    'warnings': (['Some universe tickers have no usable data'] if a.get('sources', {}).get('missing_tickers') else [])
+                                + (['Some underlying RS values used the existing neutral fallback'] if a.get('sources', {}).get('missing_underlying_rs') else [])}
+                    for a in artifacts]}
         else:
             raise ValueError("Unknown job kind")
     return 0
 
 
 def main(job_id: str) -> int:
+    os.environ['MARKET_MCP_JOB_ID'] = job_id
+    from .version import code_version
+    code_version()
     for variable in ("OMP_NUM_THREADS", "OPENBLAS_NUM_THREADS", "MKL_NUM_THREADS", "NUMEXPR_NUM_THREADS"):
         os.environ[variable] = "1"
     from marketdb import db
@@ -71,10 +96,14 @@ def main(job_id: str) -> int:
             before = audit.execute("SELECT COALESCE(MAX(run_id),0) FROM runs").fetchone()[0]
     except Exception:
         pass
-    status, message, code = "completed", "Finished. Stored results are available through the read tools.", 0
+    status, message, code, outcome = "completed", "Finished. Stored results are available through the read tools.", 0, None
     try:
         print(f"Started {job['kind']} at {jobs.now()} — database {jobs.database_path()}", flush=True)
-        code = execute(job["kind"], job["arguments"]) or 0
+        executed = execute(job["kind"], job["arguments"])
+        if isinstance(executed, dict):
+            outcome, code = executed, 0
+        else:
+            code = executed or 0
         if code:
             status, message = "failed", f"Process exited with code {code}; inspect the log."
         else:
@@ -82,7 +111,7 @@ def main(job_id: str) -> int:
                 failed = audit.execute("SELECT run_id,kind,status,notes FROM runs WHERE run_id>? AND status IN ('error','partial','aborted')", (before,)).fetchall()
             sys.stdout.flush()
             log = (jobs.job_dir() / f"{job_id}.log").read_text(encoding="utf-8", errors="replace")
-            if failed or any(marker in log for marker in ("coverage below", "FAILED", "WARNING:", "no results", "No data", "insufficient data")):
+            if failed or any(step.get('warnings') for step in (outcome or {}).get('steps', [])) or any(marker in log for marker in ("coverage below", "FAILED", "WARNING:", "no results", "No data", "insufficient data")):
                 status, message = "completed_with_warnings", "Some operations failed, were skipped or produced no data. Inspect the log and read_runs."
     except SystemExit as exc:
         code = exc.code if isinstance(exc.code, int) else (1 if exc.code else 0)
@@ -92,8 +121,9 @@ def main(job_id: str) -> int:
         status, message, code = "failed", str(exc), 1
     finally:
         with jobs.store() as con:
-            con.execute("UPDATE jobs SET status=?,finished=?,exit_code=?,message=? WHERE job_id=?",
-                        (status, jobs.now(), code, message, job_id))
+            import json
+            con.execute("UPDATE jobs SET status=?,finished=?,exit_code=?,message=?,outcome=? WHERE job_id=?",
+                        (status, jobs.now(), code, message, json.dumps(outcome) if outcome is not None else None, job_id))
         print(f"{status}: {message}", flush=True)
     return code
 

@@ -14,6 +14,11 @@ Preserve existing unrelated working-tree changes.
 - `scripts/setup_mcp_task.ps1` installs the separate Windows login task.
 - `market_mcp/settings_ui.py` renders Settings → MCP / AI Access.
 - `tests/test_market_mcp.py` uses isolated databases and no market downloads.
+- `docs/etf_income_mcp.md` and `docs/etf_income_tools.schema.json` describe Income
+  review/configuration/results tools, proxy-NAV limits and deployment verification.
+- Keep Income, Growth and AU Stocks separate. Monthly Income risk review does
+  not adopt a full rebalance cadence. No Income settings/holdings/journal writes
+  are authorised by a read, preview or deployment check.
 
 Reuse the existing `marketdb` calculations and scripts so MCP and dashboard
 results agree. Read tools must not initialise, migrate or write the market

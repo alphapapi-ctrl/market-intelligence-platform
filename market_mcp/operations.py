@@ -72,6 +72,11 @@ def market_catalog() -> dict:
             "reports": [dict(r) for r in con.execute(
                 "SELECT kind,MAX(created) AS updated,COUNT(*) AS versions FROM reports GROUP BY kind")],
             "latest_price_date": con.execute("SELECT MAX(date) FROM prices").fetchone()[0],
+            "etf_income": {"config_tool": "etf_income_config", "results_tool": "read_etf_income_results",
+                "legacy_latest_frame": con.execute("SELECT MAX(name) FROM frames WHERE name GLOB 'etf_income/[0-9][0-9][0-9][0-9][0-9][0-9][0-9][0-9]'").fetchone()[0],
+                "generation_history_kind": "etf_income_run", "backtest_history_kind": "etf_backtest_run",
+                "review_history_kind": "etf_income_review",
+                "note": "Older scoring outputs exist only in frames; an empty etf_income report list does not imply no cached rankings."},
             "recent_runs": page(con, "SELECT * FROM runs ORDER BY run_id DESC", limit=20)["rows"],
             "units": "Raw database values. Stored screener/benchmark ret_6m/12m/24m, max_dd, persist_frac and vol_63 are percentage values (12 = 12%). Drawdown return and drawdown fields are also percentage values. Breadth values are counts by metric. Prices use each security's quote currency. Report payloads and cached frames retain their source-specific units.",
             "actionable_note": "Stored actionable/high_conv flags and acc_watch are study outputs. The dashboard can apply additional saved or interactive SMA/score filters; these are not reproduced here.",
