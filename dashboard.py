@@ -8728,8 +8728,6 @@ elif page == "Fundamental Analysis":
 
 elif page == "Sentiment":
     from sentiment.debug import SentimentDebug
-    _sent_debug = SentimentDebug()
-    _sent_debug.log("ENTER sentiment page")
     import sys as _sys
     _sent_dir = os.path.join(BASE, 'sentiment')
     if _sent_dir not in _sys.path:
@@ -8763,6 +8761,15 @@ elif page == "Sentiment":
         st.write("")
         sent_force = st.button("🔄 Refresh data", key="sent_refresh")
 
+    _sent_diagnostics = st.checkbox("Show loading diagnostics", value=False,
+                                    key="sent_diagnostics",
+                                    help="Shows the current step and prints a Python stack to the server terminal if loading stalls for 15 seconds.")
+    _sent_progress = st.empty() if _sent_diagnostics else None
+    _sent_debug = SentimentDebug(
+        enabled=_sent_diagnostics,
+        progress=_sent_progress.caption if _sent_progress is not None else None,
+    )
+    _sent_debug.log("ENTER sentiment page")
     _sent_debug.log(f"Selections: symbol={INDEX_SYMBOLS[sent_index_name]} window={sent_window} force={sent_force}")
     try:
         with st.spinner("Loading sentiment and price data..."):
